@@ -56,7 +56,6 @@ const handleSuccess = () => {
             onFinish: () => {
                 fileLinkForm.value?.resetFileForm();
                 fileLinkForm.value?.setFieldValue("name", nameField);
-                console.log("finished");
             },
         });
     }

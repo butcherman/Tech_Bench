@@ -17,9 +17,7 @@ export const fetchDatalist = async (searchString: string) => {
     };
 
     delayTimer = setTimeout(() => {
-        console.log("searching");
         axios.post(route("customers.search"), searchData).then((res) => {
-            console.log(res.data);
             // Populate the datalist for users to select from
             customerDatalist.value = res.data.data;
         });

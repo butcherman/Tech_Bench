@@ -133,8 +133,6 @@ import { useForm } from "@inertiajs/vue3";
 const selectSiteModal = ref<InstanceType<typeof Modal> | null>(null);
 
 const onRowClick = (rowData: customer) => {
-    console.log(rowData.customer_site.length);
-
     if (fromCustomer.value && selectedSite.value) {
         toCustomer.value = rowData;
     } else {
@@ -158,13 +156,11 @@ const resetAll = () => {
 
 const verifyMove = () => {
     verifyModal(
-        `Equipment, Contacts, Notes and Files that are shared with other sites 
+        `Equipment, Contacts, Notes and Files that are shared with other sites
          WILL NOT be moved with this site. Continue?`,
         "IMPORTANT NOTE"
     ).then((res) => {
         if (res) {
-            console.log("verified");
-
             const formData = useForm({
                 moveSiteId: selectedSite.value?.cust_site_id,
                 toCustomer: toCustomer.value?.cust_id,

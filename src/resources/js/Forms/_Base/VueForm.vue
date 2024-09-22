@@ -109,7 +109,6 @@ const handleErrors = (
 
     for (const [key, value] of Object.entries(formErrors)) {
         if (value) {
-            console.log(typeof value);
             if (typeof value === "object") {
                 handleErrors(originalForm, value);
             } else {

@@ -75,8 +75,6 @@ export const triggerSearch = async () => {
     isLoading.value = true;
     isDirty.value = true;
 
-    console.log(searchParams.value);
-
     await axios
         .post(route("tech-tips.search"), searchParams.value)
         .then((res: AxiosResponse<axiosSearchResults>) => processResults(res))
@@ -92,8 +90,6 @@ export const triggerPublicSearch = async () => {
     isLoading.value = true;
     isDirty.value = true;
 
-    console.log(searchParams.value);
-
     await axios
         .post(route("publicTips.search"), searchParams.value)
         .then((res: AxiosResponse<axiosSearchResults>) => processResults(res))
@@ -106,7 +102,6 @@ export const triggerPublicSearch = async () => {
 };
 
 export const resetSearch = () => {
-    console.log("trigger reset");
     searchParams.value.searchFor = "";
     searchParams.value.typeList = [];
     searchParams.value.equipList = [];
@@ -118,7 +113,6 @@ export const resetSearch = () => {
  *                    Work with returned results                               *
  *******************************************************************************/
 const processResults = (res: AxiosResponse<axiosSearchResults>) => {
-    console.log(res);
     // Assign results
     searchResults.value = res.data.data;
 

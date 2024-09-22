@@ -97,7 +97,6 @@ const handleFileAdded = () => {
 const deleteFile = (file: fileLinkUpload) => {
     verifyModal("Do you want to delete this file?").then((res) => {
         if (res) {
-            console.log(file.pivot);
             router.delete(
                 route("links.destroy-file", [
                     file.pivot.link_id,

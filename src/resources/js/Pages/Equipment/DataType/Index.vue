@@ -73,7 +73,6 @@ defineProps<{
 const verifyDeleteType = (type: dataTypes) => {
     verifyModal("This cannot be undone").then((res) => {
         if (res) {
-            console.log("do it", type);
             router.delete(route("equipment-data.destroy", type.type_id));
         }
     });

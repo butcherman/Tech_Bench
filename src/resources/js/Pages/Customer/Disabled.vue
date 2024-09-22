@@ -56,7 +56,6 @@ const restoreCustomer = (customer: customer) => {
     verifyModal("This customer will be restored and usable again").then(
         (res) => {
             if (res) {
-                console.log("restore");
                 router.get(
                     route("customers.disabled.restore", customer.cust_id)
                 );
@@ -70,7 +69,6 @@ const destroyCustomer = (customer: customer) => {
         "This customer and all associated data will be removed.  This cannot be undone."
     ).then((res) => {
         if (res) {
-            console.log("force delete");
             router.delete(
                 route("customers.disabled.force-delete", customer.cust_id)
             );

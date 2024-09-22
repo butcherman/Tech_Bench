@@ -148,12 +148,10 @@ const schema = object({
  * field with the file name
  */
 const checkNameField = (file: DropzoneFile) => {
-    console.log("checking name field");
     if (
         customerFileForm.value?.getFieldValue("name") === undefined ||
         !customerFileForm.value?.getFieldValue("name").length
     ) {
-        console.log("is empty", file);
         let fileName = file.name;
         customerFileForm.value?.setFieldValue("name", fileName);
     }

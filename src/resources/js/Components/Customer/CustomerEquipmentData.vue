@@ -167,8 +167,6 @@ const saveField = (fieldId: number) => {
  * Save all modified fields
  */
 const saveAllFields = () => {
-    console.log("save all fields");
-
     let form: equipmentFormData[] = [];
     editFields.value.forEach((field) => {
         form.push({
@@ -192,7 +190,6 @@ const saveFormData = (form: equipmentFormData[]) => {
     const formData = useForm({ saveData: form });
     loading.value = true;
 
-    console.log(formData);
     formData.put(
         route("customers.update-equipment-data", customer.value.slug),
         {

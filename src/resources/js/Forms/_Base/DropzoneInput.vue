@@ -165,8 +165,6 @@ const buildEventListeners = () => {
 
     // Bubble any Errors that occur with Dropzone
     myDrop.on("error", (file, message) => {
-        console.log("error", file, message);
-        // emit("error", { file, message });
         emit("error", { file, status: file.xhr?.status, message });
     });
 
@@ -177,8 +175,6 @@ const buildEventListeners = () => {
 
     // When all files have uploaded, we will emit success with the last complete message
     myDrop.on("queuecomplete", () => {
-        console.log("queue complete");
-        // isSubmitting.value = false;
         emit("success", completeMessage.value);
     });
 };
@@ -187,8 +183,6 @@ const buildEventListeners = () => {
  * Validate the dropzone field by making sure there are no errors
  *******************************************************************************/
 const validate = () => {
-    console.log("validating");
-
     // If any files were rejected by Dropzone, we trigger an error
     let rejected = myDrop.getRejectedFiles();
     let queued = myDrop.getAcceptedFiles();
@@ -213,7 +207,6 @@ const validate = () => {
     }
 
     // All Validation Passed.  Clear any error messages
-    console.log("passed validation");
     errMessage.value = null;
     overMaxFiles.value = false;
     return true;
@@ -223,13 +216,10 @@ const validate = () => {
  * Process and Upload all files along with Form Data
  *******************************************************************************/
 const process = (form: { [key: string]: any }) => {
-    console.log("processing", form);
-
     fileFormData = form;
 
     // If no files are present, we do an axios submission
     if (myDrop.files.length === 0) {
-        console.log("no file");
         axios
             .post(props.uploadUrl.toString(), fileFormData)
             .then((res) => emit("success", res.data))
@@ -241,7 +231,6 @@ const process = (form: { [key: string]: any }) => {
                 })
             );
     } else {
-        console.log("has a file");
         myDrop.processQueue();
     }
 };

@@ -36,7 +36,6 @@ const bookmarkTitle = computed<string>(() => {
 });
 
 const toggleBookmark = (): void => {
-    console.log("toggling", !isActive.value);
     loading.value = true;
 
     axios

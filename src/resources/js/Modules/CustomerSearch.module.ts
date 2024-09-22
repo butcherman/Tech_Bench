@@ -89,7 +89,6 @@ export const resetSearch = () => {
 };
 
 const processResults = (res: axiosSearchResults) => {
-    console.log(res);
     // Assign results
     searchResults.value = res.data.data;
     // Build pagination footer

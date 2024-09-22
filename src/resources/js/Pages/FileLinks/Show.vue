@@ -70,7 +70,6 @@ onMounted(() => {
     Echo.private(`file-link.${props.link.link_id}`).listen(
         ".FileUploadedEvent",
         function () {
-            console.log("new file uploaded");
             upToDate.value = false;
         }
     );

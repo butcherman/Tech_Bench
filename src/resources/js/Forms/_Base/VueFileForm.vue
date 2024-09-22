@@ -170,10 +170,8 @@ const onSubmit = handleSubmit((form: formData): void => {
             console.log("Form Values", form);
             isSubmitting.value = false;
         } else {
-            console.log("good to go");
             isSubmitting.value = true;
             dropzoneInput.value.process(form);
-            console.log("uploading");
         }
     }
 });
@@ -195,7 +193,6 @@ const resetFileForm = () => {
  * Process any validation errors that come up
  */
 const handleErrors = (errorBag: errorBag) => {
-    console.log(errorBag);
     // The form will only handle the errors if the form was submitting
     if (isSubmitting.value) {
         isSubmitting.value = false;
@@ -208,10 +205,8 @@ const handleErrors = (errorBag: errorBag) => {
             )) {
                 if (value) {
                     if (formKeys.indexOf(key) != -1) {
-                        console.log("has key", key);
                         setFieldError(key, value);
                     } else {
-                        console.log("no key", key);
                         if (Array.isArray(key)) {
                             key.forEach((msg: string) => pushErrorAlert(msg));
                         } else {

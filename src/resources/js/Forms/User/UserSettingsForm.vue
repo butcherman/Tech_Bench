@@ -19,8 +19,7 @@
 <script setup lang="ts">
 import VueForm from "@/Forms/_Base/VueForm.vue";
 import CheckboxSwitch from "../_Base/CheckboxSwitch.vue";
-import { ref } from "vue";
-import { boolean, object, string } from "yup";
+import { boolean, object } from "yup";
 
 const props = defineProps<{
     settings: userSettings[];
@@ -40,8 +39,6 @@ const getInitValues = () => {
 
 // TODO - Finish This
 const getSchema = () => {
-    console.log("schema");
-
     let schema: { [key: string]: any } = {};
 
     props.settings.forEach((setting) => {

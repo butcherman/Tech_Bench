@@ -20,7 +20,6 @@ onMounted(
 );
 
 const grow = () => {
-    console.log("growing");
     let timeline = gsap.timeline();
     timeline.to(document.getElementById(collapseId), {
         display: "block",
@@ -37,7 +36,6 @@ const grow = () => {
 };
 
 const shrink = () => {
-    console.log("shrinking");
     let timeline = gsap.timeline();
     timeline.to(document.getElementById(collapseId), {
         opacity: 0,

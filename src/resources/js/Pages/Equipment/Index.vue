@@ -165,7 +165,6 @@ const closeEditModal = () => {
 const verifyDeleteCategory = (cat: categoryList) => {
     verifyModal("This cannot be undone").then((res) => {
         if (res) {
-            console.log("delete");
             router.delete(route("equipment-category.destroy", cat.cat_id));
         }
     });

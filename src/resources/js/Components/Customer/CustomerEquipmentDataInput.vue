@@ -25,8 +25,6 @@ const isValid = ref(true);
 const inputVal = ref(props.data.value);
 
 const validateInput = (e: FocusEvent) => {
-    console.log(e);
-
     if (!(<HTMLInputElement>e.target)?.checkValidity()) {
         isValid.value = false;
     } else {
