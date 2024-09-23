@@ -24,7 +24,7 @@ Read the .env file and modify any necessary fields.  The BASE_URL variable must
 be set for the Tech Bench to work properly.
 
 Run the command: ` docker-compose up -d ` to download, build and start the containers
-and run the Tech Bench application.
+to run the Tech Bench application.
 
 Visit the website URL provided in the .env file.  The initial login will be:
 
