@@ -8,6 +8,7 @@ use App\Http\Requests\Admin\EmailSettingsRequest;
 use App\Http\Requests\Admin\PasswordPolicyRequest;
 use App\Models\User;
 use App\Traits\AppSettingsTrait;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Hash;
 
 class BuildApplication
@@ -31,8 +32,9 @@ class BuildApplication
         $this->success = true;
 
         $this->clearSetting('app.first_time_setup');
-        $this->cacheConfig();
         event(new AdministrationEvent('Setup Complete'));
+
+        Artisan::call('optimize');
     }
 
     /**
