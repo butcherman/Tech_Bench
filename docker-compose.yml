@@ -102,8 +102,6 @@ services:
             - dbData:/bitnami/mysql/data
         networks:
             - app-tier
-        environment:
-            - MYSQL_ROOT_PASSWORD=tbRootPasswd
 
     #  Redis Container for Cache, Job and Email Queuing
     redis:
