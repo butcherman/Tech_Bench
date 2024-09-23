@@ -138,7 +138,6 @@ onMounted(() => {
     Echo.channel(`file-links.${props.linkData.link_hash}`).listen(
         ".FileUploadedEvent",
         (message: toastData) => {
-            console.log(message);
             toast.value?.pushMessage(message.message, message.title);
             upToDate.value = false;
         }

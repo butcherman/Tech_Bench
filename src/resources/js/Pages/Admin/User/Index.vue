@@ -67,7 +67,6 @@ const userLinkList = computed<userLinkList[]>(() => {
 const disableUser = (user: user) => {
     verifyModal(`${user.full_name} will be immediately disabled`).then(
         (res) => {
-            console.log(res);
             if (res) {
                 router.delete(route("admin.user.destroy", user.username));
             }

@@ -85,7 +85,6 @@ const editContactModal = ref<InstanceType<typeof CustomerContactEdit> | null>(
 );
 
 const showContact = (cont: customerContact) => {
-    console.log("show contact");
     activeContact.value = cont;
     nextTick(() => contactDetailsModal.value?.openModal());
 };

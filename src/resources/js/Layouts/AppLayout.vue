@@ -41,7 +41,6 @@ const navbarActive = ref(false);
  */
 router.on("navigate", () => {
     navbarActive.value = false;
-    console.log("current route - ", route().current());
 });
 
 /**

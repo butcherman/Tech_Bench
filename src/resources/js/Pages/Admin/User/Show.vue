@@ -194,7 +194,6 @@ const sendResetLink = () => {
 const disableUser = () => {
     verifyModal(`${props.user.full_name} will be immediately disabled`).then(
         (res) => {
-            console.log(res);
             if (res) {
                 router.delete(route("admin.user.destroy", props.user.username));
             }

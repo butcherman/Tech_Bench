@@ -80,7 +80,6 @@ const activeAlert = ref<customerAlert | null>(null);
 const triggerAlertForm = (alert: customerAlert | null = null) => {
     activeModal.value = true;
     if (alert !== null) {
-        console.log(alert);
         activeAlert.value = alert;
     }
 
@@ -97,7 +96,6 @@ const removeAlert = (alert: customerAlert) => {
     verifyModal("This alert will no longer show for the customer").then(
         (res) => {
             if (res) {
-                console.log("go for it");
                 router.delete(
                     route("customers.alerts.destroy", [
                         customer.value.slug,

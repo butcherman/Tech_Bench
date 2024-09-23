@@ -47,7 +47,6 @@ onMounted(() => {
     Echo.private("administration-channel").listen(
         ".AdministrationEvent",
         (msg: { msg: string }) => {
-            console.log(msg);
             setupMsg.value.push(msg.msg);
 
             if (msg.msg === "Setup Complete") {
@@ -56,11 +55,6 @@ onMounted(() => {
         }
     );
     axios.get(route("init.save-setup")).then((res) => {
-        console.log(res);
-        if (res.data.success) {
-            console.log("success");
-        }
-
         newUrl.value = `${res.data.url}`;
     });
 });

@@ -96,7 +96,7 @@
                         id="suppress-notifications"
                         name="suppress"
                         label="Suppress Notification"
-                        help="When enabled, notification of a new or updated 
+                        help="When enabled, notification of a new or updated
                               Tech Tip will not be sent out"
                     />
                     <CheckboxSwitch
@@ -110,7 +110,7 @@
                         id="public"
                         name="public"
                         label="Make Public Tip"
-                        help="When enabled, this Tech Tip will be available for 
+                        help="When enabled, this Tech Tip will be available for
                               anyone to see.  Be sure that this Tech Tip does not
                               contain any sensitive information."
                         @change="verifyPublic"
@@ -179,14 +179,10 @@ const schema = object({
 });
 
 const handleSuccess = (result: string) => {
-    console.log("success", result);
-    console.log(techTipForm.value?.values);
-
     let values;
     if ((values = techTipForm.value?.values)) {
         let formData = useForm(values);
         if (props.techTip) {
-            console.log("update");
             formData.transform((data) => ({
                 ...data,
                 removedFiles: removedFiles.value,
@@ -209,8 +205,8 @@ const toggleFile = (file_id: number) => {
 const verifyPublic = (value: boolean) => {
     if (value) {
         verifyModal(
-            `This Tech Tip will be available to non-registered visitors to this 
-             site.  Have you verified there is no confidential information in 
+            `This Tech Tip will be available to non-registered visitors to this
+             site.  Have you verified there is no confidential information in
              this Tech Tip?`,
             "Please Verify"
         ).then((res) => {

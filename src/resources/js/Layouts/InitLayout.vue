@@ -26,8 +26,6 @@ import { gsap } from "gsap";
 import "../../scss/Layouts/initLayout.scss";
 
 const enterAnimation = (el: Element) => {
-    console.log("entering");
-
     gsap.from(el, {
         x: 2000,
         opacity: 0,
@@ -37,7 +35,6 @@ const enterAnimation = (el: Element) => {
 };
 
 const leaveAnimation = (el: Element, done: () => void) => {
-    console.log("leaving");
     gsap.to(el, {
         x: -2000,
         duration: 0.5,

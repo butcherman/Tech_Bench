@@ -83,13 +83,11 @@ const clearModal = () => {
 };
 
 const editPhoneType = (phoneType: adminPhoneType) => {
-    console.log("edit");
     activeType.value = phoneType;
     phoneTypeModal.value?.show();
 };
 
 const deletePhoneType = (phoneType: adminPhoneType) => {
-    console.log("delete");
     verifyModal("This cannot be undone").then((res) => {
         if (res) {
             router.delete(
@@ -100,7 +98,6 @@ const deletePhoneType = (phoneType: adminPhoneType) => {
 };
 
 const addPhoneType = () => {
-    console.log("add");
     phoneTypeModal.value?.show();
 };
 </script>

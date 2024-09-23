@@ -48,7 +48,6 @@ const fileFor = computed(() => {
     if (activeFile.value?.customer_site.length) {
         let siteList = "";
         activeFile.value.customer_site.forEach((site) => {
-            console.log(site);
             siteList = siteList.concat(`${site.site_name} <br />`);
         });
 
