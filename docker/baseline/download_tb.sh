@@ -35,13 +35,13 @@ unzip -o $FILE_ROOT
 DIRNAME=$(zipinfo -1 $FILE_ROOT | grep -o "^[^/]\+[/]" | sort -u | tr -d \/)
 cd $DIRNAME
 
-if test -d src; 
-then 
+if test -d src;
+then
     cp -R src/* /app/
     cp src/.env.example /app/.env.example
-else 
-    cp -R s* /app/
-    cp s.env.example /app/.env.example
+else
+    cp -R * /app/
+    cp .env.example /app/.env.example
 fi
 
 #  Copy everything from this /app directory to the /staging directory

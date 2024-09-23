@@ -51,29 +51,30 @@ echo "Starting Tech Bench"
 # If this is the primary container, perform additional Checks
 if [ $SERVICE = "master" ] || [ $SERVICE = "app" ]
 then
-    # Do we need to run the first time setup script?
+    # Check if the version file is available in the /staging/config/ directory
+    STAGED_VERSION=$(head -n 1 /staging/version)
+    APP_VERSION=$(php /app/artisan version --format=compact | sed -e 's/Tech Bench //g')
+
+    vercomp $STAGED_VERSION $APP_VERSION
+    NEED_UPDATE=$?
+
+    if [ $NEED_UPDATE == 1 ]
+    then
+        echo -e "${RED} New Version found.  Please wait will we update ${NC}"
+        /scripts/update.sh
+    elif [ $NEED_UPDATE == 2 ]
+    then
+        echo -e "${RED} ERROR: VERSION MISMATCH"
+        echo -e "${RED} TECH BENCH VERSION IS OLDER THAN DATABASE VERSION"
+        echo -e "${RED} PLEASE UPGRADE TO VERSION $APP_VERSION OR HIGHER TO CONTINUE ${NC}"
+    fi
+
+     # Do we need to run the first time setup script?
     if [ ! -f /app/keystore/version ]
     then
         /scripts/setup.sh
-    else
-        # Check if the version file is available in the /staging/config/ directory
-        STAGED_VERSION=$(head -n 1 /staging/version)
-        APP_VERSION=$(php /app/artisan version --format=compact | sed -e 's/Tech Bench //g')
-
-        vercomp $STAGED_VERSION $APP_VERSION
-        NEED_UPDATE=$?
-
-        if [ $NEED_UPDATE == 1 ]
-        then
-            echo -e "${RED} New Version found.  Please wait will we update ${NC}"
-            /scripts/update.sh
-        elif [ $NEED_UPDATE == 2 ]
-        then
-            echo -e "${RED} ERROR: VERSION MISMATCH"
-            echo -e "${RED} TECH BENCH VERSION IS OLDER THAN DATABASE VERSION"
-            echo -e "${RED} PLEASE UPGRADE TO VERSION $APP_VERSION OR HIGHER TO CONTINUE ${NC}"
-        fi
     fi
+
 
     sleep 15
 fi

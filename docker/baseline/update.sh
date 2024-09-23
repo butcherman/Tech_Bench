@@ -29,6 +29,9 @@ cd /app
 composer install --no-dev --no-interaction --optimize-autoloader  --no-ansi >> /dev/null 2>&1
 npm install >> /dev/null 2>&1
 
+# Verify .env file is up to date
+php /app/artisan app:validate-env --force
+
 #  Update the database
 echo "Waiting for Database to finish Startup"
 sleep 15
