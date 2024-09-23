@@ -31,6 +31,7 @@ class BuildApplication
         $this->success = true;
 
         $this->clearSetting('app.first_time_setup');
+        $this->cacheConfig();
         event(new AdministrationEvent('Setup Complete'));
     }
 

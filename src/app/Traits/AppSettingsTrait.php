@@ -65,7 +65,7 @@ trait AppSettingsTrait
     }
 
     /**
-     * Cache the current config so it is not loaded on every request
+     * Cache the current config so it is not rebuilt on every request
      *
      * @codeCoverageIgnore
      */
