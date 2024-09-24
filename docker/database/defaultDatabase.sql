@@ -3,6 +3,5 @@
 ################################################################################
 
 CREATE SCHEMA IF NOT EXISTS `tech-bench`;
-CREATE USER `tbUser`@`%` IDENTIFIED BY 'techBenchDatabase';
-GRANT ALL PRIVILEGES ON `tech-bench`.* TO 'tbUser'@'%';
-FLUSH PRIVILEGES; 
+GRANT ALL PRIVILEGES ON `tech-bench`.* TO 'tbUser'@'%' ;
+FLUSH PRIVILEGES;

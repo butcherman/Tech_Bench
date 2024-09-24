@@ -62,7 +62,6 @@ services:
             - app-tier
         depends_on:
             - tech_bench
-        entrypoint: php artisan reverb:start --debug
 
     #  Horizon Container to run background jobs
     horizon:
@@ -80,7 +79,6 @@ services:
             - app-tier
         depends_on:
             - tech_bench
-        entrypoint: php artisan horizon:watch --without-tty
 
     #  Scheduler Container
     scheduler:
@@ -106,7 +104,7 @@ services:
         restart: unless-stopped
         volumes:
             - dbDevData:/bitnami/mysql/data
-            - ./database/setup.dev.sql:/docker-entrypoint-initdb.d/setup.dev.sql
+            - ./database/testDatabase.sql:/docker-entrypoint-initdb.d/testDatabase.sql
         networks:
             - app-tier
         ports:
