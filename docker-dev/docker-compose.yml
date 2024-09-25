@@ -14,6 +14,7 @@ networks:
 volumes:
     dbDevData:
     redisDevData:
+    meilisearchDevData:
 
 services:
     #  Application Container
@@ -141,6 +142,8 @@ services:
         image: butcherman/tech_bench_meilisearch:1.0
         container_name: meilisearch
         restart: unless-stopped
+        volumes:
+            - meilisearchDevData:/meili_data
         networks:
             - app-tier
         ports:

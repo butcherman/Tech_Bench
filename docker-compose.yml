@@ -14,6 +14,7 @@ volumes:
     appData:
     dbData:
     redisData:
+    meilisearchData:
 
 services:
     # Application Container
@@ -126,10 +127,10 @@ services:
 
     # Melisearch Container for Search Engine
     meilisearch:
-        image: getmeili/meilisearch:v1.9.0
+        image: butcherman/tech_bench_meilisearch:1.0
         container_name: meilisearch
         restart: unless-stopped
-        environment:
-            - MEILI_MASTER_KEY=MeiliTBMaster
+        volumes:
+            - meilisearchData:/meili_data
         networks:
             - app-tier
