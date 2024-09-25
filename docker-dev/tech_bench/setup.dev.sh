@@ -29,7 +29,6 @@ php /app/artisan storage:link -q
 # #  Create the database
 php /app/artisan migrate --force
 
-
 # # Store the version information in the keystore volume
 echo $(php /app/artisan version --format=compact | sed -e 's/Tech Bench //g') > /app/keystore/version
 
