@@ -36,7 +36,7 @@ Route::middleware('auth.secure')->prefix('maintenance')->name('maint.')->group(f
     Route::prefix('backups')->name('backups.')->group(function () {
         Route::get('settings', [BackupSettingsController::class, 'show'])
             ->name('settings.show')
-            ->breadcrumb('Backup Settings', 'admin.index');
+            ->breadcrumb('Backup Settings', 'maint.backup.index');
         Route::put('settings', [BackupSettingsController::class, 'update'])
             ->name('settings.update');
     });

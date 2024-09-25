@@ -26,7 +26,6 @@ class Kernel extends HttpKernel
      */
     protected $middlewareGroups = [
         'web' => [
-            \App\Http\Middleware\LogDebutVisits::class,
             \App\Http\Middleware\EncryptCookies::class,
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             \Illuminate\Session\Middleware\StartSession::class,
@@ -35,6 +34,7 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \Spatie\CookieConsent\CookieConsentMiddleware::class,
             \App\Http\Middleware\HandleInertiaRequests::class,
+            \App\Http\Middleware\LogDebutVisits::class,
         ],
 
         'auth.secure' => [
