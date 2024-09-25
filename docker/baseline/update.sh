@@ -33,8 +33,6 @@ npm install >> /dev/null 2>&1
 php /app/artisan app:validate-env --force
 
 #  Update the database
-echo "Waiting for Database to finish Startup"
-sleep 15
 php /app/artisan migrate --force
 
 #  Cache configuration files

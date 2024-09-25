@@ -11,9 +11,6 @@ echo "New installation of Tech Bench detected"
 echo "Setting up the application for the first time"
 echo "Please wait...."
 
-# Pause to allow other containers to start
-sleep 30
-
 #  Create Encryption Key
 echo "Creating Encryption Key"
 php /app/artisan key:generate --force

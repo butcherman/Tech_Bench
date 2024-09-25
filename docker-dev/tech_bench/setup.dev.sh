@@ -27,8 +27,6 @@ php /app/artisan reverb:generate --force
 php /app/artisan storage:link -q
 
 # #  Create the database
-echo "Waiting for Database to finish Startup"
-sleep 30
 php /app/artisan migrate --force
 
 
