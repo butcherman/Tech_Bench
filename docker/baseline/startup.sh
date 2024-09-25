@@ -74,15 +74,12 @@ then
     then
         /scripts/setup.sh
     fi
-
-
-    sleep 15
 fi
 
-# If this is not the master service, pause for 30 seconds to allow all setup scripts to complete
-if [ ! $SERVICE = "app" ]
+# Since the Reverb container has to start at the same time as Tech Bench, pause it
+if [ $SERVICE = "reverb" ]
 then
-    sleep 60
+    sleep 30
 fi
 
 #  Start the Horizon and PHP-FPM Services and run the Scheduler script based on server purppose

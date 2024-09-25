@@ -14,15 +14,18 @@ echo "Starting Tech Bench Development Container"
 
 if [ $SERVICE = "master" ] || [ $SERVICE = "app" ]
 then
-    #  If the .env file does not exist, run the setup script to create the database and configuration
+    # Do we need to run the first time setup script?
     if [ ! -f /app/keystore/version ]
     then
         /scripts/setup.dev.sh
     fi
 fi
 
-# pause for 30 seconds to allow all setup scripts to complete
-sleep 30
+# Since the Reverb container has to start at the same time as Tech Bench, pause it
+if [ $SERVICE = "reverb" ]
+then
+    sleep 30
+fi
 
 #  Start the Horizon and PHP-FPM Services and run the Scheduler script based on server purppose
 echo "Tech Bench $SERVICE is now running"
@@ -36,13 +39,13 @@ then
     php-fpm -F --pid /opt/bitnami/php/tmp/php-fpm.pid -y /opt/bitnami/php/etc/php-fpm.conf
 elif [ $SERVICE = "horizon" ]
 then
-    php /app/artisan horizon
+    php /app/artisan horizon:watch --without-tty
 elif [ $SERVICE = "scheduler" ]
 then
     /scripts/scheduler.sh
 elif [ $SERVICE = "reverb" ]
-then 
-    php /app/artisan reverb:start
+then
+    php /app/artisan reverb:start --debug
 else
     php-fpm -F --pid /opt/bitnami/php/tmp/php-fpm.pid -y /opt/bitnami/php/etc/php-fpm.conf
 fi

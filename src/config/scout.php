@@ -137,8 +137,8 @@ return [
     */
 
     'meilisearch' => [
-        'host' => 'meilisearch:7700', //  env('MEILISEARCH_HOST', 'http://localhost:7700'),
-        'key' => 'MeiliTBMaster', //  env('MEILISEARCH_KEY'),
+        'host' => 'meilisearch:7700',
+        'key' => env('MEILISEARCH_KEY', 'TechBenchMeilisearchMasterKey'),
         'index-settings' => [
             TechTip::class => [
                 'filterableAttributes' => ['EquipmentType', 'tip_type_id', 'public'],

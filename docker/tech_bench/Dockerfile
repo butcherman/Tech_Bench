@@ -41,6 +41,8 @@ RUN find /staging/ -type f -exec chmod 644 {} \;
 RUN find /staging/ -type d -exec chmod 755 {} \;
 RUN chmod -R 777 /staging/storage
 
+USER tbuser
+
 # Install dependencies
 RUN cp .env.example .env
 RUN composer install --no-dev --no-interaction --optimize-autoloader
@@ -53,5 +55,4 @@ RUN echo $(php /app/artisan version --format=compact | sed -e 's/Tech Bench //g'
 RUN rm .env
 
 # Finalize image
-USER tbuser
 WORKDIR /app

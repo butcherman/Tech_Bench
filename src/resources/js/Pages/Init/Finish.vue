@@ -20,7 +20,10 @@
                             going. Click the link below to log in again and
                             start using Tech Bench.
                         </p>
-                        <a :href="`${newUrl}`" class="btn btn-info w-100">
+                        <a
+                            :href="`${newUrl}/dashboard`"
+                            class="btn btn-info w-100"
+                        >
                             Go To Login Page
                         </a>
                     </div>

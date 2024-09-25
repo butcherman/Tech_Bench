@@ -14,6 +14,7 @@ volumes:
     appData:
     dbData:
     redisData:
+    meilisearchData:
 
 services:
     # Application Container
@@ -29,6 +30,9 @@ services:
             - TB_URL=${BASE_URL}
         networks:
             - app-tier
+        depends_on:
+            database:
+                condition: service_healthy
 
     # NGINX Web Server
     nginx:
@@ -47,6 +51,7 @@ services:
             - app-tier
         depends_on:
             - tech_bench
+            - reverb
 
     #  Reverb Container for Websockets
     reverb:
@@ -77,6 +82,7 @@ services:
             - app-tier
         depends_on:
             - tech_bench
+            - nginx
 
     #  Scheduler Container
     scheduler:
@@ -92,6 +98,7 @@ services:
             - app-tier
         depends_on:
             - tech_bench
+            - nginx
 
     # MySQL Database Container
     database:
@@ -102,8 +109,11 @@ services:
             - dbData:/bitnami/mysql/data
         networks:
             - app-tier
-        environment:
-            - MYSQL_ROOT_PASSWORD=tbRootPasswd
+        healthcheck:
+            test: ['CMD', '/opt/bitnami/scripts/mysql/healthcheck.sh']
+            interval: 15s
+            timeout: 5s
+            retries: 6
 
     #  Redis Container for Cache, Job and Email Queuing
     redis:
@@ -117,10 +127,10 @@ services:
 
     # Melisearch Container for Search Engine
     meilisearch:
-        image: getmeili/meilisearch:v1.9.0
+        image: butcherman/tech_bench_meilisearch:1.0
         container_name: meilisearch
         restart: unless-stopped
-        environment:
-            - MEILI_MASTER_KEY=MeiliTBMaster
+        volumes:
+            - meilisearchData:/meili_data
         networks:
             - app-tier
