@@ -5,14 +5,10 @@
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-body">
-                        <div v-if="backupRunning">
-                            <p class="text-center">
+                        <div v-if="inProgress">
+                            <button class="btn btn-danger w-100">
                                 A backup is currently running
-                            </p>
-                            <p class="text-center">
-                                <RefreshButton :only="['backup-running']" />
-                                Refresh to try again
-                            </p>
+                            </button>
                         </div>
                         <Link
                             v-else
@@ -20,10 +16,41 @@
                             :href="$route('maint.backup.store')"
                             method="post"
                             class="btn btn-info w-100"
-                            :disabled="backupRunning"
+                            :disabled="inProgress"
                         >
-                            Run Local Backup
+                            Run Backup
                         </Link>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center my-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <Link
+                            as="button"
+                            :href="$route('maint.backups.settings.show')"
+                            method="post"
+                            class="btn btn-info w-100"
+                        >
+                            Backup Settings
+                        </Link>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div
+            v-if="backupMessages.length"
+            class="row justify-content-center"
+            id="process-output"
+        >
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-body">
+                        <p v-for="msg in backupMessages" class="p-0 m-0 mh-25">
+                            {{ msg }}
+                        </p>
                     </div>
                 </div>
             </div>
@@ -32,7 +59,10 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-body">
-                        <div class="card-title">Backup Files</div>
+                        <div class="card-title">
+                            <RefreshButton :only="['backup-list']" />
+                            Backup Files
+                        </div>
                         <Table
                             responsive
                             :columns="tableCols"
@@ -44,7 +74,6 @@
                                 </span>
                             </template>
                             <template #action="{ rowData }">
-                                <!-- {{ rowData }} -->
                                 <a
                                     :href="
                                         $route(
@@ -79,11 +108,30 @@ import DeleteBadge from "@/Components/_Base/Badges/DeleteBadge.vue";
 import prettyBytes from "pretty-bytes";
 import verifyModal from "@/Modules/verifyModal";
 import { router } from "@inertiajs/vue3";
+import { onMounted, ref } from "vue";
 
-defineProps<{
+const props = defineProps<{
     backupRunning: boolean;
     backupList: any[];
 }>();
+
+const inProgress = ref(props.backupRunning);
+
+onMounted(() => {
+    console.log("mounted");
+    Echo.private("administration-channel").listen(
+        ".AdministrationEvent",
+        (msg: { msg: string }) => {
+            backupMessages.value.push(msg.msg);
+
+            if (msg.msg === "Backup Process Called") {
+                inProgress.value = true;
+            } else if (msg.msg === "Backup completed!") {
+                inProgress.value = false;
+            }
+        }
+    );
+});
 
 const deleteBackup = (fileName: string) => {
     verifyModal("This cannot be undone").then((res) => {
@@ -92,6 +140,8 @@ const deleteBackup = (fileName: string) => {
         }
     });
 };
+
+const backupMessages = ref<string[]>([]);
 
 const tableCols = [
     {
@@ -108,3 +158,9 @@ const tableCols = [
 <script lang="ts">
 export default { layout: AppLayout };
 </script>
+
+<style scoped lang="scss">
+#process-output {
+    min-height: 250px;
+}
+</style>

@@ -4,8 +4,6 @@ namespace App\Console\Commands\Maint;
 
 use App\Jobs\Maintenance\RunBackupJob;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Artisan;
-use Laravel\Prompts\Output\ConsoleOutput;
 
 class AppBackupCommand extends Command
 {
@@ -26,7 +24,6 @@ class AppBackupCommand extends Command
     {
         $this->line('Running System Backup');
 
-        // Artisan::call('backup:run', [], new ConsoleOutput);
         RunBackupJob::dispatchSync();
     }
 }

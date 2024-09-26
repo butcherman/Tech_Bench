@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Schedule;
 Schedule::command('auth:clear-resets')->everyFifteenMinutes();
 Schedule::command('horizon:snapshot')->everyFifteenMinutes();
 Schedule::command('model:prune')->daily();
+
 Schedule::job(new CheckCertificateJob)->daily();
 Schedule::job(new CheckAzureCertificateJob)->daily();
 Schedule::job(new NightlyBackupJob)->dailyAt('03:00');
