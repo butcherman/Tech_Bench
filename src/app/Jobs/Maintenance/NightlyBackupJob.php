@@ -33,7 +33,7 @@ class NightlyBackupJob implements ShouldQueue
     {
         if (config('backup.nightly_backup')) {
             Log::info('Calling nightly backup job');
-            new RunDatabaseBackup;
+            // new RunDatabaseBackup;
         }
     }
 }

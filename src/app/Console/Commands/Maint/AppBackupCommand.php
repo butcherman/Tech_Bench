@@ -2,8 +2,10 @@
 
 namespace App\Console\Commands\Maint;
 
-use App\Actions\Maintenance\RunDatabaseBackup;
+use App\Jobs\Maintenance\RunBackupJob;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Artisan;
+use Laravel\Prompts\Output\ConsoleOutput;
 
 class AppBackupCommand extends Command
 {
@@ -22,6 +24,9 @@ class AppBackupCommand extends Command
      */
     public function handle()
     {
-        new RunDatabaseBackup;
+        $this->line('Running System Backup');
+
+        // Artisan::call('backup:run', [], new ConsoleOutput);
+        RunBackupJob::dispatchSync();
     }
 }
