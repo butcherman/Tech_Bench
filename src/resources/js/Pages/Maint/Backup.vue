@@ -20,19 +20,11 @@
                         >
                             Run Backup
                         </Link>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row justify-content-center my-4">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-body">
                         <Link
                             as="button"
                             :href="$route('maint.backups.settings.show')"
                             method="post"
-                            class="btn btn-info w-100"
+                            class="btn btn-info w-100 mt-4"
                         >
                             Backup Settings
                         </Link>
@@ -60,6 +52,14 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="card-title">
+                            <span
+                                class="float-end pointer"
+                                title="Upload Backup"
+                                v-tooltip
+                                @click="uploadBackupModal?.show"
+                            >
+                                <fa-icon icon="cloud-arrow-up" />
+                            </span>
                             <RefreshButton :only="['backup-list']" />
                             Backup Files
                         </div>
@@ -93,18 +93,26 @@
                                 />
                             </template>
                         </Table>
+                        <small class="text-center w-100">
+                            Backups can only be restored from the command line
+                        </small>
                     </div>
                 </div>
             </div>
         </div>
+        <Modal ref="uploadBackupModal" title="Upload Backup File">
+            <UploadBackupForm @success="reload" />
+        </Modal>
     </div>
 </template>
 
 <script setup lang="ts">
 import AppLayout from "@/Layouts/AppLayout.vue";
+import UploadBackupForm from "@/Forms/Maintenance/UploadBackupForm.vue";
 import RefreshButton from "@/Components/_Base/Buttons/RefreshButton.vue";
 import Table from "@/Components/_Base/Table.vue";
 import DeleteBadge from "@/Components/_Base/Badges/DeleteBadge.vue";
+import Modal from "@/Components/_Base/Modal.vue";
 import prettyBytes from "pretty-bytes";
 import verifyModal from "@/Modules/verifyModal";
 import { router } from "@inertiajs/vue3";
@@ -115,7 +123,12 @@ const props = defineProps<{
     backupList: any[];
 }>();
 
-const inProgress = ref(props.backupRunning);
+const uploadBackupModal = ref<InstanceType<typeof Modal> | null>(null);
+const inProgress = ref<boolean>(props.backupRunning);
+const reload = () => {
+    uploadBackupModal.value?.hide();
+    router.reload({ only: ["backup-list"] });
+};
 
 onMounted(() => {
     console.log("mounted");
