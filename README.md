@@ -46,6 +46,40 @@ dates and is only available for a limited time.
 Tech Bench is a Docker based application.  Follow the instructions in the [Installation Guide](INSTALLATION.md) for
 detailed instructions to setup the Tech Bench.
 
+## Upgrading Tech Bench
+
+Upgrading to the latest version can be done though a bash script.  Follow the instructions in the
+[Upgrade Guide](UPGRADING.md) for more information.
+
+## Backing Up Tech Bench
+
+In order to backup the Tech Bench to an off-server location, you will need to use
+a package such as [Samba](https://www.samba.org/) to mount a network shared drive.
+This package needs to be installed on the dedicated server.
+
+Create a folder called **backupData** in the same directory as the Docker Compose
+file, and make sure that it has write permissions.
+
+```bash
+mkdir backupData
+chmod 775 backupData
+```
+
+Uncomment the following line the Docker Compose file.
+
+```yaml
+tech_bench:
+        container_name: tech_bench
+        restart: unless-stopped
+        image: butcherman/tech_bench_app:${APP_VERSION:-latest}
+        volumes:
+            - appData:/app
+            - ./.env:/app/.env
+            - ./backupData:/app/storage/backups/tech-bench  # <-- Uncomment this line -->
+```
+
+All backups will be stored in this folder and can be mounted to any shared location.
+
 ## Copyright © 2016-2024 Ron Butcher
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU

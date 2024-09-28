@@ -21,10 +21,12 @@ services:
     tech_bench:
         container_name: tech_bench
         restart: unless-stopped
-        image: butcherman/tech_bench_app:dev7
+        image: butcherman/tech_bench_app:${APP_VERSION:-latest}
         volumes:
             - appData:/app
             - ./.env:/app/.env
+            # - ./backupData:/app/storage/backups/tech-bench
+            # - ./logData:/app/storage/logs
         environment:
             - SERVICE=app
             - TB_URL=${BASE_URL}
@@ -57,7 +59,7 @@ services:
     reverb:
         container_name: reverb
         restart: unless-stopped
-        image: butcherman/tech_bench_app:dev7
+        image: butcherman/tech_bench_app:${APP_VERSION:-latest}
         volumes:
             - appData:/app
             - ./.env:/app/.env
@@ -72,7 +74,7 @@ services:
     horizon:
         container_name: horizon
         restart: unless-stopped
-        image: butcherman/tech_bench_app:dev7
+        image: butcherman/tech_bench_app:${APP_VERSION:-latest}
         volumes:
             - appData:/app
             - ./.env:/app/.env
@@ -88,7 +90,7 @@ services:
     scheduler:
         container_name: scheduler
         restart: unless-stopped
-        image: butcherman/tech_bench_app:dev7
+        image: butcherman/tech_bench_app:${APP_VERSION:-latest}
         volumes:
             - appData:/app
             - ./.env:/app/.env
