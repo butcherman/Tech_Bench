@@ -44,6 +44,7 @@ return [
          * Package Service Providers...
          */
         Karmendra\LaravelAgentDetector\AgentDetectorServiceProvider::class,
+        ZanySoft\Zip\ZipServiceProvider::class,
 
         /*
          * Application Service Providers...

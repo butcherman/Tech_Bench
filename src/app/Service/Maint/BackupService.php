@@ -26,9 +26,9 @@ class BackupService
     }
 
     /**
-     * Validate that a backup file exists based on the filename
+     * Verify that a backup file exists based on the filename
      */
-    public function validateBackupFile(string $fileName)
+    public function doesBackupExist(string $fileName)
     {
         return $this->storage->exists($this->backupName.$fileName);
     }

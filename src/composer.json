@@ -16,6 +16,12 @@
         "maintenance"
     ],
     "license": "LGPL-2.0-or-later",
+    "repositories": {
+        "zanysoft/laravel-zip": {
+        "type": "git",
+        "url": "https://github.com/CalumChamberlain/laravel-zip.git"
+        }
+    },
     "require": {
         "php": "^8.2",
         "barryvdh/laravel-dompdf": "^2.1",
@@ -32,6 +38,7 @@
         "laravel/horizon": "^5.24",
         "laravel/pail": "^1.1",
         "laravel/pennant": "^1.10",
+        "laravel/prompts": "^0.1.25",
         "laravel/reverb": "^1.2",
         "laravel/scout": "^10.10",
         "laravel/socialite": "^5.13",
@@ -45,7 +52,8 @@
         "spatie/laravel-backup": "^8.6",
         "spatie/laravel-cookie-consent": "^3.3",
         "spatie/ssl-certificate": "^2.6",
-        "tightenco/ziggy": "^2.1"
+        "tightenco/ziggy": "^2.1",
+        "zanysoft/laravel-zip": "dev-laravel-11"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.13",
