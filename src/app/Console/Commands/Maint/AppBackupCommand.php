@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands\Maint;
 
-use App\Actions\Maintenance\RunDatabaseBackup;
+use App\Jobs\Maintenance\RunBackupJob;
 use Illuminate\Console\Command;
 
 class AppBackupCommand extends Command
@@ -22,6 +22,8 @@ class AppBackupCommand extends Command
      */
     public function handle()
     {
-        new RunDatabaseBackup;
+        $this->line('Running System Backup');
+
+        RunBackupJob::dispatchSync();
     }
 }

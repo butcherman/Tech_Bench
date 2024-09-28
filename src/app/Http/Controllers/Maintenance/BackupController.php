@@ -43,7 +43,7 @@ class BackupController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Download a backup file
      */
     public function show(Request $request, string $backupName)
     {
@@ -51,7 +51,7 @@ class BackupController extends Controller
 
         $bakObj = new BackupService;
 
-        if (! $bakObj->validateBackupFile($backupName)) {
+        if (! $bakObj->doesBackupExist($backupName)) {
             throw new BackupFileMissingException($backupName);
         }
 
@@ -70,7 +70,7 @@ class BackupController extends Controller
 
         $bakObj = new BackupService;
 
-        if (! $bakObj->validateBackupFile($backupName)) {
+        if (! $bakObj->doesBackupExist($backupName)) {
             throw new BackupFileMissingException($backupName);
         }
 

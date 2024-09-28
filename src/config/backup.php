@@ -13,9 +13,7 @@ return [
                     storage_path('app'),
                     storage_path('logs'),
                 ],
-                'exclude' => [
-                    storage_path('app/backup-temp'),
-                ],
+                'exclude' => [],
                 'follow_links' => false,
                 'ignore_unreadable_directories' => false,
                 'relative_path' => true,

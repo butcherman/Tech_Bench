@@ -75,6 +75,7 @@ class ValidateEnvFileCommand extends Command
     protected function checkReverbVariables()
     {
         $success = true;
+        $changed = false;
         $passKeyList = [
             'REVERB_APP_ID',
             'REVERB_APP_KEY',
@@ -90,6 +91,7 @@ class ValidateEnvFileCommand extends Command
         foreach ($passKeyList as $key) {
             if (! $this->getEnvKeyValue($key)) {
                 $passed = $this->writeNewEnvironmentFileWith($key, Str::ulid());
+                $changed = true;
                 if (! $passed) {
                     $this->components->error('Unable to set .env variable for '.$key.'. An unexpected error has occurred.');
                     $success = false;
@@ -102,6 +104,7 @@ class ValidateEnvFileCommand extends Command
         foreach ($otherKeys as $key => $value) {
             if (! $this->getEnvKeyValue($key)) {
                 $passed = $this->writeNewEnvironmentFileWith($key, $value);
+                $changed = true;
                 if (! $passed) {
                     $this->components->error('Unable to set .env variable for '.$key.'. An unexpected error has occurred.');
                     $success = false;
@@ -112,10 +115,12 @@ class ValidateEnvFileCommand extends Command
         }
 
         $this->newLine();
-        if ($success) {
-            $this->components->info('Reverb credentials created successfully.');
-        } else {
-            $this->components->error('One or more errors occurred.  Please check errors above.');
+        if ($changed) {
+            if ($success) {
+                $this->components->info('Reverb credentials created successfully.');
+            } else {
+                $this->components->error('One or more errors occurred.  Please check errors above.');
+            }
         }
     }
 }

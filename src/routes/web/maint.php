@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Maintenance\Backup\UploadBackupController;
 use App\Http\Controllers\Maintenance\BackupController;
 use App\Http\Controllers\Maintenance\BackupSettingsController;
 use App\Http\Controllers\Maintenance\DownloadLogController;
@@ -33,12 +34,17 @@ Route::middleware('auth.secure')->prefix('maintenance')->name('maint.')->group(f
     Route::get('logs/{channel}/{logFile}/download', DownloadLogController::class)
         ->name('logs.download');
 
+    /**
+     * Backup Routes
+     */
     Route::prefix('backups')->name('backups.')->group(function () {
         Route::get('settings', [BackupSettingsController::class, 'show'])
             ->name('settings.show')
-            ->breadcrumb('Backup Settings', 'admin.index');
+            ->breadcrumb('Backup Settings', 'maint.backup.index');
         Route::put('settings', [BackupSettingsController::class, 'update'])
             ->name('settings.update');
+        Route::post('upload-backup', UploadBackupController::class)
+            ->name('upload');
     });
     Route::resource('backup', BackupController::class)->breadcrumbs(function (ResourceBreadcrumbs $breadcrumb) {
         $breadcrumb->index('Backups', 'admin.index');

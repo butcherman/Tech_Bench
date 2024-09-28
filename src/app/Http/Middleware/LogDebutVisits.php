@@ -45,9 +45,9 @@ class LogDebutVisits
             }
 
             // Collect information needed for logging
-            $user = $request->user()->full_name ?? $request->ip();
+            $user = $request->user() ? $request->user()->full_name : $request->ip();
             $requestData = $request->all();
-            $currentRoute = Route::currentRouteName() ?? $request->path();
+            $currentRoute = $request->path();
 
             Log::debug('Route '.$currentRoute.' visited by '.$user);
 
