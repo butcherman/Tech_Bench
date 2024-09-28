@@ -26,6 +26,19 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\Admin\AdministrationEvent' => [],
 
         /**
+         * Maintenance Events
+         */
+        'Spatie\Backup\Events\BackupManifestWasCreated' => [
+            'App\Listeners\Maintenance\AddVersionToBackup',
+        ],
+        'Spatie\Backup\Events\BackupWasSuccessful' => [
+            'App\Listeners\Maintenance\LogSuccessfulBackup',
+        ],
+        'Spatie\Backup\Events\BackupHasFailed' => [
+            'App\Listeners\Maintenance\LogFailedBackup',
+        ],
+
+        /**
          * Authentication Events
          */
         'Illuminate\Auth\Events\Login' => [
