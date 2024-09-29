@@ -36,7 +36,8 @@ class BackupController extends Controller
     {
         $this->authorize('viewAny', AppSettings::class);
 
-        dispatch(new RunBackupJob)->onQueue('backups');
+        dispatch(new RunBackupJob)->onConnection('sync'); // ->onQueue('backups');
+
         Log::info('Backup Operation called by '.$request->user()->username);
 
         return back();

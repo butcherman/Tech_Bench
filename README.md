@@ -57,28 +57,12 @@ In order to backup the Tech Bench to an off-server location, you will need to us
 a package such as [Samba](https://www.samba.org/) to mount a network shared drive.
 This package needs to be installed on the dedicated server.
 
-Create a folder called **backupData** in the same directory as the Docker Compose
-file, and make sure that it has write permissions.
+Durning the installation process, you will create a folder called ***backupData***
+in the same directory as the Docker Compose file.  See the [Installation Guide](INSTALLATION.md)
+for more information.
 
-```bash
-mkdir backupData
-chmod 775 backupData
-```
-
-Uncomment the following line the Docker Compose file.
-
-```yaml
-tech_bench:
-        container_name: tech_bench
-        restart: unless-stopped
-        image: butcherman/tech_bench_app:${APP_VERSION:-latest}
-        volumes:
-            - appData:/app
-            - ./.env:/app/.env
-            - ./backupData:/app/storage/backups/tech-bench  # <-- Uncomment this line -->
-```
-
-All backups will be stored in this folder and can be mounted to any shared location.
+This ***backupData*** folder can be mounted to a network share to store backups
+off-server.
 
 ## Copyright © 2016-2024 Ron Butcher
 

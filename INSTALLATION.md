@@ -9,7 +9,7 @@ up Docker, refer to the Docker website:  <https://www.docker.com/get-started/>
 By default, Tech Bench is set to run only through HTTPS.  It is highly recommended
 to upload a valid SSL Certificate to the application.
 
-## Installation Instructions
+## Manual Installation Instructions
 
 Download the included docker-compose.yml and .env files to the desired root folder
 of the application server.  To download the files using wget, enter the following
@@ -23,34 +23,22 @@ wget https://raw.githubusercontent.com/butcherman/Tech_Bench/dev7/.env
 Read the .env file and modify any necessary fields.  The BASE_URL variable must
 be set for the Tech Bench to work properly.
 
-### Backups
+Create a Docker Group and add the current user (along with any other needed users)
+into this group.
 
-In order to backup the Tech Bench to an off-server location, you will need to use
-a package such as [Samba](https://www.samba.org/) to mount a network shared drive.
-This package needs to be installed on the dedicated server.
+```bash
+sudo groupadd docker
+sudo usermod -aG docker $USER
+```
 
-Create a folder called **backupData** in the same directory as the Docker Compose
-file, and make sure that it has write permissions.
+Create a backupData folder that all application backups will be stored in.  This
+directory must be writable by the Docker Damon
 
 ```bash
 mkdir backupData
+chgrp docker backupData
 chmod 775 backupData
 ```
-
-Uncomment the following line the Docker Compose file.
-
-```yaml
-tech_bench:
-        container_name: tech_bench
-        restart: unless-stopped
-        image: butcherman/tech_bench_app:${APP_VERSION:-latest}
-        volumes:
-            - appData:/app
-            - ./.env:/app/.env
-            - ./backupData:/app/storage/backups/tech-bench  # <-- Uncomment this line -->
-```
-
-All backups will be stored in this folder and can be mounted to any shared location.
 
 ### Running The Tech Bench
 
