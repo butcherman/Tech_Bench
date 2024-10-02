@@ -8,11 +8,11 @@ Run the following commands to download and run the latest update script.
 
 ```bash
 # Download the latest Update Script
-wget - something...
-# Add execute permission to the Update Script
-chmod +x UpdateTB.sh
+wget https://raw.githubusercontent.com/butcherman/Tech_Bench/dev7/scripts/updateTB.sh
+# Make script executable
+chmod +x installTB.sh
 # Run the script
-./UpdateTB.sh
+./installTB.sh
 ```
 
 This script is not actually built yet, so um yeah.......

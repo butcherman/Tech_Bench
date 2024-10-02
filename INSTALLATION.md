@@ -9,6 +9,22 @@ up Docker, refer to the Docker website:  <https://www.docker.com/get-started/>
 By default, Tech Bench is set to run only through HTTPS.  It is highly recommended
 to upload a valid SSL Certificate to the application.
 
+## Using Setup Script
+
+A bash setup script can be downloaded and ran to automatically configure the Tech
+Bench.  Use the following commands to download and run the script.  You will be
+asked to enter the URL of the Tech Bench when the script runs.  All other configuration
+will be done from the browser after the Tech Bench has started.
+
+```bash
+# Download Script
+wget https://raw.githubusercontent.com/butcherman/Tech_Bench/dev7/scripts/installTB.sh
+# Make script executable
+chmod +x installTB.sh
+# Run the script
+./installTB.sh
+```
+
 ## Manual Installation Instructions
 
 Download the included docker-compose.yml and .env files to the desired root folder
