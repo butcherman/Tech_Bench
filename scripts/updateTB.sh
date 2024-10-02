@@ -87,6 +87,9 @@ findService()
         'reverb')
             addReverbService
             ;;
+        'meilisearch')
+            addMeilisearchService
+            ;;
     esac
 }
 
@@ -122,6 +125,25 @@ addReverbService()
     echo "            - tech_bench" >> docker-compose.yml
 }
 
-main
+# Add the Meilisearch Service to the Docker Compose file
+addMeilisearchService()
+{
+    echo "Installing Meilisearch Service for Search Engine"
 
+    # Create volume for Meilisearch Data
+    echo "$(awk '{print};/^volumes:/ && !ins { print "    meilisearchData:";ins=1}' docker-compose.yml)" > docker-compose.yml
+
+    echo "" >> docker-compose.yml
+    echo "    # Melisearch Container for Search Engine" >> docker-compose.yml
+    echo "    meilisearch:" >> docker-compose.yml
+    echo "        image: butcherman/tech_bench_meilisearch:1.0" >> docker-compose.yml
+    echo "        container_name: meilisearch" >> docker-compose.yml
+    echo "        restart: unless-stopped" >> docker-compose.yml
+    echo "        volumes:" >> docker-compose.yml
+    echo "            - meilisearchData:/meili_data" >> docker-compose.yml
+    echo "        networks:" >> docker-compose.yml
+    echo "            - app-tier" >> docker-compose.yml
+}
+
+main
 exit 0
