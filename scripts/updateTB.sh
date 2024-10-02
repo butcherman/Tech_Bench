@@ -1,5 +1,6 @@
 #!/bin/bash
 
+UPGRADE_VERSION=dev7
 FORCE=false
 
 # Get Arguments
@@ -60,8 +61,8 @@ main()
         fi
     fi
 
-    # Set the APP_VERSION variable in .env to "7.0" if it exists
-    sed -i "/APP_VERSION=/ c\APP_VERSION=7.0" .env
+    # Set the APP_VERSION variable in .env to the current App Version if it exists
+    sed -i "/APP_VERSION=/ c\APP_VERSION=$UPGRADE_VERSION" .env
 
     # Verify that all needed Docker Containers are present
     echo "Validating all Docker Containers are Present"
@@ -77,7 +78,29 @@ main()
         fi
     done
 
-    echo 'continuing'
+    # Take all containers offline
+    echo "Taking Tech Bench Offline"
+    docker compose down
+
+    # Remove all Tech Bench Containers
+    echo "Removing Old Containers"
+    for SVC in "${NEEDED[@]}"
+    do
+        docker container rm $SVC -f
+    done
+
+    # Delete all Tech Bench Images
+    echo "Removing Old Images"
+    docker rmi $(docker images --filter=reference="butcherman/tech_bench*:*" -q)
+
+    # Bring Tech Bench Back Online
+    docker compose up -d
+
+    echo '##########################################################################'
+    echo '#                                                                        #'
+    echo '#                        Upgrade Commplete                               #'
+    echo '#                                                                        #'
+    echo '##########################################################################'
 }
 
 # Determine which service is missing and run function to add it
