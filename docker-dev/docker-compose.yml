@@ -15,6 +15,12 @@ volumes:
     dbDevData:
     redisDevData:
     meilisearchDevData:
+    backupData:
+        driver: local
+        driver_opts:
+            type: 'none'
+            o: 'bind'
+            device: './backupData'
 
 services:
     #  Application Container
@@ -27,6 +33,7 @@ services:
         volumes:
             - ../src:/app
             - ./.env:/app/.env
+            - backupData:/app/storage/backups/tech-bench
         environment:
             - SERVICE=app
             - TB_URL=${BASE_URL}
@@ -81,6 +88,7 @@ services:
         volumes:
             - ../src:/app
             - ./.env:/app/.env
+            - backupData:/app/storage/backups/tech-bench
         environment:
             - SERVICE=horizon
         networks:
@@ -99,6 +107,7 @@ services:
         volumes:
             - ../src:/app
             - ./.env:/app/.env
+            - backupData:/app/storage/backups/tech-bench
         environment:
             - SERVICE=scheduler
         networks:
