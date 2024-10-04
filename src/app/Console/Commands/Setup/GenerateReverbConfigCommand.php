@@ -28,9 +28,11 @@ class GenerateReverbConfigCommand extends Command
      */
     public function handle()
     {
+        // @codeCoverageIgnoreStart
         if (! $this->confirmToProceed()) {
             return;
         }
+        // @codeCoverageIgnoreEnd
 
         $success = true;
         $keyList = [
@@ -42,8 +44,10 @@ class GenerateReverbConfigCommand extends Command
         foreach ($keyList as $key) {
             $passed = $this->writeNewEnvironmentFileReplacing($key, $this->generateRandomKey());
             if (! $passed) {
+                // @codeCoverageIgnoreStart
                 $this->error('Unable to set .env variable for '.$key.'.  This key does not exist');
                 $success = false;
+                // @codeCoverageIgnoreEnd
             }
         }
 
@@ -52,7 +56,9 @@ class GenerateReverbConfigCommand extends Command
         if ($success) {
             $this->components->info('Reverb credentials created successfully.');
         } else {
+            // @codeCoverageIgnoreStart
             $this->components->error('One or more errors occurred.  Please check errors above.');
+            // @codeCoverageIgnoreEnd
         }
     }
 

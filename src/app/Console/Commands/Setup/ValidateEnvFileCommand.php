@@ -59,9 +59,11 @@ class ValidateEnvFileCommand extends Command
             $url = $splitUrl ? end($splitUrl) : $appUrl;
 
             if (! $this->writeNewEnvironmentFileWith('BASE_URL', $url)) {
+                // @codeCoverageIgnoreStart
                 $this->components->error('Unable to write new BASE_URL variable');
 
                 return;
+                // @codeCoverageIgnoreEnd
             }
 
             $this->writeNewEnvironmentFileReplacing('APP_URL', '"'.$protocol.'://${BASE_URL}"');
@@ -93,8 +95,10 @@ class ValidateEnvFileCommand extends Command
                 $passed = $this->writeNewEnvironmentFileWith($key, Str::ulid());
                 $changed = true;
                 if (! $passed) {
+                    // @codeCoverageIgnoreStart
                     $this->components->error('Unable to set .env variable for '.$key.'. An unexpected error has occurred.');
                     $success = false;
+                    // @codeCoverageIgnoreEnd
                 } else {
                     $this->components->info($key.' created successfully');
                 }
@@ -106,8 +110,10 @@ class ValidateEnvFileCommand extends Command
                 $passed = $this->writeNewEnvironmentFileWith($key, $value);
                 $changed = true;
                 if (! $passed) {
+                    // @codeCoverageIgnoreStart
                     $this->components->error('Unable to set .env variable for '.$key.'. An unexpected error has occurred.');
                     $success = false;
+                    // @codeCoverageIgnoreEnd
                 } else {
                     $this->components->info($key.' created successfully');
                 }
@@ -119,7 +125,9 @@ class ValidateEnvFileCommand extends Command
             if ($success) {
                 $this->components->info('Reverb credentials created successfully.');
             } else {
+                // @codeCoverageIgnoreStart
                 $this->components->error('One or more errors occurred.  Please check errors above.');
+                // @codeCoverageIgnoreEnd
             }
         }
     }
