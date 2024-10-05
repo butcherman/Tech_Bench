@@ -38,7 +38,7 @@ services:
 
     # NGINX Web Server
     nginx:
-        image: butcherman/tech_bench_nginx:1.0
+        image: butcherman/tech_bench_nginx:1.1
         container_name: nginx
         restart: unless-stopped
         volumes:
