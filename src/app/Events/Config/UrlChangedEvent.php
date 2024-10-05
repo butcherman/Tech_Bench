@@ -1,5 +1,7 @@
 <?php
 
+// TODO - Refactor
+
 namespace App\Events\Config;
 
 use Illuminate\Broadcasting\InteractsWithSockets;

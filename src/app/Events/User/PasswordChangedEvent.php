@@ -1,5 +1,7 @@
 <?php
 
+// TODO - Refactor
+
 namespace App\Events\User;
 
 use App\Models\User;

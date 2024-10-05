@@ -1,7 +1,5 @@
 <?php
 
-// @formatted
-
 namespace App\Actions\Socialite;
 
 use App\Models\User;

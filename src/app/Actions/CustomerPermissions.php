@@ -1,7 +1,5 @@
 <?php
 
-// @formatted
-
 namespace App\Actions;
 
 use App\Models\Customer;

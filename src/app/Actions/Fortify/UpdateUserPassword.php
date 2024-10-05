@@ -1,7 +1,5 @@
 <?php
 
-// @formatted
-
 namespace App\Actions\Fortify;
 
 use App\Events\User\PasswordChangedEvent;

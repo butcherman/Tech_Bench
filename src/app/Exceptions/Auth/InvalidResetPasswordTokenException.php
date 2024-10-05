@@ -1,5 +1,7 @@
 <?php
 
+// TODO - Refactor
+
 namespace App\Exceptions\Auth;
 
 use App\Http\Requests\Auth\ResetPasswordRequest;

@@ -1,5 +1,7 @@
 <?php
 
+// TODO - Refactor
+
 namespace App\Events\TechTips;
 
 use App\Models\TechTipComment;

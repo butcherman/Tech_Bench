@@ -2,18 +2,18 @@
 
 namespace Tests\Unit\Actions;
 
-use App\Actions\BuildTechTipPermissions;
+use App\Actions\TechTipPermissions;
 use App\Models\User;
 use Tests\TestCase;
 
-class BuildTechTipPermissionsTest extends TestCase
+class TechTipPermissionsUnitTest extends TestCase
 {
     public function test_build_installer()
     {
+        $perm = new TechTipPermissions;
         $user = User::factory()->create(['role_id' => 1]);
-        $this->actingAs($user);
 
-        $permissions = BuildTechTipPermissions::build($user);
+        $permissions = $perm->get($user);
         $shouldBe = [
             'manage' => true,
             'create' => true,
@@ -29,9 +29,9 @@ class BuildTechTipPermissionsTest extends TestCase
     public function test_build_admin()
     {
         $user = User::factory()->create(['role_id' => 2]);
-        $this->actingAs($user);
+        $perm = new TechTipPermissions;
 
-        $permissions = BuildTechTipPermissions::build($user);
+        $permissions = $perm->get($user);
         $shouldBe = [
             'manage' => true,
             'create' => true,
@@ -47,9 +47,9 @@ class BuildTechTipPermissionsTest extends TestCase
     public function test_build_tech()
     {
         $user = User::factory()->create(['role_id' => 4]);
-        $this->actingAs($user);
+        $perm = new TechTipPermissions;
 
-        $permissions = BuildTechTipPermissions::build($user);
+        $permissions = $perm->get($user);
         $shouldBe = [
             'manage' => false,
             'create' => true,

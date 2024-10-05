@@ -1,5 +1,7 @@
 <?php
 
+// TODO - Refactor
+
 namespace App\Exceptions;
 
 use App\Http\Middleware\HandleInertiaRequests;

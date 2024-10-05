@@ -6,9 +6,9 @@ use App\Models\TechTip;
 use App\Models\TechTipComment;
 use App\Models\User;
 
-class BuildTechTipPermissions
+class TechTipPermissions
 {
-    public static function build(User $user): array
+    public function get(User $user): array
     {
         return [
             'manage' => $user->can('manage', TechTip::class),

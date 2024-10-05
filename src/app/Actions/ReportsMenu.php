@@ -2,9 +2,12 @@
 
 namespace App\Actions;
 
-class BuildReportsMenu
+class ReportsMenu
 {
-    public static function getMenu(): array
+    /**
+     * These are the available reports that can be run
+     */
+    public function get(): array
     {
         return [
             'User Reports' => [

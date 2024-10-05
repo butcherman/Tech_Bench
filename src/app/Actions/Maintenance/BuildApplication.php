@@ -1,7 +1,5 @@
 <?php
 
-// @formatted
-
 namespace App\Actions\Maintenance;
 
 use App\Events\Admin\AdministrationEvent;

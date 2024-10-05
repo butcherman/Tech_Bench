@@ -1,7 +1,5 @@
 <?php
 
-// @formatted
-
 namespace App\Actions\Fortify;
 
 use Laravel\Fortify\Contracts\LogoutResponse as LogoutResponseContract;

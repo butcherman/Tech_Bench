@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\TechTips;
 
-use App\Actions\BuildTechTipPermissions;
+use App\Actions\TechTipPermissions;
 use App\Enum\CrudAction;
 use App\Events\TechTips\TechTipEvent;
 use App\Http\Controllers\Controller;
@@ -17,6 +17,8 @@ use Inertia\Inertia;
 class TechTipsController extends Controller
 {
     use FileTrait;
+
+    public function __construct(protected TechTipPermissions $permissions) {}
 
     /**
      * Display Search Page for Tech Tips
@@ -41,7 +43,7 @@ class TechTipsController extends Controller
 
         return Inertia::render('TechTips/Create', [
             'tip-types' => TechTipType::all(),
-            'permissions' => BuildTechTipPermissions::build($request->user()),
+            'permissions' => $this->permissions->get($request->user()),
         ]);
     }
 
@@ -72,7 +74,7 @@ class TechTipsController extends Controller
             'tip-equipment' => fn () => $tech_tip->EquipmentType,
             'tip-files' => fn () => $tech_tip->FileUpload,
             'tip-comments' => fn () => $tech_tip->TechTipComment,
-            'permissions' => fn () => BuildTechTipPermissions::build($request->user()),
+            'permissions' => fn () => $this->permissions->get($request->user()),
             'is-fav' => fn () => $tech_tip->isFav($request->user()),
         ]);
     }
@@ -88,7 +90,7 @@ class TechTipsController extends Controller
             'tip-data' => $tech_tip->load(['EquipmentType', 'FileUpload'])
                 ->makeVisible('tip_type_id'),
             'tip-types' => TechTipType::all(),
-            'permissions' => BuildTechTipPermissions::build($request->user()),
+            'permissions' => $this->permissions->get($request->user()),
         ]);
     }
 
