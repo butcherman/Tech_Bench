@@ -6,7 +6,7 @@ use App\Actions\AdministrationMenu;
 use App\Models\User;
 use Tests\TestCase;
 
-class AdminMenuTest extends TestCase
+class AdminMenuUnitTest extends TestCase
 {
     /**
      * Test Administration menu with default roles

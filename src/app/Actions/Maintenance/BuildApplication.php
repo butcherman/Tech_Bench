@@ -37,9 +37,11 @@ class BuildApplication
         $this->clearSetting('app.first_time_setup');
         event(new AdministrationEvent('Setup Complete'));
 
+        // @codeCoverageIgnoreStart
         if (App::environment('production')) {
             Artisan::call('optimize');
         }
+        // @codeCoverageIgnoreEnd
     }
 
     /**

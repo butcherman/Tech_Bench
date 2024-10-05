@@ -2,17 +2,18 @@
 
 namespace Tests\Unit\Actions;
 
-use App\Actions\BuildCustomerPermissions;
+use App\Actions\CustomerPermissions;
 use App\Models\User;
 use Tests\TestCase;
 
-class BuildCustomerPermissionsUnitTest extends TestCase
+class CustomerPermissionsUnitTest extends TestCase
 {
     public function test_build_installer()
     {
+        $perm = new CustomerPermissions;
         $user = User::factory()->create(['role_id' => 1]);
 
-        $permissions = BuildCustomerPermissions::build($user);
+        $permissions = $perm->get($user);
         $shouldBe = [
             'details' => [
                 'create' => true,
@@ -47,9 +48,10 @@ class BuildCustomerPermissionsUnitTest extends TestCase
 
     public function test_build_admin()
     {
+        $perm = new CustomerPermissions;
         $user = User::factory()->create(['role_id' => 2]);
 
-        $permissions = BuildCustomerPermissions::build($user);
+        $permissions = $perm->get($user);
         $shouldBe = [
             'details' => [
                 'create' => true,
@@ -84,9 +86,10 @@ class BuildCustomerPermissionsUnitTest extends TestCase
 
     public function test_build_tech()
     {
+        $perm = new CustomerPermissions;
         $user = User::factory()->create(['role_id' => 4]);
 
-        $permissions = BuildCustomerPermissions::build($user);
+        $permissions = $perm->get($user);
         $shouldBe = [
             'details' => [
                 'create' => true,

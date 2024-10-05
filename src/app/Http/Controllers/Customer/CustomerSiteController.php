@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Customer;
 
-use App\Actions\BuildCustomerPermissions;
+use App\Actions\CustomerPermissions;
 use App\Enum\CrudAction;
 use App\Events\Customer\CustomerSiteEvent;
 use App\Http\Controllers\Controller;
@@ -18,13 +18,15 @@ use Inertia\Response;
 
 class CustomerSiteController extends Controller
 {
+    public function __construct(protected CustomerPermissions $permissions) {}
+
     /**
      * Display a listing of the Customer Sites.
      */
     public function index(Request $request, Customer $customer): Response
     {
         return Inertia::render('Customer/Site/Index', [
-            'permissions' => fn () => BuildCustomerPermissions::build($request->user()),
+            'permissions' => fn () => $this->permissions->get($request->user()),
             'customer' => fn () => $customer,
             'siteList' => fn () => $customer->CustomerSite->makeVisible('href'),
             'alerts' => fn () => $customer->CustomerAlert,
@@ -79,7 +81,7 @@ class CustomerSiteController extends Controller
         $customer->touchRecent($request->user());
 
         return Inertia::render('Customer/Site/Show', [
-            'permissions' => fn () => BuildCustomerPermissions::build($request->user()),
+            'permissions' => fn () => $this->permissions->get($request->user()),
             'customer' => fn () => $customer,
             'site' => fn () => $site,
             'siteList' => fn () => $customer->CustomerSite,

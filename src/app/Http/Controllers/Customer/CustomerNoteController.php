@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Customer;
 
-use App\Actions\BuildCustomerPermissions;
+use App\Actions\CustomerPermissions;
 use App\Enum\CrudAction;
 use App\Events\Customer\CustomerNoteEvent;
 use App\Http\Controllers\Controller;
@@ -17,13 +17,15 @@ use Inertia\Response;
 
 class CustomerNoteController extends Controller
 {
+    public function __construct(protected CustomerPermissions $permissions) {}
+
     /**
      * Display a listing of the Customer Note.
      */
     public function index(Request $request, Customer $customer): Response
     {
         return Inertia::render('Customer/Note/Index', [
-            'permissions' => fn () => BuildCustomerPermissions::build($request->user()),
+            'permissions' => fn () => $this->permissions->get($request->user()),
             'customer' => fn () => $customer,
             'notes' => fn () => $customer->CustomerNote,
         ]);
@@ -37,7 +39,7 @@ class CustomerNoteController extends Controller
         $this->authorize('create', CustomerNote::class);
 
         return Inertia::render('Customer/Note/Create', [
-            'permissions' => fn () => BuildCustomerPermissions::build($request->user()),
+            'permissions' => fn () => $this->permissions->get($request->user()),
             'customer' => fn () => $customer,
             'siteList' => fn () => $customer->CustomerSite->makeVisible('href'),
             'equipmentList' => fn () => $customer
@@ -68,7 +70,7 @@ class CustomerNoteController extends Controller
     public function show(Request $request, Customer $customer, CustomerNote $note): Response
     {
         return Inertia::render('Customer/Note/Show', [
-            'permissions' => fn () => BuildCustomerPermissions::build($request->user()),
+            'permissions' => fn () => $this->permissions->get($request->user()),
             'customer' => fn () => $customer,
             'siteList' => fn () => $note->CustomerSite->makeVisible('href'),
             'note' => fn () => $note,
@@ -83,7 +85,7 @@ class CustomerNoteController extends Controller
         $this->authorize('update', $note);
 
         return Inertia::render('Customer/Note/Edit', [
-            'permissions' => fn () => BuildCustomerPermissions::build($request->user()),
+            'permissions' => fn () => $this->permissions->get($request->user()),
             'customer' => fn () => $customer,
             'siteList' => fn () => $customer->CustomerSite->makeVisible('href'),
             'equipmentList' => fn () => $customer->CustomerEquipment,

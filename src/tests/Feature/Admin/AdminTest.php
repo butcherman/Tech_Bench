@@ -20,14 +20,20 @@ class AdminTest extends TestCase
 
     public function test_invoke_no_permission()
     {
-        $response = $this->actingAs(User::factory()->create())
+        /** @var User $user */
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)
             ->get(route('admin.index'));
         $response->assertStatus(403);
     }
 
     public function test_invoke()
     {
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        /** @var User $user */
+        $user = User::factory()->create(['role_id' => 1]);
+
+        $response = $this->actingAs($user)
             ->get(route('admin.index'));
         $response->assertSuccessful();
     }

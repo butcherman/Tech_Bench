@@ -1,5 +1,7 @@
 <?php
 
+// @formatted
+
 namespace App\Actions;
 
 use App\Models\Customer;
@@ -13,9 +15,9 @@ use App\Models\User;
  * Build the permission list for each customer tasks they are allowed or not
  * allowed to perform
  */
-class BuildCustomerPermissions
+class CustomerPermissions
 {
-    public static function build(User $user): array
+    public function get(User $user): array
     {
         return [
             'details' => [

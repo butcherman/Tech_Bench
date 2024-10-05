@@ -21,7 +21,7 @@ class AdministrationMenu
     /**
      * Create the administration menu based on what the user has permissions to do
      */
-    public function __invoke(User $user)
+    public function __invoke(User $user): array
     {
         $this->user = $user;
 

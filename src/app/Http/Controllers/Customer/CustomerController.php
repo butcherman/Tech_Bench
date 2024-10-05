@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Customer;
 
-use App\Actions\BuildCustomerPermissions;
+use App\Actions\CustomerPermissions;
 use App\Enum\CrudAction;
 use App\Events\Customer\CustomerEvent;
 use App\Http\Controllers\Controller;
@@ -18,13 +18,20 @@ use Inertia\Response;
 
 class CustomerController extends Controller
 {
+    // public function __construct(protected CustomerPermissions $permissions) {}
+
+    public function __construct(protected CustomerPermissions $permissions)
+    {
+        //
+    }
+
     /**
      * Customer Search Page
      */
-    public function index(Request $request): Response
+    public function index(Request $request, CustomerPermissions $permissions): Response
     {
         return Inertia::render('Customer/Index', [
-            'permissions' => fn () => BuildCustomerPermissions::build($request->user()),
+            'permissions' => fn () => $this->permissions->get($request->user()),
         ]);
     }
 
@@ -70,7 +77,7 @@ class CustomerController extends Controller
         // If the customer has multiple sites, show the Customer Home Page
         if ($customer->CustomerSite->count() > 1 || $customer->CustomerSite->count() == 0) {
             return Inertia::render('Customer/Show', [
-                'permissions' => fn () => BuildCustomerPermissions::build($request->user()),
+                'permissions' => fn () => $this->permissions->get($request->user()),
                 'customer' => fn () => $customer,
                 'siteList' => fn () => $customer->CustomerSite->makeVisible('href'),
                 'alerts' => fn () => $customer->CustomerAlert,
@@ -84,7 +91,7 @@ class CustomerController extends Controller
 
         // If the customer only has a single site, show that sites details
         return Inertia::render('Customer/Site/Show', [
-            'permissions' => fn () => BuildCustomerPermissions::build($request->user()),
+            'permissions' => fn () => $this->permissions->get($request->user()),
             'customer' => fn () => $customer,
             'site' => fn () => $customer->CustomerSite[0],
             'siteList' => fn () => $customer->CustomerSite,

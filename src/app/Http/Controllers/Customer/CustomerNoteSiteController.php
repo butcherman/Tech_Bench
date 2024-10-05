@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Customer;
 
-use App\Actions\BuildCustomerPermissions;
+use App\Actions\CustomerPermissions;
 use App\Enum\CrudAction;
 use App\Events\Customer\CustomerNoteEvent;
 use App\Http\Controllers\Controller;
@@ -18,6 +18,8 @@ use Inertia\Response;
 
 class CustomerNoteSiteController extends Controller
 {
+    public function __construct(protected CustomerPermissions $permissions) {}
+
     /**
      * Show the form for creating a new resource.
      */
@@ -26,7 +28,7 @@ class CustomerNoteSiteController extends Controller
         $this->authorize('create', CustomerNote::class);
 
         return Inertia::render('Customer/Note/Create', [
-            'permissions' => fn () => BuildCustomerPermissions::build($request->user()),
+            'permissions' => fn () => $this->permissions->get($request->user()),
             'customer' => fn () => $customer,
             'site' => fn () => $site,
             'siteList' => fn () => $customer->CustomerSite->makeVisible('href'),
@@ -56,7 +58,7 @@ class CustomerNoteSiteController extends Controller
     public function show(Request $request, Customer $customer, CustomerSite $site, CustomerNote $note): Response
     {
         return Inertia::render('Customer/Note/Show', [
-            'permissions' => fn () => BuildCustomerPermissions::build($request->user()),
+            'permissions' => fn () => $this->permissions->get($request->user()),
             'customer' => fn () => $customer,
             'siteList' => fn () => $note->CustomerSite->makeVisible('href'),
             'note' => fn () => $note,
@@ -72,7 +74,7 @@ class CustomerNoteSiteController extends Controller
         $this->authorize('update', $note);
 
         return Inertia::render('Customer/Note/Edit', [
-            'permissions' => fn () => BuildCustomerPermissions::build($request->user()),
+            'permissions' => fn () => $this->permissions->get($request->user()),
             'customer' => fn () => $customer,
             'siteList' => fn () => $customer->CustomerSite->makeVisible('href'),
             'equipmentList' => fn () => $customer->CustomerEquipment,

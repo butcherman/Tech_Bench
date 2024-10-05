@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Customer;
 
-use App\Actions\BuildCustomerPermissions;
+use App\Actions\CustomerPermissions;
 use App\Enum\CrudAction;
 use App\Events\Customer\CustomerNoteEvent;
 use App\Http\Controllers\Controller;
@@ -18,6 +18,8 @@ use Inertia\Response;
 
 class CustomerNoteEquipmentController extends Controller
 {
+    public function __construct(protected CustomerPermissions $permissions) {}
+
     /**
      * Show the form for creating a new Equipment Note.
      */
@@ -26,7 +28,7 @@ class CustomerNoteEquipmentController extends Controller
         $this->authorize('create', CustomerNote::class);
 
         return Inertia::render('Customer/Note/Create', [
-            'permissions' => fn () => BuildCustomerPermissions::build($request->user()),
+            'permissions' => fn () => $this->permissions->get($request->user()),
             'customer' => fn () => $customer,
             'equipment' => fn () => $equipment,
             'siteList' => fn () => $customer->CustomerSite->makeVisible('href'),
@@ -65,7 +67,7 @@ class CustomerNoteEquipmentController extends Controller
         CustomerNote $note
     ): Response {
         return Inertia::render('Customer/Note/Show', [
-            'permissions' => fn () => BuildCustomerPermissions::build($request->user()),
+            'permissions' => fn () => $this->permissions->get($request->user()),
             'customer' => fn () => $customer,
             'siteList' => fn () => $note->CustomerSite->makeVisible('href'),
             'note' => fn () => $note,
@@ -85,7 +87,7 @@ class CustomerNoteEquipmentController extends Controller
         $this->authorize('update', $note);
 
         return Inertia::render('Customer/Note/Edit', [
-            'permissions' => fn () => BuildCustomerPermissions::build($request->user()),
+            'permissions' => fn () => $this->permissions->get($request->user()),
             'customer' => fn () => $customer,
             'siteList' => fn () => $customer->CustomerSite->makeVisible('href'),
             'equipmentList' => fn () => $customer->CustomerEquipment,

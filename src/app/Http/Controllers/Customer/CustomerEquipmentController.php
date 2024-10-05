@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Customer;
 
-use App\Actions\BuildCustomerPermissions;
+use App\Actions\CustomerPermissions;
 use App\Enum\CrudAction;
 use App\Events\Customer\CustomerEquipmentEvent;
 use App\Http\Controllers\Controller;
@@ -18,13 +18,15 @@ use Inertia\Response;
 
 class CustomerEquipmentController extends Controller
 {
+    public function __construct(protected CustomerPermissions $permissions) {}
+
     /**
      * Home Page showing Customer Equipment and related notes/files
      */
     public function index(Request $request, Customer $customer): Response
     {
         return Inertia::render('Customer/Equipment/Index', [
-            'permissions' => fn () => BuildCustomerPermissions::build($request->user()),
+            'permissions' => fn () => $this->permissions->get($request->user()),
             'customer' => fn () => $customer,
             'siteList' => fn () => $customer->CustomerSite,
             'alerts' => fn () => $customer->CustomerAlert,
@@ -56,7 +58,7 @@ class CustomerEquipmentController extends Controller
     public function show(Request $request, Customer $customer, CustomerEquipment $equipment): Response
     {
         return Inertia::render('Customer/Equipment/Show', [
-            'permissions' => fn () => BuildCustomerPermissions::build($request->user()),
+            'permissions' => fn () => $this->permissions->get($request->user()),
             'customer' => fn () => $customer,
             'equipment' => fn () => $equipment,
             'siteList' => fn () => $equipment->CustomerSite->makeVisible('href'),
