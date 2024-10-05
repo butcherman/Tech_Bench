@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Log;
 /**
  * Log user in via Office 365 Integration
  *
+ * TODO - Build Unit Tests
+ *
  * @codeCoverageIgnore
  */
 class AuthorizeUser

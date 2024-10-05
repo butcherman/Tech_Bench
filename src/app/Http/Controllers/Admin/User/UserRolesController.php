@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin\User;
 
-use App\Actions\BuildUserRoles;
+use App\Actions\AvailableUserRoles;
 use App\Events\Feature\FeatureChangedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\User\UserRoleRequest;
@@ -14,6 +14,8 @@ use Inertia\Inertia;
 
 class UserRolesController extends Controller
 {
+    public function __construct(protected AvailableUserRoles $roles) {}
+
     /**
      * Display a listing of the resource.
      */
@@ -22,7 +24,7 @@ class UserRolesController extends Controller
         $this->authorize('view', UserRole::class);
 
         return Inertia::render('Admin/Role/Index', [
-            'roles' => BuildUserRoles::build($request->user()),
+            'roles' => $this->roles->get($request->user()),
         ]);
     }
 

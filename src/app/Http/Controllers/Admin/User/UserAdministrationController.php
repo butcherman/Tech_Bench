@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin\User;
 
-use App\Actions\BuildUserRoles;
+use App\Actions\AvailableUserRoles;
 use App\Events\Feature\FeatureChangedEvent;
 use App\Events\User\UserCreatedEvent;
 use App\Http\Controllers\Controller;
@@ -14,6 +14,8 @@ use Inertia\Inertia;
 
 class UserAdministrationController extends Controller
 {
+    public function __construct(protected AvailableUserRoles $roles) {}
+
     /**
      * Display a listing of the resource.
      */
@@ -34,7 +36,7 @@ class UserAdministrationController extends Controller
         $this->authorize('create', User::class);
 
         return Inertia::render('Admin/User/Create', [
-            'roles' => BuildUserRoles::build($request->user()),
+            'roles' => $this->roles->get($request->user()),
         ]);
     }
 
@@ -81,7 +83,7 @@ class UserAdministrationController extends Controller
         $this->authorize('update', $user);
 
         return Inertia::render('Admin/User/Edit', [
-            'roles' => BuildUserRoles::build($request->user()),
+            'roles' => $this->roles->get($request->user()),
             'user' => $user->makeVisible('role_id'),
         ]);
     }
