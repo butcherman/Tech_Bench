@@ -25,7 +25,7 @@ class BuildApplication
     /**
      * Save all of the initial setup wizard changes
      */
-    protected function __invoke(): void
+    public function __invoke(): void
     {
         $this->buildUserSettings();
         $this->buildAdminAccount();

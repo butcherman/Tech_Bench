@@ -19,7 +19,7 @@ class UserFactory extends Factory
     /**
      * Define the model's default state
      */
-    public function definition()
+    public function definition(): array
     {
         $first = $this->faker->firstName();
         $last = $this->faker->lastName();
