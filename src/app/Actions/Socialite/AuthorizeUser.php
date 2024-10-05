@@ -1,5 +1,7 @@
 <?php
 
+// @formatted
+
 namespace App\Actions\Socialite;
 
 use App\Models\User;
@@ -18,13 +20,14 @@ class AuthorizeUser
 
     /**
      * Try to authenticate the new user
-     * TODO - Type-hint $socUser
      */
-    public function processUser($socUser): bool|User
+    public function processUser(object $socUser): User|bool
     {
         if ($this->doesUserExist($socUser)) {
             Auth::login($this->user, true);
+
             $this->canBypassTwoFa();
+
             Log::stack(['daily', 'auth'])
                 ->info('User '.$this->user->username.' logged in via Microsoft Azure');
 
@@ -34,8 +37,11 @@ class AuthorizeUser
         //  If the user does not exist, determine if we can create them
         if (config('services.azure.allow_register')) {
             $this->buildUser($socUser);
+
             Auth::login($this->user, true);
+
             $this->canBypassTwoFa();
+
             Log::stack(['daily', 'auth'])
                 ->info('User '.$this->user->username.' logged in via Microsoft Azure');
 
@@ -52,7 +58,7 @@ class AuthorizeUser
     /**
      * Determine if the user already exists in the database
      */
-    protected function doesUserExist($socUser): bool
+    protected function doesUserExist(object $socUser): bool
     {
         $user = User::where('email', $socUser->email)->first();
         if ($user) {
@@ -67,7 +73,7 @@ class AuthorizeUser
     /**
      * Create the new user in the database
      */
-    protected function buildUser($socUser): void
+    protected function buildUser(object $socUser): void
     {
         $newUser = User::create([
             'role_id' => config('services.azure.default_role_id'),

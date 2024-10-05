@@ -29,8 +29,6 @@
         <env name="APP_ENV" value="testing"/>
         <env name="BCRYPT_ROUNDS" value="4"/>
         <env name="CACHE_DRIVER" value="array"/>
-        <env name="DB_CONNECTION" value="mysql"/>
-        <env name="DB_DATABASE" value="tech-bench-test"/>
         <env name="MAIL_MAILER" value="array"/>
         <env name="MAIL_FROM_ADDRESS" value="test@noem.com" />
         <env name="PULSE_ENABLED" value="false"/>

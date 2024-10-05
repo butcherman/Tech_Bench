@@ -1,5 +1,7 @@
 <?php
 
+// @formatted
+
 namespace App\Actions\Fortify;
 
 use App\Rules\ContainsLowerCase;
@@ -8,13 +10,10 @@ use App\Rules\ContainsSpecialChar;
 use App\Rules\ContainsUpperCase;
 use Illuminate\Validation\Rules\Password;
 
-/**
- * Get the validation rules used to validate passwords
- */
 trait PasswordValidationRules
 {
     /**
-     * Password Rules apply to all users
+     * Get the validation rules used to validate passwords
      */
     protected function passwordRules(): array
     {

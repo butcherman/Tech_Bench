@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Actions\BuildAdminMenu;
+use App\Actions\AdministrationMenu;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -13,13 +13,12 @@ class AdminController extends Controller
     /**
      * Handle the incoming request.
      */
-    public function __invoke(Request $request)
+    public function __invoke(Request $request, AdministrationMenu $menu)
     {
         Gate::authorize('admin-link', $request->user());
-        $menu = new BuildAdminMenu($request->user());
 
         return Inertia::render('Admin/Index', [
-            'menu' => $menu->getAdminMenu(),
+            'menu' => $menu($request->user()),
         ]);
     }
 }

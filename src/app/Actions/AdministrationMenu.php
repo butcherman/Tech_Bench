@@ -1,24 +1,30 @@
 <?php
 
+// @formatted
+
 namespace App\Actions;
 
 use App\Features\TechTipCommentFeature;
 use App\Models\User;
 use App\Traits\AllowTrait;
 
-/**
- * Build Administration Menu based on users permissions.
- * Only show items that they have permission to view
- */
-class BuildAdminMenu
+class AdministrationMenu
 {
-    // TODO - Unit Test Class
     use AllowTrait;
 
     protected $menu = [];
 
-    public function __construct(protected User $user)
+    protected User $user;
+
+    public function __construct() {}
+
+    /**
+     * Create the administration menu based on what the user has permissions to do
+     */
+    public function __invoke(User $user)
     {
+        $this->user = $user;
+
         $this->buildUserMenu();
         $this->buildCustomerMenu();
         $this->buildTechTipMenu();
@@ -26,13 +32,7 @@ class BuildAdminMenu
         $this->buildFileLinkMenu();
         $this->buildSettingsMenu();
         $this->buildMaintenanceMenu();
-    }
 
-    /**
-     * Return the completed menu
-     */
-    public function getAdminMenu(): array
-    {
         return $this->menu;
     }
 
@@ -70,7 +70,6 @@ class BuildAdminMenu
                     'route' => route('admin.user.user-settings.show'),
                 ],
             ];
-
         }
 
         if ($this->checkPermission($this->user, 'Manage Permissions')) {
@@ -89,10 +88,10 @@ class BuildAdminMenu
      */
     protected function buildCustomerMenu(): void
     {
-        $nav = [];
+        $custMenu = [];
 
         if ($this->checkPermission($this->user, 'Manage Customers')) {
-            $nav = [
+            $custMenu = [
                 [
                     'name' => 'Customer Settings',
                     'icon' => 'cog',
@@ -121,7 +120,7 @@ class BuildAdminMenu
             ];
         }
 
-        $this->menu['Customers'] = $nav;
+        $this->menu['Customers'] = $custMenu;
     }
 
     /**
@@ -129,10 +128,10 @@ class BuildAdminMenu
      */
     protected function buildEquipmentMenu(): void
     {
-        $nav = [];
+        $equipMenu = [];
 
         if ($this->checkPermission($this->user, 'Manage Equipment')) {
-            $nav = [
+            $equipMenu = [
                 [
                     'name' => 'Equipment Categories and Types',
                     'icon' => 'fas fa-cogs',
@@ -146,7 +145,7 @@ class BuildAdminMenu
             ];
         }
 
-        $this->menu['Equipment'] = $nav;
+        $this->menu['Equipment'] = $equipMenu;
     }
 
     /**
@@ -154,10 +153,10 @@ class BuildAdminMenu
      */
     protected function buildTechTipMenu(): void
     {
-        $nav = [];
+        $techTipMenu = [];
 
         if ($this->checkPermission($this->user, 'Manage Tech Tips')) {
-            $nav = [
+            $techTipMenu = [
                 [
                     'name' => 'Tech Tip Settings',
                     'icon' => 'cog',
@@ -176,26 +175,26 @@ class BuildAdminMenu
             ];
 
             if ($this->user->features()->active(TechTipCommentFeature::class)) {
-                $nav[] = [
+                $techTipMenu[] = [
                     'name' => 'View Flagged Comments',
                     'icon' => 'flag',
                     'route' => route('tech-tips.comments.show-flagged'),
                 ];
             }
-
-            $this->menu['Tech Tips'] = $nav;
         }
+
+        $this->menu['Tech Tips'] = $techTipMenu;
     }
 
     /**
-     * BUild Administration Menu for Application Settings
+     * Build Administration Menu for Application Settings
      */
     protected function buildSettingsMenu(): void
     {
-        $nav = [];
+        $settingsMenu = [];
 
         if ($this->checkPermission($this->user, 'App Settings')) {
-            $nav = [
+            $settingsMenu = [
                 [
                     'name' => 'Application Logo',
                     'icon' => 'fa-image',
@@ -224,7 +223,7 @@ class BuildAdminMenu
             ];
         }
 
-        $this->menu['Settings'] = $nav;
+        $this->menu['Settings'] = $settingsMenu;
     }
 
     /**
@@ -232,10 +231,10 @@ class BuildAdminMenu
      */
     protected function buildMaintenanceMenu(): void
     {
-        $nav = [];
+        $maintMenu = [];
 
         if ($this->checkPermission($this->user, 'App Settings')) {
-            $nav = [
+            $maintMenu = [
                 [
                     'name' => 'Application Logs',
                     'icon' => 'fa-bug',
@@ -259,7 +258,7 @@ class BuildAdminMenu
             ];
         }
 
-        $this->menu['Maintenance'] = $nav;
+        $this->menu['Maintenance'] = $maintMenu;
     }
 
     /**
@@ -267,14 +266,13 @@ class BuildAdminMenu
      */
     protected function buildFileLinkMenu(): void
     {
-        $nav = [];
+        $fileLinkMenu = [];
 
         if (
-            config('fileLink.feature_enabled') &&
-            $this->checkPermission($this->user, 'Manage File Links')
+            config('fileLink.feature_enabled')
+            && $this->checkPermission($this->user, 'Manage File Links')
         ) {
-
-            $nav = [
+            $fileLinkMenu = [
                 [
                     'name' => 'File Link Settings',
                     'icon' => 'cog',
@@ -288,6 +286,6 @@ class BuildAdminMenu
             ];
         }
 
-        $this->menu['File Links'] = $nav;
+        $this->menu['File Links'] = $fileLinkMenu;
     }
 }
