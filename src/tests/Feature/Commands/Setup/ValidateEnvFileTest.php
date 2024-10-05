@@ -2,10 +2,14 @@
 
 namespace Tests\Feature\Commands\Setup;
 
+use Illuminate\Support\Facades\File;
 use Tests\TestCase;
 
 class ValidateEnvFileTest extends TestCase
 {
+    /**
+     * Create a new .env file for testing purposes
+     */
     public function setUp(): void
     {
         parent::setUp();
@@ -18,8 +22,20 @@ class ValidateEnvFileTest extends TestCase
                "QUEUE_CONNECTION=sync\n".
                "TELESCOPE_ENABLED=false\n";
 
-        file_put_contents(base_path('.env.testing'), $env);
+        File::copy(base_path('.env'), base_path('.env.tmp'));
+        file_put_contents(base_path('.env'), $env);
+    }
 
+    /**
+     * Put the original .env file back
+     */
+    public function tearDown(): void
+    {
+        parent::tearDown();
+
+        $newEnv = file_get_contents(base_path('.env.tmp'));
+        file_put_contents(base_path('.env'), $newEnv);
+        File::delete(base_path('.env.tmp'));
     }
 
     /**
@@ -31,7 +47,7 @@ class ValidateEnvFileTest extends TestCase
             ->assertExitCode(0);
 
         // Assert the new ENV Keys exist
-        $newEnv = file_get_contents(base_path('.env.testing'));
+        $newEnv = file_get_contents(base_path('.env'));
         $matchPatterns = [
             'BASE_URL=localhost',
             'APP_URL="https://${BASE_URL}"',

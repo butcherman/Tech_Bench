@@ -13,13 +13,16 @@ use Illuminate\Validation\Rules\Password;
  */
 trait PasswordValidationRules
 {
+    /**
+     * Password Rules apply to all users
+     */
     protected function passwordRules(): array
     {
         // @codeCoverageIgnoreStart
-        $minLength = config('auth.passwords.settings.disable_compromised') ?
-            Password::min(config('auth.passwords.settings.min_length'))
-                ->uncompromised(3) :
-            Password::min(config('auth.passwords.settings.min_length'));
+        $minLength = config('auth.passwords.settings.disable_compromised')
+            ? Password::min(config('auth.passwords.settings.min_length'))
+                ->uncompromised(3)
+            : Password::min(config('auth.passwords.settings.min_length'));
         // @codeCoverageIgnoreEnd
 
         return [
@@ -35,6 +38,10 @@ trait PasswordValidationRules
         ];
     }
 
+    /**
+     * During initial setup, we set some temporary rules to allow the initial
+     * wizard to continue
+     */
     protected function tmpPasswordRules(array $passRules): array
     {
         config([
