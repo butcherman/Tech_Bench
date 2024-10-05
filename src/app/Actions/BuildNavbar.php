@@ -1,5 +1,7 @@
 <?php
 
+// @formatted
+
 namespace App\Actions;
 
 use App\Features\FileLinkFeature;
@@ -13,10 +15,37 @@ use Illuminate\Support\Facades\Gate;
  */
 class BuildNavbar
 {
-    // TODO - Unit Test Class
-    public static function build(User $user): array
+    protected User $user;
+
+    public function getNavbar(User $user): array
     {
-        $primaryNav = [
+        $this->user = $user;
+        $nav = $this->getPrimaryNav();
+
+        // If the Reports Nav exists, move it under Dashboard
+        if ($reportsNav = $this->getReportsNav()) {
+            array_splice($nav, 1, 0, [$reportsNav]);
+        }
+
+        // If the Administration Nav exists, move it just under the Dashboard
+        if ($adminNav = $this->getAdminNav()) {
+            array_splice($nav, 1, 0, [$adminNav]);
+        }
+
+        // Add any additional features
+        if ($featureNav = $this->getFileLinkNav()) {
+            $nav[] = $featureNav;
+        }
+
+        return $nav;
+    }
+
+    /**
+     * Generic Navigation that appears for all registered users
+     */
+    protected function getPrimaryNav(): array
+    {
+        return [
             [
                 'name' => 'Dashboard',
                 'route' => route('dashboard'),
@@ -33,70 +62,53 @@ class BuildNavbar
                 'icon' => 'fas fa-tools',
             ],
         ];
-
-        // If the Reports Nav exists, move it under Dashboard
-        if ($reportsNav = self::getReportsNav($user)) {
-            array_splice($primaryNav, 1, 0, [$reportsNav]);
-        }
-
-        // If the Admin Nav exists, move it just under the Dashboard
-        if ($adminNav = self::getAdminNav($user)) {
-            array_splice($primaryNav, 1, 0, [$adminNav]);
-        }
-
-        if ($featureNav = self::getFileLinkNav($user)) {
-            $primaryNav[] = $featureNav;
-        }
-
-        return $primaryNav;
-
     }
 
     /**
      * If the user has any Administrative Abilities, include Admin Link
      */
-    protected static function getAdminNav(User $user): bool|array
+    protected function getAdminNav(): array|bool
     {
-        if (Gate::allows('admin-link', $user)) {
-            return [
-                'name' => 'Administration',
-                'route' => route('admin.index'),
-                'icon' => 'fas fa-user-shield',
-            ];
+        if (! Gate::allows('admin-link', $this->user)) {
+            return false;
         }
 
-        return false;
+        return [
+            'name' => 'Administration',
+            'route' => route('admin.index'),
+            'icon' => 'fas fa-user-shield',
+        ];
     }
 
     /**
      * If the user can access the Reports link, include that link
      */
-    protected static function getReportsNav(User $user): bool|array
+    protected function getReportsNav(): array|bool
     {
-        if (Gate::allows('reports-link', $user)) {
-            return [
-                'name' => 'Reports',
-                'icon' => 'chart-bar',
-                'route' => route('reports.index'),
-            ];
+        if (! Gate::allows('reports-link', $this->user)) {
+            return false;
         }
 
-        return false;
+        return [
+            'name' => 'Reports',
+            'icon' => 'chart-bar',
+            'route' => route('reports.index'),
+        ];
     }
 
     /**
      * If the user can access File Links, include that link
      */
-    protected static function getFileLinkNav(User $user): bool|array
+    protected function getFileLinkNav(): array|bool
     {
-        if ($user->features()->active(FileLinkFeature::class)) {
-            return [
-                'name' => 'File Links',
-                'icon' => 'link',
-                'route' => route('links.index'),
-            ];
+        if (! $this->user->features()->active(FileLinkFeature::class)) {
+            return false;
         }
 
-        return false;
+        return [
+            'name' => 'File Links',
+            'icon' => 'link',
+            'route' => route('links.index'),
+        ];
     }
 }

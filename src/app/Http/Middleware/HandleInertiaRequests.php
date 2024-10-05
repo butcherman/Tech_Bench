@@ -60,7 +60,7 @@ class HandleInertiaRequests extends Middleware
                 'current_user' => fn () => $request->user()->makeVisible('user_id'),
                 'idle_timeout' => fn () => intval(config('auth.auto_logout_timer')),
                 //  Dynamically built navigation menu
-                'navbar' => fn () => BuildNavbar::build($request->user()),
+                'navbar' => fn () => (new BuildNavbar)->getNavbar($request->user()),
             ];
         }
 
