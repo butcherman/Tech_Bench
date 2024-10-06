@@ -1,5 +1,7 @@
 <?php
 
+// TODO - Refactor
+
 namespace App\Http\Requests\Report\Customer;
 
 use Illuminate\Foundation\Http\FormRequest;

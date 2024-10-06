@@ -1,5 +1,7 @@
 <?php
 
+// TODO - Refactor
+
 namespace App\Http\Controllers\Auth;
 
 use App\Exceptions\Auth\InvalidResetPasswordTokenException;

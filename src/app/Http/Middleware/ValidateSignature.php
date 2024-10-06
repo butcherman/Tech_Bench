@@ -1,5 +1,7 @@
 <?php
 
+// TODO - Refactor
+
 namespace App\Http\Middleware;
 
 use Illuminate\Routing\Middleware\ValidateSignature as Middleware;

@@ -1,5 +1,7 @@
 <?php
 
+// TODO - Refactor
+
 namespace App\Http\Requests\Equipment;
 
 use App\Models\EquipmentType;

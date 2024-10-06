@@ -1,5 +1,7 @@
 <?php
 
+// TODO - Refactor
+
 namespace App\Http\Controllers\Customer;
 
 use App\Events\Customer\CustomerEquipmentDataEvent;
