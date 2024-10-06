@@ -24,7 +24,7 @@ class ExtendLinkTest extends TestCase
 
     public function test_invoke_feature_disabled()
     {
-        config(['fileLink.feature_enabled' => false]);
+        config(['file-link.feature_enabled' => false]);
         $user = User::factory()->create();
         $link = FileLink::factory()->create();
 
@@ -34,7 +34,7 @@ class ExtendLinkTest extends TestCase
 
     public function test_invoke_different_user()
     {
-        config(['fileLink.feature_enabled' => true]);
+        config(['file-link.feature_enabled' => true]);
         $user = User::factory()->create();
         $link = FileLink::factory()->create();
 
@@ -44,7 +44,7 @@ class ExtendLinkTest extends TestCase
 
     public function test_invoke_no_permission()
     {
-        config(['fileLink.feature_enabled' => true]);
+        config(['file-link.feature_enabled' => true]);
         $this->changeRolePermission(4, 'Use File Links', false);
 
         $user = User::factory()->create();
@@ -56,7 +56,7 @@ class ExtendLinkTest extends TestCase
 
     public function test_invoke()
     {
-        config(['fileLink.feature_enabled' => true]);
+        config(['file-link.feature_enabled' => true]);
         $user = User::factory()->create();
         $link = FileLink::factory()->create(['user_id' => $user->user_id]);
 

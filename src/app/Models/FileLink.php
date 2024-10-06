@@ -98,12 +98,12 @@ class FileLink extends Model
     {
         Log::debug('Calling Prune File Links');
 
-        if (config('fileLink.auto_delete')) {
+        if (config('file-link.auto_delete')) {
             $linkList = static::whereDate('expire', '<', now()
-                ->subDays(config('fileLink.auto_delete_days')));
+                ->subDays(config('file-link.auto_delete_days')));
             Log::debug('List of prunable File Links', $linkList->get()->toArray());
 
-            if (! config('fileLink.auto_delete_override')) {
+            if (! config('file-link.auto_delete_override')) {
                 return $linkList;
             }
 

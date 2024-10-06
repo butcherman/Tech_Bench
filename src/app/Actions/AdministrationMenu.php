@@ -267,7 +267,7 @@ class AdministrationMenu
         $fileLinkMenu = [];
 
         if (
-            config('fileLink.feature_enabled')
+            config('file-link.feature_enabled')
             && $this->checkPermission($this->user, 'Manage File Links')
         ) {
             $fileLinkMenu = [

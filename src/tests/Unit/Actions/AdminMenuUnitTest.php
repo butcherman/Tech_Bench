@@ -168,7 +168,7 @@ class AdminMenuUnitTest extends TestCase
 
     public function test_admin_menu_as_installer_file_link_enabled()
     {
-        config(['fileLink.feature_enabled' => true]);
+        config(['file-link.feature_enabled' => true]);
         $user = User::factory()->create(['role_id' => 1]);
         $obj = new AdministrationMenu;
         $menu = $obj($user);

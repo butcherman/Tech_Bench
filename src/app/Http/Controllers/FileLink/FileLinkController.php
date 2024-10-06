@@ -35,7 +35,7 @@ class FileLinkController extends Controller
 
         return Inertia::render('FileLinks/Create', [
             'default-expire' => Carbon::now()
-                ->addDays(config('fileLink.default_link_life'))
+                ->addDays(config('file-link.default_link_life'))
                 ->format('Y-m-d'),
         ]);
     }

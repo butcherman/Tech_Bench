@@ -32,7 +32,7 @@ class GetUserSettingsUnitTest extends TestCase
 
     public function test_build_file_link_enabled()
     {
-        config(['fileLink.feature_enabled' => true]);
+        config(['file-link.feature_enabled' => true]);
 
         $testUser = User::factory()->create();
         $testObj = new GetUserSettings;
@@ -56,7 +56,7 @@ class GetUserSettingsUnitTest extends TestCase
 
     public function test_build_file_link_permission_removed()
     {
-        config(['fileLink.feature_enabled' => true]);
+        config(['file-link.feature_enabled' => true]);
 
         $fileLinkPerm = UserRolePermissionType::where('description', 'Use File Links')->first();
 
@@ -81,8 +81,8 @@ class GetUserSettingsUnitTest extends TestCase
 
     public function test_build_file_link_delete_config_disabled()
     {
-        config(['fileLink.feature_enabled' => true]);
-        config(['fileLink.auto_delete_override' => false]);
+        config(['file-link.feature_enabled' => true]);
+        config(['file-link.auto_delete_override' => false]);
         $testUser = User::factory()->create();
         $testObj = new GetUserSettings;
         $shouldBe = [

@@ -29,7 +29,7 @@ Broadcast::channel('tech-tips.{tip_id}', function (User $user, int $tip_id) {
  */
 Broadcast::channel('file-link.{link_id}', function (User $user, int $link_id) {
     Log::debug('User '.$user->username.' registering to File Link Channel for link ID '.$link_id);
-    if (! config('fileLink.feature_enabled')) {
+    if (! config('file-link.feature_enabled')) {
         return false;
     }
 

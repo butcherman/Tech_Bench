@@ -21,7 +21,7 @@ class FileLinkAdminTest extends TestCase
 
     public function test_index_feature_disabled()
     {
-        config(['fileLink.feature_enabled' => false]);
+        config(['file-link.feature_enabled' => false]);
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
             ->get(route('admin.links.manage.index'));
@@ -30,7 +30,7 @@ class FileLinkAdminTest extends TestCase
 
     public function test_index_no_permission()
     {
-        config(['fileLink.feature_enabled' => true]);
+        config(['file-link.feature_enabled' => true]);
 
         $response = $this->actingAs(User::factory()->create())
             ->get(route('admin.links.manage.index'));
@@ -39,7 +39,7 @@ class FileLinkAdminTest extends TestCase
 
     public function test_index()
     {
-        config(['fileLink.feature_enabled' => true]);
+        config(['file-link.feature_enabled' => true]);
         FileLink::factory()->count(5)->create();
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
@@ -64,7 +64,7 @@ class FileLinkAdminTest extends TestCase
     {
         $link = FileLink::factory()->create();
 
-        config(['fileLink.feature_enabled' => false]);
+        config(['file-link.feature_enabled' => false]);
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
             ->get(route('admin.links.manage.show', $link->link_id));
@@ -75,7 +75,7 @@ class FileLinkAdminTest extends TestCase
     {
         $link = FileLink::factory()->create();
 
-        config(['fileLink.feature_enabled' => true]);
+        config(['file-link.feature_enabled' => true]);
 
         $response = $this->actingAs(User::factory()->create())
             ->get(route('admin.links.manage.show', $link->link_id));
@@ -86,7 +86,7 @@ class FileLinkAdminTest extends TestCase
     {
         $link = FileLink::factory()->create();
 
-        config(['fileLink.feature_enabled' => true]);
+        config(['file-link.feature_enabled' => true]);
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
             ->get(route('admin.links.manage.show', $link->link_id));
@@ -110,7 +110,7 @@ class FileLinkAdminTest extends TestCase
     {
         $link = FileLink::factory()->create();
 
-        config(['fileLink.feature_enabled' => false]);
+        config(['file-link.feature_enabled' => false]);
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
             ->delete(route('admin.links.manage.destroy', $link->link_id));
@@ -121,7 +121,7 @@ class FileLinkAdminTest extends TestCase
     {
         $link = FileLink::factory()->create();
 
-        config(['fileLink.feature_enabled' => true]);
+        config(['file-link.feature_enabled' => true]);
 
         $response = $this->actingAs(User::factory()->create())
             ->delete(route('admin.links.manage.destroy', $link->link_id));
@@ -133,7 +133,7 @@ class FileLinkAdminTest extends TestCase
         $user = User::factory()->create();
         $link = FileLink::factory()->create(['user_id' => $user->user_id]);
 
-        config(['fileLink.feature_enabled' => true]);
+        config(['file-link.feature_enabled' => true]);
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
             ->delete(route('admin.links.manage.destroy', $link->link_id));

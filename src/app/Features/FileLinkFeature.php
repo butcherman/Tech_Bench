@@ -16,7 +16,7 @@ class FileLinkFeature
      */
     public function resolve(User $user): mixed
     {
-        if (! config('fileLink.feature_enabled')) {
+        if (! config('file-link.feature_enabled')) {
             return false;
         }
 

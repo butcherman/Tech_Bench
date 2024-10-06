@@ -53,7 +53,7 @@ class BuildNavbarUnitTest extends TestCase
 
     public function test_navbar_as_installer_with_file_links()
     {
-        config(['fileLink.feature_enabled' => true]);
+        config(['file-link.feature_enabled' => true]);
 
         /** @var User $user */
         $user = User::factory()->create(['role_id' => 1]);

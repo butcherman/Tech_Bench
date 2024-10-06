@@ -40,7 +40,7 @@ class UploadFileTest extends TestCase
             'file' => UploadedFile::fake()->image('testPhoto.png'),
         ];
 
-        config(['fileLink.feature_enabled' => false]);
+        config(['file-link.feature_enabled' => false]);
 
         $response = $this->actingAs(User::factory()->create())
             ->post(route('links.upload'), $data);
@@ -58,7 +58,7 @@ class UploadFileTest extends TestCase
             'file' => UploadedFile::fake()->image('testPhoto.png'),
         ];
 
-        config(['fileLink.feature_enabled' => true]);
+        config(['file-link.feature_enabled' => true]);
         $this->changeRolePermission(4, 'Use File Links', false);
 
         $response = $this->actingAs(User::factory()->create())
@@ -77,7 +77,7 @@ class UploadFileTest extends TestCase
             'file' => UploadedFile::fake()->image('testPhoto.png'),
         ];
 
-        config(['fileLink.feature_enabled' => true]);
+        config(['file-link.feature_enabled' => true]);
 
         $response = $this->actingAs(User::factory()->create())
             ->post(route('links.upload'), $data);

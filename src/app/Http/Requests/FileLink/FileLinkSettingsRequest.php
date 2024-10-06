@@ -33,6 +33,6 @@ class FileLinkSettingsRequest extends FormRequest
 
     public function updateFileLinkSettings()
     {
-        $this->saveSettingsArray($this->all(), 'fileLink');
+        $this->saveSettingsArray($this->all(), 'file-link');
     }
 }
