@@ -1,7 +1,5 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Exceptions\TechTips;
 
 use Exception;
@@ -16,7 +14,7 @@ class CommentFlaggedAlreadyException extends Exception
 {
     public function __construct(protected Request $request)
     {
-        //
+        parent::__construct();
     }
 
     public function report(): void

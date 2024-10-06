@@ -1,28 +1,14 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Features;
-
-use Illuminate\Support\Facades\Log;
 
 class TechTipCommentFeature
 {
     /**
-     * This Feature allows users to comment on Tech Tips
+     * Check if Tech Tip Comment Feature is enabled.
      */
     public function resolve(): bool
     {
-        Log::debug('Checking status of Feature - Comment on Tech Tip');
-
-        // If feature is disabled, return false
-        $isEnabled = (bool) config('tech-tips.allow_comments');
-        if (! $isEnabled) {
-            Log::debug('Feature - Comment on Tech Tip - is Disabled');
-
-            return false;
-        }
-
-        return true;
+        return config('tech-tips.allow_comments');
     }
 }

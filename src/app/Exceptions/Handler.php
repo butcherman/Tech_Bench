@@ -1,14 +1,12 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Exceptions;
 
 use App\Http\Middleware\HandleInertiaRequests;
-use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Support\Facades\App;
 use Inertia\Inertia;
+use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -23,25 +21,18 @@ class Handler extends ExceptionHandler
     ];
 
     /**
-     * Register the exception handling callbacks for the application.
-     */
-    public function register(): void
-    {
-        $this->reportable(function (Throwable $e) {
-            //
-        });
-    }
-
-    /**
      * Handle Exceptions with Inertia Pages
+     *
+     * @param  \Illuminate\Http\Request  $request
      */
-    public function render($request, Throwable $e)
+    public function render($request, Throwable $e): Response
     {
         $middlewareData = (new HandleInertiaRequests)->share($request);
         $response = parent::render($request, $e);
         $catchable = [500, 503, 404, 403];
         $statusCode = $response->getStatusCode();
 
+        // Template to be chosen is based on if a user is logged in or not
         $errPage = $request->user() ? 'ErrorAuth' : 'ErrorGuest';
 
         // If we are not in production mode, 500 errors should return symphony error page
@@ -59,11 +50,11 @@ class Handler extends ExceptionHandler
         }
 
         // Error 419 goes back with note to refresh page
-        // @codeCoverageIgnoreStart
         if ($statusCode === 419) {
+            // @codeCoverageIgnoreStart
             return back()->withErrors('Page Expired, Please Refresh and Try Again');
+            // @codeCoverageIgnoreEnd
         }
-        // @codeCoverageIgnoreEnd
 
         // All other uncaught codes will return symphony error page
         return $response;

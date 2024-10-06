@@ -1,7 +1,5 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Events\User;
 
 use App\Models\User;
@@ -16,8 +14,5 @@ class PasswordChangedEvent
     /**
      * Event is triggered when a user changes their password
      */
-    public function __construct(public User $user)
-    {
-        //
-    }
+    public function __construct(public User $user) {}
 }

@@ -1,5 +1,5 @@
 <?php
-// TODO - Refactor
+
 namespace App\Events\FileLinks;
 
 use App\Models\FileLink;
@@ -9,19 +9,15 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 
 class FileUploadedFromPublicEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
-     * Create a new event instance.
+     * Event is fired when a file is uploaded to a public file link
      */
-    public function __construct(public FileLink $link, public FileLinkTimeline $timeline)
-    {
-        Log::debug('File Uploaded from Public Event Called');
-    }
+    public function __construct(public FileLink $link, public FileLinkTimeline $timeline) {}
 
     /**
      * Get the channels the event should broadcast on
@@ -33,7 +29,7 @@ class FileUploadedFromPublicEvent implements ShouldBroadcast
         ];
     }
 
-    public function broadcastAs()
+    public function broadcastAs(): string
     {
         return 'FileUploadedEvent';
     }

@@ -1,7 +1,5 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Events\Feature;
 
 use Illuminate\Broadcasting\InteractsWithSockets;
@@ -13,10 +11,7 @@ class FeatureChangedEvent
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
-     * Event is Fired whenever an event is enabled or disabled
+     * Event is Fired whenever a Feature is enabled or disabled
      */
-    public function __construct()
-    {
-        //
-    }
+    public function __construct() {}
 }

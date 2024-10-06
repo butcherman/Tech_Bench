@@ -1,29 +1,26 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Exceptions\FileLink;
 
 use App\Models\FileLink;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class FileLinkExpiredException extends Exception
 {
-    protected $request;
-
-    protected $link;
-
-    public function __construct(Request $request, FileLink $link)
+    /**
+     * Exception is triggered when someone tries to visit a public file link
+     * that has expired
+     */
+    public function __construct(protected Request $request, protected FileLink $link)
     {
         parent::__construct();
-        $this->request = $request;
-        $this->link = $link;
     }
 
-    public function report()
+    public function report(): void
     {
         Log::alert('Someone is trying to visit an expired File Link URL', [
             'ip_address' => $this->request->ip(),
@@ -31,7 +28,7 @@ class FileLinkExpiredException extends Exception
         ]);
     }
 
-    public function render()
+    public function render(): Response
     {
         return Inertia::render('Public/FileLinks/Expired')
             ->toResponse($this->request)

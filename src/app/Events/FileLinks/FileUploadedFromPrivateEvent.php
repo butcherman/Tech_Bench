@@ -1,7 +1,5 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Events\FileLinks;
 
 use App\Models\FileLink;
@@ -10,23 +8,16 @@ use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 
 class FileUploadedFromPrivateEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
-     * Create a new event instance.
+     * Event is fired when a file is uploaded to a private file link
      */
-    public function __construct(public FileLink $fileLink)
-    {
-        Log::debug('File Uploaded from Private Connection Event Called');
-    }
+    public function __construct(public FileLink $fileLink) {}
 
-    /**
-     * Get the channels the event should broadcast on
-     */
     public function broadcastOn(): array
     {
         return [
@@ -34,15 +25,14 @@ class FileUploadedFromPrivateEvent implements ShouldBroadcast
         ];
     }
 
-    public function broadcastAs()
+    public function broadcastAs(): string
     {
         return 'FileUploadedEvent';
     }
 
-    public function broadcastWith()
+    public function broadcastWith(): array
     {
         return [
-            // 'link_hash' => $this->fileLink->link_hash
             'title' => 'New File Available',
             'message' => 'Refresh page to see new file',
         ];

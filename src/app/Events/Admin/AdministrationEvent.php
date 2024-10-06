@@ -1,7 +1,5 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Events\Admin;
 
 use Illuminate\Broadcasting\InteractsWithSockets;
@@ -15,16 +13,10 @@ class AdministrationEvent implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
-     * Create a new event instance.
+     * Event is fired when an admin needs real time update of a working job
      */
-    public function __construct(public string $msg)
-    {
-        //
-    }
+    public function __construct(public string $msg) {}
 
-    /**
-     * Get the channels the event should broadcast on
-     */
     public function broadcastOn(): array
     {
         return [
@@ -32,7 +24,7 @@ class AdministrationEvent implements ShouldBroadcast
         ];
     }
 
-    public function BroadcastAs()
+    public function BroadcastAs(): string
     {
         return 'AdministrationEvent';
     }

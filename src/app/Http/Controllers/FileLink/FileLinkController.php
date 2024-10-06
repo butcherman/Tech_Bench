@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\FileLink;
 
-use App\Enum\CrudAction;
 use App\Events\FileLinks\FileLinkEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FileLink\FileLinkRequest;
@@ -47,7 +46,7 @@ class FileLinkController extends Controller
     {
         $newLink = $request->createFileLink();
 
-        event(new FileLinkEvent($newLink, CrudAction::Create));
+        event(new FileLinkEvent($newLink));
 
         return redirect(route('links.show', $newLink->link_id))
             ->with('success', 'File Link Created');

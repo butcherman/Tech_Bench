@@ -1,7 +1,5 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Exceptions\TechTips;
 
 use App\Http\Middleware\HandleInertiaRequests;
@@ -9,15 +7,13 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class TechTipNotFoundException extends Exception
 {
-    protected $request;
-
-    public function __construct(Request $request)
+    public function __construct(protected Request $request)
     {
         parent::__construct();
-        $this->request = $request;
     }
 
     public function report(): void
@@ -28,7 +24,7 @@ class TechTipNotFoundException extends Exception
         ]);
     }
 
-    public function render()
+    public function render(): Response
     {
         $middlewareData = (new HandleInertiaRequests)->share($this->request);
 

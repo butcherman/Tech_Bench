@@ -1,7 +1,5 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Exceptions\Maintenance;
 
 use Exception;

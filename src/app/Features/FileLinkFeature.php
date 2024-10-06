@@ -1,7 +1,5 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Features;
 
 use App\Models\User;
@@ -12,9 +10,10 @@ class FileLinkFeature
     use AllowTrait;
 
     /**
-     * Resolve the feature's initial value.
+     * Determine if File Link Feature is enabled.
+     * Then determine if user has permission to use File Link Feature
      */
-    public function resolve(User $user): mixed
+    public function resolve(User $user): bool
     {
         if (! config('file-link.feature_enabled')) {
             return false;

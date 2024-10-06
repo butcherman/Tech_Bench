@@ -1,7 +1,5 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Events\TechTips;
 
 use App\Models\TechTipComment;
@@ -16,8 +14,5 @@ class TipCommentFlaggedEvent
     /**
      * Event is triggered when a Tech Tip Comment is flagged as inappropriate
      */
-    public function __construct(public TechTipComment $comment)
-    {
-        //
-    }
+    public function __construct(public TechTipComment $comment) {}
 }

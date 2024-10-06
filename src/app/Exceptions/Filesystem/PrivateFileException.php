@@ -1,7 +1,5 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Exceptions\Filesystem;
 
 use App\Models\FileUpload;
