@@ -30,6 +30,8 @@ class DestroyCustomerJob implements ShouldQueue
         $this->destroyCustomerFiles();
         $this->destroyCustomerSites();
 
+        $this->customer->forceDelete();
+
         Log::info('Customer '.$this->customer->name.' has been destroyed');
     }
 

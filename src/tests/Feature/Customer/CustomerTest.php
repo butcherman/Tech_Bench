@@ -3,6 +3,7 @@
 namespace Tests\Feature\Customer;
 
 use App\Events\Customer\CustomerEvent;
+use App\Jobs\Customer\DestroyCustomerJob;
 use App\Models\Customer;
 use App\Models\CustomerContact;
 use App\Models\CustomerFile;
@@ -10,6 +11,7 @@ use App\Models\CustomerNote;
 use App\Models\CustomerSite;
 use App\Models\User;
 use App\Models\UserRolePermission;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
 use Tests\TestCase;
@@ -528,6 +530,7 @@ class CustomerTest extends TestCase
     public function test_force_delete()
     {
         Event::fake();
+        Bus::fake();
 
         $cust = Customer::factory()
             ->has(CustomerFile::factory())
@@ -543,11 +546,12 @@ class CustomerTest extends TestCase
             'name' => $cust->name,
         ]));
 
-        $this->assertDatabaseMissing('customers', [
-            'cust_id' => $cust->cust_id,
-            'name' => $cust->name,
-        ]);
+        // $this->assertDatabaseMissing('customers', [
+        //     'cust_id' => $cust->cust_id,
+        //     'name' => $cust->name,
+        // ]);
 
+        Bus::assertDispatched(DestroyCustomerJob::class);
         Event::assertDispatched(CustomerEvent::class);
     }
 }
