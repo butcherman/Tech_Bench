@@ -1,7 +1,5 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Console\Commands\Maint;
 
 use App\Models\CustomerFile;

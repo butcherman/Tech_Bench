@@ -16,9 +16,9 @@ class LoginController extends Controller
         return Inertia::render('Auth/Login', [
             'welcome-message' => config('app.welcome_message'),
             'home-links' => config('app.home_links'),
-            'public-link' => config('techTips.allow_public') ? [
+            'public-link' => config('tech-tips.allow_public') ? [
                 'url' => route('publicTips.index'),
-                'text' => config('techTips.public_link_text'),
+                'text' => config('tech-tips.public_link_text'),
             ] : false,
             'allow-oath' => (bool) config('services.azure.allow_login'),
         ]);

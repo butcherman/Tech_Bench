@@ -38,7 +38,7 @@ class TechTipCommentTest extends TestCase
 
     public function test_index_feature_disabled()
     {
-        config(['techTips.allow_comments' => false]);
+        config(['tech-tips.allow_comments' => false]);
 
         $tip = TechTip::factory()->create();
 
@@ -97,7 +97,7 @@ class TechTipCommentTest extends TestCase
 
     public function test_store_feature_disabled()
     {
-        config(['techTips.allow_comments' => false]);
+        config(['tech-tips.allow_comments' => false]);
         $tip = TechTip::factory()->create();
         $data = [
             'comment_data' => 'This is a comment',
@@ -112,7 +112,7 @@ class TechTipCommentTest extends TestCase
     {
         Notification::fake();
 
-        config(['techTips.allow_comments' => true]);
+        config(['tech-tips.allow_comments' => true]);
         $tip = TechTip::factory()->create();
         $data = [
             'comment_data' => 'This is a comment',
@@ -181,7 +181,7 @@ class TechTipCommentTest extends TestCase
 
     public function test_update_feature_disabled()
     {
-        config(['techTips.allow_comments' => false]);
+        config(['tech-tips.allow_comments' => false]);
         $comment = TechTipComment::factory()->create();
         $data = [
             'comment_data' => 'This is an updated comment',
@@ -197,7 +197,7 @@ class TechTipCommentTest extends TestCase
 
     public function test_update_as_admin()
     {
-        config(['techTips.allow_comments' => true]);
+        config(['tech-tips.allow_comments' => true]);
         $comment = TechTipComment::factory()->create();
         $data = [
             'comment_data' => 'This is an updated comment',
@@ -277,7 +277,7 @@ class TechTipCommentTest extends TestCase
 
     public function test_destroy_feature_disabled()
     {
-        config(['techTips.allow_comments' => false]);
+        config(['tech-tips.allow_comments' => false]);
         $user = User::factory()->create();
         $comment = TechTipComment::factory()->create(['user_id' => $user->user_id]);
 
@@ -290,7 +290,7 @@ class TechTipCommentTest extends TestCase
 
     public function test_destroy_as_admin()
     {
-        config(['techTips.allow_comments' => true]);
+        config(['tech-tips.allow_comments' => true]);
         $comment = TechTipComment::factory()->create();
 
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
@@ -337,7 +337,7 @@ class TechTipCommentTest extends TestCase
 
     public function test_restore_feature_disabled()
     {
-        config(['techTips.allow_comments' => false]);
+        config(['tech-tips.allow_comments' => false]);
         $comment = TechTipComment::factory()->create();
         TechTipCommentFlag::create([
             'user_id' => User::factory()->create()->user_id,
@@ -351,7 +351,7 @@ class TechTipCommentTest extends TestCase
 
     public function test_restore()
     {
-        config(['techTips.allow_comments' => true]);
+        config(['tech-tips.allow_comments' => true]);
         $comment = TechTipComment::factory()->create();
         TechTipCommentFlag::create([
             'user_id' => User::factory()->create()->user_id,

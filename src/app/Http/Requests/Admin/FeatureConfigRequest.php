@@ -33,9 +33,9 @@ class FeatureConfigRequest extends FormRequest
 
     public function updateFeatureSettings()
     {
-        $this->saveSettings('fileLink.feature_enabled', $this->file_links);
-        $this->saveSettings('techTips.allow_public', $this->public_tips);
-        $this->saveSettings('techTips.allow_comments', $this->tip_comments);
+        $this->saveSettings('file-link.feature_enabled', $this->file_links);
+        $this->saveSettings('tech-tips.allow_public', $this->public_tips);
+        $this->saveSettings('tech-tips.allow_comments', $this->tip_comments);
 
         // Forget the feature settings to re-force checking
         event(new FeatureChangedEvent);

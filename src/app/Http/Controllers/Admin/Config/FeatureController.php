@@ -20,8 +20,8 @@ class FeatureController extends Controller
         return Inertia::render('Admin/Config/Features', [
             'feature-list' => [
                 'file_links' => (bool) config('file-link.feature_enabled'),
-                'public_tips' => (bool) config('techTips.allow_public'),
-                'tip_comments' => (bool) config('techTips.allow_comments'),
+                'public_tips' => (bool) config('tech-tips.allow_public'),
+                'tip_comments' => (bool) config('tech-tips.allow_comments'),
             ],
         ]);
     }

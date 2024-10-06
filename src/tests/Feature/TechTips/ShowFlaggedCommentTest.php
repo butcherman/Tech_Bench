@@ -34,7 +34,7 @@ class ShowFlaggedCommentTest extends TestCase
 
     public function test_invoke_feature_disabled()
     {
-        config(['techTips.allow_comments' => false]);
+        config(['tech-tips.allow_comments' => false]);
         $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
             ->get(route('tech-tips.comments.show-flagged'));
         $response->assertForbidden();

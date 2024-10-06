@@ -35,7 +35,7 @@ class TechTipsSettingsRequest extends FormRequest
     {
         $this->saveSettingsArray(
             $this->only(['allow_public', 'allow_comments']),
-            'techTips'
+            'tech-tips'
         );
 
         // Forget the feature settings to re-force checking

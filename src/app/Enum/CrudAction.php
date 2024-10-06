@@ -1,7 +1,5 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Enum;
 
 /**

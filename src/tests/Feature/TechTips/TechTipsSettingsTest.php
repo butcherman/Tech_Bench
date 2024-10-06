@@ -73,12 +73,12 @@ class TechTipsSettingsTest extends TestCase
         $response->assertSessionHas('success', __('tips.settings_updated'));
 
         $this->assertDatabaseHas('app_settings', [
-            'key' => 'techTips.allow_public',
+            'key' => 'tech-tips.allow_public',
             // 'value' => true,
         ]);
 
         $this->assertDatabaseHas('app_settings', [
-            'key' => 'techTips.allow_comments',
+            'key' => 'tech-tips.allow_comments',
             // 'value' => true,
         ]);
     }

@@ -17,7 +17,7 @@ class CheckPublicTechTipMiddleware
         /**
          * If Feature is disabled, abort
          */
-        if (! config('techTips.allow_public')) {
+        if (! config('tech-tips.allow_public')) {
             abort('404');
         }
 

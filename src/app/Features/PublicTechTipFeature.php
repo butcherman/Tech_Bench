@@ -16,7 +16,7 @@ class PublicTechTipFeature
         Log::debug('Checking status of Feature - Public Tech Tip');
 
         // Check if feature is enabled in config settings
-        $isEnabled = (bool) config('techTips.allow_public');
+        $isEnabled = (bool) config('tech-tips.allow_public');
 
         return $isEnabled;
     }

@@ -76,15 +76,15 @@ class FeatureTest extends TestCase
         $response->assertSessionHas('success', 'Feature Settings Updated');
 
         $this->assertDatabaseHas('app_settings', [
-            'key' => 'fileLink.feature_enabled',
+            'key' => 'file-link.feature_enabled',
             // 'value' => true,
         ]);
         $this->assertDatabaseHas('app_settings', [
-            'key' => 'techTips.allow_public',
+            'key' => 'tech-tips.allow_public',
             // 'value' => true,
         ]);
         $this->assertDatabaseHas('app_settings', [
-            'key' => 'techTips.allow_comments',
+            'key' => 'tech-tips.allow_comments',
             // 'value' => true,
         ]);
     }
