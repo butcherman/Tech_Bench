@@ -22,6 +22,7 @@ class SendTestEmailController extends Controller
     {
         $this->authorize('viewAny', AppSettings::class);
 
+        // TODO - Move logic to its own class
         try {
             Notification::send($request->user(), new SendTestEmail);
 

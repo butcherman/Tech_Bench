@@ -15,7 +15,7 @@ class FeatureController extends Controller
     public function __construct(protected ApplicationSettingsService $svc) {}
 
     /**
-     * Display the resource.
+     * Display the available features
      */
     public function show(): Response
     {
@@ -31,7 +31,7 @@ class FeatureController extends Controller
     }
 
     /**
-     * Update the resource in storage.
+     * Update the active features
      */
     public function update(FeatureConfigRequest $request): RedirectResponse
     {

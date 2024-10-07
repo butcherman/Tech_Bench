@@ -78,7 +78,7 @@ class BuildApplication
         event(new AdministrationEvent('Saving Password Policy'));
 
         $process = new PasswordPolicyRequest($this->appSettingsData['user-settings']);
-        $process->processPasswordSettings();
+        $this->svc->processPasswordSettings($process);
     }
 
     /**

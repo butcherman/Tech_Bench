@@ -8,6 +8,7 @@ use App\Http\Requests\Admin\BasicSettingsRequest;
 use App\Http\Requests\Admin\EmailSettingsRequest;
 use App\Http\Requests\Admin\FeatureConfigRequest;
 use App\Http\Requests\Admin\LogoRequest;
+use App\Http\Requests\Admin\PasswordPolicyRequest;
 use App\Models\AppSettings;
 use Illuminate\Http\File;
 use Illuminate\Support\Facades\App;
@@ -94,6 +95,18 @@ class ApplicationSettingsService
         ]);
     }
 
+    /**
+     * Update the User Password Policy
+     */
+    public function processPasswordSettings(PasswordPolicyRequest $requestData): void
+    {
+        $this->saveSettingsArray($requestData->toArray(), 'auth.passwords.settings');
+
+        $user = $requestData->user() ? $requestData->user()->username : 'Initial Setup Wizard';
+        Log::notice($user.' has updated the User Password Policy',
+            $requestData->toArray());
+    }
+
     /***************************************************************************/
 
     /**
@@ -124,7 +137,7 @@ class ApplicationSettingsService
     /**
      * Array must be in the form of ['key' => 'value] in order to be properly updated
      */
-    public function saveSettingsArray(array $settingArray, ?string $prefix = null)
+    public function saveSettingsArray(array $settingArray, ?string $prefix = null): void
     {
         foreach ($settingArray as $key => $value) {
             $newKey = is_null($prefix) ? $key : $prefix.'.'.$key;
@@ -138,7 +151,7 @@ class ApplicationSettingsService
     /**
      * Clear a setting from the database
      */
-    public function clearSetting($key)
+    public function clearSetting($key): void
     {
         $data = AppSettings::where('key', $key)->first();
         if ($data) {
@@ -153,7 +166,7 @@ class ApplicationSettingsService
      *
      * @codeCoverageIgnore
      */
-    protected function cacheConfig()
+    protected function cacheConfig(): void
     {
         if (App::environment('production')) {
             Artisan::call('config:cache');

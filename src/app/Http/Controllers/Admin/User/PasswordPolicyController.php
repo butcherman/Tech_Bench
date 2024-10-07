@@ -1,21 +1,23 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Http\Controllers\Admin\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\PasswordPolicyRequest;
 use App\Models\User;
-use Illuminate\Support\Facades\Log;
+use App\Service\Admin\ApplicationSettingsService;
+use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class PasswordPolicyController extends Controller
 {
+    public function __construct(protected ApplicationSettingsService $svc) {}
+
     /**
-     * Display the resource.
+     * Display the current password policy.
      */
-    public function show()
+    public function show(): Response
     {
         $this->authorize('viewAny', User::class);
 
@@ -33,16 +35,12 @@ class PasswordPolicyController extends Controller
     }
 
     /**
-     * Update the resource in storage.
+     * Update the password policy.
      */
-    public function update(PasswordPolicyRequest $request)
+    public function update(PasswordPolicyRequest $request): RedirectResponse
     {
-        $request->processPasswordSettings();
-
-        Log::notice($request->user()->username.' has updated the User Password Policy',
-            $request->toArray());
+        $this->svc->processPasswordSettings($request);
 
         return back()->with('success', __('admin.user.password_policy'));
-
     }
 }

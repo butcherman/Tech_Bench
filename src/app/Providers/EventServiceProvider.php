@@ -78,10 +78,10 @@ class EventServiceProvider extends ServiceProvider
             //////////////////// Move Me ////////////////////////////
             'App\Listeners\User\CreateUserSettingsEntry',
         ],
-        'App\Events\User\ResendWelcomeEvent' => [
-            'App\Listeners\Notify\User\ResendWelcomeEmail',
-            //////////////////// Move Me ////////////////////////////
-        ],
+        // 'App\Events\User\ResendWelcomeEvent' => [
+        //     'App\Listeners\Notify\User\ResendWelcomeEmail',
+        //     //////////////////// Move Me ////////////////////////////
+        // ],
 
         /**
          * Office 365 Authentication Events
