@@ -1,20 +1,20 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Http\Controllers\Admin\Config;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\BasicSettingsRequest;
 use App\Models\AppSettings;
+use App\Service\Admin\ApplicationSettingsService;
 use App\Service\TimezoneList;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class BasicSettingsController extends Controller
 {
+    public function __construct(protected ApplicationSettingsService $svc) {}
+
     /**
      * Display the Application Settings.
      */
@@ -34,16 +34,11 @@ class BasicSettingsController extends Controller
     }
 
     /**
-     * Update the Applications Settings
+     * Update the Application Settings
      */
     public function update(BasicSettingsRequest $request): RedirectResponse
     {
-        $request->processSettings();
-
-        Log::notice(
-            'Application Configuration updated by '.$request->user()->username,
-            $request->toArray()
-        );
+        $this->svc->updateBasicSettings($request);
 
         return back()->with('success', __('admin.config.updated'));
     }

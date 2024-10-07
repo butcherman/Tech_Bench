@@ -20,14 +20,20 @@ class EmailSettingsTest extends TestCase
 
     public function test_show_no_permission()
     {
-        $response = $this->actingAs(User::factory()->create())
+        /** @var User $user */
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)
             ->get(route('admin.email-settings.show'));
         $response->assertStatus(403);
     }
 
     public function test_show()
     {
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        /** @var User $user */
+        $user = User::factory()->create(['role_id' => 1]);
+
+        $response = $this->actingAs($user)
             ->get(route('admin.email-settings.show'));
         $response->assertSuccessful();
     }
@@ -55,6 +61,8 @@ class EmailSettingsTest extends TestCase
 
     public function test_update_no_permission()
     {
+        /** @var User $user */
+        $user = User::factory()->create();
         $data = [
             'from_address' => 'new@email.org',
             'username' => 'testName',
@@ -65,13 +73,15 @@ class EmailSettingsTest extends TestCase
             'require_aut' => true,
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs($user)
             ->put(route('admin.email-settings.update'), $data);
         $response->assertStatus(403);
     }
 
     public function test_update()
     {
+        /** @var User $user */
+        $user = User::factory()->create(['role_id' => 1]);
         $data = [
             'from_address' => 'new@email.org',
             'username' => 'testName',
@@ -82,7 +92,7 @@ class EmailSettingsTest extends TestCase
             'require_auth' => true,
         ];
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs($user)
             ->put(route('admin.email-settings.update'), $data);
         $response->assertStatus(302);
         $response->assertSessionHas('success', __('admin.email.updated'));

@@ -1,7 +1,5 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Http\Requests\Admin;
 
 use App\Models\AppSettings;
@@ -26,22 +24,13 @@ class EmailSettingsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'from_address' => 'required|email',
-            'username' => 'required_if:require_auth,true',
-            'password' => 'required_if:require_auth,true',
-            'host' => 'required|string',
-            'port' => 'required|numeric',
-            'encryption' => 'required|string',
-            'require_auth' => 'required|boolean',
+            'from_address' => ['required', 'email'],
+            'username' => ['required_if:require_auth,true'],
+            'password' => ['required_if:require_auth,true'],
+            'host' => ['required', 'string'],
+            'port' => ['required', 'numeric'],
+            'encryption' => ['required', 'string'],
+            'require_auth' => ['required', 'boolean'],
         ];
-    }
-
-    /**
-     * Save the new email settings
-     */
-    public function processSettings()
-    {
-        $this->saveSettings('mail.from.address', $this->from_address);
-        $this->saveSettingsArray($this->except('from_address'), 'mail.mailers.smtp');
     }
 }

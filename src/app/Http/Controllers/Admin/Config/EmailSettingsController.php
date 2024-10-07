@@ -1,19 +1,19 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Http\Controllers\Admin\Config;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\EmailSettingsRequest;
 use App\Models\AppSettings;
+use App\Service\Admin\ApplicationSettingsService;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class EmailSettingsController extends Controller
 {
+    public function __construct(protected ApplicationSettingsService $svc) {}
+
     /**
      * Display the Email Settings.
      */
@@ -29,7 +29,7 @@ class EmailSettingsController extends Controller
                 'encryption' => strtoupper(config('mail.mailers.smtp.encryption')),
                 'username' => config('mail.mailers.smtp.username'),
                 'password' => config('mail.mailers.smtp.password') ? __('admin.fake_password') : '',
-                'require_auth' => (bool) config('mail.mailers.smtp.require_auth'),
+                'require_auth' => config('mail.mailers.smtp.require_auth'),
             ],
         ]);
     }
@@ -39,12 +39,7 @@ class EmailSettingsController extends Controller
      */
     public function update(EmailSettingsRequest $request): RedirectResponse
     {
-        $request->processSettings();
-
-        Log::notice(
-            'Email Settings Updated by '.$request->user()->username,
-            $request->except('password')
-        );
+        $this->svc->processEmailSettings($request);
 
         return back()->with('success', __('admin.email.updated'));
     }

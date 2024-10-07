@@ -1,29 +1,31 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Http\Controllers\Admin\Config;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\FeatureConfigRequest;
 use App\Models\AppSettings;
-use Illuminate\Support\Facades\Log;
+use App\Service\Admin\ApplicationSettingsService;
+use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class FeatureController extends Controller
 {
+    public function __construct(protected ApplicationSettingsService $svc) {}
+
     /**
      * Display the resource.
      */
-    public function show()
+    public function show(): Response
     {
         $this->authorize('update', AppSettings::class);
 
         return Inertia::render('Admin/Config/Features', [
             'feature-list' => [
-                'file_links' => (bool) config('file-link.feature_enabled'),
-                'public_tips' => (bool) config('tech-tips.allow_public'),
-                'tip_comments' => (bool) config('tech-tips.allow_comments'),
+                'file_links' => config('file-link.feature_enabled'),
+                'public_tips' => config('tech-tips.allow_public'),
+                'tip_comments' => config('tech-tips.allow_comments'),
             ],
         ]);
     }
@@ -31,11 +33,9 @@ class FeatureController extends Controller
     /**
      * Update the resource in storage.
      */
-    public function update(FeatureConfigRequest $request)
+    public function update(FeatureConfigRequest $request): RedirectResponse
     {
-        $request->updateFeatureSettings();
-
-        Log::info('Application Features updated by '.$request->user()->username);
+        $this->svc->updateFeatureSettings($request);
 
         return back()->with('success', 'Feature Settings Updated');
     }

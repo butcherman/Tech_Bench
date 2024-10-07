@@ -7,6 +7,7 @@ use App\Http\Requests\Admin\BasicSettingsRequest;
 use App\Http\Requests\Admin\EmailSettingsRequest;
 use App\Http\Requests\Admin\PasswordPolicyRequest;
 use App\Models\User;
+use App\Service\Admin\ApplicationSettingsService;
 use App\Traits\AppSettingsTrait;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Artisan;
@@ -18,7 +19,12 @@ class BuildApplication
 
     protected bool $success = false;
 
-    public function __construct(public array $appSettingsData) {}
+    protected $svc;
+
+    public function __construct(public array $appSettingsData)
+    {
+        $this->svc = new ApplicationSettingsService;
+    }
 
     /**
      * Save all of the initial setup wizard changes
@@ -50,7 +56,7 @@ class BuildApplication
         event(new AdministrationEvent('Saving App Settings'));
 
         $process = new BasicSettingsRequest($this->appSettingsData['basic-settings']);
-        $process->processSettings();
+        $this->svc->updateBasicSettings($process);
     }
 
     /**
@@ -61,7 +67,7 @@ class BuildApplication
         event(new AdministrationEvent('Saving Email Settings'));
 
         $process = new EmailSettingsRequest($this->appSettingsData['email-settings']);
-        $process->processSettings();
+        $this->svc->processEmailSettings($process);
     }
 
     /**

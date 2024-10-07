@@ -1,8 +1,10 @@
 <?php
 
-namespace Tests\Feature\Config;
+namespace Tests\Admin\Config;
 
+use App\Events\Feature\FeatureChangedEvent;
 use App\Models\User;
+use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
 class FeatureTest extends TestCase
@@ -20,14 +22,20 @@ class FeatureTest extends TestCase
 
     public function test_show_no_permission()
     {
-        $response = $this->actingAs(User::factory()->create())
+        /** @var User $user */
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)
             ->get(route('admin.features.show'));
         $response->assertForbidden();
     }
 
     public function test_show()
     {
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        /** @var User $user */
+        $user = User::factory()->create(['role_id' => 1]);
+
+        $response = $this->actingAs($user)
             ->get(route('admin.features.show'));
         $response->assertSuccessful();
     }
@@ -51,41 +59,46 @@ class FeatureTest extends TestCase
 
     public function test_update_no_permission()
     {
+        /** @var User $user */
+        $user = User::factory()->create();
         $data = [
             'file_links' => true,
             'public_tips' => true,
             'tip_comments' => false,
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs($user)
             ->put(route('admin.features.update'), $data);
         $response->assertForbidden();
     }
 
     public function test_update()
     {
+        Event::fake();
+
+        /** @var User $user */
+        $user = User::factory()->create(['role_id' => 1]);
         $data = [
             'file_links' => true,
             'public_tips' => true,
             'tip_comments' => false,
         ];
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs($user)
             ->put(route('admin.features.update'), $data);
         $response->assertStatus(302);
         $response->assertSessionHas('success', 'Feature Settings Updated');
 
         $this->assertDatabaseHas('app_settings', [
             'key' => 'file-link.feature_enabled',
-            // 'value' => true,
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'tech-tips.allow_public',
-            // 'value' => true,
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'tech-tips.allow_comments',
-            // 'value' => true,
         ]);
+
+        Event::assertDispatched(FeatureChangedEvent::class);
     }
 }

@@ -2,7 +2,9 @@
 
 namespace Tests\Feature\Admin\Config;
 
+use App\Events\Config\UrlChangedEvent;
 use App\Models\User;
+use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
 class BasicSettingsTest extends TestCase
@@ -20,14 +22,20 @@ class BasicSettingsTest extends TestCase
 
     public function test_show_no_permission()
     {
-        $response = $this->actingAs(User::factory()->create())
+        /** @var User $user */
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)
             ->get(route('admin.basic-settings.show'));
         $response->assertStatus(403);
     }
 
     public function test_show()
     {
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        /** @var User $user */
+        $user = User::factory()->create(['role_id' => 1]);
+
+        $response = $this->actingAs($user)
             ->get(route('admin.basic-settings.show'));
         $response->assertSuccessful();
     }
@@ -52,6 +60,8 @@ class BasicSettingsTest extends TestCase
 
     public function test_update_no_permission()
     {
+        /** @var User $user */
+        $user = User::factory()->create();
         $data = [
             'url' => 'https://someUrl.noSite',
             'timezone' => 'UTC',
@@ -59,13 +69,17 @@ class BasicSettingsTest extends TestCase
             'company_name' => 'Bobs Fancy Cats',
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs($user)
             ->put(route('admin.basic-settings.update'), $data);
         $response->assertStatus(403);
     }
 
     public function test_update()
     {
+        Event::fake();
+
+        /** @var User $user */
+        $user = User::factory()->create(['role_id' => 1]);
         $data = [
             'url' => 'https://someUrl.noSite',
             'timezone' => 'America/LosAngeles',
@@ -73,7 +87,7 @@ class BasicSettingsTest extends TestCase
             'company_name' => 'Bobs Fancy Cats',
         ];
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs($user)
             ->put(route('admin.basic-settings.update'), $data);
         $response->assertStatus(302);
         $response->assertSessionHas('success', __('admin.config.updated'));
@@ -94,5 +108,7 @@ class BasicSettingsTest extends TestCase
             'key' => 'app.company_name',
             'value' => $data['company_name'],
         ]);
+
+        Event::assertDispatched(UrlChangedEvent::class);
     }
 }
