@@ -45,6 +45,8 @@ class FeatureTest extends TestCase
      */
     public function test_update_guest()
     {
+        Event::fake();
+
         $data = [
             'file_links' => true,
             'public_tips' => true,
@@ -55,10 +57,14 @@ class FeatureTest extends TestCase
         $response->assertStatus(302);
         $response->assertRedirect(route('login'));
         $this->assertGuest();
+
+        Event::assertNotDispatched(FeatureChangedEvent::class);
     }
 
     public function test_update_no_permission()
     {
+        Event::fake();
+
         /** @var User $user */
         $user = User::factory()->createQuietly();
         $data = [
@@ -70,6 +76,8 @@ class FeatureTest extends TestCase
         $response = $this->actingAs($user)
             ->put(route('admin.features.update'), $data);
         $response->assertForbidden();
+
+        Event::assertNotDispatched(FeatureChangedEvent::class);
     }
 
     public function test_update()

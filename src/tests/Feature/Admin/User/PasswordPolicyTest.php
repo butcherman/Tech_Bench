@@ -20,14 +20,20 @@ class PasswordPolicyTest extends TestCase
 
     public function test_show_no_permission()
     {
-        $response = $this->actingAs(User::factory()->createQuietly())
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+
+        $response = $this->actingAs($user)
             ->get(route('admin.user.password-policy.show'));
         $response->assertStatus(403);
     }
 
     public function test_show()
     {
-        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
+
+        $response = $this->actingAs($user)
             ->get(route('admin.user.password-policy.show'));
         $response->assertSuccessful();
     }
@@ -55,6 +61,8 @@ class PasswordPolicyTest extends TestCase
 
     public function test_update_no_permission()
     {
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
         $data = [
             'expire' => '60',
             'min_length' => '12',
@@ -65,13 +73,15 @@ class PasswordPolicyTest extends TestCase
             'disable_compromised' => 'false',
         ];
 
-        $response = $this->actingAs(User::factory()->createQuietly())
+        $response = $this->actingAs($user)
             ->put(route('admin.user.password-policy.update'), $data);
         $response->assertStatus(403);
     }
 
     public function test_update()
     {
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
         $data = [
             'expire' => '60',
             'min_length' => '12',
@@ -82,7 +92,7 @@ class PasswordPolicyTest extends TestCase
             'disable_compromised' => 'false',
         ];
 
-        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
+        $response = $this->actingAs($user)
             ->put(route('admin.user.password-policy.update'), $data);
         $response->assertStatus(302);
         $response->assertSessionHas('success', __('admin.user.password_policy'));
@@ -96,23 +106,18 @@ class PasswordPolicyTest extends TestCase
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'auth.passwords.settings.contains_uppercase',
-            // 'value' => $data['contains_uppercase'],
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'auth.passwords.settings.contains_lowercase',
-            // 'value' => $data['contains_lowercase'],
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'auth.passwords.settings.contains_number',
-            // 'value' => $data['contains_number'],
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'auth.passwords.settings.contains_special',
-            // 'value' => $data['contains_special'],
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'auth.passwords.settings.disable_compromised',
-            // 'value' => $data['disable_compromised'],
         ]);
     }
 }
