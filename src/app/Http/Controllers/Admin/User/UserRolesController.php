@@ -1,102 +1,92 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Http\Controllers\Admin\User;
 
 use App\Actions\AvailableUserRoles;
-use App\Events\Feature\FeatureChangedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\User\UserRoleRequest;
 use App\Models\UserRole;
-use App\Models\UserRolePermissionType;
+use App\Service\Admin\UserRoleAdministrationService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class UserRolesController extends Controller
 {
-    public function __construct(protected AvailableUserRoles $roles) {}
+    public function __construct(
+        protected AvailableUserRoles $roles,
+        protected UserRoleAdministrationService $svc
+    ) {}
 
     /**
-     * Display a listing of the resource.
+     * Display a listing of available User Roles
      */
-    public function index(Request $request)
+    public function index(Request $request): Response
     {
         $this->authorize('view', UserRole::class);
 
         return Inertia::render('Admin/Role/Index', [
-            'roles' => $this->roles->get($request->user()),
+            'roles' => UserRole::all(),
         ]);
     }
 
     /**
      * Show the form for creating a new role or copying an existing one.
      */
-    public function create(Request $request)
+    public function create(Request $request): Response
     {
         $this->authorize('create', UserRole::class);
 
-        $baseRole = $request->role_id ?
-            UserRole::find($request->role_id) : null;
+        // If we are copying an existing role, fetch that role
+        $baseRole = $request->role_id
+            ? UserRole::find($request->role_id)
+            : null;
 
         return Inertia::render('Admin/Role/Create', [
             'base-role' => $baseRole,
-            'permission-list' => UserRolePermissionType::all()
-                ->filter(function ($perm) {
-                    return $perm->feature_enabled;
-                })->groupBy('group'),
-            'permission-values' => $baseRole ? $baseRole->UserRolePermission : [],
+            'permission-list' => $this->svc->getRolePermissionTypes(),
+            'permission-values' => $baseRole
+                ? $baseRole->UserRolePermission
+                : [],
         ]);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created User Role.
      */
-    public function store(UserRoleRequest $request)
+    public function store(UserRoleRequest $request): RedirectResponse
     {
-        $newRole = $request->processNewRole();
-
-        Log::info('New User Role created by '.
-            $request->user()->username, $newRole->toArray());
-        event(new FeatureChangedEvent);
+        $newRole = $this->svc->createNewRole($request);
 
         return redirect(route('admin.user-roles.show', $newRole->role_id))
             ->with('success', __('admin.user-role.created'));
     }
 
     /**
-     * Display the specified resource.
+     * Display a User Role along with its permissions
      */
-    public function show(UserRole $user_role)
+    public function show(UserRole $user_role): Response
     {
         $this->authorize('view', $user_role);
 
-        $permList = $user_role->UserRolePermission;
-
         return Inertia::render('Admin/Role/Show', [
             'role' => $user_role->makeVisible(['allow_edit']),
-            'permission-list' => UserRolePermissionType::all()
-                ->filter(function ($perm) {
-                    return $perm->feature_enabled;
-                })->groupBy('group'),
+            'permission-list' => $this->svc->getRolePermissionTypes(),
             'permission-values' => $user_role->UserRolePermission,
         ]);
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing an existing User Role
      */
-    public function edit(UserRole $user_role)
+    public function edit(UserRole $user_role): Response
     {
         $this->authorize('update', $user_role);
 
         return Inertia::render('Admin/Role/Edit', [
             'base-role' => $user_role,
-            'permission-list' => UserRolePermissionType::all()
-                ->filter(function ($perm) {
-                    return $perm->feature_enabled;
-                })->groupBy('group'),
+            'permission-list' => $this->svc->getRolePermissionTypes(),
             'permission-values' => $user_role->UserRolePermission,
         ]);
     }
@@ -104,15 +94,9 @@ class UserRolesController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UserRoleRequest $request, UserRole $user_role)
+    public function update(UserRoleRequest $request, UserRole $user_role): RedirectResponse
     {
-        $modifiedRole = $request->processExistingRole();
-
-        Log::info(
-            'User Role Updated by '.$request->user()->username,
-            $modifiedRole->toArray()
-        );
-        event(new FeatureChangedEvent);
+        $this->svc->updateExistingRole($request, $user_role);
 
         return back()->with('success', __('admin.user-role.updated'));
     }
@@ -120,13 +104,11 @@ class UserRolesController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(UserRoleRequest $request, UserRole $user_role)
+    public function destroy(UserRole $user_role): RedirectResponse
     {
-        $request->destroyRole();
+        $this->authorize('delete', $user_role);
 
-        Log::stack(['daily', 'auth'])
-            ->notice('Role '.$user_role->name.' has been deleted by '.
-                $request->user()->username);
+        $this->svc->destroyRole($user_role);
 
         return redirect(route('admin.user-roles.index'))
             ->with('warning', __('admin.user-role.destroyed'));

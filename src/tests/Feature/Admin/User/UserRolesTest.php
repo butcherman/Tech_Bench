@@ -2,9 +2,11 @@
 
 namespace Tests\Feature\Admin\User;
 
+use App\Events\Feature\FeatureChangedEvent;
 use App\Models\User;
 use App\Models\UserRole;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
 class UserRolesTest extends TestCase
@@ -24,14 +26,20 @@ class UserRolesTest extends TestCase
 
     public function test_index_no_permission()
     {
-        $response = $this->actingAs(User::factory()->createQuietly())
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+
+        $response = $this->actingAs($user)
             ->get(route('admin.user-roles.index'));
-        $response->assertStatus(403);
+        $response->assertForbidden();
     }
 
     public function test_index()
     {
-        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
+
+        $response = $this->actingAs($user)
             ->get(route('admin.user-roles.index'));
         $response->assertSuccessful();
     }
@@ -49,21 +57,29 @@ class UserRolesTest extends TestCase
 
     public function test_create_no_permission()
     {
-        $response = $this->actingAs(User::factory()->createQuietly())
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+
+        $response = $this->actingAs($user)
             ->get(route('admin.user-roles.create'));
-        $response->assertStatus(403);
+        $response->assertForbidden();
     }
 
     public function test_create()
     {
-        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
+
+        $response = $this->actingAs($user)
             ->get(route('admin.user-roles.create'));
         $response->assertSuccessful();
     }
 
     public function test_create_copy_existing()
     {
-        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
+        $response = $this->actingAs($user)
             ->post(route('admin.user-roles.copy'), ['role_id' => 1]);
         $response->assertSuccessful();
     }
@@ -73,6 +89,8 @@ class UserRolesTest extends TestCase
      */
     public function test_store_guest()
     {
+        Event::fake();
+
         $form = [
             'name' => 'New Role',
             'description' => 'This is for testing purposes only',
@@ -95,10 +113,16 @@ class UserRolesTest extends TestCase
         $response->assertStatus(302);
         $response->assertRedirect(route('login'));
         $this->assertGuest();
+
+        Event::assertNotDispatched(FeatureChangedEvent::class);
     }
 
     public function test_store_no_permission()
     {
+        Event::fake();
+
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
         $form = [
             'name' => 'New Role',
             'description' => 'This is for testing purposes only',
@@ -117,13 +141,19 @@ class UserRolesTest extends TestCase
             ],
         ];
 
-        $response = $this->actingAs(User::factory()->createQuietly())
+        $response = $this->actingAs($user)
             ->post(route('admin.user-roles.store'), $form);
-        $response->assertStatus(403);
+        $response->assertForbidden();
+
+        Event::assertNotDispatched(FeatureChangedEvent::class);
     }
 
     public function test_store()
     {
+        Event::fake();
+
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
         $form = [
             'name' => 'New Role',
             'description' => 'This is for testing purposes only',
@@ -142,7 +172,7 @@ class UserRolesTest extends TestCase
             ],
         ];
 
-        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
+        $response = $this->actingAs($user)
             ->post(route('admin.user-roles.store'), $form);
         $response->assertStatus(302);
         $response->assertSessionHas('success', __('admin.user-role.created'));
@@ -151,6 +181,8 @@ class UserRolesTest extends TestCase
             'name' => $form['name'],
             'description' => $form['description'],
         ]);
+
+        Event::assertDispatched(FeatureChangedEvent::class);
     }
 
     /**
@@ -158,7 +190,7 @@ class UserRolesTest extends TestCase
      */
     public function test_show_guest()
     {
-        $role = UserRole::factory()->create();
+        $role = UserRole::factory()->createQuietly();
 
         $response = $this->get(route('admin.user-roles.show', $role->role_id));
         $response->assertStatus(302);
@@ -168,18 +200,22 @@ class UserRolesTest extends TestCase
 
     public function test_show_no_permission()
     {
-        $role = UserRole::factory()->create();
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+        $role = UserRole::factory()->createQuietly();
 
-        $response = $this->actingAs(User::factory()->createQuietly())
+        $response = $this->actingAs($user)
             ->get(route('admin.user-roles.show', $role->role_id));
-        $response->assertStatus(403);
+        $response->assertForbidden();
     }
 
     public function test_show()
     {
-        $role = UserRole::factory()->create();
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
+        $role = UserRole::factory()->createQuietly();
 
-        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
+        $response = $this->actingAs($user)
             ->get(route('admin.user-roles.show', $role->role_id));
         $response->assertSuccessful();
     }
@@ -189,7 +225,7 @@ class UserRolesTest extends TestCase
      */
     public function test_edit_guest()
     {
-        $testRole = UserRole::factory()->create();
+        $testRole = UserRole::factory()->createQuietly();
 
         $response = $this->get(route('admin.user-roles.edit', $testRole->role_id));
         $response->assertStatus(302);
@@ -197,20 +233,24 @@ class UserRolesTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_edit_user()
+    public function test_edit_no_permission()
     {
-        $testRole = UserRole::factory()->create();
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+        $testRole = UserRole::factory()->createQuietly();
 
-        $response = $this->actingAs(User::factory()->createQuietly())
+        $response = $this->actingAs($user)
             ->get(route('admin.user-roles.edit', $testRole->role_id));
-        $response->assertStatus(403);
+        $response->assertForbidden();
     }
 
     public function test_edit()
     {
-        $testRole = UserRole::factory()->create();
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
+        $testRole = UserRole::factory()->createQuietly();
 
-        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
+        $response = $this->actingAs($user)
             ->get(route('admin.user-roles.edit', $testRole->role_id));
         $response->assertSuccessful();
     }
@@ -220,7 +260,9 @@ class UserRolesTest extends TestCase
      */
     public function test_update_guest()
     {
-        $testRole = UserRole::factory()->create();
+        Event::fake();
+
+        $testRole = UserRole::factory()->createQuietly();
         $form = [
             'name' => 'New Role',
             'description' => 'This is for testing purposes only',
@@ -243,36 +285,16 @@ class UserRolesTest extends TestCase
         $response->assertStatus(302);
         $response->assertRedirect(route('login'));
         $this->assertGuest();
+
+        Event::assertNotDispatched(FeatureChangedEvent::class);
     }
 
-    public function test_update_user()
+    public function test_update_no_permission()
     {
-        $testRole = UserRole::factory()->create();
-        $form = [
-            'name' => 'New Role',
-            'description' => 'This is for testing purposes only',
-            'permissions' => [
-                '1' => $this->faker->boolean(),
-                '2' => $this->faker->boolean(),
-                '3' => $this->faker->boolean(),
-                '4' => $this->faker->boolean(),
-                '5' => $this->faker->boolean(),
-                '6' => $this->faker->boolean(),
-                '7' => $this->faker->boolean(),
-                '8' => $this->faker->boolean(),
-                '9' => $this->faker->boolean(),
-                '10' => $this->faker->boolean(),
-                '11' => $this->faker->boolean(),
-            ],
-        ];
+        Event::fake();
 
-        $response = $this->actingAs(User::factory()->createQuietly())
-            ->put(route('admin.user-roles.update', $testRole->role_id), $form);
-        $response->assertStatus(403);
-    }
-
-    public function test_update()
-    {
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
         $testRole = UserRole::factory()->createQuietly();
         $form = [
             'name' => 'New Role',
@@ -292,20 +314,20 @@ class UserRolesTest extends TestCase
             ],
         ];
 
-        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
+        $response = $this->actingAs($user)
             ->put(route('admin.user-roles.update', $testRole->role_id), $form);
-        $response->assertStatus(302);
-        $response->assertSessionHas('success', __('admin.user-role.updated'));
+        $response->assertForbidden();
 
-        $this->assertDatabaseHas('user_roles', [
-            'role_id' => $testRole->role_id,
-            'name' => $form['name'],
-            'description' => $form['description'],
-        ]);
+        Event::assertNotDispatched(FeatureChangedEvent::class);
     }
 
-    public function test_update_default_role()
+    public function test_update()
     {
+        Event::fake();
+
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
+        $testRole = UserRole::factory()->createQuietly();
         $form = [
             'name' => 'New Role',
             'description' => 'This is for testing purposes only',
@@ -324,9 +346,49 @@ class UserRolesTest extends TestCase
             ],
         ];
 
-        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
+        $response = $this->actingAs($user)
+            ->put(route('admin.user-roles.update', $testRole->role_id), $form);
+        $response->assertStatus(302);
+        $response->assertSessionHas('success', __('admin.user-role.updated'));
+
+        $this->assertDatabaseHas('user_roles', [
+            'role_id' => $testRole->role_id,
+            'name' => $form['name'],
+            'description' => $form['description'],
+        ]);
+
+        Event::assertDispatched(FeatureChangedEvent::class);
+    }
+
+    public function test_update_default_role()
+    {
+        Event::fake();
+
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
+        $form = [
+            'name' => 'New Role',
+            'description' => 'This is for testing purposes only',
+            'permissions' => [
+                '1' => $this->faker->boolean(),
+                '2' => $this->faker->boolean(),
+                '3' => $this->faker->boolean(),
+                '4' => $this->faker->boolean(),
+                '5' => $this->faker->boolean(),
+                '6' => $this->faker->boolean(),
+                '7' => $this->faker->boolean(),
+                '8' => $this->faker->boolean(),
+                '9' => $this->faker->boolean(),
+                '10' => $this->faker->boolean(),
+                '11' => $this->faker->boolean(),
+            ],
+        ];
+
+        $response = $this->actingAs($user)
             ->put(route('admin.user-roles.update', 1), $form);
-        $response->assertStatus(403);
+        $response->assertForbidden();
+
+        Event::assertNotDispatched(FeatureChangedEvent::class);
     }
 
     /**
@@ -334,7 +396,7 @@ class UserRolesTest extends TestCase
      */
     public function test_destroy_guest()
     {
-        $testRole = UserRole::factory()->create();
+        $testRole = UserRole::factory()->createQuietly();
 
         $response = $this->delete(route('admin.user-roles.destroy', $testRole->role_id));
         $response->assertStatus(302);
@@ -342,29 +404,36 @@ class UserRolesTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_destroy_user()
+    public function test_destroy_no_permission()
     {
-        $testRole = UserRole::factory()->create();
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+        $testRole = UserRole::factory()->createQuietly();
 
-        $response = $this->actingAs(User::factory()->createQuietly())
+        $response = $this->actingAs($user)
             ->delete(route('admin.user-roles.destroy', $testRole->role_id));
-        $response->assertStatus(403);
+        $response->assertForbidden();
     }
 
     public function test_destroy_default()
     {
-        $testRole = UserRole::factory()->create(['allow_edit' => false]);
-        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => $testRole->role_id]))
+        $testRole = UserRole::factory()->createQuietly(['allow_edit' => false]);
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => $testRole->role_id]);
+
+        $response = $this->actingAs($user)
             ->delete(route('admin.user-roles.destroy', 2));
-        $response->assertStatus(403);
+        $response->assertForbidden();
     }
 
     public function test_destroy_in_use()
     {
-        $testRole = UserRole::factory()->create();
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
+        $testRole = UserRole::factory()->createQuietly();
         User::factory()->createQuietly(['role_id' => $testRole->role_id]);
 
-        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
+        $response = $this->actingAs($user)
             ->delete(route('admin.user-roles.destroy', $testRole->role_id));
         $response->assertStatus(302);
         $response->assertSessionHasErrors(['query_error' => __('admin.user-role.in-use')]);
@@ -372,9 +441,11 @@ class UserRolesTest extends TestCase
 
     public function test_destroy()
     {
-        $testRole = UserRole::factory()->create();
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
+        $testRole = UserRole::factory()->createQuietly();
 
-        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
+        $response = $this->actingAs($user)
             ->delete(route('admin.user-roles.destroy', $testRole->role_id));
         $response->assertStatus(302);
         $response->assertSessionHas('warning', __('admin.user-role.destroyed'));
