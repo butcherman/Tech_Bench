@@ -84,7 +84,7 @@ class CustomerEquipmentDataTest extends TestCase
             ],
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->put(
                 route('customers.update-equipment-data', $this->customer->slug),
                 $data
@@ -164,7 +164,7 @@ class CustomerEquipmentDataTest extends TestCase
             ],
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->put(
                 route('customers.update-equipment-data', $this->customer->slug),
                 $data

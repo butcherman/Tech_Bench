@@ -31,7 +31,7 @@ class UserRoleUnitTest extends TestCase
      */
     public function test_user_role_permission_relationship()
     {
-        $user = User::factory()->create(['role_id' => 2]);
+        $user = User::factory()->createQuietly(['role_id' => 2]);
         $this->actingAs($user);
 
         $rolePermissions = UserRolePermission::where('role_id', $this->model->role_id)

@@ -16,13 +16,13 @@ class InitializeUserTest extends TestCase
      */
     public function test_show_while_logged_in()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->createQuietly();
         UserInitialize::create([
             'username' => $user->username,
             'token' => $token = Str::uuid(),
         ]);
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('initialize', $token));
         $response->assertStatus(302);
         $response->assertRedirect(route('dashboard'));
@@ -30,7 +30,7 @@ class InitializeUserTest extends TestCase
 
     public function test_show_invalid_token()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->createQuietly();
         $token = Str::uuid();
         UserInitialize::create([
             'username' => $user->username,
@@ -43,7 +43,7 @@ class InitializeUserTest extends TestCase
 
     public function test_show()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->createQuietly();
         UserInitialize::create([
             'username' => $user->username,
             'token' => $token = Str::uuid(),
@@ -58,7 +58,7 @@ class InitializeUserTest extends TestCase
      */
     public function test_set_while_logged_in()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->createQuietly();
         UserInitialize::create([
             'username' => $user->username,
             'token' => $token = Str::uuid(),
@@ -69,7 +69,7 @@ class InitializeUserTest extends TestCase
             'password_confirmation' => $this->password,
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->put(route('initialize.update', $token), $data);
         $response->assertStatus(302);
         $response->assertRedirect(route('dashboard'));
@@ -77,7 +77,7 @@ class InitializeUserTest extends TestCase
 
     public function test_set_invalid_token()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->createQuietly();
         UserInitialize::create([
             'username' => $user->username,
             'token' => Str::uuid(),
@@ -95,7 +95,7 @@ class InitializeUserTest extends TestCase
 
     public function test_set()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->createQuietly();
         $link = UserInitialize::create([
             'username' => $user->username,
             'token' => $token = Str::uuid(),

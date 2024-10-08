@@ -58,7 +58,7 @@ class CustomerFileTest extends TestCase
         UserRolePermission::where('role_id', 4)->where('perm_type_id', 20)
             ->update(['allow' => false]);
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->post(route('customers.files.store', $customer->slug), $data);
         $response->assertStatus(403);
     }
@@ -81,7 +81,7 @@ class CustomerFileTest extends TestCase
             'file' => UploadedFile::fake()->image('randomImage.png'),
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->post(route('customers.files.store', $customer->slug), $data);
         $response->assertSuccessful();
 
@@ -122,7 +122,7 @@ class CustomerFileTest extends TestCase
             'file' => UploadedFile::fake()->image('randomImage.png'),
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->post(route('customers.files.store', $customer->slug), $data);
         $response->assertSuccessful();
 
@@ -196,7 +196,7 @@ class CustomerFileTest extends TestCase
         UserRolePermission::where('role_id', 4)->where('perm_type_id', 21)
             ->update(['allow' => false]);
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->put(route('customers.files.update', [
                 $customer->cust_id,
                 $file->cust_file_id,
@@ -221,7 +221,7 @@ class CustomerFileTest extends TestCase
             'site_list' => [],
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->put(route('customers.files.update', [
                 $customer->cust_id,
                 $file->cust_file_id,
@@ -258,7 +258,7 @@ class CustomerFileTest extends TestCase
             'site_list' => [$sites[1], $sites[2]],
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->put(route('customers.files.update', [
                 $customer->cust_id,
                 $file->cust_file_id,
@@ -308,7 +308,7 @@ class CustomerFileTest extends TestCase
         UserRolePermission::where('role_id', 4)
             ->where('perm_type_id', 22)->update(['allow' => false]);
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->delete(route('customers.files.destroy', [
                 $data->cust_id,
                 $data->cust_file_id,
@@ -322,7 +322,7 @@ class CustomerFileTest extends TestCase
 
         $data = CustomerFile::factory()->create();
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->delete(route('customers.files.destroy', [
                 $data->cust_id,
                 $data->cust_file_id,
@@ -360,7 +360,7 @@ class CustomerFileTest extends TestCase
     {
         $file = CustomerFile::factory()->create();
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('customers.deleted-items.restore.files', [
                 $file->cust_id,
                 $file->file_id,
@@ -375,7 +375,7 @@ class CustomerFileTest extends TestCase
 
         $file = CustomerFile::factory()->create();
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->get(route('customers.deleted-items.restore.files', [
                 $file->cust_id,
                 $file->file_id,
@@ -414,7 +414,7 @@ class CustomerFileTest extends TestCase
         $file = CustomerFile::factory()->create();
         $file->delete();
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->delete(route('customers.deleted-items.force-delete.files', [
                 $file->cust_id,
                 $file->file_id,
@@ -430,7 +430,7 @@ class CustomerFileTest extends TestCase
         $file = CustomerFile::factory()->create();
         $file->delete();
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->delete(route('customers.deleted-items.force-delete.files', [
                 $file->cust_id,
                 $file->file_id,

@@ -26,7 +26,7 @@ class CustomerIdTest extends TestCase
     {
         $customer = Customer::factory()->create();
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('customers.check-id', $customer->cust_id));
         $response->assertSuccessful();
         $response->assertJson([
@@ -40,7 +40,7 @@ class CustomerIdTest extends TestCase
     {
         $customer = 8971243298457;             //  This random number should hopefully never be duplicated
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('customers.check-id', $customer));
         $response->assertSuccessful();
         $response->assertJson(['in_use' => false]);

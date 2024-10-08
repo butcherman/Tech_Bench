@@ -22,14 +22,14 @@ class TechTipTypesTest extends TestCase
 
     public function test_index_no_permission()
     {
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('admin.tech-tips.tip-types.index'));
         $response->assertForbidden();
     }
 
     public function test_index()
     {
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->get(route('admin.tech-tips.tip-types.index'));
         $response->assertSuccessful();
     }
@@ -55,7 +55,7 @@ class TechTipTypesTest extends TestCase
             'description' => 'New Tip Type',
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->post(route('admin.tech-tips.tip-types.store'), $data);
         $response->assertForbidden();
     }
@@ -66,7 +66,7 @@ class TechTipTypesTest extends TestCase
             'description' => 'New Tip Type',
         ];
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->post(route('admin.tech-tips.tip-types.store'), $data);
         $response->assertStatus(302);
         $response->assertSessionHas('success', __('tips.tip-type.created'));
@@ -97,7 +97,7 @@ class TechTipTypesTest extends TestCase
             'description' => 'New Tip Type',
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->put(route('admin.tech-tips.tip-types.update', $currentType->tip_type_id), $data);
         $response->assertForbidden();
     }
@@ -109,7 +109,7 @@ class TechTipTypesTest extends TestCase
             'description' => 'New Tip Type',
         ];
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->put(route('admin.tech-tips.tip-types.update', $currentType->tip_type_id), $data);
         $response->assertStatus(302);
         $response->assertSessionHas('success', __('tips.tip-type.updated'));
@@ -134,7 +134,7 @@ class TechTipTypesTest extends TestCase
     {
         $currentType = TechTipType::create(['description' => 'Old Tip Type']);
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->delete(route('admin.tech-tips.tip-types.destroy', $currentType->tip_type_id));
         $response->assertForbidden();
     }
@@ -143,7 +143,7 @@ class TechTipTypesTest extends TestCase
     {
         $currentType = TechTipType::create(['description' => 'Old Tip Type']);
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->delete(route('admin.tech-tips.tip-types.destroy', $currentType->tip_type_id));
         $response->assertStatus(302);
         $response->assertSessionHas('warning', __('tips.tip-type.deleted'));
@@ -156,7 +156,7 @@ class TechTipTypesTest extends TestCase
         $currentType = TechTipType::create(['description' => 'Old Tip Type']);
         TechTip::factory()->create(['tip_type_id' => $currentType->tip_type_id]);
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->delete(route('admin.tech-tips.tip-types.destroy', $currentType->tip_type_id));
         $response->assertStatus(302);
         // $response->assertSessionHasErrors()

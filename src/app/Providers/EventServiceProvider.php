@@ -73,11 +73,11 @@ class EventServiceProvider extends ServiceProvider
             //////////////////// Move Me ////////////////////////////
             'App\Listeners\User\LogPasswordChanged',
         ],
-        'App\Events\User\UserCreatedEvent' => [
-            'App\Listeners\Notify\User\NotifyNewUser',
-            //////////////////// Move Me ////////////////////////////
-            'App\Listeners\User\CreateUserSettingsEntry',
-        ],
+        // 'App\Events\User\UserCreatedEvent' => [
+        //     'App\Listeners\Notify\User\NotifyNewUser',
+        //     //////////////////// Move Me ////////////////////////////
+        //     'App\Listeners\User\CreateUserSettingsEntry',
+        // ],
         // 'App\Events\User\ResendWelcomeEvent' => [
         //     'App\Listeners\Notify\User\ResendWelcomeEmail',
         //     //////////////////// Move Me ////////////////////////////

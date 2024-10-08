@@ -15,7 +15,7 @@ class GetUserSettingsUnitTest extends TestCase
      */
     public function test_build_as_default()
     {
-        $testUser = User::factory()->create();
+        $testUser = User::factory()->createQuietly();
         $testObj = new GetUserSettings;
         $shouldBe = [
             [
@@ -34,7 +34,7 @@ class GetUserSettingsUnitTest extends TestCase
     {
         config(['file-link.feature_enabled' => true]);
 
-        $testUser = User::factory()->create();
+        $testUser = User::factory()->createQuietly();
         $testObj = new GetUserSettings;
         $shouldBe = [
             [
@@ -64,7 +64,7 @@ class GetUserSettingsUnitTest extends TestCase
             ->where('perm_type_id', $fileLinkPerm->perm_type_id)
             ->update(['allow' => false]);
 
-        $testUser = User::factory()->create();
+        $testUser = User::factory()->createQuietly();
         $testObj = new GetUserSettings;
         $shouldBe = [
             [
@@ -83,7 +83,7 @@ class GetUserSettingsUnitTest extends TestCase
     {
         config(['file-link.feature_enabled' => true]);
         config(['file-link.auto_delete_override' => false]);
-        $testUser = User::factory()->create();
+        $testUser = User::factory()->createQuietly();
         $testObj = new GetUserSettings;
         $shouldBe = [
             [

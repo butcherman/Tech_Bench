@@ -23,7 +23,7 @@ class UserPasswordTest extends TestCase
 
     public function test_invoke()
     {
-        $response = $this->actingAs(User::factory()->create())->get(route('user.change-password.show'));
+        $response = $this->actingAs(User::factory()->createQuietly())->get(route('user.change-password.show'));
 
         $response->assertSuccessful();
     }
@@ -52,7 +52,7 @@ class UserPasswordTest extends TestCase
     {
         Notification::fake();
 
-        $user = User::factory()->create();
+        $user = User::factory()->createQuietly();
         $data = [
             'current_password' => 'password',
             'password' => $pass = 'newS3cureP@ss',
@@ -70,7 +70,7 @@ class UserPasswordTest extends TestCase
      */
     public function test_change_password_no_lowercase_enabled()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->createQuietly();
         $data = [
             'current_password' => 'password',
             'password' => $pass = 'N3WSECUREPA33!',
@@ -87,7 +87,7 @@ class UserPasswordTest extends TestCase
         Notification::fake();
 
         config(['auth.passwords.settings.contains_lowercase' => false]);
-        $user = User::factory()->create();
+        $user = User::factory()->createQuietly();
         $data = [
             'current_password' => 'password',
             'password' => $pass = 'N3WSECUREPA33!',
@@ -103,7 +103,7 @@ class UserPasswordTest extends TestCase
 
     public function test_change_password_no_uppercase_enabled()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->createQuietly();
         $data = [
             'current_password' => 'password',
             'password' => $pass = 'n3wsecurepa33!',
@@ -120,7 +120,7 @@ class UserPasswordTest extends TestCase
         Notification::fake();
 
         config(['auth.passwords.settings.contains_uppercase' => false]);
-        $user = User::factory()->create();
+        $user = User::factory()->createQuietly();
         $data = [
             'current_password' => 'password',
             'password' => $pass = 'n3wsecurepa33!',
@@ -136,7 +136,7 @@ class UserPasswordTest extends TestCase
 
     public function test_change_password_no_number_enabled()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->createQuietly();
         $data = [
             'current_password' => 'password',
             'password' => $pass = 'NewSecurePass!',
@@ -153,7 +153,7 @@ class UserPasswordTest extends TestCase
         Notification::fake();
 
         config(['auth.passwords.settings.contains_number' => false]);
-        $user = User::factory()->create();
+        $user = User::factory()->createQuietly();
         $data = [
             'current_password' => 'password',
             'password' => $pass = 'NewSecurePass!',
@@ -167,7 +167,7 @@ class UserPasswordTest extends TestCase
 
     public function test_change_password_no_special_enabled()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->createQuietly();
         $data = [
             'current_password' => 'password',
             'password' => $pass = 'N3wSecurePa33',
@@ -184,7 +184,7 @@ class UserPasswordTest extends TestCase
         Notification::fake();
 
         config(['auth.passwords.settings.contains_special' => false]);
-        $user = User::factory()->create();
+        $user = User::factory()->createQuietly();
         $data = [
             'current_password' => 'password',
             'password' => $pass = 'N3wSecurePa33',
@@ -201,7 +201,7 @@ class UserPasswordTest extends TestCase
         Notification::fake();
 
         config(['auth.password.settings.disable_compromised' => true]);
-        $user = User::factory()->create();
+        $user = User::factory()->createQuietly();
         $data = [
             'current_password' => 'password',
             'password' => $pass = 'password123',

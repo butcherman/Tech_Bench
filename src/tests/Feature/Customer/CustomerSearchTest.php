@@ -64,7 +64,7 @@ class CustomerSearchTest extends TestCase
             'page' => 1,
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->post(route('customers.search'), $searchData);
         $response->assertSuccessful();
         $response->assertJsonCount(5, 'data');

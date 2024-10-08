@@ -20,7 +20,7 @@ class EquipmentListTest extends TestCase
 
     public function test_invoke()
     {
-        $response = $this->actingAs(User::factory()->create())->get(route('equipment-list'));
+        $response = $this->actingAs(User::factory()->createQuietly())->get(route('equipment-list'));
         $response->assertSuccessful();
     }
 }

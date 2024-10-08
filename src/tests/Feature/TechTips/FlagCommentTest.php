@@ -31,7 +31,7 @@ class FlagCommentTest extends TestCase
     {
         $comment = TechTipComment::factory()->create();
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->post(route('tech-tips.comments.flag', [
                 $comment->TechTip->tip_id,
                 $comment->comment_id,
@@ -46,7 +46,7 @@ class FlagCommentTest extends TestCase
 
     public function test_invoke_second_flag_attempt()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->createQuietly();
         $comment = TechTipComment::factory()->create();
         TechTipCommentFlag::create([
             'comment_id' => $comment->comment_id,

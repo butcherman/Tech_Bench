@@ -30,7 +30,7 @@ class EquipmentCategoryTest extends TestCase
             'name' => 'Cisco',
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->post(route('equipment-category.store'), $data);
         $response->assertStatus(403);
     }
@@ -41,7 +41,7 @@ class EquipmentCategoryTest extends TestCase
             'name' => 'Cisco',
         ];
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->post(route('equipment-category.store'), $data);
         $response->assertStatus(302);
         $response->assertSessionHas('success', __('equipment.category.created'));
@@ -71,7 +71,7 @@ class EquipmentCategoryTest extends TestCase
             'name' => 'Cisco',
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->put(route('equipment-category.update', $cat->cat_id), $form);
         $response->assertStatus(403);
     }
@@ -83,7 +83,7 @@ class EquipmentCategoryTest extends TestCase
             'name' => 'Cisco',
         ];
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->put(route('equipment-category.update', $cat->cat_id), $form);
         $response->assertStatus(302);
         $response->assertSessionHas('success', __('equipment.category.updated'));
@@ -110,7 +110,7 @@ class EquipmentCategoryTest extends TestCase
     {
         $cat = EquipmentCategory::factory()->create();
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->delete(route('equipment-category.destroy', $cat->cat_id));
         $response->assertStatus(403);
     }
@@ -120,7 +120,7 @@ class EquipmentCategoryTest extends TestCase
         $cat = EquipmentCategory::factory()->create();
         EquipmentType::factory()->create(['cat_id' => $cat->cat_id]);
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->delete(route('equipment-category.destroy', $cat->cat_id));
         $response->assertStatus(302);
         $response->assertSessionHasErrors([
@@ -136,7 +136,7 @@ class EquipmentCategoryTest extends TestCase
     {
         $cat = EquipmentCategory::factory()->create();
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->delete(route('equipment-category.destroy', $cat->cat_id));
         $response->assertStatus(302);
         $response->assertSessionHas('warning', __('equipment.category.destroyed'));

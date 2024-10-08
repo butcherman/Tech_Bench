@@ -23,7 +23,7 @@ class FileLinkSettingsTest extends TestCase
         config(['file-link.feature_enabled' => false]);
 
         /** @var User $user */
-        $user = User::factory()->create(['role_id' => 1]);
+        $user = User::factory()->createQuietly(['role_id' => 1]);
 
         $response = $this->actingAs($user)
             ->get(route('admin.links.settings.show'));
@@ -35,7 +35,7 @@ class FileLinkSettingsTest extends TestCase
         config(['file-link.feature_enabled' => true]);
 
         /** @var User $user */
-        $user = User::factory()->create();
+        $user = User::factory()->createQuietly();
 
         $response = $this->actingAs($user)
             ->get(route('admin.links.settings.show'));
@@ -47,7 +47,7 @@ class FileLinkSettingsTest extends TestCase
         config(['file-link.feature_enabled' => true]);
 
         /** @var User $user */
-        $user = User::factory()->create(['role_id' => 1]);
+        $user = User::factory()->createQuietly(['role_id' => 1]);
 
         $response = $this->actingAs($user)
             ->get(route('admin.links.settings.show'));
@@ -77,7 +77,7 @@ class FileLinkSettingsTest extends TestCase
         config(['file-link.feature_enabled' => false]);
 
         /** @var User $user */
-        $user = User::factory()->create(['role_id' => 1]);
+        $user = User::factory()->createQuietly(['role_id' => 1]);
         $data = [
             'default_link_life' => 30,
             'auto_delete' => true,
@@ -95,7 +95,7 @@ class FileLinkSettingsTest extends TestCase
         config(['file-link.feature_enabled' => true]);
 
         /** @var User $user */
-        $user = User::factory()->create();
+        $user = User::factory()->createQuietly();
         $data = [
             'default_link_life' => 30,
             'auto_delete' => true,
@@ -113,7 +113,7 @@ class FileLinkSettingsTest extends TestCase
         config(['file-link.feature_enabled' => true]);
 
         /** @var User $user */
-        $user = User::factory()->create(['role_id' => 1]);
+        $user = User::factory()->createQuietly(['role_id' => 1]);
         $data = [
             'default_link_life' => 30,
             'auto_delete' => false,

@@ -21,7 +21,7 @@ class AdminTest extends TestCase
     public function test_invoke_no_permission()
     {
         /** @var User $user */
-        $user = User::factory()->create();
+        $user = User::factory()->createQuietly();
 
         $response = $this->actingAs($user)
             ->get(route('admin.index'));
@@ -31,7 +31,7 @@ class AdminTest extends TestCase
     public function test_invoke()
     {
         /** @var User $user */
-        $user = User::factory()->create(['role_id' => 1]);
+        $user = User::factory()->createQuietly(['role_id' => 1]);
 
         $response = $this->actingAs($user)
             ->get(route('admin.index'));

@@ -26,14 +26,14 @@ class EquipmentTypeTest extends TestCase
 
     public function test_index_user()
     {
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('equipment.index'));
         $response->assertStatus(403);
     }
 
     public function test_index()
     {
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->get(route('equipment.index'));
         $response->assertSuccessful();
     }
@@ -51,14 +51,14 @@ class EquipmentTypeTest extends TestCase
 
     public function test_create_no_permission()
     {
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('equipment.create'));
         $response->assertStatus(403);
     }
 
     public function test_create()
     {
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->get(route('equipment.create'));
         $response->assertSuccessful();
     }
@@ -100,7 +100,7 @@ class EquipmentTypeTest extends TestCase
             ],
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->post(route('equipment.store'), $form);
         $response->assertStatus(403);
     }
@@ -119,7 +119,7 @@ class EquipmentTypeTest extends TestCase
             ],
         ];
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->post(route('equipment.store'), $form);
 
         $response->assertStatus(302);
@@ -151,7 +151,7 @@ class EquipmentTypeTest extends TestCase
     {
         $equip = EquipmentType::factory()->create();
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('equipment.show', $equip->equip_id));
         $response->assertStatus(403);
     }
@@ -160,7 +160,7 @@ class EquipmentTypeTest extends TestCase
     {
         $equip = EquipmentType::factory()->create();
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->get(route('equipment.show', $equip->equip_id));
         $response->assertSuccessful();
     }
@@ -182,7 +182,7 @@ class EquipmentTypeTest extends TestCase
     {
         $equip = EquipmentType::factory()->create();
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 4]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 4]))
             ->get(route('equipment.edit', $equip->equip_id));
         $response->assertStatus(403);
     }
@@ -191,7 +191,7 @@ class EquipmentTypeTest extends TestCase
     {
         $equip = EquipmentType::factory()->create();
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->get(route('equipment.edit', $equip->equip_id));
         $response->assertSuccessful();
     }
@@ -235,7 +235,7 @@ class EquipmentTypeTest extends TestCase
             ],
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->post(route('equipment.store', $existing->equip_id), $form);
         $response->assertStatus(403);
     }
@@ -261,7 +261,7 @@ class EquipmentTypeTest extends TestCase
 
         CustomerEquipment::factory()->count(3)->create(['equip_id' => $existing->equip_id]);
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->put(route('equipment.update', $existing->equip_id), $form);
         $response->assertStatus(302);
         $response->assertRedirect(route('equipment.index'));
@@ -305,7 +305,7 @@ class EquipmentTypeTest extends TestCase
             ],
         ];
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->put(route('equipment.update', $existing->equip_id), $form);
         $response->assertStatus(302);
         $response->assertRedirect(route('equipment.index'));
@@ -343,7 +343,7 @@ class EquipmentTypeTest extends TestCase
     {
         $equip = EquipmentType::factory()->create();
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->delete(route('equipment.destroy', $equip->equip_id));
         $response->assertStatus(403);
     }
@@ -358,7 +358,7 @@ class EquipmentTypeTest extends TestCase
             'shared' => false,
         ]);
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->delete(route('equipment.destroy', $equip->equip_id));
         $response->assertStatus(302);
         $response->assertSessionHasErrors('query_error', __('equipment.in_use', ['name' => $equip->name]));
@@ -368,7 +368,7 @@ class EquipmentTypeTest extends TestCase
     {
         $equip = EquipmentType::factory()->create();
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->delete(route('equipment.destroy', $equip->equip_id));
 
         $response->assertStatus(302);

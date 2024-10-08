@@ -12,7 +12,7 @@ class UserActivityReportTest extends TestCase
     {
         parent::setUp();
 
-        User::factory()->count(20)->create();
+        User::factory()->count(20)->createQuietly();
     }
 
     /**
@@ -28,14 +28,14 @@ class UserActivityReportTest extends TestCase
 
     public function test_index_no_permission()
     {
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('reports.user.activity'));
         $response->assertStatus(403);
     }
 
     public function test_index()
     {
-        $response = $this->actingAs(User::factory()->create(['role_id' => 2]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 2]))
             ->get(route('reports.user.activity'));
         $response->assertSuccessful();
     }
@@ -65,7 +65,7 @@ class UserActivityReportTest extends TestCase
             'user_list' => User::all()->map(fn ($user) => $user->username)->toArray(),
         ];
 
-        $response = $this->ActingAs(User::factory()->create())
+        $response = $this->ActingAs(User::factory()->createQuietly())
             ->put(route('reports.user.run-activity'), $data);
         $response->assertStatus(403);
     }
@@ -78,7 +78,7 @@ class UserActivityReportTest extends TestCase
             'user_list' => User::all()->map(fn ($user) => $user->username)->toArray(),
         ];
 
-        $response = $this->ActingAs(User::factory()->create(['role_id' => 2]))
+        $response = $this->ActingAs(User::factory()->createQuietly(['role_id' => 2]))
             ->put(route('reports.user.run-activity'), $data);
         $response->assertSuccessful();
     }

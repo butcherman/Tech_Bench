@@ -14,7 +14,7 @@ class BuildNavbarUnitTest extends TestCase
     public function test_navbar_as_installer()
     {
         /** @var User $user */
-        $user = User::factory()->create(['role_id' => 1]);
+        $user = User::factory()->createQuietly(['role_id' => 1]);
         $this->actingAs($user);
 
         $obj = new BuildNavbar;
@@ -56,7 +56,7 @@ class BuildNavbarUnitTest extends TestCase
         config(['file-link.feature_enabled' => true]);
 
         /** @var User $user */
-        $user = User::factory()->create(['role_id' => 1]);
+        $user = User::factory()->createQuietly(['role_id' => 1]);
         $this->actingAs($user);
 
         $obj = new BuildNavbar;
@@ -101,7 +101,7 @@ class BuildNavbarUnitTest extends TestCase
     public function test_navbar_as_admin()
     {
         /** @var User $user */
-        $user = User::factory()->create(['role_id' => 2]);
+        $user = User::factory()->createQuietly(['role_id' => 2]);
         $this->actingAs($user);
 
         $obj = new BuildNavbar;
@@ -141,7 +141,7 @@ class BuildNavbarUnitTest extends TestCase
     public function test_navbar_as_reports()
     {
         /** @var User $user */
-        $user = User::factory()->create(['role_id' => 3]);
+        $user = User::factory()->createQuietly(['role_id' => 3]);
         $this->actingAs($user);
 
         $obj = new BuildNavbar;
@@ -176,7 +176,7 @@ class BuildNavbarUnitTest extends TestCase
     public function test_navbar_as_tech()
     {
         /** @var User $user */
-        $user = User::factory()->create(['role_id' => 4]);
+        $user = User::factory()->createQuietly(['role_id' => 4]);
         $this->actingAs($user);
 
         $obj = new BuildNavbar;

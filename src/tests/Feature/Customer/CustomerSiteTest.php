@@ -29,7 +29,7 @@ class CustomerSiteTest extends TestCase
     {
         $customer = Customer::factory()->create();
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('customers.sites.index', $customer->slug));
         $response->assertSuccessful();
     }
@@ -57,7 +57,7 @@ class CustomerSiteTest extends TestCase
                 'allow' => false,
             ]);
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('customers.sites.create', $customer->slug));
         $response->assertStatus(403);
     }
@@ -66,14 +66,14 @@ class CustomerSiteTest extends TestCase
     {
         $customer = Customer::factory()->create();
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('customers.sites.create', $customer->slug));
         $response->assertSuccessful();
     }
 
     public function test_create_without_parent()
     {
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('customers.create-site'));
         $response->assertSuccessful();
     }
@@ -113,7 +113,7 @@ class CustomerSiteTest extends TestCase
                 'allow' => false,
             ]);
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->post(route('customers.sites.store', $customer->slug), $site->toArray());
         $response->assertStatus(403);
     }
@@ -128,7 +128,7 @@ class CustomerSiteTest extends TestCase
         $site->cust_name = $customer->name;
         $site->cust_id = $customer->cust_id;
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->post(route('customers.sites.store', $customer->slug), $site->toArray());
         $response->assertStatus(302);
         $response->assertSessionHas('success', __('cust.site.created', [
@@ -159,7 +159,7 @@ class CustomerSiteTest extends TestCase
         $site->cust_id = $customer->cust_id;
         $site->site_name = $customer->CustomerSite[0]->site_name;
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->post(route('customers.sites.store', $customer->slug), $site->toArray());
         $response->assertStatus(302);
         $response->assertSessionHas('success', __('cust.site.created', [
@@ -186,7 +186,7 @@ class CustomerSiteTest extends TestCase
         $site->cust_name = $customer->name;
         $site->cust_id = $customer->cust_id;
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->post(route('customers.store-site'), $site->toArray());
         $response->assertStatus(302);
         $response->assertSessionHas('success', __('cust.site.created', [
@@ -225,7 +225,7 @@ class CustomerSiteTest extends TestCase
     {
         $site = CustomerSite::factory()->create();
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('customers.sites.show', [
                 $site->Customer->slug,
                 $site->site_slug,
@@ -260,7 +260,7 @@ class CustomerSiteTest extends TestCase
                 'allow' => false,
             ]);
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('customers.sites.edit', [
                 $site->Customer->slug,
                 $site->site_slug,
@@ -272,7 +272,7 @@ class CustomerSiteTest extends TestCase
     {
         $site = CustomerSite::factory()->create();
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('customers.sites.edit', [
                 $site->Customer->slug,
                 $site->site_slug,
@@ -318,7 +318,7 @@ class CustomerSiteTest extends TestCase
                 'allow' => false,
             ]);
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->put(
                 route('customers.sites.update', [
                     $site->Customer->slug,
@@ -339,7 +339,7 @@ class CustomerSiteTest extends TestCase
         $data->cust_name = $site->Customer->name;
         $data->cust_id = $site->Customer->cust_id;
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->put(
                 route('customers.sites.update', [
                     $site->Customer->slug,
@@ -382,7 +382,7 @@ class CustomerSiteTest extends TestCase
         $site = CustomerSite::factory()->create();
         $data = ['reason' => 'For testing purposes'];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->delete(route('customers.sites.destroy', [
                 $site->Customer->slug,
                 $site->site_slug,
@@ -397,7 +397,7 @@ class CustomerSiteTest extends TestCase
         $site = CustomerSite::factory()->create();
         $data = ['reason' => 'For testing purposes'];
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->delete(route('customers.sites.destroy', [
                 $site->Customer->slug,
                 $site->site_slug,

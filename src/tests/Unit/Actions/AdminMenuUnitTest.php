@@ -13,7 +13,7 @@ class AdminMenuUnitTest extends TestCase
      */
     public function test_admin_menu_as_installer()
     {
-        $user = User::factory()->create(['role_id' => 1]);
+        $user = User::factory()->createQuietly(['role_id' => 1]);
         $obj = new AdministrationMenu;
         $menu = $obj($user);
 
@@ -169,7 +169,7 @@ class AdminMenuUnitTest extends TestCase
     public function test_admin_menu_as_installer_file_link_enabled()
     {
         config(['file-link.feature_enabled' => true]);
-        $user = User::factory()->create(['role_id' => 1]);
+        $user = User::factory()->createQuietly(['role_id' => 1]);
         $obj = new AdministrationMenu;
         $menu = $obj($user);
 
@@ -335,7 +335,7 @@ class AdminMenuUnitTest extends TestCase
 
     public function test_admin_menu_as_admin()
     {
-        $user = User::factory()->create(['role_id' => 2]);
+        $user = User::factory()->createQuietly(['role_id' => 2]);
         $obj = new AdministrationMenu;
         $menu = $obj($user);
 
@@ -443,7 +443,7 @@ class AdminMenuUnitTest extends TestCase
 
     public function test_admin_menu_as_reports()
     {
-        $user = User::factory()->create(['role_id' => 3]);
+        $user = User::factory()->createQuietly(['role_id' => 3]);
         $obj = new AdministrationMenu;
         $menu = $obj($user);
 
@@ -462,7 +462,7 @@ class AdminMenuUnitTest extends TestCase
 
     public function test_admin_menu_as_tech()
     {
-        $user = User::factory()->create(['role_id' => 4]);
+        $user = User::factory()->createQuietly(['role_id' => 4]);
         $obj = new AdministrationMenu;
         $menu = $obj($user);
 

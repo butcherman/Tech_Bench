@@ -20,14 +20,14 @@ class CustomerAdminTest extends TestCase
 
     public function test_edit_no_permission()
     {
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('customers.settings.edit'));
         $response->assertStatus(403);
     }
 
     public function test_edit()
     {
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->get(route('customers.settings.edit'));
         $response->assertSuccessful();
     }
@@ -59,7 +59,7 @@ class CustomerAdminTest extends TestCase
             'auto_purge' => false,
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->put(route('customers.settings.update'), $data);
         $response->assertStatus(403);
     }
@@ -73,7 +73,7 @@ class CustomerAdminTest extends TestCase
             'auto_purge' => false,
         ];
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->put(route('customers.settings.update'), $data);
         $response->assertStatus(302);
         $response->assertSessionHas('success', 'Customer Settings Updated');

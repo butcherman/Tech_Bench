@@ -20,14 +20,14 @@ class PasswordPolicyTest extends TestCase
 
     public function test_show_no_permission()
     {
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('admin.user.password-policy.show'));
         $response->assertStatus(403);
     }
 
     public function test_show()
     {
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->get(route('admin.user.password-policy.show'));
         $response->assertSuccessful();
     }
@@ -65,7 +65,7 @@ class PasswordPolicyTest extends TestCase
             'disable_compromised' => 'false',
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->put(route('admin.user.password-policy.update'), $data);
         $response->assertStatus(403);
     }
@@ -82,7 +82,7 @@ class PasswordPolicyTest extends TestCase
             'disable_compromised' => 'false',
         ];
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->put(route('admin.user.password-policy.update'), $data);
         $response->assertStatus(302);
         $response->assertSessionHas('success', __('admin.user.password_policy'));

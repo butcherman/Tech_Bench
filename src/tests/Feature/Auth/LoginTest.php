@@ -11,9 +11,9 @@ use Tests\TestCase;
 class LoginTest extends TestCase
 {
     //  Verify the a valid user can log in
-    public function test_valid_login()
+    public function test_valid_logicreateQuietlyn()
     {
-        $user = User::factory()->create([
+        $user = User::factory()->createQuietly([
             'password' => bcrypt($password = 'randomPassword'),
         ]);
 
@@ -29,7 +29,7 @@ class LoginTest extends TestCase
     //  Verify user cannot login with incorrect password
     public function test_incorrect_login()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->createQuietly();
 
         $response = $this->post(route('login'), [
             'username' => $user->username,
@@ -45,7 +45,7 @@ class LoginTest extends TestCase
     //  Verify a user that has been deactivated is not able to login
     public function test_login_as_disabled_user()
     {
-        $user = User::factory()->create([
+        $user = User::factory()->createQuietly([
             'password' => bcrypt($password = 'randomPassword'),
             'deleted_at' => Carbon::yesterday(),
         ]);
@@ -64,7 +64,7 @@ class LoginTest extends TestCase
     //  Verify that the user is redirected if already logged in
     public function test_valid_login_redirect()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->createQuietly();
 
         $response = $this->actingAs($user)->get(route('home'));
 
@@ -75,7 +75,7 @@ class LoginTest extends TestCase
     //  Verify that a user is locked out if they try more than five login attempts
     public function test_login_lockout()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->createQuietly();
 
         //  Attempt five failed attempts
         $this->post(route('login'), [
@@ -126,7 +126,7 @@ class LoginTest extends TestCase
     public function test_password_expired_redirect()
     {
         $user = User::factory()
-            ->create(['password_expires' => Carbon::yesterday()]);
+            ->createQuietly(['password_expires' => Carbon::yesterday()]);
 
         $response = $this->actingAs($user)->get(route('dashboard'));
         $response->assertStatus(302);
@@ -140,7 +140,7 @@ class LoginTest extends TestCase
     //     Notification::fake();
 
     //     config(['auth.twoFa.required' => true]);
-    //     $user = User::factory()->create();
+    //     $user = User::factory()->createQuietly();
 
     //     $response = $this->actingAs($user)->get(route('dashboard'));
     //     $response->assertStatus(302);
@@ -157,7 +157,7 @@ class LoginTest extends TestCase
     //     Notification::fake();
 
     //     config(['auth.twoFa.required' => true]);
-    //     $user = User::factory()->create(['password_expires' => Carbon::yesterday()]);
+    //     $user = User::factory()->createQuietly(['password_expires' => Carbon::yesterday()]);
 
     //     $response = $this->actingAs($user)->get(route('dashboard'));
     //     $response->assertStatus(302);
@@ -174,7 +174,7 @@ class LoginTest extends TestCase
     //     Notification::fake();
 
     //     config(['auth.twoFa.required' => true]);
-    //     $user = User::factory()->create();
+    //     $user = User::factory()->createQuietly();
     //     UserCode::create([
     //         'user_id' => $user->user_id,
     //         'code' => 1234,
@@ -196,7 +196,7 @@ class LoginTest extends TestCase
     //     Notification::fake();
 
     //     config(['auth.twoFa.required' => true]);
-    //     $user = User::factory()->create();
+    //     $user = User::factory()->createQuietly();
     //     $deviceToken = $user->generateRememberDeviceToken();
 
     //     $response = $this->actingAs($user)->withCookie('remember_device', $deviceToken)->get(route('dashboard'));

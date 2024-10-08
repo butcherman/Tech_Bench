@@ -16,7 +16,7 @@ class SendWelcomeEmailTest extends TestCase
     {
         Bus::fake();
 
-        $user = User::factory()->create();
+        $user = User::factory()->createQuietly();
 
         $response = $this->get(route('admin.user.send-welcome', $user->username));
         $response->assertStatus(302);
@@ -31,8 +31,8 @@ class SendWelcomeEmailTest extends TestCase
         Bus::fake();
 
         /** @var User $user */
-        $user = User::factory()->create();
-        $newUser = User::factory()->create();
+        $user = User::factory()->createQuietly();
+        $newUser = User::factory()->createQuietly();
 
         $response = $this->actingAs($user)
             ->get(route('admin.user.send-welcome', $newUser->username));
@@ -46,8 +46,8 @@ class SendWelcomeEmailTest extends TestCase
         Bus::fake();
 
         /** @var User $user */
-        $user = User::factory()->create(['role_id' => 1]);
-        $newUser = User::factory()->create();
+        $user = User::factory()->createQuietly(['role_id' => 1]);
+        $newUser = User::factory()->createQuietly();
 
         $response = $this->actingAs($user)
             ->get(route('admin.user.send-welcome', $newUser->username));

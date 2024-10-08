@@ -40,7 +40,7 @@ class SaveSetpTest extends TestCase
             'company_name' => 'Bobs Fancy Cats',
         ];
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->put(route('init.step-1.submit'), $data);
         $response->assertStatus(302);
         $response->assertSessionHas(['setup' => [
@@ -64,7 +64,7 @@ class SaveSetpTest extends TestCase
             'require_auth' => true,
         ];
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->put(route('init.step-2.submit'), $data);
         $response->assertStatus(302);
         $response->assertSessionHas(['setup' => [
@@ -88,7 +88,7 @@ class SaveSetpTest extends TestCase
             'disable_compromised' => false,
         ];
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->put(route('init.step-3.submit'), $data);
         $response->assertStatus(302);
         $response->assertSessionHas(['setup' => [
@@ -104,7 +104,7 @@ class SaveSetpTest extends TestCase
 
         $data = User::factory()->make()->makeVisible('role_id')->toArray();
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->put(route('init.step-4.submit', 'admin'), $data);
         $response->assertStatus(302);
         $response->assertSessionHas(['setup' => [
@@ -124,7 +124,7 @@ class SaveSetpTest extends TestCase
             'password_confirmation' => 'SomeN3wP@ssword',
         ];
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->withSession(['setup' => [
                 'user-settings' => [
                     'expire' => '60',

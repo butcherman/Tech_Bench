@@ -37,7 +37,7 @@ class CustomerNoteSiteTest extends TestCase
             ->where('perm_type_id', 17)
             ->update(['allow' => false]);
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('customers.site.notes.create', [$customer->slug, $site->site_slug]));
         $response->assertStatus(403);
     }
@@ -47,7 +47,7 @@ class CustomerNoteSiteTest extends TestCase
         $customer = Customer::factory()->create();
         $site = CustomerSite::factory()->create(['cust_id' => $customer->cust_id]);
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('customers.site.notes.create', [$customer->slug, $site->site_slug]));
         $response->assertSuccessful();
     }
@@ -97,7 +97,7 @@ class CustomerNoteSiteTest extends TestCase
             ->where('perm_type_id', 17)
             ->update(['allow' => false]);
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->post(route('customers.site.notes.store', [$customer->slug, $site->site_slug]), $data);
         $response->assertStatus(403);
     }
@@ -117,7 +117,7 @@ class CustomerNoteSiteTest extends TestCase
             'details' => 'This is the notes details',
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->post(route('customers.site.notes.store', [$customer->slug, $site->site_slug]), $data);
         $response->assertStatus(302);
         $response->assertSessionHas('success', __('cust.note.created'));
@@ -145,7 +145,7 @@ class CustomerNoteSiteTest extends TestCase
             'details' => 'This is the notes details',
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->post(route('customers.site.notes.store', [$customer->slug, $customer->CustomerSite[0]->site_slug]), $data);
         $response->assertStatus(302);
         $response->assertSessionHas('success', __('cust.note.created'));
@@ -183,7 +183,7 @@ class CustomerNoteSiteTest extends TestCase
             'details' => 'This is the notes details',
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->post(route('customers.site.notes.store', [$customer->slug, $site->site_slug]), $data);
         $response->assertStatus(302);
         $response->assertSessionHas('success', __('cust.note.created'));
@@ -222,7 +222,7 @@ class CustomerNoteSiteTest extends TestCase
         $note = CustomerNote::factory()
             ->create(['cust_id' => $customer->cust_id]);
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('customers.site.notes.show', [
                 $customer->slug,
                 $site->site_slug,
@@ -262,7 +262,7 @@ class CustomerNoteSiteTest extends TestCase
             ->where('perm_type_id', 18)
             ->update(['allow' => false]);
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('customers.site.notes.edit', [
                 $customer->slug,
                 $site->site_slug,
@@ -278,7 +278,7 @@ class CustomerNoteSiteTest extends TestCase
         $note = CustomerNote::factory()
             ->create(['cust_id' => $customer->cust_id]);
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('customers.site.notes.edit', [
                 $customer->slug,
                 $site->site_slug,
@@ -334,7 +334,7 @@ class CustomerNoteSiteTest extends TestCase
             ->where('perm_type_id', 18)
             ->update(['allow' => false]);
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->put(route('customers.site.notes.update', [
                 $customer->slug,
                 $site->site_slug,
@@ -360,7 +360,7 @@ class CustomerNoteSiteTest extends TestCase
             'details' => 'This is the notes details',
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->put(route('customers.site.notes.update', [
                 $customer->slug,
                 $site->site_slug,
@@ -403,7 +403,7 @@ class CustomerNoteSiteTest extends TestCase
             'details' => 'This is the notes details',
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->put(route('customers.site.notes.update', [
                 $customer->slug,
                 $customer->CustomerSite[0]->site_slug,
@@ -467,7 +467,7 @@ class CustomerNoteSiteTest extends TestCase
             ->where('perm_type_id', 19)
             ->update(['allow' => false]);
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->delete(route('customers.site.notes.destroy', [
                 $customer->slug,
                 $site->site_slug,
@@ -485,7 +485,7 @@ class CustomerNoteSiteTest extends TestCase
         $site = CustomerSite::factory()->create(['cust_id' => $customer->cust_id]);
         $note = CustomerNote::factory()->create(['cust_id' => $customer->cust_id]);
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->delete(route('customers.site.notes.destroy', [
                 $customer->slug,
                 $site->site_slug,

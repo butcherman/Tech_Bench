@@ -5,11 +5,12 @@ namespace App\Observers;
 use App\Events\File\FileDataDeletedEvent;
 use App\Models\TechTip;
 use App\Models\TechTipView;
+use App\Models\User;
 use Illuminate\Support\Facades\Log;
 
 class TechTipObserver
 {
-    protected $user;
+    protected User|string $user;
 
     /**
      * @codeCoverageIgnore

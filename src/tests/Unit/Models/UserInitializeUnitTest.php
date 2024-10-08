@@ -16,7 +16,7 @@ class UserInitializeUnitTest extends TestCase
         parent::setUp();
 
         $this->model = UserInitialize::create([
-            'username' => User::factory()->create()->username,
+            'username' => User::factory()->createQuietly()->username,
             'token' => Str::uuid(),
         ]);
     }

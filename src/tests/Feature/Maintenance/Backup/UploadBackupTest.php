@@ -30,7 +30,7 @@ class UploadBackupTest extends TestCase
             'file' => UploadedFile::fake()->image('randomImage.png'),
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->post(route('maint.backups.upload'), $data);
         $response->assertForbidden();
     }
@@ -43,7 +43,7 @@ class UploadBackupTest extends TestCase
             'file' => UploadedFile::fake()->image('randomImage.png'),
         ];
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->post(route('maint.backups.upload'), $data);
         $response->assertSuccessful();
 

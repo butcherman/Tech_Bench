@@ -12,6 +12,8 @@ class FeatureChangedEvent
 
     /**
      * Event is Fired whenever a Feature is enabled or disabled
+     *
+     * TODO - Change event for a single user
      */
     public function __construct() {}
 }

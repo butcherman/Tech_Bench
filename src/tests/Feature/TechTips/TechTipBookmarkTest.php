@@ -26,7 +26,7 @@ class TechTipBookmarkTest extends TestCase
 
     public function test_invoke_add()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->createQuietly();
         $tip = TechTip::factory()->create();
         $data = [
             'value' => true,
@@ -43,7 +43,7 @@ class TechTipBookmarkTest extends TestCase
 
     public function test_invoke_add_duplicate()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->createQuietly();
         $tip = TechTip::factory()->create();
         $data = [
             'value' => true,
@@ -58,7 +58,7 @@ class TechTipBookmarkTest extends TestCase
 
     public function test_invoke_remove()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->createQuietly();
         $tip = TechTip::factory()->create();
         $data = [
             'value' => false,
@@ -77,7 +77,7 @@ class TechTipBookmarkTest extends TestCase
 
     public function test_invoke_remove_duplicate()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->createQuietly();
         $tip = TechTip::factory()->create();
         $data = [
             'value' => false,

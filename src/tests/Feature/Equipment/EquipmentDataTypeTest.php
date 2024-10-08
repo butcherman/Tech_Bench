@@ -23,14 +23,14 @@ class EquipmentDataTypeTest extends TestCase
 
     public function test_index_no_permission()
     {
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('equipment-data.index'));
         $response->assertStatus(403);
     }
 
     public function test_index()
     {
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->get(route('equipment-data.index'));
         $response->assertSuccessful();
     }
@@ -48,14 +48,14 @@ class EquipmentDataTypeTest extends TestCase
 
     public function test_create_no_permission()
     {
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('equipment-data.create'));
         $response->assertStatus(403);
     }
 
     public function test_create()
     {
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->get(route('equipment-data.create'));
         $response->assertSuccessful();
     }
@@ -89,7 +89,7 @@ class EquipmentDataTypeTest extends TestCase
             'allow_copy' => false,
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->post(route('equipment-data.store'), $data);
         $response->assertStatus(403);
     }
@@ -104,7 +104,7 @@ class EquipmentDataTypeTest extends TestCase
             'allow_copy' => false,
         ];
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->post(route('equipment-data.store'), $data);
         $response->assertStatus(302);
         $response->assertSessionHas('success', __('equipment.data-field-type.created'));
@@ -128,7 +128,7 @@ class EquipmentDataTypeTest extends TestCase
     {
         $type = DataFieldType::factory()->create();
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('equipment-data.edit', $type->type_id));
         $response->assertStatus(403);
     }
@@ -137,7 +137,7 @@ class EquipmentDataTypeTest extends TestCase
     {
         $type = DataFieldType::factory()->create();
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->get(route('equipment-data.edit', $type->type_id));
         $response->assertSuccessful();
     }
@@ -175,7 +175,7 @@ class EquipmentDataTypeTest extends TestCase
             'allow_copy' => false,
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->put(route('equipment-data.update', $type->type_id), $data);
         $response->assertStatus(403);
     }
@@ -192,7 +192,7 @@ class EquipmentDataTypeTest extends TestCase
             'allow_copy' => false,
         ];
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->put(route('equipment-data.update', $type->type_id), $data);
         $response->assertStatus(302);
         $response->assertSessionHas('success', __('equipment.data-field-type.updated'));
@@ -216,7 +216,7 @@ class EquipmentDataTypeTest extends TestCase
     {
         $type = DataFieldType::factory()->create();
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->delete(route('equipment-data.destroy', $type->type_id));
         $response->assertStatus(403);
     }
@@ -225,7 +225,7 @@ class EquipmentDataTypeTest extends TestCase
     {
         $type = DataFieldType::factory()->create();
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->delete(route('equipment-data.destroy', $type->type_id));
         $response->assertStatus(302);
         $response->assertSessionHas('warning', __('equipment.data-field-type.destroyed'));
@@ -242,7 +242,7 @@ class EquipmentDataTypeTest extends TestCase
             'order' => 0,
         ]);
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->delete(route('equipment-data.destroy', $type->type_id));
 
         $response->assertStatus(302);

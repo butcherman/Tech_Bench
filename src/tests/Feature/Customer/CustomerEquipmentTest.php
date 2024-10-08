@@ -44,7 +44,7 @@ class CustomerEquipmentTest extends TestCase
 
     public function test_index()
     {
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('customers.equipment.index', $this->customer->slug));
         $response->assertSuccessful();
     }
@@ -82,7 +82,7 @@ class CustomerEquipmentTest extends TestCase
             'site_list' => $this->customer->CustomerSite->toArray(),
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->post(
                 route('customers.equipment.store', $this->customer->slug),
                 $data
@@ -105,7 +105,7 @@ class CustomerEquipmentTest extends TestCase
                 ->toArray(),
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->post(
                 route('customers.equipment.store', $this->customer->slug),
                 $data
@@ -153,7 +153,7 @@ class CustomerEquipmentTest extends TestCase
             'site_list' => $siteList,
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->post(
                 route('customers.equipment.store', $this->customer->slug),
                 $data
@@ -187,7 +187,7 @@ class CustomerEquipmentTest extends TestCase
             'cust_id' => $this->customer->cust_id,
         ]);
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('customers.equipment.show', [
                 $this->customer->slug,
                 $equip->cust_equip_id,
@@ -252,7 +252,7 @@ class CustomerEquipmentTest extends TestCase
             ],
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->put(route('customers.equipment.update', [
                 $this->customer->slug,
                 $equip->cust_equip_id,
@@ -281,7 +281,7 @@ class CustomerEquipmentTest extends TestCase
             ],
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->put(route('customers.equipment.update', [
                 $this->customer->slug,
                 $equip->cust_equip_id,
@@ -336,7 +336,7 @@ class CustomerEquipmentTest extends TestCase
             'cust_id' => $this->customer->cust_id,
         ]);
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->delete(route('customers.equipment.destroy', [
                 $this->customer->slug,
                 $equip->cust_equip_id,
@@ -352,7 +352,7 @@ class CustomerEquipmentTest extends TestCase
             'cust_id' => $this->customer->cust_id,
         ]);
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->delete(route('customers.equipment.destroy', [
                 $this->customer->slug,
                 $equip->cust_equip_id,
@@ -394,7 +394,7 @@ class CustomerEquipmentTest extends TestCase
             'cust_id' => $this->customer->cust_id,
         ]);
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('customers.deleted-items.restore.equipment', [
                 $equip->cust_id,
                 $equip->cust_equip_id,
@@ -411,7 +411,7 @@ class CustomerEquipmentTest extends TestCase
             'cust_id' => $this->customer->cust_id,
         ]);
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->get(route('customers.deleted-items.restore.equipment', [
                 $equip->cust_id,
                 $equip->cust_equip_id,
@@ -455,7 +455,7 @@ class CustomerEquipmentTest extends TestCase
         ]);
         $equip->delete();
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->delete(route('customers.deleted-items.force-delete.equipment', [
                 $equip->cust_id,
                 $equip->cust_equip_id,
@@ -473,7 +473,7 @@ class CustomerEquipmentTest extends TestCase
         ]);
         $equip->delete();
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->delete(route('customers.deleted-items.force-delete.equipment', [
                 $equip->cust_id,
                 $equip->cust_equip_id,

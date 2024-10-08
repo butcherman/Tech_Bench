@@ -26,14 +26,14 @@ class ReAssignCustomerTest extends TestCase
 
     public function test_edit_no_permission()
     {
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('customers.re-assign.edit'));
         $response->assertStatus(403);
     }
 
     public function test_edit()
     {
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->get(route('customers.re-assign.edit'));
         $response->assertSuccessful();
     }
@@ -61,7 +61,7 @@ class ReAssignCustomerTest extends TestCase
             'toCustomer' => 2,
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->put(route('customers.re-assign.update'), $data);
         $response->assertStatus(403);
     }
@@ -91,7 +91,7 @@ class ReAssignCustomerTest extends TestCase
             'toCustomer' => $toCust->cust_id,
         ];
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->put(route('customers.re-assign.update'), $data);
         $response->assertStatus(302);
 
@@ -176,7 +176,7 @@ class ReAssignCustomerTest extends TestCase
             'toCustomer' => $toCust->cust_id,
         ];
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->put(route('customers.re-assign.update'), $data);
         $response->assertStatus(302);
 
@@ -244,7 +244,7 @@ class ReAssignCustomerTest extends TestCase
             'toCustomer' => $toCust->cust_id,
         ];
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->put(route('customers.re-assign.update'), $data);
         $response->assertStatus(302);
 
@@ -296,7 +296,7 @@ class ReAssignCustomerTest extends TestCase
             'toCustomer' => $toCust->cust_id,
         ];
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->put(route('customers.re-assign.update'), $data);
         $response->assertStatus(302);
 
@@ -348,7 +348,7 @@ class ReAssignCustomerTest extends TestCase
             'toCustomer' => $toCust->cust_id,
         ];
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->put(route('customers.re-assign.update'), $data);
         $response->assertStatus(302);
 

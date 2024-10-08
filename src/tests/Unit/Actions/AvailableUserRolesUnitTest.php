@@ -16,7 +16,7 @@ class AvailableUserRolesUnitTest extends TestCase
      */
     public function test_installer_role()
     {
-        $user = User::factory()->create(['role_id' => 1]);
+        $user = User::factory()->createQuietly(['role_id' => 1]);
         $obj = new AvailableUserRoles;
 
         $shouldBe = UserRole::all()->append('href')->toArray();
@@ -27,7 +27,7 @@ class AvailableUserRolesUnitTest extends TestCase
 
     public function test_administrator_role()
     {
-        $user = User::factory()->create(['role_id' => 2]);
+        $user = User::factory()->createQuietly(['role_id' => 2]);
         $obj = new AvailableUserRoles;
 
         $shouldBe = UserRole::where('role_id', '>=', 2)
@@ -41,7 +41,7 @@ class AvailableUserRolesUnitTest extends TestCase
 
     public function test_other_role()
     {
-        $user = User::factory()->create(['role_id' => 3]);
+        $user = User::factory()->createQuietly(['role_id' => 3]);
         $obj = new AvailableUserRoles;
 
         $shouldBe = UserRole::where('role_id', '>=', 2)

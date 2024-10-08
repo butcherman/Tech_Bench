@@ -51,7 +51,7 @@ class UploadTipFileTest extends TestCase
         $dataArr['equipList'] = $equipList->pluck('equip_id')->toArray();
         $dataArr['file'] = UploadedFile::fake()->image('testPhoto.png');
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->post(route('tech-tips.upload'), $dataArr);
         $response->assertForbidden();
     }
@@ -66,7 +66,7 @@ class UploadTipFileTest extends TestCase
         $dataArr['equipList'] = $equipList->pluck('equip_id')->toArray();
         $dataArr['file'] = UploadedFile::fake()->image('testPhoto.png');
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->post(route('tech-tips.upload'), $dataArr);
         $response->assertSuccessful();
 

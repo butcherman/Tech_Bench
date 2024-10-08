@@ -20,7 +20,7 @@ class DashboardTest extends TestCase
 
     public function test_dashboard()
     {
-        $response = $this->actingAs(User::factory()->create())->get(route('dashboard'));
+        $response = $this->actingAs(User::factory()->createQuietly())->get(route('dashboard'));
         $response->assertSuccessful();
     }
 }

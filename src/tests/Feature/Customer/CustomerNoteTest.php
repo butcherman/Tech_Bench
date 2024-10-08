@@ -30,7 +30,7 @@ class CustomerNoteTest extends TestCase
     {
         $customer = Customer::factory()->create();
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('customers.notes.index', $customer->slug));
         $response->assertSuccessful();
     }
@@ -56,7 +56,7 @@ class CustomerNoteTest extends TestCase
             ->where('perm_type_id', 17)
             ->update(['allow' => false]);
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('customers.notes.create', $customer->slug));
         $response->assertStatus(403);
     }
@@ -65,7 +65,7 @@ class CustomerNoteTest extends TestCase
     {
         $customer = Customer::factory()->create();
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('customers.notes.create', $customer->slug));
         $response->assertSuccessful();
     }
@@ -113,7 +113,7 @@ class CustomerNoteTest extends TestCase
             ->where('perm_type_id', 17)
             ->update(['allow' => false]);
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->post(route('customers.notes.store', $customer->slug), $data);
         $response->assertStatus(403);
     }
@@ -132,7 +132,7 @@ class CustomerNoteTest extends TestCase
             'details' => 'This is the notes details',
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->post(route('customers.notes.store', $customer->slug), $data);
         $response->assertStatus(302);
         $response->assertSessionHas('success', __('cust.note.created'));
@@ -162,7 +162,7 @@ class CustomerNoteTest extends TestCase
             'details' => 'This is the notes details',
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->post(route('customers.notes.store', $customer->slug), $data);
         $response->assertStatus(302);
         $response->assertSessionHas('success', __('cust.note.created'));
@@ -201,7 +201,7 @@ class CustomerNoteTest extends TestCase
             'details' => 'This is the notes details',
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->post(route('customers.notes.store', $customer->slug), $data);
         $response->assertStatus(302);
         $response->assertSessionHas('success', __('cust.note.created'));
@@ -238,7 +238,7 @@ class CustomerNoteTest extends TestCase
         $note = CustomerNote::factory()
             ->create(['cust_id' => $customer->cust_id]);
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('customers.notes.show', [
                 $customer->slug,
                 $note->note_id,
@@ -274,7 +274,7 @@ class CustomerNoteTest extends TestCase
             ->where('perm_type_id', 18)
             ->update(['allow' => false]);
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('customers.notes.edit', [
                 $customer->slug,
                 $note->note_id,
@@ -288,7 +288,7 @@ class CustomerNoteTest extends TestCase
         $note = CustomerNote::factory()
             ->create(['cust_id' => $customer->cust_id]);
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('customers.notes.edit', [
                 $customer->slug,
                 $note->note_id,
@@ -340,7 +340,7 @@ class CustomerNoteTest extends TestCase
             ->where('perm_type_id', 18)
             ->update(['allow' => false]);
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->put(route('customers.notes.update', [
                 $customer->slug,
                 $note->note_id,
@@ -364,7 +364,7 @@ class CustomerNoteTest extends TestCase
             'details' => 'This is the notes details',
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->put(route('customers.notes.update', [
                 $customer->slug,
                 $note->note_id,
@@ -407,7 +407,7 @@ class CustomerNoteTest extends TestCase
             'details' => 'This is the notes details',
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->put(route('customers.notes.update', [
                 $customer->slug,
                 $note->note_id,
@@ -468,7 +468,7 @@ class CustomerNoteTest extends TestCase
             ->where('perm_type_id', 19)
             ->update(['allow' => false]);
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->delete(route('customers.notes.destroy', [
                 $customer->slug,
                 $note->note_id,
@@ -484,7 +484,7 @@ class CustomerNoteTest extends TestCase
         $customer = Customer::factory()->create();
         $note = CustomerNote::factory()->create(['cust_id' => $customer->cust_id]);
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->delete(route('customers.notes.destroy', [
                 $customer->slug,
                 $note->note_id,
@@ -521,7 +521,7 @@ class CustomerNoteTest extends TestCase
     {
         $note = CustomerNote::factory()->create();
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('customers.deleted-items.restore.notes', [
                 $note->cust_id,
                 $note->note_id,
@@ -537,7 +537,7 @@ class CustomerNoteTest extends TestCase
         $note = CustomerNote::factory()->create();
         $note->delete();
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->get(route('customers.deleted-items.restore.notes', [
                 $note->cust_id,
                 $note->note_id,
@@ -576,7 +576,7 @@ class CustomerNoteTest extends TestCase
         $note = CustomerNote::factory()->create();
         $note->delete();
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->delete(route('customers.deleted-items.force-delete.notes', [
                 $note->cust_id,
                 $note->note_id,
@@ -592,7 +592,7 @@ class CustomerNoteTest extends TestCase
         $note = CustomerNote::factory()->create();
         $note->delete();
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->delete(route('customers.deleted-items.force-delete.notes', [
                 $note->cust_id,
                 $note->note_id,

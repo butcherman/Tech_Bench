@@ -28,14 +28,14 @@ class CustomerSummaryReportTest extends TestCase
 
     public function test_index_no_permission()
     {
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('reports.customer.summary'));
         $response->assertStatus(403);
     }
 
     public function test_index()
     {
-        $response = $this->actingAs(User::factory()->create(['role_id' => 2]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 2]))
             ->get(route('reports.customer.summary'));
         $response->assertSuccessful();
     }
@@ -61,7 +61,7 @@ class CustomerSummaryReportTest extends TestCase
             'disabledCustomers' => false,
         ];
 
-        $response = $this->ActingAs(User::factory()->create())
+        $response = $this->ActingAs(User::factory()->createQuietly())
             ->put(route('reports.customer.run-summary'), $data);
         $response->assertStatus(403);
     }
@@ -72,7 +72,7 @@ class CustomerSummaryReportTest extends TestCase
             'disabledCustomers' => false,
         ];
 
-        $response = $this->ActingAs(User::factory()->create(['role_id' => 2]))
+        $response = $this->ActingAs(User::factory()->createQuietly(['role_id' => 2]))
             ->put(route('reports.customer.run-summary'), $data);
         $response->assertSuccessful();
     }

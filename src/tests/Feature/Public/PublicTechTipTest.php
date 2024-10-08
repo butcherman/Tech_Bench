@@ -27,7 +27,7 @@ class PublicTechTipTest extends TestCase
 
         EquipmentType::factory()->count(5)->create(['allow_public_tip' => true]);
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('publicTips.index'));
         $response->assertSuccessful();
     }
@@ -68,7 +68,7 @@ class PublicTechTipTest extends TestCase
             'page' => 1,
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->post(route('publicTips.search', $searchData));
         $response->assertSuccessful();
     }
@@ -82,7 +82,7 @@ class PublicTechTipTest extends TestCase
             'page' => 1,
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->post(route('publicTips.search', $searchData));
         $response->assertStatus(404);
     }
@@ -107,7 +107,7 @@ class PublicTechTipTest extends TestCase
 
         $tip = TechTip::factory()->create(['public' => true]);
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('publicTips.show', $tip->slug));
         $response->assertSuccessful();
     }

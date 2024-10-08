@@ -70,7 +70,7 @@ class CustomerContactTest extends TestCase
             ->where('perm_type_id', 14)
             ->update(['allow' => false]);
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->post(route('customers.contacts.store', $cust->slug), $data);
         $response->assertStatus(403);
     }
@@ -97,7 +97,7 @@ class CustomerContactTest extends TestCase
             ],
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->post(route('customers.contacts.store', $cust->slug), $data);
         $response->assertStatus(302);
         $response->assertSessionHas('success', __('cust.contact.created', [
@@ -199,7 +199,7 @@ class CustomerContactTest extends TestCase
             ->where('perm_type_id', 15)
             ->update(['allow' => false]);
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->put(
                 route('customers.contacts.update', [$cust->slug, $cont->cont_id]),
                 $data
@@ -245,7 +245,7 @@ class CustomerContactTest extends TestCase
             ],
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->put(
                 route('customers.contacts.update', [$cust->slug, $cont->cont_id]),
                 $data
@@ -317,7 +317,7 @@ class CustomerContactTest extends TestCase
             ->where('perm_type_id', 16)
             ->update(['allow' => false]);
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->delete(
                 route('customers.contacts.destroy', [$cont->cust_id, $cont->cont_id])
             );
@@ -330,7 +330,7 @@ class CustomerContactTest extends TestCase
 
         $cont = CustomerContact::factory()->create();
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->delete(
                 route('customers.contacts.destroy', [$cont->cust_id, $cont->cont_id])
             );
@@ -370,7 +370,7 @@ class CustomerContactTest extends TestCase
         $cont = CustomerContact::factory()->create();
         $cont->delete();
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('customers.deleted-items.restore.contacts', [
                 $cont->cust_id,
                 $cont->cont_id,
@@ -385,7 +385,7 @@ class CustomerContactTest extends TestCase
         $cont = CustomerContact::factory()->create();
         $cont->delete();
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->get(route('customers.deleted-items.restore.contacts', [
                 $cont->cust_id,
                 $cont->cont_id,
@@ -427,7 +427,7 @@ class CustomerContactTest extends TestCase
         $cont = CustomerContact::factory()->create();
         $cont->delete();
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->delete(route('customers.deleted-items.force-delete.contacts', [
                 $cont->cust_id,
                 $cont->cont_id,
@@ -442,7 +442,7 @@ class CustomerContactTest extends TestCase
         $cont = CustomerContact::factory()->create();
         $cont->delete();
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->delete(route('customers.deleted-items.force-delete.contacts', [
                 $cont->cust_id,
                 $cont->cont_id,

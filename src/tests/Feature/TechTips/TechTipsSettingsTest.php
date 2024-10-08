@@ -20,14 +20,14 @@ class TechTipsSettingsTest extends TestCase
 
     public function test_edit_no_permission()
     {
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('admin.tech-tips.settings.edit'));
         $response->assertForbidden();
     }
 
     public function test_edit()
     {
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->get(route('admin.tech-tips.settings.edit'));
         $response->assertSuccessful();
     }
@@ -55,7 +55,7 @@ class TechTipsSettingsTest extends TestCase
             'allow_public' => true,
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->put(route('admin.tech-tips.settings.edit'), $data);
         $response->assertForbidden();
     }
@@ -67,7 +67,7 @@ class TechTipsSettingsTest extends TestCase
             'allow_public' => true,
         ];
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->put(route('admin.tech-tips.settings.edit'), $data);
         $response->assertStatus(302);
         $response->assertSessionHas('success', __('tips.settings_updated'));

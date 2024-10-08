@@ -27,7 +27,7 @@ class ShowDeletedTipTest extends TestCase
         $techTip = TechTip::factory()->create();
         $techTip->delete();
 
-        $response = $this->ActingAs(User::factory()->create())
+        $response = $this->ActingAs(User::factory()->createQuietly())
             ->get(route('admin.tech-tips.deleted-tips.show', $techTip->tip_id));
         $response->assertForbidden();
     }
@@ -37,7 +37,7 @@ class ShowDeletedTipTest extends TestCase
         $techTip = TechTip::factory()->create();
         $techTip->delete();
 
-        $response = $this->ActingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->ActingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->get(route('admin.tech-tips.deleted-tips.show', $techTip->tip_id));
         $response->assertSuccessful();
     }

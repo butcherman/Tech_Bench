@@ -23,7 +23,7 @@ class BasicSettingsTest extends TestCase
     public function test_show_no_permission()
     {
         /** @var User $user */
-        $user = User::factory()->create();
+        $user = User::factory()->createQuietly();
 
         $response = $this->actingAs($user)
             ->get(route('admin.basic-settings.show'));
@@ -33,7 +33,7 @@ class BasicSettingsTest extends TestCase
     public function test_show()
     {
         /** @var User $user */
-        $user = User::factory()->create(['role_id' => 1]);
+        $user = User::factory()->createQuietly(['role_id' => 1]);
 
         $response = $this->actingAs($user)
             ->get(route('admin.basic-settings.show'));
@@ -61,7 +61,7 @@ class BasicSettingsTest extends TestCase
     public function test_update_no_permission()
     {
         /** @var User $user */
-        $user = User::factory()->create();
+        $user = User::factory()->createQuietly();
         $data = [
             'url' => 'https://someUrl.noSite',
             'timezone' => 'UTC',
@@ -79,7 +79,7 @@ class BasicSettingsTest extends TestCase
         Event::fake();
 
         /** @var User $user */
-        $user = User::factory()->create(['role_id' => 1]);
+        $user = User::factory()->createQuietly(['role_id' => 1]);
         $data = [
             'url' => 'https://someUrl.noSite',
             'timezone' => 'America/LosAngeles',

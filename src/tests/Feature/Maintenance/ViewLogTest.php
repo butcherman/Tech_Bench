@@ -30,7 +30,7 @@ class ViewLogTest extends TestCase
         $date = date('Y-m-d', strtotime(Carbon::now()));
         $filename = 'TechBench-'.$date;
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('maint.logs.view', ['Application', $filename]));
         $response->assertStatus(403);
     }
@@ -40,7 +40,7 @@ class ViewLogTest extends TestCase
         $date = date('Y-m-d', strtotime(Carbon::now()));
         $filename = 'TechBench-'.$date;
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->get(route('maint.logs.view', ['YourMom', $filename]));
         $response->assertStatus(404);
     }
@@ -50,7 +50,7 @@ class ViewLogTest extends TestCase
         $date = date('Y-m-d', strtotime(Carbon::now()->addDays(30)));
         $filename = 'TechBench-'.$date;
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->get(route('maint.logs.view', ['Application', 'yourmom.com']));
         $response->assertStatus(404);
     }
@@ -60,7 +60,7 @@ class ViewLogTest extends TestCase
         $date = date('Y-m-d', strtotime(Carbon::now()));
         $filename = 'TechBench-'.$date;
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->get(route('maint.logs.view', ['Application', $filename]));
         $response->assertSuccessful();
     }

@@ -47,7 +47,7 @@ class DownloadFileTest extends TestCase
     {
         $file = FileUpload::factory()->create(['file_name' => 'someFile.png']);
 
-        $response = $this->actingAs(User::factory()->create())->get(route('download', [$file->file_id, 'blah.jpb']));
+        $response = $this->actingAs(User::factory()->createQuietly())->get(route('download', [$file->file_id, 'blah.jpb']));
         $response->assertStatus(403);
     }
 
@@ -55,7 +55,7 @@ class DownloadFileTest extends TestCase
     {
         $file = FileUpload::factory()->create(['file_name' => 'someFile.png']);
 
-        $response = $this->actingAs(User::factory()->create())->get(route('download', [84587451, $file->file_name]));
+        $response = $this->actingAs(User::factory()->createQuietly())->get(route('download', [84587451, $file->file_name]));
         $response->assertStatus(404);
     }
 
@@ -63,7 +63,7 @@ class DownloadFileTest extends TestCase
     {
         $file = FileUpload::factory()->create(['file_name' => 'someFile.png', 'public' => true]);
 
-        $response = $this->actingAs(User::factory()->create())->get(route('download', [$file->file_id, $file->file_name]));
+        $response = $this->actingAs(User::factory()->createQuietly())->get(route('download', [$file->file_id, $file->file_name]));
         $response->assertStatus(404);
     }
 }

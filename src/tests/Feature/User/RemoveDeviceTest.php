@@ -12,8 +12,8 @@ class RemoveDeviceTest extends TestCase
 
     public function test_invoke_guest()
     {
-        $token = DeviceToken::factory()->create();
-        $user = User::factory()->create();
+        $token = DeviceToken::factory()->createQuietly();
+        $user = User::factory()->createQuietly();
 
         $response = $this->get(route('user.remove-device', [
             $user->username,
@@ -26,8 +26,8 @@ class RemoveDeviceTest extends TestCase
 
     public function test_invoke()
     {
-        $token = DeviceToken::factory()->create();
-        $user = User::factory()->create();
+        $token = DeviceToken::factory()->createQuietly();
+        $user = User::factory()->createQuietly();
 
         $response = $this->actingAs($user)
             ->get(route('user.remove-device', [$user->username, $token->device_id]));
@@ -39,10 +39,10 @@ class RemoveDeviceTest extends TestCase
 
     public function test_invoke_as_admin()
     {
-        $token = DeviceToken::factory()->create();
-        $user = User::factory()->create();
+        $token = DeviceToken::factory()->createQuietly();
+        $user = User::factory()->createQuietly();
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->get(route('user.remove-device', [$user->username, $token->device_id]));
         $response->assertStatus(302);
         $response->assertSessionHas('success', __('user.device-removed'));
@@ -52,20 +52,20 @@ class RemoveDeviceTest extends TestCase
 
     public function test_invoke_another_user()
     {
-        $token = DeviceToken::factory()->create();
-        $user = User::factory()->create();
+        $token = DeviceToken::factory()->createQuietly();
+        $user = User::factory()->createQuietly();
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('user.remove-device', [$user->username, $token->device_id]));
         $response->assertStatus(403);
     }
 
     public function test_invoke_higher_user()
     {
-        $token = DeviceToken::factory()->create();
-        $user = User::factory()->create(['role_id' => 1]);
+        $token = DeviceToken::factory()->createQuietly();
+        $user = User::factory()->createQuietly(['role_id' => 1]);
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 2]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 2]))
             ->get(route('user.remove-device', [$user->username, $token->device_id]));
         $response->assertStatus(403);
     }

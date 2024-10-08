@@ -20,14 +20,14 @@ class DisabledCustomerTest extends TestCase
 
     public function test_invoke_no_permission()
     {
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('customers.disabled.index'));
         $response->assertStatus(403);
     }
 
     public function test_invoke()
     {
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->get(route('customers.disabled.index'));
         $response->assertSuccessful();
     }

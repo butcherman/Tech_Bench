@@ -25,7 +25,7 @@ class DownloadTipTest extends TestCase
     {
         $tip = TechTip::factory()->create();
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('tech-tips.download', $tip->slug));
         $response->assertSuccessful();
     }

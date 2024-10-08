@@ -1,7 +1,5 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Http\Requests\Admin;
 
 use App\Models\User;
@@ -27,29 +25,19 @@ class UserAdministrationRequest extends FormRequest
      */
     public function rules(): array
     {
-        if (is_null($this->user)) {
-            return [
-                'username' => 'required',
-                'first_name' => 'required|string',
-                'last_name' => 'required|string',
-                'email' => 'required|email',
-                'role_id' => 'required|exists:user_roles',
-            ];
-        }
-
         return [
             'username' => [
                 'required',
                 Rule::unique('users')->ignore($this->user),
             ],
-            'first_name' => 'required|string',
-            'last_name' => 'required|string',
+            'first_name' => ['required', 'string'],
+            'last_name' => ['required', 'string'],
             'email' => [
                 'required',
                 'email',
                 Rule::unique('users')->ignore($this->user),
             ],
-            'role_id' => 'required|exists:user_roles',
+            'role_id' => ['required', 'exists:user_roles'],
         ];
     }
 }

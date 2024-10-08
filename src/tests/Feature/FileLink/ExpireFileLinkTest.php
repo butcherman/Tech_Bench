@@ -14,7 +14,7 @@ class ExpireFileLinkTest extends TestCase
      */
     public function test_invoke_guest()
     {
-        $link = FileLink::factory()->create();
+        $link = FileLink::factory()->createQuietly();
 
         $response = $this->get(route('links.expire', $link->link_id));
         $response->assertStatus(302);
@@ -25,42 +25,55 @@ class ExpireFileLinkTest extends TestCase
     public function test_invoke_feature_disabled()
     {
         config(['file-link.feature_enabled' => false]);
-        $user = User::factory()->create();
-        $link = FileLink::factory()->create();
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+        $link = FileLink::factory()->createQuietly();
 
-        $response = $this->actingAs($user)->get(route('links.expire', $link->link_id));
+        $response = $this->actingAs($user)
+            ->get(route('links.expire', $link->link_id));
         $response->assertStatus(403);
     }
 
     public function test_invoke_different_user()
     {
         config(['file-link.feature_enabled' => true]);
-        $user = User::factory()->create();
-        $link = FileLink::factory()->create();
 
-        $response = $this->actingAs($user)->get(route('links.expire', $link->link_id));
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+        $link = FileLink::factory()->createQuietly();
+
+        $response = $this->actingAs($user)
+            ->get(route('links.expire', $link->link_id));
         $response->assertStatus(403);
     }
 
     public function test_invoke_no_permission()
     {
         config(['file-link.feature_enabled' => true]);
+
         $this->changeRolePermission(4, 'Use File Links', false);
 
-        $user = User::factory()->create();
-        $link = FileLink::factory()->create(['user_id' => $user->user_id]);
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+        $link = FileLink::factory()
+            ->createQuietly(['user_id' => $user->user_id]);
 
-        $response = $this->actingAs($user)->get(route('links.expire', $link->link_id));
+        $response = $this->actingAs($user)
+            ->get(route('links.expire', $link->link_id));
         $response->assertStatus(403);
     }
 
     public function test_invoke_as_admin()
     {
         config(['file-link.feature_enabled' => true]);
-        $user = User::factory()->create();
-        $link = FileLink::factory()->create(['user_id' => $user->user_id]);
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        /** @var User $actingAs */
+        $actingAs = User::factory()->createQuietly(['role_id' => 1]);
+        $user = User::factory()->createQuietly();
+        $link = FileLink::factory()
+            ->createQuietly(['user_id' => $user->user_id]);
+
+        $response = $this->actingAs($actingAs)
             ->get(route('links.expire', $link->link_id));
         $response->assertStatus(302);
         $response->assertSessionHas('success', 'Link Expired');
@@ -74,8 +87,11 @@ class ExpireFileLinkTest extends TestCase
     public function test_invoke()
     {
         config(['file-link.feature_enabled' => true]);
-        $user = User::factory()->create();
-        $link = FileLink::factory()->create(['user_id' => $user->user_id]);
+
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+        $link = FileLink::factory()
+            ->createQuietly(['user_id' => $user->user_id]);
 
         $response = $this->actingAs($user)->get(route('links.expire', $link->link_id));
         $response->assertStatus(302);

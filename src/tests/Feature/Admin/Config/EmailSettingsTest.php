@@ -21,7 +21,7 @@ class EmailSettingsTest extends TestCase
     public function test_show_no_permission()
     {
         /** @var User $user */
-        $user = User::factory()->create();
+        $user = User::factory()->createQuietly();
 
         $response = $this->actingAs($user)
             ->get(route('admin.email-settings.show'));
@@ -31,7 +31,7 @@ class EmailSettingsTest extends TestCase
     public function test_show()
     {
         /** @var User $user */
-        $user = User::factory()->create(['role_id' => 1]);
+        $user = User::factory()->createQuietly(['role_id' => 1]);
 
         $response = $this->actingAs($user)
             ->get(route('admin.email-settings.show'));
@@ -62,7 +62,7 @@ class EmailSettingsTest extends TestCase
     public function test_update_no_permission()
     {
         /** @var User $user */
-        $user = User::factory()->create();
+        $user = User::factory()->createQuietly();
         $data = [
             'from_address' => 'new@email.org',
             'username' => 'testName',
@@ -81,7 +81,7 @@ class EmailSettingsTest extends TestCase
     public function test_update()
     {
         /** @var User $user */
-        $user = User::factory()->create(['role_id' => 1]);
+        $user = User::factory()->createQuietly(['role_id' => 1]);
         $data = [
             'from_address' => 'new@email.org',
             'username' => 'testName',

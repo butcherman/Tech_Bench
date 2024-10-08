@@ -32,14 +32,14 @@ class CustomerAlertsTest extends TestCase
 
     public function test_index_no_permission()
     {
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('customers.alerts.index', $this->customer->slug));
         $response->assertStatus(403);
     }
 
     public function test_index()
     {
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->get(route('customers.alerts.index', $this->customer->slug));
         $response->assertSuccessful();
     }
@@ -61,7 +61,7 @@ class CustomerAlertsTest extends TestCase
     {
         $data = CustomerAlert::factory()->make()->toArray();
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->post(route('customers.alerts.store', $this->customer->slug), $data);
         $response->assertStatus(403);
     }
@@ -73,7 +73,7 @@ class CustomerAlertsTest extends TestCase
         $data = CustomerAlert::factory()->make()->toArray();
         $data['cust_id'] = $this->customer->cust_id;
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->post(route('customers.alerts.store', $this->customer->slug), $data);
         $response->assertStatus(302);
         $response->assertSessionHas('success', __('cust.alert.created'));
@@ -111,7 +111,7 @@ class CustomerAlertsTest extends TestCase
             'type' => 'success',
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->put(route('customers.alerts.update', [
                 $this->customer->slug,
                 $alert->alert_id,
@@ -129,7 +129,7 @@ class CustomerAlertsTest extends TestCase
             'type' => 'success',
         ];
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->put(route('customers.alerts.update', [
                 $this->customer->slug,
                 $alert->alert_id,
@@ -159,7 +159,7 @@ class CustomerAlertsTest extends TestCase
     {
         $alert = CustomerAlert::factory()->create(['cust_id' => $this->customer->cust_id]);
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->delete(route('customers.alerts.destroy', [$this->customer->slug, $alert->alert_id]));
         $response->assertStatus(403);
     }
@@ -170,7 +170,7 @@ class CustomerAlertsTest extends TestCase
 
         $alert = CustomerAlert::factory()->create(['cust_id' => $this->customer->cust_id]);
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->delete(route('customers.alerts.destroy', [$this->customer->slug, $alert->alert_id]));
         $response->assertStatus(302);
         $response->assertSessionHas('warning', __('cust.alert.destroy'));

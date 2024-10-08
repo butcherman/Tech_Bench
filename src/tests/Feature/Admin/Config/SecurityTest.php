@@ -57,14 +57,20 @@ class SecurityTest extends TestCase
 
     public function test_index_no_permission()
     {
-        $response = $this->actingAs(User::factory()->create())
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+
+        $response = $this->actingAs($user)
             ->get(route('admin.security.index'));
         $response->assertStatus(403);
     }
 
     public function test_index()
     {
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
+
+        $response = $this->actingAs($user)
             ->get(route('admin.security.index'));
         $response->assertSuccessful();
     }
@@ -74,7 +80,10 @@ class SecurityTest extends TestCase
         Storage::fake('security');
         Storage::disk('security')->makeDirectory('private');
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
+
+        $response = $this->actingAs($user)
             ->get(route('admin.security.index'));
         $response->assertSuccessful();
     }
@@ -92,14 +101,20 @@ class SecurityTest extends TestCase
 
     public function test_create_no_permission()
     {
-        $response = $this->actingAs(User::factory()->create())
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+
+        $response = $this->actingAs($user)
             ->get(route('admin.security.create'));
         $response->assertStatus(403);
     }
 
     public function test_create()
     {
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
+
+        $response = $this->actingAs($user)
             ->get(route('admin.security.create'));
         $response->assertSuccessful();
     }
@@ -117,7 +132,10 @@ class SecurityTest extends TestCase
 
     public function test_store_no_permission()
     {
-        $response = $this->actingAs(User::factory()->create())
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+
+        $response = $this->actingAs($user)
             ->post(route('admin.security.store'), ['data' => 'blah']);
         $response->assertStatus(403);
     }
@@ -129,6 +147,8 @@ class SecurityTest extends TestCase
         openssl_x509_export($this->cert, $certOut);
         openssl_pkey_export($this->key, $pkeyOut);
 
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
         $data = [
             'wildcard' => true,
             'certificate' => $certOut,
@@ -136,7 +156,7 @@ class SecurityTest extends TestCase
             'intermediate' => $certOut,
         ];
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs($user)
             ->post(route('admin.security.store'), $data);
         $response->assertStatus(302);
         $response->assertSessionHas('success', __('admin.security.updated'));
@@ -149,6 +169,8 @@ class SecurityTest extends TestCase
     {
         Storage::fake('security');
 
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
         $data = [
             'wildcard' => true,
             'certificate' => 'blah blah not a real cert',
@@ -156,7 +178,7 @@ class SecurityTest extends TestCase
             'intermediate' => 'something else here...',
         ];
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs($user)
             ->post(route('admin.security.store'), $data);
 
         $response->assertStatus(302);
@@ -170,6 +192,8 @@ class SecurityTest extends TestCase
         openssl_x509_export($this->cert, $certOut);
         openssl_pkey_export($this->key, $pkeyOut);
 
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
         $data = [
             'wildcard' => true,
             'certificate' => $certOut,
@@ -179,7 +203,7 @@ class SecurityTest extends TestCase
 
         Carbon::setTestNow(Carbon::now()->addDays(15));
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs($user)
             ->post(route('admin.security.store'), $data);
         $response->assertStatus(302);
         $response->assertSessionHasErrors(['cert_error']);
@@ -198,14 +222,20 @@ class SecurityTest extends TestCase
 
     public function test_edit_no_permission()
     {
-        $response = $this->actingAs(User::factory()->create())
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+
+        $response = $this->actingAs($user)
             ->get(route('admin.security.edit', 'csr-request'));
         $response->assertStatus(403);
     }
 
     public function test_edit()
     {
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
+
+        $response = $this->actingAs($user)
             ->get(route('admin.security.edit', 'csr-request'));
         $response->assertSuccessful();
     }
@@ -233,6 +263,8 @@ class SecurityTest extends TestCase
 
     public function test_update_no_permission()
     {
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
         $data = [
             'countryName' => 'US',
             'stateOrProvinceName' => 'CA',
@@ -243,7 +275,7 @@ class SecurityTest extends TestCase
             'emailAddress' => 'butcherman@noem.com',
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs($user)
             ->put(route('admin.security.update', 'csr-request'), $data);
         $response->assertStatus(403);
     }
@@ -252,6 +284,8 @@ class SecurityTest extends TestCase
     {
         Storage::fake('security');
 
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
         $data = [
             'countryName' => 'US',
             'stateOrProvinceName' => 'CA',
@@ -262,7 +296,7 @@ class SecurityTest extends TestCase
             'emailAddress' => 'butcherman@noem.com',
         ];
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs($user)
             ->put(route('admin.security.update', 'csr-request'), $data);
         $response->assertSuccessful();
     }
@@ -280,7 +314,10 @@ class SecurityTest extends TestCase
 
     public function test_destroy_no_permission()
     {
-        $response = $this->actingAs(User::factory()->create())
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+
+        $response = $this->actingAs($user)
             ->delete(route('admin.security.destroy', 'cert'));
         $response->assertStatus(403);
     }
@@ -295,7 +332,10 @@ class SecurityTest extends TestCase
         Storage::disk('security')->put('server.crt', $certOut);
         Storage::disk('security')->put('private/server.key', $pkeyOut);
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
+
+        $response = $this->actingAs($user)
             ->delete(route('admin.security.destroy', 'cert'));
         $response->assertStatus(302);
         $response->assertSessionHas('warning', __('admin.security.deleted'));

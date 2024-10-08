@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use App\Notifications\User\SendAuthCode;
+use App\Observers\UserObserver;
 use App\Traits\Notifiable;
 use Carbon\Carbon;
 use Illuminate\Auth\Passwords\CanResetPassword;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -14,6 +16,7 @@ use Illuminate\Support\Str;
 use Karmendra\LaravelAgentDetector\AgentDetector;
 use Laravel\Pennant\Concerns\HasFeatures;
 
+#[ObservedBy([UserObserver::class])]
 class User extends Authenticatable
 {
     use CanResetPassword;

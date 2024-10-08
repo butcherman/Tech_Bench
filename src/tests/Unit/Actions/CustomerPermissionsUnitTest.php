@@ -11,7 +11,7 @@ class CustomerPermissionsUnitTest extends TestCase
     public function test_build_installer()
     {
         $perm = new CustomerPermissions;
-        $user = User::factory()->create(['role_id' => 1]);
+        $user = User::factory()->createQuietly(['role_id' => 1]);
 
         $permissions = $perm->get($user);
         $shouldBe = [
@@ -49,7 +49,7 @@ class CustomerPermissionsUnitTest extends TestCase
     public function test_build_admin()
     {
         $perm = new CustomerPermissions;
-        $user = User::factory()->create(['role_id' => 2]);
+        $user = User::factory()->createQuietly(['role_id' => 2]);
 
         $permissions = $perm->get($user);
         $shouldBe = [
@@ -87,7 +87,7 @@ class CustomerPermissionsUnitTest extends TestCase
     public function test_build_tech()
     {
         $perm = new CustomerPermissions;
-        $user = User::factory()->create(['role_id' => 4]);
+        $user = User::factory()->createQuietly(['role_id' => 4]);
 
         $permissions = $perm->get($user);
         $shouldBe = [

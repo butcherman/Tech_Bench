@@ -11,7 +11,7 @@ class TechTipPermissionsUnitTest extends TestCase
     public function test_build_installer()
     {
         $perm = new TechTipPermissions;
-        $user = User::factory()->create(['role_id' => 1]);
+        $user = User::factory()->createQuietly(['role_id' => 1]);
 
         $permissions = $perm->get($user);
         $shouldBe = [
@@ -28,7 +28,7 @@ class TechTipPermissionsUnitTest extends TestCase
 
     public function test_build_admin()
     {
-        $user = User::factory()->create(['role_id' => 2]);
+        $user = User::factory()->createQuietly(['role_id' => 2]);
         $perm = new TechTipPermissions;
 
         $permissions = $perm->get($user);
@@ -46,7 +46,7 @@ class TechTipPermissionsUnitTest extends TestCase
 
     public function test_build_tech()
     {
-        $user = User::factory()->create(['role_id' => 4]);
+        $user = User::factory()->createQuietly(['role_id' => 4]);
         $perm = new TechTipPermissions;
 
         $permissions = $perm->get($user);

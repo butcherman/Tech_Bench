@@ -20,14 +20,14 @@ class LogSettingsTest extends TestCase
 
     public function test_show_no_permission()
     {
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('maint.log-settings.show'));
         $response->assertStatus(403);
     }
 
     public function test_show()
     {
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->get(route('maint.log-settings.show'));
         $response->assertSuccessful();
     }
@@ -55,7 +55,7 @@ class LogSettingsTest extends TestCase
             'log_level' => 'debug',
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->put(route('maint.log-settings.update'), $data);
         $response->assertStatus(403);
     }
@@ -67,7 +67,7 @@ class LogSettingsTest extends TestCase
             'log_level' => 'critical',
         ];
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->put(route('maint.log-settings.update'), $data);
 
         $response->assertStatus(302);

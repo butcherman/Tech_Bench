@@ -20,14 +20,14 @@ class UserSettingsTest extends TestCase
 
     public function test_show_no_permission()
     {
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('admin.user.user-settings.show'));
         $response->assertStatus(403);
     }
 
     public function test_show()
     {
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->get(route('admin.user.user-settings.show'));
         $response->assertSuccessful();
     }
@@ -81,7 +81,7 @@ class UserSettingsTest extends TestCase
             ],
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->put(route('admin.user.user-settings.update'), $data);
         $response->assertStatus(403);
     }
@@ -106,7 +106,7 @@ class UserSettingsTest extends TestCase
             ],
         ];
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->put(route('admin.user.user-settings.update'), $data);
         $response->assertStatus(302);
         $response->assertSessionHas('success', __('admin.user.settings_updated'));
@@ -179,7 +179,7 @@ class UserSettingsTest extends TestCase
             ],
         ];
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->put(route('admin.user.user-settings.update'), $data);
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))->put(route('admin.user.user-settings.update'), $data);
         $response->assertStatus(302);
         $response->assertSessionHas('success', __('admin.user.settings_updated'));
 

@@ -19,7 +19,7 @@ class TwoFactorTest extends TestCase
 
         config(['auth.twoFa.required' => true]);
 
-        $response = $this->actingAs($user = User::factory()->create())
+        $response = $this->actingAs($user = User::factory()->createQuietly())
             ->get(route('dashboard'));
         $response->assertStatus(302);
         $response->assertRedirect(route('2fa.show'));
@@ -42,14 +42,14 @@ class TwoFactorTest extends TestCase
 
     public function test_show()
     {
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('2fa.show'));
         $response->assertSuccessful();
     }
 
     public function test_get_already_verified()
     {
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->withSession(['2fa_verified' => true])
             ->get(route('2fa.show'));
         $response->assertStatus(302);
@@ -74,7 +74,7 @@ class TwoFactorTest extends TestCase
 
     public function test_update()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->createQuietly();
         UserVerificationCode::create([
             'user_id' => $user->user_id,
             'code' => 1234,
@@ -92,7 +92,7 @@ class TwoFactorTest extends TestCase
 
     public function test_update_bad_code()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->createQuietly();
         UserVerificationCode::create([
             'user_id' => $user->user_id,
             'code' => 1234,
@@ -110,7 +110,7 @@ class TwoFactorTest extends TestCase
 
     public function test_update_expired_code()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->createQuietly();
         UserVerificationCode::create([
             'user_id' => $user->user_id,
             'code' => 1234,
@@ -130,7 +130,7 @@ class TwoFactorTest extends TestCase
     // TODO - Get this working...
     // public function test_update_with_remember_device()
     // {
-    //     $user = User::factory()->create();
+    //     $user = User::factory()->createQuietly();
     //     UserVerificationCode::create([
     //         'user_id' => $user->user_id,
     //         'code' => 1234,
