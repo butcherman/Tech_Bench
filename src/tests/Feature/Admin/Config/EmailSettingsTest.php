@@ -48,7 +48,7 @@ class EmailSettingsTest extends TestCase
             'username' => 'testName',
             'password' => 'blahBlah',
             'host' => 'randomHost.com',
-            'port' => 25,
+            'port' => '25',
             'encryption' => 'none',
             'require_aut' => true,
         ];
@@ -68,7 +68,7 @@ class EmailSettingsTest extends TestCase
             'username' => 'testName',
             'password' => 'blahBlah',
             'host' => 'randomHost.com',
-            'port' => 25,
+            'port' => '25',
             'encryption' => 'none',
             'require_aut' => true,
         ];
@@ -87,7 +87,7 @@ class EmailSettingsTest extends TestCase
             'username' => 'testName',
             'password' => 'blahBlah',
             'host' => 'randomHost.com',
-            'port' => 25,
+            'port' => '25',
             'encryption' => 'none',
             'require_auth' => true,
         ];

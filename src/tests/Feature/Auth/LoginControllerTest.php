@@ -20,8 +20,12 @@ class LoginControllerTest extends TestCase
 
     public function test_invoke_as_logged_in()
     {
-        $response = $this->actingAs(User::factory()->createQuietly())
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+
+        $response = $this->actingAs($user)
             ->get(route('home'));
-        $response->assertStatus(302)->assertRedirect(route('dashboard'));
+        $response->assertStatus(302)
+            ->assertRedirect(route('dashboard'));
     }
 }

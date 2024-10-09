@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Auth;
 use App\Actions\Socialite\AuthorizeUser;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -20,21 +21,21 @@ class SocialiteController extends Controller
     /**
      * Redirect the user to the Microsoft Login page
      */
-    public function redirectAuth()
+    public function redirectAuth(): RedirectResponse
     {
-        if (config('services.azure.allow_login')) {
-            Log::info('Redirecting visitor to Microsoft Azure Authentication');
-
-            return Socialite::driver('azure')->redirect();
+        if (! config('services.azure.allow_login')) {
+            return abort(404);
         }
 
-        return abort(404);
+        Log::info('Redirecting visitor to Microsoft Azure Authentication');
+
+        return Socialite::driver('azure')->redirect();
     }
 
     /**
      * Callback from when a user is properly authenticated from Microsoft
      */
-    public function callback()
+    public function callback(): RedirectResponse
     {
         if (! config('services.azure.allow_login')) {
             return abort(404);

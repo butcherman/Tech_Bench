@@ -33,4 +33,15 @@ class EmailSettingsRequest extends FormRequest
             'require_auth' => ['required', 'boolean'],
         ];
     }
+
+    /**
+     * Remove the username and password fields if Authentication is not needed
+     */
+    public function passedValidation(): void
+    {
+        if (! $this->require_auth) {
+            $this->request->remove('username');
+            $this->request->remove('password');
+        }
+    }
 }

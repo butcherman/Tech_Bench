@@ -91,7 +91,7 @@ class BasicSettingsTest extends TestCase
         $data = [
             'url' => 'https://someUrl.noSite',
             'timezone' => 'America/LosAngeles',
-            'max_filesize' => 123456,
+            'max_filesize' => '123456',
             'company_name' => 'Bobs Fancy Cats',
         ];
 
@@ -129,7 +129,7 @@ class BasicSettingsTest extends TestCase
         $data = [
             'url' => str_replace('https://', '', config('app.url')),
             'timezone' => 'America/LosAngeles',
-            'max_filesize' => 123456,
+            'max_filesize' => '123456',
             'company_name' => 'Bobs Fancy Cats',
         ];
 
