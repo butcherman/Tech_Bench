@@ -5,6 +5,7 @@
 </template>
 
 <script setup lang="ts">
+// TODO - Use Transition to clean up animation
 import { watch, onMounted, ref } from "vue";
 import { gsap } from "gsap";
 import { v4 } from "uuid";

@@ -1,21 +1,20 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\VerificationCodeRequest;
+use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class TwoFactorController extends Controller
 {
     /**
-     * Display the resource.
+     * If user has not already verified via 2FA, show the 2FA form
      */
-    public function show()
+    public function show(): Response|RedirectResponse
     {
-        // If the user has already verified, re-route to intended route or dashboard
         if (session()->has('2fa_verified')) {
             return redirect()->intended(route('dashboard'));
         }
@@ -26,13 +25,14 @@ class TwoFactorController extends Controller
     }
 
     /**
-     * Update the resource in storage.
+     * Validate and save 2FA response
      */
-    public function update(VerificationCodeRequest $request)
+    public function update(VerificationCodeRequest $request): RedirectResponse
     {
         session()->put('2fa_verified', true);
-        $cookie = $request->remember ?
-            $request->user()->generateRememberDeviceToken() : null;
+        $cookie = $request->remember
+            ? $request->user()->generateRememberDeviceToken()
+            : null;
 
         return redirect()
             ->intended(route('dashboard'))

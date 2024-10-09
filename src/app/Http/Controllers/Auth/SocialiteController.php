@@ -1,6 +1,7 @@
 <?php
 
 // TODO - Refactor
+// TODO - Test
 
 namespace App\Http\Controllers\Auth;
 
@@ -13,20 +14,24 @@ use Laravel\Socialite\Facades\Socialite;
 
 /**
  * If OATH is allowed, redirect user to O365 login page for Single Sign On
- *
- * @codeCoverageIgnore
  */
 class SocialiteController extends Controller
 {
+    /**
+     * If feature is disabled, show 404 page not found
+     */
+    public function __construct(protected AuthorizeUser $authObj)
+    {
+        if (! config('services.azure.allow_login')) {
+            abort(404);
+        }
+    }
+
     /**
      * Redirect the user to the Microsoft Login page
      */
     public function redirectAuth(): RedirectResponse
     {
-        if (! config('services.azure.allow_login')) {
-            return abort(404);
-        }
-
         Log::info('Redirecting visitor to Microsoft Azure Authentication');
 
         return Socialite::driver('azure')->redirect();
@@ -37,19 +42,7 @@ class SocialiteController extends Controller
      */
     public function callback(): RedirectResponse
     {
-        if (! config('services.azure.allow_login')) {
-            return abort(404);
-        }
-
-        $socUser = Socialite::driver('azure')->user();
-        $socialite = new AuthorizeUser;
-        $user = $socialite->processUser($socUser);
-
-        if (! $user) {
-            return redirect(route('login'))
-                ->with('warning', 'You do not have permission to Login.  Please'.
-                       ' contact your system administrator');
-        }
+        $this->authObj->handle();
 
         return redirect()->intended(RouteServiceProvider::HOME);
     }

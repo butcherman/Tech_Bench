@@ -30,6 +30,7 @@ class UserSettingsAdministrationService
             'allow_login' => (bool) config('services.azure.allow_login'),
             'allow_bypass_2fa' => (bool) config('services.azure.allow_bypass_2fa'),
             'allow_register' => (bool) config('services.azure.allow_register'),
+            'default_role_id' => (int) config('services.azure.default_role_id'),
             'tenant' => config('services.azure.tenant'),
             'client_id' => config('services.azure.client_id'),
             'client_secret' => config('services.azure.client_secret') ? __('admin.fake-password') : '',

@@ -77,3 +77,9 @@ const isInvalid = computed<boolean>(() => {
 const nameRef = toRef(props, "name");
 const { errorMessage, value, meta } = useField(nameRef);
 </script>
+
+<style scoped lang="scss">
+label {
+    font-weight: bold;
+}
+</style>

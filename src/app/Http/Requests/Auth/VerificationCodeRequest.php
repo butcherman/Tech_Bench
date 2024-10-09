@@ -25,8 +25,8 @@ class VerificationCodeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'code' => 'required|string',
-            'remember' => 'required|boolean',
+            'code' => ['required', 'string'],
+            'remember' => ['required', 'boolean'],
         ];
     }
 

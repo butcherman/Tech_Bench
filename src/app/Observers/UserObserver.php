@@ -14,14 +14,20 @@ class UserObserver
      */
     public function created(User $user): void
     {
-        Log::stack(['daily', 'auth'])
-            ->notice(
-                'New User created by '.request()->user()->username,
-                $user->toArray()
-            );
+        if (! request()->user()) {
+            Log::info('New User '.$user->username.' created via Microsoft Azure driver');
 
-        dispatch(new SendWelcomeEmailJob($user));
-        dispatch(new CreateUserSettingsEntriesJob($user));
+            dispatch(new CreateUserSettingsEntriesJob($user));
+        } else {
+            Log::stack(['daily', 'auth'])
+                ->notice(
+                    'New User created by '.request()->user()->username,
+                    $user->toArray()
+                );
+
+            dispatch(new SendWelcomeEmailJob($user));
+            dispatch(new CreateUserSettingsEntriesJob($user));
+        }
     }
 
     /**
