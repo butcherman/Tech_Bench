@@ -12,15 +12,13 @@ use SocialiteProviders\Azure\User as AzureUser;
 
 /**
  * Log user in via Office 365 Integration
- *
- * TODO - Build Unit Tests
  */
 class AuthorizeUser
 {
     /**
      * Attempt to authenticate azure user
      */
-    public function handle(): void
+    public function handle(): User
     {
         $azureUser = Socialite::driver('azure')->user();
         $localUser = $this->getLocalUser($azureUser);
@@ -34,6 +32,8 @@ class AuthorizeUser
         $this->bypass2fa();
 
         Log::info('User '.$localUser->username.' logged in via Microsoft Azure');
+
+        return $localUser;
     }
 
     /**
@@ -41,7 +41,7 @@ class AuthorizeUser
      */
     protected function getLocalUser(AzureUser $azureUser): User|bool
     {
-        $user = User::where('email', $azureUser->email)->first();
+        $user = User::where('email', $azureUser->mail)->first();
 
         return $user ?? false;
     }

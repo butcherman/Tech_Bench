@@ -38,7 +38,7 @@ class LogSettingsTest extends TestCase
     public function test_set_guest()
     {
         $data = [
-            'days' => 30,
+            'days' => '30',
             'log_level' => 'debug',
         ];
 
@@ -51,7 +51,7 @@ class LogSettingsTest extends TestCase
     public function test_set_no_permission()
     {
         $data = [
-            'days' => 30,
+            'days' => '30',
             'log_level' => 'debug',
         ];
 
@@ -63,7 +63,7 @@ class LogSettingsTest extends TestCase
     public function test_set()
     {
         $data = [
-            'days' => 120,
+            'days' => '120',
             'log_level' => 'critical',
         ];
 
@@ -81,11 +81,11 @@ class LogSettingsTest extends TestCase
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'logging.channels.auth.days',
-            'value' => 120,
+            'value' => '120',
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'logging.channels.daily.days',
-            'value' => 120,
+            'value' => '120',
         ]);
     }
 }

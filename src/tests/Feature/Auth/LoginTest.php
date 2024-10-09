@@ -64,6 +64,7 @@ class LoginTest extends TestCase
     //  Verify that the user is redirected if already logged in
     public function test_valid_login_redirect()
     {
+        /** @var User $user */
         $user = User::factory()->createQuietly();
 
         $response = $this->actingAs($user)->get(route('home'));

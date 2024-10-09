@@ -44,7 +44,7 @@ class UserSettingsTest extends TestCase
     public function test_update_guest()
     {
         $data = [
-            'auto_logout_timer' => 5,
+            'auto_logout_timer' => '5',
             'twoFa' => [
                 'required' => false,
                 'allow_save_device' => false,
@@ -53,6 +53,7 @@ class UserSettingsTest extends TestCase
                 'allow_login' => true,
                 'allow_register' => true,
                 'allow_bypass_2fa' => true,
+                'default_role_id' => '3',
                 'tenant' => 'someRadomUUID',
                 'client_id' => 'someRandomID',
                 'client_secret' => 'someRandomPassword',
@@ -72,7 +73,7 @@ class UserSettingsTest extends TestCase
         /** @var User $user */
         $user = User::factory()->createQuietly();
         $data = [
-            'auto_logout_timer' => 5,
+            'auto_logout_timer' => '5',
             'twoFa' => [
                 'required' => false,
                 'allow_save_device' => false,
@@ -81,6 +82,7 @@ class UserSettingsTest extends TestCase
                 'allow_login' => true,
                 'allow_register' => true,
                 'allow_bypass_2fa' => true,
+                'default_role_id' => '3',
                 'tenant' => 'someRadomUUID',
                 'client_id' => 'someRandomID',
                 'client_secret' => 'someRandomPassword',
@@ -99,7 +101,7 @@ class UserSettingsTest extends TestCase
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);
         $data = [
-            'auto_logout_timer' => 5,
+            'auto_logout_timer' => '5',
             'twoFa' => [
                 'required' => true,
                 'allow_save_device' => false,
@@ -108,6 +110,7 @@ class UserSettingsTest extends TestCase
                 'allow_login' => true,
                 'allow_register' => true,
                 'allow_bypass_2fa' => true,
+                'default_role_id' => '3',
                 'tenant' => 'someRadomUUID',
                 'client_id' => 'someRandomID',
                 'client_secret' => 'someRandomPassword',
@@ -123,7 +126,7 @@ class UserSettingsTest extends TestCase
 
         $this->assertDatabaseHas('app_settings', [
             'key' => 'auth.auto_logout_timer',
-            'value' => 5,
+            'value' => '5',
         ]);
 
         $this->assertDatabaseHas('app_settings', [
@@ -138,6 +141,10 @@ class UserSettingsTest extends TestCase
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'services.azure.allow_register',
+        ]);
+        $this->assertDatabaseHas('app_settings', [
+            'key' => 'services.azure.default_role_id',
+            'value' => '3',
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'services.azure.allow_bypass_2fa',
@@ -169,7 +176,7 @@ class UserSettingsTest extends TestCase
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);
         $data = [
-            'auto_logout_timer' => 5,
+            'auto_logout_timer' => '5',
             'twoFa' => [
                 'required' => true,
                 'allow_save_device' => false,
@@ -178,6 +185,7 @@ class UserSettingsTest extends TestCase
                 'allow_login' => true,
                 'allow_register' => true,
                 'allow_bypass_2fa' => true,
+                'default_role_id' => '3',
                 'tenant' => 'someRadomUUID',
                 'client_id' => 'someRandomID',
                 'client_secret' => __('admin.fake-password'),
@@ -193,7 +201,7 @@ class UserSettingsTest extends TestCase
 
         $this->assertDatabaseHas('app_settings', [
             'key' => 'auth.auto_logout_timer',
-            'value' => 5,
+            'value' => '5',
         ]);
 
         $this->assertDatabaseHas('app_settings', [
@@ -208,6 +216,10 @@ class UserSettingsTest extends TestCase
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'services.azure.allow_register',
+        ]);
+        $this->assertDatabaseHas('app_settings', [
+            'key' => 'services.azure.default_role_id',
+            'value' => '3',
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'services.azure.allow_bypass_2fa',

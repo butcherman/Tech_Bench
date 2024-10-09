@@ -1,8 +1,5 @@
 <?php
 
-// TODO - Refactor
-// TODO - Test
-
 namespace App\Http\Controllers\Auth;
 
 use App\Actions\Socialite\AuthorizeUser;
@@ -12,9 +9,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
 use Laravel\Socialite\Facades\Socialite;
 
-/**
- * If OATH is allowed, redirect user to O365 login page for Single Sign On
- */
 class SocialiteController extends Controller
 {
     /**

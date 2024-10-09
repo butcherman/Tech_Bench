@@ -60,9 +60,9 @@ class FileLinkSettingsTest extends TestCase
     public function test_update_guest()
     {
         $data = [
-            'default_link_life' => 30,
+            'default_link_life' => '30',
             'auto_delete' => true,
-            'auto_delete_days' => 365,
+            'auto_delete_days' => '365',
             'auto_delete_override' => false,
         ];
 
@@ -79,9 +79,9 @@ class FileLinkSettingsTest extends TestCase
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);
         $data = [
-            'default_link_life' => 30,
+            'default_link_life' => '30',
             'auto_delete' => true,
-            'auto_delete_days' => 365,
+            'auto_delete_days' => '365',
             'auto_delete_override' => false,
         ];
 
@@ -97,9 +97,9 @@ class FileLinkSettingsTest extends TestCase
         /** @var User $user */
         $user = User::factory()->createQuietly();
         $data = [
-            'default_link_life' => 30,
+            'default_link_life' => '30',
             'auto_delete' => true,
-            'auto_delete_days' => 365,
+            'auto_delete_days' => '365',
             'auto_delete_override' => false,
         ];
 
@@ -115,9 +115,9 @@ class FileLinkSettingsTest extends TestCase
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);
         $data = [
-            'default_link_life' => 30,
+            'default_link_life' => '30',
             'auto_delete' => false,
-            'auto_delete_days' => 365,
+            'auto_delete_days' => '365',
             'auto_delete_override' => false,
         ];
 
@@ -127,19 +127,17 @@ class FileLinkSettingsTest extends TestCase
 
         $this->assertDatabaseHas('app_settings', [
             'key' => 'file-link.default_link_life',
-            'value' => 30,
+            'value' => '30',
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'file-link.auto_delete',
-            // 'value' => true,
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'file-link.auto_delete_days',
-            'value' => 365,
+            'value' => '365',
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'file-link.auto_delete_override',
-            // 'value' => false,
         ]);
     }
 }
