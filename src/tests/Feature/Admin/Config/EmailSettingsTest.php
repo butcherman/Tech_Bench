@@ -125,4 +125,41 @@ class EmailSettingsTest extends TestCase
             'key' => 'mail.mailers.smtp.require_auth',
         ]);
     }
+
+    public function test_update_auth_not_needed()
+    {
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
+        $data = [
+            'from_address' => 'new@email.org',
+            'username' => null,
+            'password' => null,
+            'host' => 'randomHost.com',
+            'port' => '25',
+            'encryption' => 'none',
+            'require_auth' => false,
+        ];
+
+        $response = $this->actingAs($user)
+            ->put(route('admin.email-settings.update'), $data);
+        $response->assertStatus(302);
+        $response->assertSessionHas('success', __('admin.email.updated'));
+
+        $this->assertDatabaseHas('app_settings', [
+            'key' => 'mail.from.address',
+            'value' => $data['from_address'],
+        ]);
+        $this->assertDatabaseHas('app_settings', [
+            'key' => 'mail.mailers.smtp.host',
+            'value' => $data['host'],
+        ]);
+        $this->assertDatabaseHas('app_settings', [
+            'key' => 'mail.mailers.smtp.port',
+            'value' => $data['port'],
+        ]);
+        $this->assertDatabaseHas('app_settings', [
+            'key' => 'mail.mailers.smtp.encryption',
+            'value' => $data['encryption'],
+        ]);
+    }
 }

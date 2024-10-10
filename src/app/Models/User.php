@@ -94,6 +94,11 @@ class User extends Authenticatable
         return $this->hasMany(FileLink::class, 'user_id', 'user_id');
     }
 
+    public function UserVerificationCode()
+    {
+        return $this->hasOne(UserVerificationCode::class, 'user_id', 'user_id');
+    }
+
     /***************************************************************************
      * Bookmark Relationships
      ***************************************************************************/
@@ -147,6 +152,8 @@ class User extends Authenticatable
 
     /**
      * Determine the new expire date for an updated password
+     *
+     * TODO - Refactor?
      */
     public function getNewExpireTime($immediate = false)
     {
@@ -174,14 +181,24 @@ class User extends Authenticatable
     }
 
     /**
+     * After a 2FA Code is verified, save verification to session
+     */
+    public function processValidCode(bool $rememberDevice)
+    {
+        // Save verification to session
+        session()->put('2fa_verified', true);
+
+        // If Remember Device enabled, generate cookie
+        return $rememberDevice ? $this->generateRememberDeviceToken() : null;
+    }
+
+    /**
      * Generate a Remember token for a device
-     *
-     * @codeCoverageIgnore
      */
     public function generateRememberDeviceToken()
     {
         $token = Str::random(60);
-        $agent = new AgentDetector($_SERVER['HTTP_USER_AGENT']);
+        $agent = new AgentDetector(request()->header('User-Agent'));
         $ipAddr = \Request::ip();
 
         DeviceToken::create([
@@ -199,8 +216,6 @@ class User extends Authenticatable
 
     /**
      * Validate a Remember Me device token
-     *
-     * @codeCoverageIgnore
      */
     public function validateDeviceToken($token)
     {
@@ -219,8 +234,6 @@ class User extends Authenticatable
 
     /**
      * Function to get login history for the last xx days
-     *
-     * @codeCoverageIgnore
      */
     public function getLoginHistory($days = 365)
     {
@@ -231,8 +244,6 @@ class User extends Authenticatable
 
     /**
      * Get the date and time of last login
-     *
-     * @codeCoverageIgnore
      */
     public function getLastLogin()
     {

@@ -1,10 +1,7 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Http\Requests\Auth;
 
-use App\Models\UserVerificationCode;
 use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Validator;
@@ -31,22 +28,22 @@ class VerificationCodeRequest extends FormRequest
     }
 
     /**
-     * Determine if the verification code is valid
+     * Validate the actual 2FA code
      */
-    public function after()
+    public function after(): array
     {
         return [
             function (Validator $validator) {
-                $code = UserVerificationCode::where('user_id', $this->user()->user_id)
-                    ->whereCode($this->code)
-                    ->get();
+                $code = $this->user()->UserVerificationCode;
 
-                if ($code->count() !== 1) {
-                    $validator->errors()
-                        ->add('code', 'The provided code is incorrect');
-                } elseif ($code->first()->updated_at->addMinutes(30) < Carbon::now()) {
-                    $validator->errors()
-                        ->add('code', 'This Verification Code has expired');
+                // If code is missing or does not match
+                if (! $code || $code->code !== $this->code) {
+                    $validator->errors()->add('code', 'The provided code is incorrect');
+                }
+
+                // Code is only valid for 15 minutes
+                if ($code->updated_at->addMinutes(15) < Carbon::now()) {
+                    $validator->errors()->add('code', 'This Verification Code has expired.  Please try again');
                 }
             },
         ];

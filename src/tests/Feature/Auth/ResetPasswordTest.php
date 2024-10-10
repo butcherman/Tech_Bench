@@ -1,5 +1,7 @@
 <?php
 
+// TODO - Refactor
+
 namespace Tests\Feature\Auth;
 
 use App\Models\User;
@@ -28,6 +30,7 @@ class ResetPasswordTest extends TestCase
      */
     public function test_reset_password_form_while_logged_in()
     {
+        /** @var User $user */
         $user = User::factory()->createQuietly();
 
         $response = $this->actingAs($user)->get(route('password.forgot'));
@@ -42,6 +45,7 @@ class ResetPasswordTest extends TestCase
     {
         Notification::fake();
 
+        /** @var User $user */
         $user = User::factory()->createQuietly();
 
         $response = $this->post(route('password.forgot'), [
@@ -91,6 +95,7 @@ class ResetPasswordTest extends TestCase
      */
     public function test_view_password_reset_form()
     {
+        /** @var User $user */
         $user = User::factory()->createQuietly();
         $token = Password::broker()->createToken($user);
 
@@ -107,6 +112,7 @@ class ResetPasswordTest extends TestCase
      */
     public function test_view_password_reset_form_no_token()
     {
+        /** @var User $user */
         $user = User::factory()->createQuietly();
         $token = Password::broker()->createToken($user);
 
@@ -120,6 +126,7 @@ class ResetPasswordTest extends TestCase
      */
     public function test_view_password_form_while_logged_in()
     {
+        /** @var User $user */
         $user = User::factory()->createQuietly();
         $token = Password::broker()->createToken($user);
 
@@ -135,6 +142,7 @@ class ResetPasswordTest extends TestCase
     {
         Notification::fake();
 
+        /** @var User $user */
         $user = User::factory()->createQuietly();
 
         $response = $this->post(route('password.reset'), [
@@ -149,6 +157,7 @@ class ResetPasswordTest extends TestCase
         $this->assertTrue(
             Hash::check('New-awesome-password1!', $user->fresh()->password)
         );
+        $this->assertAuthenticatedAs($user);
 
         Notification::assertSentTo($user, PasswordChangedNotification::class);
     }
@@ -181,6 +190,7 @@ class ResetPasswordTest extends TestCase
      */
     public function test_submit_reset_password_form_blank_new_pass()
     {
+        /** @var User $user */
         $user = User::factory()->createQuietly([
             'password' => bcrypt('old-password'),
         ]);
@@ -208,6 +218,7 @@ class ResetPasswordTest extends TestCase
      */
     public function test_submit_reset_password_form_no_email()
     {
+        /** @var User $user */
         $user = User::factory()->createQuietly([
             'password' => bcrypt('old-password'),
         ]);

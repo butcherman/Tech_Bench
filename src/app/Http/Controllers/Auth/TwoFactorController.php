@@ -11,14 +11,10 @@ use Inertia\Response;
 class TwoFactorController extends Controller
 {
     /**
-     * If user has not already verified via 2FA, show the 2FA form
+     * Show the 2FA Verification Form
      */
-    public function show(): Response|RedirectResponse
+    public function show(): Response
     {
-        if (session()->has('2fa_verified')) {
-            return redirect()->intended(route('dashboard'));
-        }
-
         return Inertia::render('Auth/TwoFactorAuth', [
             'allow-remember' => (bool) config('auth.twoFa.allow_save_device'),
         ]);
@@ -29,10 +25,7 @@ class TwoFactorController extends Controller
      */
     public function update(VerificationCodeRequest $request): RedirectResponse
     {
-        session()->put('2fa_verified', true);
-        $cookie = $request->remember
-            ? $request->user()->generateRememberDeviceToken()
-            : null;
+        $cookie = $request->user()->processValidCode($request->remember);
 
         return redirect()
             ->intended(route('dashboard'))

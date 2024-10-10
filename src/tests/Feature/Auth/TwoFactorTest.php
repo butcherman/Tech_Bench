@@ -19,12 +19,17 @@ class TwoFactorTest extends TestCase
 
         config(['auth.twoFa.required' => true]);
 
-        $response = $this->actingAs($user = User::factory()->createQuietly())
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+
+        $response = $this->actingAs($user)
             ->get(route('dashboard'));
         $response->assertStatus(302);
         $response->assertRedirect(route('2fa.show'));
 
-        $this->assertDatabaseHas('user_verification_codes', ['user_id' => $user->user_id]);
+        $this->assertDatabaseHas('user_verification_codes', [
+            'user_id' => $user->user_id,
+        ]);
 
         Notification::assertSentTo($user, SendAuthCode::class);
     }
@@ -42,18 +47,12 @@ class TwoFactorTest extends TestCase
 
     public function test_show()
     {
-        $response = $this->actingAs(User::factory()->createQuietly())
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+
+        $response = $this->actingAs($user)
             ->get(route('2fa.show'));
         $response->assertSuccessful();
-    }
-
-    public function test_get_already_verified()
-    {
-        $response = $this->actingAs(User::factory()->createQuietly())
-            ->withSession(['2fa_verified' => true])
-            ->get(route('2fa.show'));
-        $response->assertStatus(302);
-        $response->assertRedirect(route('dashboard'));
     }
 
     /**
@@ -74,6 +73,7 @@ class TwoFactorTest extends TestCase
 
     public function test_update()
     {
+        /** @var User $user */
         $user = User::factory()->createQuietly();
         UserVerificationCode::create([
             'user_id' => $user->user_id,
@@ -92,6 +92,7 @@ class TwoFactorTest extends TestCase
 
     public function test_update_bad_code()
     {
+        /** @var User $user */
         $user = User::factory()->createQuietly();
         UserVerificationCode::create([
             'user_id' => $user->user_id,
@@ -110,6 +111,7 @@ class TwoFactorTest extends TestCase
 
     public function test_update_expired_code()
     {
+        /** @var User $user */
         $user = User::factory()->createQuietly();
         UserVerificationCode::create([
             'user_id' => $user->user_id,
@@ -127,24 +129,28 @@ class TwoFactorTest extends TestCase
         $response->assertSessionHasErrors('code');
     }
 
-    // TODO - Get this working...
-    // public function test_update_with_remember_device()
-    // {
-    //     $user = User::factory()->createQuietly();
-    //     UserVerificationCode::create([
-    //         'user_id' => $user->user_id,
-    //         'code' => 1234,
-    //     ]);
+    public function test_update_with_remember_device()
+    {
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+        UserVerificationCode::create([
+            'user_id' => $user->user_id,
+            'code' => 1234,
+        ]);
 
-    //     $data = [
-    //         'code' => '1234',
-    //         'remember' => true,
-    //     ];
+        $httpUserAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36';
 
-    //     $response = $this->actingAs($user)->put(route('2fa.update'), $data);
-    //     $response->assertStatus(302);
-    //     $response->assertRedirect(route('dashboard'));
+        $data = [
+            'code' => '1234',
+            'remember' => true,
+        ];
 
-    //     $this->assertDatabaseHas('device_tokens', ['user_id' => $user->user_id]);
-    // }
+        $response = $this->actingAs($user)
+            ->withHeaders(['User-Agent' => $httpUserAgent])
+            ->put(route('2fa.update'), $data);
+        $response->assertStatus(302);
+        $response->assertRedirect(route('dashboard'));
+
+        $this->assertDatabaseHas('device_tokens', ['user_id' => $user->user_id]);
+    }
 }

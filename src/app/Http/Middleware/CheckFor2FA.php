@@ -19,25 +19,34 @@ class CheckFor2FA
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // Any authenticated route will check to make sure user has verified themselves
-        if (config('auth.twoFa.required') && session()->missing('2fa_verified')) {
-            // Check to see if a remember device token exists and is valid
-            if ($rememberToken = $request->cookie('remember_device')) {
-                if ($request->user()->validateDeviceToken($rememberToken)) {
-                    //  If device is valid, we will attach verification and move on
-                    $request->session()->put('2fa_verified', true);
-
-                    return $next($request);
-                }
-            }
-
-            $request->user()->generateVerificationCode();
-
-            app('redirect')->setIntendedUrl($request->path());
-
-            return redirect(route('2fa.show'));
+        // If 2FA is disabled, move on.
+        if (! config('auth.twoFa.required')) {
+            return $next($request);
         }
 
-        return $next($request);
+        // If 2FA session variable exists, and is true, move on.
+        if ($request->session()->has('2fa_verified')) {
+            if ($request->session()->get('2fa_verified')) {
+                return $next($request);
+            }
+        }
+
+        // If the user has already verified this device, move on.
+        if ($rememberToken = $request->cookie('remember_device')) {
+            if ($request->user()->validateDeviceToken($rememberToken)) {
+                $request->session()->put('2fa_verified', true);
+
+                return $next($request);
+            }
+        }
+
+        // Generate a code and email it to the user
+        $request->user()->generateVerificationCode();
+
+        // Set the page the user is trying to currently visit for later redirect
+        app('redirect')->setIntendedUrl($request->path());
+
+        // Send user to Verify 2FA Page
+        return redirect(route('2fa.show'));
     }
 }
