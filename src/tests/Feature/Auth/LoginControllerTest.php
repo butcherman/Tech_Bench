@@ -12,6 +12,9 @@ class LoginControllerTest extends TestCase
      */
     public function test_invoke_guest()
     {
+        // Enable Features to have them displayed on login page
+        config(['tech-tips.allow_public' => true]);
+
         $response = $this->get(route('home'));
 
         $response->assertSuccessful();

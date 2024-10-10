@@ -5,7 +5,7 @@ namespace Tests\Feature\Auth;
 use App\Models\User;
 use App\Notifications\User\SendAuthCode;
 use Carbon\Carbon;
-use Notification;
+use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 
 class _LoginTest extends TestCase
@@ -13,9 +13,6 @@ class _LoginTest extends TestCase
     //  Verify the a valid user can log in
     public function test_valid_login()
     {
-        // Enable Features to have them displayed on login page
-        config(['tech-tips.allow_public' => true]);
-
         /** @var User $user */
         $user = User::factory()->createQuietly([
             'password' => bcrypt($password = 'randomPassword'),

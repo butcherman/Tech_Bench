@@ -1,7 +1,5 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Http\Requests\Customer;
 
 use App\Models\Customer;
@@ -19,16 +17,14 @@ class CustomerSettingsRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
         return [
-            'select_id' => 'required|boolean',
-            'update_slug' => 'required|boolean',
-            'default_state' => 'required|string',
-            'auto_purge' => 'required|boolean',
+            'select_id' => ['required', 'boolean'],
+            'update_slug' => ['required', 'boolean'],
+            'default_state' => ['required', 'string'],
+            'auto_purge' => ['required', 'boolean'],
         ];
     }
 }

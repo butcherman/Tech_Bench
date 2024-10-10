@@ -1,7 +1,5 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Http\Requests\Customer;
 
 use App\Models\CustomerAlert;
@@ -27,8 +25,8 @@ class CustomerAlertRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'message' => 'required|string',
-            'type' => 'required|string',
+            'message' => ['required', 'string'],
+            'type' => ['required', 'string'],
         ];
     }
 }
