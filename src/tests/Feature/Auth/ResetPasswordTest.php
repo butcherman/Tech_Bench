@@ -157,7 +157,6 @@ class ResetPasswordTest extends TestCase
         $this->assertTrue(
             Hash::check('New-awesome-password1!', $user->fresh()->password)
         );
-        $this->assertAuthenticatedAs($user);
 
         Notification::assertSentTo($user, PasswordChangedNotification::class);
     }

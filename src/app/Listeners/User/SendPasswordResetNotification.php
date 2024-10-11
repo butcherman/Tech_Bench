@@ -1,21 +1,19 @@
 <?php
 
-namespace App\Listeners\Notify\User;
+namespace App\Listeners\User;
 
 use App\Notifications\User\PasswordChangedNotification;
 use Illuminate\Auth\Events\PasswordReset;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Notification;
 
-class PasswordResetListener
+class SendPasswordResetNotification implements ShouldQueue
 {
     /**
-     * Handle the event.
+     * Event is triggered when a user resets their forgotten password
      */
     public function handle(PasswordReset $event): void
     {
-        Log::debug('Sending password change email to '.$event->user->email);
-
         Notification::send($event->user, new PasswordChangedNotification);
     }
 }

@@ -16,13 +16,14 @@ class LogSuccessfulLogin
         UserLogins::create(
             [
                 'user_id' => $event->user->user_id,
-                'ip_address' => \Request::ip(),
+                'ip_address' => request()->ip(),
             ]);
 
-        Log::stack(['daily', 'auth'])->info('User '.$event->user->full_name.' successfully logged in from IP Address '.\Request::ip(), [
-            'User ID' => $event->user->user_id,
-            'Username' => $event->user->username,
-            'IP Address' => \Request::ip(),
-        ]);
+        Log::stack(['daily', 'auth'])
+            ->info('User '.$event->user->full_name.' successfully logged in from IP Address '.request()->ip(), [
+                'User ID' => $event->user->user_id,
+                'Username' => $event->user->username,
+                'IP Address' => request()->ip(),
+            ]);
     }
 }

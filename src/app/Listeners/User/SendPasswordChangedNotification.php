@@ -1,21 +1,19 @@
 <?php
 
-namespace App\Listeners\Notify\User;
+namespace App\Listeners\User;
 
 use App\Events\User\PasswordChangedEvent;
 use App\Notifications\User\PasswordChangedNotification;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Notification;
 
-class PasswordChangedListener
+class SendPasswordChangedNotification implements ShouldQueue
 {
     /**
-     * Handle the event.
+     * Event is triggered when a user changes their Password
      */
     public function handle(PasswordChangedEvent $event): void
     {
-        Log::debug('Sending password change email to '.$event->user->email);
-
         Notification::send($event->user, new PasswordChangedNotification);
     }
 }

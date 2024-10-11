@@ -55,8 +55,7 @@ class EventServiceProvider extends ServiceProvider
         ],
         'Illuminate\Auth\Events\PasswordReset' => [
             'App\Listeners\Auth\LogPasswordReset',
-            'App\Listeners\Notify\User\PasswordResetListener',
-            //////////////////// Move Me ////////////////////////////
+            'App\Listeners\User\SendPasswordResetNotification',
         ],
         'App\Events\Feature\FeatureChangedEvent' => [
             'App\Listeners\Feature\RebuildFeaturePermissionsListener',
@@ -69,9 +68,8 @@ class EventServiceProvider extends ServiceProvider
             'App\Listeners\Notify\User\EmailChangedListener',
         ],
         'App\Events\User\PasswordChangedEvent' => [
-            'App\Listeners\Notify\User\PasswordChangedListener',
-            //////////////////// Move Me ////////////////////////////
             'App\Listeners\User\LogPasswordChanged',
+            'App\Listeners\User\SendPasswordChangedNotification',
         ],
 
         /**
@@ -92,13 +90,13 @@ class EventServiceProvider extends ServiceProvider
          * Customer Events
          */
         'App\Events\Customer\CustomerEvent' => [],
-        'App\Events\Customer\CustomerSiteEvent' => [],
         'App\Events\Customer\CustomerAlertEvent' => [],
         'App\Events\Customer\CustomerContactEvent' => [],
-        'App\Events\Customer\CustomerEquipmentEvent' => [],
         'App\Events\Customer\CustomerEquipmentDataEvent' => [],
-        'App\Events\Customer\CustomerNoteEvent' => [],
+        'App\Events\Customer\CustomerEquipmentEvent' => [],
         'App\Events\Customer\CustomerFileEvent' => [],
+        'App\Events\Customer\CustomerNoteEvent' => [],
+        'App\Events\Customer\CustomerSiteEvent' => [],
 
         /**
          * Tech Tip Events
