@@ -18,7 +18,7 @@ class CustomerSiteUnitTest extends TestCase
     {
         parent::setUp();
 
-        $this->model = CustomerSite::factory()->create();
+        $this->model = CustomerSite::factory()->createQuietly();
         $this->model->Customer->update([
             'primary_site_id' => $this->model->cust_site_id,
         ]);
@@ -78,7 +78,7 @@ class CustomerSiteUnitTest extends TestCase
     public function test_site_equipment_relationship()
     {
         $data = CustomerEquipment::factory()
-            ->create(['cust_id' => $this->model->cust_id]);
+            ->createQuietly(['cust_id' => $this->model->cust_id]);
         $data->CustomerSite()->sync([$this->model->cust_site_id]);
 
         $this->assertEquals(
@@ -90,7 +90,7 @@ class CustomerSiteUnitTest extends TestCase
     public function test_site_contact_relationship()
     {
         $data = CustomerContact::factory()
-            ->create(['cust_id' => $this->model->cust_id]);
+            ->createQuietly(['cust_id' => $this->model->cust_id]);
         $data->CustomerSite()->sync([$this->model->cust_site_id]);
 
         $this->assertEquals(
@@ -105,7 +105,7 @@ class CustomerSiteUnitTest extends TestCase
     public function test_site_note_relationship()
     {
         $data = CustomerNote::factory()
-            ->create(['cust_id' => $this->model->cust_id]);
+            ->createQuietly(['cust_id' => $this->model->cust_id]);
         $data->CustomerSite()->sync([$this->model->cust_site_id]);
 
         $this->assertEquals(
@@ -124,7 +124,7 @@ class CustomerSiteUnitTest extends TestCase
     public function test_site_file_relationship()
     {
         $data = CustomerFile::factory()
-            ->create(['cust_id' => $this->model->cust_id]);
+            ->createQuietly(['cust_id' => $this->model->cust_id]);
         $data->CustomerSite()->sync([$this->model->cust_site_id]);
 
         $this->assertEquals(
@@ -139,7 +139,7 @@ class CustomerSiteUnitTest extends TestCase
     public function test_equipment_note_relationship()
     {
         $equip = CustomerEquipment::factory()
-            ->create(['cust_id' => $this->model->cust_id]);
+            ->createQuietly(['cust_id' => $this->model->cust_id]);
         $equip->CustomerSite()->sync([$this->model->cust_site_id]);
 
         $data = CustomerNote::factory()->create([
@@ -159,7 +159,7 @@ class CustomerSiteUnitTest extends TestCase
     public function test_equipment_file_relationship()
     {
         $equip = CustomerEquipment::factory()
-            ->create(['cust_id' => $this->model->cust_id]);
+            ->createQuietly(['cust_id' => $this->model->cust_id]);
         $equip->CustomerSite()->sync([$this->model->cust_site_id]);
 
         $data = CustomerFile::factory()->create([
@@ -178,7 +178,7 @@ class CustomerSiteUnitTest extends TestCase
 
     public function test_general_note_relationship()
     {
-        $data = CustomerNote::factory()->create([
+        $data = CustomerNote::factory()->createQuietly([
             'cust_id' => $this->model->cust_id,
         ]);
 
@@ -193,7 +193,7 @@ class CustomerSiteUnitTest extends TestCase
 
     public function test_general_file_relationship()
     {
-        $data = CustomerFile::factory()->create([
+        $data = CustomerFile::factory()->createQuietly([
             'cust_id' => $this->model->cust_id,
         ]);
 
@@ -211,7 +211,7 @@ class CustomerSiteUnitTest extends TestCase
      */
     public function test_get_notes()
     {
-        CustomerNote::factory()->create(['cust_id' => $this->model->cust_id]);
+        CustomerNote::factory()->createQuietly(['cust_id' => $this->model->cust_id]);
         CustomerNote::factory()->has(CustomerEquipment::factory())
             ->create(['cust_id' => $this->model->cust_id]);
         CustomerNote::factory()
@@ -224,7 +224,7 @@ class CustomerSiteUnitTest extends TestCase
 
     public function test_get_files()
     {
-        CustomerFile::factory()->create(['cust_id' => $this->model->cust_id]);
+        CustomerFile::factory()->createQuietly(['cust_id' => $this->model->cust_id]);
         CustomerFile::factory()->has(CustomerEquipment::factory())
             ->create(['cust_id' => $this->model->cust_id]);
         CustomerFile::factory()

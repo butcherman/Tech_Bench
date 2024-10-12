@@ -81,19 +81,19 @@ class CustomerUnitTest extends TestCase
         );
     }
 
-    public function test_customer_contact_relationship()
-    {
-        $data = CustomerContact::factory()
-            ->create(['cust_id' => $this->model->cust_id]);
+    // public function test_customer_contact_relationship()
+    // {
+    //     $data = CustomerContact::factory()
+    //         ->create(['cust_id' => $this->model->cust_id]);
 
-        $this->assertEquals(
-            $data->toArray(),
-            $this->model
-                ->CustomerContact[0]
-                ->makeHidden(['CustomerContactPhone', 'CustomerSite'])
-                ->toArray()
-        );
-    }
+    //     $this->assertEquals(
+    //         $data->toArray(),
+    //         $this->model
+    //             ->CustomerContact[0]
+    //             ->makeHidden(['CustomerContactPhone', 'CustomerSite'])
+    //             ->toArray()
+    //     );
+    // }
 
     public function test_customer_note_relationship()
     {

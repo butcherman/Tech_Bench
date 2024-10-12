@@ -73,7 +73,7 @@ class ReAssignCustomerTest extends TestCase
             ->has(CustomerNote::factory())
             ->has(CustomerContact::factory())
             ->has(CustomerFile::factory())
-            ->create();
+            ->createQuietly();
         $toCust = Customer::factory()->create();
 
         $fromCust->CustomerEquipment[0]
@@ -126,10 +126,10 @@ class ReAssignCustomerTest extends TestCase
     {
         $fromCust = Customer::factory()
             ->has(CustomerSite::factory()->count(4))
-            ->create();
+            ->createQuietly();
         $movingSite = CustomerSite::factory()
             ->create(['cust_id' => $fromCust->cust_id]);
-        $toCust = Customer::factory()->create();
+        $toCust = Customer::factory()->createQuietly();
 
         $siteArray = CustomerSite::where('cust_id', $fromCust->cust_id)
             ->get()
@@ -138,19 +138,19 @@ class ReAssignCustomerTest extends TestCase
         // Create two Equipment Types
         $equip = CustomerEquipment::factory()
             ->count(2)
-            ->create(['cust_id' => $fromCust->cust_id]);
+            ->createQuietly(['cust_id' => $fromCust->cust_id]);
         $equip[0]->CustomerSite()->sync($siteArray);
         $equip[1]->CustomerSite()->attach($movingSite->cust_site_id);
 
         // Add Some Customer Notes to the equipment
         $notes = [
             CustomerNote::factory()
-                ->create([
+                ->createQuietly([
                     'cust_id' => $fromCust->cust_id,
                     'cust_equip_id' => $equip[0]->cust_equip_id,
                 ]),
             CustomerNote::factory()
-                ->create([
+                ->createQuietly([
                     'cust_id' => $fromCust->cust_id,
                     'cust_equip_id' => $equip[1]->cust_equip_id,
                 ]),
@@ -159,13 +159,13 @@ class ReAssignCustomerTest extends TestCase
         // Add Some Customer Files to the equipment
         $files = [
             CustomerFile::factory()
-                ->create([
+                ->createQuietly([
                     'cust_id' => $fromCust->cust_id,
                     'cust_equip_id' => $equip[0]->cust_equip_id,
                 ]),
 
             CustomerFile::factory()
-                ->create([
+                ->createQuietly([
                     'cust_id' => $fromCust->cust_id,
                     'cust_equip_id' => $equip[1]->cust_equip_id,
                 ]),
@@ -218,10 +218,10 @@ class ReAssignCustomerTest extends TestCase
         $fromCust = Customer::factory()
             ->has(CustomerSite::factory()->count(4))
             ->has(CustomerContact::factory()->count(3))
-            ->create();
+            ->createQuietly();
         $movingSite = CustomerSite::factory()
-            ->create(['cust_id' => $fromCust->cust_id]);
-        $toCust = Customer::factory()->create();
+            ->createQuietly(['cust_id' => $fromCust->cust_id]);
+        $toCust = Customer::factory()->createQuietly();
 
         $siteArray = CustomerSite::where('cust_id', $fromCust->cust_id)
             ->get()
@@ -272,10 +272,10 @@ class ReAssignCustomerTest extends TestCase
         $fromCust = Customer::factory()
             ->has(CustomerSite::factory()->count(4))
             ->has(CustomerNote::factory()->count(3))
-            ->create();
+            ->createQuietly();
         $movingSite = CustomerSite::factory()
-            ->create(['cust_id' => $fromCust->cust_id]);
-        $toCust = Customer::factory()->create();
+            ->createQuietly(['cust_id' => $fromCust->cust_id]);
+        $toCust = Customer::factory()->createQuietly();
 
         $siteArray = CustomerSite::where('cust_id', $fromCust->cust_id)
             ->get()
@@ -324,10 +324,10 @@ class ReAssignCustomerTest extends TestCase
         $fromCust = Customer::factory()
             ->has(CustomerSite::factory()->count(4))
             ->has(CustomerFile::factory()->count(3))
-            ->create();
+            ->createQuietly();
         $movingSite = CustomerSite::factory()
-            ->create(['cust_id' => $fromCust->cust_id]);
-        $toCust = Customer::factory()->create();
+            ->createQuietly(['cust_id' => $fromCust->cust_id]);
+        $toCust = Customer::factory()->createQuietly();
 
         $siteArray = CustomerSite::where('cust_id', $fromCust->cust_id)
             ->get()
