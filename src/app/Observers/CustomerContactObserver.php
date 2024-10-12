@@ -44,6 +44,10 @@ class CustomerContactObserver
 
     public function forceDeleted(CustomerContact $contact)
     {
-        //
+        Log::notice(
+            'Customer Contact force deleted for '.$contact->Customer->name.
+                ' by '.request()->user()->username,
+            $contact->toArray()
+        );
     }
 }
