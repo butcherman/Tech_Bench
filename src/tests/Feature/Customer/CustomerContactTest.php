@@ -19,7 +19,9 @@ class CustomerContactTest extends TestCase
      */
     public function test_store_guest()
     {
-        $cust = Customer::factory()->create();
+        Event::fake();
+
+        $cust = Customer::factory()->createQuietly();
         $cont = CustomerContact::factory()->make();
         $data = [
             'name' => $cont->name,
@@ -44,11 +46,17 @@ class CustomerContactTest extends TestCase
         $response->assertStatus(302);
         $response->assertRedirect(route('login'));
         $this->assertGuest();
+
+        Event::assertNotDispatched(CustomerContactEvent::class);
     }
 
     public function test_store_no_permission()
     {
-        $cust = Customer::factory()->create();
+        Event::fake();
+
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+        $cust = Customer::factory()->createQuietly();
         $cont = CustomerContact::factory()->make();
         $data = [
             'name' => $cont->name,
@@ -70,22 +78,28 @@ class CustomerContactTest extends TestCase
             ->where('perm_type_id', 14)
             ->update(['allow' => false]);
 
-        $response = $this->actingAs(User::factory()->createQuietly())
+        $response = $this->actingAs($user)
             ->post(route('customers.contacts.store', $cust->slug), $data);
         $response->assertStatus(403);
+
+        Event::assertNotDispatched(CustomerContactEvent::class);
     }
 
     public function test_store()
     {
         Event::Fake();
 
-        $cust = Customer::factory()->hasCustomerSite(5)->create();
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+        $cust = Customer::factory()->hasCustomerSite(5)->createQuietly();
         $cont = CustomerContact::factory()->make();
         $data = [
             'name' => $cont->name,
             'title' => $cont->title,
             'email' => $cont->email,
-            'site_list' => $cust->CustomerSite->pluck('cust_site_id')->toArray(),
+            'site_list' => $cust->CustomerSite
+                ->pluck('cust_site_id')
+                ->toArray(),
             'local' => false,
             'decision_maker' => false,
             'phones' => [
@@ -97,7 +111,7 @@ class CustomerContactTest extends TestCase
             ],
         ];
 
-        $response = $this->actingAs(User::factory()->createQuietly())
+        $response = $this->actingAs($user)
             ->post(route('customers.contacts.store', $cust->slug), $data);
         $response->assertStatus(302);
         $response->assertSessionHas('success', __('cust.contact.created', [
@@ -126,8 +140,10 @@ class CustomerContactTest extends TestCase
      */
     public function test_update_guest()
     {
-        $cust = Customer::factory()->create();
-        $cont = CustomerContact::factory()->create();
+        Event::fake();
+
+        $cust = Customer::factory()->createQuietly();
+        $cont = CustomerContact::factory()->createQuietly();
         $mod = CustomerContact::factory()->make();
         $ph = CustomerContactPhone::factory()
             ->count(2)
@@ -162,12 +178,18 @@ class CustomerContactTest extends TestCase
         $response->assertStatus(302);
         $response->assertRedirect(route('login'));
         $this->assertGuest();
+
+        Event::assertNotDispatched(CustomerContactEvent::class);
     }
 
     public function test_update_no_permission()
     {
-        $cust = Customer::factory()->create();
-        $cont = CustomerContact::factory()->create();
+        Event::fake();
+
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+        $cust = Customer::factory()->createQuietly();
+        $cont = CustomerContact::factory()->createQuietly();
         $mod = CustomerContact::factory()->make();
         $ph = CustomerContactPhone::factory()
             ->count(2)
@@ -199,23 +221,32 @@ class CustomerContactTest extends TestCase
             ->where('perm_type_id', 15)
             ->update(['allow' => false]);
 
-        $response = $this->actingAs(User::factory()->createQuietly())
+        $response = $this->actingAs($user)
             ->put(
-                route('customers.contacts.update', [$cust->slug, $cont->cont_id]),
+                route('customers.contacts.update', [
+                    $cust->slug,
+                    $cont->cont_id,
+                ]),
                 $data
             );
         $response->assertStatus(403);
+
+        Event::assertNotDispatched(CustomerContactEvent::class);
     }
 
     public function test_update()
     {
         Event::fake();
 
-        $cust = Customer::factory()->create();
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+        $cust = Customer::factory()->createQuietly();
         $site = CustomerSite::factory()
             ->count(5)
             ->create(['cust_id' => $cust->cust_id]);
-        $cont = CustomerContact::factory()->create(['cust_id' => $cust->cust_id]);
+        $cont = CustomerContact::factory()->createQuietly([
+            'cust_id' => $cust->cust_id,
+        ]);
         $cont->CustomerSite()
             ->attach([$site[0]->cust_site_id, $site[1]->cust_site_id]);
         $mod = CustomerContact::factory()->make();
@@ -245,9 +276,12 @@ class CustomerContactTest extends TestCase
             ],
         ];
 
-        $response = $this->actingAs(User::factory()->createQuietly())
+        $response = $this->actingAs($user)
             ->put(
-                route('customers.contacts.update', [$cust->slug, $cont->cont_id]),
+                route('customers.contacts.update', [
+                    $cust->slug,
+                    $cont->cont_id,
+                ]),
                 $data
             );
         $response->assertStatus(302);
@@ -299,40 +333,61 @@ class CustomerContactTest extends TestCase
      */
     public function test_destroy_guest()
     {
-        $cont = CustomerContact::factory()->create();
+        Event::fake();
+
+        $cont = CustomerContact::factory()->createQuietly();
 
         $response = $this->delete(
-            route('customers.contacts.destroy', [$cont->cust_id, $cont->cont_id])
+            route('customers.contacts.destroy', [
+                $cont->cust_id,
+                $cont->cont_id,
+            ])
         );
         $response->assertStatus(302);
         $response->assertRedirect(route('login'));
         $this->assertGuest();
+
+        Event::assertNotDispatched(CustomerContactEvent::class);
     }
 
     public function test_destroy_no_permission()
     {
-        $cont = CustomerContact::factory()->create();
+        Event::fake();
+
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+        $cont = CustomerContact::factory()->createQuietly();
 
         UserRolePermission::where('role_id', 4)
             ->where('perm_type_id', 16)
             ->update(['allow' => false]);
 
-        $response = $this->actingAs(User::factory()->createQuietly())
+        $response = $this->actingAs($user)
             ->delete(
-                route('customers.contacts.destroy', [$cont->cust_id, $cont->cont_id])
+                route('customers.contacts.destroy', [
+                    $cont->cust_id,
+                    $cont->cont_id,
+                ])
             );
         $response->assertStatus(403);
+
+        Event::assertNotDispatched(CustomerContactEvent::class);
     }
 
     public function test_destroy()
     {
         Event::fake();
 
-        $cont = CustomerContact::factory()->create();
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+        $cont = CustomerContact::factory()->createQuietly();
 
-        $response = $this->actingAs(User::factory()->createQuietly())
+        $response = $this->actingAs($user)
             ->delete(
-                route('customers.contacts.destroy', [$cont->cust_id, $cont->cont_id])
+                route('customers.contacts.destroy', [
+                    $cont->cust_id,
+                    $cont->cont_id,
+                ])
             );
         $response->assertStatus(302);
         $response->assertSessionHas('warning', __('cust.contact.deleted', [
@@ -348,7 +403,9 @@ class CustomerContactTest extends TestCase
      */
     public function test_restore_guest()
     {
-        $cont = CustomerContact::factory()->create();
+        Event::fake();
+
+        $cont = CustomerContact::factory()->createQuietly();
         $cont->delete();
 
         $response = $this->get(
@@ -363,29 +420,39 @@ class CustomerContactTest extends TestCase
         $response->assertStatus(302);
         $response->assertRedirect(route('login'));
         $this->assertGuest();
+
+        Event::assertNotDispatched(CustomerContactEvent::class);
     }
 
     public function test_restore_no_permission()
     {
-        $cont = CustomerContact::factory()->create();
+        Event::fake();
+
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+        $cont = CustomerContact::factory()->createQuietly();
         $cont->delete();
 
-        $response = $this->actingAs(User::factory()->createQuietly())
+        $response = $this->actingAs($user)
             ->get(route('customers.deleted-items.restore.contacts', [
                 $cont->cust_id,
                 $cont->cont_id,
             ]));
         $response->assertStatus(403);
+
+        Event::assertNotDispatched(CustomerContactEvent::class);
     }
 
     public function test_restore()
     {
         Event::fake();
 
-        $cont = CustomerContact::factory()->create();
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
+        $cont = CustomerContact::factory()->createQuietly();
         $cont->delete();
 
-        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
+        $response = $this->actingAs($user)
             ->get(route('customers.deleted-items.restore.contacts', [
                 $cont->cust_id,
                 $cont->cont_id,
@@ -395,7 +462,7 @@ class CustomerContactTest extends TestCase
             'cont' => $cont->name,
         ]));
 
-        $this->assertDatabaseHas('customer_contacts', (array) $cont->only(['cont_id']));
+        $this->assertDatabaseHas('customer_contacts', $cont->only(['cont_id']));
 
         Event::assertDispatched(CustomerContactEvent::class);
     }
@@ -405,7 +472,9 @@ class CustomerContactTest extends TestCase
      */
     public function test_force_delete_guest()
     {
-        $cont = CustomerContact::factory()->create();
+        Event::fake();
+
+        $cont = CustomerContact::factory()->createQuietly();
         $cont->delete();
 
         $response = $this->delete(
@@ -420,40 +489,55 @@ class CustomerContactTest extends TestCase
         $response->assertStatus(302);
         $response->assertRedirect(route('login'));
         $this->assertGuest();
+
+        Event::assertNotDispatched(CustomerContactEvent::class);
     }
 
     public function test_force_delete_no_permission()
     {
-        $cont = CustomerContact::factory()->create();
+        Event::fake();
+
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+        $cont = CustomerContact::factory()->createQuietly();
         $cont->delete();
 
-        $response = $this->actingAs(User::factory()->createQuietly())
+        $response = $this->actingAs($user)
             ->delete(route('customers.deleted-items.force-delete.contacts', [
                 $cont->cust_id,
                 $cont->cont_id,
             ]));
         $response->assertStatus(403);
+
+        Event::assertNotDispatched(CustomerContactEvent::class);
     }
 
     public function test_force_delete()
     {
         Event::Fake();
 
-        $cont = CustomerContact::factory()->create();
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
+        $cont = CustomerContact::factory()->createQuietly();
         $cont->delete();
 
-        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
+        $response = $this->actingAs($user)
             ->delete(route('customers.deleted-items.force-delete.contacts', [
                 $cont->cust_id,
                 $cont->cont_id,
             ]));
         $response->assertStatus(302);
-        $response->assertSessionHas('warning', __('cust.contact.force_deleted', [
-            'cont' => $cont->name,
-        ]));
+        $response->assertSessionHas(
+            'warning',
+            __('cust.contact.force_deleted', [
+                'cont' => $cont->name,
+            ]));
 
-        $this->assertDatabaseMissing('customer_contacts', (array) $cont->only(['cont_id']));
+        $this->assertDatabaseMissing(
+            'customer_contacts',
+            $cont->only(['cont_id'])
+        );
 
-        Event::assertDispatched(CustomerContactEvent::class);
+        Event::assertNotDispatched(CustomerContactEvent::class);
     }
 }

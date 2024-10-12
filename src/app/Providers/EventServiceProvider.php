@@ -87,10 +87,10 @@ class EventServiceProvider extends ServiceProvider
         ],
 
         /**
-         * Customer Events
+         * Customer Events for broadcasting
          */
-        'App\Events\Customer\CustomerEvent' => [],
         'App\Events\Customer\CustomerAlertEvent' => [],
+        'App\Events\Customer\CustomerEvent' => [],
         'App\Events\Customer\CustomerContactEvent' => [],
         'App\Events\Customer\CustomerEquipmentDataEvent' => [],
         'App\Events\Customer\CustomerEquipmentEvent' => [],

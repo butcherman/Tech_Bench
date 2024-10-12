@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use App\Observers\CustomerContactObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Prunable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Log;
 
+#[ObservedBy([CustomerContactObserver::class])]
 class CustomerContact extends Model
 {
     use HasFactory;
@@ -31,6 +34,11 @@ class CustomerContact extends Model
     /***************************************************************************
      * Model Relationships
      ***************************************************************************/
+    public function Customer()
+    {
+        return $this->belongsTo(Customer::class, 'cust_id', 'cust_id');
+    }
+
     public function CustomerSite()
     {
         return $this->belongsToMany(

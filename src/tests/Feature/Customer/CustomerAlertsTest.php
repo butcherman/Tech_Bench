@@ -107,7 +107,8 @@ class CustomerAlertsTest extends TestCase
     {
         Event::fake();
 
-        $alert = CustomerAlert::factory()->create(['cust_id' => $this->customer->cust_id]);
+        $alert = CustomerAlert::factory()
+            ->createQuietly(['cust_id' => $this->customer->cust_id]);
         $data = [
             'message' => 'updated message',
             'type' => 'success',
@@ -130,7 +131,8 @@ class CustomerAlertsTest extends TestCase
 
         /** @var User $user */
         $user = User::factory()->createQuietly();
-        $alert = CustomerAlert::factory()->create(['cust_id' => $this->customer->cust_id]);
+        $alert = CustomerAlert::factory()
+            ->createQuietly(['cust_id' => $this->customer->cust_id]);
         $data = [
             'message' => 'updated message',
             'type' => 'success',
@@ -152,7 +154,8 @@ class CustomerAlertsTest extends TestCase
 
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);
-        $alert = CustomerAlert::factory()->create(['cust_id' => $this->customer->cust_id]);
+        $alert = CustomerAlert::factory()
+            ->createQuietly(['cust_id' => $this->customer->cust_id]);
         $data = [
             'message' => 'updated message',
             'type' => 'success',
@@ -178,7 +181,8 @@ class CustomerAlertsTest extends TestCase
     {
         Event::fake();
 
-        $alert = CustomerAlert::factory()->create(['cust_id' => $this->customer->cust_id]);
+        $alert = CustomerAlert::factory()
+            ->createQuietly(['cust_id' => $this->customer->cust_id]);
 
         $response = $this->delete(route('customers.alerts.destroy', [
             $this->customer->slug,
@@ -197,7 +201,8 @@ class CustomerAlertsTest extends TestCase
 
         /** @var User $user */
         $user = User::factory()->createQuietly();
-        $alert = CustomerAlert::factory()->create(['cust_id' => $this->customer->cust_id]);
+        $alert = CustomerAlert::factory()
+            ->createQuietly(['cust_id' => $this->customer->cust_id]);
 
         $response = $this->actingAs($user)
             ->delete(route('customers.alerts.destroy', [
@@ -215,7 +220,8 @@ class CustomerAlertsTest extends TestCase
 
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);
-        $alert = CustomerAlert::factory()->create(['cust_id' => $this->customer->cust_id]);
+        $alert = CustomerAlert::factory()
+            ->createQuietly(['cust_id' => $this->customer->cust_id]);
 
         $response = $this->actingAs($user)
             ->delete(route('customers.alerts.destroy', [
