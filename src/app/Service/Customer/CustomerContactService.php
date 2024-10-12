@@ -2,8 +2,6 @@
 
 namespace App\Service\Customer;
 
-use App\Enum\CrudAction;
-use App\Events\Customer\CustomerContactEvent;
 use App\Http\Requests\Customer\CustomerContactRequest;
 use App\Models\Customer;
 use App\Models\CustomerContact;
@@ -27,8 +25,6 @@ class CustomerContactService
 
         $this->processContact($requestData, $contact);
 
-        event(new CustomerContactEvent($contact, CrudAction::Create));
-
         return $contact;
     }
 
@@ -42,8 +38,6 @@ class CustomerContactService
         $contact->update($requestData->except(['phones', 'site_list']));
 
         $this->processContact($requestData, $contact);
-
-        event(new CustomerContactEvent($contact, CrudAction::Update));
 
         return $contact;
     }
@@ -75,8 +69,6 @@ class CustomerContactService
         }
 
         $contact->delete();
-
-        event(new CustomerContactEvent($contact, CrudAction::Destroy));
     }
 
     /**
@@ -85,7 +77,5 @@ class CustomerContactService
     public function restoreContact(CustomerContact $contact): void
     {
         $contact->restore();
-
-        event(new CustomerContactEvent($contact, CrudAction::Restore));
     }
 }

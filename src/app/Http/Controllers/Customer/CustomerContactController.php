@@ -73,7 +73,6 @@ class CustomerContactController extends Controller
      */
     public function forceDelete(Customer $customer, CustomerContact $contact): RedirectResponse
     {
-
         $this->authorize('force-delete', $contact);
 
         $this->svc->destroyContact($contact, true);

@@ -3,7 +3,10 @@
 namespace App\Models;
 
 use App\Observers\CustomerContactObserver;
+use Closure;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\BroadcastableModelEventOccurred;
+use Illuminate\Database\Eloquent\BroadcastsEvents;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Prunable;
@@ -13,6 +16,7 @@ use Illuminate\Support\Facades\Log;
 #[ObservedBy([CustomerContactObserver::class])]
 class CustomerContact extends Model
 {
+    use BroadcastsEvents;
     use HasFactory;
     use Prunable;
     use SoftDeletes;
@@ -52,6 +56,35 @@ class CustomerContact extends Model
     public function CustomerContactPhone()
     {
         return $this->hasMany(CustomerContactPhone::class, 'cont_id', 'cont_id');
+    }
+
+    /***************************************************************************
+     * Model Broadcasting
+     ***************************************************************************/
+    public function broadcastOn(string $event): Closure|array
+    {
+        return match ($event) {
+            'deleted', 'trashed' => [],
+            default => function () {
+                $siteList = $this->CustomerSite->pluck('site_slug')->toArray();
+                array_walk($siteList, function (&$value) {
+                    $value = 'customer-site.'.$value;
+                });
+
+                $siteList[] = 'customer.'.$this->Customer->slug;
+
+                Log::debug('Broadcasting Customer Contact Event on channels - ', $siteList);
+
+                return $siteList;
+            },
+        };
+    }
+
+    public function newBroadcastableModelEvent(string $event): BroadcastableModelEventOccurred
+    {
+        return (new BroadcastableModelEventOccurred(
+            $this, $event
+        ))->dontBroadcastToCurrentUser();
     }
 
     /***************************************************************************
