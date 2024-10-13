@@ -1,12 +1,9 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -15,7 +12,7 @@ class CustomerDeletedItemsController extends Controller
     /**
      * Show all customers that have been soft deleted
      */
-    public function __invoke(Request $request, Customer $customer): Response
+    public function __invoke(Customer $customer): Response
     {
         $this->authorize('manage', $customer);
 

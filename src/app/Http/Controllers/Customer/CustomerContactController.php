@@ -69,7 +69,7 @@ class CustomerContactController extends Controller
     }
 
     /**
-     * remove a soft deleted contact
+     * Trash a soft deleted contact
      */
     public function forceDelete(Customer $customer, CustomerContact $contact): RedirectResponse
     {

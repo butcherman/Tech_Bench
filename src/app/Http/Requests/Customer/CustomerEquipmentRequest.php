@@ -1,11 +1,8 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Http\Requests\Customer;
 
 use App\Models\CustomerEquipment;
-use App\Models\CustomerSite;
 use App\Rules\CheckForDuplicateSiteEquipment;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -38,35 +35,12 @@ class CustomerEquipmentRequest extends FormRequest
         }
 
         return [
-            'equip_id' => 'required|exists:equipment_types',
+            'equip_id' => ['required', 'exists:equipment_types'],
             'site_list' => [
                 'required',
                 'array',
                 new CheckForDuplicateSiteEquipment,
             ],
         ];
-    }
-
-    /**
-     * Create a new Equipment resource and assign it to the Customer Sites
-     */
-    public function createEquipment()
-    {
-        $newEquipment = CustomerEquipment::create([
-            'cust_id' => $this->customer->cust_id,
-            'equip_id' => $this->equip_id,
-        ]);
-
-        /**
-         * Attach the equipment to the necessary sites
-         */
-        foreach ($this->site_list as $site) {
-            $site = CustomerSite::find($site);
-            $newEquipment->CustomerSite()->attach($site);
-        }
-
-        $newEquipment->save();
-
-        return $newEquipment;
     }
 }

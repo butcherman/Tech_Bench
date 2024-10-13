@@ -2,12 +2,16 @@
 
 namespace App\Models;
 
+use App\Observers\CustomerEquipmentObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\BroadcastableModelEventOccurred;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Prunable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Log;
 
+#[ObservedBy([CustomerEquipmentObserver::class])]
 class CustomerEquipment extends Model
 {
     use HasFactory;
@@ -47,6 +51,11 @@ class CustomerEquipment extends Model
         return $this->belongsTo(EquipmentType::class, 'equip_id', 'equip_id');
     }
 
+    public function Customer()
+    {
+        return $this->belongsTo(Customer::class, 'cust_id', 'cust_id');
+    }
+
     public function CustomerSite()
     {
         return $this->belongsToMany(
@@ -70,6 +79,24 @@ class CustomerEquipment extends Model
     public function CustomerEquipmentData()
     {
         return $this->hasMany(CustomerEquipmentData::class, 'cust_equip_id', 'cust_equip_id');
+    }
+
+    /***************************************************************************
+     * Model Broadcasting
+     ***************************************************************************/
+    public function broadcastOn(string $event)
+    {
+        return match ($event) {
+            'deleted', 'trashed', 'created' => [],
+            default => 'customer.'.$this->slug,
+        };
+    }
+
+    public function newBroadcastableModelEvent(string $event): BroadcastableModelEventOccurred
+    {
+        return (new BroadcastableModelEventOccurred(
+            $this, $event
+        ))->dontBroadcastToCurrentUser();
     }
 
     /***************************************************************************
