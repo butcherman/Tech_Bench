@@ -92,8 +92,11 @@ class CustomerNoteController extends Controller
     /**
      * Update the specified Customer Note in storage.
      */
-    public function update(CustomerNoteRequest $request, Customer $customer, CustomerNote $note): RedirectResponse
-    {
+    public function update(
+        CustomerNoteRequest $request,
+        Customer $customer,
+        CustomerNote $note
+    ): RedirectResponse {
         $updatedNote = $this->svc->updateCustomerNote($request, $note);
 
         return redirect(route('customers.notes.show', [
@@ -130,9 +133,8 @@ class CustomerNoteController extends Controller
     /**
      * remove a soft deleted note
      */
-    public function forceDelete(Request $request, Customer $customer, CustomerNote $note): RedirectResponse
+    public function forceDelete(Customer $customer, CustomerNote $note): RedirectResponse
     {
-
         $this->authorize('force-delete', $note);
 
         $this->svc->destroyCustomerNote($note, true);

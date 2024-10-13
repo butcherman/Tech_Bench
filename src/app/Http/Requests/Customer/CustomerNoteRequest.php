@@ -25,12 +25,12 @@ class CustomerNoteRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'subject' => 'required|string',
-            'note_type' => 'required|string',
-            'urgent' => 'required|boolean',
-            'site_list' => 'required_if:note_type,site',
-            'cust_equip_id' => 'required_if:note_type,equipment',
-            'details' => 'required|string',
+            'subject' => ['required', 'string'],
+            'note_type' => ['required', 'string'],
+            'urgent' => ['required', 'boolean'],
+            'site_list' => ['required_if:note_type,site'],
+            'cust_equip_id' => ['required_if:note_type,equipment'],
+            'details' => ['required', 'string'],
         ];
     }
 
