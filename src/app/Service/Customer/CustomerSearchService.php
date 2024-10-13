@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service;
+namespace App\Service\Customer;
 
 use App\Http\Requests\Customer\CustomerSearchRequest;
 use App\Models\Customer;
@@ -10,12 +10,9 @@ use App\Models\Customer;
  */
 class CustomerSearchService
 {
-    public function __construct(protected CustomerSearchRequest $searchRequest)
-    {
-        //
-    }
+    public function __construct(protected CustomerSearchRequest $searchRequest) {}
 
-    public function search()
+    public function __invoke()
     {
         if ($this->searchRequest->searchFor) {
             return $this->filteredSearch();

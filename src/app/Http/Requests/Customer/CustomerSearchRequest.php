@@ -1,7 +1,5 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Http\Requests\Customer;
 
 use Illuminate\Foundation\Http\FormRequest;
@@ -22,10 +20,10 @@ class CustomerSearchRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'basic' => 'required|boolean',
-            'page' => 'required_if:basic,false|numeric',
-            'perPage' => 'required_if:basic,false|numeric',
-            'searchFor' => 'nullable|string',
+            'basic' => ['required', 'boolean'],
+            'page' => ['required_if:basic,false', 'numeric'],
+            'perPage' => ['required_if:basic,false', 'numeric'],
+            'searchFor' => ['nullable', 'string'],
         ];
     }
 }
