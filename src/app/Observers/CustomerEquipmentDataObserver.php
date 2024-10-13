@@ -27,13 +27,15 @@ class CustomerEquipmentDataObserver
     public function updated(CustomerEquipmentData $data): void
     {
         $originalData = $data->getOriginal();
+        $logValue = ! $data->DataFieldType->do_not_log_value;
+        $redacted = '<REDACTED>';
 
         Log::info(
             'Customer Equipment Data Updated by '.$this->user, [
                 'customer_equipment_id' => $data->cust_equip_id,
                 'data-field' => $data->field_name,
-                'old-value' => $originalData['value'],
-                'new-value' => $data->value,
+                'old-value' => $logValue ? $originalData['value'] : $redacted,
+                'new-value' => $logValue ? $data->value : $redacted,
             ]
         );
     }

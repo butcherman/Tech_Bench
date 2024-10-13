@@ -31,6 +31,11 @@
             name="allow_copy"
             label="Add A Copy to Clipboard Button"
         />
+        <CheckboxSwitch
+            id="do-not-log-value"
+            name="do_not_log_value"
+            label="Do Not Log Field Value"
+        />
     </VueForm>
 </template>
 
@@ -62,6 +67,7 @@ const initValues = {
     masked: props.dataFieldType?.masked || false,
     is_hyperlink: props.dataFieldType?.is_hyperlink || false,
     allow_copy: props.dataFieldType?.allow_copy || false,
+    do_not_log_value: props.dataFieldType?.do_not_log_value || false,
 };
 const schema = object({
     name: string().required(),
@@ -77,5 +83,6 @@ const schema = object({
     masked: boolean().required(),
     is_hyperlink: boolean().required(),
     allow_copy: boolean().required(),
+    do_not_log_value: boolean().required(),
 });
 </script>
