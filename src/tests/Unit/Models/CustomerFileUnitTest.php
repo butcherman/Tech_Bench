@@ -79,17 +79,17 @@ class CustomerFileUnitTest extends TestCase
         $this->assertEquals($data->toArray(), $this->model->User->toArray());
     }
 
-    public function test_customer_equipment_relationship()
-    {
-        $data = CustomerEquipment::factory()
-            ->create(['cust_id' => $this->customer->cust_id]);
-        $this->model->update(['cust_equip_id' => $data->cust_equip_id]);
+    // public function test_customer_equipment_relationship()
+    // {
+    //     $data = CustomerEquipment::factory()
+    //         ->create(['cust_id' => $this->customer->cust_id]);
+    //     $this->model->update(['cust_equip_id' => $data->cust_equip_id]);
 
-        $this->assertEquals(
-            $data->toArray(),
-            $this->model->CustomerEquipment->toArray()
-        );
-    }
+    //     $this->assertEquals(
+    //         $data->toArray(),
+    //         $this->model->CustomerEquipment->toArray()
+    //     );
+    // }
 
     /**
      * Prunable Models

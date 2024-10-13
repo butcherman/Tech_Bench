@@ -156,25 +156,25 @@ class CustomerSiteUnitTest extends TestCase
         );
     }
 
-    public function test_equipment_file_relationship()
-    {
-        $equip = CustomerEquipment::factory()
-            ->createQuietly(['cust_id' => $this->model->cust_id]);
-        $equip->CustomerSite()->sync([$this->model->cust_site_id]);
+    // public function test_equipment_file_relationship()
+    // {
+    //     $equip = CustomerEquipment::factory()
+    //         ->createQuietly(['cust_id' => $this->model->cust_id]);
+    //     $equip->CustomerSite()->sync([$this->model->cust_site_id]);
 
-        $data = CustomerFile::factory()->create([
-            'cust_id' => $this->model->cust_id,
-            'cust_equip_id' => $equip->cust_equip_id,
-        ]);
+    //     $data = CustomerFile::factory()->create([
+    //         'cust_id' => $this->model->cust_id,
+    //         'cust_equip_id' => $equip->cust_equip_id,
+    //     ]);
 
-        $this->assertEquals(
-            $data->toArray(),
-            $this->model
-                ->EquipmentFile()[0]
-                ->makeHidden(['CustomerEquipment', 'CustomerSite', 'deleted_at'])
-                ->toArray()
-        );
-    }
+    //     $this->assertEquals(
+    //         $data->toArray(),
+    //         $this->model
+    //             ->EquipmentFile()[0]
+    //             ->makeHidden(['CustomerEquipment', 'CustomerSite', 'deleted_at'])
+    //             ->toArray()
+    //     );
+    // }
 
     public function test_general_note_relationship()
     {

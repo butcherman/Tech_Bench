@@ -71,6 +71,7 @@ class EquipmentDataTypeTest extends TestCase
             'masked' => false,
             'is_hyperlink' => false,
             'allow_copy' => false,
+            'do_not_log_value' => false,
         ];
 
         $response = $this->post(route('equipment-data.store'), $data);
@@ -87,6 +88,7 @@ class EquipmentDataTypeTest extends TestCase
             'masked' => false,
             'is_hyperlink' => false,
             'allow_copy' => false,
+            'do_not_log_value' => false,
         ];
 
         $response = $this->actingAs(User::factory()->createQuietly())
@@ -102,6 +104,7 @@ class EquipmentDataTypeTest extends TestCase
             'masked' => false,
             'is_hyperlink' => false,
             'allow_copy' => false,
+            'do_not_log_value' => false,
         ];
 
         $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
@@ -155,6 +158,7 @@ class EquipmentDataTypeTest extends TestCase
             'masked' => false,
             'is_hyperlink' => true,
             'allow_copy' => false,
+            'do_not_log_value' => false,
         ];
 
         $response = $this->put(route('equipment-data.update', $type->type_id), $data);
@@ -173,6 +177,7 @@ class EquipmentDataTypeTest extends TestCase
             'masked' => false,
             'is_hyperlink' => true,
             'allow_copy' => false,
+            'do_not_log_value' => false,
         ];
 
         $response = $this->actingAs(User::factory()->createQuietly())
@@ -190,6 +195,7 @@ class EquipmentDataTypeTest extends TestCase
             'masked' => false,
             'is_hyperlink' => true,
             'allow_copy' => false,
+            'do_not_log_value' => false,
         ];
 
         $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))

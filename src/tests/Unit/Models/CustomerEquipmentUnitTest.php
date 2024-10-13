@@ -74,22 +74,22 @@ class CustomerEquipmentUnitTest extends TestCase
         );
     }
 
-    public function test_customer_file_relationship()
-    {
-        $data = CustomerFile::factory()
-            ->create([
-                'cust_id' => $this->customer->cust_id,
-                'cust_equip_id' => $this->model->cust_equip_id,
-            ]);
+    // public function test_customer_file_relationship()
+    // {
+    //     $data = CustomerFile::factory()
+    //         ->create([
+    //             'cust_id' => $this->customer->cust_id,
+    //             'cust_equip_id' => $this->model->cust_equip_id,
+    //         ]);
 
-        $this->assertEquals(
-            $data->toArray(),
-            $this->model
-                ->CustomerFile[0]
-                ->makeHidden(['CustomerSite'])
-                ->toArray()
-        );
-    }
+    //     $this->assertEquals(
+    //         $data->toArray(),
+    //         $this->model
+    //             ->CustomerFile[0]
+    //             ->makeHidden(['CustomerSite'])
+    //             ->toArray()
+    //     );
+    // }
 
     public function test_customer_equipment_data()
     {

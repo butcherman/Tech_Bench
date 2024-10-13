@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use App\Observers\CustomerFileObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Prunable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Log;
 
+#[ObservedBy([CustomerFileObserver::class])]
 class CustomerFile extends Model
 {
     use HasFactory;
@@ -77,7 +80,7 @@ class CustomerFile extends Model
      ***************************************************************************/
     public function FileUpload()
     {
-        return $this->hasOne(FileUpload::class, 'file_id', 'file_id');
+        return $this->belongsTo(FileUpload::class, 'file_id', 'file_id');
     }
 
     public function CustomerSite()
@@ -103,6 +106,11 @@ class CustomerFile extends Model
     {
         return $this->belongsTo(User::class, 'user_id', 'user_id')
             ->withTrashed();
+    }
+
+    public function Customer()
+    {
+        return $this->belongsTo(Customer::class, 'cust_id', 'cust_id');
     }
 
     public function CustomerEquipment()

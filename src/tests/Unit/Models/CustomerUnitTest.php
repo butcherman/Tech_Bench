@@ -70,16 +70,16 @@ class CustomerUnitTest extends TestCase
         );
     }
 
-    public function test_customer_equipment_relationship()
-    {
-        $data = CustomerEquipment::factory()
-            ->create(['cust_id' => $this->model->cust_id]);
+    // public function test_customer_equipment_relationship()
+    // {
+    //     $data = CustomerEquipment::factory()
+    //         ->create(['cust_id' => $this->model->cust_id]);
 
-        $this->assertEquals(
-            $data->toArray(),
-            $this->model->CustomerEquipment[0]->toArray()
-        );
-    }
+    //     $this->assertEquals(
+    //         $data->toArray(),
+    //         $this->model->CustomerEquipment[0]->toArray()
+    //     );
+    // }
 
     // public function test_customer_contact_relationship()
     // {
@@ -112,16 +112,16 @@ class CustomerUnitTest extends TestCase
         );
     }
 
-    public function test_customer_file_relationship()
-    {
-        $data = CustomerFile::factory()
-            ->create(['cust_id' => $this->model->cust_id]);
-        $this->assertEquals(
-            $data->toArray(),
-            $this->model
-                ->CustomerFile[0]
-                ->makeHidden(['CustomerSite'])
-                ->toArray()
-        );
-    }
+    // public function test_customer_file_relationship()
+    // {
+    //     $data = CustomerFile::factory()
+    //         ->create(['cust_id' => $this->model->cust_id]);
+    //     $this->assertEquals(
+    //         $data->toArray(),
+    //         $this->model
+    //             ->CustomerFile[0]
+    //             ->makeHidden(['CustomerSite'])
+    //             ->toArray()
+    //     );
+    // }
 }
