@@ -21,6 +21,7 @@ class SocialiteTest extends TestCase
         config(['services.azure.allow_login' => false]);
 
         $response = $this->get(route('azure-login'));
+
         $response->assertStatus(404);
     }
 
@@ -29,6 +30,7 @@ class SocialiteTest extends TestCase
         config(['services.azure.allow_login' => true]);
 
         $response = $this->get(route('azure-login'));
+
         $response->assertStatus(302);
     }
 
@@ -40,6 +42,7 @@ class SocialiteTest extends TestCase
         config(['services.azure.allow_login' => false]);
 
         $response = $this->get(route('azure-callback'));
+
         $response->assertStatus(404);
     }
 
@@ -48,6 +51,7 @@ class SocialiteTest extends TestCase
         config(['services.azure.allow_login' => true]);
 
         $response = $this->get(route('azure-callback'));
+
         $response->assertStatus(500);
     }
 
@@ -97,9 +101,10 @@ class SocialiteTest extends TestCase
             ->andReturn($provider);
 
         $response = $this->get(route('azure-callback'));
-        $response->assertStatus(302);
-        $response->assertRedirect(route('dashboard'));
-        $response->assertSessionHas('2fa_verified', true);
+
+        $response->assertStatus(302)
+            ->assertRedirect(route('dashboard'))
+            ->assertSessionHas('2fa_verified', true);
 
         $this->assertAuthenticatedAs(User::where('email', $user->email)->first());
         $this->assertDatabaseHas('users', $user->only([
@@ -215,9 +220,10 @@ class SocialiteTest extends TestCase
             ->andReturn($provider);
 
         $response = $this->get(route('azure-callback'));
-        $response->assertStatus(302);
-        $response->assertRedirect(route('login'));
-        $response->assertSessionHas('warning', 'You do not have permission to Login.  Please'.
+
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'))
+            ->assertSessionHas('warning', 'You do not have permission to Login.  Please'.
                    ' contact your system administrator');
 
         $this->assertDatabaseMissing('users', $user->only([

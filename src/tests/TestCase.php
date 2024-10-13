@@ -12,6 +12,16 @@ abstract class TestCase extends BaseTestCase
     use CreatesApplication;
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->withoutVite();
+        $this->withoutMiddleware([
+            \Spatie\CookieConsent\CookieConsentMiddleware::class,
+        ]);
+    }
+
     protected function changeRolePermission(int $roleId, string $permName, bool $value = false)
     {
         $permId = UserRolePermissionType::where('description', $permName)->first()->perm_type_id;

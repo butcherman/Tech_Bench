@@ -28,9 +28,12 @@ class CustomerAlertEvent implements ShouldBroadcast
 
     /**
      * Get the channels the event should broadcast on
+     *
+     * @codeCoverageIgnore
      */
     public function broadcastOn(): array
     {
+        // TODO - update to include all customer sites as well
         return [
             new PrivateChannel('customer.'.$this->customer->slug),
         ];
@@ -38,6 +41,8 @@ class CustomerAlertEvent implements ShouldBroadcast
 
     /**
      * Send all of the existing customer alerts in the broadcast message
+     *
+     * @codeCoverageIgnore
      */
     public function broadcastWith(): array
     {

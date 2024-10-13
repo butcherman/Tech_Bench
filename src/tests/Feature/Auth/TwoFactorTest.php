@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\UserVerificationCode;
 use App\Notifications\User\SendAuthCode;
 use Illuminate\Support\Facades\Notification;
+use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class TwoFactorTest extends TestCase
@@ -24,8 +25,9 @@ class TwoFactorTest extends TestCase
 
         $response = $this->actingAs($user)
             ->get(route('dashboard'));
-        $response->assertStatus(302);
-        $response->assertRedirect(route('2fa.show'));
+
+        $response->assertStatus(302)
+            ->assertRedirect(route('2fa.show'));
 
         $this->assertDatabaseHas('user_verification_codes', [
             'user_id' => $user->user_id,
@@ -40,8 +42,8 @@ class TwoFactorTest extends TestCase
     public function test_show_guest()
     {
         $response = $this->get(route('2fa.show'));
-        $response->assertStatus(302);
-        $response->assertRedirect(route('login'));
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
         $this->assertGuest();
     }
 
@@ -52,7 +54,12 @@ class TwoFactorTest extends TestCase
 
         $response = $this->actingAs($user)
             ->get(route('2fa.show'));
-        $response->assertSuccessful();
+
+        $response->assertSuccessful()
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('Auth/TwoFactorAuth')
+                ->has('allow-remember')
+            );
     }
 
     /**
@@ -86,8 +93,9 @@ class TwoFactorTest extends TestCase
         ];
 
         $response = $this->actingAs($user)->put(route('2fa.update'), $data);
-        $response->assertStatus(302);
-        $response->assertRedirect(route('dashboard'));
+
+        $response->assertStatus(302)
+            ->assertRedirect(route('dashboard'));
     }
 
     public function test_update_bad_code()
@@ -105,8 +113,9 @@ class TwoFactorTest extends TestCase
         ];
 
         $response = $this->actingAs($user)->put(route('2fa.update'), $data);
-        $response->assertStatus(302);
-        $response->assertSessionHasErrors('code');
+
+        $response->assertStatus(302)
+            ->assertSessionHasErrors('code');
     }
 
     public function test_update_expired_code()
@@ -124,15 +133,18 @@ class TwoFactorTest extends TestCase
         ];
 
         $this->travel(45)->minutes();
+
         $response = $this->actingAs($user)->put(route('2fa.update'), $data);
-        $response->assertStatus(302);
-        $response->assertSessionHasErrors('code');
+
+        $response->assertStatus(302)
+            ->assertSessionHasErrors('code');
     }
 
     public function test_update_with_remember_device()
     {
         /** @var User $user */
         $user = User::factory()->createQuietly();
+
         UserVerificationCode::create([
             'user_id' => $user->user_id,
             'code' => 1234,
@@ -148,8 +160,9 @@ class TwoFactorTest extends TestCase
         $response = $this->actingAs($user)
             ->withHeaders(['User-Agent' => $httpUserAgent])
             ->put(route('2fa.update'), $data);
-        $response->assertStatus(302);
-        $response->assertRedirect(route('dashboard'));
+
+        $response->assertStatus(302)
+            ->assertRedirect(route('dashboard'));
 
         $this->assertDatabaseHas('device_tokens', ['user_id' => $user->user_id]);
     }

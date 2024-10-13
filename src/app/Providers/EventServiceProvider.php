@@ -90,13 +90,13 @@ class EventServiceProvider extends ServiceProvider
          * Customer Events for broadcasting
          */
         'App\Events\Customer\CustomerAlertEvent' => [],
-        'App\Events\Customer\CustomerEvent' => [],
-        'App\Events\Customer\CustomerContactEvent' => [],
-        'App\Events\Customer\CustomerEquipmentDataEvent' => [],
-        'App\Events\Customer\CustomerEquipmentEvent' => [],
-        'App\Events\Customer\CustomerFileEvent' => [],
-        'App\Events\Customer\CustomerNoteEvent' => [],
-        'App\Events\Customer\CustomerSiteEvent' => [],
+        // 'App\Events\Customer\CustomerEvent' => [],
+        // 'App\Events\Customer\CustomerContactEvent' => [],
+        // 'App\Events\Customer\CustomerEquipmentDataEvent' => [],
+        // 'App\Events\Customer\CustomerEquipmentEvent' => [],
+        // 'App\Events\Customer\CustomerFileEvent' => [],
+        // 'App\Events\Customer\CustomerNoteEvent' => [],
+        // 'App\Events\Customer\CustomerSiteEvent' => [],
 
         /**
          * Tech Tip Events

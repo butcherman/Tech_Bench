@@ -10,6 +10,7 @@ use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Password;
+use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class ResetPasswordTest extends TestCase
@@ -21,7 +22,10 @@ class ResetPasswordTest extends TestCase
     {
         $response = $this->get(route('password.forgot'));
 
-        $response->assertSuccessful();
+        $response->assertSuccessful()
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('Auth/ForgotPassword')
+            );
         $this->assertGuest();
     }
 

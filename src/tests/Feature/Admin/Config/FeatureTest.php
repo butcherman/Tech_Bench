@@ -5,6 +5,7 @@ namespace Tests\Admin\Config;
 use App\Events\Feature\FeatureChangedEvent;
 use App\Models\User;
 use Illuminate\Support\Facades\Event;
+use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class FeatureTest extends TestCase
@@ -27,6 +28,7 @@ class FeatureTest extends TestCase
 
         $response = $this->actingAs($user)
             ->get(route('admin.features.show'));
+
         $response->assertForbidden();
     }
 
@@ -37,7 +39,12 @@ class FeatureTest extends TestCase
 
         $response = $this->actingAs($user)
             ->get(route('admin.features.show'));
-        $response->assertSuccessful();
+
+        $response->assertSuccessful()
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('Admin/Config/Features')
+                ->has('feature-list')
+            );
     }
 
     /**
@@ -75,6 +82,7 @@ class FeatureTest extends TestCase
 
         $response = $this->actingAs($user)
             ->put(route('admin.features.update'), $data);
+
         $response->assertForbidden();
 
         Event::assertNotDispatched(FeatureChangedEvent::class);
@@ -94,8 +102,8 @@ class FeatureTest extends TestCase
 
         $response = $this->actingAs($user)
             ->put(route('admin.features.update'), $data);
-        $response->assertStatus(302);
-        $response->assertSessionHas('success', 'Feature Settings Updated');
+        $response->assertStatus(302)
+            ->assertSessionHas('success', 'Feature Settings Updated');
 
         $this->assertDatabaseHas('app_settings', [
             'key' => 'file-link.feature_enabled',

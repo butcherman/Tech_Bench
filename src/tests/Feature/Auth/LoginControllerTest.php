@@ -3,6 +3,7 @@
 namespace Tests\Feature\Auth;
 
 use App\Models\User;
+use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class LoginControllerTest extends TestCase
@@ -17,7 +18,14 @@ class LoginControllerTest extends TestCase
 
         $response = $this->get(route('home'));
 
-        $response->assertSuccessful();
+        $response->assertSuccessful()
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('Auth/Login')
+                ->has('welcome-message')
+                ->has('home-links')
+                ->has('public-link')
+                ->has('allow-oath')
+            );
         $this->assertGuest();
     }
 
@@ -28,6 +36,7 @@ class LoginControllerTest extends TestCase
 
         $response = $this->actingAs($user)
             ->get(route('home'));
+
         $response->assertStatus(302)
             ->assertRedirect(route('dashboard'));
     }

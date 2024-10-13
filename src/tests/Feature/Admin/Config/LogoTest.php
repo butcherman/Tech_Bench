@@ -4,6 +4,7 @@ namespace Tests\Feature\Admin\Config;
 
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
+use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class LogoTest extends TestCase
@@ -26,7 +27,8 @@ class LogoTest extends TestCase
 
         $response = $this->actingAs($user)
             ->get(route('admin.logo.show'));
-        $response->assertStatus(403);
+
+        $response->assertForbidden();
     }
 
     public function test_show()
@@ -36,7 +38,10 @@ class LogoTest extends TestCase
 
         $response = $this->actingAs($user)
             ->get(route('admin.logo.show'));
-        $response->assertSuccessful();
+
+        $response->assertSuccessful()
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('Admin/Config/Logo'));
     }
 
     /**
@@ -64,7 +69,8 @@ class LogoTest extends TestCase
 
         $response = $this->actingAs($user)
             ->post(route('admin.logo.update'), $data);
-        $response->assertStatus(403);
+
+        $response->assertForbidden();
     }
 
     public function test_update()
@@ -77,6 +83,7 @@ class LogoTest extends TestCase
 
         $response = $this->actingAs($user)
             ->post(route('admin.logo.update'), $data);
+
         $response->assertSuccessful();
 
         $this->assertDatabaseHas('app_settings', [

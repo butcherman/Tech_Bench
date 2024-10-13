@@ -12,9 +12,6 @@ class TechTipObserver
 {
     protected User|string $user;
 
-    /**
-     * @codeCoverageIgnore
-     */
     public function __construct()
     {
         $this->user = match (true) {
@@ -27,7 +24,7 @@ class TechTipObserver
     /**
      * Actions for when a Tech Tip is retrieved from the database
      */
-    public function retrieved(TechTip $techTip)
+    public function retrieved(TechTip $techTip): void
     {
         // Separate log entry for Search Results
         if (

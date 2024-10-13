@@ -5,6 +5,7 @@ namespace Tests\Feature\Admin\Config;
 use App\Events\Config\UrlChangedEvent;
 use App\Models\User;
 use Illuminate\Support\Facades\Event;
+use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class BasicSettingsTest extends TestCase
@@ -27,7 +28,7 @@ class BasicSettingsTest extends TestCase
 
         $response = $this->actingAs($user)
             ->get(route('admin.basic-settings.show'));
-        $response->assertStatus(403);
+        $response->assertForbidden();
     }
 
     public function test_show()
@@ -37,7 +38,13 @@ class BasicSettingsTest extends TestCase
 
         $response = $this->actingAs($user)
             ->get(route('admin.basic-settings.show'));
-        $response->assertSuccessful();
+
+        $response->assertSuccessful()
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('Admin/Config/Settings')
+                ->has('settings')
+                ->has('timezone-list')
+            );
     }
 
     /**
@@ -77,7 +84,8 @@ class BasicSettingsTest extends TestCase
 
         $response = $this->actingAs($user)
             ->put(route('admin.basic-settings.update'), $data);
-        $response->assertStatus(403);
+
+        $response->assertForbidden();
 
         Event::assertNotDispatched(UrlChangedEvent::class);
     }
@@ -97,8 +105,9 @@ class BasicSettingsTest extends TestCase
 
         $response = $this->actingAs($user)
             ->put(route('admin.basic-settings.update'), $data);
-        $response->assertStatus(302);
-        $response->assertSessionHas('success', __('admin.config.updated'));
+
+        $response->assertStatus(302)
+            ->assertSessionHas('success', __('admin.config.updated'));
 
         $this->assertDatabaseHas('app_settings', [
             'key' => 'app.url',
@@ -135,8 +144,8 @@ class BasicSettingsTest extends TestCase
 
         $response = $this->actingAs($user)
             ->put(route('admin.basic-settings.update'), $data);
-        $response->assertStatus(302);
-        $response->assertSessionHas('success', __('admin.config.updated'));
+        $response->assertStatus(302)
+            ->assertSessionHas('success', __('admin.config.updated'));
 
         $this->assertDatabaseHas('app_settings', [
             'key' => 'app.timezone',

@@ -3,6 +3,7 @@
 namespace Tests\Feature\Admin\Config;
 
 use App\Models\User;
+use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class EmailSettingsTest extends TestCase
@@ -35,7 +36,12 @@ class EmailSettingsTest extends TestCase
 
         $response = $this->actingAs($user)
             ->get(route('admin.email-settings.show'));
-        $response->assertSuccessful();
+
+        $response->assertSuccessful()
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('Admin/Config/Email')
+                ->has('settings')
+            );
     }
 
     /**
@@ -94,8 +100,8 @@ class EmailSettingsTest extends TestCase
 
         $response = $this->actingAs($user)
             ->put(route('admin.email-settings.update'), $data);
-        $response->assertStatus(302);
-        $response->assertSessionHas('success', __('admin.email.updated'));
+        $response->assertStatus(302)
+            ->assertSessionHas('success', __('admin.email.updated'));
 
         $this->assertDatabaseHas('app_settings', [
             'key' => 'mail.from.address',
@@ -142,8 +148,8 @@ class EmailSettingsTest extends TestCase
 
         $response = $this->actingAs($user)
             ->put(route('admin.email-settings.update'), $data);
-        $response->assertStatus(302);
-        $response->assertSessionHas('success', __('admin.email.updated'));
+        $response->assertStatus(302)
+            ->assertSessionHas('success', __('admin.email.updated'));
 
         $this->assertDatabaseHas('app_settings', [
             'key' => 'mail.from.address',
