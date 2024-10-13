@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Observers\CustomerEquipmentObserver;
+use App\Traits\CustomerBroadcastingTrait;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\BroadcastableModelEventOccurred;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -14,6 +15,7 @@ use Illuminate\Support\Facades\Log;
 #[ObservedBy([CustomerEquipmentObserver::class])]
 class CustomerEquipment extends Model
 {
+    use CustomerBroadcastingTrait;
     use HasFactory;
     use Prunable;
     use SoftDeletes;
@@ -88,7 +90,11 @@ class CustomerEquipment extends Model
     {
         return match ($event) {
             'deleted', 'trashed', 'created' => [],
-            default => 'customer.'.$this->slug,
+            default => array_merge(
+                $this->getCustomerChannel(),
+                $this->getSiteChannelList(),
+                $this->getEquipmentChannel(),
+            ),
         };
     }
 

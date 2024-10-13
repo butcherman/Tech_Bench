@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Observers\CustomerObserver;
+use App\Traits\CustomerBroadcastingTrait;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\BroadcastableModelEventOccurred;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,6 +14,7 @@ use Laravel\Scout\Searchable;
 #[ObservedBy([CustomerObserver::class])]
 class Customer extends Model
 {
+    use CustomerBroadcastingTrait;
     use HasFactory;
     use Searchable;
     use SoftDeletes;
@@ -116,7 +118,7 @@ class Customer extends Model
     {
         return match ($event) {
             'deleted', 'trashed', 'created' => [],
-            default => 'customer.'.$this->slug,
+            default => $this->getCustomerChannel(),
         };
     }
 

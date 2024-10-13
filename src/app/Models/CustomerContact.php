@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Observers\CustomerContactObserver;
+use App\Traits\CustomerBroadcastingTrait;
 use Closure;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\BroadcastableModelEventOccurred;
@@ -17,6 +18,7 @@ use Illuminate\Support\Facades\Log;
 class CustomerContact extends Model
 {
     use BroadcastsEvents;
+    use CustomerBroadcastingTrait;
     use HasFactory;
     use Prunable;
     use SoftDeletes;
@@ -65,18 +67,10 @@ class CustomerContact extends Model
     {
         return match ($event) {
             'deleted', 'trashed' => [],
-            default => function () {
-                $siteList = $this->CustomerSite->pluck('site_slug')->toArray();
-                array_walk($siteList, function (&$value) {
-                    $value = 'customer-site.'.$value;
-                });
-
-                $siteList[] = 'customer.'.$this->Customer->slug;
-
-                Log::debug('Broadcasting Customer Contact Event on channels - ', $siteList);
-
-                return $siteList;
-            },
+            default => array_merge(
+                $this->getCustomerChannel(),
+                $this->getSiteChannelList()
+            )
         };
     }
 

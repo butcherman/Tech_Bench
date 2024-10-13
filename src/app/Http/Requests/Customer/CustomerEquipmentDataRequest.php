@@ -1,12 +1,8 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Http\Requests\Customer;
 
-use App\Models\CustomerEquipmentData;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Log;
 
 class CustomerEquipmentDataRequest extends FormRequest
 {
@@ -24,26 +20,7 @@ class CustomerEquipmentDataRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'saveData' => 'array|required',
+            'saveData' => ['array', 'required'],
         ];
-    }
-
-    /**
-     * Save each of the fields that were modified
-     */
-    public function processDataChanges()
-    {
-        foreach ($this->saveData as $data) {
-            $newData = CustomerEquipmentData::find($data['fieldId']);
-            Log::info('Customer Data for '.$this->customer->name.
-                ' has been updated by '.$this->user()->username, [
-                    'cust_id' => $this->customer->cust_id,
-                    'data-field-id' => $newData->id,
-                    'old-value' => $newData->value,
-                    'new-value' => $data['value'],
-                ]);
-
-            $newData->update(['value' => $data['value']]);
-        }
     }
 }

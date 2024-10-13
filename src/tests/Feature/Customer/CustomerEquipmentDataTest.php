@@ -2,13 +2,11 @@
 
 namespace Tests\Feature\Customer;
 
-use App\Events\Customer\CustomerEquipmentDataEvent;
 use App\Models\Customer;
 use App\Models\CustomerEquipment;
 use App\Models\CustomerEquipmentData;
 use App\Models\DataField;
 use App\Models\User;
-use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
 class CustomerEquipmentDataTest extends TestCase
@@ -43,16 +41,18 @@ class CustomerEquipmentDataTest extends TestCase
             route('customers.update-equipment-data', $this->customer->slug),
             $data
         );
-        $response->assertStatus(302);
-        $response->assertRedirect(route('login'));
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
         $this->assertGuest();
     }
 
     public function test_invoke_one_field()
     {
-        Event::fake();
-
-        $fields = DataField::factory()->count(4)->create(['equip_id' => $this->equipment->equip_id]);
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+        $fields = DataField::factory()
+            ->count(4)
+            ->create(['equip_id' => $this->equipment->equip_id]);
 
         $data1 = CustomerEquipmentData::create([
             'cust_equip_id' => $this->equipment->cust_equip_id,
@@ -84,13 +84,14 @@ class CustomerEquipmentDataTest extends TestCase
             ],
         ];
 
-        $response = $this->actingAs(User::factory()->createQuietly())
+        $response = $this->actingAs($user)
             ->put(
                 route('customers.update-equipment-data', $this->customer->slug),
                 $data
             );
-        $response->assertStatus(302);
-        $response->assertSessionHas('success', 'Saved Successfully');
+
+        $response->assertStatus(302)
+            ->assertSessionHas('success', 'Saved Successfully');
 
         $this->assertDatabaseHas('customer_equipment_data', [
             'cust_equip_id' => $this->equipment->cust_equip_id,
@@ -112,15 +113,15 @@ class CustomerEquipmentDataTest extends TestCase
             'field_id' => $fields[3]->field_id,
             'value' => $value3,
         ]);
-
-        Event::assertDispatched(CustomerEquipmentDataEvent::class);
     }
 
     public function test_invoke_all_fields()
     {
-        Event::fake();
-
-        $fields = DataField::factory()->count(4)->create(['equip_id' => $this->equipment->equip_id]);
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+        $fields = DataField::factory()
+            ->count(4)
+            ->create(['equip_id' => $this->equipment->equip_id]);
 
         $data1 = CustomerEquipmentData::create([
             'cust_equip_id' => $this->equipment->cust_equip_id,
@@ -164,13 +165,13 @@ class CustomerEquipmentDataTest extends TestCase
             ],
         ];
 
-        $response = $this->actingAs(User::factory()->createQuietly())
+        $response = $this->actingAs($user)
             ->put(
                 route('customers.update-equipment-data', $this->customer->slug),
                 $data
             );
-        $response->assertStatus(302);
-        $response->assertSessionHas('success', 'Saved Successfully');
+        $response->assertStatus(302)
+            ->assertSessionHas('success', 'Saved Successfully');
 
         $this->assertDatabaseHas('customer_equipment_data', [
             'cust_equip_id' => $this->equipment->cust_equip_id,
@@ -192,7 +193,5 @@ class CustomerEquipmentDataTest extends TestCase
             'field_id' => $fields[3]->field_id,
             'value' => $newVal3,
         ]);
-
-        Event::assertDispatched(CustomerEquipmentDataEvent::class);
     }
 }
