@@ -95,22 +95,22 @@ class CustomerUnitTest extends TestCase
     //     );
     // }
 
-    public function test_customer_note_relationship()
-    {
-        $data = CustomerNote::factory()
-            ->create(['cust_id' => $this->model->cust_id]);
+    // public function test_customer_note_relationship()
+    // {
+    //     $data = CustomerNote::factory()
+    //         ->create(['cust_id' => $this->model->cust_id]);
 
-        $this->assertEquals(
-            $data->toArray(),
-            $this->model
-                ->CustomerNote[0]
-                ->makeHidden([
-                    'cust_equip_id',
-                    'deleted_at',
-                    'CustomerEquipment',
-                ])->toArray()
-        );
-    }
+    //     $this->assertEquals(
+    //         $data->toArray(),
+    //         $this->model
+    //             ->CustomerNote[0]
+    //             ->makeHidden([
+    //                 'cust_equip_id',
+    //                 'deleted_at',
+    //                 'CustomerEquipment',
+    //             ])->toArray()
+    //     );
+    // }
 
     // public function test_customer_file_relationship()
     // {

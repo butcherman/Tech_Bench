@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use App\Observers\CustomerNoteObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Prunable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Log;
 
+#[ObservedBy([CustomerNoteObserver::class])]
 class CustomerNote extends Model
 {
     use HasFactory;
@@ -47,6 +50,11 @@ class CustomerNote extends Model
     /***************************************************************************
      * Model Relationships
      ***************************************************************************/
+    public function Customer()
+    {
+        return $this->belongsTo(Customer::class, 'cust_id', 'cust_id');
+    }
+
     public function CustomerSite()
     {
         return $this->belongsToMany(
@@ -59,7 +67,7 @@ class CustomerNote extends Model
 
     public function CustomerEquipment()
     {
-        return $this->hasOne(
+        return $this->belongsTo(
             CustomerEquipment::class,
             'cust_equip_id',
             'cust_equip_id'

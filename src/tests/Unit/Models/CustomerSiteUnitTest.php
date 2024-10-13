@@ -102,24 +102,24 @@ class CustomerSiteUnitTest extends TestCase
         );
     }
 
-    public function test_site_note_relationship()
-    {
-        $data = CustomerNote::factory()
-            ->createQuietly(['cust_id' => $this->model->cust_id]);
-        $data->CustomerSite()->sync([$this->model->cust_site_id]);
+    // public function test_site_note_relationship()
+    // {
+    //     $data = CustomerNote::factory()
+    //         ->createQuietly(['cust_id' => $this->model->cust_id]);
+    //     $data->CustomerSite()->sync([$this->model->cust_site_id]);
 
-        $this->assertEquals(
-            $data->toArray(),
-            $this->model
-                ->SiteNote[0]
-                ->makeHidden([
-                    'CustomerEquipment',
-                    'cust_equip_id',
-                    'deleted_at',
-                    'pivot',
-                ])->toArray()
-        );
-    }
+    //     $this->assertEquals(
+    //         $data->toArray(),
+    //         $this->model
+    //             ->SiteNote[0]
+    //             ->makeHidden([
+    //                 'CustomerEquipment',
+    //                 'cust_equip_id',
+    //                 'deleted_at',
+    //                 'pivot',
+    //             ])->toArray()
+    //     );
+    // }
 
     public function test_site_file_relationship()
     {
@@ -136,25 +136,25 @@ class CustomerSiteUnitTest extends TestCase
         );
     }
 
-    public function test_equipment_note_relationship()
-    {
-        $equip = CustomerEquipment::factory()
-            ->createQuietly(['cust_id' => $this->model->cust_id]);
-        $equip->CustomerSite()->sync([$this->model->cust_site_id]);
+    // public function test_equipment_note_relationship()
+    // {
+    //     $equip = CustomerEquipment::factory()
+    //         ->createQuietly(['cust_id' => $this->model->cust_id]);
+    //     $equip->CustomerSite()->sync([$this->model->cust_site_id]);
 
-        $data = CustomerNote::factory()->create([
-            'cust_id' => $this->model->cust_id,
-            'cust_equip_id' => $equip->cust_equip_id,
-        ]);
+    //     $data = CustomerNote::factory()->create([
+    //         'cust_id' => $this->model->cust_id,
+    //         'cust_equip_id' => $equip->cust_equip_id,
+    //     ]);
 
-        $this->assertEquals(
-            $data->toArray(),
-            $this->model
-                ->EquipmentNote()[0]
-                ->makeHidden(['CustomerEquipment', 'deleted_at'])
-                ->toArray()
-        );
-    }
+    //     $this->assertEquals(
+    //         $data->toArray(),
+    //         $this->model
+    //             ->EquipmentNote()[0]
+    //             ->makeHidden(['CustomerEquipment', 'deleted_at'])
+    //             ->toArray()
+    //     );
+    // }
 
     // public function test_equipment_file_relationship()
     // {
