@@ -1,6 +1,7 @@
 <?php
 
 // TODO - Refactor
+// TODO - Rebuild PDF Template
 
 namespace App\Http\Controllers\Customer;
 
@@ -17,8 +18,11 @@ class DownloadNoteController extends Controller
     /**
      * Download a Customer Note in PDF Form
      */
-    public function __invoke(Request $request, Customer $customer, CustomerNote $note): Response
-    {
+    public function __invoke(
+        Request $request,
+        Customer $customer,
+        CustomerNote $note
+    ): Response {
         Log::info('Customer Note ID '.$note->note_id.' downloaded by '.
                 $request->user()->username);
 

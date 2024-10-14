@@ -15,7 +15,9 @@ class CustomerEquipmentDataObserver
         $this->user = match (true) {
             ! is_null(request()->user()) => request()->user()->username,
             request()->ip() === '127.0.0.1' => 'Internal Service',
+            // @codeCoverageIgnoreStart
             default => request()->ip(),
+            // @codeCoverageIgnoreEnd
         };
     }
 
@@ -38,20 +40,5 @@ class CustomerEquipmentDataObserver
                 'new-value' => $logValue ? $data->value : $redacted,
             ]
         );
-    }
-
-    public function deleted(CustomerEquipmentData $data): void
-    {
-        //
-    }
-
-    public function restored(CustomerEquipmentData $data): void
-    {
-        //
-    }
-
-    public function forceDeleted(CustomerEquipmentData $data): void
-    {
-        //
     }
 }

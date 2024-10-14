@@ -1,7 +1,5 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
@@ -29,6 +27,10 @@ class ReAssignCustomerController extends Controller
     {
         dispatch(new ReAssignSiteJob($request));
 
-        return back()->with('success', 'Re-Assignment job started in background.  This may take some time');
+        return back()
+            ->with(
+                'success',
+                'Re-Assignment job started in background.  This may take some time'
+            );
     }
 }

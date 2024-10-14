@@ -16,7 +16,9 @@ class CustomerObserver
         $this->user = match (true) {
             ! is_null(request()->user()) => request()->user()->username,
             request()->ip() === '127.0.0.1' => 'Internal Service',
+            // @codeCoverageIgnoreStart
             default => request()->ip(),
+            // @codeCoverageIgnoreEnd
         };
     }
 
