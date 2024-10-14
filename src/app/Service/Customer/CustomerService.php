@@ -16,15 +16,13 @@ class CustomerService
      */
     public function createCustomer(CustomerRequest $requestData): Customer
     {
-        $slug = $this->generateSlug($requestData->name);
-        $requestData->merge(['slug' => $slug]);
-
-        $newCustomer = Customer::create($requestData->only([
+        $newCustomer = new Customer($requestData->only([
             'cust_id',
             'name',
             'dba_name',
-            'slug',
         ]));
+        $newCustomer->slug = $this->generateSlug($requestData->name);
+        $newCustomer->save();
 
         $this->createSite($requestData, $newCustomer);
 
@@ -79,20 +77,59 @@ class CustomerService
      */
     public function createSite(
         CustomerRequest|CustomerSiteRequest $requestData,
-        Customer $customer
+        ?Customer $customer
     ): CustomerSite {
+        // If the customer was not passed with request, find from customer id
+        if (is_null($customer)) {
+            $customer = Customer::find($requestData->cust_id);
+        }
+
         $site = new CustomerSite($requestData->only([
             'address',
             'city',
             'state',
             'zip',
         ]));
+
+        $slug = $this->generateSlug($requestData->site_name ?: $requestData->name, true);
         $site->site_name = $requestData->site_name ?: $requestData->name;
-        $site->site_slug = $requestData->site_slug ?: $requestData->slug;
+        $site->site_slug = $slug;
 
         $customer->CustomerSite()->save($site);
 
         return $site;
+    }
+
+    /**
+     * Update an existing customer site
+     */
+    public function updateSite(CustomerSiteRequest $requestData, CustomerSite $site): CustomerSite
+    {
+        // If name has changed, generate a new slug
+        if ($requestData->site_name !== $site->site_name) {
+            $slug = $this->generateSlug($requestData->site_name);
+            $requestData->merge(['site-slug' => $slug]);
+        }
+
+        $site->update($requestData->except(['cust_name']));
+
+        return $site;
+    }
+
+    /**
+     * Destroy a customer site
+     */
+    public function destroySite(CustomerSite $site, string $reason, ?bool $force = false): void
+    {
+        if ($force) {
+            $site->forceDelete();
+
+            return;
+        }
+
+        $site->deleted_reason = $reason;
+        $site->save();
+        $site->delete();
     }
 
     /**

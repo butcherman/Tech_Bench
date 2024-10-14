@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Observers\CustomerSiteObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+#[ObservedBy([CustomerSiteObserver::class])]
 class CustomerSite extends Model
 {
     use HasFactory;
@@ -52,9 +55,7 @@ class CustomerSite extends Model
             return $this->Customer->primary_site_id === $this->cust_site_id;
         }
 
-        // @codeCoverageIgnoreStart
         return false;
-        // @codeCoverageIgnoreEnd
     }
 
     public function getHrefAttribute()
