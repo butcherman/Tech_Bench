@@ -1,5 +1,7 @@
 <?php
 
+// TODO - Refactor
+
 namespace Tests\Feature\Auth;
 
 use App\Models\User;
@@ -8,6 +10,7 @@ use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Password;
+use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class ResetPasswordTest extends TestCase
@@ -19,7 +22,10 @@ class ResetPasswordTest extends TestCase
     {
         $response = $this->get(route('password.forgot'));
 
-        $response->assertSuccessful();
+        $response->assertSuccessful()
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('Auth/ForgotPassword')
+            );
         $this->assertGuest();
     }
 
@@ -28,7 +34,8 @@ class ResetPasswordTest extends TestCase
      */
     public function test_reset_password_form_while_logged_in()
     {
-        $user = User::factory()->create();
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
 
         $response = $this->actingAs($user)->get(route('password.forgot'));
 
@@ -42,7 +49,8 @@ class ResetPasswordTest extends TestCase
     {
         Notification::fake();
 
-        $user = User::factory()->create();
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
 
         $response = $this->post(route('password.forgot'), [
             'email' => $user->email,
@@ -91,7 +99,8 @@ class ResetPasswordTest extends TestCase
      */
     public function test_view_password_reset_form()
     {
-        $user = User::factory()->create();
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
         $token = Password::broker()->createToken($user);
 
         $response = $this->get(route('password.reset', [
@@ -107,7 +116,8 @@ class ResetPasswordTest extends TestCase
      */
     public function test_view_password_reset_form_no_token()
     {
-        $user = User::factory()->create();
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
         $token = Password::broker()->createToken($user);
 
         $response = $this->get(route('password.reset', $token));
@@ -120,7 +130,8 @@ class ResetPasswordTest extends TestCase
      */
     public function test_view_password_form_while_logged_in()
     {
-        $user = User::factory()->create();
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
         $token = Password::broker()->createToken($user);
 
         $response = $this->actingAs($user)->get(route('password.reset', $token));
@@ -135,7 +146,8 @@ class ResetPasswordTest extends TestCase
     {
         Notification::fake();
 
-        $user = User::factory()->create();
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
 
         $response = $this->post(route('password.reset'), [
             'token' => Password::broker()->createToken($user),
@@ -158,7 +170,7 @@ class ResetPasswordTest extends TestCase
      */
     public function test_submit_reset_password_form_invalid_token()
     {
-        $user = User::factory()->create([
+        $user = User::factory()->createQuietly([
             'password' => bcrypt('old-password'),
         ]);
 
@@ -181,7 +193,8 @@ class ResetPasswordTest extends TestCase
      */
     public function test_submit_reset_password_form_blank_new_pass()
     {
-        $user = User::factory()->create([
+        /** @var User $user */
+        $user = User::factory()->createQuietly([
             'password' => bcrypt('old-password'),
         ]);
         $token = Password::broker()->createToken($user);
@@ -208,7 +221,8 @@ class ResetPasswordTest extends TestCase
      */
     public function test_submit_reset_password_form_no_email()
     {
-        $user = User::factory()->create([
+        /** @var User $user */
+        $user = User::factory()->createQuietly([
             'password' => bcrypt('old-password'),
         ]);
         $token = Password::broker()->createToken($user);

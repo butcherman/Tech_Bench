@@ -1,8 +1,11 @@
 <?php
 
+// TODO - Refactor
+
 namespace App\Http\Controllers\User;
 
 use App\Actions\BuildUserSettings;
+use App\Actions\GetUserSettings;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\UserAccountRequest;
 use App\Http\Requests\User\UserSettingsRequest;
@@ -17,7 +20,7 @@ class UserSettingsController extends Controller
     /**
      * Show the users Settings and Account Information
      */
-    public function show(Request $request)
+    public function show(Request $request, GetUserSettings $userSettings)
     {
         $this->authorize('view', $request->user());
 
@@ -25,7 +28,7 @@ class UserSettingsController extends Controller
             'twoFaEnabled' => config('auth.twoFa.required')
                 && config('auth.twoFa.allow_save_device'),
             'devices' => DeviceToken::where('user_id', $request->user()->user_id)->get(),
-            'settings' => BuildUserSettings::build($request->user()),
+            'settings' => $userSettings($request->user()),   //  BuildUserSettings::build($request->user()),
         ]);
     }
 

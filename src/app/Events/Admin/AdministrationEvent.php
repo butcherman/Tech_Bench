@@ -7,17 +7,20 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class AdministrationEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
-     * Create a new event instance.
+     * Event is fired when an admin needs real time update of a working job
      */
     public function __construct(public string $msg)
     {
-        //
+        Log::debug('Administration Event Called', [
+            'message' => $msg,
+        ]);
     }
 
     /**
@@ -30,7 +33,10 @@ class AdministrationEvent implements ShouldBroadcast
         ];
     }
 
-    public function BroadcastAs()
+    /**
+     * Get the name the event should broadcast as
+     */
+    public function BroadcastAs(): string
     {
         return 'AdministrationEvent';
     }

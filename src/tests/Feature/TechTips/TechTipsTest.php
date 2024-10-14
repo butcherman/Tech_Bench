@@ -29,7 +29,7 @@ class TechTipsTest extends TestCase
 
     public function test_index()
     {
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('tech-tips.index'));
         $response->assertSuccessful();
     }
@@ -55,14 +55,14 @@ class TechTipsTest extends TestCase
                 'allow' => false,
             ]);
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('tech-tips.create'));
         $response->assertForbidden();
     }
 
     public function test_create()
     {
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->get(route('tech-tips.create'));
         $response->assertSuccessful();
     }
@@ -97,7 +97,7 @@ class TechTipsTest extends TestCase
         $dataArr['suppress'] = false;
         $dataArr['equipList'] = $equipList->pluck('equip_id')->toArray();
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->post(route('tech-tips.store'), $dataArr);
         $response->assertForbidden();
     }
@@ -110,7 +110,7 @@ class TechTipsTest extends TestCase
         $dataArr['suppress'] = false;
         $dataArr['equipList'] = $equipList->pluck('equip_id')->toArray();
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->post(route('tech-tips.store'), $dataArr);
         $response->assertStatus(302);
         $response->assertSessionHas('success', __('tips.created'));
@@ -140,7 +140,7 @@ class TechTipsTest extends TestCase
         $dataArr['suppress'] = false;
         $dataArr['equipList'] = $equipList->pluck('equip_id')->toArray();
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 3]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 3]))
             ->post(route('tech-tips.store'), $dataArr);
         $response->assertForbidden();
     }
@@ -153,7 +153,7 @@ class TechTipsTest extends TestCase
         $dataArr['suppress'] = false;
         $dataArr['equipList'] = $equipList->pluck('equip_id')->toArray();
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->post(route('tech-tips.store'), $dataArr);
         $response->assertStatus(302);
         $response->assertSessionHas('success', __('tips.created'));
@@ -180,7 +180,7 @@ class TechTipsTest extends TestCase
         $dataArr['suppress'] = false;
         $dataArr['equipList'] = $equipList->pluck('equip_id')->toArray();
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->withSession(['tip-file' => [$fileList->file_id]])
             ->post(route('tech-tips.store'), $dataArr);
 
@@ -215,7 +215,7 @@ class TechTipsTest extends TestCase
     {
         $tip = TechTip::factory()->create();
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('tech-tips.show', $tip->slug));
         $response->assertSuccessful();
     }
@@ -224,14 +224,14 @@ class TechTipsTest extends TestCase
     {
         $tip = TechTip::factory()->create();
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('tech-tips.show', $tip->tip_id));
         $response->assertSuccessful();
     }
 
     public function test_show_missing_tip()
     {
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('tech-tips.show', 'random-tip'));
         $response->assertSuccessful();
     }
@@ -261,7 +261,7 @@ class TechTipsTest extends TestCase
 
         $tip = TechTip::factory()->create();
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('tech-tips.edit', $tip->slug));
         $response->assertForbidden();
     }
@@ -270,7 +270,7 @@ class TechTipsTest extends TestCase
     {
         $tip = TechTip::factory()->create();
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->get(route('tech-tips.edit', $tip->slug));
         $response->assertSuccessful();
     }
@@ -301,7 +301,7 @@ class TechTipsTest extends TestCase
         $dataArr['equipList'] = $equipList->pluck('equip_id')->toArray();
         $dataArr['removedFiles'] = [];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->put(route('tech-tips.update', $tip->tip_id), $dataArr);
         $response->assertForbidden();
     }
@@ -316,7 +316,7 @@ class TechTipsTest extends TestCase
         $dataArr['equipList'] = $equipList->pluck('equip_id')->toArray();
         $dataArr['removedFiles'] = [];
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->put(route('tech-tips.update', $tip->tip_id), $dataArr);
         $response->assertStatus(302);
         $response->assertSessionHas('success', __('tips.updated'));
@@ -346,7 +346,7 @@ class TechTipsTest extends TestCase
         $dataArr['removedFiles'] = [];
         $dataArr['public'] = true;
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 2]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 2]))
             ->put(route('tech-tips.update', $tip->tip_id), $dataArr);
         $response->assertForbidden();
     }
@@ -376,7 +376,7 @@ class TechTipsTest extends TestCase
         $dataArr['equipList'] = $equipList->pluck('equip_id')->toArray();
         $dataArr['removedFiles'] = [$file2->file_id];
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->withSession(['tip-file' => [$file1->file_id]])
             ->put(route('tech-tips.update', $tip->tip_id), $dataArr);
         $response->assertStatus(302);
@@ -416,7 +416,7 @@ class TechTipsTest extends TestCase
     {
         $tip = TechTip::factory()->create();
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->delete(route('tech-tips.destroy', $tip->slug));
         $response->assertForbidden();
     }
@@ -425,7 +425,7 @@ class TechTipsTest extends TestCase
     {
         $tip = TechTip::factory()->create();
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->delete(route('tech-tips.destroy', $tip->slug));
         $response->assertStatus(302);
         $response->assertSessionHas('warning', __('tips.deleted'));
@@ -450,7 +450,7 @@ class TechTipsTest extends TestCase
     {
         $tip = TechTip::factory()->create();
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('admin.tech-tips.restore', $tip->tip_id));
         $response->assertForbidden();
     }
@@ -459,7 +459,7 @@ class TechTipsTest extends TestCase
     {
         $tip = TechTip::factory()->create();
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->get(route('admin.tech-tips.restore', $tip->tip_id));
         $response->assertStatus(302);
         $response->assertSessionHas('success', __('tips.restored'));
@@ -487,7 +487,7 @@ class TechTipsTest extends TestCase
     {
         $tip = TechTip::factory()->create();
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->delete(route('admin.tech-tips.force-delete', $tip->tip_id));
         $response->assertForbidden();
     }
@@ -500,7 +500,7 @@ class TechTipsTest extends TestCase
         $tip = TechTip::factory()->create();
         TechTipFile::factory()->count(5)->create(['tip_id' => $tip->tip_id]);
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->delete(route('admin.tech-tips.force-delete', $tip->tip_id));
         $response->assertStatus(302);
         $response->assertSessionHas('warning', __('tips.deleted'));

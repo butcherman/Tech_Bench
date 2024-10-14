@@ -14,8 +14,5 @@ class EmailChangedEvent
     /**
      * Event is triggered when a user changes their email address
      */
-    public function __construct(public string $oldEmail, public User $user)
-    {
-        //
-    }
+    public function __construct(public string $oldEmail, public User $user) {}
 }

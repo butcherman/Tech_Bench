@@ -5,15 +5,17 @@ namespace App\Http\Controllers\Admin\Config;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\LogoRequest;
 use App\Models\AppSettings;
+use App\Service\Admin\ApplicationSettingsService;
 use App\Traits\AppSettingsTrait;
 use Illuminate\Http\Response as HttpResponse;
-use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class LogoController extends Controller
 {
     use AppSettingsTrait;
+
+    public function __construct(protected ApplicationSettingsService $svc) {}
 
     /**
      * Display the current logo.
@@ -30,12 +32,7 @@ class LogoController extends Controller
      */
     public function update(LogoRequest $request): HttpResponse
     {
-        $logoLocation = $request->processLogo();
-        $this->saveSettings('app.logo', $logoLocation);
-
-        Log::notice('New Tech Bench Logo uploaded by '.$request->user()->username, [
-            'file-location' => $logoLocation,
-        ]);
+        $this->svc->processLogo($request);
 
         return response()->noContent();
     }

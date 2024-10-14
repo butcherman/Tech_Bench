@@ -7,6 +7,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
+use Inertia\Response;
 
 /**
  * Exception triggered when trying to access a customer that does not exist
@@ -29,7 +30,7 @@ class CustomerNotFoundException extends Exception
         ]);
     }
 
-    public function render()
+    public function render(): Response
     {
         $middlewareData = (new HandleInertiaRequests)->share($this->request);
 

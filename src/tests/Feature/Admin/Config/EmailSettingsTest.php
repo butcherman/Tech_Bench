@@ -3,6 +3,7 @@
 namespace Tests\Feature\Admin\Config;
 
 use App\Models\User;
+use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class EmailSettingsTest extends TestCase
@@ -20,16 +21,27 @@ class EmailSettingsTest extends TestCase
 
     public function test_show_no_permission()
     {
-        $response = $this->actingAs(User::factory()->create())
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+
+        $response = $this->actingAs($user)
             ->get(route('admin.email-settings.show'));
         $response->assertStatus(403);
     }
 
     public function test_show()
     {
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
+
+        $response = $this->actingAs($user)
             ->get(route('admin.email-settings.show'));
-        $response->assertSuccessful();
+
+        $response->assertSuccessful()
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('Admin/Config/Email')
+                ->has('settings')
+            );
     }
 
     /**
@@ -42,7 +54,7 @@ class EmailSettingsTest extends TestCase
             'username' => 'testName',
             'password' => 'blahBlah',
             'host' => 'randomHost.com',
-            'port' => 25,
+            'port' => '25',
             'encryption' => 'none',
             'require_aut' => true,
         ];
@@ -55,37 +67,41 @@ class EmailSettingsTest extends TestCase
 
     public function test_update_no_permission()
     {
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
         $data = [
             'from_address' => 'new@email.org',
             'username' => 'testName',
             'password' => 'blahBlah',
             'host' => 'randomHost.com',
-            'port' => 25,
+            'port' => '25',
             'encryption' => 'none',
             'require_aut' => true,
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs($user)
             ->put(route('admin.email-settings.update'), $data);
         $response->assertStatus(403);
     }
 
     public function test_update()
     {
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
         $data = [
             'from_address' => 'new@email.org',
             'username' => 'testName',
             'password' => 'blahBlah',
             'host' => 'randomHost.com',
-            'port' => 25,
+            'port' => '25',
             'encryption' => 'none',
             'require_auth' => true,
         ];
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs($user)
             ->put(route('admin.email-settings.update'), $data);
-        $response->assertStatus(302);
-        $response->assertSessionHas('success', __('admin.email.updated'));
+        $response->assertStatus(302)
+            ->assertSessionHas('success', __('admin.email.updated'));
 
         $this->assertDatabaseHas('app_settings', [
             'key' => 'mail.from.address',
@@ -113,6 +129,43 @@ class EmailSettingsTest extends TestCase
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'mail.mailers.smtp.require_auth',
+        ]);
+    }
+
+    public function test_update_auth_not_needed()
+    {
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
+        $data = [
+            'from_address' => 'new@email.org',
+            'username' => null,
+            'password' => null,
+            'host' => 'randomHost.com',
+            'port' => '25',
+            'encryption' => 'none',
+            'require_auth' => false,
+        ];
+
+        $response = $this->actingAs($user)
+            ->put(route('admin.email-settings.update'), $data);
+        $response->assertStatus(302)
+            ->assertSessionHas('success', __('admin.email.updated'));
+
+        $this->assertDatabaseHas('app_settings', [
+            'key' => 'mail.from.address',
+            'value' => $data['from_address'],
+        ]);
+        $this->assertDatabaseHas('app_settings', [
+            'key' => 'mail.mailers.smtp.host',
+            'value' => $data['host'],
+        ]);
+        $this->assertDatabaseHas('app_settings', [
+            'key' => 'mail.mailers.smtp.port',
+            'value' => $data['port'],
+        ]);
+        $this->assertDatabaseHas('app_settings', [
+            'key' => 'mail.mailers.smtp.encryption',
+            'value' => $data['encryption'],
         ]);
     }
 }

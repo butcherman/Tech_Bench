@@ -2,72 +2,66 @@
 
 namespace App\Actions\Socialite;
 
+use App\Exceptions\Auth\UnableToCreateAzureUserException;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Laravel\Socialite\Facades\Socialite;
+use SocialiteProviders\Azure\User as AzureUser;
 
 /**
  * Log user in via Office 365 Integration
- *
- * @codeCoverageIgnore
  */
 class AuthorizeUser
 {
-    protected $user;
-
     /**
-     * Try to authenticate the new user
-     * TODO - Type-hint $socUser
+     * Attempt to authenticate azure user
      */
-    public function processUser($socUser): bool|User
+    public function handle(): User
     {
-        if ($this->doesUserExist($socUser)) {
-            Auth::login($this->user, true);
-            $this->canBypassTwoFa();
-            Log::stack(['daily', 'auth'])
-                ->info('User '.$this->user->username.' logged in via Microsoft Azure');
+        $azureUser = Socialite::driver('azure')->user();
+        $localUser = $this->getLocalUser($azureUser);
 
-            return $this->user;
+        if (! $localUser) {
+            $localUser = $this->processNewUser($azureUser);
         }
 
-        //  If the user does not exist, determine if we can create them
-        if (config('services.azure.allow_register')) {
-            $this->buildUser($socUser);
-            Auth::login($this->user, true);
-            $this->canBypassTwoFa();
-            Log::stack(['daily', 'auth'])
-                ->info('User '.$this->user->username.' logged in via Microsoft Azure');
+        Auth::login($localUser, true);
 
-            return $this->user;
-        }
+        $this->bypass2fa();
 
-        Log::stack(['daily', 'auth'])->info('User '.$socUser->user['userPrincipalName'].
-            ' tried to login via Microsoft Azure, but failed because this user does not'.
-            ' exist in the database.');
+        Log::info('User '.$localUser->username.' logged in via Microsoft Azure');
 
-        return false;
+        return $localUser;
     }
 
     /**
-     * Determine if the user already exists in the database
+     * Get the local user from the database if they exist
      */
-    protected function doesUserExist($socUser): bool
+    protected function getLocalUser(AzureUser $azureUser): User|bool
     {
-        $user = User::where('email', $socUser->email)->first();
-        if ($user) {
-            $this->user = $user;
+        $user = User::where('email', $azureUser->mail)->first();
 
-            return true;
+        return $user ?? false;
+    }
+
+    /**
+     * Create a new user (if allowed) and authenticate this user
+     */
+    protected function processNewUser(AzureUser $azureUser): User
+    {
+        if (! config('services.azure.allow_register')) {
+            throw (new UnableToCreateAzureUserException($azureUser));
         }
 
-        return false;
+        return $this->buildUser($azureUser);
     }
 
     /**
      * Create the new user in the database
      */
-    protected function buildUser($socUser): void
+    protected function buildUser(AzureUser $socUser): User
     {
         $newUser = User::create([
             'role_id' => config('services.azure.default_role_id'),
@@ -78,14 +72,13 @@ class AuthorizeUser
             'password' => Hash::make($socUser->user['id']),
         ]);
 
-        $this->user = $newUser;
-        Log::info('New User '.$this->user->username.' created via Microsoft Azure driver');
+        return $newUser;
     }
 
     /**
      * Determine if the user can bypass 2FA and set necessary session
      */
-    protected function canBypassTwoFa(): void
+    protected function bypass2fa(): void
     {
         if (config('services.azure.allow_bypass_2fa')) {
             session()->put('2fa_verified', true);

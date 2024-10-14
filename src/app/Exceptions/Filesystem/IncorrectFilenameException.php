@@ -13,8 +13,10 @@ use Illuminate\Support\Facades\Log;
  */
 class IncorrectFilenameException extends Exception
 {
-    public function __construct(protected string $fileName, protected FileUpload $fileData)
-    {
+    public function __construct(
+        protected string $fileName,
+        protected FileUpload $fileData
+    ) {
         parent::__construct();
     }
 

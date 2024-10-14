@@ -10,15 +10,14 @@ class TechTipCommentObserver
 {
     protected $user;
 
-    /**
-     * @codeCoverageIgnore
-     */
     public function __construct()
     {
         $this->user = match (true) {
             request()->user() !== null => request()->user()->username,
             request()->ip() === '127.0.0.1' => 'Internal Service',
+            // @codeCoverageIgnoreStart
             default => request()->ip(),
+            // @codeCoverageIgnoreEnd
         };
     }
 

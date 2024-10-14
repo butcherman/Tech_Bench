@@ -16,7 +16,7 @@ class CustomerAlertsTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->customer = Customer::factory()->create();
+        $this->customer = Customer::factory()->createQuietly();
     }
 
     /**
@@ -32,14 +32,20 @@ class CustomerAlertsTest extends TestCase
 
     public function test_index_no_permission()
     {
-        $response = $this->actingAs(User::factory()->create())
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+
+        $response = $this->actingAs($user)
             ->get(route('customers.alerts.index', $this->customer->slug));
         $response->assertStatus(403);
     }
 
     public function test_index()
     {
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
+
+        $response = $this->actingAs($user)
             ->get(route('customers.alerts.index', $this->customer->slug));
         $response->assertSuccessful();
     }
@@ -49,31 +55,42 @@ class CustomerAlertsTest extends TestCase
      */
     public function test_store_guest()
     {
-        $data = CustomerAlert::factory()->make()->toArray();
+        Event::fake();
+
+        $data = CustomerAlert::factory()->make()->only(['message', 'type']);
 
         $response = $this->post(route('customers.alerts.store', $this->customer->slug), $data);
         $response->assertStatus(302);
         $response->assertRedirect(route('login'));
         $this->assertGuest();
+
+        Event::assertNotDispatched(CustomerAlertEvent::class);
     }
 
     public function test_store_no_permission()
     {
-        $data = CustomerAlert::factory()->make()->toArray();
+        Event::fake();
 
-        $response = $this->actingAs(User::factory()->create())
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+        $data = CustomerAlert::factory()->make()->only(['message', 'type']);
+
+        $response = $this->actingAs($user)
             ->post(route('customers.alerts.store', $this->customer->slug), $data);
         $response->assertStatus(403);
+
+        Event::assertNotDispatched(CustomerAlertEvent::class);
     }
 
     public function test_store()
     {
         Event::fake();
 
-        $data = CustomerAlert::factory()->make()->toArray();
-        $data['cust_id'] = $this->customer->cust_id;
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
+        $data = CustomerAlert::factory()->make()->only(['message', 'type']);
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs($user)
             ->post(route('customers.alerts.store', $this->customer->slug), $data);
         $response->assertStatus(302);
         $response->assertSessionHas('success', __('cust.alert.created'));
@@ -88,7 +105,10 @@ class CustomerAlertsTest extends TestCase
      */
     public function test_update_guest()
     {
-        $alert = CustomerAlert::factory()->create(['cust_id' => $this->customer->cust_id]);
+        Event::fake();
+
+        $alert = CustomerAlert::factory()
+            ->createQuietly(['cust_id' => $this->customer->cust_id]);
         $data = [
             'message' => 'updated message',
             'type' => 'success',
@@ -101,35 +121,47 @@ class CustomerAlertsTest extends TestCase
         $response->assertStatus(302);
         $response->assertRedirect(route('login'));
         $this->assertGuest();
+
+        Event::assertNotDispatched(CustomerAlertEvent::class);
     }
 
     public function test_update_no_permission()
     {
-        $alert = CustomerAlert::factory()->create(['cust_id' => $this->customer->cust_id]);
+        Event::fake();
+
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+        $alert = CustomerAlert::factory()
+            ->createQuietly(['cust_id' => $this->customer->cust_id]);
         $data = [
             'message' => 'updated message',
             'type' => 'success',
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs($user)
             ->put(route('customers.alerts.update', [
                 $this->customer->slug,
                 $alert->alert_id,
             ]), $data);
         $response->assertStatus(403);
+
+        Event::assertNotDispatched(CustomerAlertEvent::class);
     }
 
     public function test_update()
     {
         Event::fake();
 
-        $alert = CustomerAlert::factory()->create(['cust_id' => $this->customer->cust_id]);
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
+        $alert = CustomerAlert::factory()
+            ->createQuietly(['cust_id' => $this->customer->cust_id]);
         $data = [
             'message' => 'updated message',
             'type' => 'success',
         ];
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs($user)
             ->put(route('customers.alerts.update', [
                 $this->customer->slug,
                 $alert->alert_id,
@@ -147,31 +179,55 @@ class CustomerAlertsTest extends TestCase
      */
     public function test_destroy_guest()
     {
-        $alert = CustomerAlert::factory()->create(['cust_id' => $this->customer->cust_id]);
+        Event::fake();
 
-        $response = $this->delete(route('customers.alerts.destroy', [$this->customer->slug, $alert->alert_id]));
+        $alert = CustomerAlert::factory()
+            ->createQuietly(['cust_id' => $this->customer->cust_id]);
+
+        $response = $this->delete(route('customers.alerts.destroy', [
+            $this->customer->slug,
+            $alert->alert_id,
+        ]));
         $response->assertStatus(302);
         $response->assertRedirect(route('login'));
         $this->assertGuest();
+
+        Event::assertNotDispatched(CustomerAlertEvent::class);
     }
 
     public function test_destroy_no_permission()
     {
-        $alert = CustomerAlert::factory()->create(['cust_id' => $this->customer->cust_id]);
+        Event::fake();
 
-        $response = $this->actingAs(User::factory()->create())
-            ->delete(route('customers.alerts.destroy', [$this->customer->slug, $alert->alert_id]));
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+        $alert = CustomerAlert::factory()
+            ->createQuietly(['cust_id' => $this->customer->cust_id]);
+
+        $response = $this->actingAs($user)
+            ->delete(route('customers.alerts.destroy', [
+                $this->customer->slug,
+                $alert->alert_id,
+            ]));
         $response->assertStatus(403);
+
+        Event::assertNotDispatched(CustomerAlertEvent::class);
     }
 
     public function test_destroy()
     {
         Event::fake();
 
-        $alert = CustomerAlert::factory()->create(['cust_id' => $this->customer->cust_id]);
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
+        $alert = CustomerAlert::factory()
+            ->createQuietly(['cust_id' => $this->customer->cust_id]);
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
-            ->delete(route('customers.alerts.destroy', [$this->customer->slug, $alert->alert_id]));
+        $response = $this->actingAs($user)
+            ->delete(route('customers.alerts.destroy', [
+                $this->customer->slug,
+                $alert->alert_id,
+            ]));
         $response->assertStatus(302);
         $response->assertSessionHas('warning', __('cust.alert.destroy'));
 

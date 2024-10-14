@@ -2,20 +2,13 @@
 
 namespace App\Features;
 
-use Illuminate\Support\Facades\Log;
-
 class PublicTechTipFeature
 {
     /**
-     * Resolve the feature's initial value.
+     * Determine if Public Tech Tips are enabled
      */
     public function resolve(): bool
     {
-        Log::debug('Checking status of Feature - Public Tech Tip');
-
-        // Check if feature is enabled in config settings
-        $isEnabled = (bool) config('techTips.allow_public');
-
-        return $isEnabled;
+        return config('tech-tips.allow_public');
     }
 }

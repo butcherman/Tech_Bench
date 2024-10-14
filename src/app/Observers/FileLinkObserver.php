@@ -10,15 +10,14 @@ class FileLinkObserver
 {
     protected $user;
 
-    /**
-     * @codeCoverageIgnore
-     */
     public function __construct()
     {
         $this->user = match (true) {
             request()->user() !== null => request()->user()->username,
             request()->ip() === '127.0.0.1' => 'Internal Service',
+            // @codeCoverageIgnoreStart
             default => request()->ip(),
+            // @codeCoverageIgnoreEnd
         };
     }
 
@@ -47,7 +46,7 @@ class FileLinkObserver
     /**
      * Before a File Link is deleted, we queue all files for deletion
      */
-    public function deleting(FileLink $fileLink)
+    public function deleting(FileLink $fileLink): void
     {
         $fileList = $fileLink->FileUpload->pluck('file_id')->toArray();
 

@@ -1,25 +1,26 @@
 <?php
 
+// TODO - Refactor
+
 namespace App\Http\Controllers\Admin;
 
-use App\Actions\BuildAdminMenu;
+use App\Actions\AdministrationMenu;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class AdminController extends Controller
 {
     /**
      * Handle the incoming request.
      */
-    public function __invoke(Request $request)
+    public function __invoke(Request $request, AdministrationMenu $menu): Response
     {
-        Gate::authorize('admin-link', $request->user());
-        $menu = new BuildAdminMenu($request->user());
+        $this->authorize('admin-link');
 
         return Inertia::render('Admin/Index', [
-            'menu' => $menu->getAdminMenu(),
+            'menu' => $menu($request->user()),
         ]);
     }
 }

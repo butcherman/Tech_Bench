@@ -2,13 +2,19 @@
 
 namespace App\Models;
 
+use App\Observers\CustomerObserver;
+use App\Traits\CustomerBroadcastingTrait;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\BroadcastableModelEventOccurred;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Scout\Searchable;
 
+#[ObservedBy([CustomerObserver::class])]
 class Customer extends Model
 {
+    use CustomerBroadcastingTrait;
     use HasFactory;
     use Searchable;
     use SoftDeletes;
@@ -103,6 +109,24 @@ class Customer extends Model
             'cust_id',
             'user_id'
         )->withTimestamps();
+    }
+
+    /***************************************************************************
+     * Model Broadcasting
+     ***************************************************************************/
+    public function broadcastOn(string $event)
+    {
+        return match ($event) {
+            'deleted', 'trashed', 'created' => [],
+            default => $this->getCustomerChannel(),
+        };
+    }
+
+    public function newBroadcastableModelEvent(string $event): BroadcastableModelEventOccurred
+    {
+        return (new BroadcastableModelEventOccurred(
+            $this, $event
+        ))->dontBroadcastToCurrentUser();
     }
 
     /***************************************************************************

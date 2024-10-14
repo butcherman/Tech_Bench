@@ -2,20 +2,19 @@
 
 namespace App\Http\Controllers\Customer;
 
-use App\Enum\CrudAction;
-use App\Events\Customer\CustomerAlertEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customer\CustomerAlertRequest;
 use App\Models\Customer;
 use App\Models\CustomerAlert;
+use App\Service\Customer\CustomerAlertService;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class CustomerAlertsController extends Controller
 {
+    public function __construct(protected CustomerAlertService $svc) {}
+
     /**
      * Display a listing of alerts for the requested customer
      */
@@ -24,8 +23,8 @@ class CustomerAlertsController extends Controller
         $this->authorize('viewAny', CustomerAlert::class);
 
         return Inertia::render('Customer/Alert/Index', [
-            'customer' => $customer,
-            'alerts' => $customer->CustomerAlert,
+            'customer' => fn () => $customer,
+            'alerts' => fn () => $customer->CustomerAlert,
         ]);
     }
 
@@ -34,19 +33,7 @@ class CustomerAlertsController extends Controller
      */
     public function store(CustomerAlertRequest $request, Customer $customer): RedirectResponse
     {
-        $newAlert = CustomerAlert::create([
-            'cust_id' => $customer->cust_id,
-            'message' => $request->message,
-            'type' => $request->type,
-        ]);
-
-        Log::info(
-            'New Customer Alert created for '.
-            $customer->name.' by '.$request->user()->username,
-            $newAlert->toArray()
-        );
-
-        event(new CustomerAlertEvent($customer, $newAlert, CrudAction::Create));
+        $this->svc->createCustomerAlert($request, $customer);
 
         return back()->with('success', __('cust.alert.created'));
     }
@@ -59,15 +46,11 @@ class CustomerAlertsController extends Controller
         Customer $customer,
         CustomerAlert $alert
     ): RedirectResponse {
-        $alert->update([
-            'message' => $request->message,
-            'type' => $request->type,
-        ]);
-
-        Log::info('Customer Alert Updated for '.$customer->name.
-            ' by '.$request->user()->username, $alert->toArray());
-
-        event(new CustomerAlertEvent($customer, $alert, CrudAction::Update));
+        $this->svc->updateCustomerAlert(
+            $request,
+            $customer,
+            $alert
+        );
 
         return back()->with('success', __('cust.alert.updated'));
     }
@@ -75,19 +58,11 @@ class CustomerAlertsController extends Controller
     /**
      * Remove the specified customer alert
      */
-    public function destroy(
-        Request $request,
-        Customer $customer,
-        CustomerAlert $alert
-    ): RedirectResponse {
+    public function destroy(Customer $customer, CustomerAlert $alert): RedirectResponse
+    {
         $this->authorize('delete', $alert);
 
-        $alert->delete();
-
-        Log::info('Customer Alert for '.$customer->name.
-            ' deleted by '.$request->user()->username, $alert->toArray());
-
-        event(new CustomerAlertEvent($customer, $alert, CrudAction::Destroy));
+        $this->svc->removeCustomerAlert($customer, $alert);
 
         return back()->with('warning', __('cust.alert.destroy'));
     }

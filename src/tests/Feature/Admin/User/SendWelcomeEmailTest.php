@@ -2,11 +2,9 @@
 
 namespace Tests\Feature\Admin\User;
 
+use App\Jobs\User\SendWelcomeEmailJob;
 use App\Models\User;
-use App\Models\UserInitialize;
-use App\Notifications\User\SendWelcomeEmail;
-use Illuminate\Support\Facades\Notification;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Bus;
 use Tests\TestCase;
 
 class SendWelcomeEmailTest extends TestCase
@@ -16,62 +14,46 @@ class SendWelcomeEmailTest extends TestCase
      */
     public function test_invoke_guest()
     {
-        $user = User::factory()->create();
+        Bus::fake();
+
+        $user = User::factory()->createQuietly();
 
         $response = $this->get(route('admin.user.send-welcome', $user->username));
         $response->assertStatus(302);
         $response->assertRedirect(route('login'));
         $this->assertGuest();
+
+        Bus::assertNothingDispatched();
     }
 
     public function test_invoke_no_permission()
     {
-        $user = User::factory()->create();
+        Bus::fake();
 
-        $response = $this->actingAs(User::factory()->create())
-            ->get(route('admin.user.send-welcome', $user->username));
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+        $newUser = User::factory()->createQuietly();
+
+        $response = $this->actingAs($user)
+            ->get(route('admin.user.send-welcome', $newUser->username));
         $response->assertStatus(403);
+
+        Bus::assertNothingDispatched();
     }
 
     public function test_invoke()
     {
-        Notification::fake();
+        Bus::fake();
 
-        $user = User::factory()->create();
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
+        $newUser = User::factory()->createQuietly();
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
-            ->get(route('admin.user.send-welcome', $user->username));
+        $response = $this->actingAs($user)
+            ->get(route('admin.user.send-welcome', $newUser->username));
         $response->assertStatus(302);
         $response->assertSessionHas('success', __('admin.user.welcome_sent'));
-        $this->assertDatabaseHas('user_initializes', [
-            'username' => $user->username,
-        ]);
 
-        Notification::assertSentTo($user, SendWelcomeEmail::class);
-    }
-
-    public function test_invoke_with_existing_invite()
-    {
-        Notification::fake();
-
-        $user = User::factory()->create();
-        $oldLink = UserInitialize::create([
-            'username' => $user->username,
-            'token' => Str::uuid(),
-        ]);
-
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
-            ->get(route('admin.user.send-welcome', $user->username));
-        $response->assertStatus(302);
-        $response->assertSessionHas('success', __('admin.user.welcome_sent'));
-        $this->assertDatabaseHas('user_initializes', [
-            'username' => $user->username,
-        ]);
-        $this->assertDatabaseMissing('user_initializes', [
-            'id' => $oldLink->id,
-            'token' => $oldLink->token,
-        ]);
-
-        Notification::assertSentTo($user, SendWelcomeEmail::class);
+        Bus::assertDispatched(SendWelcomeEmailJob::class);
     }
 }

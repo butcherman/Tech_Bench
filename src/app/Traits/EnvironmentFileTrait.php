@@ -7,8 +7,6 @@ use Illuminate\Support\Facades\Artisan;
 
 trait EnvironmentFileTrait
 {
-    protected $envFile;
-
     /**
      * Get the value of a current .env key
      */
@@ -65,7 +63,6 @@ trait EnvironmentFileTrait
             return false;
         }
 
-        // $input .= '\n'.$key.'='.$value;
         $input .= "\n{$key}={$value}\n";
 
         file_put_contents($this->laravel->environmentFilePath(), $input);

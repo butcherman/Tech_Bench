@@ -20,14 +20,14 @@ class BackupSettingsTest extends TestCase
 
     public function test_show_no_permission()
     {
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('maint.backups.settings.show'));
         $response->assertStatus(403);
     }
 
     public function test_show()
     {
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->get(route('maint.backups.settings.show'));
         $response->assertSuccessful();
     }
@@ -61,7 +61,7 @@ class BackupSettingsTest extends TestCase
             'mail_to' => 'randomDude@noemail.com',
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->put(route('maint.backups.settings.update'), $data);
         $response->assertForbidden();
     }
@@ -76,7 +76,7 @@ class BackupSettingsTest extends TestCase
             'mail_to' => 'randomDude@noemail.com',
         ];
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->put(route('maint.backups.settings.update'), $data);
         $response->assertStatus(302);
         $response->assertSessionHas('success', __('admin.backups.settings-successful'));

@@ -6,15 +6,15 @@ use App\Exceptions\Auth\InvalidResetPasswordTokenException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\ResetPasswordRequest;
 use App\Service\Cache;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class ResetPasswordController extends Controller
 {
     /**
-     * Handle the incoming request.
+     * Submit the Reset Password Form
      */
-    public function __invoke(ResetPasswordRequest $request)
+    public function __invoke(ResetPasswordRequest $request): Response
     {
         //  If the user is trying to visit the page without a proper token or email, show 404
         if (! $request->has('token') || ! $request->has('email')) {
@@ -26,6 +26,5 @@ class ResetPasswordController extends Controller
             'email' => $request->email,
             'rules' => Cache::PasswordRules(),
         ]);
-
     }
 }

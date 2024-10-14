@@ -2,7 +2,10 @@
 
 namespace Tests\Feature\Admin\Config;
 
+use App\Events\Config\UrlChangedEvent;
 use App\Models\User;
+use Illuminate\Support\Facades\Event;
+use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class BasicSettingsTest extends TestCase
@@ -20,16 +23,28 @@ class BasicSettingsTest extends TestCase
 
     public function test_show_no_permission()
     {
-        $response = $this->actingAs(User::factory()->create())
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+
+        $response = $this->actingAs($user)
             ->get(route('admin.basic-settings.show'));
-        $response->assertStatus(403);
+        $response->assertForbidden();
     }
 
     public function test_show()
     {
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
+
+        $response = $this->actingAs($user)
             ->get(route('admin.basic-settings.show'));
-        $response->assertSuccessful();
+
+        $response->assertSuccessful()
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('Admin/Config/Settings')
+                ->has('settings')
+                ->has('timezone-list')
+            );
     }
 
     /**
@@ -37,6 +52,8 @@ class BasicSettingsTest extends TestCase
      */
     public function test_update_guest()
     {
+        Event::fake();
+
         $data = [
             'url' => 'https://someUrl.noSite',
             'timezone' => 'UTC',
@@ -48,10 +65,16 @@ class BasicSettingsTest extends TestCase
         $response->assertStatus(302);
         $response->assertRedirect(route('login'));
         $this->assertGuest();
+
+        Event::assertNotDispatched(UrlChangedEvent::class);
     }
 
     public function test_update_no_permission()
     {
+        Event::fake();
+
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
         $data = [
             'url' => 'https://someUrl.noSite',
             'timezone' => 'UTC',
@@ -59,24 +82,32 @@ class BasicSettingsTest extends TestCase
             'company_name' => 'Bobs Fancy Cats',
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs($user)
             ->put(route('admin.basic-settings.update'), $data);
-        $response->assertStatus(403);
+
+        $response->assertForbidden();
+
+        Event::assertNotDispatched(UrlChangedEvent::class);
     }
 
     public function test_update()
     {
+        Event::fake();
+
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
         $data = [
             'url' => 'https://someUrl.noSite',
             'timezone' => 'America/LosAngeles',
-            'max_filesize' => 123456,
+            'max_filesize' => '123456',
             'company_name' => 'Bobs Fancy Cats',
         ];
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs($user)
             ->put(route('admin.basic-settings.update'), $data);
-        $response->assertStatus(302);
-        $response->assertSessionHas('success', __('admin.config.updated'));
+
+        $response->assertStatus(302)
+            ->assertSessionHas('success', __('admin.config.updated'));
 
         $this->assertDatabaseHas('app_settings', [
             'key' => 'app.url',
@@ -94,5 +125,41 @@ class BasicSettingsTest extends TestCase
             'key' => 'app.company_name',
             'value' => $data['company_name'],
         ]);
+
+        Event::assertDispatched(UrlChangedEvent::class);
+    }
+
+    public function test_update_url_not_changed()
+    {
+        Event::fake();
+
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
+        $data = [
+            'url' => str_replace('https://', '', config('app.url')),
+            'timezone' => 'America/LosAngeles',
+            'max_filesize' => '123456',
+            'company_name' => 'Bobs Fancy Cats',
+        ];
+
+        $response = $this->actingAs($user)
+            ->put(route('admin.basic-settings.update'), $data);
+        $response->assertStatus(302)
+            ->assertSessionHas('success', __('admin.config.updated'));
+
+        $this->assertDatabaseHas('app_settings', [
+            'key' => 'app.timezone',
+            'value' => $data['timezone'],
+        ]);
+        $this->assertDatabaseHas('app_settings', [
+            'key' => 'filesystems.max_filesize',
+            'value' => $data['max_filesize'],
+        ]);
+        $this->assertDatabaseHas('app_settings', [
+            'key' => 'app.company_name',
+            'value' => $data['company_name'],
+        ]);
+
+        Event::assertNotDispatched(UrlChangedEvent::class);
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+// TODO - Refactor
+
 namespace App\Http\Requests\FileLink;
 
 use App\Models\FileLink;
@@ -33,6 +35,6 @@ class FileLinkSettingsRequest extends FormRequest
 
     public function updateFileLinkSettings()
     {
-        $this->saveSettingsArray($this->all(), 'fileLink');
+        $this->saveSettingsArray($this->all(), 'file-link');
     }
 }

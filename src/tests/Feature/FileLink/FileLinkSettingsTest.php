@@ -20,27 +20,36 @@ class FileLinkSettingsTest extends TestCase
 
     public function test_show_feature_disabled()
     {
-        config(['fileLink.feature_enabled' => false]);
+        config(['file-link.feature_enabled' => false]);
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
+
+        $response = $this->actingAs($user)
             ->get(route('admin.links.settings.show'));
         $response->assertForbidden();
     }
 
     public function test_show_no_permission()
     {
-        config(['fileLink.feature_enabled' => true]);
+        config(['file-link.feature_enabled' => true]);
 
-        $response = $this->actingAs(User::factory()->create())
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+
+        $response = $this->actingAs($user)
             ->get(route('admin.links.settings.show'));
         $response->assertForbidden();
     }
 
     public function test_show()
     {
-        config(['fileLink.feature_enabled' => true]);
+        config(['file-link.feature_enabled' => true]);
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
+
+        $response = $this->actingAs($user)
             ->get(route('admin.links.settings.show'));
         $response->assertSuccessful();
     }
@@ -51,9 +60,9 @@ class FileLinkSettingsTest extends TestCase
     public function test_update_guest()
     {
         $data = [
-            'default_link_life' => 30,
+            'default_link_life' => '30',
             'auto_delete' => true,
-            'auto_delete_days' => 365,
+            'auto_delete_days' => '365',
             'auto_delete_override' => false,
         ];
 
@@ -65,66 +74,70 @@ class FileLinkSettingsTest extends TestCase
 
     public function test_update_feature_disabled()
     {
+        config(['file-link.feature_enabled' => false]);
+
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
         $data = [
-            'default_link_life' => 30,
+            'default_link_life' => '30',
             'auto_delete' => true,
-            'auto_delete_days' => 365,
+            'auto_delete_days' => '365',
             'auto_delete_override' => false,
         ];
 
-        config(['fileLink.feature_enabled' => false]);
-
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs($user)
             ->put(route('admin.links.settings.update'), $data);
         $response->assertForbidden();
     }
 
     public function test_update_no_permission()
     {
+        config(['file-link.feature_enabled' => true]);
+
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
         $data = [
-            'default_link_life' => 30,
+            'default_link_life' => '30',
             'auto_delete' => true,
-            'auto_delete_days' => 365,
+            'auto_delete_days' => '365',
             'auto_delete_override' => false,
         ];
 
-        config(['fileLink.feature_enabled' => true]);
-
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs($user)
             ->put(route('admin.links.settings.update'), $data);
         $response->assertForbidden();
     }
 
     public function test_update()
     {
+        config(['file-link.feature_enabled' => true]);
+
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
         $data = [
-            'default_link_life' => 30,
+            'default_link_life' => '30',
             'auto_delete' => false,
-            'auto_delete_days' => 365,
+            'auto_delete_days' => '365',
             'auto_delete_override' => false,
         ];
 
-        config(['fileLink.feature_enabled' => true]);
-
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs($user)
             ->put(route('admin.links.settings.update'), $data);
         $response->assertStatus(302);
 
         $this->assertDatabaseHas('app_settings', [
-            'key' => 'fileLink.default_link_life',
-            'value' => 30,
+            'key' => 'file-link.default_link_life',
+            'value' => '30',
         ]);
         $this->assertDatabaseHas('app_settings', [
-            'key' => 'fileLink.auto_delete',
-            // 'value' => true,
+            'key' => 'file-link.auto_delete',
         ]);
         $this->assertDatabaseHas('app_settings', [
-            'key' => 'fileLink.auto_delete_days',
-            'value' => 365,
+            'key' => 'file-link.auto_delete_days',
+            'value' => '365',
         ]);
         $this->assertDatabaseHas('app_settings', [
-            'key' => 'fileLink.auto_delete_override',
-            // 'value' => false,
+            'key' => 'file-link.auto_delete_override',
         ]);
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+// TODO - Refactor
+
 namespace App\Http\Controllers\TechTips;
 
 use App\Http\Controllers\Controller;
@@ -20,8 +22,8 @@ class TechTipsSettingsController extends Controller
 
         return Inertia::render('TechTips/Admin', [
             'settings' => [
-                'allow_comments' => (bool) config('techTips.allow_comments'),
-                'allow_public' => (bool) config('techTips.allow_public'),
+                'allow_comments' => (bool) config('tech-tips.allow_comments'),
+                'allow_public' => (bool) config('tech-tips.allow_public'),
             ],
         ]);
     }

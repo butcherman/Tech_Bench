@@ -5,15 +5,17 @@ namespace App\Http\Controllers\Customer;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customer\CustomerSettingsRequest;
 use App\Models\Customer;
+use App\Service\Customer\CustomerAdministrationService;
 use App\Traits\AppSettingsTrait;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class CustomerAdminController extends Controller
 {
     use AppSettingsTrait;
+
+    public function __construct(protected CustomerAdministrationService $svc) {}
 
     /**
      * Show the form for editing customer settings
@@ -35,11 +37,8 @@ class CustomerAdminController extends Controller
      */
     public function update(CustomerSettingsRequest $request): RedirectResponse
     {
-        $this->saveSettingsArray($request->toArray(), 'customer');
+        $this->svc->updateCustomerSettings($request);
 
-        Log::info('Customer Settings Updated By '.
-            $request->user()->username, $request->toArray());
-
-        return back()->with('success', 'Customer Settings Updated');
+        return back()->with('success', __('cust.admin.settings_updated'));
     }
 }

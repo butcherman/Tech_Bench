@@ -24,22 +24,24 @@ class EmailSettingsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'from_address' => 'required|email',
-            'username' => 'required_if:require_auth,true',
-            'password' => 'required_if:require_auth,true',
-            'host' => 'required|string',
-            'port' => 'required|numeric',
-            'encryption' => 'required|string',
-            'require_auth' => 'required|boolean',
+            'from_address' => ['required', 'email'],
+            'username' => ['required_if:require_auth,true'],
+            'password' => ['required_if:require_auth,true'],
+            'host' => ['required', 'string'],
+            'port' => ['required', 'numeric'],
+            'encryption' => ['required', 'string'],
+            'require_auth' => ['required', 'boolean'],
         ];
     }
 
     /**
-     * Save the new email settings
+     * Remove the username and password fields if Authentication is not needed
      */
-    public function processSettings()
+    public function passedValidation(): void
     {
-        $this->saveSettings('mail.from.address', $this->from_address);
-        $this->saveSettingsArray($this->except('from_address'), 'mail.mailers.smtp');
+        if (! $this->require_auth) {
+            $this->request->remove('username');
+            $this->request->remove('password');
+        }
     }
 }

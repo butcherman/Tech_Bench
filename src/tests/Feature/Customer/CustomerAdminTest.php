@@ -20,14 +20,20 @@ class CustomerAdminTest extends TestCase
 
     public function test_edit_no_permission()
     {
-        $response = $this->actingAs(User::factory()->create())
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+
+        $response = $this->actingAs($user)
             ->get(route('customers.settings.edit'));
         $response->assertStatus(403);
     }
 
     public function test_edit()
     {
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
+
+        $response = $this->actingAs($user)
             ->get(route('customers.settings.edit'));
         $response->assertSuccessful();
     }
@@ -52,6 +58,8 @@ class CustomerAdminTest extends TestCase
 
     public function test_update_no_permission()
     {
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
         $data = [
             'select_id' => false,
             'update_slug' => false,
@@ -59,13 +67,15 @@ class CustomerAdminTest extends TestCase
             'auto_purge' => false,
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs($user)
             ->put(route('customers.settings.update'), $data);
         $response->assertStatus(403);
     }
 
     public function test_update()
     {
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
         $data = [
             'select_id' => false,
             'update_slug' => false,
@@ -73,18 +83,16 @@ class CustomerAdminTest extends TestCase
             'auto_purge' => false,
         ];
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs($user)
             ->put(route('customers.settings.update'), $data);
         $response->assertStatus(302);
-        $response->assertSessionHas('success', 'Customer Settings Updated');
+        $response->assertSessionHas('success', __('cust.admin.settings_updated'));
 
         $this->assertDatabaseHas('app_settings', [
             'key' => 'customer.select_id',
-            // 'value' => false,
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'customer.update_slug',
-            // 'value' => false,
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'customer.default_state',
@@ -92,7 +100,6 @@ class CustomerAdminTest extends TestCase
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'customer.auto_purge',
-            // 'value' => false,
         ]);
     }
 }

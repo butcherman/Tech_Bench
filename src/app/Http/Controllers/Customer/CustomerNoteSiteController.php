@@ -2,22 +2,25 @@
 
 namespace App\Http\Controllers\Customer;
 
-use App\Actions\BuildCustomerPermissions;
-use App\Enum\CrudAction;
-use App\Events\Customer\CustomerNoteEvent;
+use App\Actions\CustomerPermissions;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customer\CustomerNoteRequest;
 use App\Models\Customer;
 use App\Models\CustomerNote;
 use App\Models\CustomerSite;
+use App\Service\Customer\CustomerNoteService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class CustomerNoteSiteController extends Controller
 {
+    public function __construct(
+        protected CustomerPermissions $permissions,
+        protected CustomerNoteService $svc
+    ) {}
+
     /**
      * Show the form for creating a new resource.
      */
@@ -26,37 +29,43 @@ class CustomerNoteSiteController extends Controller
         $this->authorize('create', CustomerNote::class);
 
         return Inertia::render('Customer/Note/Create', [
-            'permissions' => fn () => BuildCustomerPermissions::build($request->user()),
+            'permissions' => fn () => $this->permissions->get($request->user()),
             'customer' => fn () => $customer,
             'site' => fn () => $site,
             'siteList' => fn () => $customer->CustomerSite->makeVisible('href'),
-            'equipmentList' => fn () => $customer->load('CustomerEquipment')->CustomerEquipment,
+            'equipmentList' => fn () => $customer->load('CustomerEquipment')
+                ->CustomerEquipment,
         ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(CustomerNoteRequest $request, Customer $customer, CustomerSite $site): RedirectResponse
-    {
-        $newNote = $request->createNote();
+    public function store(
+        CustomerNoteRequest $request,
+        Customer $customer,
+        CustomerSite $site
+    ): RedirectResponse {
+        $newNote = $this->svc->createCustomerNote($request, $customer);
 
-        Log::info('New Customer Note created for '.$customer->name.
-            ' by '.$request->user()->username, $newNote->toArray());
-
-        event(new CustomerNoteEvent($customer, $newNote, CrudAction::Create));
-
-        return redirect(route('customers.sites.show', [$customer->slug, $site->site_slug]))
+        return redirect(route('customers.sites.show', [
+            $customer->slug,
+            $site->site_slug,
+        ]))
             ->with('success', __('cust.note.created'));
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Request $request, Customer $customer, CustomerSite $site, CustomerNote $note): Response
-    {
+    public function show(
+        Request $request,
+        Customer $customer,
+        CustomerSite $site,
+        CustomerNote $note
+    ): Response {
         return Inertia::render('Customer/Note/Show', [
-            'permissions' => fn () => BuildCustomerPermissions::build($request->user()),
+            'permissions' => fn () => $this->permissions->get($request->user()),
             'customer' => fn () => $customer,
             'siteList' => fn () => $note->CustomerSite->makeVisible('href'),
             'note' => fn () => $note,
@@ -67,12 +76,16 @@ class CustomerNoteSiteController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Request $request, Customer $customer, CustomerSite $site, CustomerNote $note): Response
-    {
+    public function edit(
+        Request $request,
+        Customer $customer,
+        CustomerSite $site,
+        CustomerNote $note
+    ): Response {
         $this->authorize('update', $note);
 
         return Inertia::render('Customer/Note/Edit', [
-            'permissions' => fn () => BuildCustomerPermissions::build($request->user()),
+            'permissions' => fn () => $this->permissions->get($request->user()),
             'customer' => fn () => $customer,
             'siteList' => fn () => $customer->CustomerSite->makeVisible('href'),
             'equipmentList' => fn () => $customer->CustomerEquipment,
@@ -90,12 +103,7 @@ class CustomerNoteSiteController extends Controller
         CustomerSite $site,
         CustomerNote $note
     ): RedirectResponse {
-        $updatedNote = $request->updateNote();
-
-        Log::info('Customer Note for '.$customer->name.
-            ' updated by '.$request->user()->username, $updatedNote->toArray());
-
-        event(new CustomerNoteEvent($customer, $updatedNote, CrudAction::Update));
+        $updatedNote = $this->svc->updateCustomerNote($request, $note);
 
         return redirect(route('customers.site.notes.show', [
             $customer->slug,
@@ -108,19 +116,13 @@ class CustomerNoteSiteController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy(
-        Request $request,
         Customer $customer,
         CustomerSite $site,
         CustomerNote $note
     ): RedirectResponse {
         $this->authorize('delete', $note);
 
-        $note->delete();
-
-        Log::notice('Customer Note for '.$customer->name.
-            ' deleted by '.$request->user()->username, $note->toArray());
-
-        event(new CustomerNoteEvent($customer, $note, CrudAction::ForceDelete));
+        $this->svc->destroyCustomerNote($note);
 
         return redirect(route('customers.sites.show', [
             $customer->slug,

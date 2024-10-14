@@ -3,12 +3,13 @@
 namespace App\Http\Requests\Admin;
 
 use App\Models\AppSettings;
+use App\Traits\AppSettingsTrait;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\File;
-use Illuminate\Support\Facades\Storage;
 
 class LogoRequest extends FormRequest
 {
+    use AppSettingsTrait;
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -23,18 +24,7 @@ class LogoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'file' => 'required|mimes:jpeg,bmp,png,jpg,gif',
+            'file' => ['required', 'mimes:jpeg,bmp,png,jpg,gif'],
         ];
-    }
-
-    /**
-     * Save the Logo File
-     */
-    public function processLogo()
-    {
-        $path = 'images/logo';
-        $storedFile = Storage::disk('public')->putFile($path, new File($this->file));
-
-        return '/storage/'.$storedFile;
     }
 }

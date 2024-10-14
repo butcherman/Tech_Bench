@@ -22,7 +22,10 @@ class SendTestEmailTest extends TestCase
 
     public function test_invoke_no_permission()
     {
-        $response = $this->actingAs(User::factory()->create())
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+
+        $response = $this->actingAs($user)
             ->get(route('admin.test-email'));
         $response->assertStatus(403);
     }
@@ -31,7 +34,10 @@ class SendTestEmailTest extends TestCase
     {
         Notification::fake();
 
-        $response = $this->actingAs($user = User::factory()->create(['role_id' => 1]))
+        /** @var User $user */
+        $user = $user = User::factory()->createQuietly(['role_id' => 1]);
+
+        $response = $this->actingAs($user)
             ->get(route('admin.test-email'));
         $response->assertStatus(302);
 

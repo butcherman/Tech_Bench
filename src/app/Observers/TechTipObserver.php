@@ -5,28 +5,28 @@ namespace App\Observers;
 use App\Events\File\FileDataDeletedEvent;
 use App\Models\TechTip;
 use App\Models\TechTipView;
+use App\Models\User;
 use Illuminate\Support\Facades\Log;
 
 class TechTipObserver
 {
-    protected $user;
+    protected User|string $user;
 
-    /**
-     * @codeCoverageIgnore
-     */
     public function __construct()
     {
         $this->user = match (true) {
             request()->user() !== null => request()->user()->username,
             request()->ip() === '127.0.0.1' => 'Internal Service',
+            // @codeCoverageIgnoreStart
             default => request()->ip(),
+            // @codeCoverageIgnoreEnd
         };
     }
 
     /**
      * Actions for when a Tech Tip is retrieved from the database
      */
-    public function retrieved(TechTip $techTip)
+    public function retrieved(TechTip $techTip): void
     {
         // Separate log entry for Search Results
         if (

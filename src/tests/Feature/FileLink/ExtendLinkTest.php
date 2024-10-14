@@ -14,7 +14,7 @@ class ExtendLinkTest extends TestCase
      */
     public function test_invoke_guest()
     {
-        $link = FileLink::factory()->create();
+        $link = FileLink::factory()->createQuietly();
 
         $response = $this->get(route('links.extend', $link->link_id));
         $response->assertStatus(302);
@@ -24,9 +24,9 @@ class ExtendLinkTest extends TestCase
 
     public function test_invoke_feature_disabled()
     {
-        config(['fileLink.feature_enabled' => false]);
-        $user = User::factory()->create();
-        $link = FileLink::factory()->create();
+        config(['file-link.feature_enabled' => false]);
+        $user = User::factory()->createQuietly();
+        $link = FileLink::factory()->createQuietly();
 
         $response = $this->actingAs($user)->get(route('links.extend', $link->link_id));
         $response->assertStatus(403);
@@ -34,9 +34,9 @@ class ExtendLinkTest extends TestCase
 
     public function test_invoke_different_user()
     {
-        config(['fileLink.feature_enabled' => true]);
-        $user = User::factory()->create();
-        $link = FileLink::factory()->create();
+        config(['file-link.feature_enabled' => true]);
+        $user = User::factory()->createQuietly();
+        $link = FileLink::factory()->createQuietly();
 
         $response = $this->actingAs($user)->get(route('links.extend', $link->link_id));
         $response->assertStatus(403);
@@ -44,11 +44,11 @@ class ExtendLinkTest extends TestCase
 
     public function test_invoke_no_permission()
     {
-        config(['fileLink.feature_enabled' => true]);
+        config(['file-link.feature_enabled' => true]);
         $this->changeRolePermission(4, 'Use File Links', false);
 
-        $user = User::factory()->create();
-        $link = FileLink::factory()->create(['user_id' => $user->user_id]);
+        $user = User::factory()->createQuietly();
+        $link = FileLink::factory()->createQuietly(['user_id' => $user->user_id]);
 
         $response = $this->actingAs($user)->get(route('links.extend', $link->link_id));
         $response->assertStatus(403);
@@ -56,9 +56,9 @@ class ExtendLinkTest extends TestCase
 
     public function test_invoke()
     {
-        config(['fileLink.feature_enabled' => true]);
-        $user = User::factory()->create();
-        $link = FileLink::factory()->create(['user_id' => $user->user_id]);
+        config(['file-link.feature_enabled' => true]);
+        $user = User::factory()->createQuietly();
+        $link = FileLink::factory()->createQuietly(['user_id' => $user->user_id]);
 
         $response = $this->actingAs($user)->get(route('links.extend', $link->link_id));
         $response->assertStatus(302);

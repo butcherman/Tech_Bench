@@ -33,6 +33,7 @@ return [
         'force_deleted' => ':equip Destroyed',
         'site-updated' => 'Site List Updated',
     ],
+
     'contact' => [
         'created' => ':cont Created',
         'updated' => ':cont Updated',
@@ -40,6 +41,7 @@ return [
         'restored' => ':cont Restored',
         'force_deleted' => ':cont Destroyed',
     ],
+
     'note' => [
         'created' => 'New note Created',
         'updated' => 'Note Updated',
@@ -47,6 +49,7 @@ return [
         'restored' => 'Note Restored',
         'force_deleted' => 'Note Destroyed',
     ],
+
     'file' => [
         'created' => 'New file Created',
         'updated' => 'File Updated',
@@ -57,7 +60,9 @@ return [
 
     'admin' => [
         'change_id' => 'Customer ID Updated',
+        'settings_updated' => 'Customer Settings Updated',
     ],
+
     'files' => [
         'type_created' => 'New File Type Created',
         'type_updated' => 'File Type Updated',

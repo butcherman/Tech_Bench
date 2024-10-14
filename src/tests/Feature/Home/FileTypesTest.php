@@ -22,14 +22,14 @@ class FileTypesTest extends TestCase
 
     public function test_index_no_permission()
     {
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('admin.file-types.index'));
         $response->assertStatus(403);
     }
 
     public function test_index()
     {
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->get(route('admin.file-types.index'));
         $response->assertSuccessful();
     }
@@ -47,7 +47,7 @@ class FileTypesTest extends TestCase
 
     public function test_create()
     {
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('file-types'));
         $response->assertSuccessful();
         // $response->assertJson(CustomerFileType::get()->toJson()); FIXME - check for proper json resposne
@@ -74,7 +74,7 @@ class FileTypesTest extends TestCase
             'description' => 'New Test Description',
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->post(route('admin.file-types.store'), $data);
         $response->assertStatus(403);
     }
@@ -85,7 +85,7 @@ class FileTypesTest extends TestCase
             'description' => 'New Test Description',
         ];
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->post(route('admin.file-types.store'), $data);
         $response->assertStatus(302);
         $response->assertSessionHas('success', __('admin.file-type.created'));
@@ -123,7 +123,7 @@ class FileTypesTest extends TestCase
             'description' => 'New Test Description',
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->put(
                 route('admin.file-types.update', $fileType->file_type_id),
                 $data
@@ -139,7 +139,7 @@ class FileTypesTest extends TestCase
             'description' => 'New Test Description',
         ];
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->put(
                 route('admin.file-types.update', $fileType->file_type_id),
                 $data
@@ -172,7 +172,7 @@ class FileTypesTest extends TestCase
     {
         $fileType = CustomerFileType::factory()->create();
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->delete(
                 route('admin.file-types.destroy', $fileType->file_type_id)
             );
@@ -183,7 +183,7 @@ class FileTypesTest extends TestCase
     {
         $fileType = CustomerFileType::factory()->create();
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->delete(route('admin.file-types.destroy', $fileType->file_type_id));
         $response->assertStatus(302);
         $response->assertSessionHas('warning', __('admin.file-type.destroyed'));
@@ -199,7 +199,7 @@ class FileTypesTest extends TestCase
         CustomerFile::factory()->create([
             'file_type_id' => $fileType->file_type_id,
         ]);
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->delete(route('admin.file-types.destroy', $fileType->file_type_id));
         $response->assertStatus(302);
         $response->assertSessionHasErrors('query_error');

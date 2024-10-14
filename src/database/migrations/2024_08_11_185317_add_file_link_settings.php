@@ -52,7 +52,7 @@ return new class extends Migration
             [
                 'name' => 'Auto Delete Expired File Links',
                 'feature_name' => FileLinkFeature::class,
-                'config_key' => 'fileLink.auto_delete_override',
+                'config_key' => 'file-link.auto_delete_override',
             ],
         );
 

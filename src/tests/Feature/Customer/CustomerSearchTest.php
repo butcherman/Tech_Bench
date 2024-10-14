@@ -37,6 +37,7 @@ class CustomerSearchTest extends TestCase
                 'name' => 'Al\'s Vacuum and Shoes',
             ],
         ];
+
         foreach ($testData as $data) {
             Customer::factory()->create($data);
         }
@@ -50,13 +51,16 @@ class CustomerSearchTest extends TestCase
         ];
 
         $response = $this->post(route('customers.search'), $searchData);
-        $response->assertStatus(302);
-        $response->assertRedirect(route('login'));
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
+
         $this->assertGuest();
     }
 
     public function test_search_all_customers()
     {
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
         $searchData = [
             'basic' => false,
             'perPage' => 25,
@@ -64,9 +68,10 @@ class CustomerSearchTest extends TestCase
             'page' => 1,
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs($user)
             ->post(route('customers.search'), $searchData);
-        $response->assertSuccessful();
-        $response->assertJsonCount(5, 'data');
+
+        $response->assertSuccessful()
+            ->assertJsonCount(5, 'data');
     }
 }

@@ -17,7 +17,7 @@ class FileLinkFileTest extends TestCase
      */
     public function test_store_guest()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->createQuietly();
         $link = FileLink::factory()->create(['user_id' => $user->user_id]);
 
         $data = [
@@ -32,14 +32,14 @@ class FileLinkFileTest extends TestCase
 
     public function test_store_feature_disabled()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->createQuietly();
         $link = FileLink::factory()->create(['user_id' => $user->user_id]);
 
         $data = [
             'file' => UploadedFile::fake()->image('testPhoto.png'),
         ];
 
-        config(['fileLink.feature_enabled' => false]);
+        config(['file-link.feature_enabled' => false]);
 
         $response = $this->actingAs($user)
             ->post(route('links.add-file', $link->link_id), $data);
@@ -48,14 +48,14 @@ class FileLinkFileTest extends TestCase
 
     public function test_store_no_permission()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->createQuietly();
         $link = FileLink::factory()->create(['user_id' => $user->user_id]);
 
         $data = [
             'file' => UploadedFile::fake()->image('testPhoto.png'),
         ];
 
-        config(['fileLink.feature_enabled' => true]);
+        config(['file-link.feature_enabled' => true]);
         $this->changeRolePermission(4, 'Use File Links', false);
 
         $response = $this->actingAs($user)
@@ -65,14 +65,14 @@ class FileLinkFileTest extends TestCase
 
     public function test_store()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->createQuietly();
         $link = FileLink::factory()->create(['user_id' => $user->user_id]);
 
         $data = [
             'file' => UploadedFile::fake()->image('testPhoto.png'),
         ];
 
-        config(['fileLink.feature_enabled' => true]);
+        config(['file-link.feature_enabled' => true]);
 
         $response = $this->actingAs($user)
             ->post(route('links.add-file', $link->link_id), $data);
@@ -92,7 +92,7 @@ class FileLinkFileTest extends TestCase
      */
     public function test_destroy_guest()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->createQuietly();
         $link = FileLink::factory()->create(['user_id' => $user->user_id]);
         $file = FileUpload::factory()->create();
         $timeline = FileLinkTimeline::create([
@@ -106,7 +106,7 @@ class FileLinkFileTest extends TestCase
         $attachedFile->upload = true;
         $attachedFile->save();
 
-        config(['fileLink.feature_enabled' => true]);
+        config(['file-link.feature_enabled' => true]);
 
         $response = $this->delete(route('links.destroy-file', [$link->link_id, $attachedFile->link_file_id]));
         $response->assertStatus(302);
@@ -116,9 +116,9 @@ class FileLinkFileTest extends TestCase
 
     public function test_destroy_feature_disabled()
     {
-        config(['fileLink.feature_enabled' => false]);
+        config(['file-link.feature_enabled' => false]);
 
-        $user = User::factory()->create();
+        $user = User::factory()->createQuietly();
         $link = FileLink::factory()->create(['user_id' => $user->user_id]);
         $file = FileUpload::factory()->create();
         $timeline = FileLinkTimeline::create([
@@ -139,10 +139,10 @@ class FileLinkFileTest extends TestCase
 
     public function test_destroy_no_permission()
     {
-        config(['fileLink.feature_enabled' => true]);
+        config(['file-link.feature_enabled' => true]);
         $this->changeRolePermission(4, 'Use File Links', false);
 
-        $user = User::factory()->create();
+        $user = User::factory()->createQuietly();
         $link = FileLink::factory()->create(['user_id' => $user->user_id]);
         $file = FileUpload::factory()->create();
         $timeline = FileLinkTimeline::create([
@@ -156,7 +156,7 @@ class FileLinkFileTest extends TestCase
         $attachedFile->upload = true;
         $attachedFile->save();
 
-        config(['fileLink.feature_enabled' => true]);
+        config(['file-link.feature_enabled' => true]);
 
         $response = $this->actingAs($user)
             ->delete(route('links.destroy-file', [$link->link_id, $attachedFile->link_file_id]));
@@ -165,9 +165,9 @@ class FileLinkFileTest extends TestCase
 
     public function test_destroy_as_admin()
     {
-        config(['fileLink.feature_enabled' => true]);
+        config(['file-link.feature_enabled' => true]);
 
-        $user = User::factory()->create();
+        $user = User::factory()->createQuietly();
         $link = FileLink::factory()->create(['user_id' => $user->user_id]);
         $file = FileUpload::factory()->create();
         $timeline = FileLinkTimeline::create([
@@ -181,7 +181,7 @@ class FileLinkFileTest extends TestCase
         $attachedFile->upload = true;
         $attachedFile->save();
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->delete(route('links.destroy-file', [$link->link_id, $attachedFile->link_file_id]));
         $response->assertStatus(302);
         $response->assertSessionHas('warning', 'File Deleted');
@@ -193,7 +193,7 @@ class FileLinkFileTest extends TestCase
 
     public function test_destroy()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->createQuietly();
         $link = FileLink::factory()->create(['user_id' => $user->user_id]);
         $file = FileUpload::factory()->create();
         $timeline = FileLinkTimeline::create([
@@ -207,7 +207,7 @@ class FileLinkFileTest extends TestCase
         $attachedFile->upload = true;
         $attachedFile->save();
 
-        config(['fileLink.feature_enabled' => true]);
+        config(['file-link.feature_enabled' => true]);
 
         $response = $this->actingAs($user)
             ->delete(route('links.destroy-file', [$link->link_id, $attachedFile->link_file_id]));

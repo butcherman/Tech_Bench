@@ -5,14 +5,14 @@ namespace App\Http\Controllers\Customer;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Home\BookmarkRequest;
 use App\Models\Customer;
-use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class CustomerBookmarkController extends Controller
 {
     /**
-     * Handle the incoming request.
+     * Turn on or off a Customer Bookmark for a user
      */
-    public function __invoke(BookmarkRequest $request, Customer $customer)
+    public function __invoke(BookmarkRequest $request, Customer $customer): Response
     {
         if ($request->value) {
             $customer->Bookmarks()->attach($request->user());

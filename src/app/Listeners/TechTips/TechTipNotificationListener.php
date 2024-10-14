@@ -22,7 +22,7 @@ class TechTipNotificationListener implements ShouldQueue
         if ($event->sendNotification) {
             $userList = User::whereNot('user_id', $author)->get();
 
-            if ($event->action === 'Create') {
+            if ($event->action->name === 'Create') {
                 Log::debug('Sending New Tech Tip Notification to', $userList->toArray());
                 Notification::send($userList, new NewTechTipNotification($event->techTip));
             } else {

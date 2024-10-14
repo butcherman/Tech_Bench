@@ -58,7 +58,7 @@ class SaveSetupTest extends TestCase
             ],
         ];
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->withSession($data)
             ->get(route('init.save-setup'));
         $response->assertSuccessful();

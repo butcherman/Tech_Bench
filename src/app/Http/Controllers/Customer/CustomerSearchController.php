@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customer\CustomerSearchRequest;
-use App\Service\CustomerSearchService;
+use App\Service\Customer\CustomerSearchService;
 
 class CustomerSearchController extends Controller
 {
@@ -15,6 +15,6 @@ class CustomerSearchController extends Controller
     {
         $searchObj = new CustomerSearchService($request);
 
-        return $searchObj->search();
+        return $searchObj();
     }
 }

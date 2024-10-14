@@ -2,12 +2,11 @@
 
 namespace Tests\Feature\Customer;
 
-use App\Events\Customer\CustomerSiteEvent;
 use App\Models\Customer;
 use App\Models\CustomerSite;
 use App\Models\User;
 use App\Models\UserRolePermission;
-use Illuminate\Support\Facades\Event;
+use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class CustomerSiteTest extends TestCase
@@ -20,18 +19,28 @@ class CustomerSiteTest extends TestCase
         $customer = Customer::factory()->create();
 
         $response = $this->get(route('customers.sites.index', $customer->slug));
-        $response->assertStatus(302);
-        $response->assertRedirect(route('login'));
+
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
         $this->assertGuest();
     }
 
     public function test_index()
     {
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
         $customer = Customer::factory()->create();
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs($user)
             ->get(route('customers.sites.index', $customer->slug));
-        $response->assertSuccessful();
+        $response->assertSuccessful()
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('Customer/Site/Index')
+                ->has('permissions')
+                ->has('customer')
+                ->has('siteList')
+                ->has('alerts')
+            );
     }
 
     /**
@@ -42,40 +51,58 @@ class CustomerSiteTest extends TestCase
         $customer = Customer::factory()->create();
 
         $response = $this->get(route('customers.sites.create', $customer->slug));
-        $response->assertStatus(302);
-        $response->assertRedirect(route('login'));
+
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
         $this->assertGuest();
     }
 
     public function test_create_no_permission()
     {
-        $customer = Customer::factory()->create();
         //  Remove the "Add Customer" permission from the Tech Role
-        UserRolePermission::whereRoleId(4)
-            ->wherePermTypeId(7)
-            ->update([
-                'allow' => false,
-            ]);
+        $this->changeRolePermission(4, 'Add Customer', false);
 
-        $response = $this->actingAs(User::factory()->create())
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+        $customer = Customer::factory()->create();
+
+        $response = $this->actingAs($user)
             ->get(route('customers.sites.create', $customer->slug));
-        $response->assertStatus(403);
+
+        $response->assertForbidden();
     }
 
     public function test_create()
     {
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
         $customer = Customer::factory()->create();
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs($user)
             ->get(route('customers.sites.create', $customer->slug));
-        $response->assertSuccessful();
+
+        $response->assertSuccessful()
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('Customer/Site/Create')
+                ->has('default-state')
+                ->has('parent-customer')
+            );
     }
 
     public function test_create_without_parent()
     {
-        $response = $this->actingAs(User::factory()->create())
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+
+        $response = $this->actingAs($user)
             ->get(route('customers.create-site'));
-        $response->assertSuccessful();
+
+        $response->assertSuccessful()
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('Customer/Site/Create')
+                ->has('default-state')
+                ->has('parent-customer')
+            );
     }
 
     /**
@@ -93,13 +120,19 @@ class CustomerSiteTest extends TestCase
             route('customers.sites.store', $customer->slug),
             $site->toArray()
         );
-        $response->assertStatus(302);
-        $response->assertRedirect(route('login'));
+
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
         $this->assertGuest();
     }
 
     public function test_store_no_permission()
     {
+        //  Remove the "Add Customer" permission from the Tech Role
+        $this->changeRolePermission(4, 'Add Customer', false);
+
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
         $customer = Customer::factory()->create();
         $site = CustomerSite::factory()->make();
 
@@ -113,27 +146,32 @@ class CustomerSiteTest extends TestCase
                 'allow' => false,
             ]);
 
-        $response = $this->actingAs(User::factory()->create())
-            ->post(route('customers.sites.store', $customer->slug), $site->toArray());
-        $response->assertStatus(403);
+        $response = $this->actingAs($user)
+            ->post(
+                route('customers.sites.store', $customer->slug),
+                $site->toArray()
+            );
+
+        $response->assertForbidden();
     }
 
     public function test_store()
     {
-        Event::fake();
-
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
         $customer = Customer::factory()->create();
         $site = CustomerSite::factory()->make();
 
         $site->cust_name = $customer->name;
         $site->cust_id = $customer->cust_id;
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs($user)
             ->post(route('customers.sites.store', $customer->slug), $site->toArray());
-        $response->assertStatus(302);
-        $response->assertSessionHas('success', __('cust.site.created', [
-            'name' => $site->site_name,
-        ]));
+
+        $response->assertStatus(302)
+            ->assertSessionHas('success', __('cust.site.created', [
+                'name' => $site->site_name,
+            ]));
 
         $this->assertDatabaseHas('customer_sites', $site->only([
             'cust_id',
@@ -143,14 +181,12 @@ class CustomerSiteTest extends TestCase
             'state',
             'zip',
         ]));
-
-        Event::assertDispatched(CustomerSiteEvent::class);
     }
 
     public function test_store_duplicate_slug()
     {
-        Event::fake();
-
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
         $customer = Customer::factory()->create();
         CustomerSite::factory()->create(['cust_id' => $customer->cust_id]);
         $site = CustomerSite::factory()->make();
@@ -159,12 +195,16 @@ class CustomerSiteTest extends TestCase
         $site->cust_id = $customer->cust_id;
         $site->site_name = $customer->CustomerSite[0]->site_name;
 
-        $response = $this->actingAs(User::factory()->create())
-            ->post(route('customers.sites.store', $customer->slug), $site->toArray());
-        $response->assertStatus(302);
-        $response->assertSessionHas('success', __('cust.site.created', [
-            'name' => $site->site_name,
-        ]));
+        $response = $this->actingAs($user)
+            ->post(
+                route('customers.sites.store', $customer->slug),
+                $site->toArray()
+            );
+
+        $response->assertStatus(302)
+            ->assertSessionHas('success', __('cust.site.created', [
+                'name' => $site->site_name,
+            ]));
 
         $this->assertDatabaseHas('customer_sites', $site->only([
             'cust_id',
@@ -178,20 +218,21 @@ class CustomerSiteTest extends TestCase
 
     public function test_store_without_parent_in_url()
     {
-        Event::fake();
-
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
         $customer = Customer::factory()->create();
         $site = CustomerSite::factory()->make();
 
         $site->cust_name = $customer->name;
         $site->cust_id = $customer->cust_id;
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs($user)
             ->post(route('customers.store-site'), $site->toArray());
-        $response->assertStatus(302);
-        $response->assertSessionHas('success', __('cust.site.created', [
-            'name' => $site->site_name,
-        ]));
+
+        $response->assertStatus(302)
+            ->assertSessionHas('success', __('cust.site.created', [
+                'name' => $site->site_name,
+            ]));
 
         $this->assertDatabaseHas('customer_sites', $site->only([
             'cust_id',
@@ -201,8 +242,6 @@ class CustomerSiteTest extends TestCase
             'state',
             'zip',
         ]));
-
-        Event::assertDispatched(CustomerSiteEvent::class);
     }
 
     /**
@@ -216,21 +255,38 @@ class CustomerSiteTest extends TestCase
             $site->Customer->slug,
             $site->site_slug,
         ]));
-        $response->assertStatus(302);
-        $response->assertRedirect(route('login'));
+
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
         $this->assertGuest();
     }
 
     public function test_show()
     {
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
         $site = CustomerSite::factory()->create();
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs($user)
             ->get(route('customers.sites.show', [
                 $site->Customer->slug,
                 $site->site_slug,
             ]));
-        $response->assertSuccessful();
+
+        $response->assertSuccessful()
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('Customer/Site/Show')
+                ->has('permissions')
+                ->has('customer')
+                ->has('site')
+                ->has('siteList')
+                ->has('alerts')
+                ->has('equipmentList')
+                ->has('contacts')
+                ->has('notes')
+                ->has('files')
+                ->has('is-fav')
+            );
     }
 
     /**
@@ -244,40 +300,49 @@ class CustomerSiteTest extends TestCase
             $site->Customer->slug,
             $site->site_slug,
         ]));
-        $response->assertStatus(302);
-        $response->assertRedirect(route('login'));
+
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
         $this->assertGuest();
     }
 
     public function test_edit_no_permission()
     {
+        //  Remove the "Update Customer" permission from the Tech Role
+        $this->changeRolePermission(4, 'Update Customer', false);
+
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
         $site = CustomerSite::factory()->create();
 
-        //  Remove the "Add Customer" permission from the Tech Role
-        UserRolePermission::whereRoleId(4)
-            ->wherePermTypeId(8)
-            ->update([
-                'allow' => false,
-            ]);
-
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs($user)
             ->get(route('customers.sites.edit', [
                 $site->Customer->slug,
                 $site->site_slug,
             ]));
-        $response->assertStatus(403);
+
+        $response->assertForbidden();
     }
 
     public function test_edit()
     {
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
         $site = CustomerSite::factory()->create();
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs($user)
             ->get(route('customers.sites.edit', [
                 $site->Customer->slug,
                 $site->site_slug,
             ]));
-        $response->assertSuccessful();
+
+        $response->assertSuccessful()
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('Customer/Site/Edit')
+                ->has('default-state')
+                ->has('parent-customer')
+                ->has('site')
+            );
     }
 
     /**
@@ -298,27 +363,26 @@ class CustomerSiteTest extends TestCase
             ]),
             $data->toArray()
         );
-        $response->assertStatus(302);
-        $response->assertRedirect(route('login'));
+
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
         $this->assertGuest();
     }
 
     public function test_update_no_permission()
     {
+        //  Remove the "Update Customer" permission from the Tech Role
+        $this->changeRolePermission(4, 'Update Customer', false);
+
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
         $site = CustomerSite::factory()->create();
         $data = CustomerSite::factory()->make();
 
         $data->cust_name = $site->Customer->name;
         $data->cust_id = $site->Customer->cust_id;
 
-        //  Remove the "Add Customer" permission from the Tech Role
-        UserRolePermission::whereRoleId(4)
-            ->wherePermTypeId(8)
-            ->update([
-                'allow' => false,
-            ]);
-
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs($user)
             ->put(
                 route('customers.sites.update', [
                     $site->Customer->slug,
@@ -326,20 +390,21 @@ class CustomerSiteTest extends TestCase
                 ]),
                 $data->toArray()
             );
-        $response->assertStatus(403);
+
+        $response->assertForbidden();
     }
 
     public function test_update()
     {
-        Event::fake();
-
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
         $site = CustomerSite::factory()->create();
         $data = CustomerSite::factory()->make();
 
         $data->cust_name = $site->Customer->name;
         $data->cust_id = $site->Customer->cust_id;
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs($user)
             ->put(
                 route('customers.sites.update', [
                     $site->Customer->slug,
@@ -347,17 +412,16 @@ class CustomerSiteTest extends TestCase
                 ]),
                 $data->toArray()
             );
-        $response->assertStatus(302);
-        $response->assertSessionHas('success', __('cust.site.updated', [
-            'name' => $data->site_name,
-        ]));
+
+        $response->assertStatus(302)
+            ->assertSessionHas('success', __('cust.site.updated', [
+                'name' => $data->site_name,
+            ]));
 
         $this->assertDatabaseHas('customer_sites', [
             'cust_site_id' => $site->cust_site_id,
             'site_name' => $data->site_name,
         ]);
-
-        Event::assertDispatched(CustomerSiteEvent::class);
     }
 
     /**
@@ -372,41 +436,49 @@ class CustomerSiteTest extends TestCase
             $site->Customer->slug,
             $site->site_slug,
         ]), $data);
-        $response->assertStatus(302);
-        $response->assertRedirect(route('login'));
+
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
         $this->assertGuest();
     }
 
     public function test_destroy_no_permission()
     {
+        //  Remove the "Deactivate Customer" permission from the Tech Role
+        $this->changeRolePermission(4, 'Deactivate Customer', false);
+
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
         $site = CustomerSite::factory()->create();
         $data = ['reason' => 'For testing purposes'];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs($user)
             ->delete(route('customers.sites.destroy', [
                 $site->Customer->slug,
                 $site->site_slug,
             ]), $data);
-        $response->assertStatus(403);
+
+        $response->assertForbidden();
     }
 
     public function test_destroy()
     {
-        Event::fake();
-
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
         $site = CustomerSite::factory()->create();
         $data = ['reason' => 'For testing purposes'];
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs($user)
             ->delete(route('customers.sites.destroy', [
                 $site->Customer->slug,
                 $site->site_slug,
             ]), $data);
-        $response->assertStatus(302);
-        $response->assertSessionHas('danger', __('cust.destroy', ['name' => $site->site_name]));
+
+        $response->assertStatus(302)
+            ->assertSessionHas('danger', __('cust.destroy', [
+                'name' => $site->site_name,
+            ]));
 
         $this->assertSoftDeleted('customer_sites', $site->only(['cust_site_id']));
-
-        Event::assertDispatched(CustomerSiteEvent::class);
     }
 }

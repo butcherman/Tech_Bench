@@ -35,7 +35,7 @@ class DownloadNoteTest extends TestCase
             'cust_id' => $customer->cust_id,
         ]);
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('customers.notes.download', [
                 $customer->slug,
                 $note->note_id,

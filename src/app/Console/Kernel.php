@@ -1,5 +1,7 @@
 <?php
 
+// TODO - Refactor
+
 namespace App\Console;
 
 use App\Jobs\Admin\CheckCertificateJob;

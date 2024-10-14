@@ -28,14 +28,14 @@ class CustomerFilesReportTest extends TestCase
 
     public function test_index_no_permission()
     {
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('reports.customer.files'));
         $response->assertStatus(403);
     }
 
     public function test_index()
     {
-        $response = $this->actingAs(User::factory()->create(['role_id' => 2]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 2]))
             ->get(route('reports.customer.files'));
         $response->assertSuccessful();
     }
@@ -63,7 +63,7 @@ class CustomerFilesReportTest extends TestCase
             'fileTypes' => [1, 2],
         ];
 
-        $response = $this->ActingAs(User::factory()->create())
+        $response = $this->ActingAs(User::factory()->createQuietly())
             ->put(route('reports.customer.run-files'), $data);
         $response->assertStatus(403);
     }
@@ -75,7 +75,7 @@ class CustomerFilesReportTest extends TestCase
             'fileTypes' => [1, 2],
         ];
 
-        $response = $this->ActingAs(User::factory()->create(['role_id' => 2]))
+        $response = $this->ActingAs(User::factory()->createQuietly(['role_id' => 2]))
             ->put(route('reports.customer.run-files'), $data);
         $response->assertSuccessful();
     }
@@ -87,7 +87,7 @@ class CustomerFilesReportTest extends TestCase
             'fileTypes' => [1, 2],
         ];
 
-        $response = $this->ActingAs(User::factory()->create(['role_id' => 2]))
+        $response = $this->ActingAs(User::factory()->createQuietly(['role_id' => 2]))
             ->put(route('reports.customer.run-files'), $data);
         $response->assertSuccessful();
     }

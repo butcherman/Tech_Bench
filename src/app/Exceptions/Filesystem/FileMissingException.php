@@ -27,7 +27,7 @@ class FileMissingException extends Exception
         ]);
     }
 
-    public function render(Request $request): never
+    public function render(): never
     {
         abort(404, 'The requested file was not found');
     }

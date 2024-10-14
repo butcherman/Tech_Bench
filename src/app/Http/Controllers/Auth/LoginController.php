@@ -3,23 +3,25 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class LoginController extends Controller
 {
     /**
-     * Handle the incoming request.
+     * Show the Login page
      */
-    public function __invoke()
+    public function __invoke(): Response
     {
         return Inertia::render('Auth/Login', [
             'welcome-message' => config('app.welcome_message'),
             'home-links' => config('app.home_links'),
-            'public-link' => config('techTips.allow_public') ? [
-                'url' => route('publicTips.index'),
-                'text' => config('techTips.public_link_text'),
-            ] : false,
+            'public-link' => config('tech-tips.allow_public')
+                ? [
+                    'url' => route('publicTips.index'),
+                    'text' => config('tech-tips.public_link_text'),
+                ]
+                : false,
             'allow-oath' => (bool) config('services.azure.allow_login'),
         ]);
     }

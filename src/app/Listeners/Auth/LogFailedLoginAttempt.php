@@ -14,7 +14,7 @@ class LogFailedLoginAttempt
     {
         Log::stack(['daily', 'auth'])->warning('User tried to login with invalid credentials', [
             'Username' => $event->credentials['username'],
-            'IP Address' => \Request::ip(),
+            'IP Address' => request()->ip(),
             'Attempt Number' => session('failed_login') + 1,
         ]);
     }

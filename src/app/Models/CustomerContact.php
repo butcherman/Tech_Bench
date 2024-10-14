@@ -2,14 +2,23 @@
 
 namespace App\Models;
 
+use App\Observers\CustomerContactObserver;
+use App\Traits\CustomerBroadcastingTrait;
+use Closure;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\BroadcastableModelEventOccurred;
+use Illuminate\Database\Eloquent\BroadcastsEvents;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Prunable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Log;
 
+#[ObservedBy([CustomerContactObserver::class])]
 class CustomerContact extends Model
 {
+    use BroadcastsEvents;
+    use CustomerBroadcastingTrait;
     use HasFactory;
     use Prunable;
     use SoftDeletes;
@@ -31,6 +40,11 @@ class CustomerContact extends Model
     /***************************************************************************
      * Model Relationships
      ***************************************************************************/
+    public function Customer()
+    {
+        return $this->belongsTo(Customer::class, 'cust_id', 'cust_id');
+    }
+
     public function CustomerSite()
     {
         return $this->belongsToMany(
@@ -44,6 +58,27 @@ class CustomerContact extends Model
     public function CustomerContactPhone()
     {
         return $this->hasMany(CustomerContactPhone::class, 'cont_id', 'cont_id');
+    }
+
+    /***************************************************************************
+     * Model Broadcasting
+     ***************************************************************************/
+    public function broadcastOn(string $event): Closure|array
+    {
+        return match ($event) {
+            'deleted', 'trashed' => [],
+            default => array_merge(
+                $this->getCustomerChannel(),
+                $this->getSiteChannelList()
+            )
+        };
+    }
+
+    public function newBroadcastableModelEvent(string $event): BroadcastableModelEventOccurred
+    {
+        return (new BroadcastableModelEventOccurred(
+            $this, $event
+        ))->dontBroadcastToCurrentUser();
     }
 
     /***************************************************************************

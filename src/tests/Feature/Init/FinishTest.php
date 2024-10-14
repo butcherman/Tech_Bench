@@ -26,7 +26,7 @@ class FinishTest extends TestCase
         config(['app.first_time_setup' => true]);
         config(['app.env' => 'local']);
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))->get(route('init.finish'));
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))->get(route('init.finish'));
         $response->assertSuccessful();
     }
 }

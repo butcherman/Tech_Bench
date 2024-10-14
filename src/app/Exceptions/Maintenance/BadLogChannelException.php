@@ -22,7 +22,7 @@ class BadLogChannelException extends Exception
             ' tried to visit an invalid log channel - '.$this->badChannel);
     }
 
-    public function render(Request $request): never
+    public function render(): never
     {
         abort(404, 'Invalid Log Channel');
     }

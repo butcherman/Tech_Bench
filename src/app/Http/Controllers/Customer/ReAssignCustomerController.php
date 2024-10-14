@@ -27,6 +27,10 @@ class ReAssignCustomerController extends Controller
     {
         dispatch(new ReAssignSiteJob($request));
 
-        return back()->with('success', 'Re-Assignment job started in background.  This may take some time');
+        return back()
+            ->with(
+                'success',
+                'Re-Assignment job started in background.  This may take some time'
+            );
     }
 }

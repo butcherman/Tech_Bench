@@ -1,5 +1,7 @@
 <?php
 
+// TODO - Refactor
+
 namespace App\Http\Controllers\FileLink;
 
 use App\Events\Feature\FeatureChangedEvent;
@@ -20,10 +22,10 @@ class FileLinkSettingsController extends Controller
 
         return Inertia::render('FileLinks/Settings', [
             'settings' => [
-                'default_link_life' => config('fileLink.default_link_life'),
-                'auto_delete' => (bool) config('fileLink.auto_delete'),
-                'auto_delete_days' => config('fileLink.auto_delete_days'),
-                'auto_delete_override' => (bool) config('fileLink.auto_delete_override'),
+                'default_link_life' => config('file-link.default_link_life'),
+                'auto_delete' => (bool) config('file-link.auto_delete'),
+                'auto_delete_days' => config('file-link.auto_delete_days'),
+                'auto_delete_override' => (bool) config('file-link.auto_delete_override'),
             ],
         ]);
     }

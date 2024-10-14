@@ -2,13 +2,13 @@
 
 namespace Tests\Feature\Customer;
 
-use App\Events\Customer\CustomerNoteEvent;
 use App\Models\Customer;
+use App\Models\CustomerEquipment;
 use App\Models\CustomerNote;
 use App\Models\CustomerSite;
 use App\Models\User;
 use App\Models\UserRolePermission;
-use Illuminate\Support\Facades\Event;
+use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class CustomerNoteTest extends TestCase
@@ -21,18 +21,28 @@ class CustomerNoteTest extends TestCase
         $customer = Customer::factory()->create();
 
         $response = $this->get(route('customers.notes.index', $customer->slug));
-        $response->assertStatus(302);
-        $response->assertRedirect(route('login'));
+
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
         $this->assertGuest();
     }
 
     public function test_index()
     {
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
         $customer = Customer::factory()->create();
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs($user)
             ->get(route('customers.notes.index', $customer->slug));
-        $response->assertSuccessful();
+
+        $response->assertSuccessful()
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('Customer/Note/Index')
+                ->has('permissions')
+                ->has('customer')
+                ->has('notes')
+            );
     }
 
     /**
@@ -43,31 +53,44 @@ class CustomerNoteTest extends TestCase
         $customer = Customer::factory()->create();
 
         $response = $this->get(route('customers.notes.create', $customer->slug));
-        $response->assertStatus(302);
-        $response->assertRedirect(route('login'));
+
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
         $this->assertGuest();
     }
 
     public function test_create_no_permission()
     {
+        // Remove the 'Add Customer Note' permission from the Tech Role
+        $this->changeRolePermission(4, 'Add Customer Note', false);
+
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
         $customer = Customer::factory()->create();
 
-        UserRolePermission::where('role_id', 4)
-            ->where('perm_type_id', 17)
-            ->update(['allow' => false]);
-
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs($user)
             ->get(route('customers.notes.create', $customer->slug));
-        $response->assertStatus(403);
+
+        $response->assertForbidden();
     }
 
     public function test_create()
     {
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
         $customer = Customer::factory()->create();
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs($user)
             ->get(route('customers.notes.create', $customer->slug));
-        $response->assertSuccessful();
+
+        $response->assertSuccessful()
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('Customer/Note/Create')
+                ->has('permissions')
+                ->has('customer')
+                ->has('siteList')
+                ->has('equipmentList')
+            );
     }
 
     /**
@@ -92,13 +115,19 @@ class CustomerNoteTest extends TestCase
             ),
             $data
         );
-        $response->assertStatus(302);
-        $response->assertRedirect(route('login'));
+
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
         $this->assertGuest();
     }
 
     public function test_store_no_permission()
     {
+        // Remove the 'Add Customer Note' permission from the Tech Role
+        $this->changeRolePermission(4, 'Add Customer Note', false);
+
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
         $customer = Customer::factory()->create();
         $data = [
             'subject' => 'This is a test Note',
@@ -113,43 +142,42 @@ class CustomerNoteTest extends TestCase
             ->where('perm_type_id', 17)
             ->update(['allow' => false]);
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs($user)
             ->post(route('customers.notes.store', $customer->slug), $data);
-        $response->assertStatus(403);
+
+        $response->assertForbidden();
     }
 
     public function test_store()
     {
-        Event::fake();
-
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
         $customer = Customer::factory()->create();
         $data = [
             'subject' => 'This is a test Note',
             'note_type' => 'general',
             'urgent' => true,
             'site_list' => [],
-            'note_id' => null,
             'details' => 'This is the notes details',
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs($user)
             ->post(route('customers.notes.store', $customer->slug), $data);
-        $response->assertStatus(302);
-        $response->assertSessionHas('success', __('cust.note.created'));
+
+        $response->assertStatus(302)
+            ->assertSessionHas('success', __('cust.note.created'));
 
         unset($data['site_list']);
         unset($data['note_type']);
         unset($data['note_id']);
 
         $this->assertDatabaseHas('customer_notes', $data);
-
-        Event::assertDispatched(CustomerNoteEvent::class);
     }
 
     public function test_store_site_note()
     {
-        Event::fake();
-
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
         $customer = Customer::factory()
             ->has(CustomerSite::factory()->count(3))
             ->create();
@@ -157,15 +185,17 @@ class CustomerNoteTest extends TestCase
             'subject' => 'This is a test Note',
             'note_type' => 'site',
             'urgent' => true,
-            'site_list' => $customer->CustomerSite->pluck('cust_site_id'),
-            'note_id' => null,
+            'site_list' => $customer->CustomerSite
+                ->pluck('cust_site_id')
+                ->toArray(),
             'details' => 'This is the notes details',
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs($user)
             ->post(route('customers.notes.store', $customer->slug), $data);
-        $response->assertStatus(302);
-        $response->assertSessionHas('success', __('cust.note.created'));
+
+        $response->assertStatus(302)
+            ->assertSessionHas('success', __('cust.note.created'));
 
         unset($data['site_list']);
         unset($data['note_type']);
@@ -181,37 +211,36 @@ class CustomerNoteTest extends TestCase
         $this->assertDatabaseHas('customer_site_notes', [
             'cust_site_id' => $customer->CustomerSite[2]->cust_site_id,
         ]);
-
-        Event::assertDispatched(CustomerNoteEvent::class);
     }
 
     public function test_store_equipment_note()
     {
-        Event::fake();
-
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
         $customer = Customer::factory()->create();
-        $notement = CustomerNote::factory()
-            ->create(['cust_id' => $customer->cust_id]);
+
         $data = [
             'subject' => 'This is a test Note',
-            'note_type' => 'general',
+            'note_type' => 'equipment',
             'urgent' => true,
             'site_list' => [],
-            'note_id' => $notement->note_id,
             'details' => 'This is the notes details',
+            'cust_equip_id' => CustomerEquipment::factory()
+                ->create(['cust_id' => $customer->cust_id])
+                ->cust_equip_id,
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs($user)
             ->post(route('customers.notes.store', $customer->slug), $data);
-        $response->assertStatus(302);
-        $response->assertSessionHas('success', __('cust.note.created'));
+
+        $response->assertStatus(302)
+            ->assertSessionHas('success', __('cust.note.created'));
 
         unset($data['site_list']);
         unset($data['note_type']);
         unset($data['note_id']);
-        $this->assertDatabaseHas('customer_notes', $data);
 
-        Event::assertDispatched(CustomerNoteEvent::class);
+        $this->assertDatabaseHas('customer_notes', $data);
     }
 
     /**
@@ -227,23 +256,34 @@ class CustomerNoteTest extends TestCase
             $customer->slug,
             $note->note_id,
         ]));
-        $response->assertStatus(302);
-        $response->assertRedirect(route('login'));
+
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
         $this->assertGuest();
     }
 
     public function test_show()
     {
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
         $customer = Customer::factory()->create();
         $note = CustomerNote::factory()
             ->create(['cust_id' => $customer->cust_id]);
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs($user)
             ->get(route('customers.notes.show', [
                 $customer->slug,
                 $note->note_id,
             ]));
-        $response->assertSuccessful();
+
+        $response->assertSuccessful()
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('Customer/Note/Show')
+                ->has('permissions')
+                ->has('customer')
+                ->has('siteList')
+                ->has('note')
+            );
     }
 
     /**
@@ -259,41 +299,55 @@ class CustomerNoteTest extends TestCase
             $customer->slug,
             $note->note_id,
         ]));
-        $response->assertStatus(302);
-        $response->assertRedirect(route('login'));
+
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
         $this->assertGuest();
     }
 
     public function test_edit_no_permission()
     {
+        // Remove the 'Edit Customer Note' permission from the Tech Role
+        $this->changeRolePermission(4, 'Edit Customer Note', false);
+
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
         $customer = Customer::factory()->create();
         $note = CustomerNote::factory()
             ->create(['cust_id' => $customer->cust_id]);
 
-        UserRolePermission::where('role_id', 4)
-            ->where('perm_type_id', 18)
-            ->update(['allow' => false]);
-
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs($user)
             ->get(route('customers.notes.edit', [
                 $customer->slug,
                 $note->note_id,
             ]));
-        $response->assertStatus(403);
+
+        $response->assertForbidden();
     }
 
     public function test_edit()
     {
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
         $customer = Customer::factory()->create();
         $note = CustomerNote::factory()
             ->create(['cust_id' => $customer->cust_id]);
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs($user)
             ->get(route('customers.notes.edit', [
                 $customer->slug,
                 $note->note_id,
             ]));
-        $response->assertSuccessful();
+
+        $response->assertSuccessful()
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('Customer/Note/Edit')
+                ->has('permissions')
+                ->has('customer')
+                ->has('siteList')
+                ->has('equipmentList')
+                ->has('note')
+            );
     }
 
     /*
@@ -317,13 +371,19 @@ class CustomerNoteTest extends TestCase
             $customer->slug,
             $note->note_id,
         ]), $data);
-        $response->assertStatus(302);
-        $response->assertRedirect(route('login'));
+
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
         $this->assertGuest();
     }
 
     public function test_update_no_permission()
     {
+        // Remove the 'Edit Customer Note' permission from the Tech Role
+        $this->changeRolePermission(4, 'Edit Customer Note', false);
+
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
         $customer = Customer::factory()->create();
         $note = CustomerNote::factory()
             ->create(['cust_id' => $customer->cust_id]);
@@ -336,22 +396,19 @@ class CustomerNoteTest extends TestCase
             'details' => 'This is the notes details',
         ];
 
-        UserRolePermission::where('role_id', 4)
-            ->where('perm_type_id', 18)
-            ->update(['allow' => false]);
-
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs($user)
             ->put(route('customers.notes.update', [
                 $customer->slug,
                 $note->note_id,
             ]), $data);
-        $response->assertStatus(403);
+
+        $response->assertForbidden();
     }
 
     public function test_update()
     {
-        Event::fake();
-
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
         $customer = Customer::factory()->create();
         $note = CustomerNote::factory()
             ->create(['cust_id' => $customer->cust_id]);
@@ -364,27 +421,26 @@ class CustomerNoteTest extends TestCase
             'details' => 'This is the notes details',
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs($user)
             ->put(route('customers.notes.update', [
                 $customer->slug,
                 $note->note_id,
             ]), $data);
-        $response->assertStatus(302);
-        $response->assertSessionHas('success', __('cust.note.updated'));
+
+        $response->assertStatus(302)
+            ->assertSessionHas('success', __('cust.note.updated'));
 
         unset($data['site_list']);
         unset($data['note_type']);
         $data['note_id'] = $note->note_id;
 
         $this->assertDatabaseHas('customer_notes', $data);
-
-        Event::assertDispatched(CustomerNoteEvent::class);
     }
 
     public function test_update_sites()
     {
-        Event::fake();
-
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
         $customer = Customer::factory()
             ->has(CustomerSite::factory()->count(3))
             ->create();
@@ -407,13 +463,14 @@ class CustomerNoteTest extends TestCase
             'details' => 'This is the notes details',
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs($user)
             ->put(route('customers.notes.update', [
                 $customer->slug,
                 $note->note_id,
             ]), $data);
-        $response->assertStatus(302);
-        $response->assertSessionHas('success', __('cust.note.updated'));
+
+        $response->assertStatus(302)
+            ->assertSessionHas('success', __('cust.note.updated'));
 
         unset($data['site_list']);
         unset($data['note_type']);
@@ -432,8 +489,6 @@ class CustomerNoteTest extends TestCase
             'note_id' => $note->note_id,
             'cust_site_id' => $customer->CustomerSite[2]->cust_site_id,
         ]);
-
-        Event::assertDispatched(CustomerNoteEvent::class);
     }
 
     /*
@@ -448,8 +503,9 @@ class CustomerNoteTest extends TestCase
             $customer->slug,
             $note->note_id,
         ]));
-        $response->assertStatus(302);
-        $response->assertRedirect(route('login'));
+
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
         $this->assertGuest();
 
         $this->assertDatabaseHas('customer_notes', $note->only([
@@ -461,6 +517,11 @@ class CustomerNoteTest extends TestCase
 
     public function test_destroy_no_permission()
     {
+        // Remove the 'Delete Customer Note' permission from the Tech Role
+        $this->changeRolePermission(4, 'Delete Customer Note', false);
+
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
         $customer = Customer::factory()->create();
         $note = CustomerNote::factory()->create(['cust_id' => $customer->cust_id]);
 
@@ -468,36 +529,37 @@ class CustomerNoteTest extends TestCase
             ->where('perm_type_id', 19)
             ->update(['allow' => false]);
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs($user)
             ->delete(route('customers.notes.destroy', [
                 $customer->slug,
                 $note->note_id,
             ]));
-        $response->assertStatus(403);
+
+        $response->assertForbidden();
 
     }
 
     public function test_destroy()
     {
-        Event::fake();
-
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
         $customer = Customer::factory()->create();
         $note = CustomerNote::factory()->create(['cust_id' => $customer->cust_id]);
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs($user)
             ->delete(route('customers.notes.destroy', [
                 $customer->slug,
                 $note->note_id,
             ]));
-        $response->assertStatus(302);
-        $response->assertSessionHas('warning', __('cust.note.deleted'));
+
+        $response->assertStatus(302)
+            ->assertSessionHas('warning', __('cust.note.deleted'));
+
         $this->assertSoftDeleted('customer_notes', $note->only([
             'note_id',
             'subject',
             'details',
         ]));
-
-        Event::assertDispatched(CustomerNoteEvent::class);
     }
 
     /**
@@ -512,45 +574,45 @@ class CustomerNoteTest extends TestCase
             $note->note_id,
         ]));
 
-        $response->assertStatus(302);
-        $response->assertRedirect(route('login'));
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
         $this->assertGuest();
     }
 
     public function test_restore_no_permission()
     {
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
         $note = CustomerNote::factory()->create();
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs($user)
             ->get(route('customers.deleted-items.restore.notes', [
                 $note->cust_id,
                 $note->note_id,
             ]));
 
-        $response->assertStatus(403);
+        $response->assertForbidden();
     }
 
     public function test_restore()
     {
-        Event::fake();
-
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
         $note = CustomerNote::factory()->create();
         $note->delete();
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs($user)
             ->get(route('customers.deleted-items.restore.notes', [
                 $note->cust_id,
                 $note->note_id,
             ]));
 
-        $response->assertStatus(302);
-        $response->assertSessionHas('success', __('cust.note.restored'));
+        $response->assertStatus(302)
+            ->assertSessionHas('success', __('cust.note.restored'));
 
         $this->assertDatabaseHas('customer_notes', $note->only([
             'note_id',
         ]));
-
-        Event::assertDispatched(CustomerNoteEvent::class);
     }
 
     /**
@@ -566,43 +628,43 @@ class CustomerNoteTest extends TestCase
             $note->note_id,
         ]));
 
-        $response->assertStatus(302);
-        $response->assertRedirect(route('login'));
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
         $this->assertGuest();
     }
 
     public function test_force_delete_no_permission()
     {
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
         $note = CustomerNote::factory()->create();
         $note->delete();
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs($user)
             ->delete(route('customers.deleted-items.force-delete.notes', [
                 $note->cust_id,
                 $note->note_id,
             ]));
 
-        $response->assertStatus(403);
+        $response->assertForbidden();
     }
 
     public function test_force_delete()
     {
-        Event::fake();
-
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
         $note = CustomerNote::factory()->create();
         $note->delete();
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs($user)
             ->delete(route('customers.deleted-items.force-delete.notes', [
                 $note->cust_id,
                 $note->note_id,
             ]));
 
-        $response->assertStatus(302);
-        $response->assertSessionHas('warning', __('cust.note.force_deleted'));
+        $response->assertStatus(302)
+            ->assertSessionHas('warning', __('cust.note.force_deleted'));
 
         $this->assertDatabaseMissing('customer_notes', $note->only(['note_id']));
-
-        Event::assertDispatched(CustomerNoteEvent::class);
     }
 }

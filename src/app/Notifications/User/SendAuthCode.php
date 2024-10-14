@@ -12,18 +12,12 @@ class SendAuthCode extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    /**
-     * Create a new notification instance.
-     */
-    public function __construct(protected string $authCode)
-    {
-        //
-    }
+    public function __construct(protected string $authCode) {}
 
     /**
-     * Get the notification's delivery channels
+     * Notification is only sent via email
      */
-    public function via(object $notifiable): array
+    public function via(): array
     {
         return ['mail'];
     }
@@ -39,6 +33,7 @@ class SendAuthCode extends Notification implements ShouldQueue
             ->subject('Tech Bench Verification Code')
             ->greeting('Hello '.$notifiable->full_name)
             ->line('For security reasons, please enter the verification code to complete your two-factor authentication to sign into the Tech Bench')
-            ->line('Verification Code: '.$this->authCode);
+            ->line('Verification Code: '.$this->authCode)
+            ->line('Note:  This code is good for 15 minutes');
     }
 }

@@ -20,14 +20,14 @@ class DeletedTipsTest extends TestCase
 
     public function test_invoke_no_permission()
     {
-        $response = $this->ActingAs(User::factory()->create())
+        $response = $this->ActingAs(User::factory()->createQuietly())
             ->get(route('admin.tech-tips.deleted-tips'));
         $response->assertForbidden();
     }
 
     public function test_invoke()
     {
-        $response = $this->ActingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->ActingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->get(route('admin.tech-tips.deleted-tips'));
         $response->assertSuccessful();
     }

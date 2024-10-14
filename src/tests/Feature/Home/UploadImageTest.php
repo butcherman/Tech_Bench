@@ -28,7 +28,7 @@ class UploadImageTest extends TestCase
         Storage::fake('public');
         $data = ['file' => UploadedFile::fake()->image('testPhoto.png')];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->post(route('upload-image'), $data);
         $response->assertSuccessful();
 

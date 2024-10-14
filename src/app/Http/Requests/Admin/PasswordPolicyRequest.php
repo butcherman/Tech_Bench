@@ -24,17 +24,12 @@ class PasswordPolicyRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'expire' => 'required|numeric',
-            'min_length' => 'required|numeric',
-            'contains_uppercase' => 'required|boolean',
-            'contains_lowercase' => 'required|boolean',
-            'contains_number' => 'required|boolean',
-            'contains_special' => 'required|boolean',
+            'expire' => ['required', 'numeric'],
+            'min_length' => ['required', 'numeric'],
+            'contains_uppercase' => ['required', 'boolean'],
+            'contains_lowercase' => ['required', 'boolean'],
+            'contains_number' => ['required', 'boolean'],
+            'contains_special' => ['required', 'boolean'],
         ];
-    }
-
-    public function processPasswordSettings()
-    {
-        $this->saveSettingsArray($this->toArray(), 'auth.passwords.settings');
     }
 }

@@ -131,7 +131,6 @@ const reload = () => {
 };
 
 onMounted(() => {
-    console.log("mounted");
     Echo.private("administration-channel").listen(
         ".AdministrationEvent",
         (msg: { msg: string }) => {

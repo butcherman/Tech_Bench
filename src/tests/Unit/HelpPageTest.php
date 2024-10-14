@@ -52,12 +52,14 @@ class HelpPageTest extends TestCase
         })->map(function ($route) {
             return $route->action;
         })->pluck('as')->filter(function ($name) {
+            if (str_starts_with($name, 'generated::')) {
+                return false;
+            }
+
             $exploded = explode('.', $name);
 
             return count(array_intersect($this->bypassRoutes, $exploded)) == 0;
         });
-
-        // dd($routeList);
 
         foreach ($routeList as $route) {
             $this->assertFileExists(resource_path('js/Help/Pages/'.$route.'.vue'));

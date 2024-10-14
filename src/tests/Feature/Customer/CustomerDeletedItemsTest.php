@@ -4,6 +4,7 @@ namespace Tests\Feature\Customer;
 
 use App\Models\Customer;
 use App\Models\User;
+use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class CustomerDeletedItemsTest extends TestCase
@@ -16,26 +17,38 @@ class CustomerDeletedItemsTest extends TestCase
         $customer = Customer::factory()->create();
 
         $response = $this->get(route('customers.deleted-items.index', $customer->slug));
-        $response->assertStatus(302);
-        $response->assertRedirect(route('login'));
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
         $this->assertGuest();
     }
 
     public function test_invoke_no_permission()
     {
-        $customer = Customer::factory()->create();
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
 
-        $response = $this->actingAs(User::factory()->create())
+        $customer = Customer::factory()->createQuietly();
+
+        $response = $this->actingAs($user)
             ->get(route('customers.deleted-items.index', $customer->slug));
-        $response->assertStatus(403);
+
+        $response->assertForbidden();
     }
 
     public function test_invoke()
     {
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
         $customer = Customer::factory()->create();
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs($user)
             ->get(route('customers.deleted-items.index', $customer->slug));
-        $response->assertSuccessful();
+
+        $response->assertSuccessful()
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('Customer/DeletedItems')
+                ->has('customer')
+                ->has('deleted-items')
+            );
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+// TODO - Refactor
+
 namespace App\Http\Requests\Equipment;
 
 use App\Models\EquipmentType;
@@ -26,6 +28,7 @@ class DataTypeRequest extends FormRequest
             'masked' => 'required|boolean',
             'is_hyperlink' => 'required|boolean',
             'allow_copy' => 'required|boolean',
+            'do_not_log_value' => 'required|boolean',
         ];
     }
 }

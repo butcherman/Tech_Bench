@@ -26,7 +26,7 @@ class CheckForInitTest extends TestCase
         config(['app.first_time_setup' => true]);
         config(['app.env' => 'local']);
 
-        $response = $this->actingAs(User::factory()->create())->get(route('dashboard'));
+        $response = $this->actingAs(User::factory()->createQuietly())->get(route('dashboard'));
         $response->assertStatus(403);
     }
 

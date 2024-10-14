@@ -12,11 +12,7 @@ class FileDataDeletedEvent implements ShouldQueue
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
-     * Event is triggered when a file is removed from the
-     * file_uploads table
+     * Event is fired when a file is removed from the file_uploads table
      */
-    public function __construct(public int $fileId)
-    {
-        //
-    }
+    public function __construct(public int $fileId) {}
 }

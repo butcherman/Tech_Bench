@@ -15,7 +15,7 @@ trait AppSettingsTrait
     /**
      * Save an individual setting into the database so that it can be modified from the hard coded setting
      */
-    protected function saveSettings($key, $value)
+    protected function saveSettings(string $key, ?string $value): void
     {
         // Verify that we are not trying to save over a fake password
         if ($value !== __('admin.fake-password') && $value !== null) {
@@ -38,9 +38,23 @@ trait AppSettingsTrait
     }
 
     /**
+     * Array must be in the form of ['key' => 'value] in order to be properly updated
+     */
+    protected function saveSettingsArray(array $settingArray, ?string $prefix = null): void
+    {
+        foreach ($settingArray as $key => $value) {
+            $newKey = is_null($prefix) ? $key : $prefix.'.'.$key;
+
+            $this->saveSettings($newKey, $value);
+        }
+
+        $this->cacheConfig();
+    }
+
+    /**
      * Clear a setting from the database
      */
-    protected function clearSetting($key)
+    protected function clearSetting(string $key): void
     {
         $data = AppSettings::where('key', $key)->first();
         if ($data) {
@@ -51,25 +65,11 @@ trait AppSettingsTrait
     }
 
     /**
-     * Array must be in the form of ['key' => 'value] in order to be properly updated
-     */
-    protected function saveSettingsArray($settingArray, $prefix = '')
-    {
-        foreach ($settingArray as $key => $value) {
-            $newKey = $prefix !== '' ? $prefix.'.'.$key : $key;
-
-            $this->saveSettings($newKey, $value);
-        }
-
-        $this->cacheConfig();
-    }
-
-    /**
      * Cache the current config so it is not rebuilt on every request
      *
      * @codeCoverageIgnore
      */
-    protected function cacheConfig()
+    protected function cacheConfig(): void
     {
         if (App::environment('production')) {
             Artisan::call('config:cache');

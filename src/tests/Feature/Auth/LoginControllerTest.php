@@ -3,6 +3,7 @@
 namespace Tests\Feature\Auth;
 
 use App\Models\User;
+use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class LoginControllerTest extends TestCase
@@ -12,16 +13,31 @@ class LoginControllerTest extends TestCase
      */
     public function test_invoke_guest()
     {
+        // Enable Features to have them displayed on login page
+        config(['tech-tips.allow_public' => true]);
+
         $response = $this->get(route('home'));
 
-        $response->assertSuccessful();
+        $response->assertSuccessful()
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('Auth/Login')
+                ->has('welcome-message')
+                ->has('home-links')
+                ->has('public-link')
+                ->has('allow-oath')
+            );
         $this->assertGuest();
     }
 
     public function test_invoke_as_logged_in()
     {
-        $response = $this->actingAs(User::factory()->create())
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+
+        $response = $this->actingAs($user)
             ->get(route('home'));
-        $response->assertStatus(302)->assertRedirect(route('dashboard'));
+
+        $response->assertStatus(302)
+            ->assertRedirect(route('dashboard'));
     }
 }

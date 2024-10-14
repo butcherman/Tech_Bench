@@ -20,5 +20,6 @@ type dataTypes = {
     masked: boolean;
     is_hyperlink: boolean;
     allow_copy: boolean;
+    do_not_log_value: boolean;
     in_use: boolean;
 };

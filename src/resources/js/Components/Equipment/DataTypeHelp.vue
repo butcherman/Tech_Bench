@@ -46,6 +46,11 @@
                     button next to the field to allow the user to quickly add
                     the field to their clipboard.
                 </li>
+                <li class="list-group-item">
+                    <strong>Do Not Log Field Value:</strong>
+                    When enabled the value of this field will be redacted in
+                    system logs.
+                </li>
             </ul>
         </div>
     </div>

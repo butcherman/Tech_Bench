@@ -1,5 +1,7 @@
 <?php
 
+// TODO - Refactor
+
 namespace App\Http\Controllers\Equipment;
 
 use App\Http\Controllers\Controller;

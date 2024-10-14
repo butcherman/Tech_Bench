@@ -21,8 +21,8 @@ class ReAssignSiteRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'moveSiteId' => 'required|exists:customer_sites,cust_site_id',
-            'toCustomer' => 'required|exists:customers,cust_id',
+            'moveSiteId' => ['required', 'exists:customer_sites,cust_site_id'],
+            'toCustomer' => ['required', 'exists:customers,cust_id'],
         ];
     }
 }

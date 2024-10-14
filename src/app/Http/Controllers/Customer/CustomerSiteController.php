@@ -2,29 +2,32 @@
 
 namespace App\Http\Controllers\Customer;
 
-use App\Actions\BuildCustomerPermissions;
-use App\Enum\CrudAction;
-use App\Events\Customer\CustomerSiteEvent;
+use App\Actions\CustomerPermissions;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customer\CustomerDisableRequest;
 use App\Http\Requests\Customer\CustomerSiteRequest;
 use App\Models\Customer;
 use App\Models\CustomerSite;
+use App\Service\Customer\CustomerService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class CustomerSiteController extends Controller
 {
+    public function __construct(
+        protected CustomerPermissions $permissions,
+        protected CustomerService $svc
+    ) {}
+
     /**
      * Display a listing of the Customer Sites.
      */
     public function index(Request $request, Customer $customer): Response
     {
         return Inertia::render('Customer/Site/Index', [
-            'permissions' => fn () => BuildCustomerPermissions::build($request->user()),
+            'permissions' => fn () => $this->permissions->get($request->user()),
             'customer' => fn () => $customer,
             'siteList' => fn () => $customer->CustomerSite->makeVisible('href'),
             'alerts' => fn () => $customer->CustomerAlert,
@@ -49,18 +52,7 @@ class CustomerSiteController extends Controller
      */
     public function store(CustomerSiteRequest $request, ?Customer $customer = null): RedirectResponse
     {
-        // If the customer was not included in the URL, find based on request data
-        if ($customer === null) {
-            $customer = Customer::find($request->cust_id);
-        }
-
-        $request->setSlug();
-        $newSite = CustomerSite::create($request->except(['cust_name']));
-
-        Log::info('New Customer Site created for '.$request->cust_name.
-            ' by '.$request->user()->username, $newSite->toArray());
-
-        event(new CustomerSiteEvent($customer, $newSite, CrudAction::Create));
+        $newSite = $this->svc->createSite($request, $customer);
 
         return redirect(route('customers.sites.show', [
             $newSite->Customer->slug,
@@ -79,7 +71,7 @@ class CustomerSiteController extends Controller
         $customer->touchRecent($request->user());
 
         return Inertia::render('Customer/Site/Show', [
-            'permissions' => fn () => BuildCustomerPermissions::build($request->user()),
+            'permissions' => fn () => $this->permissions->get($request->user()),
             'customer' => fn () => $customer,
             'site' => fn () => $site,
             'siteList' => fn () => $customer->CustomerSite,
@@ -109,20 +101,19 @@ class CustomerSiteController extends Controller
     /**
      * Update the specified Customer Site in storage.
      */
-    public function update(CustomerSiteRequest $request, Customer $customer, CustomerSite $site): RedirectResponse
-    {
-        $request->setSlug();
-        $site->update($request->except(['cust_name']));
-
-        Log::info('Customer Site '.$site->site_name.' updated for '.
-            $request->cust_name.' by '.$request->user()->username, $site->toArray());
-
-        event(new CustomerSiteEvent($customer, $site, CrudAction::Update));
+    public function update(
+        CustomerSiteRequest $request,
+        Customer $customer,
+        CustomerSite $site
+    ): RedirectResponse {
+        $this->svc->updateSite($request, $site);
 
         return redirect(route('customers.sites.show', [
             $customer->slug,
             $site->site_slug,
-        ]))->with('success', __('cust.site.updated', ['name' => $site->site_name]));
+        ]))->with('success', __('cust.site.updated', [
+            'name' => $site->site_name,
+        ]));
     }
 
     /**
@@ -130,13 +121,7 @@ class CustomerSiteController extends Controller
      */
     public function destroy(CustomerDisableRequest $request, Customer $customer, CustomerSite $site): RedirectResponse
     {
-        $site->update(['deleted_reason' => $request->reason]);
-        $site->delete();
-
-        Log::alert('Customer Site '.$site->site_name.' for '.
-            $customer->name.' has been disabled by '.$request->user()->username);
-
-        event(new CustomerSiteEvent($customer, $site, CrudAction::Destroy));
+        $this->svc->destroySite($site, $request->reason);
 
         return redirect(route('customers.show', $customer->slug))
             ->with('danger', __('cust.destroy', [

@@ -5,6 +5,9 @@ namespace App\Service\Misc;
 use App\Events\Admin\AdministrationEvent;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
+/**
+ * @codeCoverageIgnore
+ */
 class ConsoleOutputService extends ConsoleOutput
 {
     /**

@@ -14,6 +14,7 @@ return [
     'azure' => [
         'allow_login' => env('AZURE_ALLOW_LOGIN', false),
         'allow_register' => env('AZURE_ALLOW_REGISTER', false),
+        'default_role_id' => 4,
         'allow_bypass_2fa' => env('AZURE_BYPASS_2FA', false),
         'default_role_id' => env('AZURE_DEFAULT_ROLE_ID', 4),
         'client_id' => env('AZURE_CLIENT_ID'),

@@ -20,7 +20,7 @@ class AboutTest extends TestCase
 
     public function test_about()
     {
-        $response = $this->actingAs(User::factory()->create())->get(route('about'));
+        $response = $this->actingAs(User::factory()->createQuietly())->get(route('about'));
         $response->assertSuccessful();
     }
 }

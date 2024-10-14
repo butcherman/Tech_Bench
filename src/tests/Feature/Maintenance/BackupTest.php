@@ -23,14 +23,14 @@ class BackupTest extends TestCase
 
     public function test_index_no_permission()
     {
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('maint.backup.index'));
         $response->assertForbidden();
     }
 
     public function test_index()
     {
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->get(route('maint.backup.index'));
         $response->assertSuccessful();
     }
@@ -54,7 +54,7 @@ class BackupTest extends TestCase
     {
         Queue::fake();
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->post(route('maint.backup.store'));
         $response->assertForbidden();
 
@@ -65,7 +65,7 @@ class BackupTest extends TestCase
     {
         Queue::fake();
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->post(route('maint.backup.store'));
         $response->assertStatus(302);
 
@@ -93,7 +93,7 @@ class BackupTest extends TestCase
         Storage::disk('backups')->put(config('backup.backup.name').
             DIRECTORY_SEPARATOR.'backup.zip', '123456');
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('maint.backup.show', 'backup.zip'));
         $response->assertForbidden();
     }
@@ -104,7 +104,7 @@ class BackupTest extends TestCase
         Storage::disk('backups')->put(config('backup.backup.name').
             DIRECTORY_SEPARATOR.'backup.zip', '123456');
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->get(route('maint.backup.show', 'backup.zip'));
         $response->assertDownload();
     }
@@ -115,7 +115,7 @@ class BackupTest extends TestCase
         Storage::disk('backups')->put(config('backup.backup.name').
             DIRECTORY_SEPARATOR.'backup.zip', '123456');
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->get(route('maint.backup.show', 'backup2.zip'));
         $response->assertStatus(404);
     }
@@ -141,7 +141,7 @@ class BackupTest extends TestCase
         Storage::disk('backups')->put(config('backup.backup.name').
             DIRECTORY_SEPARATOR.'backup.zip', '123456');
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->delete(route('maint.backup.destroy', 'backup.zip'));
         $response->assertForbidden();
 
@@ -155,7 +155,7 @@ class BackupTest extends TestCase
         Storage::disk('backups')->put(config('backup.backup.name').
             DIRECTORY_SEPARATOR.'backup.zip', '123456');
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->delete(route('maint.backup.destroy', 'backup.zip'));
         $response->assertStatus(302);
         $response->assertSessionHas('success', __('admin.backups.deleted'));
@@ -170,7 +170,7 @@ class BackupTest extends TestCase
         Storage::disk('backups')->put(config('backup.backup.name').
             DIRECTORY_SEPARATOR.'backup.zip', '123456');
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->delete(route('maint.backup.destroy', 'backup2.zip'));
         $response->assertStatus(404);
     }

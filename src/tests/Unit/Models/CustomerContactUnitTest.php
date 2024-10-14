@@ -19,9 +19,9 @@ class CustomerContactUnitTest extends TestCase
     {
         parent::setUp();
 
-        $this->customer = Customer::factory()->create();
+        $this->customer = Customer::factory()->createQuietly();
         $this->model = CustomerContact::factory()
-            ->create(['cust_id' => $this->customer->cust_id]);
+            ->createQuietly(['cust_id' => $this->customer->cust_id]);
         $this->model->CustomerSite()->sync([$this->customer->primary_site_id]);
     }
 
@@ -41,7 +41,7 @@ class CustomerContactUnitTest extends TestCase
     public function test_customer_contact_phone_relationship()
     {
         $data = CustomerContactPhone::factory()
-            ->create(['cont_id' => $this->model->cont_id]);
+            ->createQuietly(['cont_id' => $this->model->cont_id]);
 
         $this->assertEquals(
             $data->toArray(),
@@ -59,7 +59,7 @@ class CustomerContactUnitTest extends TestCase
     {
         $models = CustomerContact::factory()
             ->count(5)
-            ->create(['cust_id' => $this->customer->cust_id]);
+            ->createQuietly(['cust_id' => $this->customer->cust_id]);
 
         $models[0]->delete();
         $this->travel(30)->days(); // 120 days ago
@@ -89,7 +89,7 @@ class CustomerContactUnitTest extends TestCase
 
         $models = CustomerContact::factory()
             ->count(5)
-            ->create(['cust_id' => $this->customer->cust_id]);
+            ->createQuietly(['cust_id' => $this->customer->cust_id]);
 
         $models[0]->delete();
         $this->travel(30)->days(); // 120 days ago

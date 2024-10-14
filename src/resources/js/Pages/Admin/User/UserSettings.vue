@@ -8,6 +8,7 @@
                         :auto-logout-timer="autoLogoutTimer"
                         :twoFa="twoFa"
                         :oath="oath"
+                        :role-list="roleList"
                     />
                 </div>
             </div>
@@ -23,6 +24,7 @@ defineProps<{
     autoLogoutTimer: number;
     twoFa: twoFaConfig;
     oath: oathConfig;
+    roleList: userRole[];
 }>();
 </script>
 

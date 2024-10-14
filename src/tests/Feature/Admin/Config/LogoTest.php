@@ -4,6 +4,7 @@ namespace Tests\Feature\Admin\Config;
 
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
+use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class LogoTest extends TestCase
@@ -21,16 +22,26 @@ class LogoTest extends TestCase
 
     public function test_show_no_permission()
     {
-        $response = $this->actingAs(User::factory()->create())
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+
+        $response = $this->actingAs($user)
             ->get(route('admin.logo.show'));
-        $response->assertStatus(403);
+
+        $response->assertForbidden();
     }
 
     public function test_show()
     {
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
+
+        $response = $this->actingAs($user)
             ->get(route('admin.logo.show'));
-        $response->assertSuccessful();
+
+        $response->assertSuccessful()
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('Admin/Config/Logo'));
     }
 
     /**
@@ -50,23 +61,29 @@ class LogoTest extends TestCase
 
     public function test_update_no_permission()
     {
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
         $data = [
             'file' => UploadedFile::fake()->image('testPhoto.png'),
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs($user)
             ->post(route('admin.logo.update'), $data);
-        $response->assertStatus(403);
+
+        $response->assertForbidden();
     }
 
     public function test_update()
     {
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
         $data = [
             'file' => UploadedFile::fake()->image('testPhoto.png'),
         ];
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs($user)
             ->post(route('admin.logo.update'), $data);
+
         $response->assertSuccessful();
 
         $this->assertDatabaseHas('app_settings', [

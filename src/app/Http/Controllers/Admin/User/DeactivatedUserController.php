@@ -4,15 +4,15 @@ namespace App\Http\Controllers\Admin\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class DeactivatedUserController extends Controller
 {
     /**
-     * Handle the incoming request.
+     * Show a list of deactivated users.
      */
-    public function __invoke(Request $request)
+    public function __invoke(): Response
     {
         $this->authorize('viewAny', User::class);
 

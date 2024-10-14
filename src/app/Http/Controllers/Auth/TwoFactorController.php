@@ -4,33 +4,28 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\VerificationCodeRequest;
+use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class TwoFactorController extends Controller
 {
     /**
-     * Display the resource.
+     * Show the 2FA Verification Form
      */
-    public function show()
+    public function show(): Response
     {
-        // If the user has already verified, re-route to intended route or dashboard
-        if (session()->has('2fa_verified')) {
-            return redirect()->intended(route('dashboard'));
-        }
-
         return Inertia::render('Auth/TwoFactorAuth', [
             'allow-remember' => (bool) config('auth.twoFa.allow_save_device'),
         ]);
     }
 
     /**
-     * Update the resource in storage.
+     * Validate and save 2FA response
      */
-    public function update(VerificationCodeRequest $request)
+    public function update(VerificationCodeRequest $request): RedirectResponse
     {
-        session()->put('2fa_verified', true);
-        $cookie = $request->remember ?
-            $request->user()->generateRememberDeviceToken() : null;
+        $cookie = $request->user()->processValidCode($request->remember);
 
         return redirect()
             ->intended(route('dashboard'))

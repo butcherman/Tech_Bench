@@ -3,6 +3,7 @@
 namespace Tests\Feature\Customer;
 
 use App\Models\User;
+use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class DisabledCustomerTest extends TestCase
@@ -13,22 +14,35 @@ class DisabledCustomerTest extends TestCase
     public function test_invoke_guest()
     {
         $response = $this->get(route('customers.disabled.index'));
-        $response->assertStatus(302);
-        $response->assertRedirect(route('login'));
+
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
         $this->assertGuest();
     }
 
     public function test_invoke_no_permission()
     {
-        $response = $this->actingAs(User::factory()->create())
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+
+        $response = $this->actingAs($user)
             ->get(route('customers.disabled.index'));
-        $response->assertStatus(403);
+
+        $response->assertForbidden();
     }
 
     public function test_invoke()
     {
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
+
+        $response = $this->actingAs($user)
             ->get(route('customers.disabled.index'));
-        $response->assertSuccessful();
+
+        $response->assertSuccessful()
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('Customer/Disabled')
+                ->has('disabled-list')
+            );
     }
 }

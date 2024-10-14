@@ -40,9 +40,9 @@ class UploadFileTest extends TestCase
             'file' => UploadedFile::fake()->image('testPhoto.png'),
         ];
 
-        config(['fileLink.feature_enabled' => false]);
+        config(['file-link.feature_enabled' => false]);
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->post(route('links.upload'), $data);
         $response->assertForbidden();
     }
@@ -58,10 +58,10 @@ class UploadFileTest extends TestCase
             'file' => UploadedFile::fake()->image('testPhoto.png'),
         ];
 
-        config(['fileLink.feature_enabled' => true]);
+        config(['file-link.feature_enabled' => true]);
         $this->changeRolePermission(4, 'Use File Links', false);
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->post(route('links.upload'), $data);
         $response->assertForbidden();
     }
@@ -77,9 +77,9 @@ class UploadFileTest extends TestCase
             'file' => UploadedFile::fake()->image('testPhoto.png'),
         ];
 
-        config(['fileLink.feature_enabled' => true]);
+        config(['file-link.feature_enabled' => true]);
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->post(route('links.upload'), $data);
         $response->assertSuccessful();
 

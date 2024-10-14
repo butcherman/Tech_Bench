@@ -8,13 +8,13 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Fortify\Contracts\UpdatesUserPasswords;
 
-/**
- * Validate and update the user's password
- */
 class UpdateUserPassword implements UpdatesUserPasswords
 {
     use PasswordValidationRules;
 
+    /**
+     * Validate and update the user's password
+     */
     public function update(User $user, array $input): void
     {
         Validator::make($input, [

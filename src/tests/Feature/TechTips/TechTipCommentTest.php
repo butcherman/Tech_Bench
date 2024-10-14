@@ -31,18 +31,18 @@ class TechTipCommentTest extends TestCase
     {
         $tip = TechTip::factory()->create();
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('tech-tips.comments.index', $tip->slug));
         $response->assertForbidden();
     }
 
     public function test_index_feature_disabled()
     {
-        config(['techTips.allow_comments' => false]);
+        config(['tech-tips.allow_comments' => false]);
 
         $tip = TechTip::factory()->create();
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('tech-tips.comments.index', $tip->slug));
         $response->assertForbidden();
     }
@@ -51,7 +51,7 @@ class TechTipCommentTest extends TestCase
     {
         $tip = TechTip::factory()->create();
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->get(route('tech-tips.comments.index', $tip->slug));
         $response->assertSuccessful();
     }
@@ -90,20 +90,20 @@ class TechTipCommentTest extends TestCase
             'comment_data' => 'This is a comment',
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->post(route('tech-tips.comments.store', $tip->tip_id), $data);
         $response->assertForbidden();
     }
 
     public function test_store_feature_disabled()
     {
-        config(['techTips.allow_comments' => false]);
+        config(['tech-tips.allow_comments' => false]);
         $tip = TechTip::factory()->create();
         $data = [
             'comment_data' => 'This is a comment',
         ];
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->post(route('tech-tips.comments.store', $tip->tip_id), $data);
         $response->assertForbidden();
     }
@@ -112,13 +112,13 @@ class TechTipCommentTest extends TestCase
     {
         Notification::fake();
 
-        config(['techTips.allow_comments' => true]);
+        config(['tech-tips.allow_comments' => true]);
         $tip = TechTip::factory()->create();
         $data = [
             'comment_data' => 'This is a comment',
         ];
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->post(route('tech-tips.comments.store', $tip->tip_id), $data);
         $response->assertStatus(302);
         $response->assertSessionHas('success', __('tips.comment.created'));
@@ -171,7 +171,7 @@ class TechTipCommentTest extends TestCase
             'comment_data' => 'This is an updated comment',
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->put(route('tech-tips.comments.update', [
                 $comment->TechTip->tip_id,
                 $comment->comment_id,
@@ -181,13 +181,13 @@ class TechTipCommentTest extends TestCase
 
     public function test_update_feature_disabled()
     {
-        config(['techTips.allow_comments' => false]);
+        config(['tech-tips.allow_comments' => false]);
         $comment = TechTipComment::factory()->create();
         $data = [
             'comment_data' => 'This is an updated comment',
         ];
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->put(route('tech-tips.comments.update', [
                 $comment->TechTip->tip_id,
                 $comment->comment_id,
@@ -197,13 +197,13 @@ class TechTipCommentTest extends TestCase
 
     public function test_update_as_admin()
     {
-        config(['techTips.allow_comments' => true]);
+        config(['tech-tips.allow_comments' => true]);
         $comment = TechTipComment::factory()->create();
         $data = [
             'comment_data' => 'This is an updated comment',
         ];
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->put(route('tech-tips.comments.update', [
                 $comment->TechTip->tip_id,
                 $comment->comment_id,
@@ -213,7 +213,7 @@ class TechTipCommentTest extends TestCase
 
     public function test_update()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->createQuietly();
         $comment = TechTipComment::factory()
             ->create(['user_id' => $user->user_id]);
         $data = [
@@ -253,7 +253,7 @@ class TechTipCommentTest extends TestCase
     {
         $comment = TechTipComment::factory()->create();
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->delete(
                 route('tech-tips.comments.destroy', $comment->comment_id)
             );
@@ -262,7 +262,7 @@ class TechTipCommentTest extends TestCase
 
     public function test_destroy_as_author()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->createQuietly();
         $comment = TechTipComment::factory()->create(['user_id' => $user->user_id]);
 
         $response = $this->actingAs($user)
@@ -277,8 +277,8 @@ class TechTipCommentTest extends TestCase
 
     public function test_destroy_feature_disabled()
     {
-        config(['techTips.allow_comments' => false]);
-        $user = User::factory()->create();
+        config(['tech-tips.allow_comments' => false]);
+        $user = User::factory()->createQuietly();
         $comment = TechTipComment::factory()->create(['user_id' => $user->user_id]);
 
         $response = $this->actingAs($user)
@@ -290,10 +290,10 @@ class TechTipCommentTest extends TestCase
 
     public function test_destroy_as_admin()
     {
-        config(['techTips.allow_comments' => true]);
+        config(['tech-tips.allow_comments' => true]);
         $comment = TechTipComment::factory()->create();
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->delete(
                 route('tech-tips.comments.destroy', $comment->comment_id)
             );
@@ -310,7 +310,7 @@ class TechTipCommentTest extends TestCase
     {
         $comment = TechTipComment::factory()->create();
         TechTipCommentFlag::create([
-            'user_id' => User::factory()->create()->user_id,
+            'user_id' => User::factory()->createQuietly()->user_id,
             'comment_id' => $comment->comment_id,
         ]);
 
@@ -326,39 +326,39 @@ class TechTipCommentTest extends TestCase
     {
         $comment = TechTipComment::factory()->create();
         TechTipCommentFlag::create([
-            'user_id' => User::factory()->create()->user_id,
+            'user_id' => User::factory()->createQuietly()->user_id,
             'comment_id' => $comment->comment_id,
         ]);
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('tech-tips.comments.restore', $comment->comment_id));
         $response->assertForbidden();
     }
 
     public function test_restore_feature_disabled()
     {
-        config(['techTips.allow_comments' => false]);
+        config(['tech-tips.allow_comments' => false]);
         $comment = TechTipComment::factory()->create();
         TechTipCommentFlag::create([
-            'user_id' => User::factory()->create()->user_id,
+            'user_id' => User::factory()->createQuietly()->user_id,
             'comment_id' => $comment->comment_id,
         ]);
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->get(route('tech-tips.comments.restore', $comment->comment_id));
         $response->assertForbidden();
     }
 
     public function test_restore()
     {
-        config(['techTips.allow_comments' => true]);
+        config(['tech-tips.allow_comments' => true]);
         $comment = TechTipComment::factory()->create();
         TechTipCommentFlag::create([
-            'user_id' => User::factory()->create()->user_id,
+            'user_id' => User::factory()->createQuietly()->user_id,
             'comment_id' => $comment->comment_id,
         ]);
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->get(route('tech-tips.comments.restore', $comment->comment_id));
         $response->assertStatus(302);
 

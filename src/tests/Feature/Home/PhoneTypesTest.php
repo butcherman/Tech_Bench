@@ -22,14 +22,14 @@ class PhoneTypesTest extends TestCase
 
     public function test_index_no_permission()
     {
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('admin.phone-types.index'));
         $response->assertStatus(403);
     }
 
     public function test_index()
     {
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->get(route('admin.phone-types.index'));
         $response->assertSuccessful();
     }
@@ -47,7 +47,7 @@ class PhoneTypesTest extends TestCase
 
     public function test_create()
     {
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('phone-types'));
         $response->assertSuccessful();
         // $response->assertJson(PhoneNumberType::get()->toJson()); FIXME - check for proper json resposne
@@ -76,7 +76,7 @@ class PhoneTypesTest extends TestCase
             'icon_class' => 'fa-home',
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->post(route('admin.phone-types.store'), $data);
         $response->assertStatus(403);
     }
@@ -88,7 +88,7 @@ class PhoneTypesTest extends TestCase
             'icon_class' => 'fa-home',
         ];
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->post(route('admin.phone-types.store'), $data);
         $response->assertStatus(302);
         $response->assertSessionHas('success', __('admin.phone-type.created'));
@@ -129,7 +129,7 @@ class PhoneTypesTest extends TestCase
             'icon_class' => 'fa-home',
         ];
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->put(
                 route('admin.phone-types.update', $phoneType->phone_type_id),
                 $data
@@ -146,7 +146,7 @@ class PhoneTypesTest extends TestCase
             'icon_class' => 'fa-home',
         ];
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->put(
                 route('admin.phone-types.update', $phoneType->phone_type_id),
                 $data
@@ -179,7 +179,7 @@ class PhoneTypesTest extends TestCase
     {
         $phoneType = PhoneNumberType::find(1);
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->delete(
                 route('admin.phone-types.destroy', $phoneType->phone_type_id)
             );
@@ -190,7 +190,7 @@ class PhoneTypesTest extends TestCase
     {
         $phoneType = PhoneNumberType::find(1);
 
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->delete(
                 route('admin.phone-types.destroy', $phoneType->phone_type_id)
             );
@@ -208,7 +208,7 @@ class PhoneTypesTest extends TestCase
         CustomerContactPhone::factory()->create([
             'phone_type_id' => $phoneType->phone_type_id,
         ]);
-        $response = $this->actingAs(User::factory()->create(['role_id' => 1]))
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
             ->delete(
                 route('admin.phone-types.destroy', $phoneType->phone_type_id)
             );

@@ -24,7 +24,7 @@ class PublicFileLinkTest extends TestCase
 
     public function test_show_expired_link()
     {
-        $link = FileLink::factory()->create();
+        $link = FileLink::factory()->createQuietly();
         $link->expireLink();
 
         $response = $this->get(route('guest-link.show', $link->link_hash));
@@ -33,7 +33,7 @@ class PublicFileLinkTest extends TestCase
 
     public function test_show_guest()
     {
-        $link = FileLink::factory()->create();
+        $link = FileLink::factory()->createQuietly();
 
         $response = $this->get(route('guest-link.show', $link->link_hash));
         $response->assertSuccessful();
@@ -41,9 +41,9 @@ class PublicFileLinkTest extends TestCase
 
     public function test_show()
     {
-        $link = FileLink::factory()->create();
+        $link = FileLink::factory()->createQuietly();
 
-        $response = $this->actingAs(User::factory()->create())
+        $response = $this->actingAs(User::factory()->createQuietly())
             ->get(route('guest-link.show', $link->link_hash));
         $response->assertSuccessful();
     }
@@ -65,7 +65,7 @@ class PublicFileLinkTest extends TestCase
 
     public function test_update_expired_link()
     {
-        $link = FileLink::factory()->create();
+        $link = FileLink::factory()->createQuietly();
         $link->expireLink();
         $data = [
             'name' => 'Billy Bob',
@@ -81,7 +81,7 @@ class PublicFileLinkTest extends TestCase
     {
         Storage::fake('fileLinks');
 
-        $link = FileLink::factory()->create();
+        $link = FileLink::factory()->createQuietly();
         $data = [
             'name' => 'Billy Bob',
             'note' => 'This is a note',
@@ -104,8 +104,8 @@ class PublicFileLinkTest extends TestCase
     {
         Notification::fake();
 
-        $file = FileUpload::factory()->create();
-        $link = FileLink::factory()->create();
+        $file = FileUpload::factory()->createQuietly();
+        $link = FileLink::factory()->createQuietly();
         $data = [
             'name' => 'Billy Bob',
             'notes' => 'This is a note',
