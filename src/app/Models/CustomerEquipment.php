@@ -4,8 +4,10 @@ namespace App\Models;
 
 use App\Observers\CustomerEquipmentObserver;
 use App\Traits\CustomerBroadcastingTrait;
+use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\BroadcastableModelEventOccurred;
+use Illuminate\Database\Eloquent\BroadcastsEvents;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Prunable;
@@ -15,6 +17,7 @@ use Illuminate\Support\Facades\Log;
 #[ObservedBy([CustomerEquipmentObserver::class])]
 class CustomerEquipment extends Model
 {
+    use BroadcastsEvents;
     use CustomerBroadcastingTrait;
     use HasFactory;
     use Prunable;
@@ -86,20 +89,19 @@ class CustomerEquipment extends Model
     /***************************************************************************
      * Model Broadcasting
      ***************************************************************************/
-    public function broadcastOn(string $event)
+    public function broadcastOn(string $event): array
     {
-        return match ($event) {
-            'deleted', 'trashed', 'created' => [],
-            default => array_merge(
-                $this->getCustomerChannel(),
-                $this->getSiteChannelList(),
-                $this->getEquipmentChannel(),
-            ),
-        };
+        Log::debug('Broadcasting Customer Site Event');
+
+        return [
+            new PrivateChannel('customer.'.$this->Customer->slug),
+        ];
     }
 
     public function newBroadcastableModelEvent(string $event): BroadcastableModelEventOccurred
     {
+        Log::debug('Calling Dont Broadcast to Current User');
+
         return (new BroadcastableModelEventOccurred(
             $this, $event
         ))->dontBroadcastToCurrentUser();

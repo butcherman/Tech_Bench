@@ -6,10 +6,11 @@
                     v-if="permissions.equipment.create"
                     class="float-end"
                 />
+                <AlertButton v-if="changeAlert.equipment" />
                 <RefreshButton
                     :only="['equipmentList']"
                     @loading-start="toggleLoading('equipment')"
-                    @loading-complete="toggleLoading('equipment')"
+                    @loading-complete="clearAlert('equipment')"
                 />
                 Equipment:
             </div>
@@ -49,6 +50,7 @@
 <script setup lang="ts">
 import Overlay from "../_Base/Loaders/Overlay.vue";
 import RefreshButton from "../_Base/Buttons/RefreshButton.vue";
+import AlertButton from "../_Base/Buttons/AlertButton.vue";
 import CustomerEquipmentCreate from "./CustomerEquipmentCreate.vue";
 import {
     loading,
@@ -56,5 +58,7 @@ import {
     equipmentList,
     customer,
     permissions,
+    changeAlert,
+    clearAlert,
 } from "@/State/CustomerState";
 </script>

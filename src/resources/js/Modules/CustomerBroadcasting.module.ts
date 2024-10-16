@@ -48,5 +48,8 @@ export const registerCustomerChannel = (slug: string) => {
         .listen('.CustomerSiteCreated', () => triggerAlert('site'))
         .listen('.CustomerSiteUpdated', () => triggerAlert('site'))
         .listen('.customerSiteDeleted', () => triggerAlert('site'))
+        .listen('.CustomerEquipmentCreated', () => triggerAlert('equipment'))
+        .listen('.CustomerEquipmentUpdated', () => triggerAlert('equipment'))
+        .listen('.CustomerEquipmentDeleted', () => triggerAlert('equipment'))
         .listenToAll((event, data) => console.log(event, data));;
 }

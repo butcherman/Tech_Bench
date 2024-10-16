@@ -20,6 +20,21 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import CustomerSiteList from "@/Components/Customer/CustomerSiteList.vue";
 import AddButton from "@/Components/_Base/Buttons/AddButton.vue";
 import { customer, permissions } from "@/State/CustomerState";
+import { onMounted, onUnmounted } from "vue";
+import { registerCustomerChannel } from "@/Modules/CustomerBroadcasting.module";
+
+/**
+ * Register to Customer Channel
+ */
+const channelName = customer.value.slug;
+onMounted(() => {
+    registerCustomerChannel(channelName);
+});
+
+/**
+ * Leave Customer Channel
+ */
+onUnmounted(() => Echo.leave(`customer.${channelName}`));
 </script>
 
 <script lang="ts">
