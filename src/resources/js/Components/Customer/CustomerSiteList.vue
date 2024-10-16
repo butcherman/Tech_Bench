@@ -11,7 +11,7 @@
                             <RefreshButton
                                 :only="['siteList']"
                                 @loading-start="toggleLoading('site')"
-                                @loading-complete="toggleAlert('site')"
+                                @loading-complete="clearAlert('site')"
                             />
                         </span>
                     </slot>
@@ -55,7 +55,7 @@ import { computed } from "vue";
 import {
     siteList,
     changeAlert,
-    toggleAlert,
+    clearAlert,
     loading,
     toggleLoading,
 } from "@/State/CustomerState";

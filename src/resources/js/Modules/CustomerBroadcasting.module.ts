@@ -1,5 +1,5 @@
 import Modal from "@/Components/_Base/Modal.vue";
-import { customer, toggleAlert } from "@/State/CustomerState";
+import { customer, triggerAlert } from "@/State/CustomerState";
 import { ref } from "vue";
 
 interface alertLink {
@@ -22,11 +22,14 @@ export const customerAlertModal = ref<InstanceType<typeof Modal>|null>(null);
 export const customerAlertMessage = ref<string|null>(null);
 export const customerAlertLink = ref<alertLink|null>(null);
 
+/**
+ * Channel for all Customer Related Events
+ */
 export const registerCustomerChannel = (slug: string) => {
     Echo.private(`customer.${slug}`)
         .listen('.CustomerUpdated', (data: updatedCustomer) => {
             if(data.model.primary_site_id !== customer.value.primary_site_id) {
-                toggleAlert('site');
+                triggerAlert('site');
             }
         })
         .listen('.CustomerSlugChanged', (data: updatedSlug) => {
@@ -42,5 +45,8 @@ export const registerCustomerChannel = (slug: string) => {
                 text: 'Click to Reload Page',
             }
         })
-        .listenToAll((event, data) => console.log(event, data));
+        .listen('.CustomerSiteCreated', () => triggerAlert('site'))
+        .listen('.CustomerSiteUpdated', () => triggerAlert('site'))
+        .listen('.customerSiteDeleted', () => triggerAlert('site'))
+        .listenToAll((event, data) => console.log(event, data));;
 }

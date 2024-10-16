@@ -38,13 +38,14 @@ const changeAlert = reactive({
 });
 
 
-const toggleAlert = (key: "site" | "equipment" | "contacts" | "notes" | "files") => {
-    changeAlert[key] = !changeAlert[key];
-
-    if(!changeAlert[key]) {
-        loading[key] = false;
-    }
+const clearAlert = (key: "site" | "equipment" | "contacts" | "notes" | "files") => {
+    changeAlert[key] = false;
+    loading[key] = false;
 };
+
+const triggerAlert = (key: "site" | "equipment" | "contacts" | "notes" | "files") => {
+    changeAlert[key] = true;
+}
 
 /*******************************************************************************
  * Customer Information
@@ -89,7 +90,8 @@ export {
     loading,
     changeAlert,
     toggleLoading,
-    toggleAlert,
+    clearAlert,
+    triggerAlert,
     customer,
     customerAlerts,
     currentSite,

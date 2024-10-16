@@ -76,7 +76,8 @@ import CustomerFile from "@/Components/Customer/CustomerFile.vue";
 import AddButton from "@/Components/_Base/Buttons/AddButton.vue";
 import BookmarkItem from "@/Components/_Base/BookmarkItem.vue";
 import Modal from "@/Components/_Base/Modal.vue";
-import { computed, onMounted, onUnmounted } from "vue";
+import { router } from "@inertiajs/vue3";
+import { computed, onMounted, onUnmounted, onBeforeUnmount } from "vue";
 import { customer, permissions } from "@/State/CustomerState";
 import {
     registerCustomerChannel,
@@ -99,14 +100,15 @@ const showManagement = computed(
 /**
  * Register to Customer Channel
  */
+const channelName = customer.value.slug;
 onMounted(() => {
-    registerCustomerChannel(customer.value.slug);
+    registerCustomerChannel(channelName);
 });
 
 /**
  * Leave Customer Channel
  */
-onUnmounted(() => Echo.leave(`customer.${customer.value.slug}`));
+onUnmounted(() => Echo.leave(`customer.${channelName}`));
 
 const quickJumpList = [
     {
