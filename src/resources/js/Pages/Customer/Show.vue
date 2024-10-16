@@ -49,6 +49,16 @@
                 <CustomerFile />
             </div>
         </div>
+        <Modal title="ALERT" ref="customerAlertModal" no-close-on-click>
+            <div>{{ customerAlertMessage }}</div>
+            <a
+                v-if="customerAlertLink"
+                :href="customerAlertLink.link"
+                class="btn btn-info w-100"
+            >
+                {{ customerAlertLink.text }}
+            </a>
+        </Modal>
     </div>
 </template>
 
@@ -65,8 +75,15 @@ import CustomerNote from "@/Components/Customer/CustomerNote.vue";
 import CustomerFile from "@/Components/Customer/CustomerFile.vue";
 import AddButton from "@/Components/_Base/Buttons/AddButton.vue";
 import BookmarkItem from "@/Components/_Base/BookmarkItem.vue";
-import { computed } from "vue";
+import Modal from "@/Components/_Base/Modal.vue";
+import { computed, onMounted, onUnmounted } from "vue";
 import { customer, permissions } from "@/State/CustomerState";
+import {
+    registerCustomerChannel,
+    customerAlertModal,
+    customerAlertMessage,
+    customerAlertLink,
+} from "@/Modules/CustomerBroadcasting.module";
 
 defineProps<{
     isFav: boolean;
@@ -78,6 +95,18 @@ const showManagement = computed(
         permissions.value.details.manage ||
         permissions.value.details.delete
 );
+
+/**
+ * Register to Customer Channel
+ */
+onMounted(() => {
+    registerCustomerChannel(customer.value.slug);
+});
+
+/**
+ * Leave Customer Channel
+ */
+onUnmounted(() => Echo.leave(`customer.${customer.value.slug}`));
 
 const quickJumpList = [
     {

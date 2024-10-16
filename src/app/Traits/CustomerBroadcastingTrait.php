@@ -4,11 +4,6 @@ namespace App\Traits;
 
 trait CustomerBroadcastingTrait
 {
-    protected function getCustomerChannel(): array
-    {
-        return ['customer.'.$this->Customer->slug];
-    }
-
     protected function getSiteChannelList(): array
     {
         $siteList = $this->CustomerSite->pluck('site_slug')->toArray();

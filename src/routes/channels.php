@@ -16,6 +16,15 @@ Broadcast::channel('App.Models.User.{id}', function (User $user, int $id) {
 });
 
 /**
+ * Customer Channels
+ */
+Broadcast::channel('customer.{slug}', function (User $user, string $slug) {
+    Log::debug('User '.$user->username.' registering to Customer Channel - '.$slug);
+
+    return $user ? true : false;
+});
+
+/**
  * Active Tech Tip Channel
  */
 Broadcast::channel('tech-tips.{tip_id}', function (User $user, int $tip_id) {

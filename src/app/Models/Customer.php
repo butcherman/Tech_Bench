@@ -4,16 +4,20 @@ namespace App\Models;
 
 use App\Observers\CustomerObserver;
 use App\Traits\CustomerBroadcastingTrait;
+use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\BroadcastableModelEventOccurred;
+use Illuminate\Database\Eloquent\BroadcastsEvents;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Log;
 use Laravel\Scout\Searchable;
 
 #[ObservedBy([CustomerObserver::class])]
 class Customer extends Model
 {
+    use BroadcastsEvents;
     use CustomerBroadcastingTrait;
     use HasFactory;
     use Searchable;
@@ -114,16 +118,22 @@ class Customer extends Model
     /***************************************************************************
      * Model Broadcasting
      ***************************************************************************/
-    public function broadcastOn(string $event)
+    public function broadcastOn(string $event): array
     {
+        Log::debug('Broadcasting Customer Event');
+
         return match ($event) {
             'deleted', 'trashed', 'created' => [],
-            default => $this->getCustomerChannel(),
+            default => [
+                new PrivateChannel('customer.'.$this->slug),
+            ],
         };
     }
 
     public function newBroadcastableModelEvent(string $event): BroadcastableModelEventOccurred
     {
+        Log::debug('Calling Dont Broadcast to Current User');
+
         return (new BroadcastableModelEventOccurred(
             $this, $event
         ))->dontBroadcastToCurrentUser();
