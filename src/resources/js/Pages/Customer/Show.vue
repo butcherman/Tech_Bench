@@ -76,8 +76,7 @@ import CustomerFile from "@/Components/Customer/CustomerFile.vue";
 import AddButton from "@/Components/_Base/Buttons/AddButton.vue";
 import BookmarkItem from "@/Components/_Base/BookmarkItem.vue";
 import Modal from "@/Components/_Base/Modal.vue";
-import { router } from "@inertiajs/vue3";
-import { computed, onMounted, onUnmounted, onBeforeUnmount } from "vue";
+import { computed, onMounted, onUnmounted } from "vue";
 import { customer, permissions } from "@/State/CustomerState";
 import {
     registerCustomerChannel,

@@ -24,6 +24,12 @@ Broadcast::channel('customer.{slug}', function (User $user, string $slug) {
     return $user ? true : false;
 });
 
+Broadcast::channel('customer-site.{siteSlug}', function (User $user, string $siteSlug) {
+    Log::debug('User '.$user->username.' registering to Customer Site Channel - '.$siteSlug);
+
+    return $user ? true : false;
+});
+
 /**
  * Active Tech Tip Channel
  */
