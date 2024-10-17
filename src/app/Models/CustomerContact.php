@@ -4,7 +4,7 @@ namespace App\Models;
 
 use App\Observers\CustomerContactObserver;
 use App\Traits\CustomerBroadcastingTrait;
-use Closure;
+use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\BroadcastableModelEventOccurred;
 use Illuminate\Database\Eloquent\BroadcastsEvents;
@@ -63,19 +63,19 @@ class CustomerContact extends Model
     /***************************************************************************
      * Model Broadcasting
      ***************************************************************************/
-    public function broadcastOn(string $event): Closure|array
+    public function broadcastOn(string $event): array
     {
-        return match ($event) {
-            'deleted', 'trashed' => [],
-            default => array_merge(
-                $this->getCustomerChannel(),
-                $this->getSiteChannelList()
-            )
-        };
+        Log::debug('Broadcasting Customer Site Event');
+
+        return [
+            new PrivateChannel('customer.'.$this->Customer->slug),
+        ];
     }
 
     public function newBroadcastableModelEvent(string $event): BroadcastableModelEventOccurred
     {
+        Log::debug('Calling Dont Broadcast to Current User');
+
         return (new BroadcastableModelEventOccurred(
             $this, $event
         ))->dontBroadcastToCurrentUser();

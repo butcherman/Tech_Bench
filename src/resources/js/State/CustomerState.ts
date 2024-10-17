@@ -39,11 +39,13 @@ const changeAlert = reactive({
 
 
 const clearAlert = (key: "site" | "equipment" | "contacts" | "notes" | "files") => {
+    console.log('clear alert called');
     changeAlert[key] = false;
     loading[key] = false;
 };
 
 const triggerAlert = (key: "site" | "equipment" | "contacts" | "notes" | "files") => {
+    console.log('trigger alert called');
     changeAlert[key] = true;
 }
 

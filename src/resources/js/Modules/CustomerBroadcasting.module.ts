@@ -51,5 +51,13 @@ export const registerCustomerChannel = (slug: string) => {
         .listen('.CustomerEquipmentCreated', () => triggerAlert('equipment'))
         .listen('.CustomerEquipmentUpdated', () => triggerAlert('equipment'))
         .listen('.CustomerEquipmentDeleted', () => triggerAlert('equipment'))
-        .listenToAll((event, data) => console.log(event, data));;
+        .listen('.CustomerContactCreated', () => triggerAlert('contacts'))
+        .listen('.CustomerContactUpdated', () => triggerAlert('contacts'))
+        .listen('.CustomerContactDeleted', () => triggerAlert('contacts'))
+        .listen('.CustomerNoteCreated', () => triggerAlert('notes'))
+        .listen('.CustomerNoteUpdated', () => triggerAlert('notes'))
+        .listen('.CustomerNoteDeleted', () => triggerAlert('notes'))
+        .listen('.CustomerFileCreated', () => triggerAlert('files'))
+        .listen('.CustomerFileUpdated', () => triggerAlert('files'))
+        .listen('.CustomerFileDeleted', () => triggerAlert('files'));
 }

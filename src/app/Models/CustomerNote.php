@@ -3,7 +3,10 @@
 namespace App\Models;
 
 use App\Observers\CustomerNoteObserver;
+use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\BroadcastableModelEventOccurred;
+use Illuminate\Database\Eloquent\BroadcastsEvents;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Prunable;
@@ -13,6 +16,7 @@ use Illuminate\Support\Facades\Log;
 #[ObservedBy([CustomerNoteObserver::class])]
 class CustomerNote extends Model
 {
+    use BroadcastsEvents;
     use HasFactory;
     use Prunable;
     use SoftDeletes;
@@ -72,6 +76,27 @@ class CustomerNote extends Model
             'cust_equip_id',
             'cust_equip_id'
         );
+    }
+
+    /***************************************************************************
+     * Model Broadcasting
+     ***************************************************************************/
+    public function broadcastOn(string $event): array
+    {
+        Log::debug('Broadcasting Customer Site Event');
+
+        return [
+            new PrivateChannel('customer.'.$this->Customer->slug),
+        ];
+    }
+
+    public function newBroadcastableModelEvent(string $event): BroadcastableModelEventOccurred
+    {
+        Log::debug('Calling Dont Broadcast to Current User');
+
+        return (new BroadcastableModelEventOccurred(
+            $this, $event
+        ))->dontBroadcastToCurrentUser();
     }
 
     /***************************************************************************

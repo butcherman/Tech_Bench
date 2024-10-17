@@ -2,10 +2,14 @@
     <div class="card">
         <div class="card-body">
             <div class="card-title">
+                <AlertButton
+                    v-if="changeAlert.files"
+                    title="Files Updated.  Refresh for most recent data"
+                />
                 <RefreshButton
                     :only="['files']"
                     @loading-start="toggleLoading('files')"
-                    @loading-complete="toggleLoading('files')"
+                    @loading-complete="clearAlert('files')"
                 />
                 Files:
                 <CustomerFileCreate class="float-end" :equipment="equipment" />
@@ -50,6 +54,7 @@
 
 <script setup lang="ts">
 import RefreshButton from "../_Base/Buttons/RefreshButton.vue";
+import AlertButton from "../_Base/Buttons/AlertButton.vue";
 import Overlay from "../_Base/Loaders/Overlay.vue";
 import Table from "../_Base/Table.vue";
 import CustomerFileCreate from "@/Components/Customer/CustomerFileCreate.vue";
@@ -63,6 +68,8 @@ import {
     files,
     permissions,
     customer,
+    changeAlert,
+    clearAlert,
 } from "@/State/CustomerState";
 import verifyModal from "@/Modules/verifyModal";
 import { router } from "@inertiajs/vue3";
