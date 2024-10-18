@@ -124,7 +124,7 @@ class CustomerSite extends Model
      ***************************************************************************/
     public function broadcastOn(string $event): array
     {
-        Log::debug('Broadcasting Customer Site Event');
+        Log::debug('Broadcasting Customer Site Event - Event Name - '.$event);
 
         return match ($event) {
             'deleted', 'trashed', 'created' => [
@@ -139,7 +139,7 @@ class CustomerSite extends Model
 
     public function newBroadcastableModelEvent(string $event): BroadcastableModelEventOccurred
     {
-        Log::debug('Calling Dont Broadcast to Current User');
+        Log::debug('Calling Dont Broadcast to Current User', $this->toArray());
 
         return (new BroadcastableModelEventOccurred(
             $this, $event

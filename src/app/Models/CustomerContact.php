@@ -74,14 +74,20 @@ class CustomerContact extends Model
             [new PrivateChannel('customer.'.$this->Customer->slug)]
         );
 
-        Log::debug('Broadcasting Customer Contact Event', $allChannels);
+        Log::debug(
+            'Broadcasting Customer Contact Event - Event Name - '.$event,
+            $allChannels
+        );
 
-        return $allChannels;
+        return match ($event) {
+            'trashed', 'deleted' => [],
+            default => $allChannels,
+        };
     }
 
     public function newBroadcastableModelEvent(string $event): BroadcastableModelEventOccurred
     {
-        Log::debug('Calling Do Not Broadcast to Current User');
+        Log::debug('Calling Do Not Broadcast to Current User', $this->toArray());
 
         return (new BroadcastableModelEventOccurred(
             $this, $event
