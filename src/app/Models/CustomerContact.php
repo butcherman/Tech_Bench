@@ -74,7 +74,7 @@ class CustomerContact extends Model
             [new PrivateChannel('customer.'.$this->Customer->slug)]
         );
 
-        Log::debug('Broadcasting Customer Equipment Event', $allChannels);
+        Log::debug('Broadcasting Customer Contact Event', $allChannels);
 
         return $allChannels;
     }
