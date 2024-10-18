@@ -65,16 +65,23 @@ class CustomerContact extends Model
      ***************************************************************************/
     public function broadcastOn(string $event): array
     {
-        Log::debug('Broadcasting Customer Site Event');
+        $siteChannels = $this->getSiteChannels(
+            $this->CustomerSite->pluck('site_slug')->toArray()
+        );
 
-        return [
-            new PrivateChannel('customer.'.$this->Customer->slug),
-        ];
+        $allChannels = array_merge(
+            $siteChannels,
+            [new PrivateChannel('customer.'.$this->Customer->slug)]
+        );
+
+        Log::debug('Broadcasting Customer Equipment Event', $allChannels);
+
+        return $allChannels;
     }
 
     public function newBroadcastableModelEvent(string $event): BroadcastableModelEventOccurred
     {
-        Log::debug('Calling Dont Broadcast to Current User');
+        Log::debug('Calling Do Not Broadcast to Current User');
 
         return (new BroadcastableModelEventOccurred(
             $this, $event

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Observers\CustomerNoteObserver;
+use App\Traits\CustomerBroadcastingTrait;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\BroadcastableModelEventOccurred;
@@ -17,6 +18,7 @@ use Illuminate\Support\Facades\Log;
 class CustomerNote extends Model
 {
     use BroadcastsEvents;
+    use CustomerBroadcastingTrait;
     use HasFactory;
     use Prunable;
     use SoftDeletes;
@@ -83,16 +85,23 @@ class CustomerNote extends Model
      ***************************************************************************/
     public function broadcastOn(string $event): array
     {
-        Log::debug('Broadcasting Customer Site Event');
+        $siteChannels = $this->getSiteChannels(
+            $this->CustomerSite->pluck('site_slug')->toArray()
+        );
 
-        return [
-            new PrivateChannel('customer.'.$this->Customer->slug),
-        ];
+        $allChannels = array_merge(
+            $siteChannels,
+            [new PrivateChannel('customer.'.$this->Customer->slug)]
+        );
+
+        Log::debug('Broadcasting Customer Equipment Event', $allChannels);
+
+        return $allChannels;
     }
 
     public function newBroadcastableModelEvent(string $event): BroadcastableModelEventOccurred
     {
-        Log::debug('Calling Dont Broadcast to Current User');
+        Log::debug('Calling Do Not Broadcast to Current User');
 
         return (new BroadcastableModelEventOccurred(
             $this, $event
