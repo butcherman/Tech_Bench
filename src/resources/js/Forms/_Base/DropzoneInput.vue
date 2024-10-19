@@ -86,7 +86,10 @@ const initDropzone = () => {
         autoProcessQueue: false,
         chunking: true,
         chunkSize: fileData.chunkSize,
-        headers: { "X-CSRF-TOKEN": fileData.token },
+        headers: {
+            "X-CSRF-TOKEN": fileData.token,
+            "X-Socket-Id": Echo.socketId(),
+        },
         maxFiles: props.maxFiles || 5,
         maxFilesize: fileData.maxSize,
         method: "POST",
