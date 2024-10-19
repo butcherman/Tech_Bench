@@ -5,12 +5,12 @@
 namespace App\Http\Requests\FileLink;
 
 use App\Features\FileLinkFeature;
+use App\Http\Requests\UploadFileBaseRequest;
 use App\Models\FileLink;
 use App\Models\FileLinkTimeline;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
 
-class FileLinkRequest extends FormRequest
+class FileLinkRequest extends UploadFileBaseRequest
 {
     /**
      * Determine if the user is authorized to make this request.

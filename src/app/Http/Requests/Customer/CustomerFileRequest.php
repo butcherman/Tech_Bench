@@ -2,11 +2,10 @@
 
 namespace App\Http\Requests\Customer;
 
+use App\Http\Requests\UploadFileBaseRequest;
 use App\Models\CustomerFile;
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Str;
 
-class CustomerFileRequest extends FormRequest
+class CustomerFileRequest extends UploadFileBaseRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -32,17 +31,5 @@ class CustomerFileRequest extends FormRequest
             'cust_equip_id' => ['required_if:file_type,equipment'],
             'file_type_id' => ['required', 'exists:customer_file_types'],
         ];
-    }
-
-    /**
-     * If JSON data was part of the request, normalize it before validation
-     */
-    public function prepareForValidation()
-    {
-        foreach ($this->all() as $key => $value) {
-            if (Str::isJson($value)) {
-                $this->merge([$key => json_decode($value)]);
-            }
-        }
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Exceptions\Auth;
 
 use Exception;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
 use SocialiteProviders\Azure\User;
 
@@ -20,7 +21,7 @@ class UnableToCreateAzureUserException extends Exception
                     Administration Settings.');
     }
 
-    public function render()
+    public function render(): RedirectResponse
     {
         return redirect(route('login'))
             ->with('warning', 'You do not have permission to Login.  Please'.
