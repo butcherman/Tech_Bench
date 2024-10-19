@@ -14,18 +14,17 @@ class SocialiteController extends Controller
     /**
      * If feature is disabled, show 404 page not found
      */
-    public function __construct(protected AuthorizeUser $authObj)
-    {
-        if (! config('services.azure.allow_login')) {
-            abort(404);
-        }
-    }
+    public function __construct(protected AuthorizeUser $authObj) {}
 
     /**
      * Redirect the user to the Microsoft Login page
      */
     public function redirectAuth(): RedirectResponse
     {
+        if (! config('services.azure.allow_login')) {
+            abort(404);
+        }
+
         Log::info('Redirecting visitor to Microsoft Azure Authentication');
 
         return Socialite::driver('azure')->redirect();
@@ -36,6 +35,10 @@ class SocialiteController extends Controller
      */
     public function callback(): RedirectResponse
     {
+        if (! config('services.azure.allow_login')) {
+            abort(404);
+        }
+
         $this->authObj->handle();
 
         return redirect()->intended(RouteServiceProvider::HOME);
