@@ -90,7 +90,10 @@ export const registerEquipmentChannel = (custEquipId: number) => {
         .listen(".CustomerNoteDeleted", () => triggerAlert("notes"))
         .listen(".CustomerFileCreated", () => triggerAlert("files"))
         .listen(".CustomerFileUpdated", () => triggerAlert("files"))
-        .listen(".CustomerFileDeleted", () => triggerAlert("files"));
+        .listen(".CustomerFileDeleted", () => triggerAlert("files"))
+        .listen(".CustomerEquipmentDataUpdated", () =>
+            triggerAlert("equipment")
+        );
 };
 
 /**

@@ -32,9 +32,16 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="card-title">
+                            <AlertButton
+                                v-if="changeAlert.equipment"
+                                class="float-start"
+                                title="Files Updated.  Refresh for most recent data"
+                            />
                             <RefreshButton
                                 :only="['equipment-data']"
                                 class="float-start w-auto"
+                                @loading-start="toggleLoading('equipment')"
+                                @loading-complete="clearAlert('equipment')"
                             />
                             <h5 class="text-center">
                                 {{ equipment.equip_name }}
@@ -73,9 +80,17 @@ import CustomerEquipmentSites from "@/Components/Customer/CustomerEquipmentSites
 import CustomerNote from "@/Components/Customer/CustomerNote.vue";
 import CustomerFile from "@/Components/Customer/CustomerFile.vue";
 import RefreshButton from "@/Components/_Base/Buttons/RefreshButton.vue";
+import AlertButton from "@/Components/_Base/Buttons/AlertButton.vue";
 import verifyModal from "@/Modules/verifyModal";
 import { onMounted, onUnmounted } from "vue";
-import { customer, permissions } from "@/State/CustomerState";
+import {
+    customer,
+    permissions,
+    loading,
+    toggleLoading,
+    changeAlert,
+    clearAlert,
+} from "@/State/CustomerState";
 import { router } from "@inertiajs/vue3";
 import { registerEquipmentChannel } from "@/Modules/CustomerBroadcasting.module";
 
