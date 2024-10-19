@@ -97,7 +97,10 @@ class CustomerEquipment extends Model
 
         $allChannels = array_merge(
             $siteChannels,
-            [new PrivateChannel('customer.'.$this->Customer->slug)]
+            [
+                new PrivateChannel('customer.'.$this->Customer->slug),
+                new PrivateChannel('customer-equipment.'.$this->cust_equip_id),
+            ]
         );
 
         Log::debug(

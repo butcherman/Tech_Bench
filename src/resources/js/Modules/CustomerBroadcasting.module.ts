@@ -74,8 +74,23 @@ export const registerSiteChannel = (siteSlug: string) => {
         .listen(".CustomerNoteDeleted", () => triggerAlert("notes"))
         .listen(".CustomerFileCreated", () => triggerAlert("files"))
         .listen(".CustomerFileUpdated", () => triggerAlert("files"))
-        .listen(".CustomerFileDeleted", () => triggerAlert("files"))
-        .listenToAll((event, data) => console.log(event, data));
+        .listen(".CustomerFileDeleted", () => triggerAlert("files"));
+};
+
+/**
+ * Channel for all Customer Equipment Related Events
+ */
+export const registerEquipmentChannel = (custEquipId: number) => {
+    Echo.private(`customer-equipment.${custEquipId}`)
+        .listen(".CustomerEquipmentCreated", () => triggerAlert("equipment"))
+        .listen(".CustomerEquipmentUpdated", () => triggerAlert("equipment"))
+        .listen(".CustomerEquipmentDeleted", () => triggerAlert("equipment"))
+        .listen(".CustomerNoteCreated", () => triggerAlert("notes"))
+        .listen(".CustomerNoteUpdated", () => triggerAlert("notes"))
+        .listen(".CustomerNoteDeleted", () => triggerAlert("notes"))
+        .listen(".CustomerFileCreated", () => triggerAlert("files"))
+        .listen(".CustomerFileUpdated", () => triggerAlert("files"))
+        .listen(".CustomerFileDeleted", () => triggerAlert("files"));
 };
 
 /**

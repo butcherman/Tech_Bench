@@ -89,6 +89,10 @@ class CustomerNote extends Model
             $this->CustomerSite->pluck('site_slug')->toArray()
         );
 
+        if ($this->cust_equip_id) {
+            $siteChannels[] = new PrivateChannel('customer-equipment.'.$this->cust_equip_id);
+        }
+
         $allChannels = array_merge(
             $siteChannels,
             [new PrivateChannel('customer.'.$this->Customer->slug)]

@@ -36,6 +36,14 @@ Broadcast::channel('customer-site.{siteSlug}', function (User $user, string $sit
     return $user ? true : false;
 });
 
+Broadcast::channel('customer-equipment.{custEquipId}', function (User $user, int $custEquipId) {
+    Log::debug(
+        'User '.$user->username.' registering to Customer Equipment Channel - '.$custEquipId
+    );
+
+    return $user ? true : false;
+});
+
 /**
  * Active Tech Tip Channel
  */

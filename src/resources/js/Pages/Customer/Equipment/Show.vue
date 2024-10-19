@@ -74,13 +74,28 @@ import CustomerNote from "@/Components/Customer/CustomerNote.vue";
 import CustomerFile from "@/Components/Customer/CustomerFile.vue";
 import RefreshButton from "@/Components/_Base/Buttons/RefreshButton.vue";
 import verifyModal from "@/Modules/verifyModal";
+import { onMounted, onUnmounted } from "vue";
 import { customer, permissions } from "@/State/CustomerState";
 import { router } from "@inertiajs/vue3";
+import { registerEquipmentChannel } from "@/Modules/CustomerBroadcasting.module";
 
 const props = defineProps<{
     equipment: customerEquipment;
     equipmentData: customerEquipmentData[];
 }>();
+
+/**
+ * Register to Customer Channel
+ */
+const channelName = props.equipment.cust_equip_id;
+onMounted(() => {
+    registerEquipmentChannel(channelName);
+});
+
+/**
+ * Leave Customer Channel
+ */
+onUnmounted(() => Echo.leave(`customer.${channelName}`));
 
 const disableEquipment = () => {
     verifyModal("This Equipment will no longer be accessible").then((res) => {
