@@ -2,9 +2,12 @@
 
 namespace App\Models;
 
+use App\Observers\EquipmentCategoryObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+#[ObservedBy([EquipmentCategoryObserver::class])]
 class EquipmentCategory extends Model
 {
     use HasFactory;

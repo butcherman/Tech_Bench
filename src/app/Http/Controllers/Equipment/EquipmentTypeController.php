@@ -1,29 +1,27 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Http\Controllers\Equipment;
 
-use App\Exceptions\Database\GeneralQueryException;
-use App\Exceptions\Database\RecordInUseException;
 use App\Features\PublicTechTipFeature;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Equipment\EquipmentTypeRequest;
-use App\Jobs\Customer\UpdateCustomerDataFieldsJob;
 use App\Models\DataFieldType;
 use App\Models\EquipmentType;
 use App\Service\Cache;
-use Illuminate\Database\QueryException;
+use App\Service\Equipment\EquipmentService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class EquipmentTypeController extends Controller
 {
+    public function __construct(protected EquipmentService $svc) {}
+
     /**
-     * Display a listing of the resource.
+     * Display a listing of all Equipment Types.
      */
-    public function index()
+    public function index(): Response
     {
         $this->authorize('viewAny', EquipmentType::class);
 
@@ -33,9 +31,9 @@ class EquipmentTypeController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new Equipment Type.
      */
-    public function create(Request $request)
+    public function create(Request $request): Response
     {
         $this->authorize('create', EquipmentType::class);
 
@@ -49,39 +47,32 @@ class EquipmentTypeController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created Equipment Type.
      */
-    public function store(EquipmentTypeRequest $request)
+    public function store(EquipmentTypeRequest $request): RedirectResponse
     {
-        $newEquipment = EquipmentType::create($request->only(['cat_id', 'name', 'allow_public_tip']));
-        $request->processCustomerFields($newEquipment);
+        $this->svc->createEquipmentType($request);
 
-        Cache::clearCache(['equipmentTypes', 'equipmentCategories']);
-        Log::info(
-            'New Equipment Type created by '.$request->user()->username,
-            $request->toArray()
-        );
-
-        return redirect(route('equipment.index'))->with('success', __('equipment.created'));
+        return redirect(route('equipment.index'))
+            ->with('success', __('equipment.created'));
     }
 
     /**
-     * Display the specified resource.
+     * Display the Equipment Type references where it is used.
      */
-    public function show(EquipmentType $equipment)
+    public function show(EquipmentType $equipment): Response
     {
         $this->authorize('viewAny', $equipment);
 
         return Inertia::render('Equipment/Show', [
-            // TODO - Add Tech Tip References
-            'equipment' => $equipment->load(['Customer'/** 'TechTip' */]),
+            'equipment' => $equipment->load(['Customer', 'TechTip']),
         ]);
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing the Equipment Type.
      */
-    public function edit(Request $request, EquipmentType $equipment)
+    public function edit(Request $request, EquipmentType $equipment): Response
     {
         $this->authorize('update', $equipment);
 
@@ -96,49 +87,28 @@ class EquipmentTypeController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified Equipment Type.
      */
-    public function update(EquipmentTypeRequest $request, EquipmentType $equipment)
-    {
-        $equipment->update($request->only(['cat_id', 'name', 'allow_public_tip']));
-        $request->processCustomerFields($equipment);
+    public function update(
+        EquipmentTypeRequest $request,
+        EquipmentType $equipment
+    ): RedirectResponse {
+        $this->svc->updateEquipmentType($request, $equipment);
 
-        Cache::clearCache(['equipmentTypes', 'equipmentCategories']);
-        Log::info('Equipment Type '.$equipment->name.' updated by '.
-            $request->user()->username, $request->toArray());
-
-        UpdateCustomerDataFieldsJob::dispatch($equipment);
-
-        return redirect(route('equipment.index'))->with('success', __('equipment.updated'));
+        return redirect(route('equipment.index'))
+            ->with('success', __('equipment.updated'));
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the Equipment Type.
      */
-    public function destroy(Request $request, EquipmentType $equipment)
+    public function destroy(EquipmentType $equipment): RedirectResponse
     {
         $this->authorize('delete', $equipment);
 
-        try {
-            $equipment->delete();
-            Cache::clearCache(['equipmentTypes', 'equipmentCategories']);
-        } catch (QueryException $e) {
-            if (in_array($e->errorInfo[1], [19, 1451])) {
-                throw new RecordInUseException(
-                    $equipment->name.' is still in use and cannot be deleted',
-                    0,
-                    $e
-                );
-            } else {
-                // @codeCoverageIgnoreStart
-                throw new GeneralQueryException('', 0, $e);
-                // @codeCoverageIgnoreEnd
-            }
-        }
+        $this->svc->destroyEquipmentType($equipment);
 
-        Log::notice('Equipment Type '.$equipment->name.' was deleted by '.
-            $request->user()->username);
-
-        return redirect(route('equipment.index'))->with('warning', __('equipment.destroyed'));
+        return redirect(route('equipment.index'))
+            ->with('warning', __('equipment.destroyed'));
     }
 }

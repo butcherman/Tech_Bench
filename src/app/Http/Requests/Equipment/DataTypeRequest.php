@@ -1,7 +1,5 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Http\Requests\Equipment;
 
 use App\Models\EquipmentType;
@@ -23,12 +21,12 @@ class DataTypeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string',
-            'pattern' => 'nullable',
-            'masked' => 'required|boolean',
-            'is_hyperlink' => 'required|boolean',
-            'allow_copy' => 'required|boolean',
-            'do_not_log_value' => 'required|boolean',
+            'name' => ['required', 'string', 'unique:data_field_types,name'],
+            'pattern' => ['nullable'],
+            'masked' => ['required', 'boolean'],
+            'is_hyperlink' => ['required', 'boolean'],
+            'allow_copy' => ['required', 'boolean'],
+            'do_not_log_value' => ['required', 'boolean'],
         ];
     }
 }
