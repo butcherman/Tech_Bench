@@ -40,16 +40,19 @@ class FileUpload extends Model
         return $this->created_at;
     }
 
+    /***************************************************************************
+     * Additional Methods
+     ***************************************************************************/
+
+    /**
+     * Verify that the file is valid and user is allowed to download
+     */
     public function validateFile($fileName)
     {
         $this->verifyFileName($fileName);
         $this->verifyPublicDownload();
         $this->verifyFileExists();
     }
-
-    /***************************************************************************
-     * Additional Methods
-     ***************************************************************************/
 
     /**
      * Verify that the File Name passed to download route matches file

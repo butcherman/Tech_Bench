@@ -1,7 +1,5 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Http\Controllers\Home;
 
 use App\Http\Controllers\Controller;
@@ -18,7 +16,8 @@ class UploadImageController extends Controller
     public function __invoke(UploadImageRequest $request, ?string $folderName = null)
     {
         $path = 'images/uploaded/'.$folderName;
-        $location = Storage::disk('public')->putFile($path, new File($request->file));
+        $location = Storage::disk('public')
+            ->putFile($path, new File($request->file));
 
         return ['location' => Storage::url($location)];
     }

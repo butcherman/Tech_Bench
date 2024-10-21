@@ -28,7 +28,7 @@ class EquipmentDataService
         try {
             $field->delete();
         } catch (QueryException $e) {
-            (new CheckDatabaseError)->check(
+            CheckDatabaseError::check(
                 $e,
                 $field->name.' is still in use and cannot be deleted'
             );

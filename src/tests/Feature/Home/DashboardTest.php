@@ -3,6 +3,7 @@
 namespace Tests\Feature\Home;
 
 use App\Models\User;
+use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class DashboardTest extends TestCase
@@ -13,14 +14,24 @@ class DashboardTest extends TestCase
     public function test_dashboard_guest()
     {
         $response = $this->get(route('dashboard'));
-        $response->assertStatus(302);
-        $response->assertRedirect(route('login'));
+
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
         $this->assertGuest();
     }
 
     public function test_dashboard()
     {
-        $response = $this->actingAs(User::factory()->createQuietly())->get(route('dashboard'));
-        $response->assertSuccessful();
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+
+        $response = $this->actingAs($user)->get(route('dashboard'));
+
+        $response->assertSuccessful()
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('Home/Dashboard')
+                ->has('bookmarks')
+                ->has('recent')
+            );
     }
 }

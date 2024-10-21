@@ -1,7 +1,5 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Http\Requests\Home;
 
 use App\Models\Customer;
@@ -23,8 +21,8 @@ class PhoneTypesRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'description' => 'required|string',
-            'icon_class' => 'required|string',
+            'description' => ['required', 'string'],
+            'icon_class' => ['required', 'string'],
         ];
     }
 }

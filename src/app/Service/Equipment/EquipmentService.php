@@ -37,11 +37,10 @@ class EquipmentService
             $category->delete();
             Cache::clearCache(['equipmentTypes', 'equipmentCategories']);
         } catch (QueryException $e) {
-            (new CheckDatabaseError)
-                ->check(
-                    $e,
-                    __('equipment.category.in-use', ['name' => $category->name])
-                );
+            CheckDatabaseError::check(
+                $e,
+                __('equipment.category.in-use', ['name' => $category->name])
+            );
         }
     }
 
@@ -75,11 +74,10 @@ class EquipmentService
         try {
             $equipment->delete();
         } catch (QueryException $e) {
-            (new CheckDatabaseError)
-                ->check(
-                    $e,
-                    __('equipment.in_use', ['name' => $equipment->name])
-                );
+            CheckDatabaseError::check(
+                $e,
+                __('equipment.in_use', ['name' => $equipment->name])
+            );
         }
     }
 

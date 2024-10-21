@@ -1,7 +1,5 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Http\Controllers\Home;
 
 use App\Http\Controllers\Controller;
@@ -12,7 +10,7 @@ use Illuminate\Support\Facades\Log;
 class DownloadFileController extends Controller
 {
     /**
-     * Handle the incoming request.
+     * Download a file from the Storage System.
      */
     public function __invoke(Request $request, FileUpload $file, string $fileName)
     {
