@@ -11,14 +11,6 @@ class CustomerAdministrationService
     use AppSettingsTrait;
 
     /**
-     * Create a new class instance.
-     */
-    public function __construct()
-    {
-        //
-    }
-
-    /**
      * Update Customer Administration Settings
      */
     public function updateCustomerSettings(CustomerSettingsRequest $requestData)

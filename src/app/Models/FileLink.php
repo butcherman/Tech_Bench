@@ -89,6 +89,21 @@ class FileLink extends Model
         $this->update([
             'expire' => Carbon::yesterday(),
         ]);
+
+        Log::info('A File link was manually expired', $this->toArray());
+    }
+
+    public function extendLink()
+    {
+        $currentExpire = Carbon::parse($this->expire);
+        $this->update([
+            'expire' => $currentExpire->addDays(30),
+        ]);
+
+        Log::info(
+            'A File Link expiration date has been extended 30 days',
+            $this->toArray()
+        );
     }
 
     /***************************************************************************

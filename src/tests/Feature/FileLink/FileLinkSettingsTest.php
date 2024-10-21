@@ -13,8 +13,9 @@ class FileLinkSettingsTest extends TestCase
     public function test_show_guest()
     {
         $response = $this->get(route('admin.links.settings.show'));
-        $response->assertStatus(302);
-        $response->assertRedirect(route('login'));
+
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
         $this->assertGuest();
     }
 
@@ -27,6 +28,7 @@ class FileLinkSettingsTest extends TestCase
 
         $response = $this->actingAs($user)
             ->get(route('admin.links.settings.show'));
+
         $response->assertForbidden();
     }
 
@@ -39,6 +41,7 @@ class FileLinkSettingsTest extends TestCase
 
         $response = $this->actingAs($user)
             ->get(route('admin.links.settings.show'));
+
         $response->assertForbidden();
     }
 
@@ -51,6 +54,7 @@ class FileLinkSettingsTest extends TestCase
 
         $response = $this->actingAs($user)
             ->get(route('admin.links.settings.show'));
+
         $response->assertSuccessful();
     }
 
@@ -67,8 +71,9 @@ class FileLinkSettingsTest extends TestCase
         ];
 
         $response = $this->put(route('admin.links.settings.update'), $data);
-        $response->assertStatus(302);
-        $response->assertRedirect(route('login'));
+
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
         $this->assertGuest();
     }
 
@@ -87,6 +92,7 @@ class FileLinkSettingsTest extends TestCase
 
         $response = $this->actingAs($user)
             ->put(route('admin.links.settings.update'), $data);
+
         $response->assertForbidden();
     }
 
@@ -105,6 +111,7 @@ class FileLinkSettingsTest extends TestCase
 
         $response = $this->actingAs($user)
             ->put(route('admin.links.settings.update'), $data);
+
         $response->assertForbidden();
     }
 
@@ -123,7 +130,9 @@ class FileLinkSettingsTest extends TestCase
 
         $response = $this->actingAs($user)
             ->put(route('admin.links.settings.update'), $data);
-        $response->assertStatus(302);
+
+        $response->assertStatus(302)
+            ->assertSessionHas('success', 'File Link Settings Updated');
 
         $this->assertDatabaseHas('app_settings', [
             'key' => 'file-link.default_link_life',

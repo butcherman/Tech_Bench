@@ -1,7 +1,5 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Http\Requests\FileLink;
 
 use App\Models\FileLink;
@@ -26,15 +24,10 @@ class FileLinkSettingsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'default_link_life' => 'required|numeric',
-            'auto_delete' => 'required|boolean',
-            'auto_delete_days' => 'required|numeric',
-            'auto_delete_override' => 'required|boolean',
+            'default_link_life' => ['required', 'numeric'],
+            'auto_delete' => ['required', 'boolean'],
+            'auto_delete_days' => ['required', 'numeric'],
+            'auto_delete_override' => ['required', 'boolean'],
         ];
-    }
-
-    public function updateFileLinkSettings()
-    {
-        $this->saveSettingsArray($this->all(), 'file-link');
     }
 }

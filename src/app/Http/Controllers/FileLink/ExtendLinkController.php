@@ -1,30 +1,21 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Http\Controllers\FileLink;
 
 use App\Http\Controllers\Controller;
 use App\Models\FileLink;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Http\RedirectResponse;
 
 class ExtendLinkController extends Controller
 {
     /**
-     * Handle the incoming request.
+     * Extend the Expire date on a file link by 30 days
      */
-    public function __invoke(Request $request, FileLink $link)
+    public function __invoke(FileLink $link): RedirectResponse
     {
         $this->authorize('update', $link);
 
-        $currentExpire = Carbon::parse($link->expire);
-        $link->update([
-            'expire' => $currentExpire->addDays(30),
-        ]);
-
-        Log::info('A File Link has been extended 30 days by '.$request->user()->username, $link->toArray());
+        $link->extendLink();
 
         return back()
             ->with(

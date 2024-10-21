@@ -1,21 +1,20 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Http\Controllers\FileLink;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\FileLinkAdminResource;
 use App\Http\Resources\FileLinkTableResource;
 use App\Models\FileLink;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use App\Service\FileLink\FileLinkService;
 use Inertia\Inertia;
 
 class FileLinkAdminController extends Controller
 {
+    public function __construct(protected FileLinkService $svc) {}
+
     /**
-     * Display a listing of the resource.
+     * Display a listing all File Links for all users.
      */
     public function index()
     {
@@ -27,7 +26,7 @@ class FileLinkAdminController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display another users File Link.
      */
     public function show(FileLink $link)
     {
@@ -49,18 +48,13 @@ class FileLinkAdminController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove another users File Link.
      */
-    public function destroy(Request $request, FileLink $link)
+    public function destroy(FileLink $link)
     {
         $this->authorize('delete', $link);
 
-        $link->delete();
-
-        Log::info(
-            'File Link deleted by '.$request->user()->username,
-            $link->toArray()
-        );
+        $this->svc->destroyFileLink($link);
 
         return redirect(route('admin.links.manage.index'))
             ->with('danger', 'File Link Deleted');
