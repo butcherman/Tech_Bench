@@ -23,12 +23,7 @@ class BasicSettingsController extends Controller
         $this->authorize('viewAny', AppSettings::class);
 
         return Inertia::render('Admin/Config/Settings', [
-            'settings' => [
-                'url' => preg_replace('(^https?://)', '', config('app.url')),
-                'company_name' => config('app.company_name'),
-                'timezone' => config('app.timezone'),
-                'max_filesize' => (int) config('filesystems.max_filesize'),
-            ],
+            'settings' => $this->svc->getBasicSettings(),
             'timezone-list' => TimezoneList::Build(),
         ]);
     }

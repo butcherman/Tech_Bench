@@ -3,6 +3,7 @@
 namespace Tests\Feature\Init;
 
 use App\Models\User;
+use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class FinishTest extends TestCase
@@ -16,8 +17,9 @@ class FinishTest extends TestCase
         config(['app.env' => 'local']);
 
         $response = $this->get(route('init.finish'));
-        $response->assertStatus(302);
-        $response->assertRedirect(route('login'));
+
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
         $this->assertGuest();
     }
 
@@ -26,7 +28,15 @@ class FinishTest extends TestCase
         config(['app.first_time_setup' => true]);
         config(['app.env' => 'local']);
 
-        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))->get(route('init.finish'));
-        $response->assertSuccessful();
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
+
+        $response = $this->actingAs($user)->get(route('init.finish'));
+
+        $response->assertSuccessful()
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('Init/Finish')
+                ->has('step')
+            );
     }
 }

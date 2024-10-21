@@ -3,6 +3,7 @@
 namespace Tests\Feature\Init;
 
 use App\Models\User;
+use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class StepFourTest extends TestCase
@@ -16,8 +17,9 @@ class StepFourTest extends TestCase
         config(['app.env' => 'local']);
 
         $response = $this->get(route('init.step-4'));
-        $response->assertStatus(302);
-        $response->assertRedirect(route('login'));
+
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
         $this->assertGuest();
     }
 
@@ -26,9 +28,21 @@ class StepFourTest extends TestCase
         config(['app.first_time_setup' => true]);
         config(['app.env' => 'local']);
 
-        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
+
+        $response = $this->actingAs($user)
             ->get(route('init.step-4'));
-        $response->assertSuccessful();
+
+        $response->assertSuccessful()
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('Init/StepFour')
+                ->has('step')
+                ->has('rules')
+                ->has('roles')
+                ->has('user')
+                ->has('has-pass')
+            );
     }
 
     public function test_invoke_with_session_data()
@@ -36,13 +50,20 @@ class StepFourTest extends TestCase
         config(['app.first_time_setup' => true]);
         config(['app.env' => 'local']);
 
-        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
+
+        $response = $this->actingAs($user)
             ->withSession([
                 'setup' => [
                     'administrator-account' => User::factory()->make(),
                 ],
             ])
             ->get(route('init.step-4'));
-        $response->assertSuccessful();
+
+        $response->assertSuccessful()
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('Init/StepFour')
+            );
     }
 }

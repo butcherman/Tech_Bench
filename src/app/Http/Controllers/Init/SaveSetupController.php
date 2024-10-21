@@ -1,7 +1,5 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Http\Controllers\Init;
 
 use App\Actions\Maintenance\BuildApplication;
@@ -19,6 +17,7 @@ class SaveSetupController extends Controller
         $init = new BuildApplication($request->session()->pull('setup'));
         $init();
 
-        return response()->json(['success' => true, 'url' => config('app.url')]);
+        return response()
+            ->json(['success' => true, 'url' => config('app.url')]);
     }
 }
