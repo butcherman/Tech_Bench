@@ -10,6 +10,7 @@ use App\Models\FileUpload;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class FileLinkFileTest extends TestCase
@@ -72,6 +73,8 @@ class FileLinkFileTest extends TestCase
     {
         config(['file-link.feature_enabled' => true]);
 
+        Storage::fake('fileLinks');
+
         /** @var User $user */
         $user = User::factory()->createQuietly();
         $link = FileLink::factory()->create(['user_id' => $user->user_id]);
@@ -84,16 +87,31 @@ class FileLinkFileTest extends TestCase
 
         $response->assertSuccessful();
 
-        // $this->assertDatabaseHas('file_link_timelines', [
-        //     'link_id' => $link->link_id,
-        // ]);
-        // $this->assertDatabaseHas('file_link_files', [
-        //     'link_id' => $link->link_id,
-        //     'upload' => false,
-        // ]);
+        Storage::disk('fileLinks')
+            ->assertExists($link->link_id.'/testPhoto.png');
     }
 
-    // TODO - Verify file exists and is in correct folder after upload complete
+    public function test_store_file_upload_complete()
+    {
+        config(['file-link.feature_enabled' => true]);
+
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+        $link = FileLink::factory()->create(['user_id' => $user->user_id]);
+        $upload = FileUpload::factory()->create();
+        $data = [];
+
+        $response = $this->actingAs($user)
+            ->withSession(['link-file' => [$upload->file_id]])
+            ->post(route('links.add-file', $link->link_id), $data);
+
+        $response->assertSuccessful();
+
+        $this->assertDatabaseHas('file_link_files', [
+            'link_id' => $link->link_id,
+            'file_id' => $upload->file_id,
+        ]);
+    }
 
     /**
      * Destroy Method

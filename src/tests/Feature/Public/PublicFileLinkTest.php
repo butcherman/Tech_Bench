@@ -2,9 +2,12 @@
 
 namespace Tests\Feature\Public;
 
+use App\Events\FileLinks\FileUploadedFromPublicEvent;
 use App\Models\FileLink;
+use App\Models\FileUpload;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
@@ -124,5 +127,28 @@ class PublicFileLinkTest extends TestCase
 
         Storage::disk('fileLinks')
             ->assertExists($link->link_id.DIRECTORY_SEPARATOR.'testPhoto.png');
+    }
+
+    public function test_update_guest_file_upload_after_file()
+    {
+        Event::fake();
+
+        $upload = FileUpload::factory()->create();
+        $link = FileLink::factory()->createQuietly();
+        $data = [
+            'name' => 'Billy Bob',
+            'note' => 'This is a note',
+        ];
+
+        $response = $this->withSession(['link-file' => [$upload->file_id]])
+            ->post(
+                route('guest-link.update',
+                    $link->link_hash
+                ), $data);
+
+        $response->assertStatus(302)
+            ->assertSessionHas('success', 'Files Uploaded Successfully');
+
+        Event::assertDispatched(FileUploadedFromPublicEvent::class);
     }
 }

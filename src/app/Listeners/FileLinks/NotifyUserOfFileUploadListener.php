@@ -7,7 +7,7 @@ use App\Notifications\FileLinks\GuestFileUploadedNotification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Notification;
 
-class FileUploadFromPublicListener implements ShouldQueue
+class NotifyUserOfFileUploadListener implements ShouldQueue
 {
     /**
      * Handle the event.

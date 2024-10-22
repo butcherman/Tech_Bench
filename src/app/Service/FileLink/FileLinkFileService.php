@@ -3,6 +3,7 @@
 namespace App\Service\FileLink;
 
 use App\Events\File\FileDataDeletedEvent;
+use App\Events\FileLinks\FileUploadedFromPublicEvent;
 use App\Models\FileLink;
 use App\Models\FileLinkFile;
 use App\Models\FileLinkNote;
@@ -54,6 +55,8 @@ class FileLinkFileService extends FileLinkService
                 'note' => $requestData->get('notes'),
             ]);
         }
+
+        event(new FileUploadedFromPublicEvent($link, $timeline));
     }
 
     public function destroyLinkFile(FileLinkFile $linkFile): void

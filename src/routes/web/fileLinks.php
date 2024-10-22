@@ -7,7 +7,6 @@ use App\Http\Controllers\FileLink\FileLinkAdminController;
 use App\Http\Controllers\FileLink\FileLinkController;
 use App\Http\Controllers\FileLink\FileLinkFileController;
 use App\Http\Controllers\FileLink\FileLinkSettingsController;
-use App\Http\Controllers\FileLink\UploadFileController;
 use App\Http\Controllers\Public\PublicFileLinkController;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 use Illuminate\Http\Request;
@@ -17,8 +16,6 @@ use Illuminate\Support\Facades\Route;
  * Routes for File Link Usage
  */
 Route::middleware('auth.secure')->group(function () {
-    Route::post('links/upload', UploadFileController::class)
-        ->name('links.upload');
     Route::get('{link}/expire', ExpireFileLinkController::class)
         ->name('links.expire');
     Route::get('{link}/extend', ExtendLinkController::class)
