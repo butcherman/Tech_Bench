@@ -2,10 +2,11 @@
 
 namespace Tests\Feature\FileLink;
 
+use App\Jobs\FileLink\HandleLinkFilesJob;
 use App\Models\FileLink;
-use App\Models\FileUpload;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
@@ -178,6 +179,8 @@ class FileLinkTest extends TestCase
 
     public function test_store()
     {
+        Bus::fake();
+
         config(['file-link.feature_enabled' => true]);
 
         /** @var User $user */
@@ -201,6 +204,8 @@ class FileLinkTest extends TestCase
             'allow_upload' => true,
             'instructions' => 'Here are some instructions',
         ]);
+
+        Bus::assertDispatched(HandleLinkFilesJob::class);
     }
 
     public function test_store_with_file()
@@ -208,37 +213,32 @@ class FileLinkTest extends TestCase
         config(['file-link.feature_enabled' => true]);
 
         Storage::fake('fileLinks');
-        Storage::disk('fileLinks')
-            ->put('tmp/tmp.png', UploadedFile::fake()->image('tmp.png'));
+        Bus::fake();
 
         /** @var User $user */
         $user = User::factory()->createQuietly();
-        $fileList = FileUpload::factory()->create([
-            'disk' => 'fileLinks',
-            'folder' => 'tmp',
-            'file_name' => 'tmp.png',
-        ]);
-
         $data = [
             'link_name' => 'Test Link',
             'expire' => '2030-12-12',
             'allow_upload' => true,
             'instructions' => 'Here are some instructions',
+            'file' => UploadedFile::fake()->image('testPhoto.png'),
         ];
 
         $response = $this->actingAs($user)
-            ->withSession(['link-file' => [$fileList->file_id]])
             ->post(route('links.store'), $data);
 
-        $response->assertStatus(302)
-            ->assertSessionHas('success', 'File Link Created');
+        $response->assertSuccessful();
 
-        $this->assertDatabaseHas('file_links', [
-            'link_name' => 'Test Link',
-            'expire' => '2030-12-12',
-            'allow_upload' => true,
-            'instructions' => 'Here are some instructions',
+        $this->assertDatabaseHas('file_uploads', [
+            'folder' => 'tmp',
+            'file_name' => 'testPhoto.png',
         ]);
+
+        Storage::disk('fileLinks')
+            ->assertExists('tmp'.DIRECTORY_SEPARATOR.'testPhoto.png');
+
+        Bus::assertNotDispatched(HandleLinkFilesJob::class);
     }
 
     /**

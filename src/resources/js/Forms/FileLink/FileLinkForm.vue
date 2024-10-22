@@ -3,7 +3,7 @@
         ref="fileLinkForm"
         :initial-values="initValues"
         :validation-schema="schema"
-        :submit-route="$route('links.upload')"
+        :submit-route="$route('links.store')"
         :submit-text="submitText"
         :max-files="5"
         :hide-file-input="fileLink ? true : false"

@@ -1,32 +1,29 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Http\Controllers\Public;
 
-use App\Events\FileLinks\FileUploadedFromPublicEvent;
-use App\Exceptions\FileLink\FileLinkExpiredException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FileLink\PublicFileLinkRequest;
 use App\Models\FileLink;
-use App\Models\FileLinkNote;
-use App\Models\FileLinkTimeline;
+use App\Service\FileLink\FileLinkFileService;
 use App\Traits\FileTrait;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Response as HttpResponse;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class PublicFileLinkController extends Controller
 {
     use FileTrait;
 
+    public function __construct(protected FileLinkFileService $svc) {}
+
     /**
      * Display the specified resource.
      */
-    public function show(Request $request, FileLink $link)
+    public function show(FileLink $link): Response
     {
-        $this->validatePublicLink($request, $link);
+        $link->validatePublicLink();
 
         return Inertia::render('Public/FileLinks/Show', [
             'link-data' => fn () => $link->only([
@@ -44,57 +41,21 @@ class PublicFileLinkController extends Controller
     /**
      * Upload a public file to the File Link
      */
-    public function update(PublicFileLinkRequest $request, FileLink $link)
-    {
-        $this->validatePublicLink($request, $link);
-        $this->setFileData('fileLinks', $link->link_id);
+    public function update(
+        PublicFileLinkRequest $request,
+        FileLink $link
+    ): HttpResponse|RedirectResponse {
+        $link->validatePublicLink();
 
-        if ($request->file) {
-            if ($savedFile = $this->getChunk($request)) {
-                Log::debug('File Link file saved', $savedFile->toArray());
-                $request->session()->push('link-file', $savedFile->file_id);
-                Log::debug(
-                    'Current session file list',
-                    $request->session()->get('link-file')
-                );
-            }
+        // If a file is part of this request, process that first
+        if ($request->has('file')) {
+            $this->svc->processIncomingFile($request, $link, false);
 
             return response()->noContent();
         }
 
-        $timeline = FileLinkTimeline::create([
-            'link_id' => $link->link_id,
-            'added_by' => $request->name,
-        ]);
-
-        // Once file is loaded, update other information
-        if ($request->session()->has('link-file')) {
-            $fileList = $request->session()->pull('link-file');
-            $link->FileUpload()->attach($fileList, [
-                'timeline_id' => $timeline->timeline_id,
-                'upload' => true,
-            ]);
-        }
-
-        if ($request->notes) {
-            FileLinkNote::create([
-                'timeline_id' => $timeline->timeline_id,
-                'note' => $request->notes,
-            ]);
-        }
-
-        event(new FileUploadedFromPublicEvent($link, $timeline));
+        $this->svc->savePublicLoadedFile($request->collect(), $link);
 
         return back()->with('success', 'Files Uploaded Successfully');
-    }
-
-    /**
-     * Verify that the link is valid
-     */
-    protected function validatePublicLink(Request $request, FileLink $fileLink)
-    {
-        if (Carbon::parse($fileLink->expire) < Carbon::now()) {
-            throw new FileLinkExpiredException($request, $fileLink);
-        }
     }
 }

@@ -6,16 +6,17 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\FileLink\FileLinkRequest;
 use App\Http\Resources\FileLinkTableResource;
 use App\Models\FileLink;
-use App\Service\FileLink\FileLinkService;
+use App\Service\FileLink\FileLinkFileService;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response as HttpResponse;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class FileLinkController extends Controller
 {
-    public function __construct(protected FileLinkService $svc) {}
+    public function __construct(protected FileLinkFileService $svc) {}
 
     /**
      * Display a listing of the resource.
@@ -46,8 +47,15 @@ class FileLinkController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(FileLinkRequest $request): RedirectResponse
+    public function store(FileLinkRequest $request): RedirectResponse|HttpResponse
     {
+        // If this link has a file, process that first
+        if ($request->has('file')) {
+            $this->svc->processIncomingFile($request, null, true);
+
+            return response()->noContent();
+        }
+
         $newLink = $this->svc->createFileLink($request->collect());
 
         return redirect(route('links.show', $newLink->link_id))

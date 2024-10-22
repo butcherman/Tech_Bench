@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Exceptions\FileLink\FileLinkExpiredException;
 use App\Observers\FileLinkObserver;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
@@ -104,6 +105,16 @@ class FileLink extends Model
             'A File Link expiration date has been extended 30 days',
             $this->toArray()
         );
+    }
+
+    /**
+     * Verify that the link is valid
+     */
+    public function validatePublicLink()
+    {
+        if (Carbon::parse($this->expire) < Carbon::now()) {
+            throw new FileLinkExpiredException($this);
+        }
     }
 
     /***************************************************************************

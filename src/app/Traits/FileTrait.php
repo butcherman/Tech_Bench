@@ -130,4 +130,21 @@ trait FileTrait
 
         return $name;
     }
+
+    /**
+     * Move a file from one folder to another (on same disk) and update database
+     */
+    protected function moveFileUpload(FileUpload $upload, string $newFolder): void
+    {
+        $newName = $this->checkForDuplicate($upload->file_name);
+
+        Storage::disk($upload->disk)->move(
+            $upload->folder.DIRECTORY_SEPARATOR.$upload->file_name,
+            $newFolder.DIRECTORY_SEPARATOR.$newName
+        );
+
+        $upload->file_name = $newName;
+        $upload->folder = $newFolder;
+        $upload->save();
+    }
 }

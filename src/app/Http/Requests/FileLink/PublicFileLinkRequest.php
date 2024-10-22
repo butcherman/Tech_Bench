@@ -1,7 +1,5 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Http\Requests\FileLink;
 
 use Illuminate\Foundation\Http\FormRequest;
@@ -22,8 +20,8 @@ class PublicFileLinkRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string',
-            'notes' => 'nullable|string',
+            'name' => ['required', 'string'],
+            'notes' => ['nullable', 'string'],
         ];
     }
 }

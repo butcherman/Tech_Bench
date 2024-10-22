@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\FileLink\FileLinkSettingsRequest;
 use App\Models\FileLink;
 use App\Service\FileLink\FileLinkAdministrationService;
+use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class FileLinkSettingsController extends Controller
 {
@@ -15,7 +17,7 @@ class FileLinkSettingsController extends Controller
     /**
      * Display the resource.
      */
-    public function show()
+    public function show(): Response
     {
         $this->authorize('manage', FileLink::class);
 
@@ -32,7 +34,7 @@ class FileLinkSettingsController extends Controller
     /**
      * Update the resource in storage.
      */
-    public function update(FileLinkSettingsRequest $request)
+    public function update(FileLinkSettingsRequest $request): RedirectResponse
     {
         $this->svc->saveFileLinkSettings($request->collect());
 

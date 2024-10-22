@@ -1,7 +1,5 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Http\Resources;
 
 use Illuminate\Http\Request;

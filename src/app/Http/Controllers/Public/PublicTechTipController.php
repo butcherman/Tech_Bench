@@ -1,7 +1,5 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
@@ -9,14 +7,16 @@ use App\Http\Requests\TechTips\SearchTipsRequest;
 use App\Models\EquipmentCategory;
 use App\Models\TechTip;
 use App\Service\TechTipSearchService;
+use Illuminate\Http\JsonResponse;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class PublicTechTipController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): Response
     {
         return Inertia::render('Public/TechTips/Index', [
             'equip-types' => EquipmentCategory::with([
@@ -30,17 +30,17 @@ class PublicTechTipController extends Controller
     /**
      * Search for a Public Tech Tip
      */
-    public function search(SearchTipsRequest $request)
+    public function search(SearchTipsRequest $request): JsonResponse
     {
         $searchObj = new TechTipSearchService($request);
 
-        return $searchObj->publicSearch();
+        return response()->json($searchObj->publicSearch());
     }
 
     /**
      * Display the Tech Tip
      */
-    public function show(TechTip $tech_tip)
+    public function show(TechTip $tech_tip): Response
     {
         $tech_tip->loadPublicData();
 

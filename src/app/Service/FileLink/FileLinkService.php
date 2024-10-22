@@ -12,15 +12,16 @@ class FileLinkService
 {
     public function createFileLink(Collection $requestData): FileLink
     {
-        $currentUser = request()->user();
-
         $newLink = new FileLink($requestData->all());
         $newLink->link_hash = Str::uuid()->toString();
 
         // Attach link to user
+        $currentUser = request()->user();
         $currentUser->FileLink()->save($newLink);
 
-        $this->processLinkFiles($newLink, $currentUser);
+        // Save any uploaded files
+        $timeline = $this->createTimelineEntry($newLink, $currentUser->user_id);
+        $this->processLinkFiles($newLink, $timeline, false);
 
         return $newLink;
     }
@@ -37,21 +38,26 @@ class FileLinkService
         $link->delete();
     }
 
-    protected function processLinkFiles(FileLink $link, User $currentUser): void
-    {
+    protected function processLinkFiles(
+        FileLink $link,
+        FileLinkTimeline $timeline,
+        bool $isUpload
+    ): FileLinkTimeline {
         $fileList = session()->pull('link-file');
         if ($fileList) {
-            $timeline = $this->createTimelineEntry($link, $currentUser);
-            $link->FileUpload()->syncWithPivotValues($fileList, [
+            $link->FileUpload()->attach($fileList, [
                 'timeline_id' => $timeline->timeline_id,
+                'upload' => $isUpload,
             ]);
         }
+
+        return $timeline;
     }
 
-    protected function createTimelineEntry(FileLink $link, User $user): FileLinkTimeline
+    protected function createTimelineEntry(FileLink $link, string|int $addedBy): FileLinkTimeline
     {
         $timeline = new FileLinkTimeline([
-            'added_by' => $user->user_id,
+            'added_by' => $addedBy,
         ]);
 
         $link->Timeline()->save($timeline);

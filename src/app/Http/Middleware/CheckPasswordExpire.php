@@ -1,7 +1,5 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Http\Middleware;
 
 use Carbon\Carbon;
@@ -23,8 +21,8 @@ class CheckPasswordExpire
     {
         //  Check to see if we are logged in and not visiting a bypass route
         if (
-            $request->user()->password_expires &&
-            $request->user()->password_expires < Carbon::now()
+            $request->user()->password_expires
+            && $request->user()->password_expires < Carbon::now()
         ) {
             Log::stack(['auth', 'daily'])
                 ->notice('User '.$request->user()->full_name.' is being forced to change their password');

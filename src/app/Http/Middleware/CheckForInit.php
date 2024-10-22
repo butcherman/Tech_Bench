@@ -1,7 +1,5 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Http\Middleware;
 
 use Closure;
@@ -25,7 +23,11 @@ class CheckForInit
             && $request->user()
         ) {
             if ($request->user()->user_id !== 1) {
-                Log::critical('An unauthorized user tried to gain access to the First Time Setup Wizard', $request->user()->toArray());
+                Log::critical(
+                    'An unauthorized user tried to gain access to the First Time Setup Wizard',
+                    $request->user()->toArray()
+                );
+
                 abort(403);
             }
 
