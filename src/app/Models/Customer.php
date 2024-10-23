@@ -156,9 +156,10 @@ class Customer extends Model
     {
         $isRecent = $this->Recent->where('user_id', $user->user_id)->first();
         if ($isRecent) {
-            $this->Recent()->detach($user);
+            $isRecent->touch();
+        } else {
+            $this->Recent()->attach($user);
         }
-        $this->Recent()->attach($user);
 
     }
 }

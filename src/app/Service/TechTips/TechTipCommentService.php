@@ -17,7 +17,7 @@ class TechTipCommentService
     {
         return $techTip->TechTipComment()->save(new TechTipComment([
             'user_id' => request()->user()->user_id,
-            'comment' => $requestData->comment_data,
+            'comment' => $requestData->get('comment_data'),
         ]));
     }
 

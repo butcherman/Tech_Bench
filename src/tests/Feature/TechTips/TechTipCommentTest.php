@@ -123,31 +123,31 @@ class TechTipCommentTest extends TestCase
         $response->assertForbidden();
     }
 
-    // public function test_store()
-    // {
-    //     Notification::fake();
+    public function test_store()
+    {
+        Notification::fake();
 
-    //     config(['tech-tips.allow_comments' => true]);
-    //     $tip = TechTip::factory()->create();
-    //     $data = [
-    //         'comment_data' => 'This is a comment',
-    //     ];
+        config(['tech-tips.allow_comments' => true]);
+        $tip = TechTip::factory()->create();
+        $data = [
+            'comment_data' => 'This is a comment',
+        ];
 
-    //     $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
-    //         ->post(route('tech-tips.comments.store', $tip->tip_id), $data);
-    //     $response->assertStatus(302);
-    //     $response->assertSessionHas('success', __('tips.comment.created'));
+        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
+            ->post(route('tech-tips.comments.store', $tip->tip_id), $data);
+        $response->assertStatus(302);
+        $response->assertSessionHas('success', __('tips.comment.created'));
 
-    //     $this->assertDatabaseHas('tech_tip_comments', [
-    //         'tip_id' => $tip->tip_id,
-    //         'comment' => $data['comment_data'],
-    //     ]);
+        $this->assertDatabaseHas('tech_tip_comments', [
+            'tip_id' => $tip->tip_id,
+            'comment' => $data['comment_data'],
+        ]);
 
-    //     Notification::assertSentTo(
-    //         User::find($tip->user_id),
-    //         TipCommentedNotification::class
-    //     );
-    // }
+        Notification::assertSentTo(
+            User::find($tip->user_id),
+            TipCommentedNotification::class
+        );
+    }
 
     /**
      * Update Method

@@ -38,6 +38,7 @@ class TechTipCommentController extends Controller
      */
     public function store(TechTipCommentRequest $request, TechTip $techTip)
     {
+        $this->svc->createComment($request->collect(), $techTip);
 
         return back()->with('success', __('tips.comment.created'));
     }
