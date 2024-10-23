@@ -1,7 +1,5 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
@@ -22,7 +20,7 @@ class UploadImageRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'file' => 'mimes:jpeg,bmp,png,jpb,gif,webp',
+            'file' => ['mimes:jpeg,bmp,png,jpb,gif,webp'],
         ];
     }
 }

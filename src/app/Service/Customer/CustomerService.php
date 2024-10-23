@@ -2,6 +2,7 @@
 
 namespace App\Service\Customer;
 
+use App\Events\Customer\CustomerSlugChangedEvent;
 use App\Http\Requests\Customer\CustomerRequest;
 use App\Http\Requests\Customer\CustomerSiteRequest;
 use App\Jobs\Customer\DestroyCustomerJob;
@@ -38,8 +39,12 @@ class CustomerService
     ): Customer {
         // If name has changed, generate a new slug
         if ($requestData->name !== $customer->name) {
+            $oldSlug = $customer->slug;
+
             $slug = $this->generateSlug($requestData->name);
             $customer->slug = $slug;
+
+            event(new CustomerSlugChangedEvent($customer, $oldSlug, $slug));
         }
 
         $customer->name = $requestData->name;

@@ -9,13 +9,13 @@ class DatabaseSeeder extends Seeder
     /**
      * Seed the application's database
      */
-    public function run()
+    public function run(): void
     {
         $this->call([
             UserSeeder::class,
             EquipmentSeeder::class,
             CustomerSeeder::class,
-            // TechTipSeeder::class,
+            TechTipSeeder::class,
         ]);
     }
 }

@@ -5,7 +5,7 @@ namespace Tests\Feature\Init;
 use App\Models\User;
 use Tests\TestCase;
 
-class SaveSetpTest extends TestCase
+class SaveStepTest extends TestCase
 {
     /**
      * Invoke Method
@@ -23,8 +23,9 @@ class SaveSetpTest extends TestCase
         ];
 
         $response = $this->put(route('init.step-1.submit'), $data);
-        $response->assertStatus(302);
-        $response->assertRedirect(route('login'));
+
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
         $this->assertGuest();
     }
 
@@ -33,6 +34,8 @@ class SaveSetpTest extends TestCase
         config(['app.first_time_setup' => true]);
         config(['app.env' => 'local']);
 
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
         $data = [
             'url' => 'https://someUrl.noSite',
             'timezone' => 'UTC',
@@ -40,13 +43,14 @@ class SaveSetpTest extends TestCase
             'company_name' => 'Bobs Fancy Cats',
         ];
 
-        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
+        $response = $this->actingAs($user)
             ->put(route('init.step-1.submit'), $data);
-        $response->assertStatus(302);
-        $response->assertSessionHas(['setup' => [
-            'basic-settings' => $data,
-        ],
-        ]);
+
+        $response->assertStatus(302)
+            ->assertSessionHas(['setup' => [
+                'basic-settings' => $data,
+            ],
+            ]);
     }
 
     public function test_invoke_step_2()
@@ -54,6 +58,8 @@ class SaveSetpTest extends TestCase
         config(['app.first_time_setup' => true]);
         config(['app.env' => 'local']);
 
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
         $data = [
             'from_address' => 'new@email.org',
             'username' => 'testName',
@@ -64,13 +70,14 @@ class SaveSetpTest extends TestCase
             'require_auth' => true,
         ];
 
-        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
+        $response = $this->actingAs($user)
             ->put(route('init.step-2.submit'), $data);
-        $response->assertStatus(302);
-        $response->assertSessionHas(['setup' => [
-            'email-settings' => $data,
-        ],
-        ]);
+
+        $response->assertStatus(302)
+            ->assertSessionHas(['setup' => [
+                'email-settings' => $data,
+            ],
+            ]);
     }
 
     public function test_invoke_step_3()
@@ -78,6 +85,8 @@ class SaveSetpTest extends TestCase
         config(['app.first_time_setup' => true]);
         config(['app.env' => 'local']);
 
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
         $data = [
             'expire' => '60',
             'min_length' => '12',
@@ -88,13 +97,14 @@ class SaveSetpTest extends TestCase
             'disable_compromised' => false,
         ];
 
-        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
+        $response = $this->actingAs($user)
             ->put(route('init.step-3.submit'), $data);
-        $response->assertStatus(302);
-        $response->assertSessionHas(['setup' => [
-            'user-settings' => $data,
-        ],
-        ]);
+
+        $response->assertStatus(302)
+            ->assertSessionHas(['setup' => [
+                'user-settings' => $data,
+            ],
+            ]);
     }
 
     public function test_invoke_step_4()
@@ -102,15 +112,18 @@ class SaveSetpTest extends TestCase
         config(['app.first_time_setup' => true]);
         config(['app.env' => 'local']);
 
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
         $data = User::factory()->make()->makeVisible('role_id')->toArray();
 
-        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
+        $response = $this->actingAs($user)
             ->put(route('init.step-4.submit', 'admin'), $data);
-        $response->assertStatus(302);
-        $response->assertSessionHas(['setup' => [
-            'admin' => $data,
-        ],
-        ]);
+
+        $response->assertStatus(302)
+            ->assertSessionHas(['setup' => [
+                'admin' => $data,
+            ],
+            ]);
     }
 
     public function test_invoke_step_4b()
@@ -118,13 +131,15 @@ class SaveSetpTest extends TestCase
         config(['app.first_time_setup' => true]);
         config(['app.env' => 'local']);
 
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
         $data = [
             'current_password' => 'password',
             'password' => 'SomeN3wP@ssword',
             'password_confirmation' => 'SomeN3wP@ssword',
         ];
 
-        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
+        $response = $this->actingAs($user)
             ->withSession(['setup' => [
                 'user-settings' => [
                     'expire' => '60',
@@ -137,20 +152,21 @@ class SaveSetpTest extends TestCase
                 ],
             ]])
             ->put(route('init.step-4b.submit'), $data);
-        $response->assertStatus(302);
-        $response->assertSessionHas([
-            'setup' => [
-                'administrator-password' => $data,
-                'user-settings' => [
-                    'expire' => '60',
-                    'min_length' => '12',
-                    'contains_uppercase' => 'false',
-                    'contains_lowercase' => 'false',
-                    'contains_number' => 'false',
-                    'contains_special' => 'false',
-                    'disable_compromised' => 'false',
+
+        $response->assertStatus(302)
+            ->assertSessionHas([
+                'setup' => [
+                    'administrator-password' => $data,
+                    'user-settings' => [
+                        'expire' => '60',
+                        'min_length' => '12',
+                        'contains_uppercase' => 'false',
+                        'contains_lowercase' => 'false',
+                        'contains_number' => 'false',
+                        'contains_special' => 'false',
+                        'disable_compromised' => 'false',
+                    ],
                 ],
-            ],
-        ]);
+            ]);
     }
 }

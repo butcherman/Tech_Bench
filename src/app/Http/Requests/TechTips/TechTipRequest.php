@@ -5,12 +5,12 @@
 namespace App\Http\Requests\TechTips;
 
 use App\Events\File\FileDataDeletedEvent;
+use App\Http\Requests\UploadFileBaseRequest;
 use App\Models\TechTip;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
-class TechTipRequest extends FormRequest
+class TechTipRequest extends UploadFileBaseRequest
 {
     /**
      * Determine if the user is authorized to make this request

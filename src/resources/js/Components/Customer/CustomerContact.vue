@@ -2,10 +2,14 @@
     <div class="card">
         <div class="card-body">
             <div class="card-title">
+                <AlertButton
+                    v-if="changeAlert.contacts"
+                    title="Contacts Updated.  Refresh for most recent data"
+                />
                 <RefreshButton
                     :only="['contacts']"
                     @loading-start="toggleLoading('contacts')"
-                    @loading-complete="toggleLoading('contacts')"
+                    @loading-complete="clearAlert('contacts')"
                 />
                 Contacts:
                 <CustomerContactCreate
@@ -64,6 +68,7 @@ import CustomerContactCreate from "./CustomerContactCreate.vue";
 import CustomerContactModal from "./CustomerContactModal.vue";
 import CustomerContactEdit from "./CustomerContactEdit.vue";
 import RefreshButton from "../_Base/Buttons/RefreshButton.vue";
+import AlertButton from "../_Base/Buttons/AlertButton.vue";
 import Overlay from "../_Base/Loaders/Overlay.vue";
 import {
     permissions,
@@ -71,6 +76,8 @@ import {
     customer,
     loading,
     toggleLoading,
+    changeAlert,
+    clearAlert,
 } from "@/State/CustomerState";
 import { ref, nextTick } from "vue";
 import { router } from "@inertiajs/vue3";

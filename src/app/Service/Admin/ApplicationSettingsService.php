@@ -19,6 +19,19 @@ class ApplicationSettingsService
     use AppSettingsTrait;
 
     /**
+     * Get an array of basic settings from config/db
+     */
+    public function getBasicSettings(): array
+    {
+        return [
+            'url' => preg_replace('(^https?://)', '', config('app.url')),
+            'company_name' => config('app.company_name'),
+            'timezone' => config('app.timezone'),
+            'max_filesize' => (int) config('filesystems.max_filesize'),
+        ];
+    }
+
+    /**
      * Update the Basic Settings for Tech Bench
      */
     public function updateBasicSettings(BasicSettingsRequest $requestData): void
@@ -49,6 +62,22 @@ class ApplicationSettingsService
             'Application Configuration updated by '.$user,
             $requestData->toArray()
         );
+    }
+
+    /**
+     * Get an array of the Email Settings
+     */
+    public function getEmailSettings(): array
+    {
+        return [
+            'from_address' => config('mail.from.address'),
+            'host' => config('mail.mailers.smtp.host'),
+            'port' => config('mail.mailers.smtp.port'),
+            'encryption' => strtoupper(config('mail.mailers.smtp.encryption')),
+            'username' => config('mail.mailers.smtp.username'),
+            'password' => config('mail.mailers.smtp.password') ? __('admin.fake_password') : '',
+            'require_auth' => (bool) config('mail.mailers.smtp.require_auth'),
+        ];
     }
 
     /**
@@ -109,6 +138,22 @@ class ApplicationSettingsService
         Log::notice('New Tech Bench Logo uploaded by '.$user, [
             'file-location' => $storedFile,
         ]);
+    }
+
+    /**
+     * Get the password Policy settings
+     */
+    public function getPasswordSettings(): array
+    {
+        return [
+            'expire' => config('auth.passwords.settings.expire'),
+            'min_length' => config('auth.passwords.settings.min_length'),
+            'contains_uppercase' => (bool) config('auth.passwords.settings.contains_uppercase'),
+            'contains_lowercase' => (bool) config('auth.passwords.settings.contains_lowercase'),
+            'contains_number' => (bool) config('auth.passwords.settings.contains_number'),
+            'contains_special' => (bool) config('auth.passwords.settings.contains_special'),
+            'disable_compromised' => (bool) config('auth.passwords.settings.disable_compromised'),
+        ];
     }
 
     /**

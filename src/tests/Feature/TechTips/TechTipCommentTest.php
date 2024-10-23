@@ -10,6 +10,7 @@ use App\Models\UserRolePermission;
 use App\Models\UserRolePermissionType;
 use App\Notifications\TechTips\TipCommentedNotification;
 use Illuminate\Support\Facades\Notification;
+use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class TechTipCommentTest extends TestCase
@@ -22,17 +23,21 @@ class TechTipCommentTest extends TestCase
         $tip = TechTip::factory()->create();
 
         $response = $this->get(route('tech-tips.comments.index', $tip->slug));
-        $response->assertStatus(302);
-        $response->assertRedirect(route('login'));
+
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
         $this->assertGuest();
     }
 
     public function test_index_no_permission()
     {
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
         $tip = TechTip::factory()->create();
 
-        $response = $this->actingAs(User::factory()->createQuietly())
+        $response = $this->actingAs($user)
             ->get(route('tech-tips.comments.index', $tip->slug));
+
         $response->assertForbidden();
     }
 
@@ -40,20 +45,30 @@ class TechTipCommentTest extends TestCase
     {
         config(['tech-tips.allow_comments' => false]);
 
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
         $tip = TechTip::factory()->create();
 
-        $response = $this->actingAs(User::factory()->createQuietly())
+        $response = $this->actingAs($user)
             ->get(route('tech-tips.comments.index', $tip->slug));
         $response->assertForbidden();
     }
 
     public function test_index()
     {
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
         $tip = TechTip::factory()->create();
 
-        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
+        $response = $this->actingAs($user)
             ->get(route('tech-tips.comments.index', $tip->slug));
-        $response->assertSuccessful();
+
+        $response->assertSuccessful()
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('TechTips/Comments/Index')
+                ->has('tip-data')
+                ->has('flagged-comments')
+            );
     }
 
     /**

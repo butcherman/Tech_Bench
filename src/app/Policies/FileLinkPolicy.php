@@ -11,7 +11,7 @@ class FileLinkPolicy
 {
     use AllowTrait;
 
-    public function manage(User $user)
+    public function manage(User $user): bool
     {
         if ($this->viewAny($user)) {
             return $this->checkPermission($user, 'Manage File Links');
@@ -29,16 +29,23 @@ class FileLinkPolicy
     }
 
     /**
+     * Determine if the user can create a File Link
+     */
+    public function create(User $user): bool
+    {
+        return $this->viewAny($user);
+    }
+
+    /**
      * Determine whether the user can update the model.
      */
     public function update(User $user, FileLink $fileLink): bool
     {
-        if ($this->viewAny($user)) {
-            return $user->user_id === $fileLink->user_id ||
-                $this->checkPermission($user, 'Manage File Links');
+        if (! $this->viewAny($user)) {
+            return false;
         }
 
-        return false;
+        return $this->manage($user) || $user->user_id === $fileLink->user_id;
     }
 
     /**
@@ -46,11 +53,10 @@ class FileLinkPolicy
      */
     public function delete(User $user, FileLink $fileLink): bool
     {
-        if ($this->viewAny($user)) {
-            return $user->user_id === $fileLink->user_id ||
-                $this->checkPermission($user, 'Manage File Links');
+        if (! $this->viewAny($user)) {
+            return false;
         }
 
-        return false;
+        return $this->manage($user) || $user->user_id === $fileLink->user_id;
     }
 }

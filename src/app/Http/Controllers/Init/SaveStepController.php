@@ -1,7 +1,5 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Http\Controllers\Init;
 
 use App\Actions\Fortify\PasswordValidationRules;
@@ -39,10 +37,16 @@ class SaveStepController extends Controller
             $validator->validate($validator->rules());
         } else {
             Validator::make($saveData, [
-                'current_password' => ['required', 'string', 'current_password:web'],
-                'password' => $this->tmpPasswordRules($request->session()->get('setup.user-settings')),
+                'current_password' => [
+                    'required',
+                    'string',
+                    'current_password:web',
+                ],
+                'password' => $this->tmpPasswordRules(
+                    $request->session()->get('setup.user-settings'
+                    )),
             ], [
-                'current_password.current_password' => __('The provided password does not match your current password.'),
+                    'current_password.current_password' => __('The provided password does not match your current password.'),
             ])->validateWithBag('updatePassword');
         }
 

@@ -1,22 +1,23 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Http\Controllers\FileLink;
 
-use App\Events\Feature\FeatureChangedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FileLink\FileLinkSettingsRequest;
 use App\Models\FileLink;
-use Illuminate\Support\Facades\Log;
+use App\Service\FileLink\FileLinkAdministrationService;
+use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class FileLinkSettingsController extends Controller
 {
+    public function __construct(protected FileLinkAdministrationService $svc) {}
+
     /**
      * Display the resource.
      */
-    public function show()
+    public function show(): Response
     {
         $this->authorize('manage', FileLink::class);
 
@@ -33,12 +34,9 @@ class FileLinkSettingsController extends Controller
     /**
      * Update the resource in storage.
      */
-    public function update(FileLinkSettingsRequest $request)
+    public function update(FileLinkSettingsRequest $request): RedirectResponse
     {
-        $request->updateFileLinkSettings();
-
-        Log::info('File Link Settings updated by '.$request->user()->username, $request->toArray());
-        event(new FeatureChangedEvent);
+        $this->svc->saveFileLinkSettings($request->collect());
 
         return back()->with('success', 'File Link Settings Updated');
     }

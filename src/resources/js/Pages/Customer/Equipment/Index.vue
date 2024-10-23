@@ -19,6 +19,21 @@ import CustomerDetails from "@/Components/Customer/CustomerDetails.vue";
 import CustomerAlerts from "@/Components/Customer/CustomerAlerts.vue";
 import CustomerEquipment from "@/Components/Customer/CustomerEquipment.vue";
 import { customer } from "@/State/CustomerState";
+import { onMounted, onUnmounted } from "vue";
+import { registerCustomerChannel } from "@/Modules/CustomerBroadcasting.module";
+
+/**
+ * Register to Customer Channel
+ */
+const channelName = customer.value.slug;
+onMounted(() => {
+    registerCustomerChannel(channelName);
+});
+
+/**
+ * Leave Customer Channel
+ */
+onUnmounted(() => Echo.leave(`customer.${channelName}`));
 </script>
 
 <script lang="ts">

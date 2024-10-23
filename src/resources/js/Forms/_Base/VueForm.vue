@@ -96,6 +96,9 @@ const onSubmit = handleSubmit((form): void => {
             onFinish: () => (isSubmitting.value = false),
             onSuccess: () => emit("success"),
             onError: () => handleErrors(form, formData.errors),
+            headers: {
+                "X-Socket-Id": Echo.socketId(),
+            },
         });
     }
 });

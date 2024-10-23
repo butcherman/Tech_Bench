@@ -77,14 +77,17 @@ class SearchTipsTest extends TestCase
 
     public function test_search_all_tips()
     {
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
         $searchData = [
             'perPage' => 25,
             'page' => 1,
         ];
 
-        $response = $this->actingAs(User::factory()->createQuietly())
+        $response = $this->actingAs($user)
             ->post(route('tech-tips.search', $searchData));
-        $response->assertSuccessful();
-        $response->assertJsonCount(5, 'data');
+
+        $response->assertSuccessful()
+            ->assertJsonCount(5, 'data');
     }
 }

@@ -20,7 +20,7 @@ class BookmarkRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'value' => 'required|boolean',
+            'value' => ['required', 'boolean'],
         ];
     }
 }

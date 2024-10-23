@@ -9,7 +9,7 @@ class CreateUserCustomerBookmarksTable extends Migration
     /**
      * Run the migrations
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('user_customer_bookmarks', function (Blueprint $table) {
             $table->increments('id');
@@ -33,12 +33,13 @@ class CreateUserCustomerBookmarksTable extends Migration
     /**
      * Reverse the migrations
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('user_customer_bookmarks', function (Blueprint $table) {
             $table->dropForeign(['user_id']);
             $table->dropForeign(['cust_id']);
         });
+
         Schema::dropIfExists('user_customer_bookmarks');
     }
 }

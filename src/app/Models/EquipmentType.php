@@ -2,9 +2,12 @@
 
 namespace App\Models;
 
+use App\Observers\EquipmentTypeObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+#[ObservedBy([EquipmentTypeObserver::class])]
 class EquipmentType extends Model
 {
     use HasFactory;
@@ -29,11 +32,9 @@ class EquipmentType extends Model
 
     public function DataFieldType()
     {
-        return $this->hasManyThrough(
+        return $this->belongsToMany(
             DataFieldType::class,
-            DataField::class,
-            'equip_id',
-            'type_id',
+            'data_fields',
             'equip_id',
             'type_id'
         )->orderBy('order');
@@ -48,6 +49,18 @@ class EquipmentType extends Model
             'cust_id',
             'equip_id',
             'cust_id'
+        );
+    }
+
+    public function TechTip()
+    {
+        return $this->hasManyThrough(
+            TechTip::class,
+            TechTipEquipment::class,
+            'equip_id',
+            'tip_id',
+            'equip_id',
+            'tip_id'
         );
     }
 }

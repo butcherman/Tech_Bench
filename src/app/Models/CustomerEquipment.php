@@ -4,8 +4,10 @@ namespace App\Models;
 
 use App\Observers\CustomerEquipmentObserver;
 use App\Traits\CustomerBroadcastingTrait;
+use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\BroadcastableModelEventOccurred;
+use Illuminate\Database\Eloquent\BroadcastsEvents;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Prunable;
@@ -15,6 +17,7 @@ use Illuminate\Support\Facades\Log;
 #[ObservedBy([CustomerEquipmentObserver::class])]
 class CustomerEquipment extends Model
 {
+    use BroadcastsEvents;
     use CustomerBroadcastingTrait;
     use HasFactory;
     use Prunable;
@@ -86,20 +89,35 @@ class CustomerEquipment extends Model
     /***************************************************************************
      * Model Broadcasting
      ***************************************************************************/
-    public function broadcastOn(string $event)
+    public function broadcastOn(string $event): array
     {
+        $siteChannels = $this->getSiteChannels(
+            $this->CustomerSite->pluck('site_slug')->toArray()
+        );
+
+        $allChannels = array_merge(
+            $siteChannels,
+            [
+                new PrivateChannel('customer.'.$this->Customer->slug),
+                new PrivateChannel('customer-equipment.'.$this->cust_equip_id),
+            ]
+        );
+
+        Log::debug(
+            'Broadcasting Customer Equipment Event - Event Name - '.$event,
+            $allChannels
+        );
+
         return match ($event) {
-            'deleted', 'trashed', 'created' => [],
-            default => array_merge(
-                $this->getCustomerChannel(),
-                $this->getSiteChannelList(),
-                $this->getEquipmentChannel(),
-            ),
+            'trashed', 'deleted' => [],
+            default => $allChannels,
         };
     }
 
     public function newBroadcastableModelEvent(string $event): BroadcastableModelEventOccurred
     {
+        Log::debug('Calling Do Not Broadcast to Current User', $this->toArray());
+
         return (new BroadcastableModelEventOccurred(
             $this, $event
         ))->dontBroadcastToCurrentUser();

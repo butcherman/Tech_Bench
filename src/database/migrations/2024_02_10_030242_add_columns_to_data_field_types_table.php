@@ -12,11 +12,21 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('data_field_types', function (Blueprint $table) {
-            $table->string('pattern')->after('name')->nullable();
-            $table->string('pattern_error')->after('pattern')->nullable();
-            $table->boolean('is_hyperlink')->after('pattern_error')->default(false);
-            $table->boolean('allow_copy')->after('is_hyperlink')->default(false);
-            $table->boolean('do_not_log_value')->after('allow_copy')->default(false);
+            $table->string('pattern')
+                ->after('name')
+                ->nullable();
+            $table->string('pattern_error')
+                ->after('pattern')
+                ->nullable();
+            $table->boolean('is_hyperlink')
+                ->after('pattern_error')
+                ->default(false);
+            $table->boolean('allow_copy')
+                ->after('is_hyperlink')
+                ->default(false);
+            $table->boolean('do_not_log_value')
+                ->after('allow_copy')
+                ->default(false);
             $table->renameColumn('hidden', 'masked');
         });
 

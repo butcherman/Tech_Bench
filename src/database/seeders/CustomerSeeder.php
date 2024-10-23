@@ -11,7 +11,7 @@ class CustomerSeeder extends Seeder
     /**
      *  Create 150 random customers
      */
-    public function run()
+    public function run(): void
     {
         /**
          * Create 150 new customers.  Assign them a random number of sub sites (up to five)

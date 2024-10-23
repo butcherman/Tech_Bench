@@ -1,75 +1,47 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Http\Controllers\Equipment;
 
-use App\Exceptions\Database\GeneralQueryException;
-use App\Exceptions\Database\RecordInUseException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Equipment\EquipmentCategoryRequest;
 use App\Models\EquipmentCategory;
-use App\Service\Cache;
-use Illuminate\Database\QueryException;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use App\Service\Equipment\EquipmentService;
+use Illuminate\Http\RedirectResponse;
 
 class EquipmentCategoryController extends Controller
 {
-    /**
-     * Store the newly created resource in storage.
-     */
-    public function store(EquipmentCategoryRequest $request)
-    {
-        $newCat = EquipmentCategory::create($request->all());
-        Cache::clearCache(['equipmentTypes', 'equipmentCategories']);
+    public function __construct(protected EquipmentService $svc) {}
 
-        Log::info('New Equipment Category '.$newCat->name.' created by '.
-            $request->user()->username, $newCat->toArray());
+    /**
+     * Store the newly created Equipment Category.
+     */
+    public function store(EquipmentCategoryRequest $request): RedirectResponse
+    {
+        $this->svc->createCategory($request);
 
         return back()->with('success', __('equipment.category.created'));
     }
 
     /**
-     * Update the resource in storage.
+     * Update the Equipment Category.
      */
-    public function update(EquipmentCategoryRequest $request, EquipmentCategory $category)
-    {
-        $category->update($request->all());
-        Cache::clearCache(['equipmentTypes', 'equipmentCategories']);
-
-        Log::info('Equipment Category '.$category->name.' has been updated by '.
-            $request->user()->username);
+    public function update(
+        EquipmentCategoryRequest $request,
+        EquipmentCategory $category
+    ): RedirectResponse {
+        $this->svc->updateCategory($request, $category);
 
         return back()->with('success', __('equipment.category.updated'));
     }
 
     /**
-     * Remove the resource from storage.
+     * Remove the Equipment Category.
      */
-    public function destroy(Request $request, EquipmentCategory $category)
+    public function destroy(EquipmentCategory $category): RedirectResponse
     {
         $this->authorize('delete', $category);
 
-        try {
-            $category->delete();
-            Cache::clearCache(['equipmentTypes', 'equipmentCategories']);
-        } catch (QueryException $e) {
-            if (in_array($e->errorInfo[1], [19, 1451])) {
-                throw new RecordInUseException(
-                    __('equipment.category.in-use', ['name' => $category->name]),
-                    0,
-                    $e
-                );
-            } else {
-                // @codeCoverageIgnoreStart
-                throw new GeneralQueryException('', 0, $e);
-                // @codeCoverageIgnoreEnd
-            }
-        }
-
-        Log::notice('Equipment Category '.$category->name.' has been deleted by '.
-            $request->user()->username);
+        $this->svc->destroyCategory($category);
 
         return back()->with('warning', __('equipment.category.destroyed'));
     }

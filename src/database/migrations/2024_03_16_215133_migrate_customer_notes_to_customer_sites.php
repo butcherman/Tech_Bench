@@ -32,7 +32,7 @@ return new class extends Migration
     /**
      * Migrate Customer Notes to new Schema
      */
-    public function migrateCustomerNotes()
+    public function migrateCustomerNotes(): void
     {
         $customerNotes = CustomerNote::withTrashed()->get();
 
@@ -57,7 +57,7 @@ return new class extends Migration
     /**
      * Remote Shared Column from Customer Notes Table
      */
-    public function cleanup()
+    public function cleanup(): void
     {
         Schema::table('customer_notes', function (Blueprint $table) {
             $table->dropColumn('shared');

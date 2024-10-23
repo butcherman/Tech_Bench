@@ -3,6 +3,7 @@
 namespace Tests\Feature\TechTips;
 
 use App\Models\User;
+use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class DeletedTipsTest extends TestCase
@@ -13,22 +14,34 @@ class DeletedTipsTest extends TestCase
     public function test_invoke_guest()
     {
         $response = $this->get(route('admin.tech-tips.deleted-tips'));
-        $response->assertStatus(302);
-        $response->assertRedirect(route('login'));
+
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
         $this->assertGuest();
     }
 
     public function test_invoke_no_permission()
     {
-        $response = $this->ActingAs(User::factory()->createQuietly())
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+
+        $response = $this->ActingAs($user)
             ->get(route('admin.tech-tips.deleted-tips'));
+
         $response->assertForbidden();
     }
 
     public function test_invoke()
     {
-        $response = $this->ActingAs(User::factory()->createQuietly(['role_id' => 1]))
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
+
+        $response = $this->ActingAs($user)
             ->get(route('admin.tech-tips.deleted-tips'));
-        $response->assertSuccessful();
+        $response->assertSuccessful()
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('TechTips/Deleted/Index')
+                ->has('deleted-tips')
+            );
     }
 }

@@ -9,7 +9,7 @@ class CreateDataFieldsTable extends Migration
     /**
      * Run the migrations
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('data_fields', function (Blueprint $table) {
             $table->id('field_id');
@@ -33,7 +33,7 @@ class CreateDataFieldsTable extends Migration
     /**
      * Reverse the migrations
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('data_fields', function (Blueprint $table) {
             $table->dropForeign(['equip_id']);

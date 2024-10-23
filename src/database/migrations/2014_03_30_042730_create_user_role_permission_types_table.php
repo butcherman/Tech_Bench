@@ -10,7 +10,7 @@ class CreateUserRolePermissionTypesTable extends Migration
     /**
      * Run the migrations
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('user_role_permission_types', function (Blueprint $table) {
             $table->id('perm_type_id');
@@ -227,7 +227,7 @@ class CreateUserRolePermissionTypesTable extends Migration
     /**
      * Reverse the migrations
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('user_role_permission_types');
     }

@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests\Customer;
 
+use App\Http\Requests\UploadFileBaseRequest;
 use App\Models\CustomerFile;
-use Illuminate\Foundation\Http\FormRequest;
 
-class CustomerFileRequest extends FormRequest
+class CustomerFileRequest extends UploadFileBaseRequest
 {
     /**
      * Determine if the user is authorized to make this request.

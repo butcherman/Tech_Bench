@@ -9,7 +9,7 @@ class CreateCustomerFilesTable extends Migration
     /**
      * Run the migrations
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('customer_files', function (Blueprint $table) {
             $table->id('cust_file_id');
@@ -44,7 +44,7 @@ class CreateCustomerFilesTable extends Migration
     /**
      * Reverse the migrations
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('customer_files', function (Blueprint $table) {
             $table->dropForeign(['file_id']);
@@ -52,6 +52,7 @@ class CreateCustomerFilesTable extends Migration
             $table->dropForeign(['cust_id']);
             $table->dropForeign(['user_id']);
         });
+
         Schema::dropIfExists('customer_files');
     }
 }

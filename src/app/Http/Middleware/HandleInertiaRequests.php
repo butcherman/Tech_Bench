@@ -72,7 +72,7 @@ class HandleInertiaRequests extends Middleware
     /**
      * Put all flash data into an array to be gone over by front end
      */
-    protected function getFlashData()
+    protected function getFlashData(): array
     {
         $flashArr = [];
         $flash = session('_flash');

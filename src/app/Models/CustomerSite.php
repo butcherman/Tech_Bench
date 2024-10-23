@@ -3,14 +3,19 @@
 namespace App\Models;
 
 use App\Observers\CustomerSiteObserver;
+use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\BroadcastableModelEventOccurred;
+use Illuminate\Database\Eloquent\BroadcastsEvents;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Log;
 
 #[ObservedBy([CustomerSiteObserver::class])]
 class CustomerSite extends Model
 {
+    use BroadcastsEvents;
     use HasFactory;
     use SoftDeletes;
 
@@ -112,6 +117,33 @@ class CustomerSite extends Model
             'cust_site_id',
             'cust_file_id'
         );
+    }
+
+    /***************************************************************************
+     * Model Broadcasting
+     ***************************************************************************/
+    public function broadcastOn(string $event): array
+    {
+        Log::debug('Broadcasting Customer Site Event - Event Name - '.$event);
+
+        return match ($event) {
+            'deleted', 'trashed', 'created' => [
+                new PrivateChannel('customer.'.$this->Customer->slug),
+            ],
+            default => [
+                new PrivateChannel('customer.'.$this->Customer->slug),
+                new PrivateChannel('customer.'.$this->site_slug),
+            ],
+        };
+    }
+
+    public function newBroadcastableModelEvent(string $event): BroadcastableModelEventOccurred
+    {
+        Log::debug('Calling Dont Broadcast to Current User', $this->toArray());
+
+        return (new BroadcastableModelEventOccurred(
+            $this, $event
+        ))->dontBroadcastToCurrentUser();
     }
 
     /***************************************************************************

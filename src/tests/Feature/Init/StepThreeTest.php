@@ -3,6 +3,7 @@
 namespace Tests\Feature\Init;
 
 use App\Models\User;
+use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class StepThreeTest extends TestCase
@@ -16,8 +17,9 @@ class StepThreeTest extends TestCase
         config(['app.env' => 'local']);
 
         $response = $this->get(route('init.step-3'));
-        $response->assertStatus(302);
-        $response->assertRedirect(route('login'));
+
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
         $this->assertGuest();
     }
 
@@ -26,9 +28,18 @@ class StepThreeTest extends TestCase
         config(['app.first_time_setup' => true]);
         config(['app.env' => 'local']);
 
-        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
+
+        $response = $this->actingAs($user)
             ->get(route('init.step-3'));
-        $response->assertSuccessful();
+
+        $response->assertSuccessful()
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('Init/StepThree')
+                ->has('step')
+                ->has('policy')
+            );
     }
 
     public function test_invoke_with_session_data()
@@ -36,7 +47,10 @@ class StepThreeTest extends TestCase
         config(['app.first_time_setup' => true]);
         config(['app.env' => 'local']);
 
-        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
+
+        $response = $this->actingAs($user)
             ->withSession(['setup' => [
                 'user-settings' => [
                     'expire' => '60',
@@ -49,6 +63,12 @@ class StepThreeTest extends TestCase
                 ],
             ]])
             ->get(route('init.step-3'));
-        $response->assertSuccessful();
+
+        $response->assertSuccessful()
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('Init/StepThree')
+                ->has('step')
+                ->has('policy')
+            );
     }
 }

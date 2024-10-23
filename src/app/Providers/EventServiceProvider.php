@@ -90,13 +90,7 @@ class EventServiceProvider extends ServiceProvider
          * Customer Events for broadcasting
          */
         'App\Events\Customer\CustomerAlertEvent' => [],
-        // 'App\Events\Customer\CustomerEvent' => [],
-        // 'App\Events\Customer\CustomerContactEvent' => [],
-        // 'App\Events\Customer\CustomerEquipmentDataEvent' => [],
-        // 'App\Events\Customer\CustomerEquipmentEvent' => [],
-        // 'App\Events\Customer\CustomerFileEvent' => [],
-        // 'App\Events\Customer\CustomerNoteEvent' => [],
-        // 'App\Events\Customer\CustomerSiteEvent' => [],
+        'App\Events\Customer\CustomerSlugChangedEvent' => [],
 
         /**
          * Tech Tip Events
@@ -109,19 +103,15 @@ class EventServiceProvider extends ServiceProvider
             'App\Listeners\TechTips\TechTipCommentNotificationListener',
         ],
         'App\Events\TechTips\TipCommentFlaggedEvent' => [
-            'App\Listeners\\TechTips\TipCommentFlaggedListener',
+            'App\Listeners\TechTips\TipCommentFlaggedListener',
         ],
 
         /**
          * File Link Events
          */
-        'App\Events\FileLinks\FileLinkEvent' => [
-            'App\Listeners\FileLinks\UpdateLinkFilesListener',
-        ],
         'App\Events\FileLinks\FileUploadedFromPublicEvent' => [
-            'App\Listeners\FileLinks\FileUploadFromPublicListener',
+            'App\Listeners\FileLinks\NotifyUserOfFileUploadListener',
         ],
-        'App\Events\FileLinks\FileUploadedFromPrivateEvent' => [],
     ];
 
     /**

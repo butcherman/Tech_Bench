@@ -2,7 +2,6 @@
 
 namespace App\Http\Middleware;
 
-// TODO - Refactor
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;

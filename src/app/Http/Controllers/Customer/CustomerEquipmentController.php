@@ -10,6 +10,7 @@ use App\Models\CustomerEquipment;
 use App\Service\Customer\CustomerEquipmentService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -39,6 +40,8 @@ class CustomerEquipmentController extends Controller
      */
     public function store(CustomerEquipmentRequest $request, Customer $customer): RedirectResponse
     {
+        Log::critical($request->header('X-Socket-Id'));
+
         $equip = $this->svc->createEquipment($request, $customer);
 
         return back()->with('success', __('cust.equipment.created', [

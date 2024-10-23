@@ -2,13 +2,14 @@
 
 namespace Tests\Feature\Public;
 
+use App\Events\FileLinks\FileUploadedFromPublicEvent;
 use App\Models\FileLink;
 use App\Models\FileUpload;
 use App\Models\User;
-use App\Notifications\FileLinks\GuestFileUploadedNotification;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
+use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class PublicFileLinkTest extends TestCase
@@ -19,6 +20,7 @@ class PublicFileLinkTest extends TestCase
     public function test_show_bad_link()
     {
         $response = $this->get(route('guest-link.show', 'random-string'));
+
         $response->assertSuccessful();
     }
 
@@ -28,6 +30,7 @@ class PublicFileLinkTest extends TestCase
         $link->expireLink();
 
         $response = $this->get(route('guest-link.show', $link->link_hash));
+
         $response->assertStatus(410);
     }
 
@@ -36,16 +39,30 @@ class PublicFileLinkTest extends TestCase
         $link = FileLink::factory()->createQuietly();
 
         $response = $this->get(route('guest-link.show', $link->link_hash));
-        $response->assertSuccessful();
+
+        $response->assertSuccessful()
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('Public/FileLinks/Show')
+                ->has('link-data')
+                ->has('link-files')
+            );
     }
 
     public function test_show()
     {
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
         $link = FileLink::factory()->createQuietly();
 
-        $response = $this->actingAs(User::factory()->createQuietly())
+        $response = $this->actingAs($user)
             ->get(route('guest-link.show', $link->link_hash));
-        $response->assertSuccessful();
+
+        $response->assertSuccessful()
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('Public/FileLinks/Show')
+                ->has('link-data')
+                ->has('link-files')
+            );
     }
 
     /**
@@ -59,7 +76,11 @@ class PublicFileLinkTest extends TestCase
             'file' => UploadedFile::fake()->image('testPhoto.png'),
         ];
 
-        $response = $this->post(route('guest-link.update', 'random-string'), $data);
+        $response = $this->post(
+            route('guest-link.update', 'random-string'),
+            $data
+        );
+
         $response->assertStatus(404);
     }
 
@@ -73,7 +94,11 @@ class PublicFileLinkTest extends TestCase
             'file' => UploadedFile::fake()->image('testPhoto.png'),
         ];
 
-        $response = $this->post(route('guest-link.update', $link->link_hash), $data);
+        $response = $this->post(
+            route('guest-link.update', $link->link_hash),
+            $data
+        );
+
         $response->assertStatus(410);
     }
 
@@ -88,7 +113,11 @@ class PublicFileLinkTest extends TestCase
             'file' => UploadedFile::fake()->image('testPhoto.png'),
         ];
 
-        $response = $this->post(route('guest-link.update', $link->link_hash), $data);
+        $response = $this->post(
+            route('guest-link.update',
+                $link->link_hash
+            ), $data);
+
         $response->assertSuccessful();
 
         $this->assertDatabaseHas('file_uploads', [
@@ -100,30 +129,26 @@ class PublicFileLinkTest extends TestCase
             ->assertExists($link->link_id.DIRECTORY_SEPARATOR.'testPhoto.png');
     }
 
-    public function test_update_guest_after_file()
+    public function test_update_guest_file_upload_after_file()
     {
-        Notification::fake();
+        Event::fake();
 
-        $file = FileUpload::factory()->createQuietly();
+        $upload = FileUpload::factory()->create();
         $link = FileLink::factory()->createQuietly();
         $data = [
             'name' => 'Billy Bob',
-            'notes' => 'This is a note',
+            'note' => 'This is a note',
         ];
 
-        $response = $this->withSession(['link-file' => [$file->file_id]])
-            ->post(route('guest-link.update', $link->link_hash), $data);
-        $response->assertStatus(302);
-        $response->assertSessionHas('success', 'Files Uploaded Successfully');
+        $response = $this->withSession(['link-file' => [$upload->file_id]])
+            ->post(
+                route('guest-link.update',
+                    $link->link_hash
+                ), $data);
 
-        $this->assertDatabaseHas('file_link_notes', [
-            'note' => $data['notes'],
-        ]);
-        $this->assertDatabaseHas('file_link_timelines', [
-            'link_id' => $link->link_id,
-            'added_by' => $data['name'],
-        ]);
+        $response->assertStatus(302)
+            ->assertSessionHas('success', 'Files Uploaded Successfully');
 
-        Notification::assertSentTo($link->User, GuestFileUploadedNotification::class);
+        Event::assertDispatched(FileUploadedFromPublicEvent::class);
     }
 }

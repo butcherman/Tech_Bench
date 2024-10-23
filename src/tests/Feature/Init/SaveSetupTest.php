@@ -16,13 +16,16 @@ class SaveSetupTest extends TestCase
         config(['app.env' => 'local']);
 
         $response = $this->get(route('init.save-setup'));
-        $response->assertStatus(302);
-        $response->assertRedirect(route('login'));
+
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
         $this->assertGuest();
     }
 
     public function test_invoke()
     {
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
         $data = [
             'setup' => [
                 'basic-settings' => [
@@ -58,9 +61,10 @@ class SaveSetupTest extends TestCase
             ],
         ];
 
-        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
+        $response = $this->actingAs($user)
             ->withSession($data)
             ->get(route('init.save-setup'));
+
         $response->assertSuccessful();
     }
 }

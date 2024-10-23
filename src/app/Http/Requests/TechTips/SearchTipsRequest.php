@@ -1,7 +1,5 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Http\Requests\TechTips;
 
 use Illuminate\Foundation\Http\FormRequest;
@@ -26,11 +24,11 @@ class SearchTipsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'searchFor' => 'nullable|string',
-            'typeList' => 'array',
-            'equipList' => 'array',
-            'page' => 'required|numeric',
-            'perPage' => 'required|numeric',
+            'searchFor' => ['nullable', 'string'],
+            'typeList' => ['array'],
+            'equipList' => ['array'],
+            'page' => ['required', 'numeric'],
+            'perPage' => ['required', 'numeric'],
         ];
     }
 }

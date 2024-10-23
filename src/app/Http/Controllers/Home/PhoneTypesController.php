@@ -1,7 +1,5 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Http\Controllers\Home;
 
 use App\Http\Controllers\Controller;
@@ -9,15 +7,20 @@ use App\Http\Requests\Home\PhoneTypesRequest;
 use App\Models\Customer;
 use App\Models\PhoneNumberType;
 use App\Service\Cache;
-use App\Service\CheckDatabaseError;
-use Illuminate\Database\QueryException;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use App\Service\Misc\PhoneTypeService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class PhoneTypesController extends Controller
 {
-    public function index()
+    public function __construct(protected PhoneTypeService $svc) {}
+
+    /**
+     * Show a list of available phone types to Administrators
+     */
+    public function index(): Response
     {
         $this->authorize('manage', Customer::class);
 
@@ -27,62 +30,43 @@ class PhoneTypesController extends Controller
     }
 
     /**
-     * Show the form for creating the resource.
+     * Return a list of phone types from Cache
      */
-    public function create()
+    public function create(): JsonResponse
     {
-        return Cache::phoneTypes();
+        return response()->json(Cache::phoneTypes());
     }
 
     /**
-     * Store the newly created resource in storage.
+     * Store the newly created Phone Type.
      */
-    public function store(PhoneTypesRequest $request)
+    public function store(PhoneTypesRequest $request): RedirectResponse
     {
-        $phoneType = PhoneNumberType::create($request->only(['description', 'icon_class']));
-        Cache::clearCache('phoneTypes');
-
-        Log::info(
-            'New Phone Number Type created by '.$request->user()->username,
-            $phoneType->toArray()
-        );
+        $this->svc->createPhoneType($request->collect());
 
         return back()->with('success', __('admin.phone-type.created'));
     }
 
     /**
-     * Update the resource in storage.
+     * Update the Phone Type.
      */
-    public function update(PhoneTypesRequest $request, PhoneNumberType $phone_type)
-    {
-        $phone_type->update($request->only(['description', 'icon_class']));
-        Cache::clearCache('phoneTypes');
-
-        Log::info(
-            'Phone Number Type updated by '.$request->user()->username,
-            $phone_type->toArray()
-        );
+    public function update(
+        PhoneTypesRequest $request,
+        PhoneNumberType $phone_type
+    ): RedirectResponse {
+        $this->svc->updatePhoneType($request->collect(), $phone_type);
 
         return back()->with('success', __('admin.phone-type.updated'));
     }
 
     /**
-     * Remove the resource from storage.
+     * Remove the Phone Type.
      */
-    public function destroy(Request $request, PhoneNumberType $phone_type)
+    public function destroy(PhoneNumberType $phone_type): RedirectResponse
     {
         $this->authorize('manage', Customer::class);
 
-        try {
-
-            $phone_type->delete();
-            Cache::clearCache('phoneTypes');
-        } catch (QueryException $e) {
-            CheckDatabaseError::check($e, 'Unable to delete, Phone Number Type is in use by at least one customer');
-        }
-
-        Log::notice('Phone Number Type deleted by '.
-            $request->user()->username, $phone_type->toArray());
+        $this->svc->destroyPhoneType($phone_type);
 
         return back()->with('warning', __('admin.phone-type.destroyed'));
     }

@@ -16,8 +16,9 @@ class CheckForInitTest extends TestCase
         config(['app.env' => 'local']);
 
         $response = $this->get(route('dashboard'));
-        $response->assertStatus(302);
-        $response->assertRedirect(route('login'));
+
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
         $this->assertGuest();
     }
 
@@ -26,8 +27,12 @@ class CheckForInitTest extends TestCase
         config(['app.first_time_setup' => true]);
         config(['app.env' => 'local']);
 
-        $response = $this->actingAs(User::factory()->createQuietly())->get(route('dashboard'));
-        $response->assertStatus(403);
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+
+        $response = $this->actingAs($user)->get(route('dashboard'));
+
+        $response->assertForbidden();
     }
 
     public function test_as_installer()
@@ -36,8 +41,9 @@ class CheckForInitTest extends TestCase
         config(['app.env' => 'local']);
 
         $response = $this->actingAs(User::find(1))->get(route('dashboard'));
-        $response->assertStatus(302);
-        $response->assertRedirect(route('init.welcome'));
+
+        $response->assertStatus(302)
+            ->assertRedirect(route('init.welcome'));
     }
 
     public function test_second_run()
@@ -46,6 +52,7 @@ class CheckForInitTest extends TestCase
         config(['app.env' => 'local']);
 
         $response = $this->actingAs(User::find(1))->get(route('init.welcome'));
-        $response->assertStatus(403);
+
+        $response->assertForbidden();
     }
 }

@@ -6,8 +6,10 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Context;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -36,9 +38,11 @@ class LogDebutVisits
      */
     public function handle(Request $request, Closure $next): Response
     {
+        // Generate unique ID and add to Context to be tagged in all logging entries
+        Context::add('trace_id', Str::uuid()->toString());
+
         // If log level is not set to debug, continue on
         if (config('logging.channels.daily.level') === 'debug') {
-
             // Determine if we need to bypass this URL
             foreach ($this->doNotLog as $bypass) {
                 if ($request->is($bypass)) {

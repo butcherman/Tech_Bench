@@ -81,9 +81,7 @@ onMounted(() => {
 /**
  * Leave Broadcast Channel
  */
-onUnmounted(() => {
-    Echo.leave(`tech-tips.${props.tipData.tip_id}`);
-});
+onUnmounted(() => Echo.leave(`tech-tips.${props.tipData.tip_id}`));
 
 /**
  * Live update Comments so user does not have to refresh page

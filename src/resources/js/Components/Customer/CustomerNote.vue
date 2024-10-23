@@ -2,10 +2,14 @@
     <div class="card">
         <div class="card-body">
             <div class="card-title">
+                <AlertButton
+                    v-if="changeAlert.notes"
+                    title="Notes Updated.  Refresh for most recent data"
+                />
                 <RefreshButton
                     :only="['notes']"
                     @loading-start="toggleLoading('notes')"
-                    @loading-complete="toggleLoading('notes')"
+                    @loading-complete="clearAlert('notes')"
                 />
                 Notes:
                 <Link :href="addRoute">
@@ -118,6 +122,7 @@ import AddButton from "../_Base/Buttons/AddButton.vue";
 import Pagination from "../_Base/Pagination.vue";
 import Modal from "../_Base/Modal.vue";
 import RefreshButton from "../_Base/Buttons/RefreshButton.vue";
+import AlertButton from "../_Base/Buttons/AlertButton.vue";
 import Overlay from "../_Base/Loaders/Overlay.vue";
 import CustomerNoteDetails from "./CustomerNoteDetails.vue";
 import { ref, computed } from "vue";
@@ -129,6 +134,8 @@ import {
     currentSite,
     loading,
     toggleLoading,
+    changeAlert,
+    clearAlert,
 } from "@/State/CustomerState";
 
 const props = defineProps<{

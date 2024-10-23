@@ -6,16 +6,24 @@
         :max-files="5"
         submit-text="Add File"
         file-required
-        @success="$emit('success')"
+        @success="handleSuccess"
     >
     </VueFileForm>
 </template>
 
 <script setup lang="ts">
 import VueFileForm from "@/Forms/_Base/VueFileForm.vue";
+import { useForm } from "@inertiajs/vue3";
 
-defineEmits(["success"]);
-defineProps<{
+const emit = defineEmits(["success"]);
+const props = defineProps<{
     linkId: number;
 }>();
+
+const handleSuccess = () => {
+    let formData = useForm({});
+    formData.post(route("links.add-file", props.linkId));
+
+    emit("success");
+};
 </script>

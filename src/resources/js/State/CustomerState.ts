@@ -27,6 +27,29 @@ const toggleLoading = (
 };
 
 /*******************************************************************************
+ * Alert Icons
+ *******************************************************************************/
+const changeAlert = reactive({
+    site: false,
+    equipment: false,
+    contacts: false,
+    notes: false,
+    files: false,
+});
+
+
+const clearAlert = (key: "site" | "equipment" | "contacts" | "notes" | "files") => {
+    console.log('clear alert called');
+    changeAlert[key] = false;
+    loading[key] = false;
+};
+
+const triggerAlert = (key: "site" | "equipment" | "contacts" | "notes" | "files") => {
+    console.log('trigger alert called');
+    changeAlert[key] = true;
+}
+
+/*******************************************************************************
  * Customer Information
  *******************************************************************************/
 const customer = computed<customer>(() => page.props.customer);
@@ -67,7 +90,10 @@ const files = computed<customerFile[]>(() => page.props.files);
 export {
     permissions,
     loading,
+    changeAlert,
     toggleLoading,
+    clearAlert,
+    triggerAlert,
     customer,
     customerAlerts,
     currentSite,

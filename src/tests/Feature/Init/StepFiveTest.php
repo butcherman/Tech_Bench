@@ -3,6 +3,7 @@
 namespace Tests\Feature\Init;
 
 use App\Models\User;
+use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class StepFiveTest extends TestCase
@@ -16,8 +17,9 @@ class StepFiveTest extends TestCase
         config(['app.env' => 'local']);
 
         $response = $this->get(route('init.step-5'));
-        $response->assertStatus(302);
-        $response->assertRedirect(route('login'));
+
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
         $this->assertGuest();
     }
 
@@ -26,7 +28,10 @@ class StepFiveTest extends TestCase
         config(['app.first_time_setup' => true]);
         config(['app.env' => 'local']);
 
-        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
+
+        $response = $this->actingAs($user)
             ->withSession([
                 'setup' => [
                     'basic-settings' => [
@@ -57,6 +62,10 @@ class StepFiveTest extends TestCase
                 ],
             ])
             ->get(route('init.step-5'));
-        $response->assertSuccessful();
+
+        $response->assertSuccessful()
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('Init/StepFive')
+            );
     }
 }

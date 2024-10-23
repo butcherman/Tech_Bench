@@ -1,7 +1,5 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Http\Controllers\Home;
 
 use App\Http\Controllers\Controller;
@@ -9,18 +7,20 @@ use App\Http\Requests\Home\FileTypesRequest;
 use App\Models\Customer;
 use App\Models\CustomerFileType;
 use App\Service\Cache;
-use App\Service\CheckDatabaseError;
-use Illuminate\Database\QueryException;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use App\Service\Customer\CustomerFileTypeService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class FileTypesController extends Controller
 {
+    public function __construct(protected CustomerFileTypeService $svc) {}
+
     /**
-     * Display a listing of the resource.
+     * Show a listing of all current File Types (from cache)
      */
-    public function index()
+    public function index(): Response
     {
         $this->authorize('manage', Customer::class);
 
@@ -30,54 +30,43 @@ class FileTypesController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Return the File Types from Cache
      */
-    public function create()
+    public function create(): JsonResponse
     {
-        return Cache::fileTypes();
+        return response()->json(Cache::fileTypes());
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created File Type.
      */
-    public function store(FileTypesRequest $request)
+    public function store(FileTypesRequest $request): RedirectResponse
     {
-        $fileType = CustomerFileType::create($request->only(['description']));
-
-        Cache::clearCache(['fileTypes']);
-        Log::info('New Customer File Type created by '.
-            $request->user()->username, $fileType->toArray());
+        $this->svc->createFileType($request->collect());
 
         return back()->with('success', __('admin.file-type.created'));
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the File Type.
      */
-    public function update(FileTypesRequest $request, CustomerFileType $file_type)
-    {
-        $file_type->update($request->only(['description']));
-
-        Cache::clearCache(['fileTypes']);
-        Log::info('Customer File Type Updated by '.
-            $request->user()->username, $file_type->toArray());
+    public function update(
+        FileTypesRequest $request,
+        CustomerFileType $file_type
+    ): RedirectResponse {
+        $this->svc->updateFileType($request->collect(), $file_type);
 
         return back()->with('success', __('admin.file-type.updated'));
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the File Type.
      */
-    public function destroy(Request $request, CustomerFileType $file_type)
+    public function destroy(CustomerFileType $file_type): RedirectResponse
     {
         $this->authorize('manage', Customer::class);
 
-        try {
-            $file_type->delete();
-            Cache::clearCache(['fileTypes']);
-        } catch (QueryException $e) {
-            CheckDatabaseError::check($e, 'Unable to delete, File Type is in use by at least one customer');
-        }
+        $this->svc->destroyFileType($file_type);
 
         return back()->with('warning', __('admin.file-type.destroyed'));
     }

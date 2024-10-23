@@ -1,7 +1,5 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Http\Requests\Home;
 
 use App\Models\Customer;
@@ -23,7 +21,7 @@ class FileTypesRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'description' => 'required',
+            'description' => ['required'],
         ];
     }
 }

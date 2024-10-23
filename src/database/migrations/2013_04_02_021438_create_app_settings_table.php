@@ -10,7 +10,7 @@ class CreateAppSettingsTable extends Migration
     /**
      * Run the migrations
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('app_settings', function (Blueprint $table) {
             $table->id();
@@ -35,7 +35,7 @@ class CreateAppSettingsTable extends Migration
     /**
      * Reverse the migrations
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('app_settings');
     }

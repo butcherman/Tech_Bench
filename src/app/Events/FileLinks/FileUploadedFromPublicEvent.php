@@ -21,6 +21,8 @@ class FileUploadedFromPublicEvent implements ShouldBroadcast
 
     /**
      * Get the channels the event should broadcast on
+     *
+     * @codeCoverageIgnore
      */
     public function broadcastOn(): array
     {
@@ -29,6 +31,11 @@ class FileUploadedFromPublicEvent implements ShouldBroadcast
         ];
     }
 
+    /**
+     * Get the name the event should broadcast as
+     *
+     * @codeCoverageIgnore
+     */
     public function broadcastAs(): string
     {
         return 'FileUploadedEvent';

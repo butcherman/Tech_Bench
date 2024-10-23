@@ -1,27 +1,24 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Http\Controllers\Equipment;
 
-use App\Exceptions\Database\GeneralQueryException;
-use App\Exceptions\Database\RecordInUseException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Equipment\DataTypeRequest;
 use App\Models\DataFieldType;
 use App\Models\EquipmentType;
-use App\Service\Cache;
-use Illuminate\Database\QueryException;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use App\Service\Equipment\EquipmentDataService;
+use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class EquipmentDataTypeController extends Controller
 {
+    public function __construct(protected EquipmentDataService $svc) {}
+
     /**
-     * Display a listing of the resource.
+     * Display a listing all Equipment Data Fields.
      */
-    public function index()
+    public function index(): Response
     {
         $this->authorize('viewAny', EquipmentType::class);
 
@@ -31,9 +28,9 @@ class EquipmentDataTypeController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a Equipment Data Field.
      */
-    public function create()
+    public function create(): Response
     {
         $this->authorize('viewAny', EquipmentType::class);
 
@@ -41,73 +38,51 @@ class EquipmentDataTypeController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created Equipment Data Field.
      */
-    public function store(DataTypeRequest $request)
+    public function store(DataTypeRequest $request): RedirectResponse
     {
-        $newField = DataFieldType::create($request->toArray());
-
-        Log::info('New Equipment Data Field created by '.
-            $request->user()->username, $newField->toArray());
+        $this->svc->createDataType($request->collect());
 
         return redirect(route('equipment-data.index'))
             ->with('success', __('equipment.data-field-type.created'));
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing the Equipment Data Field.
      */
-    public function edit(DataFieldType $equipment_datum)
+    public function edit(DataFieldType $equipment_datum): Response
     {
         $this->authorize('viewAny', EquipmentType::class);
 
         return Inertia::render('Equipment/DataType/Edit', [
             'data-field-type' => $equipment_datum,
         ]);
-
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the Equipment Data Field.
      */
-    public function update(DataTypeRequest $request, DataFieldType $equipment_datum)
-    {
-        $equipment_datum->update($request->toArray());
-
-        Log::info('Equipment Data Type '.$equipment_datum->name.' updated by '.
-            $request->user()->username, $equipment_datum->toArray());
+    public function update(
+        DataTypeRequest $request,
+        DataFieldType $equipment_datum
+    ): RedirectResponse {
+        $this->svc->updateDataType($request->collect(), $equipment_datum);
 
         return redirect(route('equipment-data.index'))
             ->with('success', __('equipment.data-field-type.updated'));
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the Equipment Data Field.
      */
-    public function destroy(Request $request, DataFieldType $equipment_datum)
+    public function destroy(DataFieldType $equipment_datum): RedirectResponse
     {
         $this->authorize('viewAny', EquipmentType::class);
 
-        try {
-            $equipment_datum->delete();
-            Cache::clearCache(['equipmentTypes', 'equipmentCategories']);
-        } catch (QueryException $e) {
-            if (in_array($e->errorInfo[1], [19, 1451])) {
-                throw new RecordInUseException(
-                    $equipment_datum->name.' is still in use and cannot be deleted',
-                    0,
-                    $e
-                );
-            } else {
-                // @codeCoverageIgnoreStart
-                throw new GeneralQueryException('', 0, $e);
-                // @codeCoverageIgnoreEnd
-            }
-        }
+        $this->svc->destroyDataType($equipment_datum);
 
-        Log::notice('Data Field '.$equipment_datum->name.' deleted by '.
-            $request->user()->username);
-
-        return back()->with('warning', __('equipment.data-field-type.destroyed'));
+        return back()
+            ->with('warning', __('equipment.data-field-type.destroyed'));
     }
 }

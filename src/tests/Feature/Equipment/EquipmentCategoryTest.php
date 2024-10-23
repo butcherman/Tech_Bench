@@ -19,32 +19,38 @@ class EquipmentCategoryTest extends TestCase
         ];
 
         $response = $this->post(route('equipment-category.store'), $data);
-        $response->assertStatus(302);
-        $response->assertRedirect(route('login'));
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
         $this->assertGuest();
     }
 
     public function test_store_no_permission()
     {
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
         $data = [
             'name' => 'Cisco',
         ];
 
-        $response = $this->actingAs(User::factory()->createQuietly())
+        $response = $this->actingAs($user)
             ->post(route('equipment-category.store'), $data);
-        $response->assertStatus(403);
+
+        $response->assertForbidden();
     }
 
     public function test_store()
     {
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
         $data = [
             'name' => 'Cisco',
         ];
 
-        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
+        $response = $this->actingAs($user)
             ->post(route('equipment-category.store'), $data);
-        $response->assertStatus(302);
-        $response->assertSessionHas('success', __('equipment.category.created'));
+        $response->assertStatus(302)
+            ->assertSessionHas('success', __('equipment.category.created'));
+
         $this->assertDatabaseHas('equipment_categories', ['name' => 'Cisco']);
     }
 
@@ -58,35 +64,46 @@ class EquipmentCategoryTest extends TestCase
             'name' => 'Cisco',
         ];
 
-        $response = $this->put(route('equipment-category.update', $cat->cat_id), $form);
-        $response->assertStatus(302);
-        $response->assertRedirect(route('login'));
+        $response = $this->put(
+            route('equipment-category.update', $cat->cat_id),
+            $form
+        );
+
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
         $this->assertGuest();
     }
 
     public function test_update_user()
     {
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
         $cat = EquipmentCategory::factory()->create();
         $form = [
             'name' => 'Cisco',
         ];
 
-        $response = $this->actingAs(User::factory()->createQuietly())
+        $response = $this->actingAs($user)
             ->put(route('equipment-category.update', $cat->cat_id), $form);
-        $response->assertStatus(403);
+
+        $response->assertForbidden();
     }
 
     public function test_update()
     {
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
         $cat = EquipmentCategory::factory()->create();
         $form = [
             'name' => 'Cisco',
         ];
 
-        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
+        $response = $this->actingAs($user)
             ->put(route('equipment-category.update', $cat->cat_id), $form);
-        $response->assertStatus(302);
-        $response->assertSessionHas('success', __('equipment.category.updated'));
+
+        $response->assertStatus(302)
+            ->assertSessionHas('success', __('equipment.category.updated'));
+
         $this->assertDatabaseHas('equipment_categories', [
             'cat_id' => $cat->cat_id,
             'name' => $form['name'],
@@ -100,32 +117,42 @@ class EquipmentCategoryTest extends TestCase
     {
         $cat = EquipmentCategory::factory()->create();
 
-        $response = $this->delete(route('equipment-category.destroy', $cat->cat_id));
-        $response->assertStatus(302);
-        $response->assertRedirect(route('login'));
+        $response = $this->delete(
+            route('equipment-category.destroy', $cat->cat_id)
+        );
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
         $this->assertGuest();
     }
 
     public function test_destroy_user()
     {
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
         $cat = EquipmentCategory::factory()->create();
 
-        $response = $this->actingAs(User::factory()->createQuietly())
+        $response = $this->actingAs($user)
             ->delete(route('equipment-category.destroy', $cat->cat_id));
-        $response->assertStatus(403);
+
+        $response->assertForbidden();
     }
 
     public function test_destroy_with_equipment()
     {
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
         $cat = EquipmentCategory::factory()->create();
         EquipmentType::factory()->create(['cat_id' => $cat->cat_id]);
 
-        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
+        $response = $this->actingAs($user)
             ->delete(route('equipment-category.destroy', $cat->cat_id));
-        $response->assertStatus(302);
-        $response->assertSessionHasErrors([
-            'query_error' => __('equipment.category.in-use', ['name' => $cat->name]),
-        ]);
+
+        $response->assertStatus(302)
+            ->assertSessionHasErrors([
+                'query_error' => __('equipment.category.in-use', [
+                    'name' => $cat->name,
+                ]),
+            ]);
         $this->assertDatabaseHas('equipment_categories', [
             'cat_id' => $cat->cat_id,
             'name' => $cat->name,
@@ -134,12 +161,16 @@ class EquipmentCategoryTest extends TestCase
 
     public function test_destroy()
     {
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
         $cat = EquipmentCategory::factory()->create();
 
-        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
+        $response = $this->actingAs($user)
             ->delete(route('equipment-category.destroy', $cat->cat_id));
-        $response->assertStatus(302);
-        $response->assertSessionHas('warning', __('equipment.category.destroyed'));
+
+        $response->assertStatus(302)
+            ->assertSessionHas('warning', __('equipment.category.destroyed'));
+
         $this->assertDatabaseMissing('equipment_categories', [
             'cat_id' => $cat->cat_id,
             'name' => $cat->name,

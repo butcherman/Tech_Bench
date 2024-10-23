@@ -26,7 +26,7 @@ return new class extends Migration
     /**
      * Migrate Customer Contacts to new Schema
      */
-    public function migrateCustomerContacts()
+    public function migrateCustomerContacts(): void
     {
         $customerContacts = CustomerContact::withTrashed()->get();
 
@@ -53,7 +53,7 @@ return new class extends Migration
     /**
      * Remove Shared Column from Customer Contacts Table
      */
-    public function cleanup()
+    public function cleanup(): void
     {
         Schema::table('customer_contacts', function (Blueprint $table) {
             $table->dropColumn('shared');

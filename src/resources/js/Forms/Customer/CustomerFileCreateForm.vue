@@ -62,7 +62,7 @@ import SelectBoxInput from "../_Base/SelectBoxInput.vue";
 import SelectInput from "../_Base/SelectInput.vue";
 import { ref } from "vue";
 import { array, object, string } from "yup";
-import { DropzoneFile } from "dropzone";
+import type { DropzoneFile } from "dropzone";
 
 const props = defineProps<{
     customer: customer;

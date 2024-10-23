@@ -86,7 +86,10 @@ const initDropzone = () => {
         autoProcessQueue: false,
         chunking: true,
         chunkSize: fileData.chunkSize,
-        headers: { "X-CSRF-TOKEN": fileData.token },
+        headers: {
+            "X-CSRF-TOKEN": fileData.token,
+            "X-Socket-Id": Echo.socketId(),
+        },
         maxFiles: props.maxFiles || 5,
         maxFilesize: fileData.maxSize,
         method: "POST",
@@ -143,13 +146,10 @@ const buildEventListeners = () => {
 
     // Append Form Data to each File Chunk
     myDrop.on("sending", (file, xhr, formData) => {
-        for (const field in fileFormData) {
-            formData.append(
-                field,
-                // JSON.stringify(formData[field as keyof object])
-                fileFormData[field]
-            );
+        for (const [field, value] of Object.entries(fileFormData)) {
+            formData.append(field, JSON.stringify(value));
         }
+
         emit("sending", file, xhr, formData);
     });
 

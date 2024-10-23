@@ -6,7 +6,6 @@ use App\Models\FileUpload;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
-// use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Storage;
 use Pion\Laravel\ChunkUpload\Handler\HandlerFactory;
 use Pion\Laravel\ChunkUpload\Receiver\FileReceiver;
@@ -130,5 +129,22 @@ trait FileTrait
         }
 
         return $name;
+    }
+
+    /**
+     * Move a file from one folder to another (on same disk) and update database
+     */
+    protected function moveFileUpload(FileUpload $upload, string $newFolder): void
+    {
+        $newName = $this->checkForDuplicate($upload->file_name);
+
+        Storage::disk($upload->disk)->move(
+            $upload->folder.DIRECTORY_SEPARATOR.$upload->file_name,
+            $newFolder.DIRECTORY_SEPARATOR.$newName
+        );
+
+        $upload->file_name = $newName;
+        $upload->folder = $newFolder;
+        $upload->save();
     }
 }

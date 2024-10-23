@@ -13,7 +13,7 @@ class CreateUsersTable extends Migration
     /**
      * Run the migrations
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id('user_id');
@@ -23,7 +23,8 @@ class CreateUsersTable extends Migration
             $table->string('last_name');
             $table->string('email')->unique();
             $table->string('password')
-                ->default(Hash::make(strtolower(Str::random(15))));       //  Generate a random password if one is not assigned
+                //  Generate a random password if one is not assigned
+                ->default(Hash::make(strtolower(Str::random(15))));
             $table->rememberToken();
             $table->timestamp('password_expires')->nullable();
             $table->softDeletes();
@@ -54,11 +55,12 @@ class CreateUsersTable extends Migration
     /**
      * Reverse the migrations
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
             $table->dropForeign(['role_id']);
         });
+
         Schema::dropIfExists('users');
     }
 }

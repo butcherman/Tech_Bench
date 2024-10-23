@@ -5,6 +5,10 @@ namespace Tests\Feature\Auth;
 use App\Models\User;
 use App\Notifications\User\SendAuthCode;
 use Carbon\Carbon;
+use Illuminate\Auth\Events\Failed;
+use Illuminate\Auth\Events\Lockout;
+use Illuminate\Auth\Events\Login;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 
@@ -13,6 +17,8 @@ class _LoginTest extends TestCase
     //  Verify the a valid user can log in
     public function test_valid_login()
     {
+        Event::fake();
+
         /** @var User $user */
         $user = User::factory()->createQuietly([
             'password' => bcrypt($password = 'randomPassword'),
@@ -25,11 +31,15 @@ class _LoginTest extends TestCase
 
         $response->assertStatus(302)->assertRedirect(route('dashboard'));
         $this->assertAuthenticatedAs($user);
+
+        Event::assertDispatched(Login::class);
     }
 
     //  Verify user cannot login with incorrect password
     public function test_incorrect_login()
     {
+        Event::fake();
+
         /** @var User $user */
         $user = User::factory()->createQuietly();
 
@@ -42,11 +52,15 @@ class _LoginTest extends TestCase
             ->assertRedirect(route('home'))
             ->assertSessionHasErrors(['username' => __('auth.failed')]);
         $this->assertGuest();
+
+        Event::assertDispatched(Failed::class);
     }
 
     //  Verify a user that has been deactivated is not able to login
     public function test_login_as_disabled_user()
     {
+        Event::fake();
+
         /** @var User $user */
         $user = User::factory()->createQuietly([
             'password' => bcrypt($password = 'randomPassword'),
@@ -62,6 +76,8 @@ class _LoginTest extends TestCase
             ->assertRedirect(route('home'))
             ->assertSessionHasErrors(['username' => __('auth.failed')]);
         $this->assertGuest();
+
+        Event::assertDispatched(Failed::class);
     }
 
     //  Verify that the user is redirected if already logged in
@@ -79,6 +95,8 @@ class _LoginTest extends TestCase
     //  Verify that a user is locked out if they try more than five login attempts
     public function test_login_lockout()
     {
+        Event::fake();
+
         /** @var User $user */
         $user = User::factory()->createQuietly();
 
@@ -114,6 +132,8 @@ class _LoginTest extends TestCase
         $response->assertSessionHasErrors('throttle');
         $this->assertGuest();
 
+        Event::assertDispatched(Lockout::class);
+
         //  After more than 10 minutes, user should be able to try again
         Carbon::setTestNow(Carbon::now()->addMinutes(15));
         $response = $this->post(route('login'), [
@@ -125,6 +145,8 @@ class _LoginTest extends TestCase
             ->assertRedirect(route('home'))
             ->assertSessionHasErrors(['username' => __('auth.failed')]);
         $this->assertGuest();
+
+        Event::assertDispatched(Failed::class);
     }
 
     //  Make sure that the user is redirected to the Change Password page if their password has expired

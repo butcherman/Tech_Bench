@@ -9,7 +9,7 @@ class CreateCustomerEquipmentTable extends Migration
     /**
      * Run the migrations
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('customer_equipment', function (Blueprint $table) {
             $table->id('cust_equip_id');
@@ -33,12 +33,13 @@ class CreateCustomerEquipmentTable extends Migration
     /**
      * Reverse the migrations
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('customer_equipment', function (Blueprint $table) {
             $table->dropForeign(['cust_id']);
             $table->dropForeign(['equip_id']);
         });
+
         Schema::dropIfExists('customer_equipment');
     }
 }

@@ -29,7 +29,7 @@ return new class extends Migration
         $this->cleanup();
     }
 
-    protected function migrateCustomerFiles()
+    protected function migrateCustomerFiles(): void
     {
         // $customerFiles = CustomerFile
         $customerFiles = CustomerFile::withTrashed()->get();
@@ -52,7 +52,7 @@ return new class extends Migration
         }
     }
 
-    protected function cleanup()
+    protected function cleanup(): void
     {
         Schema::table('customer_files', function (Blueprint $table) {
             $table->dropColumn('shared');

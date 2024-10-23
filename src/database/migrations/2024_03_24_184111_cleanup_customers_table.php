@@ -27,11 +27,17 @@ return new class extends Migration
         }
     }
 
-    protected function cleanupCustomersTable()
+    protected function cleanupCustomersTable(): void
     {
         Schema::table('customers', function (Blueprint $table) {
             $table->dropForeign(['parent_id']);
-            $table->dropColumn(['parent_id', 'address', 'city', 'state', 'zip']);
+            $table->dropColumn([
+                'parent_id',
+                'address',
+                'city',
+                'state',
+                'zip',
+            ]);
             $table->text('deleted_reason')->nullable()->after('slug');
         });
     }

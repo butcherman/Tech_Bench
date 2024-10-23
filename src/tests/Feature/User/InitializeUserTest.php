@@ -4,6 +4,8 @@ namespace Tests\Feature\User;
 
 use App\Models\User;
 use App\Models\UserInitialize;
+use Illuminate\Auth\Events\Login;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
@@ -95,6 +97,8 @@ class InitializeUserTest extends TestCase
 
     public function test_set()
     {
+        Event::fake();
+
         $user = User::factory()->createQuietly();
         $link = UserInitialize::create([
             'username' => $user->username,
@@ -111,5 +115,7 @@ class InitializeUserTest extends TestCase
         $response->assertRedirect(route('dashboard'));
         $response->assertSessionHas('success', __('user.initialized'));
         $this->assertDatabaseMissing('user_initializes', $link->toArray());
+
+        Event::assertDispatched(Login::class);
     }
 }

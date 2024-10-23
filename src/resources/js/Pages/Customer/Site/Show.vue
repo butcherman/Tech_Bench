@@ -33,6 +33,16 @@
                 <CustomerFile />
             </div>
         </div>
+        <Modal title="ALERT" ref="customerAlertModal" no-close-on-click>
+            <div>{{ customerAlertMessage }}</div>
+            <a
+                v-if="customerAlertLink"
+                :href="customerAlertLink.link"
+                class="btn btn-info w-100"
+            >
+                {{ customerAlertLink.text }}
+            </a>
+        </Modal>
     </div>
 </template>
 
@@ -47,12 +57,32 @@ import CustomerContact from "@/Components/Customer/CustomerContact.vue";
 import CustomerNote from "@/Components/Customer/CustomerNote.vue";
 import CustomerFile from "@/Components/Customer/CustomerFile.vue";
 import BookmarkItem from "@/Components/_Base/BookmarkItem.vue";
-import { computed } from "vue";
-import { customer, permissions } from "@/State/CustomerState";
+import Modal from "@/Components/_Base/Modal.vue";
+import { computed, onMounted, onUnmounted } from "vue";
+import { customer, currentSite, permissions } from "@/State/CustomerState";
+import {
+    registerSiteChannel,
+    customerAlertModal,
+    customerAlertMessage,
+    customerAlertLink,
+} from "@/Modules/CustomerBroadcasting.module";
 
 defineProps<{
     isFav: boolean;
 }>();
+
+/**
+ * Register to Customer Channel
+ */
+const channelName = currentSite.value.site_slug;
+onMounted(() => {
+    registerSiteChannel(channelName);
+});
+
+/**
+ * Leave Customer Channel
+ */
+onUnmounted(() => Echo.leave(`customer.${channelName}`));
 
 const showManagement = computed(
     () =>

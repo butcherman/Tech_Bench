@@ -2,25 +2,21 @@
 
 namespace App\Traits;
 
+use Illuminate\Broadcasting\PrivateChannel;
+use Illuminate\Support\Facades\Log;
+
 trait CustomerBroadcastingTrait
 {
-    protected function getCustomerChannel(): array
+    protected function getSiteChannels(array $siteSlugs): array
     {
-        return ['customer.'.$this->Customer->slug];
-    }
+        $channelList = [];
 
-    protected function getSiteChannelList(): array
-    {
-        $siteList = $this->CustomerSite->pluck('site_slug')->toArray();
-        array_walk($siteList, function (&$value) {
-            $value = 'customer-site.'.$value;
-        });
+        foreach ($siteSlugs as $slug) {
+            $channelList[] = new PrivateChannel('customer-site.'.$slug);
+        }
 
-        return $siteList;
-    }
+        Log::debug('Customer Site Channel List created', $channelList);
 
-    protected function getEquipmentChannel(): array
-    {
-        return ['customer-equipment.'.$this->cust_equip_id];
+        return $channelList;
     }
 }

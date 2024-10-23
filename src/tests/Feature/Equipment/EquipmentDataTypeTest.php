@@ -6,6 +6,7 @@ use App\Models\DataField;
 use App\Models\DataFieldType;
 use App\Models\EquipmentType;
 use App\Models\User;
+use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class EquipmentDataTypeTest extends TestCase
@@ -16,23 +17,36 @@ class EquipmentDataTypeTest extends TestCase
     public function test_index_guest()
     {
         $response = $this->get(route('equipment-data.index'));
-        $response->assertStatus(302);
-        $response->assertRedirect(route('login'));
+
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
         $this->assertGuest();
     }
 
     public function test_index_no_permission()
     {
-        $response = $this->actingAs(User::factory()->createQuietly())
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+
+        $response = $this->actingAs($user)
             ->get(route('equipment-data.index'));
-        $response->assertStatus(403);
+
+        $response->assertForbidden();
     }
 
     public function test_index()
     {
-        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
+
+        $response = $this->actingAs($user)
             ->get(route('equipment-data.index'));
-        $response->assertSuccessful();
+
+        $response->assertSuccessful()
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('Equipment/DataType/Index')
+                ->has('data-types')
+            );
     }
 
     /**
@@ -41,23 +55,35 @@ class EquipmentDataTypeTest extends TestCase
     public function test_create_guest()
     {
         $response = $this->get(route('equipment-data.create'));
-        $response->assertStatus(302);
-        $response->assertRedirect(route('login'));
+
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
         $this->assertGuest();
     }
 
     public function test_create_no_permission()
     {
-        $response = $this->actingAs(User::factory()->createQuietly())
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+
+        $response = $this->actingAs($user)
             ->get(route('equipment-data.create'));
-        $response->assertStatus(403);
+
+        $response->assertForbidden();
     }
 
     public function test_create()
     {
-        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
+
+        $response = $this->actingAs($user)
             ->get(route('equipment-data.create'));
-        $response->assertSuccessful();
+
+        $response->assertSuccessful()
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('Equipment/DataType/Create')
+            );
     }
 
     /**
@@ -75,13 +101,16 @@ class EquipmentDataTypeTest extends TestCase
         ];
 
         $response = $this->post(route('equipment-data.store'), $data);
-        $response->assertStatus(302);
-        $response->assertRedirect(route('login'));
+
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
         $this->assertGuest();
     }
 
     public function test_store_no_permission()
     {
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
         $data = [
             'name' => 'Something Random',
             'pattern' => null,
@@ -91,13 +120,16 @@ class EquipmentDataTypeTest extends TestCase
             'do_not_log_value' => false,
         ];
 
-        $response = $this->actingAs(User::factory()->createQuietly())
+        $response = $this->actingAs($user)
             ->post(route('equipment-data.store'), $data);
-        $response->assertStatus(403);
+
+        $response->assertForbidden();
     }
 
     public function test_store()
     {
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
         $data = [
             'name' => 'Something Random',
             'pattern' => null,
@@ -107,10 +139,15 @@ class EquipmentDataTypeTest extends TestCase
             'do_not_log_value' => false,
         ];
 
-        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
+        $response = $this->actingAs($user)
             ->post(route('equipment-data.store'), $data);
-        $response->assertStatus(302);
-        $response->assertSessionHas('success', __('equipment.data-field-type.created'));
+
+        $response->assertStatus(302)
+            ->assertSessionHas(
+                'success',
+                __('equipment.data-field-type.created')
+            );
+
         $this->assertDatabaseHas('data_field_types', $data);
     }
 
@@ -122,27 +159,38 @@ class EquipmentDataTypeTest extends TestCase
         $type = DataFieldType::factory()->create();
 
         $response = $this->get(route('equipment-data.edit', $type->type_id));
-        $response->assertStatus(302);
-        $response->assertRedirect(route('login'));
+
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
         $this->assertGuest();
     }
 
     public function test_edit_no_permission()
     {
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
         $type = DataFieldType::factory()->create();
 
-        $response = $this->actingAs(User::factory()->createQuietly())
+        $response = $this->actingAs($user)
             ->get(route('equipment-data.edit', $type->type_id));
-        $response->assertStatus(403);
+
+        $response->assertForbidden();
     }
 
     public function test_edit()
     {
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
         $type = DataFieldType::factory()->create();
 
-        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
+        $response = $this->actingAs($user)
             ->get(route('equipment-data.edit', $type->type_id));
-        $response->assertSuccessful();
+
+        $response->assertSuccessful()
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('Equipment/DataType/Edit')
+                ->has('data-field-type')
+            );
     }
 
     /**
@@ -162,13 +210,16 @@ class EquipmentDataTypeTest extends TestCase
         ];
 
         $response = $this->put(route('equipment-data.update', $type->type_id), $data);
-        $response->assertStatus(302);
-        $response->assertRedirect(route('login'));
+
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
         $this->assertGuest();
     }
 
     public function test_update_no_permission()
     {
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
         $type = DataFieldType::factory()->create();
 
         $data = [
@@ -180,13 +231,16 @@ class EquipmentDataTypeTest extends TestCase
             'do_not_log_value' => false,
         ];
 
-        $response = $this->actingAs(User::factory()->createQuietly())
+        $response = $this->actingAs($user)
             ->put(route('equipment-data.update', $type->type_id), $data);
-        $response->assertStatus(403);
+
+        $response->assertForbidden();
     }
 
     public function test_update()
     {
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
         $type = DataFieldType::factory()->create();
 
         $data = [
@@ -198,10 +252,15 @@ class EquipmentDataTypeTest extends TestCase
             'do_not_log_value' => false,
         ];
 
-        $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
+        $response = $this->actingAs($user)
             ->put(route('equipment-data.update', $type->type_id), $data);
-        $response->assertStatus(302);
-        $response->assertSessionHas('success', __('equipment.data-field-type.updated'));
+
+        $response->assertStatus(302)
+            ->assertSessionHas(
+                'success',
+                __('equipment.data-field-type.updated')
+            );
+
         $this->assertDatabaseHas('data_field_types', $data);
     }
 
@@ -224,7 +283,7 @@ class EquipmentDataTypeTest extends TestCase
 
         $response = $this->actingAs(User::factory()->createQuietly())
             ->delete(route('equipment-data.destroy', $type->type_id));
-        $response->assertStatus(403);
+        $response->assertForbidden();
     }
 
     public function test_destroy()
