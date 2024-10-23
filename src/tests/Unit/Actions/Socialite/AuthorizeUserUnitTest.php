@@ -6,7 +6,9 @@ use App\Actions\Socialite\AuthorizeUser;
 use App\Exceptions\Auth\UnableToCreateAzureUserException;
 use App\Jobs\User\CreateUserSettingsEntriesJob;
 use App\Models\User;
+use Illuminate\Auth\Events\Login;
 use Illuminate\Support\Facades\Bus;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
 use Mockery\MockInterface;
@@ -16,6 +18,8 @@ class AuthorizeUserUnitTest extends TestCase
 {
     public function test_with_existing_user()
     {
+        Event::fake();
+
         $user = User::factory()->create();
 
         // Mock the Socialite Response
@@ -56,11 +60,14 @@ class AuthorizeUserUnitTest extends TestCase
         $response = $testObject->handle();
 
         $this->assertEquals($user->toArray(), $response->toArray());
+
+        Event::assertDispatched(Login::class);
     }
 
     public function test_with_new_user_registration_enabled()
     {
         Bus::fake();
+        Event::fake(Login::class);
 
         config(['services.azure.allow_register' => true]);
 
@@ -112,6 +119,7 @@ class AuthorizeUserUnitTest extends TestCase
         ]));
 
         Bus::assertDispatched(CreateUserSettingsEntriesJob::class);
+        Event::assertDispatched(Login::class);
     }
 
     public function test_with_new_user_registration_disabled()

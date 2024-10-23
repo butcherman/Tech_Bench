@@ -5,8 +5,9 @@
 namespace Tests\Feature\Auth;
 
 use App\Models\User;
-use App\Notifications\User\PasswordChangedNotification;
+use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Auth\Notifications\ResetPassword;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Password;
@@ -144,7 +145,7 @@ class ResetPasswordTest extends TestCase
      */
     public function test_submit_reset_password_form_valid()
     {
-        Notification::fake();
+        Event::fake();
 
         /** @var User $user */
         $user = User::factory()->createQuietly();
@@ -162,7 +163,7 @@ class ResetPasswordTest extends TestCase
             Hash::check('New-awesome-password1!', $user->fresh()->password)
         );
 
-        Notification::assertSentTo($user, PasswordChangedNotification::class);
+        Event::assertDispatched(PasswordReset::class);
     }
 
     /**

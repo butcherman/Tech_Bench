@@ -5,7 +5,9 @@ namespace Tests\Feature\Auth;
 use App\Jobs\User\CreateUserSettingsEntriesJob;
 use App\Jobs\User\SendWelcomeEmailJob;
 use App\Models\User;
+use Illuminate\Auth\Events\Login;
 use Illuminate\Support\Facades\Bus;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
 use Mockery\MockInterface;
@@ -57,6 +59,7 @@ class SocialiteTest extends TestCase
 
     public function test_callback_new_user()
     {
+        Event::fake(Login::class);
         Bus::fake();
 
         config(['services.azure.allow_login' => true]);
@@ -115,10 +118,12 @@ class SocialiteTest extends TestCase
 
         Bus::assertDispatched(CreateUserSettingsEntriesJob::class);
         Bus::assertNotDispatched(SendWelcomeEmailJob::class);
+        Event::assertDispatched(Login::class);
     }
 
     public function test_callback_new_user_two_fa_bypass_disabled()
     {
+        Event::fake(Login::class);
         Bus::fake();
 
         config(['services.azure.allow_login' => true]);
@@ -175,6 +180,7 @@ class SocialiteTest extends TestCase
 
         Bus::assertDispatched(CreateUserSettingsEntriesJob::class);
         Bus::assertNotDispatched(SendWelcomeEmailJob::class);
+        Event::assertDispatched(Login::class);
     }
 
     public function test_callback_new_user_register_disabled()
