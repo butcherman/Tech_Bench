@@ -9,7 +9,7 @@ class CreateTechTipsTable extends Migration
     /**
      * Run the migrations
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('tech_tips', function (Blueprint $table) {
             $table->id('tip_id');
@@ -41,7 +41,7 @@ class CreateTechTipsTable extends Migration
     /**
      * Reverse the migrations
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('tech_tips', function (Blueprint $table) {
             $table->dropForeign(['user_id']);

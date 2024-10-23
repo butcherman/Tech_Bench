@@ -29,28 +29,32 @@ return new class extends Migration
     /**
      * Migrate data from the customers table to this new table
      */
-    protected function migrate()
+    protected function migrate(): void
     {
-        $custList = Customer::withTrashed()->get();
-
         // Cycle through the list of customers and create individual sites
-        foreach ($custList as $cust) {
-            CustomerSite::create([
-                'cust_site_id' => $cust->cust_id,
-                'cust_id' => $cust->parent_id ? $cust->parent_id : $cust->cust_id,
-                'site_name' => $cust->name,
-                'site_slug' => $cust->slug,
-                'address' => $cust->address,
-                'city' => $cust->city,
-                'state' => $cust->state,
-                'zip' => $cust->zip,
-            ]);
+        Customer::withoutEvents(function () {
+            $custList = Customer::withTrashed()->get();
 
-            // Add the Primary Site to the Customer Profile
-            if (! $cust->parent_id) {
-                $cust->primary_site_id = $cust->cust_id;
-                $cust->save();
+            foreach ($custList as $cust) {
+                CustomerSite::create([
+                    'cust_site_id' => $cust->cust_id,
+                    'cust_id' => $cust->parent_id
+                        ? $cust->parent_id
+                        : $cust->cust_id,
+                    'site_name' => $cust->name,
+                    'site_slug' => $cust->slug,
+                    'address' => $cust->address,
+                    'city' => $cust->city,
+                    'state' => $cust->state,
+                    'zip' => $cust->zip,
+                ]);
+
+                // Add the Primary Site to the Customer Profile
+                if (! $cust->parent_id) {
+                    $cust->primary_site_id = $cust->cust_id;
+                    $cust->save();
+                }
             }
-        }
+        });
     }
 };

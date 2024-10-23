@@ -10,7 +10,7 @@ class CreateTechTipTypesTable extends Migration
     /**
      * Run the migrations
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('tech_tip_types', function (Blueprint $table) {
             $table->id('tip_type_id');
@@ -48,7 +48,7 @@ class CreateTechTipTypesTable extends Migration
     /**
      * Reverse the migrations
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('tech_tip_types');
     }

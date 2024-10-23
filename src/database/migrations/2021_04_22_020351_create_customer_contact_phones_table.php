@@ -9,7 +9,7 @@ class CreateCustomerContactPhonesTable extends Migration
     /**
      * Run the migrations
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('customer_contact_phones', function (Blueprint $table) {
             $table->id();
@@ -33,7 +33,7 @@ class CreateCustomerContactPhonesTable extends Migration
     /**
      * Reverse the migrations
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('customer_contact_phones');
     }

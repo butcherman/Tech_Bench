@@ -10,7 +10,7 @@ class CreateUserRolesTable extends Migration
     /**
      * Run the migrations
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('user_roles', function (Blueprint $table) {
             $table->id('role_id');
@@ -63,7 +63,7 @@ class CreateUserRolesTable extends Migration
     /**
      * Reverse the migrations
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('user_roles');
     }

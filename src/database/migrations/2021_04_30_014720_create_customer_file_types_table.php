@@ -10,7 +10,7 @@ class CreateCustomerFileTypesTable extends Migration
     /**
      * Run the migrations
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('customer_file_types', function (Blueprint $table) {
             $table->id('file_type_id');
@@ -47,13 +47,14 @@ class CreateCustomerFileTypesTable extends Migration
                 'updated_at' => NOW(),
             ],
         ];
+
         DB::table('customer_file_types')->insert($defaultData);
     }
 
     /**
      * Reverse the migrations
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('customer_file_types');
     }

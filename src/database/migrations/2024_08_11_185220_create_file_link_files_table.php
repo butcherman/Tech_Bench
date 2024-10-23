@@ -52,7 +52,9 @@ return new class extends Migration
             // Migrate any existing File Link Files
             $addedFiles = FileLinkFile::all()->groupBy('created_at');
             foreach ($addedFiles as $group) {
-                $addedBy = (string) $group[0]->user_id ? $group[0]->user_id : $group[0]->added_by;
+                $addedBy = (string) $group[0]->user_id
+                    ? $group[0]->user_id
+                    : $group[0]->added_by;
                 $key = FileLinkTimeline::create([
                     'link_id' => $group[0]->link_id,
                     'added_by' => $addedBy,

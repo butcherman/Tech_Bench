@@ -21,7 +21,7 @@ return new class extends Migration
     /**
      * Migrate Customer Equipment to new schema
      */
-    public function migrateCustomerEquipment()
+    public function migrateCustomerEquipment(): void
     {
         $customerEquipment = CustomerEquipment::withTrashed()
             ->get();
@@ -50,7 +50,7 @@ return new class extends Migration
     /**
      * Remove Shared Column from Customer Equipment Table
      */
-    public function cleanup()
+    public function cleanup(): void
     {
         Schema::table('customer_equipment', function (Blueprint $table) {
             $table->dropColumn('shared');

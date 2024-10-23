@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\EquipmentType;
-use App\Models\FileUploads;
+use App\Models\FileUpload;
 use App\Models\TechTip;
 use App\Models\TechTipComment;
 use App\Models\TechTipEquipment;
@@ -18,7 +18,7 @@ class TechTipSeeder extends Seeder
     /**
      * Run the database seeds
      */
-    public function run()
+    public function run(): void
     {
         //  Create 10 random Tech Tips
         $tips = TechTip::factory()->count(10)->create([
@@ -42,14 +42,19 @@ class TechTipSeeder extends Seeder
 
             //  For the even tips, add a file
             if ($i % 2 == 1) {
-                $file = FileUploads::factory()->create();
+                $file = FileUpload::factory()->create();
                 TechTipFile::factory()->create([
                     'tip_id' => $tips[$i]->tip_id,
                     'file_id' => $file->file_id,
                 ]);
 
                 //  Create a basic image file on the filesystem
-                Storage::disk('tips')->putFileAs($tips[$i]->tip_id, UploadedFile::fake()->image($file->file_name), $file->file_name);
+                Storage::disk('tips')
+                    ->putFileAs(
+                        $tips[$i]->tip_id,
+                        UploadedFile::fake()
+                            ->image($file->file_name), $file->file_name
+                    );
             }
         }
     }

@@ -9,7 +9,7 @@ class CreateFileUploadsTable extends Migration
     /**
      * Run the migrations
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('file_uploads', function (Blueprint $table) {
             $table->id('file_id');
@@ -24,7 +24,7 @@ class CreateFileUploadsTable extends Migration
     /**
      * Reverse the migrations
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('file_uploads');
     }

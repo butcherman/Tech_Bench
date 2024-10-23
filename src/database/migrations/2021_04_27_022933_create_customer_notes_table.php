@@ -9,7 +9,7 @@ class CreateCustomerNotesTable extends Migration
     /**
      * Run the migrations
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('customer_notes', function (Blueprint $table) {
             $table->id('note_id');
@@ -41,13 +41,14 @@ class CreateCustomerNotesTable extends Migration
     /**
      * Reverse the migrations
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('customer_notes', function (Blueprint $table) {
             $table->dropForeign(['cust_id']);
             $table->dropForeign(['created_by']);
             $table->dropForeign(['updated_by']);
         });
+
         Schema::dropIfExists('customer_notes');
     }
 }

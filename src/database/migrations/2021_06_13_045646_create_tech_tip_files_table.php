@@ -9,7 +9,7 @@ class CreateTechTipFilesTable extends Migration
     /**
      * Run the migrations
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('tech_tip_files', function (Blueprint $table) {
             $table->id('tip_file_id');
@@ -31,12 +31,13 @@ class CreateTechTipFilesTable extends Migration
     /**
      * Reverse the migrations
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('tech_tip_files', function (Blueprint $table) {
             $table->dropForeign(['tip_id']);
             $table->dropForeign(['file_id']);
         });
+
         Schema::dropIfExists('tech_tip_files');
     }
 }

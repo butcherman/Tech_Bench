@@ -12,7 +12,7 @@ class EquipmentSeeder extends Seeder
     /**
      *  Create sample categories and equipment (rather than relying on Faker to generate random words)
      */
-    public function run()
+    public function run(): void
     {
         // TODO - make a general seeder so it can be run more than once
         $equip = collect([
@@ -45,7 +45,7 @@ class EquipmentSeeder extends Seeder
             }
         }
 
-        // Create the information to gather when adding a syste mto a customer
+        // Create the information to gather when adding a system mto a customer
         $equipList = EquipmentType::all();
         foreach ($equipList as $e) {
             for ($i = 1; $i < 7; $i++) {

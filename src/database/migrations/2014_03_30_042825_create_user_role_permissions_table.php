@@ -10,7 +10,7 @@ class CreateUserRolePermissionsTable extends Migration
     /**
      * Run the migrations
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('user_role_permissions', function (Blueprint $table) {
             $table->id();
@@ -167,12 +167,13 @@ class CreateUserRolePermissionsTable extends Migration
     /**
      * Reverse the migrations
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('user_role_permissions', function (Blueprint $table) {
             $table->dropForeign(['role_id']);
             $table->dropForeign(['perm_type_id']);
         });
+
         Schema::dropIfExists('user_role_permissions');
     }
 }

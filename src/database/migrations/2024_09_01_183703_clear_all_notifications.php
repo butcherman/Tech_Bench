@@ -16,12 +16,4 @@ return new class extends Migration
             $n->delete();
         }
     }
-
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
-    {
-        //
-    }
 };

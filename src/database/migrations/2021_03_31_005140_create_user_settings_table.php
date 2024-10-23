@@ -10,7 +10,7 @@ class CreateUserSettingsTable extends Migration
     /**
      * Run the migrations
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('user_settings', function (Blueprint $table) {
             $table->id('setting_id');
@@ -34,7 +34,13 @@ class CreateUserSettingsTable extends Migration
          * Add the default admin user to the table
          */
         $default = [
-            ['user_id' => 1, 'setting_type_id' => 1, 'value' => 1, 'created_at' => NOW(), 'updated_at' => NOW()],
+            [
+                'user_id' => 1,
+                'setting_type_id' => 1,
+                'value' => 1,
+                'created_at' => NOW(),
+                'updated_at' => NOW(),
+            ],
         ];
 
         DB::table('user_settings')->insert($default);
@@ -43,7 +49,7 @@ class CreateUserSettingsTable extends Migration
     /**
      * Reverse the migrations
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('user_settings', function (Blueprint $table) {
             $table->dropForeign(['user_id']);

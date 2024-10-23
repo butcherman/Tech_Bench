@@ -9,7 +9,7 @@ class CreateEquipmentCategoriesTable extends Migration
     /**
      * Run the migrations
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('equipment_categories', function (Blueprint $table) {
             $table->id('cat_id');
@@ -21,7 +21,7 @@ class CreateEquipmentCategoriesTable extends Migration
     /**
      * Reverse the migrations
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('equipment_categories');
     }

@@ -14,7 +14,7 @@ class UserSeeder extends Seeder
     /**
      *  Create 20 random users with different roles
      */
-    public function run()
+    public function run(): void
     {
         //  Make it so that the admin password is not expired
         User::find(1)->update([

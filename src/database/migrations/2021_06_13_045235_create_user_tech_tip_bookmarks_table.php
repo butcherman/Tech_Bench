@@ -9,7 +9,7 @@ class CreateUserTechTipBookmarksTable extends Migration
     /**
      * Run the migrations
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('user_tech_tip_bookmarks', function (Blueprint $table) {
             $table->id();
@@ -33,12 +33,13 @@ class CreateUserTechTipBookmarksTable extends Migration
     /**
      * Reverse the migrations
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('user_tech_tip_bookmarks', function (Blueprint $table) {
             $table->dropForeign(['tip_id']);
             $table->dropForeign(['user_id']);
         });
+
         Schema::dropIfExists('user_tech_tip_bookmarks');
     }
 }

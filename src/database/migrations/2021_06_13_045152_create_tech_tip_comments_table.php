@@ -9,7 +9,7 @@ class CreateTechTipCommentsTable extends Migration
     /**
      * Run the migrations
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('tech_tip_comments', function (Blueprint $table) {
             $table->id();
@@ -33,12 +33,13 @@ class CreateTechTipCommentsTable extends Migration
     /**
      * Reverse the migrations
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('tech_tip_comments', function (Blueprint $table) {
             $table->dropForeign(['tip_id']);
             $table->dropForeign(['user_id']);
         });
+
         Schema::dropIfExists('tech_tip_comments');
     }
 }

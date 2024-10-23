@@ -9,7 +9,7 @@ class CreateEquipmentTypesTable extends Migration
     /**
      * Run the migrations
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('equipment_types', function (Blueprint $table) {
             $table->id('equip_id');
@@ -26,7 +26,7 @@ class CreateEquipmentTypesTable extends Migration
     /**
      * Reverse the migrations
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('equipment_types', function (Blueprint $table) {
             $table->dropForeign(['cat_id']);

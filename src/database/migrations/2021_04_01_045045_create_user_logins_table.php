@@ -9,7 +9,7 @@ class CreateUserLoginsTable extends Migration
     /**
      * Run the migrations
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('user_logins', function (Blueprint $table) {
             $table->id();
@@ -27,7 +27,7 @@ class CreateUserLoginsTable extends Migration
     /**
      * Reverse the migrations
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('user_logins', function (Blueprint $table) {
             $table->dropForeign(['user_id']);
