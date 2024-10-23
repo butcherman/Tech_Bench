@@ -8,12 +8,15 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\TechTips\TechTipCommentRequest;
 use App\Models\TechTip;
 use App\Models\TechTipComment;
+use App\Service\TechTips\TechTipCommentService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class TechTipCommentController extends Controller
 {
+    public function __construct(protected TechTipCommentService $svc) {}
+
     /**
      * Display a listing of any Flagged Comments for a specific Tech Tip
      */
@@ -35,10 +38,6 @@ class TechTipCommentController extends Controller
      */
     public function store(TechTipCommentRequest $request, TechTip $techTip)
     {
-        $techTip->TechTipComment()->save(new TechTipComment([
-            'user_id' => $request->user()->user_id,
-            'comment' => $request->comment_data,
-        ]));
 
         return back()->with('success', __('tips.comment.created'));
     }

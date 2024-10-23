@@ -4,16 +4,21 @@ namespace App\Service\TechTips;
 
 use App\Events\TechTips\TipCommentFlaggedEvent;
 use App\Exceptions\TechTips\CommentFlaggedAlreadyException;
+use App\Models\TechTip;
 use App\Models\TechTipComment;
 use App\Service\CheckDatabaseError;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 
 class TechTipCommentService
 {
-    public function createComment()
+    public function createComment(Collection $requestData, TechTip $techTip): TechTipComment
     {
-        //
+        return $techTip->TechTipComment()->save(new TechTipComment([
+            'user_id' => request()->user()->user_id,
+            'comment' => $requestData->comment_data,
+        ]));
     }
 
     public function updateComment()

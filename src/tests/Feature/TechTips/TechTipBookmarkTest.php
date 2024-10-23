@@ -19,13 +19,15 @@ class TechTipBookmarkTest extends TestCase
         ];
 
         $response = $this->post(route('tech-tips.bookmark', $tip->slug), $data);
-        $response->assertStatus(302);
-        $response->assertRedirect(route('login'));
+
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
         $this->assertGuest();
     }
 
     public function test_invoke_add()
     {
+        /** @var User $user */
         $user = User::factory()->createQuietly();
         $tip = TechTip::factory()->create();
         $data = [
@@ -34,7 +36,10 @@ class TechTipBookmarkTest extends TestCase
 
         $response = $this->actingAs($user)
             ->post(route('tech-tips.bookmark', $tip->slug), $data);
-        $response->assertSuccessful();
+
+        $response->assertSuccessful()
+            ->assertJson(['success' => true]);
+
         $this->assertDatabaseHas('user_tech_tip_bookmarks', [
             'user_id' => $user->user_id,
             'tip_id' => $tip->tip_id,
@@ -43,6 +48,7 @@ class TechTipBookmarkTest extends TestCase
 
     public function test_invoke_add_duplicate()
     {
+        /** @var User $user */
         $user = User::factory()->createQuietly();
         $tip = TechTip::factory()->create();
         $data = [
@@ -53,11 +59,13 @@ class TechTipBookmarkTest extends TestCase
 
         $response = $this->actingAs($user)
             ->post(route('tech-tips.bookmark', $tip->slug), $data);
+
         $response->assertStatus(500);
     }
 
     public function test_invoke_remove()
     {
+        /** @var User $user */
         $user = User::factory()->createQuietly();
         $tip = TechTip::factory()->create();
         $data = [
@@ -68,7 +76,10 @@ class TechTipBookmarkTest extends TestCase
 
         $response = $this->actingAs($user)
             ->post(route('tech-tips.bookmark', $tip->slug), $data);
-        $response->assertSuccessful();
+
+        $response->assertSuccessful()
+            ->assertJson(['success' => true]);
+
         $this->assertDatabaseMissing('user_tech_tip_bookmarks', [
             'user_id' => $user->user_id,
             'tip_id' => $tip->tip_id,
@@ -77,6 +88,7 @@ class TechTipBookmarkTest extends TestCase
 
     public function test_invoke_remove_duplicate()
     {
+        /** @var User $user */
         $user = User::factory()->createQuietly();
         $tip = TechTip::factory()->create();
         $data = [
@@ -85,7 +97,10 @@ class TechTipBookmarkTest extends TestCase
 
         $response = $this->actingAs($user)
             ->post(route('tech-tips.bookmark', $tip->slug), $data);
-        $response->assertSuccessful();
+
+        $response->assertSuccessful()
+            ->assertJson(['success' => true]);
+
         $this->assertDatabaseMissing('user_tech_tip_bookmarks', [
             'user_id' => $user->user_id,
             'tip_id' => $tip->tip_id,

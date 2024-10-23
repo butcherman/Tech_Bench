@@ -103,14 +103,13 @@ class EventServiceProvider extends ServiceProvider
             'App\Listeners\TechTips\TechTipCommentNotificationListener',
         ],
         'App\Events\TechTips\TipCommentFlaggedEvent' => [
-            'App\Listeners\\TechTips\TipCommentFlaggedListener',
+            'App\Listeners\TechTips\TipCommentFlaggedListener',
         ],
 
         /**
          * File Link Events
          */
         'App\Events\FileLinks\FileUploadedFromPublicEvent' => [
-            // 'App\Listeners\FileLinks\FileUploadFromPublicListener',
             'App\Listeners\FileLinks\NotifyUserOfFileUploadListener',
         ],
     ];
