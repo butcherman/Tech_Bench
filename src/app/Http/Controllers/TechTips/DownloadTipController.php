@@ -1,13 +1,12 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Http\Controllers\TechTips;
 
 use App\Http\Controllers\Controller;
 use App\Models\TechTip;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 
 class DownloadTipController extends Controller
@@ -15,7 +14,7 @@ class DownloadTipController extends Controller
     /**
      * Handle the incoming request.
      */
-    public function __invoke(Request $request, TechTip $techTip)
+    public function __invoke(Request $request, TechTip $techTip): Response
     {
         Log::info('Tech Tip ID '.$techTip->tip_id.' downloaded by '.
             $request->user()->username);
