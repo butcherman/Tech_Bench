@@ -41,7 +41,7 @@ class CustomerFileObserver
     public function deleted(CustomerFile $customerFile): void
     {
         Log::notice(
-            'Customer File deleted for '.$customerFile->Customer->name.' by '.
+            'Customer File deleted for by '.
                 $this->user,
             $customerFile->toArray()
         );
@@ -59,8 +59,7 @@ class CustomerFileObserver
     public function forceDeleted(CustomerFile $customerFile): void
     {
         Log::notice(
-            'Customer File force deleted for '.$customerFile->Customer->name.
-                ' by '.$this->user,
+            'Customer File force deleted for by '.$this->user,
             $customerFile->toArray()
         );
     }

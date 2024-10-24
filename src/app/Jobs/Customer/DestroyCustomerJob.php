@@ -2,8 +2,9 @@
 
 namespace App\Jobs\Customer;
 
-use App\Events\File\FileDataDeletedEvent;
 use App\Models\Customer;
+use App\Service\Customer\CustomerFileService;
+use App\Service\Customer\CustomerService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -23,47 +24,14 @@ class DestroyCustomerJob implements ShouldQueue
     /**
      * Execute the job.
      */
-    public function handle(): void
+    public function handle(CustomerFileService $fileSvc, CustomerService $custSvc): void
     {
         Log::info('Destroying Customer - '.$this->customer->name);
 
-        $this->destroyCustomerFiles();
-        $this->destroyCustomerSites();
-
-        $this->customer->forceDelete();
+        $fileSvc->destroyAllCustomerFiles($this->customer);
+        $custSvc->destroyAllSites($this->customer);
+        $custSvc->destroyCustomer($this->customer, 'Force Deleting Customer', true);
 
         Log::info('Customer '.$this->customer->name.' has been destroyed');
-    }
-
-    /**
-     * Remove all Customer Files from the disk if not in use by other items
-     */
-    protected function destroyCustomerFiles(): void
-    {
-        $fileList = $this->customer->CustomerFile;
-
-        foreach ($fileList as $fileData) {
-            $fileData->forceDelete();
-            event(new FileDataDeletedEvent($fileData->FileUpload->file_id));
-        }
-    }
-
-    /**
-     * Remove all related sites from the customer
-     */
-    protected function destroyCustomerSites(): void
-    {
-        // Clear out the primary site id so that all sites can be destroyed
-        $this->customer->primary_site_id = null;
-        $this->customer->save();
-
-        Log::debug('Destroying Customer Sites for '.$this->customer->name);
-        $siteList = $this->customer->CustomerSite;
-
-        // Remove all sites associated with this customer
-        $siteList->each(function ($site) {
-            $site->forceDelete();
-            Log::debug('Customer Site '.$site->site_name.' destroyed');
-        });
     }
 }

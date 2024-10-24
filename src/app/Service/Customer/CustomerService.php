@@ -5,7 +5,6 @@ namespace App\Service\Customer;
 use App\Events\Customer\CustomerSlugChangedEvent;
 use App\Http\Requests\Customer\CustomerRequest;
 use App\Http\Requests\Customer\CustomerSiteRequest;
-use App\Jobs\Customer\DestroyCustomerJob;
 use App\Models\Customer;
 use App\Models\CustomerSite;
 use Illuminate\Support\Str;
@@ -62,7 +61,7 @@ class CustomerService
         ?bool $force = false
     ): void {
         if ($force) {
-            dispatch(new DestroyCustomerJob($customer));
+            $customer->forceDelete();
 
             return;
         }
@@ -135,6 +134,23 @@ class CustomerService
         $site->deleted_reason = $reason;
         $site->save();
         $site->delete();
+    }
+
+    /**
+     * Destroy All Customer Sites
+     */
+    public function destroyAllSites(Customer $customer): void
+    {
+        CustomerSite::withoutBroadcasting(function () use ($customer) {
+            // Remove the Primary Site ID from the customer
+            $customer->primary_site_id = null;
+            $customer->save();
+
+            $siteList = $customer->CustomerSite;
+            foreach ($siteList as $site) {
+                $this->destroySite($site, 'Force Deleting Customer', true);
+            }
+        });
     }
 
     /**

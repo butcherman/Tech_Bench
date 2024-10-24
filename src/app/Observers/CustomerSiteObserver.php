@@ -40,18 +40,20 @@ class CustomerSiteObserver
 
     public function deleted(CustomerSite $site): void
     {
-        Log::alert('Customer Site '.$site->site_name.' for '.
-            $site->Customer->name.' has been disabled by '.$this->user);
+        Log::alert(
+            'Customer Site '.$site->site_name.' has been disabled by '.$this->user
+        );
     }
 
-    public function restored(CustomerSite $site): void
-    {
-        //
-    }
+    // public function restored(CustomerSite $site): void
+    // {
+    //     //
+    // }
 
     public function forceDeleted(CustomerSite $site): void
     {
-        Log::alert('Customer Site '.$site->site_name.' for '.
-            $site->Customer->name.' has been trashed by '.$this->user);
+        Log::alert(
+            'Customer Site '.$site->site_name.' has been trashed by '.$this->user
+        );
     }
 }

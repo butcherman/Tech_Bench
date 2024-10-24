@@ -131,6 +131,10 @@ class CustomerFile extends Model
     /***************************************************************************
      * Model Broadcasting
      ***************************************************************************/
+
+    /**
+     * @codeCoverageIgnore
+     */
     public function broadcastOn(string $event): array
     {
         $siteChannels = $this->getSiteChannels(

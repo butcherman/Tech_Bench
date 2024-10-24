@@ -75,6 +75,16 @@ class CustomerFileService
         $customerFile->delete();
     }
 
+    public function destroyAllCustomerFiles(Customer $customer): void
+    {
+        CustomerFile::withoutBroadcasting(function () use ($customer) {
+            $fileList = $customer->CustomerFile;
+            foreach ($fileList as $fileData) {
+                $this->destroyCustomerFile($fileData, true);
+            }
+        });
+    }
+
     public function restoreCustomerFile(CustomerFile $customerFile): void
     {
         $customerFile->restore();
