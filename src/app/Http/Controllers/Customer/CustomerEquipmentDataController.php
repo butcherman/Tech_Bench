@@ -15,9 +15,11 @@ class CustomerEquipmentDataController extends Controller
     /**
      * Save changes made to Customer Equipment Data
      */
-    public function __invoke(CustomerEquipmentDataRequest $request, Customer $customer): RedirectResponse
-    {
-        $this->svc->updateEquipmentDataFields($request, $customer);
+    public function __invoke(
+        CustomerEquipmentDataRequest $request,
+        Customer $customer
+    ): RedirectResponse {
+        $this->svc->updateDataFieldValue($request, $customer);
 
         return back()->with('success', 'Saved Successfully');
     }

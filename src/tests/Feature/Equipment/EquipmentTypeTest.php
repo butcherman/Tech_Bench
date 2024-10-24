@@ -326,6 +326,8 @@ class EquipmentTypeTest extends TestCase
 
     public function test_update()
     {
+        Bus::fake();
+
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);
         $existing = EquipmentType::factory()->create();
@@ -378,6 +380,8 @@ class EquipmentTypeTest extends TestCase
             $this->assertTrue($fieldData->order === $index);
             $index++;
         }
+
+        Bus::assertDispatched(UpdateCustomerDataFieldsJob::class);
     }
 
     public function test_update_remove_field()
