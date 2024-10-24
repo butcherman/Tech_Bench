@@ -3,3 +3,4 @@
 *.scss linguist-vendored
 *.js linguist-vendored
 CHANGELOG.md export-ignore
+src/config/version.yml merge=ours

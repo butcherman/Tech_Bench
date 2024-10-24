@@ -1,53 +1,78 @@
 # Tech Bench
 
 [![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
-[![GitHub release](https://img.shields.io/github/release/Butcherman/Tech_Bench)](https://GitHub.com/Butcherman/Tech_Bench/releases/)
-[![Documentation Status](https://readthedocs.org/projects/tech-bench/badge/?version=latest)](https://tech-bench.readthedocs.io/en/latest/?badge=latest)
-[![GitHub issues](https://img.shields.io/github/issues/Butcherman/Tech_Bench)](https://GitHub.com/Butcherman/Tech_Bench/issues/)
+[![GitHub Release](https://img.shields.io/github/release/Butcherman/Tech_Bench)](https://GitHub.com/Butcherman/Tech_Bench/releases/)
+[![GitHub Issues](https://img.shields.io/github/issues/Butcherman/Tech_Bench)](https://GitHub.com/Butcherman/Tech_Bench/issues/)
 
 ## About Tech Bench
 
-Tech Bench is a custom Content Management System (CMS) built to aid service technicians by allowing them to store and share information about their customers and equipment they install and maintain.
+Tech Bench is a custom Content Management System (CMS) designed specifically for service technicians working in the field.
+This application allows technicians to securely store and share important customer information such as contact names, equipment
+installed, equipment backups, and notes about the customer. The advantage to using this application is to allow any technician -
+even those unfamiliar with the customer - quick and centralized access to all of this information.
 
-## The Tech Bench consists of two major sections
+## Tech Bench consists of two major sections
 
-### Customer Information
+### Customers
 
-Users can create customer accounts and store customer specific information for each of these customers such as:
+Customer accounts can be created as stand alone or with multiple attached sites. Customer specific information can then
+be stored and shared for quick centralized access. Information includes:
 
-* The type of equipment they have installed
-* Login passwords and other information for the equipment
-* Notes and files specific to that customer and their equipment.
+- Equipment Types Installed
+- Equipment Specific Information (such as IP Addresses, login information, etc.)
+- Contacts, including onsite and offsite contacts
+- Notes for the customer, their specific site, or specific to the installed equipment
+- Files such as backups, site maps, etc.
 
-This central storage location ensures that all field staff have access to the same information.
+### Tech Tips (Knowledge Base) and Documentation
 
-### Tech Tips and Documentation
+While working in the field, all service technicians run across tips and tricks that they use to make their jobs easier.
+Tech Tips allows for users to create and share these tips with coworkers. This creates a custom Knowledge Base for all
+registered users.
 
-While working in the field, all service technicians run across tips and tricks that they use to make their jobs easier.  The Tech Tips section allows for registered users to share these tips with all other users.  This creates a custom Knowledge Base for registered users.
+An optional Public Knowledge Base is also available to give your customers an easy place to find information such as Quick
+Reference Guides, or custom documentation that has been put together for customers.
 
-The Knowledge Base can also include official documentation for the different equiopment that your company installs and maintains.
+## Additional Features
 
-Whenever a new Tech Tip is created, an email is sent to all registered users notifying them of the tip.
+### File Links
 
-## Installing Tech Bench
+Sometimes customers need access to files, or need to provide technicians with files that may be too large to email. File
+Links allows users to create a custom URL to deliver files, or have files uploaded to. Each File Link has an expiration
+dates and is only available for a limited time.
 
-Tech Bench is designed to run in a cluster of Docker containers.  To download the images and get the Docker-Compose file for building the cluster, visit the Tech Bench Installer repository at <https://github.com/butcherman/Tech_Bench_Installer>
+## Installation and Setup of Tech Bench
 
-## SSL Certificates
+Tech Bench is a Docker based application.  Follow the instructions in the [Installation Guide](INSTALLATION.md) for
+detailed instructions to setup the Tech Bench.
 
-By default the Tech Bench uses a Self Signed SSL Certificate for https requests.  It is recommended to upload a valid SSL certificate to the server.  When the Tech Bench application is created, a folder called "StorageData" is created to store all file data.  Inside this directory is a "keystore" sub directory.  Name the SSL Certificate `server.crt` and the key file to `server.key`.  Place the server.crt file in the keystore directory, and place the server.key inside the keystore\private directory overwriting the existing files.  Reboot the NGINX Docker container.
+## Upgrading Tech Bench
 
-To remove a custom certificate, simply delete the existing server.crt and server.key files and reboot the NGINX Docker container.  A new self signed SSL Certificate will be created.
+Upgrading to the latest version can be done though a bash script.  Follow the instructions in the
+[Upgrade Guide](UPGRADING.md) for more information.
 
-## Copyright © 2016-2023 Ron Butcher
+## Backing Up Tech Bench
 
-This program is free software:  you can redistribute it and/or modify it under the terms of the GNU
+In order to backup the Tech Bench to an off-server location, you will need to use
+a package such as [Samba](https://www.samba.org/) to mount a network shared drive.
+This package needs to be installed on the dedicated server.
+
+Durning the installation process, you will create a folder called ***backupData***
+in the same directory as the Docker Compose file.  See the [Installation Guide](INSTALLATION.md)
+for more information.
+
+This ***backupData*** folder can be mounted to a network share to store backups
+off-server.
+
+## Copyright © 2016-2024 Ron Butcher
+
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU
 General Public License as published by the Free Software Foundation, either version 2 of the License,
 or (at your option) any later version.
 
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public
 License for more details.
 
-You should have received a copy of the GNU General Public License along with this program.  If not, see
-www.gnu.org/licenses.
+You should have received a copy of the GNU General Public License along with this program. If not, see
+<www.gnu.org/licenses>.

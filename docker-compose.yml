@@ -1,0 +1,138 @@
+################################################################################
+#                                                                              #
+#                                                                              #
+#                          Tech Bench Docker Installation                      #
+#           NOTE:  Check .env file for necessary fields to modify to           #
+#                        secure this Tech Bench installation                   #
+#                                                                              #
+#                                                                              #
+################################################################################
+networks:
+    app-tier:
+        driver: bridge
+volumes:
+    appData:
+    dbData:
+    redisData:
+    meilisearchData:
+
+services:
+    # Application Container
+    tech_bench:
+        container_name: tech_bench
+        restart: unless-stopped
+        image: butcherman/tech_bench_app:${APP_VERSION:-latest}
+        volumes:
+            - appData:/app
+            - ./.env:/app/.env
+            # - ./backupData:/app/storage/backups/tech-bench
+            # - ./logData:/app/storage/logs
+        environment:
+            - SERVICE=app
+            - TB_URL=${BASE_URL}
+        networks:
+            - app-tier
+        depends_on:
+            database:
+                condition: service_healthy
+
+    # NGINX Web Server
+    nginx:
+        image: butcherman/tech_bench_nginx:1.1
+        container_name: nginx
+        restart: unless-stopped
+        volumes:
+            - appData:/app
+            - ./.env:/app/.env
+        environment:
+            - TB_URL=${BASE_URL}
+        ports:
+            - "80:80"
+            - "443:443"
+        networks:
+            - app-tier
+        depends_on:
+            - tech_bench
+            - reverb
+
+    #  Reverb Container for Websockets
+    reverb:
+        container_name: reverb
+        restart: unless-stopped
+        image: butcherman/tech_bench_app:${APP_VERSION:-latest}
+        volumes:
+            - appData:/app
+            - ./.env:/app/.env
+        environment:
+            - SERVICE=reverb
+        networks:
+            - app-tier
+        depends_on:
+            - tech_bench
+
+    #  Horizon Container to run background jobs
+    horizon:
+        container_name: horizon
+        restart: unless-stopped
+        image: butcherman/tech_bench_app:${APP_VERSION:-latest}
+        volumes:
+            - appData:/app
+            - ./.env:/app/.env
+        environment:
+            - SERVICE=horizon
+        networks:
+            - app-tier
+        depends_on:
+            - tech_bench
+            - nginx
+
+    #  Scheduler Container
+    scheduler:
+        container_name: scheduler
+        restart: unless-stopped
+        image: butcherman/tech_bench_app:${APP_VERSION:-latest}
+        volumes:
+            - appData:/app
+            - ./.env:/app/.env
+        environment:
+            - SERVICE=scheduler
+        networks:
+            - app-tier
+        depends_on:
+            - tech_bench
+            - nginx
+
+    # MySQL Database Container
+    database:
+        image: butcherman/tech_bench_database:1.0
+        container_name: database
+        restart: unless-stopped
+        volumes:
+            - dbData:/bitnami/mysql/data
+        networks:
+            - app-tier
+        healthcheck:
+            test: ['CMD', '/opt/bitnami/scripts/mysql/healthcheck.sh']
+            interval: 15s
+            timeout: 5s
+            retries: 6
+
+    #  Redis Container for Cache, Job and Email Queuing
+    redis:
+        image: butcherman/tech_bench_redis:1.0
+        container_name: redis
+        restart: unless-stopped
+        volumes:
+            - redisData:/bitnami/redis/data
+        networks:
+            - app-tier
+
+    # Melisearch Container for Search Engine
+    meilisearch:
+        image: butcherman/tech_bench_meilisearch:1.0
+        container_name: meilisearch
+        restart: unless-stopped
+        volumes:
+            - meilisearchData:/meili_data
+        networks:
+            - app-tier
