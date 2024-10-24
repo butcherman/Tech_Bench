@@ -6,6 +6,7 @@ use App\Actions\CustomerPermissions;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customer\CustomerDisableRequest;
 use App\Http\Requests\Customer\CustomerRequest;
+use App\Jobs\Customer\DestroyCustomerJob;
 use App\Models\Customer;
 use App\Service\Customer\CustomerService;
 use Illuminate\Http\RedirectResponse;
@@ -154,7 +155,7 @@ class CustomerController extends Controller
     {
         $this->authorize('forceDelete', $customer);
 
-        $this->svc->destroyCustomer($customer, null, true);
+        dispatch(new DestroyCustomerJob($customer));
 
         return back()->with('danger', __('cust.force_deleted', [
             'name' => $customer->name,

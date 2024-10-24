@@ -25,7 +25,7 @@ class ReAssignCustomerController extends Controller
      */
     public function update(ReAssignSiteRequest $request)
     {
-        dispatch(new ReAssignSiteJob($request));
+        dispatch(new ReAssignSiteJob($request->collect(), $request->user()));
 
         return back()
             ->with(

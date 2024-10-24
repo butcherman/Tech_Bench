@@ -37,7 +37,7 @@ class CustomerAdminController extends Controller
      */
     public function update(CustomerSettingsRequest $request): RedirectResponse
     {
-        $this->svc->updateCustomerSettings($request);
+        $this->svc->updateCustomerSettings($request->collect());
 
         return back()->with('success', __('cust.admin.settings_updated'));
     }

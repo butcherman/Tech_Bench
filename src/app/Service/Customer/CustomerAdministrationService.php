@@ -2,8 +2,8 @@
 
 namespace App\Service\Customer;
 
-use App\Http\Requests\Customer\CustomerSettingsRequest;
 use App\Traits\AppSettingsTrait;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 
 class CustomerAdministrationService
@@ -13,11 +13,13 @@ class CustomerAdministrationService
     /**
      * Update Customer Administration Settings
      */
-    public function updateCustomerSettings(CustomerSettingsRequest $requestData)
+    public function updateCustomerSettings(Collection $requestData)
     {
         $this->saveSettingsArray($requestData->toArray(), 'customer');
 
-        Log::info('Customer Settings Updated By '.
-            $requestData->user()->username, $requestData->toArray());
+        Log::info(
+            'Customer Settings Updated By '.request()->user()->username,
+            $requestData->toArray()
+        );
     }
 }

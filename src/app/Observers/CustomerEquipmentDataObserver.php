@@ -23,7 +23,10 @@ class CustomerEquipmentDataObserver
 
     public function created(CustomerEquipmentData $data): void
     {
-        //
+        Log::debug(
+            'Equipment Data Fields Created for New Customer Equipment',
+            $data->toArray()
+        );
     }
 
     public function updated(CustomerEquipmentData $data): void
