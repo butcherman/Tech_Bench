@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Admin\Config;
+namespace Tests\Feature\Admin\Config;
 
 use App\Events\Feature\FeatureChangedEvent;
 use App\Models\User;

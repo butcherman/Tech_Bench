@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\_Jobs\Customer;
+namespace Tests\Feature\_Jobs\Customer;
 
 use App\Jobs\Customer\CreateCustomerDataFieldsJob;
 use App\Models\CustomerEquipment;
