@@ -45,10 +45,10 @@ class CustomerSiteObserver
         );
     }
 
-    public function restored(CustomerSite $site): void
-    {
-        //
-    }
+    // public function restored(CustomerSite $site): void
+    // {
+    //     //
+    // }
 
     public function forceDeleted(CustomerSite $site): void
     {

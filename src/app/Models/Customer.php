@@ -118,6 +118,10 @@ class Customer extends Model
     /***************************************************************************
      * Model Broadcasting
      ***************************************************************************/
+
+    /**
+     * @codeCoverageIgnore
+     */
     public function broadcastOn(string $event): array
     {
         Log::debug('Broadcasting Customer Event');

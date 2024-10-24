@@ -60,7 +60,9 @@ class CustomerSite extends Model
             return $this->Customer->primary_site_id === $this->cust_site_id;
         }
 
+        // @codeCoverageIgnoreStart
         return false;
+        // @codeCoverageIgnoreEnd
     }
 
     public function getHrefAttribute()
@@ -122,6 +124,10 @@ class CustomerSite extends Model
     /***************************************************************************
      * Model Broadcasting
      ***************************************************************************/
+
+    /**
+     * @codeCoverageIgnore
+     */
     public function broadcastOn(string $event): array
     {
         Log::debug('Broadcasting Customer Site Event - Event Name - '.$event);

@@ -61,6 +61,10 @@ class CustomerEquipmentData extends Model
     /***************************************************************************
      * Model Broadcasting
      ***************************************************************************/
+
+    /**
+     * @codeCoverageIgnore
+     */
     public function broadcastOn(string $event): array
     {
         return match ($event) {

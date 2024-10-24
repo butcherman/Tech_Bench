@@ -24,9 +24,9 @@ class CustomerUnitTest extends TestCase
         $this->model = Customer::factory()->create();
     }
 
-    /**
+    /***************************************************************************
      * Route Model Binding Key
-     */
+     ***************************************************************************/
     public function test_route_binding_key()
     {
         $this->assertEquals(
@@ -39,17 +39,17 @@ class CustomerUnitTest extends TestCase
         );
     }
 
-    /**
+    /***************************************************************************
      * Model Attributes
-     */
+     ***************************************************************************/
     public function test_model_attributes()
     {
         $this->assertArrayHasKey('site_count', $this->model->toArray());
     }
 
-    /**
+    /***************************************************************************
      * Model Relationships
-     */
+     ***************************************************************************/
     public function test_customer_site_relationship()
     {
         $data = CustomerSite::where('cust_site_id', $this->model->primary_site_id)
@@ -165,9 +165,9 @@ class CustomerUnitTest extends TestCase
         );
     }
 
-    /**
+    /***************************************************************************
      * Model Methods
-     */
+     ***************************************************************************/
     public function test_is_fav_true()
     {
         $user = User::factory()->create();
