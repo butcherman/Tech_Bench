@@ -38,7 +38,7 @@ const props = defineProps<{
 const submitRoute = computed(() =>
     props.initialize
         ? route("initialize.update", props.token)
-        : route("password.reset")
+        : route("password.update")
 );
 const submitMethod = computed(() => (props.initialize ? "put" : "post"));
 const submitText = computed(() =>

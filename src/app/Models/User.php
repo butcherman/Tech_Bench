@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -37,5 +39,25 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | Additional Model Methods
+    |---------------------------------------------------------------------------
+    */
+
+    /**
+     * Determine the new expire date for an updated password
+     */
+    public function getNewExpireTime(?bool $immediate = false): ?Carbon
+    {
+        if ($immediate) {
+            return Carbon::yesterday();
+        }
+
+        return config('auth.passwords.settings.expire')
+            ? Carbon::now()->addDays(config('auth.passwords.settings.expire'))
+            : null;
     }
 }

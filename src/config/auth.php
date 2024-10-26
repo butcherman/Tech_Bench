@@ -92,6 +92,15 @@ return [
             'expire' => 60,
             'throttle' => 60,
         ],
+        'settings' => [
+            'expire' => 30,
+            'min_length' => 6,
+            'contains_uppercase' => true,
+            'contains_lowercase' => true,
+            'contains_number' => true,
+            'contains_special' => true,
+            'disable_compromised' => false,
+        ],
     ],
 
     /*

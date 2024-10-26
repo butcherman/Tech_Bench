@@ -3,7 +3,7 @@
         ref="resetPasswordForm"
         :initial-values="initValues"
         :validation-schema="schema"
-        :submit-route="$route('password.forgot')"
+        :submit-route="$route('password.email')"
         submit-method="post"
         submit-text="Send Recovery Instructions"
     >
