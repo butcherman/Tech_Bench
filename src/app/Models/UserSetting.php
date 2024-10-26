@@ -6,10 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class UserSetting extends Model
 {
+    /** @var string */
     protected $primaryKey = 'setting_id';
 
+    /** @var array<int, string> */
     protected $guarded = ['setting_id', 'created_at', 'updated_at'];
 
+    /** @var array<int, string> */
     protected $hidden = [
         'setting_id',
         'user_id',
@@ -17,26 +20,4 @@ class UserSetting extends Model
         'updated_at',
         'UserSettingType',
     ];
-
-    protected $appends = ['name'];
-
-    protected $casts = [
-        'value' => 'boolean',
-    ];
-
-    /***************************************************************************
-     * Model Attributes
-     ***************************************************************************/
-    public function getNameAttribute()
-    {
-        return $this->UserSettingType->name;
-    }
-
-    /***************************************************************************
-     * Model Relationships
-     ***************************************************************************/
-    public function UserSettingType()
-    {
-        return $this->hasOne(UserSettingType::class, 'setting_type_id', 'setting_type_id');
-    }
 }

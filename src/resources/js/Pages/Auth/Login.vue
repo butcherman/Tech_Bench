@@ -59,22 +59,22 @@
                     </div>
                     <h5 class="text-center">Tech Login:</h5>
                     <LoginForm />
-                    <div class="separator">or</div>
-                    <a
+                    <!-- <div class="separator">or</div> -->
+                    <!-- <a
                         v-if="allowOath"
                         as="button"
                         :href="$route('azure-login')"
                         class="btn btn-primary w-100 my-1"
                     >
                         Login With Office 365
-                    </a>
-                    <Link
+                    </a> -->
+                    <!-- <Link
                         :href="$route('password.forgot')"
                         as="button"
                         class="btn btn-primary w-100 my-1"
                     >
                         Forgot Password
-                    </Link>
+                    </Link> -->
                 </div>
             </div>
         </div>
@@ -94,7 +94,7 @@ interface homeLinks {
 defineProps<{
     welcomeMessage?: string;
     homeLinks: homeLinks[];
-    publicLink: homeLinks | boolean;
+    publicLink: homeLinks;
     allowOath: boolean;
 }>();
 

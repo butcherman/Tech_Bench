@@ -1,27 +1,21 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Http\Middleware;
 
-use App\Actions\BuildNavbar;
-use App\Service\Cache;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
-use PragmaRX\Version\Package\Version;
 
-/**
- * Middleware to process all InertiaJS responses
- */
 class HandleInertiaRequests extends Middleware
 {
     /**
-     * The root template that's loaded on the first page visit
+     * The root template that's loaded on the first page visit.
+     *
+     * @var string
      */
     protected $rootView = 'app';
 
     /**
-     * Determines the current asset version
+     * Determines the current asset version.
      */
     public function version(Request $request): ?string
     {
@@ -29,12 +23,23 @@ class HandleInertiaRequests extends Middleware
     }
 
     /**
-     * Defines the props that are shared by default
+     * Define the props that are shared by default.
      */
     public function share(Request $request): array
     {
-        $userShare = [];
-        $primaryShare = array_merge(parent::share($request), [
+        return array_merge(
+            parent::share($request),
+            $this->getPrimaryShare(),
+            $this->getUserShare($request),
+        );
+    }
+
+    /**
+     * Get the primary share information (Application Data)
+     */
+    protected function getPrimaryShare(): array
+    {
+        return [
             //  Flash messages are used for success/failure messages on next page load
             'flash' => $this->getFlashData(),
             // App information that is shared and used on all pages
@@ -42,8 +47,8 @@ class HandleInertiaRequests extends Middleware
                 'name' => fn () => config('app.name'),
                 'company_name' => fn () => config('app.company_name'),
                 'logo' => fn () => config('app.logo'),
-                'version' => fn () => Cache::version(),
-                'copyright' => fn () => Cache::copyright(),
+                'version' => fn () => 'test', //  Cache::version(),
+                'copyright' => fn () => 'test', //  Cache::copyright(),
                 //  File information
                 'fileData' => [
                     'maxSize' => fn () => config('filesystems.max_filesize'),
@@ -51,22 +56,25 @@ class HandleInertiaRequests extends Middleware
                     'token' => fn () => csrf_token(),
                 ],
             ],
-        ]);
+        ];
+    }
 
-        /**
-         * If a user is logged in, we need additional data
-         */
-        if ($request->user()) {
-            $userShare = [
-                //  Current logged in user
-                'current_user' => fn () => $request->user()->makeVisible('user_id'),
-                'idle_timeout' => fn () => intval(config('auth.auto_logout_timer')),
-                //  Dynamically built navigation menu
-                'navbar' => fn () => (new BuildNavbar)->getNavbar($request->user()),
-            ];
+    /**
+     * Get the user share information if it exists
+     */
+    protected function getUserShare(Request $request): array
+    {
+        if (! $request->user()) {
+            return [];
         }
 
-        return array_merge($primaryShare, $userShare);
+        return [
+            //  Current logged in user
+            'current_user' => fn () => $request->user()->makeVisible('user_id'),
+            'idle_timeout' => fn () => intval(config('auth.auto_logout_timer')),
+            //  Dynamically built navigation menu
+            'navbar' => fn () => [], // (new BuildNavbar)->getNavbar($request->user()),
+        ];
     }
 
     /**

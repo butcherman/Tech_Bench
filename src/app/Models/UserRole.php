@@ -2,17 +2,17 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class UserRole extends Model
 {
-    use HasFactory;
-
+    /** @var string */
     protected $primaryKey = 'role_id';
 
+    /** @var array<int, string> */
     protected $guarded = ['role_id', 'allow_edit', 'created_at', 'updated_at'];
 
+    /** @var array<int, string> */
     protected $hidden = [
         'allow_edit',
         'created_at',
@@ -20,23 +20,8 @@ class UserRole extends Model
         'UserRolePermission',
     ];
 
+    /** @var array<string, string> */
     protected $casts = [
         'allow_edit' => 'boolean',
     ];
-
-    /***************************************************************************
-     * Additional Attributes
-     ***************************************************************************/
-    public function getHrefAttribute()
-    {
-        return route('admin.user-roles.show', $this->role_id);
-    }
-
-    /***************************************************************************
-     * Model Relationships
-     ***************************************************************************/
-    public function UserRolePermission()
-    {
-        return $this->hasMany(UserRolePermission::class, 'role_id', 'role_id');
-    }
 }

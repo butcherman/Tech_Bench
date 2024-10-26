@@ -3,14 +3,16 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Auth;
 
 class UserRolePermission extends Model
 {
+    /** @var string */
     protected $primaryKey = 'id';
 
+    /** @var array<int, string> */
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
+    /** @var array<int, string> */
     protected $hidden = [
         'id',
         'role_id',
@@ -19,36 +21,8 @@ class UserRolePermission extends Model
         'UserRolePermissionType',
     ];
 
-    protected $appends = ['description', 'feature_enabled'];
-
+    /** @var array<string, string> */
     protected $casts = [
         'allow' => 'boolean',
     ];
-
-    /***************************************************************************
-     * Additional Attributes
-     ***************************************************************************/
-    public function getDescriptionAttribute()
-    {
-        return $this->UserRolePermissionType->description;
-    }
-
-    public function getFeatureEnabledAttribute()
-    {
-        if ($this->UserRolePermissionType->feature_name) {
-            return Auth::user()
-                ->features()
-                ->active($this->UserRolePermissionType->feature_name);
-        }
-
-        return true;
-    }
-
-    /***************************************************************************
-     * Model Relationships
-     ***************************************************************************/
-    public function UserRolePermissionType()
-    {
-        return $this->hasOne(UserRolePermissionType::class, 'perm_type_id', 'perm_type_id');
-    }
 }
