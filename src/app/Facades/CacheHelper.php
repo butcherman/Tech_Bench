@@ -3,6 +3,7 @@
 namespace App\Facades;
 
 use Illuminate\Support\Facades\Cache;
+use PragmaRX\Version\Package\Version;
 
 class CacheHelper
 {
@@ -25,7 +26,7 @@ class CacheHelper
      */
     public function passwordRules(): array
     {
-        return Cache::get('password_rules', function () {
+        return Cache::rememberForever('password_rules', function () {
             $passwordRules = [
                 'Password must be at least '.
                 config('auth.passwords.settings.min_length').
@@ -49,6 +50,33 @@ class CacheHelper
             }
 
             return $passwordRules;
+        });
+    }
+
+    /**
+     * Get the version of the Tech Bench Application
+     */
+    public function appData(): array
+    {
+        return Cache::rememberForever('appData', function () {
+            $version = new Version;
+
+            return [
+                'name' => config('app.name'),
+                'company_name' => config('app.company_name'),
+                'logo' => config('app.logo'),
+                'version' => $version->full(),
+                'copyright' => $version->copyright(),
+
+                // File information
+                'fileData' => [
+                    'maxSize' => config('filesystems.max_filesize'),
+                    'chunkSize' => config('filesystems.chunk_size'),
+                ],
+
+                // Inactivity timeout
+                'idle_timeout' => intval(config('auth.auto_logout_timer')),
+            ];
         });
     }
 }

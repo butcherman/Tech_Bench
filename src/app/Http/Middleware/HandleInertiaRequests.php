@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Facades\CacheFacade;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -42,20 +43,9 @@ class HandleInertiaRequests extends Middleware
         return [
             //  Flash messages are used for success/failure messages on next page load
             'flash' => $this->getFlashData(),
+            'token' => fn () => csrf_token(),
             // App information that is shared and used on all pages
-            'app' => [
-                'name' => fn () => config('app.name'),
-                'company_name' => fn () => config('app.company_name'),
-                'logo' => fn () => config('app.logo'),
-                'version' => fn () => 'test', //  Cache::version(),
-                'copyright' => fn () => 'test', //  Cache::copyright(),
-                //  File information
-                'fileData' => [
-                    'maxSize' => fn () => config('filesystems.max_filesize'),
-                    'chunkSize' => fn () => config('filesystems.chunk_size'),
-                    'token' => fn () => csrf_token(),
-                ],
-            ],
+            'app' => fn () => CacheFacade::appData(),
         ];
     }
 
@@ -71,7 +61,7 @@ class HandleInertiaRequests extends Middleware
         return [
             //  Current logged in user
             'current_user' => fn () => $request->user()->makeVisible('user_id'),
-            'idle_timeout' => fn () => intval(config('auth.auto_logout_timer')),
+
             //  Dynamically built navigation menu
             'navbar' => fn () => [], // (new BuildNavbar)->getNavbar($request->user()),
         ];
