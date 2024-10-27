@@ -1,6 +1,10 @@
 <?php
 
+use App\Http\Middleware\CheckForTwoFactor;
+use App\Http\Middleware\CheckPasswordExpiration;
 use App\Http\Middleware\HandleInertiaRequests;
+use App\Http\Middleware\LogDebugVisits;
+use Illuminate\Auth\Middleware\Authenticate;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -24,8 +28,14 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->web(append: [
+            LogDebugVisits::class,
             HandleInertiaRequests::class,
-        ]);
+        ])
+            ->appendToGroup('auth.secure', [
+                Authenticate::class,
+                CheckForTwoFactor::class,
+                CheckPasswordExpiration::class,
+            ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

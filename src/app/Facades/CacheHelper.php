@@ -67,6 +67,8 @@ class CacheHelper
                 'logo' => config('app.logo'),
                 'version' => $version->full(),
                 'copyright' => $version->copyright(),
+                'build' => $version->commit(),
+                'build_date' => $version->build(),
 
                 // File information
                 'fileData' => [

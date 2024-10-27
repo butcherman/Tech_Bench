@@ -2,14 +2,15 @@
 
 namespace Tests\Feature\Auth;
 
+use App\Mail\Auth\VerificationCodeMail;
+use App\Models\DeviceToken;
 use App\Models\User;
-use App\Notifications\User\SendAuthCode;
 use Carbon\Carbon;
 use Illuminate\Auth\Events\Failed;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
 class _LoginTest extends TestCase
@@ -151,80 +152,83 @@ class _LoginTest extends TestCase
     }
 
     // Make sure that the user is redirected to the Change Password page if their password has expired
-    // TODO - Add Back in
-    // public function test_password_expired_redirect()
-    // {
-    //     /** @var User $user */
-    //     $user = User::factory()
-    //         ->createQuietly(['password_expires' => Carbon::yesterday()]);
+    public function test_password_expired_redirect()
+    {
+        config(['auth.twoFa.required' => false]);
 
-    //     $response = $this->actingAs($user)->get(route('dashboard'));
-    //     $response->assertStatus(302);
-    //     $response->assertRedirect(route('user.change-password.show'));
-    //     $response->assertSessionHasErrors(['password']);
-    // }
+        /** @var User $user */
+        $user = User::factory()
+            ->createQuietly(['password_expires' => Carbon::yesterday()]);
+
+        $response = $this->actingAs($user)->get(route('dashboard'));
+
+        $response->assertStatus(302)
+            ->assertRedirect(route('user.change-password.show'))
+            ->assertSessionHasErrors(['password']);
+    }
 
     // Make sure that the user is redirected to the 2fa page if enabled
-    // TODO - Add Back In
-    // public function test_redirect_two_fa()
-    // {
-    //     Notification::fake();
+    public function test_redirect_two_fa()
+    {
+        Mail::fake();
 
-    //     config(['auth.twoFa.required' => true]);
+        config(['auth.twoFa.required' => true]);
 
-    //     /** @var User $user */
-    //     $user = User::factory()->createQuietly();
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
 
-    //     $response = $this->actingAs($user)->get(route('dashboard'));
-    //     $response->assertStatus(302);
-    //     $response->assertRedirect(route('2fa.show'));
+        $response = $this->actingAs($user)->get(route('dashboard'));
+        $response->assertStatus(302);
+        $response->assertRedirect(route('2fa.show'));
 
-    //     $this->assertDatabaseHas('user_verification_codes', [
-    //         'user_id' => $user->user_id,
-    //     ]);
+        $this->assertDatabaseHas('user_verification_codes', [
+            'user_id' => $user->user_id,
+        ]);
 
-    //     Notification::assertSentTo($user, SendAuthCode::class);
-    // }
+        Mail::assertQueued(VerificationCodeMail::class);
+    }
 
     // Make sure that if the password is expired, user is redirected to 2fa page first (if enabled)
-    // TODO - Add Back In
-    // public function test_redirect_two_fa_with_password_expired()
-    // {
-    //     Notification::fake();
+    public function test_redirect_two_fa_with_password_expired()
+    {
+        Mail::fake();
 
-    //     config(['auth.twoFa.required' => true]);
+        config(['auth.twoFa.required' => true]);
 
-    //     /** @var User $user */
-    //     $user = User::factory()->createQuietly([
-    //         'password_expires' => Carbon::yesterday(),
-    //     ]);
+        /** @var User $user */
+        $user = User::factory()->createQuietly([
+            'password_expires' => Carbon::yesterday(),
+        ]);
 
-    //     $response = $this->actingAs($user)->get(route('dashboard'));
-    //     $response->assertStatus(302);
-    //     $response->assertRedirect(route('2fa.show'));
+        $response = $this->actingAs($user)->get(route('dashboard'));
 
-    //     $this->assertDatabaseHas('user_verification_codes', ['user_id' => $user->user_id]);
+        $response->assertStatus(302)
+            ->assertRedirect(route('2fa.show'));
 
-    //     Notification::assertSentTo($user, SendAuthCode::class);
-    // }
+        $this->assertDatabaseHas('user_verification_codes', [
+            'user_id' => $user->user_id,
+        ]);
+
+        Mail::assertQueued(VerificationCodeMail::class);
+    }
 
     // Make sure that if the user has a remember device token, it will bypass the 2fa page
-    // TODO - Add Back In
-    // public function test_redirect_with_valid_device_token()
-    // {
-    //     Notification::fake();
+    public function test_redirect_with_valid_device_token()
+    {
+        Mail::fake();
 
-    //     config(['auth.twoFa.required' => true]);
+        config(['auth.twoFa.required' => true]);
 
-    //     /** @var User $user */
-    //     $user = User::factory()->createQuietly();
-    //     $deviceToken = $user->generateRememberDeviceToken();
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+        $deviceToken = DeviceToken::factory()
+            ->create(['user_id' => $user->user_id]);
 
-    //     $response = $this->actingAs($user)
-    //         ->withCookie('remember_device', $deviceToken)
-    //         ->get(route('dashboard'));
-    //     $response->assertSuccessful();
+        $response = $this->actingAs($user)
+            ->withCookie('remember_device', $deviceToken->token)
+            ->get(route('dashboard'));
+        $response->assertSuccessful();
 
-    //     Notification::assertNotSentTo($user, SendAuthCode::class);
-    // }
+        Mail::assertNotQueued(VerificationCodeMail::class);
+    }
 }

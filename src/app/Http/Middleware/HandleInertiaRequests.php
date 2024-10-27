@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Actions\Misc\BuildNavBar;
 use App\Facades\CacheFacade;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
@@ -14,6 +15,8 @@ class HandleInertiaRequests extends Middleware
      * @var string
      */
     protected $rootView = 'app';
+
+    public function __construct(protected BuildNavBar $navbar) {}
 
     /**
      * Determines the current asset version.
@@ -63,7 +66,7 @@ class HandleInertiaRequests extends Middleware
             'current_user' => fn () => $request->user()->makeVisible('user_id'),
 
             //  Dynamically built navigation menu
-            'navbar' => fn () => [], // (new BuildNavbar)->getNavbar($request->user()),
+            'navbar' => fn () => $this->navbar->handle($request->user()), // (new BuildNavbar)->getNavbar($request->user()),
         ];
     }
 

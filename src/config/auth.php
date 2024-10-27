@@ -152,9 +152,9 @@ return [
     */
 
     'twoFa' => [
-        'required' => env('REQUIRE_2FA', false),
-        'allow_save_device' => true,
-        'allow_via_email' => true,
+        'required' => (bool) env('REQUIRE_2FA', false),
+        'allow_save_device' => (bool) true,
+        'allow_via_email' => (bool) true,
     ],
 
 ];
