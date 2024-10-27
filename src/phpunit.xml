@@ -37,5 +37,6 @@
         <env name="TELESCOPE_ENABLED" value="false"/>
         <env name="BROADCAST_DRIVER" value="null" />
         <env name="SCOUT_DRIVER" value="database" />
+        <env name="REQUIRE_2FA" value="false" />
     </php>
 </phpunit>
