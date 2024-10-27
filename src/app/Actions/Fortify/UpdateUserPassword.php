@@ -2,6 +2,7 @@
 
 namespace App\Actions\Fortify;
 
+use App\Events\User\UserPasswordChangedEvent;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -27,5 +28,7 @@ class UpdateUserPassword implements UpdatesUserPasswords
             'password' => Hash::make($input['password']),
             'password_expires' => $user->getNewExpireTime(),
         ])->save();
+
+        event(new UserPasswordChangedEvent($user));
     }
 }

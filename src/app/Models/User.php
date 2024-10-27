@@ -77,6 +77,11 @@ class User extends Authenticatable
         return $this->hasOne(UserVerificationCode::class, 'user_id', 'user_id');
     }
 
+    public function UserLogins()
+    {
+        return $this->hasMany(UserLogin::class, 'user_id', 'user_id');
+    }
+
     /*
     |---------------------------------------------------------------------------
     | Additional Model Methods

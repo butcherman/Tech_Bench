@@ -2,18 +2,22 @@
 
 namespace App\Listeners\Auth;
 
+use App\Mail\Auth\PasswordChangedMail;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
-class LogPasswordResetListener
+class HandlePasswordResetListener
 {
     /**
      * Handle the event.
      */
     public function handle(PasswordReset $event): void
     {
+        Mail::to($event->user)->send(new PasswordChangedMail($event->user));
+
         Log::stack(['daily', 'auth'])
-            ->info('User '.$event->user->full_name.' has reset their forgotten password', [
+            ->notice('User '.$event->user->full_name.' has reset their forgotten password', [
                 'User ID' => $event->user->user_id,
                 'Username' => $event->user->username,
                 'IP Address' => request()->ip(),

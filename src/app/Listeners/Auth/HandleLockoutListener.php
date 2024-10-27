@@ -5,7 +5,7 @@ namespace App\Listeners\Auth;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Support\Facades\Log;
 
-class LogLockoutListener
+class HandleLockoutListener
 {
     /**
      * Handle the event.

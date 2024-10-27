@@ -2,7 +2,9 @@
 
 namespace Tests\Feature\User;
 
+use App\Events\User\UserPasswordChangedEvent;
 use App\Models\User;
+use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
 class UserPasswordTest extends TestCase
@@ -53,7 +55,7 @@ class UserPasswordTest extends TestCase
      */
     public function test_submit_password_change()
     {
-        // Notification::fake();
+        Event::fake();
 
         /** @var User $user */
         $user = User::factory()->createQuietly();
@@ -68,7 +70,7 @@ class UserPasswordTest extends TestCase
 
         $response->assertStatus(302);
 
-        // Notification::assertSentTo($user, PasswordChangedNotification::class);
+        Event::assertDispatched(UserPasswordChangedEvent::class);
     }
 
     /**
@@ -76,6 +78,8 @@ class UserPasswordTest extends TestCase
      */
     public function test_change_password_no_lowercase_enabled()
     {
+        Event::fake();
+
         /** @var User $user */
         $user = User::factory()->createQuietly();
         $data = [
@@ -89,12 +93,15 @@ class UserPasswordTest extends TestCase
 
         $response->assertStatus(302)
             ->assertInvalid();
+
+        Event::assertNotDispatched(UserPasswordChangedEvent::class);
     }
 
     public function test_change_password_no_lowercase_disabled()
     {
         config(['auth.passwords.settings.contains_lowercase' => false]);
-        // Notification::fake();
+
+        Event::fake();
 
         /** @var User $user */
         $user = User::factory()->createQuietly();
@@ -110,11 +117,13 @@ class UserPasswordTest extends TestCase
         $response->assertStatus(302)
             ->assertValid();
 
-        // Notification::assertSentTo($user, PasswordChangedNotification::class);
+        Event::assertDispatched(UserPasswordChangedEvent::class);
     }
 
     public function test_change_password_no_uppercase_enabled()
     {
+        Event::fake();
+
         /** @var User $user */
         $user = User::factory()->createQuietly();
         $data = [
@@ -128,12 +137,15 @@ class UserPasswordTest extends TestCase
 
         $response->assertStatus(302)
             ->assertInvalid();
+
+        Event::assertNotDispatched(UserPasswordChangedEvent::class);
     }
 
     public function test_change_password_no_uppercase_disabled()
     {
         config(['auth.passwords.settings.contains_uppercase' => false]);
-        // Notification::fake();
+
+        Event::fake();
 
         /** @var User $user */
         $user = User::factory()->createQuietly();
@@ -149,11 +161,13 @@ class UserPasswordTest extends TestCase
         $response->assertStatus(302)
             ->assertValid();
 
-        // Notification::assertSentTo($user, PasswordChangedNotification::class);
+        Event::assertDispatched(UserPasswordChangedEvent::class);
     }
 
     public function test_change_password_no_number_enabled()
     {
+        Event::fake();
+
         /** @var User $user */
         $user = User::factory()->createQuietly();
         $data = [
@@ -167,12 +181,15 @@ class UserPasswordTest extends TestCase
 
         $response->assertStatus(302)
             ->assertInvalid();
+
+        Event::assertNotDispatched(UserPasswordChangedEvent::class);
     }
 
     public function test_change_password_no_number_disabled()
     {
         config(['auth.passwords.settings.contains_number' => false]);
-        // Notification::fake();
+
+        Event::fake();
 
         /** @var User $user */
         $user = User::factory()->createQuietly();
@@ -187,10 +204,14 @@ class UserPasswordTest extends TestCase
 
         $response->assertStatus(302)
             ->assertValid();
+
+        Event::assertDispatched(UserPasswordChangedEvent::class);
     }
 
     public function test_change_password_no_special_enabled()
     {
+        Event::fake();
+
         /** @var User $user */
         $user = User::factory()->createQuietly();
         $data = [
@@ -204,12 +225,15 @@ class UserPasswordTest extends TestCase
 
         $response->assertStatus(302)
             ->assertInvalid();
+
+        Event::assertNotDispatched(UserPasswordChangedEvent::class);
     }
 
     public function test_change_password_no_special_disabled()
     {
         config(['auth.passwords.settings.contains_special' => false]);
-        // Notification::fake();
+
+        Event::fake();
 
         /** @var User $user */
         $user = User::factory()->createQuietly();
@@ -224,12 +248,15 @@ class UserPasswordTest extends TestCase
 
         $response->assertStatus(302)
             ->assertValid();
+
+        Event::assertDispatched(UserPasswordChangedEvent::class);
     }
 
     public function test_change_password_no_compromised_enabled()
     {
         config(['auth.password.settings.disable_compromised' => true]);
-        // Notification::fake();
+
+        Event::fake();
 
         /** @var User $user */
         $user = User::factory()->createQuietly();
@@ -244,5 +271,7 @@ class UserPasswordTest extends TestCase
 
         $response->assertStatus(302)
             ->assertInvalid();
+
+        Event::assertNotDispatched(UserPasswordChangedEvent::class);
     }
 }

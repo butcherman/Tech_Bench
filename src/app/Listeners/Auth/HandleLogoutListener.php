@@ -5,7 +5,7 @@ namespace App\Listeners\Auth;
 use Illuminate\Auth\Events\Logout;
 use Illuminate\Support\Facades\Log;
 
-class LogLogoutListener
+class HandleLogoutListener
 {
     /**
      * Handle the event.

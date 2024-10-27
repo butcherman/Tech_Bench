@@ -5,7 +5,7 @@ namespace App\Listeners\Auth;
 use Illuminate\Auth\Events\Failed;
 use Illuminate\Support\Facades\Log;
 
-class LogFailedListener
+class HandleFailedLoginListener
 {
     /**
      * Handle the event.
