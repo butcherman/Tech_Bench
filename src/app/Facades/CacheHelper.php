@@ -10,7 +10,7 @@ class CacheHelper
     /**
      * Clear a specific cache key, or wipe the entire cache
      */
-    public function clearCache(?string $key): void
+    public function clearCache(?string $key = null): void
     {
         if ($key) {
             Cache::forget($key);
@@ -24,7 +24,7 @@ class CacheHelper
     /**
      * Build the password rules for users
      */
-    public function passwordRules(): array
+    public function passwordRules()
     {
         return Cache::rememberForever('password_rules', function () {
             $passwordRules = [
@@ -56,7 +56,7 @@ class CacheHelper
     /**
      * Get the version of the Tech Bench Application
      */
-    public function appData(): array
+    public function appData()
     {
         return Cache::rememberForever('appData', function () {
             $version = new Version;
