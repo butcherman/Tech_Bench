@@ -27,7 +27,7 @@ class UserUnitTest extends TestCase
     /**
      * Route Model Binding Key
      */
-    public function test_route_binding_key()
+    public function test_route_binding_key(): void
     {
         $this->assertEquals($this->model->getRouteKeyName(), 'username');
     }
@@ -35,7 +35,7 @@ class UserUnitTest extends TestCase
     /**
      * Model Attributes
      */
-    public function test_model_attributes()
+    public function test_model_attributes(): void
     {
         $this->assertArrayHasKey('full_name', $this->model->toArray());
         $this->assertArrayHasKey('initials', $this->model->toArray());
@@ -45,7 +45,7 @@ class UserUnitTest extends TestCase
     /**
      * Model Relationships
      */
-    public function test_device_token_relationship()
+    public function test_device_token_relationship(): void
     {
         $token = DeviceToken::factory()
             ->create(['user_id' => $this->model->user_id]);
@@ -56,7 +56,7 @@ class UserUnitTest extends TestCase
         );
     }
 
-    public function test_user_verification_code_relationship()
+    public function test_user_verification_code_relationship(): void
     {
         $code = UserVerificationCode::create([
             'user_id' => $this->model->user_id,
@@ -69,7 +69,7 @@ class UserUnitTest extends TestCase
         );
     }
 
-    public function test_user_logins_relationship()
+    public function test_user_logins_relationship(): void
     {
         $login = UserLogin::create([
             'user_id' => $this->model->user_id,
@@ -79,7 +79,7 @@ class UserUnitTest extends TestCase
         $this->assertCount(1, $this->model->UserLogins->toArray());
     }
 
-    // public function test_user_role_relationship()
+    // public function test_user_role_relationship(): void
     // {
     //     $role = UserRole::where('role_id', $this->model->role_id)->first();
     //     $this->assertEquals($this->model->UserRole, $role);
@@ -88,7 +88,7 @@ class UserUnitTest extends TestCase
     /**
      * Additional Model Methods
      */
-    public function test_get_new_expire_time()
+    public function test_get_new_expire_time(): void
     {
         // Test Immediate Expire
         $yesterday = Carbon::yesterday()->format('M d Y');
@@ -108,7 +108,7 @@ class UserUnitTest extends TestCase
         );
     }
 
-    public function test_generate_verification_code()
+    public function test_generate_verification_code(): void
     {
         Mail::fake();
 
@@ -117,7 +117,7 @@ class UserUnitTest extends TestCase
         Mail::assertQueued(VerificationCodeMail::class);
     }
 
-    public function test_validate_device_token()
+    public function test_validate_device_token(): void
     {
         $token = DeviceToken::factory()
             ->create(['user_id' => $this->model->user_id]);
@@ -125,7 +125,7 @@ class UserUnitTest extends TestCase
         $this->assertTrue($this->model->validateDeviceToken($token->token));
     }
 
-    public function test_validate_device_token_invalid()
+    public function test_validate_device_token_invalid(): void
     {
         DeviceToken::factory()
             ->create(['user_id' => $this->model->user_id]);

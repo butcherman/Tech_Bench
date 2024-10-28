@@ -26,7 +26,7 @@ class UserVerificationCodeUnitTest extends TestCase
     | Test Model Relationships
     |---------------------------------------------------------------------------
     */
-    public function test_user_relationship()
+    public function test_user_relationship(): void
     {
         $user = User::find($this->model->user_id);
 

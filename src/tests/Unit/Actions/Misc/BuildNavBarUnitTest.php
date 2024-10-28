@@ -8,7 +8,7 @@ use Tests\TestCase;
 
 class BuildNavBarUnitTest extends TestCase
 {
-    public function test_build_default_navbar()
+    public function test_build_default_navbar(): void
     {
         $shouldBe = [
             [

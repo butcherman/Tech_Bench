@@ -12,7 +12,7 @@ class CacheFacade extends Facade
      * this will prevent us from having to define default values every
      * time we access the cache.
      */
-    public static function getFacadeAccessor()
+    public static function getFacadeAccessor(): string
     {
         return 'CacheData';
     }

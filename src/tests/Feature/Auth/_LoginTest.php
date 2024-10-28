@@ -152,7 +152,7 @@ class _LoginTest extends TestCase
     }
 
     // Make sure that the user is redirected to the Change Password page if their password has expired
-    public function test_password_expired_redirect()
+    public function test_password_expired_redirect(): void
     {
         config(['auth.twoFa.required' => false]);
 
@@ -168,7 +168,7 @@ class _LoginTest extends TestCase
     }
 
     // Make sure that the user is redirected to the 2fa page if enabled
-    public function test_redirect_two_fa()
+    public function test_redirect_two_fa(): void
     {
         Mail::fake();
 
@@ -189,7 +189,7 @@ class _LoginTest extends TestCase
     }
 
     // Make sure that if the password is expired, user is redirected to 2fa page first (if enabled)
-    public function test_redirect_two_fa_with_password_expired()
+    public function test_redirect_two_fa_with_password_expired(): void
     {
         Mail::fake();
 
@@ -213,7 +213,7 @@ class _LoginTest extends TestCase
     }
 
     // Make sure that if the user has a remember device token, it will bypass the 2fa page
-    public function test_redirect_with_valid_device_token()
+    public function test_redirect_with_valid_device_token(): void
     {
         Mail::fake();
 

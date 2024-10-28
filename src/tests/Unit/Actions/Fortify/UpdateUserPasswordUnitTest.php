@@ -10,7 +10,7 @@ use Tests\TestCase;
 
 class UpdateUserPasswordUnitTest extends TestCase
 {
-    public function test_update()
+    public function test_update(): void
     {
         Event::fake();
 

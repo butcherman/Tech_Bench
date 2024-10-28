@@ -9,7 +9,7 @@ use Tests\TestCase;
 
 class ResetUserPasswordUnitTest extends TestCase
 {
-    public function test_reset()
+    public function test_reset(): void
     {
         $pass = 'S3curePassw0rd!';
         $user = User::factory()->create();

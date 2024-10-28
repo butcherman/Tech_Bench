@@ -7,7 +7,7 @@ use Tests\TestCase;
 
 class HorizonGateTest extends TestCase
 {
-    public function test_gate_valid()
+    public function test_gate_valid(): void
     {
         /** @var User $user */
         $user = User::factory()->create(['role_id' => 1]);
@@ -17,7 +17,7 @@ class HorizonGateTest extends TestCase
         $response->assertSuccessful();
     }
 
-    public function test_gate_invalid_user()
+    public function test_gate_invalid_user(): void
     {
         /** @var User $user */
         $user = User::factory()->create(['role_id' => 2]);
@@ -27,7 +27,7 @@ class HorizonGateTest extends TestCase
         $response->assertForbidden();
     }
 
-    public function test_gate_guest()
+    public function test_gate_guest(): void
     {
         $response = $this->get('/administration/horizon');
 

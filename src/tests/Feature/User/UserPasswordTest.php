@@ -12,7 +12,7 @@ class UserPasswordTest extends TestCase
     /**
      * Invoke Method
      */
-    public function test_invoke_guest()
+    public function test_invoke_guest(): void
     {
         $response = $this->get(route('user.change-password.show'));
 
@@ -21,7 +21,7 @@ class UserPasswordTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_invoke()
+    public function test_invoke(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly();
@@ -35,7 +35,7 @@ class UserPasswordTest extends TestCase
     /**
      * Test Submitting the Change Password form (processed by Fortify)
      */
-    public function test_submit_password_change_guest()
+    public function test_submit_password_change_guest(): void
     {
         $data = [
             'current_password' => 'password',
@@ -53,7 +53,7 @@ class UserPasswordTest extends TestCase
     /**
      * Test Submitting the Change Password form (processed by Fortify)
      */
-    public function test_submit_password_change()
+    public function test_submit_password_change(): void
     {
         Event::fake();
 
@@ -76,7 +76,7 @@ class UserPasswordTest extends TestCase
     /**
      * Test Password Complexity rules
      */
-    public function test_change_password_no_lowercase_enabled()
+    public function test_change_password_no_lowercase_enabled(): void
     {
         Event::fake();
 
@@ -97,7 +97,7 @@ class UserPasswordTest extends TestCase
         Event::assertNotDispatched(UserPasswordChangedEvent::class);
     }
 
-    public function test_change_password_no_lowercase_disabled()
+    public function test_change_password_no_lowercase_disabled(): void
     {
         config(['auth.passwords.settings.contains_lowercase' => false]);
 
@@ -120,7 +120,7 @@ class UserPasswordTest extends TestCase
         Event::assertDispatched(UserPasswordChangedEvent::class);
     }
 
-    public function test_change_password_no_uppercase_enabled()
+    public function test_change_password_no_uppercase_enabled(): void
     {
         Event::fake();
 
@@ -141,7 +141,7 @@ class UserPasswordTest extends TestCase
         Event::assertNotDispatched(UserPasswordChangedEvent::class);
     }
 
-    public function test_change_password_no_uppercase_disabled()
+    public function test_change_password_no_uppercase_disabled(): void
     {
         config(['auth.passwords.settings.contains_uppercase' => false]);
 
@@ -164,7 +164,7 @@ class UserPasswordTest extends TestCase
         Event::assertDispatched(UserPasswordChangedEvent::class);
     }
 
-    public function test_change_password_no_number_enabled()
+    public function test_change_password_no_number_enabled(): void
     {
         Event::fake();
 
@@ -185,7 +185,7 @@ class UserPasswordTest extends TestCase
         Event::assertNotDispatched(UserPasswordChangedEvent::class);
     }
 
-    public function test_change_password_no_number_disabled()
+    public function test_change_password_no_number_disabled(): void
     {
         config(['auth.passwords.settings.contains_number' => false]);
 
@@ -208,7 +208,7 @@ class UserPasswordTest extends TestCase
         Event::assertDispatched(UserPasswordChangedEvent::class);
     }
 
-    public function test_change_password_no_special_enabled()
+    public function test_change_password_no_special_enabled(): void
     {
         Event::fake();
 
@@ -229,7 +229,7 @@ class UserPasswordTest extends TestCase
         Event::assertNotDispatched(UserPasswordChangedEvent::class);
     }
 
-    public function test_change_password_no_special_disabled()
+    public function test_change_password_no_special_disabled(): void
     {
         config(['auth.passwords.settings.contains_special' => false]);
 
@@ -252,7 +252,7 @@ class UserPasswordTest extends TestCase
         Event::assertDispatched(UserPasswordChangedEvent::class);
     }
 
-    public function test_change_password_no_compromised_enabled()
+    public function test_change_password_no_compromised_enabled(): void
     {
         config(['auth.password.settings.disable_compromised' => true]);
 

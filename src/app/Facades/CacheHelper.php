@@ -23,6 +23,8 @@ class CacheHelper
 
     /**
      * Build the password rules for users
+     *
+     * @return \Illuminate\Cache\TCacheValue
      */
     public function passwordRules()
     {
@@ -55,6 +57,8 @@ class CacheHelper
 
     /**
      * Get the version of the Tech Bench Application
+     *
+     * @return \Illuminate\Cache\TCacheValue
      */
     public function appData()
     {

@@ -21,8 +21,11 @@ abstract class TestCase extends BaseTestCase
         ]);
     }
 
-    protected function changeRolePermission(int $roleId, string $permName, bool $value = false)
-    {
+    protected function changeRolePermission(
+        int $roleId,
+        string $permName,
+        bool $value = false
+    ): void {
         $permId = UserRolePermissionType::where('description', $permName)->first()->perm_type_id;
         UserRolePermission::where('role_id', $roleId)
             ->where('perm_type_id', $permId)

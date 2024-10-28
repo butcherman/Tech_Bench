@@ -11,7 +11,7 @@ use Tests\TestCase;
 
 class HandlePasswordResetUnitTest extends TestCase
 {
-    public function test_handle()
+    public function test_handle(): void
     {
         Mail::fake();
 

@@ -19,7 +19,7 @@ class PasswordValidationRulesUnitTest extends TestCase
     | Primary Password Rules
     |---------------------------------------------------------------------------
     */
-    public function test_password_rules_default()
+    public function test_password_rules_default(): void
     {
         $rules = $this->passwordRules();
         $shouldBe = [
@@ -37,7 +37,7 @@ class PasswordValidationRulesUnitTest extends TestCase
         $this->assertEquals($shouldBe, $rules);
     }
 
-    public function test_password_rules_no_compromised()
+    public function test_password_rules_no_compromised(): void
     {
         config(['auth.passwords.settings.disable_compromised' => true]);
 
@@ -62,7 +62,7 @@ class PasswordValidationRulesUnitTest extends TestCase
     | Password Rules used during Initial Setup
     |---------------------------------------------------------------------------
     */
-    public function test_tmp_password_rules_default()
+    public function test_tmp_password_rules_default(): void
     {
         $passRules = [
             'disable_compromised' => false,

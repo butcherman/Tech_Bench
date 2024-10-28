@@ -26,7 +26,7 @@ class CacheHelperUnitTest extends TestCase
     | Clear Cache
     |---------------------------------------------------------------------------
     */
-    public function test_clear_cache_key()
+    public function test_clear_cache_key(): void
     {
         Cache::put('test_key', 'test_key');
 
@@ -37,7 +37,7 @@ class CacheHelperUnitTest extends TestCase
         $this->helperObj->clearCache('test_key');
     }
 
-    public function test_clear_cache()
+    public function test_clear_cache(): void
     {
         Cache::put('test_key', 'test_key');
         Cache::put('test_two', 'test_two');
@@ -53,7 +53,7 @@ class CacheHelperUnitTest extends TestCase
     | Password Rules
     |---------------------------------------------------------------------------
     */
-    public function test_password_rules_facade_method()
+    public function test_password_rules_facade_method(): void
     {
         $shouldBe = [
             'Password must be at least 6 characters',
@@ -73,7 +73,7 @@ class CacheHelperUnitTest extends TestCase
         $this->assertEquals($shouldBe, $passRules);
     }
 
-    public function test_password_rules_default_values()
+    public function test_password_rules_default_values(): void
     {
         $shouldBe = [
             'Password must be at least 6 characters',
@@ -88,7 +88,7 @@ class CacheHelperUnitTest extends TestCase
         $this->assertEquals($shouldBe, $passRules);
     }
 
-    public function test_password_rules_non_default()
+    public function test_password_rules_non_default(): void
     {
         config(['auth.passwords.settings.contains_lowercase' => false]);
         config(['auth.passwords.settings.contains_uppercase' => false]);
@@ -109,7 +109,7 @@ class CacheHelperUnitTest extends TestCase
     | Application Data
     |---------------------------------------------------------------------------
     */
-    public function test_app_data_facade()
+    public function test_app_data_facade(): void
     {
         $version = new Version;
 
@@ -142,7 +142,7 @@ class CacheHelperUnitTest extends TestCase
         $this->assertEquals($shouldBe, $appData);
     }
 
-    public function test_app_data()
+    public function test_app_data(): void
     {
         $version = new Version;
 

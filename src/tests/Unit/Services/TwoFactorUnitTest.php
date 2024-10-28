@@ -13,7 +13,7 @@ class TwoFactorUnitTest extends TestCase
     /** @var string */
     protected $httpUserAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36';
 
-    public function test_process_verification_response_remember_on()
+    public function test_process_verification_response_remember_on(): void
     {
         Event::fake();
 
@@ -28,7 +28,11 @@ class TwoFactorUnitTest extends TestCase
         $this->actingAs($user);
 
         $testObj = new TwoFactorService;
-        $response = $testObj->processVerificationResponse($data, $user, $this->httpUserAgent);
+        $response = $testObj->processVerificationResponse(
+            $data,
+            $user,
+            $this->httpUserAgent
+        );
 
         $this->assertNotNull($response);
         $this->assertDatabaseMissing(
@@ -37,7 +41,7 @@ class TwoFactorUnitTest extends TestCase
         );
     }
 
-    public function test_process_verification_response_remember_off()
+    public function test_process_verification_response_remember_off(): void
     {
         Event::fake();
 
@@ -64,7 +68,7 @@ class TwoFactorUnitTest extends TestCase
         );
     }
 
-    public function test_generate_remember_device_token()
+    public function test_generate_remember_device_token(): void
     {
         /** @var User $user */
         $user = User::factory()->create();

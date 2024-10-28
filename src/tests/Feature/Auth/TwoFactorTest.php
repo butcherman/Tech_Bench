@@ -14,7 +14,7 @@ class TwoFactorTest extends TestCase
     /**
      * Test the 2FA Middleware
      */
-    public function test_middleware()
+    public function test_middleware(): void
     {
         Mail::fake();
 
@@ -36,7 +36,7 @@ class TwoFactorTest extends TestCase
         Mail::assertQueued(VerificationCodeMail::class);
     }
 
-    public function test_middleware_new_code()
+    public function test_middleware_new_code(): void
     {
         Mail::fake();
 
@@ -71,7 +71,7 @@ class TwoFactorTest extends TestCase
     /**
      * Show Method
      */
-    public function test_show_guest()
+    public function test_show_guest(): void
     {
         $response = $this->get(route('2fa.show'));
         $response->assertStatus(302)
@@ -79,7 +79,7 @@ class TwoFactorTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_show()
+    public function test_show(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly();
@@ -97,7 +97,7 @@ class TwoFactorTest extends TestCase
     /**
      * Update Method
      */
-    public function test_update_guest()
+    public function test_update_guest(): void
     {
         $data = [
             'code' => '1234',
@@ -110,7 +110,7 @@ class TwoFactorTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_update()
+    public function test_update(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly();
@@ -131,7 +131,7 @@ class TwoFactorTest extends TestCase
             ->assertRedirect(route('dashboard'));
     }
 
-    public function test_update_bad_code()
+    public function test_update_bad_code(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly();
@@ -151,7 +151,7 @@ class TwoFactorTest extends TestCase
             ->assertSessionHasErrors('code');
     }
 
-    public function test_update_expired_code()
+    public function test_update_expired_code(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly();
@@ -173,7 +173,7 @@ class TwoFactorTest extends TestCase
             ->assertSessionHasErrors('code');
     }
 
-    public function test_update_with_remember_device()
+    public function test_update_with_remember_device(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly();

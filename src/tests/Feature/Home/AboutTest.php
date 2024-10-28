@@ -11,7 +11,7 @@ class AboutTest extends TestCase
     /**
      * Invoke Method
      */
-    public function test_about_guest()
+    public function test_about_guest(): void
     {
         $response = $this->get(route('about'));
 
@@ -20,7 +20,7 @@ class AboutTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_about()
+    public function test_about(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly();

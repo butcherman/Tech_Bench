@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -41,6 +42,7 @@ class User extends Authenticatable
         ];
     }
 
+    /** @var array<string, string> */
     protected $appends = ['initials', 'full_name'];
 
     /*
@@ -48,7 +50,7 @@ class User extends Authenticatable
     | Route Model Binding Key
     |---------------------------------------------------------------------------
     */
-    public function getRouteKeyName()
+    public function getRouteKeyName(): string
     {
         return 'username';
     }
@@ -82,12 +84,12 @@ class User extends Authenticatable
         return $this->hasMany(DeviceToken::class, 'user_id', 'user_id');
     }
 
-    public function UserVerificationCode()
+    public function UserVerificationCode(): HasOne
     {
         return $this->hasOne(UserVerificationCode::class, 'user_id', 'user_id');
     }
 
-    public function UserLogins()
+    public function UserLogins(): HasMany
     {
         return $this->hasMany(UserLogin::class, 'user_id', 'user_id');
     }
@@ -115,7 +117,7 @@ class User extends Authenticatable
     /**
      * Generate a 2FA Code
      */
-    public function generateVerificationCode()
+    public function generateVerificationCode(): void
     {
         UserVerificationCode::updateOrCreate(
             ['user_id' => $this->user_id],
