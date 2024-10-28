@@ -17,7 +17,8 @@ class TwoFactorService
      */
     public function processVerificationResponse(
         Collection $requestData,
-        User $user
+        User $user,
+        string $userAgent
     ): ?string {
         session()->put('2fa_verified', true);
 
@@ -25,21 +26,20 @@ class TwoFactorService
         $user->UserVerificationCode->delete();
 
         return $requestData->get('remember')
-            ? $this->generateRememberDeviceToken($user)
+            ? $this->generateRememberDeviceToken($user, $userAgent)
             : null;
     }
 
     /**
      * Generate a Remember token for a device
      */
-    public function generateRememberDeviceToken(User $user): string
+    public function generateRememberDeviceToken(User $user, string $userAgent): string
     {
         $token = Str::random(60);
-        $agent = new AgentDetector(request()->header('User-Agent'));
+        $agent = new AgentDetector($userAgent);
         $ipAddr = request()->ip();
 
         $devToken = new DeviceToken([
-            // 'user_id' => $user->user_id,
             'token' => $token,
             'type' => $agent->device(),
             'os' => $agent->platform().' '.$agent->platformVersion(),

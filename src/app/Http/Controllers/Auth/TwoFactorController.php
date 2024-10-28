@@ -29,7 +29,11 @@ class TwoFactorController extends Controller
     public function update(VerificationCodeRequest $request): RedirectResponse
     {
         $cookie = $this->svc
-            ->processVerificationResponse($request->collect(), $request->user());
+            ->processVerificationResponse(
+                $request->collect(),
+                $request->user(),
+                $request->header('User-Agent')
+            );
 
         return redirect()
             ->intended(route('dashboard'))

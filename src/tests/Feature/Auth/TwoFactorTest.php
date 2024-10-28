@@ -127,6 +127,7 @@ class TwoFactorTest extends TestCase
         $response = $this->actingAs($user)->put(route('2fa.update'), $data);
 
         $response->assertStatus(302)
+            ->assertSessionHas(['2fa_verified' => true])
             ->assertRedirect(route('dashboard'));
     }
 
@@ -194,6 +195,7 @@ class TwoFactorTest extends TestCase
             ->put(route('2fa.update'), $data);
 
         $response->assertStatus(302)
+            ->assertSessionHas(['2fa_verified' => true])
             ->assertRedirect(route('dashboard'));
 
         $this->assertDatabaseHas('device_tokens', ['user_id' => $user->user_id]);
