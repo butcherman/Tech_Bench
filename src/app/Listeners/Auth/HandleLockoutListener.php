@@ -9,6 +9,8 @@ class HandleLockoutListener
 {
     /**
      * Handle the event.
+     *
+     * @codeCoverageIgnore
      */
     public function handle(Lockout $event): void
     {

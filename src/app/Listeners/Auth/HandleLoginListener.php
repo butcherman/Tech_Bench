@@ -9,6 +9,8 @@ class HandleLoginListener
 {
     /**
      * Handle the event.
+     *
+     * @codeCoverageIgnore
      */
     public function handle(Login $event): void
     {

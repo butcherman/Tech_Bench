@@ -36,6 +36,38 @@ class TwoFactorTest extends TestCase
         Mail::assertQueued(VerificationCodeMail::class);
     }
 
+    public function test_middleware_new_code()
+    {
+        Mail::fake();
+
+        config(['auth.twoFa.required' => true]);
+
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+
+        UserVerificationCode::create([
+            'user_id' => $user->user_id,
+            'code' => 9876,
+        ]);
+
+        $response = $this->actingAs($user)
+            ->get(route('dashboard'));
+
+        $response->assertStatus(302)
+            ->assertRedirect(route('2fa.show'));
+
+        $this->assertDatabaseHas('user_verification_codes', [
+            'user_id' => $user->user_id,
+        ]);
+
+        $this->assertDatabaseMissing('user_verification_codes', [
+            'user_id' => $user->user_id,
+            'code' => 9876,
+        ]);
+
+        Mail::assertQueued(VerificationCodeMail::class);
+    }
+
     /**
      * Show Method
      */

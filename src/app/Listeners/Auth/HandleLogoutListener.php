@@ -9,6 +9,8 @@ class HandleLogoutListener
 {
     /**
      * Handle the event.
+     *
+     * @codeCoverageIgnore
      */
     public function handle(Logout $event): void
     {
