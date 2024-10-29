@@ -50,27 +50,27 @@ class UserObserver
     /**
      * Handle the User "deleted" event.
      */
-    public function deleted(User $user): void
-    {
-        //
-        Log::info('deleted');
-    }
+    // public function deleted(User $user): void
+    // {
+    //     //
+    //     Log::info('deleted');
+    // }
 
     /**
      * Handle the User "restored" event.
      */
-    public function restored(User $user): void
-    {
-        //
-        Log::info('restored');
-    }
+    // public function restored(User $user): void
+    // {
+    //     //
+    //     Log::info('restored');
+    // }
 
     /**
      * Handle the User "force deleted" event.
      */
-    public function forceDeleted(User $user): void
-    {
-        //
-        Log::info('force deleted');
-    }
+    // public function forceDeleted(User $user): void
+    // {
+    //     //
+    //     Log::info('force deleted');
+    // }
 }

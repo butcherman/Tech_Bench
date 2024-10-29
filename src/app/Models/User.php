@@ -39,7 +39,6 @@ class User extends Authenticatable
         'UserRole',
     ];
 
-    /** @var array<string, string> */
     protected function casts(): array
     {
         return [
@@ -49,9 +48,6 @@ class User extends Authenticatable
             'password_expires' => 'datetime: M d, Y',
         ];
     }
-
-    /** @var array<string, string> */
-    protected $appends = ['initials', 'full_name'];
 
     /*
     |---------------------------------------------------------------------------
@@ -68,6 +64,9 @@ class User extends Authenticatable
     | Model Attributes
     |---------------------------------------------------------------------------
     */
+    /** @var array<string, string> */
+    protected $appends = ['initials', 'full_name'];
+
     public function fullName(): Attribute
     {
         return Attribute::make(
@@ -100,6 +99,11 @@ class User extends Authenticatable
     public function UserLogins(): HasMany
     {
         return $this->hasMany(UserLogin::class, 'user_id', 'user_id');
+    }
+
+    public function UserSettings(): HasMany
+    {
+        return $this->hasMany(UserSetting::class, 'user_id', 'user_id');
     }
 
     /*

@@ -10,7 +10,10 @@ use Tests\TestCase;
 
 class UserSettingsUnitTest extends TestCase
 {
-    public function test_update()
+    /**
+     * Update User Account Method
+     */
+    public function test_update_user_account(): void
     {
         Event::fake(UserEmailChangedEvent::class);
 
@@ -35,7 +38,7 @@ class UserSettingsUnitTest extends TestCase
         Event::assertDispatched(UserEmailChangedEvent::class);
     }
 
-    public function test_update_no_email_change()
+    public function test_update_user_account_no_email_change(): void
     {
         Event::fake(UserEmailChangedEvent::class);
 
@@ -58,5 +61,28 @@ class UserSettingsUnitTest extends TestCase
         ]);
 
         Event::assertNotDispatched(UserEmailChangedEvent::class);
+    }
+
+    /**
+     * Update User Settings Method
+     */
+    public function test_update_user_settings(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+        $data = [
+            'settingList' => ['type_id_1' => false],
+        ];
+
+        $this->actingAs($user);
+
+        $testObj = new UserSettingsService;
+        $testObj->updateUserSettings(collect($data), $user);
+
+        $this->assertDatabaseHas('user_settings', [
+            'user_id' => $user->user_id,
+            'setting_type_id' => 1,
+            'value' => false,
+        ]);
     }
 }

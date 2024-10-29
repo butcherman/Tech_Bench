@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\User\UpdateUserAccountController;
+use App\Http\Controllers\User\UpdateUserSettingsController;
 use App\Http\Controllers\User\UserPasswordController;
 use App\Http\Controllers\User\UserSettingsController;
 use App\Http\Middleware\CheckPasswordExpiration;
@@ -17,7 +18,6 @@ Route::middleware('auth.secure')->prefix('user')->name('user.')->group(function 
     Route::put('user-account/{user}', UpdateUserAccountController::class)
         ->name('user-account.update');
 
-    Route::post('user-settings', function () {
-        return 'user settings update';
-    })->name('user-settings.update');
+    Route::put('user-settings/{user}', UpdateUserSettingsController::class)
+        ->name('user-settings.update');
 });
