@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\Facades\CacheHelper;
+use App\Policies\GatePolicy;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -20,6 +22,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // CacheFacade
         $this->app->bind('CacheData', CacheHelper::class);
+
+        //  Gate to determine if the Administration link should show up on the navigation menu
+        Gate::define('admin-link', [GatePolicy::class, 'adminLink']);
+
+        //  Gate to determine if the Reports link should show up on the navigation menu
+        Gate::define('reports-link', [GatePolicy::class, 'reportsLink']);
     }
 }

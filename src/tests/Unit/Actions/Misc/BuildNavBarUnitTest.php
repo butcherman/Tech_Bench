@@ -33,4 +33,66 @@ class BuildNavBarUnitTest extends TestCase
 
         $this->assertEquals($shouldBe, $navbar);
     }
+
+    public function test_build_installer_navbar(): void
+    {
+        $shouldBe = [
+            [
+                'name' => 'Dashboard',
+                'route' => route('dashboard'),
+                'icon' => 'fas fa-tachometer-alt',
+            ],
+            [
+                'name' => 'Administration',
+                'route' => route('admin.index'),
+                'icon' => 'fas fa-user-shield',
+            ],
+            [
+                'name' => 'Customers',
+                'route' => '#', // route('customers.index'),
+                'icon' => 'fas fa-user-tie',
+            ],
+            [
+                'name' => 'Tech Tips',
+                'route' => '#', // route('tech-tips.index'),
+                'icon' => 'fas fa-tools',
+            ],
+        ];
+
+        $user = User::factory()->create(['role_id' => 1]);
+        $navbar = (new BuildNavBar)->handle($user);
+
+        $this->assertEquals($shouldBe, $navbar);
+    }
+
+    public function test_build_administrator_navbar(): void
+    {
+        $shouldBe = [
+            [
+                'name' => 'Dashboard',
+                'route' => route('dashboard'),
+                'icon' => 'fas fa-tachometer-alt',
+            ],
+            [
+                'name' => 'Administration',
+                'route' => route('admin.index'),
+                'icon' => 'fas fa-user-shield',
+            ],
+            [
+                'name' => 'Customers',
+                'route' => '#', // route('customers.index'),
+                'icon' => 'fas fa-user-tie',
+            ],
+            [
+                'name' => 'Tech Tips',
+                'route' => '#', // route('tech-tips.index'),
+                'icon' => 'fas fa-tools',
+            ],
+        ];
+
+        $user = User::factory()->create(['role_id' => 2]);
+        $navbar = (new BuildNavBar)->handle($user);
+
+        $this->assertEquals($shouldBe, $navbar);
+    }
 }

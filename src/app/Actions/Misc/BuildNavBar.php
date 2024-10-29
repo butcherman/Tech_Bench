@@ -3,15 +3,30 @@
 namespace App\Actions\Misc;
 
 use App\Models\User;
+use App\Traits\AllowTrait;
 
 class BuildNavBar
 {
+    use AllowTrait;
+
+    /** @var User */
+    protected $user;
+
     /**
      * Build the dynamic Navigation Bar for the authenticated user
      */
     public function handle(User $user): array
     {
-        return $this->getPrimaryNav();
+        $this->user = $user;
+
+        $nav = $this->getPrimaryNav();
+
+        // If the Administration Nav exists, move it just under the Dashboard
+        if ($adminNav = $this->getAdminNav()) {
+            array_splice($nav, 1, 0, [$adminNav]);
+        }
+
+        return $nav;
     }
 
     /**
@@ -35,6 +50,22 @@ class BuildNavBar
                 'route' => '#', // route('tech-tips.index'),
                 'icon' => 'fas fa-tools',
             ],
+        ];
+    }
+
+    /**
+     * If the user has any Administrative Abilities, include Admin Link
+     */
+    protected function getAdminNav(): array|bool
+    {
+        if (! $this->seeAdminLink($this->user)) {
+            return false;
+        }
+
+        return [
+            'name' => 'Administration',
+            'route' => route('admin.index'),
+            'icon' => 'fas fa-user-shield',
         ];
     }
 }

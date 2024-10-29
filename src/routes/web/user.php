@@ -8,13 +8,21 @@ use App\Http\Controllers\User\UserSettingsController;
 use App\Http\Middleware\CheckPasswordExpiration;
 use Illuminate\Support\Facades\Route;
 
+/*
+|-------------------------------------------------------------------------------
+| User Account Routes
+|-------------------------------------------------------------------------------
+*/
+
 Route::middleware('auth.secure')->prefix('user')->name('user.')->group(function () {
     Route::get('change-password', UserPasswordController::class)
         ->name('change-password.show')
+        ->breadcrumb('Change Password', 'user.user-settings.show')
         ->withoutMiddleware(CheckPasswordExpiration::class);
 
     Route::get('user-settings', UserSettingsController::class)
-        ->name('user-settings.show');
+        ->name('user-settings.show')
+        ->breadcrumb('User Settings', 'dashboard');
 
     Route::put('user-account/{user}', UpdateUserAccountController::class)
         ->name('user-account.update');

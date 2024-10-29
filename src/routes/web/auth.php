@@ -23,6 +23,7 @@ Route::middleware(['guest', 'throttle:50,120'])->group(function () {
 Route::middleware('auth')->name('2fa.')->group(function () {
     Route::get('two-factor-authentication', [TwoFactorController::class, 'show'])
         ->name('show');
+
     Route::put('two-factor-authentication', [TwoFactorController::class, 'update'])
         ->name('update');
 });

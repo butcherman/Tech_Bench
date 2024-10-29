@@ -26,4 +26,16 @@ trait AllowTrait
         return false;
         // @codeCoverageIgnoreEnd
     }
+
+    protected function seeAdminLink(User $user): bool
+    {
+        $userRole = UserRolePermission::whereRoleId($user->role_id)
+            ->whereHas('UserRolePermissionType', function ($q) {
+                $q->whereIsAdminLink(1);
+            })
+            ->whereAllow(1)
+            ->count();
+
+        return $userRole == 0 ? false : true;
+    }
 }

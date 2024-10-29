@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Auth\Services;
+namespace Tests\Unit\Services\Auth;
 
 use App\Models\DeviceToken;
 use App\Models\User;

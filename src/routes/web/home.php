@@ -4,7 +4,18 @@ use App\Http\Controllers\Home\AboutController;
 use App\Http\Controllers\Home\DashboardController;
 use Illuminate\Support\Facades\Route;
 
+/*
+|-------------------------------------------------------------------------------
+| Primary/Non-Specific Routes for Authenticated Users
+|-------------------------------------------------------------------------------
+*/
+
 Route::middleware('auth.secure')->group(function () {
-    Route::get('dashboard', DashboardController::class)->name('dashboard');
-    Route::get('about', AboutController::class)->name('about');
+    Route::get('dashboard', DashboardController::class)
+        ->name('dashboard')
+        ->breadcrumb('Dashboard');
+
+    Route::get('about', AboutController::class)
+        ->name('about')
+        ->breadcrumb('About', 'dashboard');
 });
