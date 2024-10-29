@@ -6,22 +6,8 @@ use App\Events\User\UserEmailChangedEvent;
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
 
-class UserObserver
+class UserObserver extends Observer
 {
-    /** @var User|string */
-    protected $user;
-
-    public function __construct()
-    {
-        $this->user = match (true) {
-            request()->user() !== null => request()->user()->username,
-            request()->ip() === '127.0.0.1' => 'Internal Service',
-            // @codeCoverageIgnoreStart
-            default => request()->ip(),
-            // @codeCoverageIgnoreEnd
-        };
-    }
-
     /**
      * Handle the User "created" event.
      */
