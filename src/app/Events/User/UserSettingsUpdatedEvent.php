@@ -12,7 +12,7 @@ class UserSettingsUpdatedEvent
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
-     * Create a new event instance.
+     * Event is triggered when User Settings are updated
      */
     public function __construct(public User $user) {}
 }

@@ -72,7 +72,7 @@ const removeDevice = (device: userDevice) => {
         Code if you use it to log in again.`
     ).then((res) => {
         if (res) {
-            router.get(
+            router.delete(
                 route("user.remove-device", [
                     props.user.username,
                     device.device_id,

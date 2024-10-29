@@ -10,7 +10,7 @@ use Inertia\Response;
 class DashboardController extends Controller
 {
     /**
-     * Handle the incoming request.
+     * Show the Dashboard Page.
      */
     public function __invoke(Request $request): Response
     {

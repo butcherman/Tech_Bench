@@ -48,7 +48,8 @@ class UserUnitTest extends TestCase
     public function test_device_token_relationship(): void
     {
         $token = DeviceToken::factory()
-            ->create(['user_id' => $this->model->user_id]);
+            ->create(['user_id' => $this->model->user_id])
+            ->makeHidden(['user']);
 
         $this->assertEquals(
             $this->model->DeviceTokens[0]->toArray(),

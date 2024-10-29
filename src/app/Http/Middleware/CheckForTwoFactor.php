@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 class CheckForTwoFactor
 {
     /**
-     * Handle an incoming request.
+     * Check to see if the user has authenticated via 2FA.
      */
     public function handle(Request $request, Closure $next): Response
     {

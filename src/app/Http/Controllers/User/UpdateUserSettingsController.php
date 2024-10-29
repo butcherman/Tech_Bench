@@ -13,7 +13,7 @@ class UpdateUserSettingsController extends Controller
     public function __construct(protected UserSettingsService $svc) {}
 
     /**
-     * UPdate the users Application Settings
+     * Update the users Application Settings
      */
     public function __invoke(UserSettingsRequest $request, User $user): RedirectResponse
     {

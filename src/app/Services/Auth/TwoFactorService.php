@@ -52,4 +52,12 @@ class TwoFactorService
 
         return $token;
     }
+
+    /**
+     * Remove a device token
+     */
+    public function destroyDeviceToken(DeviceToken $token): void
+    {
+        $token->delete();
+    }
 }

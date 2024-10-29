@@ -6,6 +6,9 @@ use App\Models\User;
 
 class BuildNavBar
 {
+    /**
+     * Build the dynamic Navigation Bar for the authenticated user
+     */
     public function handle(User $user): array
     {
         return $this->getPrimaryNav();

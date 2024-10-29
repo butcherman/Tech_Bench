@@ -10,7 +10,7 @@ use Inertia\Response;
 class UserPasswordController extends Controller
 {
     /**
-     * Password Change Page.
+     * Show the Password Change Page.
      */
     public function __invoke(): Response
     {
