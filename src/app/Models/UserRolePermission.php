@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class UserRolePermission extends Model
 {
@@ -25,4 +26,18 @@ class UserRolePermission extends Model
     protected $casts = [
         'allow' => 'boolean',
     ];
+
+    /*
+    |---------------------------------------------------------------------------
+    | Model Relationships
+    |---------------------------------------------------------------------------
+    */
+    public function UserRolePermissionType(): HasOne
+    {
+        return $this->hasOne(
+            UserRolePermissionType::class,
+            'perm_type_id',
+            'perm_type_id'
+        );
+    }
 }

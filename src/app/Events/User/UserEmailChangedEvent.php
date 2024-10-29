@@ -7,12 +7,12 @@ use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class UserPasswordChangedEvent
+class UserEmailChangedEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
-     * Event is triggered when a user changes their password
+     * Event is triggered when a user email address is changed
      */
-    public function __construct(public User $user) {}
+    public function __construct(public User $user, public string $originalEmail) {}
 }

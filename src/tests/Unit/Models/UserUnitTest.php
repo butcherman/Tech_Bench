@@ -51,7 +51,7 @@ class UserUnitTest extends TestCase
             ->create(['user_id' => $this->model->user_id]);
 
         $this->assertEquals(
-            $this->model->DeviceToken[0]->toArray(),
+            $this->model->DeviceTokens[0]->toArray(),
             $token->toArray()
         );
     }

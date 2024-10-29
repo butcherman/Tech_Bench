@@ -2,8 +2,8 @@
     <VueForm
         :initial-values="initValues"
         :validation-schema="schema"
-        :submit-route="$route('user.user-settings.store', user.username)"
-        submit-method="post"
+        :submit-route="$route('user.user-account.update', user.username)"
+        submit-method="put"
         submit-text="Update Account Settings"
     >
         <TextInput id="first-name" name="first_name" label="First Name" focus />

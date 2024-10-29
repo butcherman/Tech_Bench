@@ -26,7 +26,7 @@
                 </div>
             </div>
         </div>
-        <div v-if="twoFaEnabled" class="row justify-content-center mt-2">
+        <div v-if="allowSaveDevice" class="row justify-content-center mt-2">
             <div class="col">
                 <div class="card">
                     <div class="card-body h-100">
@@ -51,7 +51,7 @@ import UserDevices from "@/Components/User/UserDevices.vue";
 
 defineProps<{
     current_user: user;
-    twoFaEnabled: boolean;
+    allowSaveDevice: boolean;
     devices: userDevice[];
     settings: userSettings[];
 }>();

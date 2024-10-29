@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use App\Observers\UserObserver;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -11,6 +13,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+#[ObservedBy([UserObserver::class])]
 class User extends Authenticatable
 {
     use HasFactory;
@@ -21,24 +24,29 @@ class User extends Authenticatable
     protected $primaryKey = 'user_id';
 
     /** @var array<int, string> */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
+    protected $guarded = ['user_id', 'created_at', 'updated_at'];
 
     /** @var array<int, string> */
     protected $hidden = [
+        'role_id',
         'password',
         'remember_token',
+        'deleted_at',
+        'created_at',
+        'password_expires',
+        'updated_at',
+        'user_id',
+        'UserRole',
     ];
 
     /** @var array<string, string> */
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            'created_at' => 'datetime:M d, Y',
+            'updated_at' => 'datetime:M d, Y',
+            'deleted_at' => 'datetime:M d, Y',
+            'password_expires' => 'datetime: M d, Y',
         ];
     }
 
@@ -79,7 +87,7 @@ class User extends Authenticatable
     | Model Relationships
     |---------------------------------------------------------------------------
     */
-    public function DeviceToken(): HasMany
+    public function DeviceTokens(): HasMany
     {
         return $this->hasMany(DeviceToken::class, 'user_id', 'user_id');
     }
@@ -130,7 +138,7 @@ class User extends Authenticatable
      */
     public function validateDeviceToken(string $token): bool
     {
-        $valid = $this->DeviceToken->where('token', $token)->first();
+        $valid = $this->DeviceTokens->where('token', $token)->first();
 
         if ($valid) {
             $valid->update(['updated_ip_address' => request()->ip()]);

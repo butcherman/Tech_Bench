@@ -48,7 +48,7 @@ class TwoFactorService
             'updated_ip_address' => $ipAddr,
         ]);
 
-        $user->DeviceToken()->save($devToken);
+        $user->DeviceTokens()->save($devToken);
 
         return $token;
     }
