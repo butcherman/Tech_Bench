@@ -2,6 +2,7 @@
 
 namespace App\Services\User;
 
+use App\Events\User\UserSettingsUpdatedEvent;
 use App\Models\User;
 use App\Models\UserSetting;
 use Illuminate\Support\Collection;
@@ -24,6 +25,6 @@ class UserSettingsService
                 ->update(['value' => $value]);
         }
 
-        // TODO - Log this change
+        event(new UserSettingsUpdatedEvent($user));
     }
 }
