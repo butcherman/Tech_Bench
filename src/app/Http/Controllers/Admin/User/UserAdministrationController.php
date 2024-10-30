@@ -64,34 +64,65 @@ class UserAdministrationController extends Controller
         $this->authorize('view', $user);
 
         return Inertia::render('Admin/User/Show', [
-            'user' => [],
-            'role' => [],
-            'last-login' => [],
-            'thirty-day-count' => 0,
+            'user' => $user->getAdminLoad(),
+            'role' => $user->UserRole,
+            'last-login' => $user->getLastLogin(),
+            'thirty-day-count' => $user->getLoginHistory(30),
         ]);
     }
 
     /**
      * Show the form for editing a user.
      */
-    public function edit(string $id)
+    public function edit(Request $request, User $user): Response
     {
-        //
+        $this->authorize('update', $user);
+
+        return Inertia::render('Admin/User/Edit', [
+            'roles' => $this->getAvailableRoles($request->user()),
+            'user' => $user->getAdminLoad(),
+        ]);
     }
 
     /**
      * Update a users information.
      */
-    public function update(Request $request, string $id)
+    public function update(UserAdministrationRequest $request, User $user): RedirectResponse
     {
-        //
+        $this->svc->updateUser($request->safe()->collect(), $user);
+
+        return redirect(route('admin.user.show', $user->username))
+            ->with('success', __('admin.user.updated', ['user' => $user->full_name]));
     }
 
     /**
      * Soft Delete/Disable a user.
      */
-    public function destroy(string $id)
+    public function destroy(User $user): RedirectResponse
     {
-        //
+        $this->authorize('delete', $user);
+
+        $this->svc->destroyUser($user);
+
+        return redirect(route('admin.user.index'))
+            ->with(
+                'warning',
+                __('admin.user.disabled', ['user' => $user->full_name])
+            );
+    }
+
+    /**
+     * Restore a disabled user
+     */
+    public function restore(User $user): RedirectResponse
+    {
+        $this->authorize('delete', $user);
+
+        $this->svc->restoreUser($user);
+
+        return back()->with(
+            'success',
+            __('admin.user.restored', ['user' => $user->full_name])
+        );
     }
 }

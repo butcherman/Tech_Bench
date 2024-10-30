@@ -44,10 +44,18 @@ Route::middleware('auth.secure')->group(function () {
     |---------------------------------------------------------------------------
     */
     Route::prefix('administration')->name('admin.')->group(function () {
+        Route::prefix('users')->name('user.')->group(function () {
+            Route::get('{user}/restore', [UserAdministrationController::class, 'restore'])
+                ->name('restore')
+                ->withTrashed();
+        });
+
         Route::resource('user', UserAdministrationController::class)
             ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
                 $breadcrumbs->index('User Administration', 'admin.index')
-                    ->create('New User');
+                    ->create('New User')
+                    ->show('User Details')
+                    ->edit('Edit User Details');
             });
     });
 });

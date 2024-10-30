@@ -2,12 +2,14 @@
 
 namespace Tests\Unit\Services\User;
 
+use App\Events\Feature\FeatureChangedEvent;
 use App\Jobs\User\CreateUserSettingsJob;
 use App\Jobs\User\SendWelcomeEmailJob;
 use App\Models\User;
 use App\Services\User\UserAdministrationService;
 use Database\Seeders\UserSeeder;
 use Illuminate\Support\Facades\Bus;
+use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
 class UserAdministrationUnitTest extends TestCase
@@ -90,5 +92,72 @@ class UserAdministrationUnitTest extends TestCase
 
         Bus::assertNotDispatched(SendWelcomeEmailJob::class);
         Bus::assertDispatched(CreateUserSettingsJob::class);
+    }
+
+    public function test_update_user(): void
+    {
+        Event::fake();
+
+        $user = User::factory()->create();
+        $data = [
+            'username' => 'newUserName',
+            'first_name' => 'Billy',
+            'last_name' => 'Bob',
+            'email' => 'bbob@noem.com',
+            'role_id' => 3,
+        ];
+
+        $testObj = new UserAdministrationService;
+        $updated = $testObj->updateUser(collect($data), $user);
+
+        $this->assertDatabaseHas('users', $data);
+        $this->assertEquals($updated->only([
+            'username',
+            'first_name',
+            'last_name',
+            'email',
+            'role_id',
+        ]), $data);
+
+        Event::assertDispatched(FeatureChangedEvent::class);
+    }
+
+    public function test_destroy_user(): void
+    {
+        $user = User::factory()->create();
+
+        $testObj = new UserAdministrationService;
+        $testObj->destroyUser($user);
+
+        $this->assertSoftDeleted('users', $user->only(['user_id', 'username']));
+    }
+
+    public function test_destroy_user_force(): void
+    {
+        $user = User::factory()->create();
+
+        $testObj = new UserAdministrationService;
+        $testObj->destroyUser($user, true);
+
+        $this->assertDatabaseMissing('users', $user->only(['user_id', 'username']));
+    }
+
+    // TODO - Test Try Catch - User has stuff....
+
+    public function test_restore(): void
+    {
+        $user = User::factory()->create();
+        $user->delete();
+
+        $testObj = new UserAdministrationService;
+        $testObj->restoreUser($user);
+
+        $this->assertDatabaseHas(
+            'users',
+            array_merge(
+                $user->only(['user_id', 'username']),
+                ['deleted_at' => null],
+            )
+        );
     }
 }

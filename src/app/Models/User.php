@@ -106,6 +106,11 @@ class User extends Authenticatable
         return $this->hasMany(UserSetting::class, 'user_id', 'user_id');
     }
 
+    public function UserRole(): HasOne
+    {
+        return $this->hasOne(UserRole::class, 'role_id', 'role_id');
+    }
+
     /*
     |---------------------------------------------------------------------------
     | Additional Model Methods
@@ -151,5 +156,37 @@ class User extends Authenticatable
         }
 
         return false;
+    }
+
+    /**
+     * Unhide fields to allow User Administration
+     */
+    public function getAdminLoad(): User
+    {
+        return $this->makeVisible([
+            'role_id',
+            'created_at',
+            'updated_at',
+            'deleted_at',
+        ]);
+    }
+
+    /**
+     * Function to get login history for the last xx days
+     */
+    public function getLoginHistory($days = 365)
+    {
+        return $this->UserLogins
+            ->where('created_at', '>', now()->subDays($days));
+    }
+
+    /**
+     * Get the date and time of last login
+     */
+    public function getLastLogin()
+    {
+        return $this->UserLogins()
+            ->orderBy('created_at', 'desc')
+            ->first();
     }
 }
