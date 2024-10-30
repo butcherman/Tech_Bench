@@ -2,9 +2,9 @@
 
 namespace Tests\Unit\Facades;
 
-use App\Facades\CacheHelper;
 use App\Models\UserRole;
 use App\Models\UserSettingType;
+use App\Services\Misc\CacheHelper;
 use Illuminate\Support\Facades\Cache;
 use PragmaRX\Version\Package\Version;
 use Tests\TestCase;

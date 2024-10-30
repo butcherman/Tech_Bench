@@ -2,8 +2,8 @@
 
 namespace App\Providers;
 
-use App\Facades\CacheHelper;
 use App\Policies\GatePolicy;
+use App\Services\Misc\CacheHelper;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 

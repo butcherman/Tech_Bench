@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Facades;
+namespace App\Services\Misc;
 
 use App\Models\UserRole;
 use App\Models\UserSettingType;
