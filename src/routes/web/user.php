@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\User\DisabledUserController;
 use App\Http\Controllers\Admin\User\ReSendWelcomeEmailController;
 use App\Http\Controllers\Admin\User\UserAdministrationController;
 use App\Http\Controllers\User\RemoveDeviceTokenController;
@@ -57,6 +58,14 @@ Route::middleware('auth.secure')->group(function () {
 
             Route::post('send-reset-password-link', [PasswordResetLinkController::class, 'store'])
                 ->name('password-link');
+
+            Route::get('deactivated-users', DisabledUserController::class)
+                ->name('deactivated')
+                ->breadcrumb('Disabled Users', 'admin.user.index');
+
+            Route::get('{user}/restore', [UserAdministrationController::class, 'restore'])
+                ->withTrashed()
+                ->name('restore');
         });
 
         Route::resource('user', UserAdministrationController::class)
@@ -65,7 +74,7 @@ Route::middleware('auth.secure')->group(function () {
                     ->create('New User')
                     ->show('User Details')
                     ->edit('Edit User Details');
-            });
+            })->withTrashed();
     });
 });
 

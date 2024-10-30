@@ -113,7 +113,7 @@ class BuildAdminMenuUnitTest extends TestCase
                 [
                     'name' => 'List Disabled Users',
                     'icon' => 'fas fa-store-alt-slash',
-                    'route' => '#', // route('admin.user.deactivated'),
+                    'route' => route('admin.user.deactivated'),
                 ],
                 [
                     'name' => 'Password Policy',

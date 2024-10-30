@@ -17,7 +17,7 @@ class UserAdministrationService
     public function getAllUsers(?bool $trashed = false): Collection|Builder
     {
         if ($trashed) {
-            return User::onlyTrashed();
+            return User::onlyTrashed()->get()->makeVisible('deleted_at');
         }
 
         return User::all();

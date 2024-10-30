@@ -67,7 +67,7 @@ class UserAdministrationController extends Controller
             'user' => $user->getAdminLoad(),
             'role' => $user->UserRole,
             'last-login' => $user->getLastLogin(),
-            'thirty-day-count' => $user->getLoginHistory(30),
+            'thirty-day-count' => $user->getLoginHistory(30)->count(),
         ]);
     }
 

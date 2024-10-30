@@ -93,11 +93,6 @@ const columns = [
         },
     },
     {
-        label: "Role",
-        field: "role_name",
-        sort: true,
-    },
-    {
         label: "Deactivated Date",
         field: "deleted_at",
         sort: true,
