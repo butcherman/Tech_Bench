@@ -58,7 +58,7 @@ const props = defineProps<{
 const userLinkList = computed<userLinkList[]>(() => {
     let newList = [...props.userList];
     newList.forEach((item) => {
-        item.href = route("admin.user.edit", item.username);
+        item.href = route("admin.user.show", item.username);
     });
 
     return newList;

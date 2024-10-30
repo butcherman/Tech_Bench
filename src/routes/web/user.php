@@ -10,6 +10,7 @@ use App\Http\Controllers\User\UserSettingsController;
 use App\Http\Middleware\CheckPasswordExpiration;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 use Illuminate\Support\Facades\Route;
+use Laravel\Fortify\Http\Controllers\PasswordResetLinkController;
 
 Route::middleware('auth.secure')->group(function () {
 
@@ -53,6 +54,9 @@ Route::middleware('auth.secure')->group(function () {
 
             Route::get('{user}/resend-welcome-email', ReSendWelcomeEmailController::class)
                 ->name('send-welcome');
+
+            Route::post('send-reset-password-link', [PasswordResetLinkController::class, 'store'])
+                ->name('password-link');
         });
 
         Route::resource('user', UserAdministrationController::class)
