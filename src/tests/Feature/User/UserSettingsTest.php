@@ -11,7 +11,7 @@ class UserSettingsTest extends TestCase
     /**
      * Show Method
      */
-    public function test_show_guest()
+    public function test_show_guest(): void
     {
         $response = $this->get(route('user.user-settings.show'));
 
@@ -20,7 +20,7 @@ class UserSettingsTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_show()
+    public function test_show(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly();

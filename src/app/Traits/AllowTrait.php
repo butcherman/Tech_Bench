@@ -5,11 +5,11 @@ namespace App\Traits;
 use App\Models\User;
 use App\Models\UserRolePermission;
 
-/**
- *  AllowTrait only has one function to check permission for the policies
- */
 trait AllowTrait
 {
+    /**
+     *  AllowTrait determines if a user can perform a task based on their Role
+     */
     protected function checkPermission(User $user, $description): bool
     {
         $allowed = UserRolePermission::whereRoleId($user->role_id)
@@ -27,6 +27,10 @@ trait AllowTrait
         // @codeCoverageIgnoreEnd
     }
 
+    /**
+     * Determine if the user has access to any settings that would require them
+     * to see the Administration menu.
+     */
     protected function seeAdminLink(User $user): bool
     {
         $userRole = UserRolePermission::whereRoleId($user->role_id)

@@ -13,7 +13,7 @@ class BuildUserSettingsUnitTest extends TestCase
     /**
      * Build Method
      */
-    public function test_build_as_default()
+    public function test_build_as_default(): void
     {
         $testUser = User::factory()->createQuietly();
         $testObj = new BuildUserSettings;
@@ -31,7 +31,7 @@ class BuildUserSettingsUnitTest extends TestCase
     }
 
     // TODO - Add Back In
-    // public function test_build_file_link_enabled()
+    // public function test_build_file_link_enabled(): void
     // {
     //     config(['file-link.feature_enabled' => true]);
 
@@ -55,7 +55,7 @@ class BuildUserSettingsUnitTest extends TestCase
     //     $this->assertEquals($settingData->toArray(), $shouldBe);
     // }
 
-    // public function test_build_file_link_permission_removed()
+    // public function test_build_file_link_permission_removed(): void
     // {
     //     config(['file-link.feature_enabled' => true]);
 
@@ -80,7 +80,7 @@ class BuildUserSettingsUnitTest extends TestCase
     //     $this->assertEquals($settingData->toArray(), $shouldBe);
     // }
 
-    // public function test_build_file_link_delete_config_disabled()
+    // public function test_build_file_link_delete_config_disabled(): void
     // {
     //     config(['file-link.feature_enabled' => true]);
     //     config(['file-link.auto_delete_override' => false]);

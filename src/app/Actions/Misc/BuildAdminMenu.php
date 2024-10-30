@@ -15,6 +15,10 @@ class BuildAdminMenu
     /** @var array<string, array> */
     protected $menu;
 
+    /**
+     * Based on the users permissions, build the Administration links that they
+     * have permission to view
+     */
     public function handle(User $user): array
     {
         $this->user = $user;
@@ -41,12 +45,12 @@ class BuildAdminMenu
                 [
                     'name' => 'Users',
                     'icon' => 'fas fa-user-edit',
-                    'route' => '#', // route('admin.user.index'),
+                    'route' => route('admin.user.index'),
                 ],
                 [
                     'name' => 'Create User',
                     'icon' => 'fas fa-user-plus',
-                    'route' => '#', // route('admin.user.create'),
+                    'route' => route('admin.user.create'),
                 ],
                 [
                     'name' => 'List Disabled Users',

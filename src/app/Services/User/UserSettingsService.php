@@ -17,6 +17,9 @@ class UserSettingsService
         $user->update($requestData->toArray());
     }
 
+    /**
+     * Update the users Settings Data (primarily notification settings).
+     */
     public function updateUserSettings(Collection $requestData, User $user): void
     {
         foreach ($requestData->get('settingList') as $key => $value) {

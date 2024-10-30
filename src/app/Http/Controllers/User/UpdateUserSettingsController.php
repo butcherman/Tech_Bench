@@ -17,7 +17,7 @@ class UpdateUserSettingsController extends Controller
      */
     public function __invoke(UserSettingsRequest $request, User $user): RedirectResponse
     {
-        $this->svc->updateUserSettings($request->collect(), $user);
+        $this->svc->updateUserSettings($request->safe()->collect(), $user);
 
         return back()->with('success', __('user.updated'));
     }

@@ -10,6 +10,14 @@ class UserPolicy
     use AllowTrait;
 
     /**
+     * Determine if the user can view a list of all models.
+     */
+    public function viewAny(User $user): bool
+    {
+        return $this->checkPermission($user, 'Manage Users');
+    }
+
+    /**
      * Determine whether the user can view the model.
      */
     public function view(User $user, User $model): bool

@@ -10,7 +10,8 @@ use Illuminate\Support\Facades\Mail;
 class HandlePasswordResetListener
 {
     /**
-     * Handle the event.
+     * Send a notification email letting the user know that their password has
+     * been changed.
      */
     public function handle(PasswordReset $event): void
     {

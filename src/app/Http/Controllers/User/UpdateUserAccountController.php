@@ -17,7 +17,7 @@ class UpdateUserAccountController extends Controller
      */
     public function __invoke(UserAccountRequest $request, User $user): RedirectResponse
     {
-        $this->svc->updateUserAccount($request->collect(), $user);
+        $this->svc->updateUserAccount($request->safe()->collect(), $user);
 
         return back()->with('success', __('user.updated'));
     }

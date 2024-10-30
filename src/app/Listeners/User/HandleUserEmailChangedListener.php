@@ -9,7 +9,8 @@ use Illuminate\Support\Facades\Mail;
 class HandleUserEmailChangedListener
 {
     /**
-     * Handle the event.
+     * Send the user an email letting them know that their email address has
+     * been changed
      */
     public function handle(UserEmailChangedEvent $event): void
     {

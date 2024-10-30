@@ -20,7 +20,7 @@ class UserSettingsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'settingList' => 'required|array',
+            'settingList' => ['required', 'array'],
         ];
     }
 }

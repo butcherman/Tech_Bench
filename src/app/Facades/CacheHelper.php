@@ -2,6 +2,8 @@
 
 namespace App\Facades;
 
+use App\Models\UserRole;
+use App\Models\UserSettingType;
 use Illuminate\Support\Facades\Cache;
 use PragmaRX\Version\Package\Version;
 
@@ -83,6 +85,30 @@ class CacheHelper
                 // Inactivity timeout
                 'idle_timeout' => intval(config('auth.auto_logout_timer')),
             ];
+        });
+    }
+
+    /**
+     * Get a list of User Roles
+     *
+     * @return \Illuminate\Cache\TCacheValue
+     */
+    public function userRoles()
+    {
+        return Cache::rememberForever('userRoles', function () {
+            return UserRole::all();
+        });
+    }
+
+    /**
+     * Get a list of all the possible User Settings Types
+     *
+     * @return \Illuminate\Cache\TCacheValue
+     */
+    public function userSettingsType()
+    {
+        return Cache::rememberForever('userSettingsType', function () {
+            return UserSettingType::all();
         });
     }
 }

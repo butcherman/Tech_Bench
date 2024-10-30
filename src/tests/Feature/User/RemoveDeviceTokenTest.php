@@ -8,8 +8,6 @@ use Tests\TestCase;
 
 class RemoveDeviceTokenTest extends TestCase
 {
-    // protected $testAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
-
     public function test_invoke_guest(): void
     {
         $user = User::factory()->createQuietly();

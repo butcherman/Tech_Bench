@@ -12,7 +12,7 @@ class UpdateUserAccountTest extends TestCase
     /**
      * Store Method
      */
-    public function test_store_guest()
+    public function test_store_guest(): void
     {
         $user = User::factory()->createQuietly();
         $data = User::factory()
@@ -29,7 +29,7 @@ class UpdateUserAccountTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_store()
+    public function test_store(): void
     {
         Event::fake(UserEmailChangedEvent::class);
 
@@ -57,7 +57,7 @@ class UpdateUserAccountTest extends TestCase
         Event::assertDispatched(UserEmailChangedEvent::class);
     }
 
-    public function test_store_no_email_change()
+    public function test_store_no_email_change(): void
     {
         Event::fake(UserEmailChangedEvent::class);
 
@@ -90,7 +90,7 @@ class UpdateUserAccountTest extends TestCase
 
     }
 
-    public function test_store_another_user_as_admin()
+    public function test_store_another_user_as_admin(): void
     {
         Event::fake(UserEmailChangedEvent::class);
 
@@ -121,7 +121,7 @@ class UpdateUserAccountTest extends TestCase
         Event::assertDispatched(UserEmailChangedEvent::class);
     }
 
-    public function test_store_another_user()
+    public function test_store_another_user(): void
     {
         /** @var User $actingAs */
         $actingAs = User::factory()->createQuietly();
@@ -143,7 +143,7 @@ class UpdateUserAccountTest extends TestCase
         ]);
     }
 
-    public function test_store_higher_user()
+    public function test_store_higher_user(): void
     {
         /** @var User $actingAs */
         $actingAs = User::factory()->createQuietly(['role_id' => 2]);

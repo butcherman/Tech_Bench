@@ -21,7 +21,7 @@ class UserRolePermissionUnitTest extends TestCase
     /**
      * Model Relationships
      */
-    public function test_user_role_permission_type_relationship()
+    public function test_user_role_permission_type_relationship(): void
     {
         // Testing default data - Role Permission 1 is type App Settings
         $permType = UserRolePermissionType::find(1);

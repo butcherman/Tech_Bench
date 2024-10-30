@@ -30,7 +30,7 @@ class TwoFactorController extends Controller
     {
         $cookie = $this->svc
             ->processVerificationResponse(
-                $request->collect(),
+                $request->safe()->collect(),
                 $request->user(),
                 $request->header('User-Agent')
             );
