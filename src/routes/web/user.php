@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\User\ReSendWelcomeEmailController;
 use App\Http\Controllers\Admin\User\UserAdministrationController;
 use App\Http\Controllers\User\RemoveDeviceTokenController;
 use App\Http\Controllers\User\UpdateUserAccountController;
@@ -43,11 +44,15 @@ Route::middleware('auth.secure')->group(function () {
     | User Administration Routes
     |---------------------------------------------------------------------------
     */
+
     Route::prefix('administration')->name('admin.')->group(function () {
         Route::prefix('users')->name('user.')->group(function () {
             Route::get('{user}/restore', [UserAdministrationController::class, 'restore'])
                 ->name('restore')
                 ->withTrashed();
+
+            Route::get('{user}/resend-welcome-email', ReSendWelcomeEmailController::class)
+                ->name('send-welcome');
         });
 
         Route::resource('user', UserAdministrationController::class)
