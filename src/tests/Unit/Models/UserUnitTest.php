@@ -72,7 +72,7 @@ class UserUnitTest extends TestCase
 
     public function test_user_logins_relationship(): void
     {
-        $login = UserLogin::create([
+        UserLogin::create([
             'user_id' => $this->model->user_id,
             'ip_address' => '127.0.0.1',
         ]);
@@ -80,11 +80,12 @@ class UserUnitTest extends TestCase
         $this->assertCount(1, $this->model->UserLogins->toArray());
     }
 
-    // public function test_user_role_relationship(): void
-    // {
-    //     $role = UserRole::where('role_id', $this->model->role_id)->first();
-    //     $this->assertEquals($this->model->UserRole, $role);
-    // }
+    public function test_user_role_relationship(): void
+    {
+        $role = UserRole::where('role_id', $this->model->role_id)->first();
+
+        $this->assertEquals($this->model->UserRole, $role);
+    }
 
     /**
      * Additional Model Methods
@@ -134,5 +135,41 @@ class UserUnitTest extends TestCase
         $token = DeviceToken::factory()->make();
 
         $this->assertFalse($this->model->validateDeviceToken($token->token));
+    }
+
+    public function test_get_admin_load(): void
+    {
+        $adminLoad = $this->model->getAdminLoad()->toArray();
+
+        $this->assertArrayHasKey('role_id', $adminLoad);
+        $this->assertArrayHasKey('created_at', $adminLoad);
+        $this->assertArrayHasKey('updated_at', $adminLoad);
+        $this->assertArrayHasKey('deleted_at', $adminLoad);
+    }
+
+    public function test_get_login_history()
+    {
+        UserLogin::factory()
+            ->count(10)
+            ->create(['user_id' => $this->model->user_id]);
+
+        $this->assertCount(10, $this->model->getLoginHistory());
+    }
+
+    public function test_get_last_login()
+    {
+        for ($i = 0; $i < 10; $i++) {
+            UserLogin::factory()->create(['user_id' => $this->model->user_id]);
+            $this->travel(2)->days();
+        }
+
+        $lastLogin = UserLogin::where('user_id', $this->model->user_id)
+            ->get()
+            ->last();
+
+        $this->assertEquals(
+            $lastLogin->toArray(),
+            $this->model->getLastLogin()->toArray()
+        );
     }
 }
