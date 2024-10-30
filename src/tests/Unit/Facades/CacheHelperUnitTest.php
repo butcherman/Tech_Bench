@@ -3,6 +3,8 @@
 namespace Tests\Unit\Facades;
 
 use App\Facades\CacheHelper;
+use App\Models\UserRole;
+use App\Models\UserSettingType;
 use Illuminate\Support\Facades\Cache;
 use PragmaRX\Version\Package\Version;
 use Tests\TestCase;
@@ -168,5 +170,43 @@ class CacheHelperUnitTest extends TestCase
         $appData = $this->helperObj->appData();
 
         $this->assertEquals($shouldBe, $appData);
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | User Roles
+    |---------------------------------------------------------------------------
+    */
+    public function test_user_roles(): void
+    {
+        $shouldBe = UserRole::all();
+
+        Cache::shouldReceive('rememberForever')
+            ->once()
+            ->with('userRoles', \Closure::class)
+            ->andReturn($shouldBe);
+
+        $roleList = $this->helperObj->userRoles();
+
+        $this->assertEquals($shouldBe->toArray(), $roleList->toArray());
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | User Settings Types
+    |---------------------------------------------------------------------------
+    */
+    public function test_user_settings_type(): void
+    {
+        $shouldBe = UserSettingType::all();
+
+        Cache::shouldReceive('rememberForever')
+            ->once()
+            ->with('userSettingsType', \Closure::class)
+            ->andReturn($shouldBe);
+
+        $settingTypeList = $this->helperObj->userSettingsType();
+
+        $this->assertEquals($shouldBe->toArray(), $settingTypeList->toArray());
     }
 }
