@@ -5,7 +5,6 @@ namespace App\Services\Admin;
 use App\Jobs\User\UpdatePasswordExpireJob;
 use App\Traits\AppSettingsTrait;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Log;
 
 class UserGlobalSettingsService
 {
@@ -30,7 +29,7 @@ class UserGlobalSettingsService
     /**
      * Update the User Password Policy
      */
-    public function savePasswordPolicy(Collection $requestData)
+    public function savePasswordPolicy(Collection $requestData): void
     {
         // If the password expire field has changed, we must update all users
         if ($requestData->get('expire') !== config('auth.passwords.settings.expire')) {
@@ -40,11 +39,6 @@ class UserGlobalSettingsService
         $this->saveSettingsArray(
             $requestData->toArray(),
             'auth.passwords.settings'
-        );
-
-        Log::notice(
-            request()->user()->username.' has updated the User Password Policy',
-            $requestData->toArray()
         );
     }
 }

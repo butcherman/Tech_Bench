@@ -27,6 +27,7 @@ class PasswordPolicyRequest extends FormRequest
             'contains_lowercase' => ['required', 'boolean'],
             'contains_number' => ['required', 'boolean'],
             'contains_special' => ['required', 'boolean'],
+            'disable_compromised' => ['required', 'boolean'],
         ];
     }
 }

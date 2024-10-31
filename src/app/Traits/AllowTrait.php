@@ -4,6 +4,7 @@ namespace App\Traits;
 
 use App\Models\User;
 use App\Models\UserRolePermission;
+use Illuminate\Support\Facades\Log;
 
 trait AllowTrait
 {
@@ -12,6 +13,8 @@ trait AllowTrait
      */
     protected function checkPermission(User $user, $description): bool
     {
+        Log::debug('Checker user permission for '.$description, $user->toArray());
+
         $allowed = UserRolePermission::whereRoleId($user->role_id)
             ->whereHas('UserRolePermissionType', function ($q) use ($description) {
                 $q->where('description', $description);
@@ -19,10 +22,17 @@ trait AllowTrait
             ->first();
 
         if ($allowed) {
+            Log::debug(
+                'User Permission result found for '.$description,
+                $allowed->toArray()
+            );
+
             return (bool) $allowed->allow;
         }
 
         // @codeCoverageIgnoreStart
+        Log::debug('No permission value found.  Returning false');
+
         return false;
         // @codeCoverageIgnoreEnd
     }

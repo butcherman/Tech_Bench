@@ -160,4 +160,99 @@ class UserAdministrationUnitTest extends TestCase
             )
         );
     }
+
+    public function test_reset_password_expire(): void
+    {
+        config(['auth.passwords.settings.expire' => 60]);
+
+        $user = User::factory()
+            ->create(['password_expires' => now()->addDays(90)]);
+
+        $testObj = new UserAdministrationService;
+        $testObj->resetPasswordExpire($user);
+
+        $this->assertEquals(
+            $user->fresh()->password_expires->format('m-d-y'),
+            now()->addDays(60)->format('m-d-y')
+        );
+    }
+
+    public function test_reset_password_expire_was_null(): void
+    {
+        config(['auth.passwords.settings.expire' => 60]);
+
+        $user = User::factory()->create();
+
+        $testObj = new UserAdministrationService;
+        $testObj->resetPasswordExpire($user);
+
+        $this->assertEquals(
+            $user->fresh()->password_expires->format('m-d-y'),
+            now()->addDays(60)->format('m-d-y')
+        );
+    }
+
+    public function test_reset_password_expire_expires_soon(): void
+    {
+        config(['auth.passwords.settings.expire' => 30]);
+
+        $user = User::factory()
+            ->create(['password_expires' => now()->addDays(10)]);
+
+        $testObj = new UserAdministrationService;
+        $testObj->resetPasswordExpire($user);
+
+        $this->assertEquals(
+            $user->fresh()->password_expires->format('m-d-y'),
+            now()->addDays(10)->format('m-d-y')
+        );
+    }
+
+    public function test_reset_password_expire_expired_already(): void
+    {
+        config(['auth.passwords.settings.expire' => 30]);
+
+        $user = User::factory()
+            ->create(['password_expires' => now()->subDays(5)]);
+
+        $testObj = new UserAdministrationService;
+        $testObj->resetPasswordExpire($user);
+
+        $this->assertEquals(
+            $user->fresh()->password_expires->format('m-d-y'),
+            now()->subDays(5)->format('m-d-y')
+        );
+    }
+
+    public function test_reset_password_expire_set_to_zero(): void
+    {
+        config(['auth.passwords.settings.expire' => 0]);
+
+        $user = User::factory()
+            ->create(['password_expires' => now()->addDays(30)]);
+
+        $testObj = new UserAdministrationService;
+        $testObj->resetPasswordExpire($user);
+
+        $this->assertEquals(
+            $user->fresh()->password_expires,
+            null
+        );
+    }
+
+    public function test_reset_password_expire_set_to_zero_expired_already(): void
+    {
+        config(['auth.passwords.settings.expire' => 0]);
+
+        $user = User::factory()
+            ->create(['password_expires' => now()->subDays(5)]);
+
+        $testObj = new UserAdministrationService;
+        $testObj->resetPasswordExpire($user);
+
+        $this->assertEquals(
+            $user->fresh()->password_expires->format('m-d-y'),
+            now()->subDays(5)->format('m-d-y')
+        );
+    }
 }

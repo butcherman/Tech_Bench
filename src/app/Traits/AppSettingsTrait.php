@@ -20,6 +20,7 @@ trait AppSettingsTrait
     {
         // Verify that we are not trying to save over a fake password
         if ($value !== __('admin.fake-password') && $value !== null) {
+            Log::debug('Saving Permission Value for '.$key);
 
             // Verify that the value has actually changed
             if (config($key) != $value) {
@@ -32,6 +33,8 @@ trait AppSettingsTrait
                     'key' => $key,
                     'value' => $value,
                 ]);
+            } else {
+                Log::debug('Value not changed, skipping');
             }
         }
 
