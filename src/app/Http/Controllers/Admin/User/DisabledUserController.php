@@ -17,7 +17,7 @@ class DisabledUserController extends Controller
      */
     public function __invoke(): Response
     {
-        $this->authorize('viewAny', User::class);
+        $this->authorize('manage', User::class);
 
         return Inertia::render('Admin/User/Deactivated', [
             'user-list' => $this->svc->getAllUsers(true),

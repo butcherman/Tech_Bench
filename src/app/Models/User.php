@@ -126,7 +126,7 @@ class User extends Authenticatable
             return Carbon::yesterday();
         }
 
-        return config('auth.passwords.settings.expire')
+        return (int) config('auth.passwords.settings.expire') > 0
             ? Carbon::now()->addDays(config('auth.passwords.settings.expire'))
             : null;
     }

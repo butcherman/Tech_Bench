@@ -12,7 +12,7 @@ class UserPolicy
     /**
      * Determine if the user can view a list of all models.
      */
-    public function viewAny(User $user): bool
+    public function manage(User $user): bool
     {
         return $this->checkPermission($user, 'Manage Users');
     }

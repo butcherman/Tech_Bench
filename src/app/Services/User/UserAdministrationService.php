@@ -8,6 +8,7 @@ use App\Jobs\User\SendWelcomeEmailJob;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 
 class UserAdministrationService
 {
@@ -74,5 +75,31 @@ class UserAdministrationService
     public function restoreUser(User $user): void
     {
         $user->restore();
+    }
+
+    /**
+     * Update a users Password Expire date
+     */
+    public function resetPasswordExpire(User $user): void
+    {
+        $newExpireDate = $user->getNewExpireTime();
+        Log::debug('New Expiration Date for '.$user->username.' - '.$newExpireDate);
+
+        // If the new expire date is null, remove the expire date altogether
+        if (is_null($newExpireDate)) {
+            // If the current expire date is greater than today, null it out
+            if ($user->password_expires > now()) {
+                $user->password_expires = null;
+                $user->save();
+            }
+
+            return;
+        }
+
+        // If the new expire date is less than the current expire, update it
+        if ($newExpireDate < $user->password_expires || is_null($user->password_expires)) {
+            $user->password_expires = $newExpireDate;
+            $user->save();
+        }
     }
 }

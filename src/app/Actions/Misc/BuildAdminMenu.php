@@ -60,7 +60,7 @@ class BuildAdminMenu
                 [
                     'name' => 'Password Policy',
                     'icon' => 'fas fa-user-lock',
-                    'route' => '#', // route('admin.user.password-policy.show'),
+                    'route' => route('admin.user.password-policy.show'),
                 ],
                 [
                     'name' => 'User Settings',

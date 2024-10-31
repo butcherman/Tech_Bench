@@ -23,7 +23,7 @@ class UserAdministrationController extends Controller
      */
     public function index(): Response
     {
-        $this->authorize('viewAny', User::class);
+        $this->authorize('manage', User::class);
 
         return Inertia::render('Admin/User/Index', [
             'user-list' => $this->svc->getAllUsers(),
@@ -61,7 +61,7 @@ class UserAdministrationController extends Controller
      */
     public function show(User $user): Response
     {
-        $this->authorize('view', $user);
+        $this->authorize('manage', $user);
 
         return Inertia::render('Admin/User/Show', [
             'user' => $user->getAdminLoad(),
@@ -116,7 +116,7 @@ class UserAdministrationController extends Controller
      */
     public function restore(User $user): RedirectResponse
     {
-        $this->authorize('delete', $user);
+        $this->authorize('manage', $user);
 
         $this->svc->restoreUser($user);
 
