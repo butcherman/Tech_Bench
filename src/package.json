@@ -9,8 +9,10 @@
         "autoprefixer": "^10.4.20",
         "axios": "^1.7.4",
         "concurrently": "^9.0.1",
+        "laravel-echo": "^1.16.1",
         "laravel-vite-plugin": "^1.0",
         "postcss": "^8.4.47",
+        "pusher-js": "^8.4.0-rc2",
         "vite": "^5.0"
     },
     "dependencies": {
@@ -31,11 +33,9 @@
         "dropzone": "^6.0.0-beta.2",
         "file-icon-vectors": "^1.0",
         "gsap": "^3.12",
-        "laravel-echo": "^1.16.1",
         "lodash": "^4.17",
         "pinia": "^2.1",
         "pretty-bytes": "^6.1",
-        "pusher-js": "^8.4.0-rc2",
         "sass": "1.77.6",
         "sass-loader": "^14.2",
         "tinymce": "^7.2",
