@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\User\UserSettingsRequest;
+use App\Models\AppSettings;
 use App\Models\User;
 use App\Services\Admin\UserGlobalSettingsService;
 use App\Traits\UserRoleTrait;
@@ -24,7 +25,7 @@ class UserSettingsController extends Controller
      */
     public function edit(Request $request): Response
     {
-        $this->authorize('create', User::class);
+        $this->authorize('viewAny', AppSettings::class);
 
         return Inertia::render('Admin/User/UserSettings', [
             'auto-logout-timer' => intval(config('auth.auto_logout_timer')),
@@ -42,8 +43,10 @@ class UserSettingsController extends Controller
         $this->svc->updateUserSettingsConfig($request->safe()->collect());
 
         /**
-         * If the user just enabled 2FA, they will be prompted for a code immediately.
-         * Bypass by manually adding verification to session
+         * If the user just enabled 2FA, they will be prompted for a code
+         * immediately.
+         *
+         * Bypass this by manually adding verification to session
          */
         $request->session()->put('2fa_verified', true);
 

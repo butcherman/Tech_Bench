@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Actions\Misc\CheckDatabaseError;
 use App\Policies\GatePolicy;
 use App\Services\Misc\CacheHelper;
 use Illuminate\Support\Facades\Gate;
@@ -24,6 +25,9 @@ class AppServiceProvider extends ServiceProvider
     {
         // CacheFacade
         $this->app->bind('CacheData', CacheHelper::class);
+
+        // DbQueryFacade
+        $this->app->bind('DbException', CheckDatabaseError::class);
 
         //  Gate to determine if the Administration link should show up on the navigation menu
         Gate::define('admin-link', [GatePolicy::class, 'adminLink']);

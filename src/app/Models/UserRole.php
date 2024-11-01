@@ -2,10 +2,16 @@
 
 namespace App\Models;
 
+use App\Observers\UserRoleObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+#[ObservedBy([UserRoleObserver::class])]
 class UserRole extends Model
 {
+    use HasFactory;
+
     /** @var string */
     protected $primaryKey = 'role_id';
 
@@ -24,4 +30,14 @@ class UserRole extends Model
     protected $casts = [
         'allow_edit' => 'boolean',
     ];
+
+    /*
+    |---------------------------------------------------------------------------
+    | Model Relationships
+    |---------------------------------------------------------------------------
+    */
+    public function UserRolePermission()
+    {
+        return $this->hasMany(UserRolePermission::class, 'role_id', 'role_id');
+    }
 }

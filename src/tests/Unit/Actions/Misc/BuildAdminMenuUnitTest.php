@@ -128,7 +128,7 @@ class BuildAdminMenuUnitTest extends TestCase
                 [
                     'name' => 'Roles and Permissions',
                     'icon' => 'fas fa-users-cog',
-                    'route' => '#', // route('admin.user-roles.index'),
+                    'route' => route('admin.user-roles.index'),
                 ],
             ],
             'Customers' => [

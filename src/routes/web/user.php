@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\User\DisabledUserController;
 use App\Http\Controllers\Admin\User\ReSendWelcomeEmailController;
 use App\Http\Controllers\Admin\User\UserAdministrationController;
+use App\Http\Controllers\Admin\User\UserRolesController;
 use App\Http\Controllers\User\RemoveDeviceTokenController;
 use App\Http\Controllers\User\UpdateUserAccountController;
 use App\Http\Controllers\User\UpdateUserSettingsController;
@@ -75,6 +76,18 @@ Route::middleware('auth.secure')->group(function () {
                     ->show('User Details')
                     ->edit('Edit User Details');
             })->withTrashed();
+
+        Route::post('user-roles/create', [UserRolesController::class, 'create'])
+            ->name('user-roles.copy')
+            ->breadcrumb('Build New Role', 'admin.user-roles.index');
+
+        Route::resource('user-roles', UserRolesController::class)
+            ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
+                $breadcrumbs->index('Roles and Permissions', 'admin.index')
+                    ->create('Build New Role')
+                    ->show('View Role')
+                    ->edit('Modify Role');
+            });
     });
 });
 

@@ -16,5 +16,5 @@ class FeatureChangedEvent
      * to use an application feature.  The feature table will be cleared and
      * the application can then rebuild it.
      */
-    public function __construct(public User $user) {}
+    public function __construct(public ?User $user = null) {}
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Admin\User;
 
+use App\Models\AppSettings;
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -12,7 +13,7 @@ class UserSettingsRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return $this->user()->can('manage', User::class);
+        return $this->user()->can('update', AppSettings::class);
     }
 
     /**
