@@ -118,12 +118,12 @@ class BuildAdminMenuUnitTest extends TestCase
                 [
                     'name' => 'Password Policy',
                     'icon' => 'fas fa-user-lock',
-                    'route' => route('admin.user.password-policy.show'),
+                    'route' => route('admin.user.password-policy.edit'),
                 ],
                 [
                     'name' => 'User Settings',
                     'icon' => 'cog',
-                    'route' => '#', // route('admin.user.user-settings.show'),
+                    'route' => route('admin.user.user-settings.edit'),
                 ],
                 [
                     'name' => 'Roles and Permissions',

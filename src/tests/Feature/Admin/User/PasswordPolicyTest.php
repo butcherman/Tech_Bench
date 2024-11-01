@@ -13,7 +13,7 @@ class PasswordPolicyTest extends TestCase
      */
     public function test_edit_guest(): void
     {
-        $response = $this->get(route('admin.user.password-policy.show'));
+        $response = $this->get(route('admin.user.password-policy.edit'));
 
         $response->assertStatus(302)
             ->assertRedirect(route('login'));
@@ -26,7 +26,7 @@ class PasswordPolicyTest extends TestCase
         $user = User::factory()->createQuietly();
 
         $response = $this->actingAs($user)
-            ->get(route('admin.user.password-policy.show'));
+            ->get(route('admin.user.password-policy.edit'));
 
         $response->assertForbidden();
     }
@@ -37,7 +37,7 @@ class PasswordPolicyTest extends TestCase
         $user = User::factory()->createQuietly(['role_id' => 1]);
 
         $response = $this->actingAs($user)
-            ->get(route('admin.user.password-policy.show'));
+            ->get(route('admin.user.password-policy.edit'));
 
         $response->assertSuccessful()
             ->assertInertia(fn (Assert $page) => $page
