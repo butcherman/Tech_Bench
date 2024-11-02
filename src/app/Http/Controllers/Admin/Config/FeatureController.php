@@ -38,7 +38,7 @@ class FeatureController extends Controller
     {
         $this->svc->updateFeatureSettings($request->safe()->collect());
 
-        Log::info('Application Features updated by '.$request()->user()->username);
+        Log::info('Application Features updated by '.$request->user()->username);
 
         return back()->with('success', 'Feature Settings Updated');
     }

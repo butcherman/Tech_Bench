@@ -3,6 +3,7 @@
 namespace Tests\Unit\Services\Admin;
 
 use App\Events\Config\UrlChangedEvent;
+use App\Events\Feature\FeatureChangedEvent;
 use App\Services\Admin\ApplicationSettingsService;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Event;
@@ -151,6 +152,22 @@ class ApplicationSettingsUnitTest extends TestCase
         $this->assertDatabaseHas('app_settings', [
             'key' => 'mail.mailers.smtp.require_auth',
         ]);
+    }
+
+    public function test_update_feature_settings()
+    {
+        Event::fake(FeatureChangedEvent::class);
+
+        $data = [
+            'file_links' => true,
+            'public_tips' => true,
+            'tip_comments' => false,
+        ];
+
+        $testObj = new ApplicationSettingsService;
+        $testObj->updateFeatureSettings(collect($data));
+
+        Event::assertDispatched(FeatureChangedEvent::class);
     }
 
     public function test_update_logo(): void

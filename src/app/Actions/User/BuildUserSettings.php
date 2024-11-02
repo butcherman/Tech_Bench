@@ -85,6 +85,7 @@ class BuildUserSettings
      */
     protected function isFeatureEnabled(string $featureName): bool
     {
-        return $this->user->features()->active($featureName);
+        // TODO - Add this back
+        return false; //  $this->user->features()->active($featureName);
     }
 }
