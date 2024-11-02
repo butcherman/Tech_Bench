@@ -16,7 +16,7 @@ trait AppSettingsTrait
      * Save an individual setting into the database so that it can be modified
      * from the hard coded setting
      */
-    protected function saveSettings(string $key, ?string $value): void
+    protected function saveSettings(string $key, mixed $value): void
     {
         // Verify that we are not trying to save over a fake password
         if ($value !== __('admin.fake-password') && $value !== null) {
