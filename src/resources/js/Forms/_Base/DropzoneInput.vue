@@ -61,6 +61,7 @@ let myDrop: Dropzone;
 let fileFormData: { [key: string]: any };
 
 const fileData: fileData = usePage<pageProps>().props.app.fileData;
+const token: string = usePage<pageProps>().props.csrf_token;
 const isDirty = ref<boolean>(false);
 const overMaxFiles = ref<boolean>(false);
 const errMessage = ref<string | null>(null);
@@ -87,7 +88,7 @@ const initDropzone = () => {
         chunking: true,
         chunkSize: fileData.chunkSize,
         headers: {
-            "X-CSRF-TOKEN": fileData.token,
+            "X-CSRF-TOKEN": token,
             "X-Socket-Id": Echo.socketId(),
         },
         maxFiles: props.maxFiles || 5,

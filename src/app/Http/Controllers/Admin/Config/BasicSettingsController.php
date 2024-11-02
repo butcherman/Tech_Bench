@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Config;
 
+use App\Facades\TimezoneList;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Config\BasicSettingsRequest;
 use App\Models\AppSettings;
@@ -24,7 +25,7 @@ class BasicSettingsController extends Controller
 
         return Inertia::render('Admin/Config/Settings', [
             'settings' => $this->svc->getBasicSettings(),
-            'timezone-list' => [], // TODO - Build Timezone List TimezoneList::Build(),
+            'timezone-list' => TimezoneList::build(),
         ]);
     }
 

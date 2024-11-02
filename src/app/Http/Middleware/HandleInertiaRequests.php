@@ -66,7 +66,7 @@ class HandleInertiaRequests extends Middleware
             'current_user' => fn () => $request->user()->makeVisible('user_id'),
 
             //  Dynamically built navigation menu
-            'navbar' => fn () => $this->navbar->handle($request->user()), // (new BuildNavbar)->getNavbar($request->user()),
+            'navbar' => fn () => $this->navbar->handle($request->user()),
         ];
     }
 

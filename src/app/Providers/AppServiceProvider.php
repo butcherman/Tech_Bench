@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Actions\Misc\BuildTimezoneList;
 use App\Actions\Misc\CheckDatabaseError;
 use App\Policies\GatePolicy;
 use App\Services\Misc\CacheHelper;
@@ -28,6 +29,9 @@ class AppServiceProvider extends ServiceProvider
 
         // DbQueryFacade
         $this->app->bind('DbException', CheckDatabaseError::class);
+
+        // Timezone Facade
+        $this->app->bind('TimezoneList', BuildTimezoneList::class);
 
         //  Gate to determine if the Administration link should show up on the navigation menu
         Gate::define('admin-link', [GatePolicy::class, 'adminLink']);

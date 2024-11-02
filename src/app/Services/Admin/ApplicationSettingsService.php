@@ -4,6 +4,7 @@ namespace App\Services\Admin;
 
 use App\Events\Config\UrlChangedEvent;
 use App\Events\Feature\FeatureChangedEvent;
+use App\Facades\CacheFacade;
 use App\Traits\AppSettingsTrait;
 use Illuminate\Http\File;
 use Illuminate\Support\Collection;
@@ -113,6 +114,8 @@ class ApplicationSettingsService
             ->putFile($path, new File($requestData->get('file')));
 
         $this->saveSettings('app.logo', '/storage/'.$storedFile);
+
+        CacheFacade::clearCache('appData');
 
         return $storedFile;
     }

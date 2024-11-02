@@ -9,6 +9,7 @@ type pageProps = {
     app: appProps;
     flash: flashData[];
     current_user: user | null;
+    csrf_token: string;
     idle_timeout: number;
     navbar: navbar[];
     breadcrumbs: breadcrumbs[];
@@ -58,7 +59,6 @@ type basicPermissions = {
 type fileData = {
     chunkSize: number;
     maxSize: number;
-    token: string;
 };
 
 type fileUpload = {
