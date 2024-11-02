@@ -196,27 +196,27 @@ class BuildAdminMenu
                 [
                     'name' => 'Application Logo',
                     'icon' => 'fa-image',
-                    'route' => '#', // route('admin.logo.show'),
+                    'route' => route('admin.logo.edit'),
                 ],
                 [
                     'name' => 'Application Configuration',
                     'icon' => 'fa-server',
-                    'route' => '#', // route('admin.basic-settings.show'),
+                    'route' => route('admin.basic-settings.edit'),
                 ],
                 [
                     'name' => 'Email Settings',
                     'icon' => 'fas fa-envelope',
-                    'route' => '#', // route('admin.email-settings.show'),
+                    'route' => route('admin.email-settings.edit'),
                 ],
                 [
                     'name' => 'Security Settings',
                     'icon' => 'fa-lock',
-                    'route' => '#', // route('admin.security.index'),
+                    'route' => route('admin.security.index'),
                 ],
                 [
                     'name' => 'Enable/Disable Features',
                     'icon' => 'gears',
-                    'route' => '#', // route('admin.features.show'),
+                    'route' => route('admin.features.edit'),
                 ],
             ];
         }

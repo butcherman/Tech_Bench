@@ -48,19 +48,19 @@ Route::middleware('auth.secure')->prefix('administration')->name('admin.')->grou
     |---------------------------------------------------------------------------
     */
     Route::get('logo', [LogoController::class, 'edit'])
-        ->name('logo.show')
+        ->name('logo.edit')
         ->breadcrumb('Tech Bench Logo', 'admin.index');
     Route::post('logo', [LogoController::class, 'update'])
         ->name('logo.update');
 
     Route::get('basic-settings', [BasicSettingsController::class, 'edit'])
-        ->name('basic-settings.show')
+        ->name('basic-settings.edit')
         ->breadcrumb('Tech Bench Settings', 'admin.index');
     Route::put('basic-settings', [BasicSettingsController::class, 'update'])
         ->name('basic-settings.update');
 
     Route::get('email-settings', [EmailSettingsController::class, 'edit'])
-        ->name('email-settings.show')
+        ->name('email-settings.edit')
         ->breadcrumb('Email Settings', 'admin.index');
     Route::put('email-settings', [EmailSettingsController::class, 'update'])
         ->name('email-settings.update');
@@ -68,7 +68,7 @@ Route::middleware('auth.secure')->prefix('administration')->name('admin.')->grou
         ->name('test-email');
 
     Route::get('features', [FeatureController::class, 'edit'])
-        ->name('features.show')
+        ->name('features.edit')
         ->breadcrumb('App Features', 'admin.index');
     Route::put('features', [FeatureController::class, 'update'])
         ->name('features.update');
@@ -78,5 +78,5 @@ Route::middleware('auth.secure')->prefix('administration')->name('admin.')->grou
             $breadcrumbs->index('SSL Certificate', 'admin.index')
                 ->create('Upload New Certificate')
                 ->edit('Generate CSR', 'admin.security.index');
-        })->except(['show']);
+        })->except(['edit']);
 });
