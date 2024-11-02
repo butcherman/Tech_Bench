@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Auth;
 
 class UserRolePermissionType extends Model
 {
@@ -40,9 +41,10 @@ class UserRolePermissionType extends Model
 
     public function featureEnabled(): Attribute
     {
-        // TODO - Enable This Check...
         return Attribute::make(
-            get: fn () => true,
+            get: fn () => $this->feature_name && Auth::check()
+                ? Auth::user()->features()->active($this->feature_name)
+                : true,
         );
     }
 

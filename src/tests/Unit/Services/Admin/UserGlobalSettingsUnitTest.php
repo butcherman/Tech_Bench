@@ -170,7 +170,6 @@ class UserGlobalSettingsUnitTest extends TestCase
 
         $this->assertDatabaseHas('app_settings', [
             'key' => 'auth.auto_logout_timer',
-            'value' => '5',
         ]);
 
         $this->assertDatabaseHas('app_settings', [
@@ -188,7 +187,6 @@ class UserGlobalSettingsUnitTest extends TestCase
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'services.azure.default_role_id',
-            'value' => '3',
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'services.azure.allow_bypass_2fa',

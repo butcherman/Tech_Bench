@@ -3,10 +3,12 @@
 namespace App\Services\User;
 
 use App\Events\Feature\FeatureChangedEvent;
+use App\Facades\DbException;
 use App\Jobs\User\CreateUserSettingsJob;
 use App\Jobs\User\SendWelcomeEmailJob;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 
@@ -60,8 +62,12 @@ class UserAdministrationService
     public function destroyUser(User $user, bool $force = false): void
     {
         if ($force) {
-            // TODO - add try catch
-            $user->forceDelete();
+            try {
+
+                $user->forceDelete();
+            } catch (QueryException $e) {
+                DbException::check($e, 'This User has contributions tied to them.  Unable to delete.');
+            }
 
             return;
         }
