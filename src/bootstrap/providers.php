@@ -6,4 +6,5 @@ return [
     App\Providers\FortifyServiceProvider::class,
     App\Providers\HorizonServiceProvider::class,
     App\Providers\TelescopeServiceProvider::class,
+    \SocialiteProviders\Manager\ServiceProvider::class,
 ];

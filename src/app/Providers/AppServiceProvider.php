@@ -6,6 +6,7 @@ use App\Actions\Misc\BuildTimezoneList;
 use App\Actions\Misc\CheckDatabaseError;
 use App\Policies\GatePolicy;
 use App\Services\Misc\CacheHelper;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
@@ -38,5 +39,10 @@ class AppServiceProvider extends ServiceProvider
 
         //  Gate to determine if the Reports link should show up on the navigation menu
         Gate::define('reports-link', [GatePolicy::class, 'reportsLink']);
+
+        // Listen to Socialite Events
+        Event::listen(function (\SocialiteProviders\Manager\SocialiteWasCalled $event) {
+            $event->extendSocialite('azure', \SocialiteProviders\Azure\Provider::class);
+        });
     }
 }
