@@ -2,23 +2,30 @@
 
 namespace App\Listeners\Config;
 
+use App\Actions\Admin\UpdateApplicationUrl;
 use App\Events\Config\UrlChangedEvent;
+use Illuminate\Support\Facades\Log;
 
 class HandleUrlChangeListener
 {
     /**
      * Create the event listener.
      */
-    public function __construct()
-    {
-        //
-    }
+    public function __construct(protected UpdateApplicationUrl $svc) {}
 
     /**
      * Handle the event.
      */
     public function handle(UrlChangedEvent $event): void
     {
-        // TODO - Handle the event
+        Log::alert(
+            config('app.name').' URL has changed.  Rebuilding application files',
+            [
+                'old-url' => $event->oldUrl,
+                'new-url' => $event->newUrl,
+            ]
+        );
+
+        $this->svc->handle($event->newUrl);
     }
 }
