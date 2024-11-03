@@ -3,22 +3,17 @@
 namespace App\Listeners\Feature;
 
 use App\Events\Feature\FeatureChangedEvent;
+use Laravel\Pennant\Feature;
 
 class HandleFeatureChangedListener
 {
     /**
-     * Create the event listener.
-     */
-    public function __construct()
-    {
-        //
-    }
-
-    /**
      * Handle the event.
+     *
+     * @codeCoverageIgnore
      */
     public function handle(FeatureChangedEvent $event): void
     {
-        // TODO - Do Something.......
+        Feature::purge();
     }
 }

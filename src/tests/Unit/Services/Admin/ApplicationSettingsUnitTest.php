@@ -11,6 +11,11 @@ use Tests\TestCase;
 
 class ApplicationSettingsUnitTest extends TestCase
 {
+    /*
+    |---------------------------------------------------------------------------
+    | getBasicSettings()
+    |---------------------------------------------------------------------------
+    */
     public function test_get_basic_settings(): void
     {
         $shouldBe = [
@@ -26,6 +31,11 @@ class ApplicationSettingsUnitTest extends TestCase
         $this->assertEquals($shouldBe, $res);
     }
 
+    /*
+    |---------------------------------------------------------------------------
+    | updateBasicSettings()
+    |---------------------------------------------------------------------------
+    */
     public function test_update_basic_settings(): void
     {
         Event::fake(UrlChangedEvent::class);
@@ -90,6 +100,11 @@ class ApplicationSettingsUnitTest extends TestCase
         Event::assertNotDispatched(UrlChangedEvent::class);
     }
 
+    /*
+    |---------------------------------------------------------------------------
+    | getEmailSettings()
+    |---------------------------------------------------------------------------
+    */
     public function test_get_email_settings(): void
     {
         $shouldBe = [
@@ -98,9 +113,7 @@ class ApplicationSettingsUnitTest extends TestCase
             'port' => config('mail.mailers.smtp.port'),
             'encryption' => strtoupper(config('mail.mailers.smtp.encryption')),
             'username' => config('mail.mailers.smtp.username'),
-            'password' => config('mail.mailers.smtp.password')
-                ? __('admin.fake_password')
-                : '',
+            'password' => '',
             'require_auth' => (bool) config('mail.mailers.smtp.require_auth'),
         ];
 
@@ -110,6 +123,33 @@ class ApplicationSettingsUnitTest extends TestCase
         $this->assertEquals($shouldBe, $res);
     }
 
+    public function test_get_email_settings_with_auth_enabled(): void
+    {
+        config(['mail.mailers.smtp.require_auth' => true]);
+        config(['mail.mailers.smtp.username' => 'somedude@noem.com']);
+        config(['mail.mailers.smtp.password' => 'this_is_a_password']);
+
+        $shouldBe = [
+            'from_address' => config('mail.from.address'),
+            'host' => config('mail.mailers.smtp.host'),
+            'port' => config('mail.mailers.smtp.port'),
+            'encryption' => strtoupper(config('mail.mailers.smtp.encryption')),
+            'username' => config('mail.mailers.smtp.username'),
+            'password' => __('admin.fake_password'),
+            'require_auth' => (bool) config('mail.mailers.smtp.require_auth'),
+        ];
+
+        $testObj = new ApplicationSettingsService;
+        $res = $testObj->getEmailSettings();
+
+        $this->assertEquals($shouldBe, $res);
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | updateEmailSettings()
+    |---------------------------------------------------------------------------
+    */
     public function test_update_email_settings(): void
     {
         $data = [
@@ -154,6 +194,11 @@ class ApplicationSettingsUnitTest extends TestCase
         ]);
     }
 
+    /*
+    |---------------------------------------------------------------------------
+    | updateFeatureSettings()
+    |---------------------------------------------------------------------------
+    */
     public function test_update_feature_settings()
     {
         Event::fake(FeatureChangedEvent::class);
@@ -170,6 +215,11 @@ class ApplicationSettingsUnitTest extends TestCase
         Event::assertDispatched(FeatureChangedEvent::class);
     }
 
+    /*
+    |---------------------------------------------------------------------------
+    | updateLogo
+    |---------------------------------------------------------------------------
+    */
     public function test_update_logo(): void
     {
         $data = [
