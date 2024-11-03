@@ -78,5 +78,5 @@ Route::middleware('auth.secure')->prefix('administration')->name('admin.')->grou
             $breadcrumbs->index('SSL Certificate', 'admin.index')
                 ->create('Upload New Certificate')
                 ->edit('Generate CSR', 'admin.security.index');
-        })->except(['edit']);
+        })->except(['show']);
 });
