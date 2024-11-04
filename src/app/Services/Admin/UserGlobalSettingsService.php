@@ -4,6 +4,7 @@ namespace App\Services\Admin;
 
 use App\Jobs\User\UpdatePasswordExpireJob;
 use App\Traits\AppSettingsTrait;
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
 class UserGlobalSettingsService
@@ -69,6 +70,16 @@ class UserGlobalSettingsService
             'secret_expires' => config('services.azure.secret_expires'),
             'redirect' => config('services.azure.redirect') ?? 'https://'.config('app.url').'/auth/callback',
         ];
+    }
+
+    /**
+     * Return the number of days until the Oath Certificate expires
+     */
+    public function getOathCertExpiresDays(): int
+    {
+        $certExpires = Carbon::parse(config('services.azure.secret_expires'));
+
+        return floor(Carbon::now()->diffInDays($certExpires));
     }
 
     /**

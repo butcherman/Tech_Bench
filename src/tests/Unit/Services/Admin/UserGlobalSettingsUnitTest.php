@@ -4,11 +4,17 @@ namespace Tests\Unit\Services\Admin;
 
 use App\Jobs\User\UpdatePasswordExpireJob;
 use App\Services\Admin\UserGlobalSettingsService;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Bus;
 use Tests\TestCase;
 
 class UserGlobalSettingsUnitTest extends TestCase
 {
+    /*
+    |---------------------------------------------------------------------------
+    | getPasswordPolicy()
+    |---------------------------------------------------------------------------
+    */
     public function test_get_password_policy(): void
     {
         $shouldBe = [
@@ -27,6 +33,11 @@ class UserGlobalSettingsUnitTest extends TestCase
         $this->assertEquals($shouldBe, $data);
     }
 
+    /*
+    |---------------------------------------------------------------------------
+    | savePasswordPolicy()
+    |---------------------------------------------------------------------------
+    */
     public function test_save_password_policy(): void
     {
         Bus::fake();
@@ -111,6 +122,11 @@ class UserGlobalSettingsUnitTest extends TestCase
         Bus::assertNotDispatched(UpdatePasswordExpireJob::class);
     }
 
+    /*
+    |---------------------------------------------------------------------------
+    | getTwoFaConfig()
+    |---------------------------------------------------------------------------
+    */
     public function test_get_two_fa_config(): void
     {
         $shouldBe = [
@@ -124,6 +140,11 @@ class UserGlobalSettingsUnitTest extends TestCase
         $this->assertEquals($shouldBe, $res);
     }
 
+    /*
+    |---------------------------------------------------------------------------
+    | getOathConfig()
+    |---------------------------------------------------------------------------
+    */
     public function test_get_oath_config(): void
     {
         $shouldBe = [
@@ -144,6 +165,26 @@ class UserGlobalSettingsUnitTest extends TestCase
         $this->assertEquals($shouldBe, $res);
     }
 
+    /*
+    |---------------------------------------------------------------------------
+    | getOathCertExpiresDays()
+    |---------------------------------------------------------------------------
+    */
+    public function test_get_oath_cert_expires_days(): void
+    {
+        config(['services.azure.secret_expires' => Carbon::now()->addDays(30)]);
+
+        $testObj = new UserGlobalSettingsService;
+        $res = $testObj->getOathCertExpiresDays();
+
+        $this->assertEquals(29, $res);
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | updateUserSettingsConfig()
+    |---------------------------------------------------------------------------
+    */
     public function test_update_user_settings_config(): void
     {
         $data = [

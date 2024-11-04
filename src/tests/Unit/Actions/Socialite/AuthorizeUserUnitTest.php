@@ -28,6 +28,7 @@ class AuthorizeUserUnitTest extends TestCase
     public function test_with_existing_user(): void
     {
         config(['services.azure.allow_login' => true]);
+        config(['services.azure.allow_bypass_2fa' => true]);
 
         Event::fake();
 
