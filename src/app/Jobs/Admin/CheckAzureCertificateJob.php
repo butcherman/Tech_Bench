@@ -12,7 +12,8 @@ class CheckAzureCertificateJob implements ShouldQueue
     use Queueable;
 
     /**
-     * Execute the job.
+     * Check to see if the Azure Secret is set to expire soon and email installer
+     * level users if it is.
      */
     public function handle(CheckSocialiteSecret $svc): void
     {

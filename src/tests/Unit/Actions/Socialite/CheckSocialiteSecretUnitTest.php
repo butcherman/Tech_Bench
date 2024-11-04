@@ -20,7 +20,7 @@ class CheckSocialiteSecretUnitTest extends TestCase
         $testObj = new CheckSocialiteSecret;
         $testObj();
 
-        Mail::assertSent(AzureCertificateExpiresSoonMail::class);
+        Mail::assertQueued(AzureCertificateExpiresSoonMail::class);
     }
 
     public function test_handle_fifty_days_out(): void
@@ -32,7 +32,7 @@ class CheckSocialiteSecretUnitTest extends TestCase
         $testObj = new CheckSocialiteSecret;
         $testObj();
 
-        Mail::assertNotSent(AzureCertificateExpiresSoonMail::class);
+        Mail::assertNotQueued(AzureCertificateExpiresSoonMail::class);
     }
 
     public function test_handle_expired(): void
@@ -44,6 +44,6 @@ class CheckSocialiteSecretUnitTest extends TestCase
         $testObj = new CheckSocialiteSecret;
         $testObj();
 
-        Mail::assertSent(AzureCertificateExpiredMail::class);
+        Mail::assertQueued(AzureCertificateExpiredMail::class);
     }
 }

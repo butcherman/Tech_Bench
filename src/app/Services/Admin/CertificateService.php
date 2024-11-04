@@ -95,7 +95,7 @@ class CertificateService
     /**
      * Build the meta data for the Certificate File
      */
-    public function getCertMetaData(?string $cert = null): array
+    protected function buildCertMetaData(?string $cert = null)
     {
         if (is_null($cert)) {
             $cert = $this->getCurrentCert();
@@ -111,6 +111,20 @@ class CertificateService
             );
             Log::debug($e->getMessage());
 
+            return false;
+        }
+
+        return $certData;
+    }
+
+    /**
+     * Return the meta data for the cert formatted for the HTML Page
+     */
+    public function getCertMetaData(?string $cert = null): array
+    {
+        $certData = $this->buildCertMetaData($cert);
+
+        if (! $certData) {
             return ['Error' => 'Invalid Certificate File'];
         }
 

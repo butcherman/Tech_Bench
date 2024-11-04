@@ -1,5 +1,7 @@
 <?php
 
+use App\Jobs\Admin\CheckAzureCertificateJob;
+use App\Jobs\Admin\CheckSslCertificateJob;
 use Illuminate\Support\Facades\Schedule;
 
 Schedule::command('telescope:prune')->daily();
@@ -8,8 +10,8 @@ Schedule::command('auth:clear-resets')->everyFifteenMinutes();
 Schedule::command('model:prune')->daily();
 
 // TODO - Create Jobs
-// Schedule::job(new CheckCertificateJob)->daily();
-// Schedule::job(new CheckAzureCertificateJob)->daily();
+Schedule::job(new CheckSslCertificateJob)->daily();
+Schedule::job(new CheckAzureCertificateJob)->daily();
 // Schedule::job(new NightlyBackupJob)->dailyAt('03:00');
 // Schedule::job(new DailyCleanupJob)->dailyAt('06:00');
 // Schedule::job(new ImageFileCleanupJob)->monthly();

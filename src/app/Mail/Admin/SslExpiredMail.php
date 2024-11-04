@@ -12,7 +12,7 @@ use Illuminate\Queue\SerializesModels;
 /**
  * @codeCoverageIgnore
  */
-class AzureCertificateExpiredMail extends Mailable implements ShouldQueue
+class SslExpiredMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
@@ -22,7 +22,7 @@ class AzureCertificateExpiredMail extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Azure Certificate Expired',
+            subject: 'SSL Certificate Expired',
         );
     }
 
@@ -32,7 +32,7 @@ class AzureCertificateExpiredMail extends Mailable implements ShouldQueue
     public function content(): Content
     {
         return new Content(
-            markdown: 'mail.admin.azureCertificateExpired',
+            markdown: 'mail.admin.sslExpired',
         );
     }
 }
