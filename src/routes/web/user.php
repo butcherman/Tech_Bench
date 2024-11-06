@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\User\DisabledUserController;
 use App\Http\Controllers\Admin\User\ReSendWelcomeEmailController;
 use App\Http\Controllers\Admin\User\UserAdministrationController;
 use App\Http\Controllers\Admin\User\UserRolesController;
+use App\Http\Controllers\User\InitializeUserController;
 use App\Http\Controllers\User\RemoveDeviceTokenController;
 use App\Http\Controllers\User\UpdateUserAccountController;
 use App\Http\Controllers\User\UpdateUserSettingsController;
@@ -91,15 +92,18 @@ Route::middleware('auth.secure')->group(function () {
     });
 });
 
+/*
+|---------------------------------------------------------------------------
+| Finish Setting Up User Account Routes
+|---------------------------------------------------------------------------
+*/
+
 Route::middleware('guest')->group(function () {
-    Route::get('initialize-account/{token}', function () {
-        return 'user initialize route';
-    })->name('initialize');
-    // Route::get('initialize-account/{token}', [InitializeUserController::class, 'show'])
-    //     ->name('initialize')
-    //     ->missing(function () {
-    //         abort(404, 'Cannot Find the Requested Page');
-    //     });
-    // Route::put('initialize-account/{token}', [InitializeUserController::class, 'update'])
-    //     ->name('initialize.update');
+    Route::get('initialize-account/{token}', [InitializeUserController::class, 'show'])
+        ->name('initialize')
+        ->missing(function () {
+            abort(404, 'Cannot Find the Requested Page');
+        });
+    Route::put('initialize-account/{token}', [InitializeUserController::class, 'update'])
+        ->name('initialize.update');
 });
