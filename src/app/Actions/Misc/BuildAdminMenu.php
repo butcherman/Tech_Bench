@@ -133,7 +133,7 @@ class BuildAdminMenu
                 [
                     'name' => 'Equipment Categories and Types',
                     'icon' => 'fas fa-cogs',
-                    'route' => '#', // route('equipment.index'),
+                    'route' => route('equipment.index'),
                 ],
                 [
                     'name' => 'Customer Equipment Data',

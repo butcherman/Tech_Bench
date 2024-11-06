@@ -2,6 +2,9 @@
 
 namespace App\Services\Misc;
 
+use App\Models\DataFieldType;
+use App\Models\EquipmentCategory;
+use App\Models\EquipmentType;
 use App\Models\UserRole;
 use App\Models\UserSettingType;
 use Illuminate\Support\Facades\Cache;
@@ -109,6 +112,42 @@ class CacheHelper
     {
         return Cache::rememberForever('userSettingsType', function () {
             return UserSettingType::all();
+        });
+    }
+
+    /**
+     * Get a list of all Equipment Categories with their Equipment Types.
+     *
+     * @return \Illuminate\Cache\TCacheValue
+     */
+    public function equipmentCategories()
+    {
+        return Cache::rememberForever('equipmentCategories', function () {
+            return EquipmentCategory::with('EquipmentType')->get();
+        });
+    }
+
+    /**
+     * Get a list of all Equipment Types.
+     *
+     * @return \Illuminate\Cache\TCacheValue
+     */
+    public function equipmentTypes()
+    {
+        return Cache::rememberForever('equipmentTypes', function () {
+            return EquipmentType::all();
+        });
+    }
+
+    /**
+     * Get a list of all Data Field Types for Equipment
+     *
+     * @return \Illuminate\Cache\TCacheValue
+     */
+    public function dataFieldTypes()
+    {
+        return Cache::rememberForever('dataFieldTypes', function () {
+            return DataFieldType::all();
         });
     }
 }
