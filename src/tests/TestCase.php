@@ -26,7 +26,10 @@ abstract class TestCase extends BaseTestCase
         string $permName,
         bool $value = false
     ): void {
-        $permId = UserRolePermissionType::where('description', $permName)->first()->perm_type_id;
+        $permId = UserRolePermissionType::where('description', $permName)
+            ->first()
+            ->perm_type_id;
+
         UserRolePermission::where('role_id', $roleId)
             ->where('perm_type_id', $permId)
             ->update([

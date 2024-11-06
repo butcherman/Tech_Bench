@@ -17,7 +17,7 @@ class InitializeUserTest extends TestCase
     /**
      * Show Method
      */
-    public function test_show_while_logged_in()
+    public function test_show_while_logged_in(): void
     {
         /** @var User $actingAs */
         $actingAs = User::factory()->createQuietly();
@@ -34,7 +34,7 @@ class InitializeUserTest extends TestCase
             ->assertRedirect(route('dashboard'));
     }
 
-    public function test_show_invalid_token()
+    public function test_show_invalid_token(): void
     {
         $user = User::factory()->createQuietly();
         $token = Str::uuid();
@@ -48,7 +48,7 @@ class InitializeUserTest extends TestCase
         $response->assertStatus(404);
     }
 
-    public function test_show()
+    public function test_show(): void
     {
         $user = User::factory()->createQuietly();
         UserInitialize::create([
@@ -70,7 +70,7 @@ class InitializeUserTest extends TestCase
     /**
      * Update Method
      */
-    public function test_set_while_logged_in()
+    public function test_set_while_logged_in(): void
     {
         /** @var User $actingAs */
         $actingAs = User::factory()->createQuietly();
@@ -92,7 +92,7 @@ class InitializeUserTest extends TestCase
             ->assertRedirect(route('dashboard'));
     }
 
-    public function test_set_invalid_token()
+    public function test_set_invalid_token(): void
     {
         $user = User::factory()->createQuietly();
         UserInitialize::create([
@@ -110,7 +110,7 @@ class InitializeUserTest extends TestCase
         $response->assertStatus(404);
     }
 
-    public function test_set()
+    public function test_set(): void
     {
         Event::fake();
 
