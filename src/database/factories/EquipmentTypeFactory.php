@@ -18,6 +18,7 @@ class EquipmentTypeFactory extends Factory
         return [
             'cat_id' => EquipmentCategory::factory(),
             'name' => $this->faker->unique()->word(),
+            'allow_public_tip' => true,
         ];
     }
 }

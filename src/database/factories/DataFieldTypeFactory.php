@@ -21,6 +21,8 @@ class DataFieldTypeFactory extends Factory
             'masked' => false,
             'is_hyperlink' => false,
             'allow_copy' => false,
+            'do_not_log_value' => false,
+            'masked' => false,
         ];
     }
 }

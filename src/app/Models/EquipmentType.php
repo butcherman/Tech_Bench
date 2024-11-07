@@ -47,6 +47,15 @@ class EquipmentType extends Model
             'equip_id',
             'type_id'
         )->orderBy('order');
+
+        // return $this->hasManyThrough(
+        //     DataFieldType::class,
+        //     DataField::class,
+        //     'equip_id',
+        //     'type_id',
+        //     'equip_id',
+        //     'type_id'
+        // )->orderBy('order');
     }
 
     public function Customer(): HasManyThrough

@@ -23,6 +23,7 @@ class DataFieldType extends Model
     protected $casts = [
         'is_hyperlink' => 'boolean',
         'masked' => 'boolean',
+        'allow_copy' => 'boolean',
     ];
 
     /*
