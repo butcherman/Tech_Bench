@@ -167,7 +167,7 @@ class BuildAdminMenuUnitTest extends TestCase
                 [
                     'name' => 'Customer Equipment Data',
                     'icon' => 'fas fa-database',
-                    'route' => '#', // route('equipment-data.index'),
+                    'route' => route('equipment-data.index'),
                 ],
             ],
             'Tech Tips' => [
