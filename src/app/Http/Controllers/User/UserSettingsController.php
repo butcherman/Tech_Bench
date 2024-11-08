@@ -18,9 +18,9 @@ class UserSettingsController extends Controller
         $this->authorize('view', $request->user());
 
         return Inertia::render('User/Settings', [
-            'allowSaveDevice' => config('auth.twoFa.allow_save_device'),
-            'devices' => $request->user()->DeviceTokens,
-            'settings' => $svc($request->user()),
+            'allowSaveDevice' => fn () => config('auth.twoFa.allow_save_device'),
+            'devices' => fn () => $request->user()->DeviceTokens,
+            'settings' => fn () => $svc($request->user()),
         ]);
     }
 }

@@ -26,7 +26,7 @@ class UserAdministrationController extends Controller
         $this->authorize('manage', User::class);
 
         return Inertia::render('Admin/User/Index', [
-            'user-list' => $this->svc->getAllUsers(),
+            'user-list' => fn () => $this->svc->getAllUsers(),
         ]);
     }
 
@@ -38,7 +38,7 @@ class UserAdministrationController extends Controller
         $this->authorize('create', User::class);
 
         return Inertia::render('Admin/User/Create', [
-            'roles' => $this->getAvailableRoles($request->user()),
+            'roles' => fn () => $this->getAvailableRoles($request->user()),
         ]);
     }
 
@@ -64,10 +64,10 @@ class UserAdministrationController extends Controller
         $this->authorize('manage', $user);
 
         return Inertia::render('Admin/User/Show', [
-            'user' => $user->getAdminLoad(),
-            'role' => $user->UserRole,
-            'last-login' => $user->getLastLogin(),
-            'thirty-day-count' => $user->getLoginHistory(30)->count(),
+            'user' => fn () => $user->getAdminLoad(),
+            'role' => fn () => $user->UserRole,
+            'last-login' => fn () => $user->getLastLogin(),
+            'thirty-day-count' => fn () => $user->getLoginHistory(30)->count(),
         ]);
     }
 
@@ -79,8 +79,8 @@ class UserAdministrationController extends Controller
         $this->authorize('update', $user);
 
         return Inertia::render('Admin/User/Edit', [
-            'roles' => $this->getAvailableRoles($request->user()),
-            'user' => $user->getAdminLoad(),
+            'roles' => fn () => $this->getAvailableRoles($request->user()),
+            'user' => fn () => $user->getAdminLoad(),
         ]);
     }
 

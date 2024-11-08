@@ -28,6 +28,7 @@ Route::middleware('auth.secure')->prefix('administration')->name('admin.')->grou
     | User Settings Administration
     |---------------------------------------------------------------------------
     */
+
     Route::prefix('users')->name('user.')->group(function () {
         Route::get('password-policy', [PasswordPolicyController::class, 'edit'])
             ->name('password-policy.edit')
@@ -47,6 +48,7 @@ Route::middleware('auth.secure')->prefix('administration')->name('admin.')->grou
     | Application Configuration
     |---------------------------------------------------------------------------
     */
+
     Route::get('logo', [LogoController::class, 'edit'])
         ->name('logo.edit')
         ->breadcrumb('Tech Bench Logo', 'admin.index');
@@ -67,11 +69,23 @@ Route::middleware('auth.secure')->prefix('administration')->name('admin.')->grou
     Route::get('test-email', SendTestEmailController::class)
         ->name('test-email');
 
+    /*
+    |---------------------------------------------------------------------------
+    | Feature Configuration
+    |---------------------------------------------------------------------------
+    */
+
     Route::get('features', [FeatureController::class, 'edit'])
         ->name('features.edit')
         ->breadcrumb('App Features', 'admin.index');
     Route::put('features', [FeatureController::class, 'update'])
         ->name('features.update');
+
+    /*
+    |---------------------------------------------------------------------------
+    | SSL Certificate Administration
+    |---------------------------------------------------------------------------
+    */
 
     Route::resource('security', SecurityController::class)
         ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {

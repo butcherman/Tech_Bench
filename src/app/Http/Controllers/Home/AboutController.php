@@ -15,8 +15,8 @@ class AboutController extends Controller
     public function __invoke(): Response
     {
         return Inertia::render('Home/About', [
-            'build' => CacheFacade::appData()['build'],
-            'build_date' => CacheFacade::appData()['build_date'],
+            'build' => fn () => CacheFacade::appData()['build'],
+            'build_date' => fn () => CacheFacade::appData()['build_date'],
         ]);
     }
 }

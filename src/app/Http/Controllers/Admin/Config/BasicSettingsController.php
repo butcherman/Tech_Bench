@@ -24,8 +24,8 @@ class BasicSettingsController extends Controller
         $this->authorize('viewAny', AppSettings::class);
 
         return Inertia::render('Admin/Config/Settings', [
-            'settings' => $this->svc->getBasicSettings(),
-            'timezone-list' => TimezoneList::build(),
+            'settings' => fn () => $this->svc->getBasicSettings(),
+            'timezone-list' => fn () => TimezoneList::build(),
         ]);
     }
 

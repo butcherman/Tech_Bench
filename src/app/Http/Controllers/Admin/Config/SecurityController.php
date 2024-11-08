@@ -25,8 +25,8 @@ class SecurityController extends Controller
         $this->authorize('viewAny', AppSettings::class);
 
         return Inertia::render('Admin/Security/Index', [
-            'cert' => $this->svc->getCurrentCert(),
-            'data' => $this->svc->getCertMetaData(),
+            'cert' => fn () => $this->svc->getCurrentCert(),
+            'data' => fn () => $this->svc->getCertMetaData(),
         ]);
     }
 

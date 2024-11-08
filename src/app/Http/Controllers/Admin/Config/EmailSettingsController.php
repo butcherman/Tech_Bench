@@ -23,7 +23,7 @@ class EmailSettingsController extends Controller
         $this->authorize('viewAny', AppSettings::class);
 
         return Inertia::render('Admin/Config/Email', [
-            'settings' => $this->svc->getEmailSettings(),
+            'settings' => fn () => $this->svc->getEmailSettings(),
         ]);
     }
 

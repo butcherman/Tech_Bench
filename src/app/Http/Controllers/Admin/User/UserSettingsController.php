@@ -28,10 +28,10 @@ class UserSettingsController extends Controller
         $this->authorize('viewAny', AppSettings::class);
 
         return Inertia::render('Admin/User/UserSettings', [
-            'auto-logout-timer' => intval(config('auth.auto_logout_timer')),
-            'two-fa' => $this->svc->getTwoFaConfig(),
-            'oath' => $this->svc->getOathConfig(),
-            'role-list' => $this->getAvailableRoles($request->user()),
+            'auto-logout-timer' => fn () => intval(config('auth.auto_logout_timer')),
+            'two-fa' => fn () => $this->svc->getTwoFaConfig(),
+            'oath' => fn () => $this->svc->getOathConfig(),
+            'role-list' => fn () => $this->getAvailableRoles($request->user()),
         ]);
     }
 

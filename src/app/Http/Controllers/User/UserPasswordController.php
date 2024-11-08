@@ -15,7 +15,7 @@ class UserPasswordController extends Controller
     public function __invoke(): Response
     {
         return Inertia::render('User/Password', [
-            'rules' => CacheFacade::passwordRules(),
+            'rules' => fn () => CacheFacade::passwordRules(),
         ]);
     }
 }

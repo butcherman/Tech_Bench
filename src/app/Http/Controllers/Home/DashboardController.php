@@ -15,11 +15,11 @@ class DashboardController extends Controller
     public function __invoke(Request $request): Response
     {
         return Inertia::render('Home/Dashboard', [
-            'bookmarks' => [
+            'bookmarks' => fn () => [
                 'techTips' => [], // $request->user()->TechTipBookmarks,
                 'customers' => [], // $request->user()->CustomerBookmarks,
             ],
-            'recent' => [
+            'recent' => fn () => [
                 'techTips' => [], // $request->user()->TechTipRecent,
                 'customers' => [], // $request->user()->CustomerRecent,
             ],

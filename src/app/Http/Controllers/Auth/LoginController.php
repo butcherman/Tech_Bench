@@ -14,10 +14,10 @@ class LoginController extends Controller
     public function __invoke(): Response
     {
         return Inertia::render('Auth/Login', [
-            'welcome-message' => config('app.welcome_message'),
-            'home-links' => config('app.home_links'),
-            'public-link' => false,
-            'allow-oath' => config('services.azure.allow_login'),
+            'welcome-message' => fn () => config('app.welcome_message'),
+            'home-links' => fn () => config('app.home_links'),
+            'public-link' => fn () => false,
+            'allow-oath' => fn () => config('services.azure.allow_login'),
         ]);
     }
 }

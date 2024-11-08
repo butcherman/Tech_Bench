@@ -24,7 +24,7 @@ class EquipmentDataTypeController extends Controller
         $this->authorize('viewAny', EquipmentType::class);
 
         return Inertia::render('Equipment/DataType/Index', [
-            'data-types' => CacheFacade::dataFieldTypes(),
+            'data-types' => fn () => CacheFacade::dataFieldTypes(),
         ]);
     }
 
@@ -57,7 +57,7 @@ class EquipmentDataTypeController extends Controller
         $this->authorize('viewAny', EquipmentType::class);
 
         return Inertia::render('Equipment/DataType/Edit', [
-            'data-field-type' => $equipment_datum,
+            'data-field-type' => fn () => $equipment_datum,
         ]);
     }
 

@@ -50,6 +50,13 @@ Route::middleware('auth.secure')->group(function () {
     */
 
     Route::prefix('administration')->name('admin.')->group(function () {
+
+        /*
+        |-----------------------------------------------------------------------
+        | User Account Administration
+        |-----------------------------------------------------------------------
+        */
+
         Route::prefix('users')->name('user.')->group(function () {
             Route::get('{user}/restore', [UserAdministrationController::class, 'restore'])
                 ->name('restore')
@@ -78,6 +85,12 @@ Route::middleware('auth.secure')->group(function () {
                     ->edit('Edit User Details');
             })->withTrashed();
 
+        /*
+        |-----------------------------------------------------------------------
+        | User Roles Administration
+        |-----------------------------------------------------------------------
+        */
+
         Route::post('user-roles/create', [UserRolesController::class, 'create'])
             ->name('user-roles.copy')
             ->breadcrumb('Build New Role', 'admin.user-roles.index');
@@ -93,9 +106,9 @@ Route::middleware('auth.secure')->group(function () {
 });
 
 /*
-|---------------------------------------------------------------------------
+|-------------------------------------------------------------------------------
 | Finish Setting Up User Account Routes
-|---------------------------------------------------------------------------
+|-------------------------------------------------------------------------------
 */
 
 Route::middleware('guest')->group(function () {
