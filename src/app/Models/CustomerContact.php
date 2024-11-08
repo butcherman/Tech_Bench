@@ -18,10 +18,17 @@ class CustomerContact extends Model
     /** @var array<int, string> */
     protected $hidden = ['created_at', 'updated_at', 'deleted_at'];
 
-    /** @var array<string, string> */
-    protected $casts = [
-        'deleted_at' => 'datetime:M d, Y',
-        'local' => 'boolean',
-        'decision_maker' => 'boolean',
-    ];
+    /*
+    |---------------------------------------------------------------------------
+    | Model Casting
+    |---------------------------------------------------------------------------
+    */
+    protected function casts(): array
+    {
+        return [
+            'deleted_at' => 'datetime:M d, Y',
+            'local' => 'boolean',
+            'decision_maker' => 'boolean',
+        ];
+    }
 }

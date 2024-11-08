@@ -22,12 +22,19 @@ class DataFieldType extends Model
     /** @var array<int, string> */
     protected $hidden = ['updated_at', 'created_at', 'laravel_through_key'];
 
-    /** @var array<int, string> */
-    protected $casts = [
-        'is_hyperlink' => 'boolean',
-        'masked' => 'boolean',
-        'allow_copy' => 'boolean',
-    ];
+    /*
+    |---------------------------------------------------------------------------
+    | Model Casting
+    |---------------------------------------------------------------------------
+    */
+    protected function casts(): array
+    {
+        return [
+            'is_hyperlink' => 'boolean',
+            'masked' => 'boolean',
+            'allow_copy' => 'boolean',
+        ];
+    }
 
     /*
     |---------------------------------------------------------------------------

@@ -23,8 +23,15 @@ class CustomerEquipment extends Model
         'EquipmentType',
     ];
 
-    /** @var array<string, string> */
-    protected $casts = [
-        'deleted_at' => 'datetime:M d, Y',
-    ];
+    /*
+    |---------------------------------------------------------------------------
+    | Model Casting
+    |---------------------------------------------------------------------------
+    */
+    protected function casts(): array
+    {
+        return [
+            'deleted_at' => 'datetime:M d, Y',
+        ];
+    }
 }

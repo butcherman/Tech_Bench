@@ -26,10 +26,17 @@ class UserRole extends Model
         'UserRolePermission',
     ];
 
-    /** @var array<string, string> */
-    protected $casts = [
-        'allow_edit' => 'boolean',
-    ];
+    /*
+    |---------------------------------------------------------------------------
+    | Model Casting
+    |---------------------------------------------------------------------------
+    */
+    protected function casts(): array
+    {
+        return [
+            'allow_edit' => 'boolean',
+        ];
+    }
 
     /*
     |---------------------------------------------------------------------------

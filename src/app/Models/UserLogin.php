@@ -18,9 +18,16 @@ class UserLogin extends Model
     /** @var array<int, string> */
     protected $hidden = ['id', 'updated_at'];
 
-    /** @var array<string, string> */
-    protected $casts = [
-        'created_at' => 'date',
-        'updated_at' => 'date',
-    ];
+    /*
+    |---------------------------------------------------------------------------
+    | Model Casting
+    |---------------------------------------------------------------------------
+    */
+    protected function casts(): array
+    {
+        return [
+            'created_at' => 'date',
+            'updated_at' => 'date',
+        ];
+    }
 }

@@ -15,11 +15,18 @@ class CustomerNote extends Model
     /** @var array<int, string> */
     protected $guarded = ['note_id', 'updated_at', 'created_at'];
 
-    /** @var array<string, string> */
-    protected $casts = [
-        'created_at' => 'datetime:M d, Y',
-        'updated_at' => 'datetime:M d, Y',
-        'deleted_at' => 'datetime:M d, Y',
-        'urgent' => 'boolean',
-    ];
+    /*
+    |---------------------------------------------------------------------------
+    | Model Casting
+    |---------------------------------------------------------------------------
+    */
+    protected function casts(): array
+    {
+        return [
+            'created_at' => 'datetime:M d, Y',
+            'updated_at' => 'datetime:M d, Y',
+            'deleted_at' => 'datetime:M d, Y',
+            'urgent' => 'boolean',
+        ];
+    }
 }

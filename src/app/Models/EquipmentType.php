@@ -24,10 +24,17 @@ class EquipmentType extends Model
     /** @var array<int, string> */
     protected $hidden = ['created_at', 'updated_at', 'pivot'];
 
-    /** @var array<string, string> */
-    protected $casts = [
-        'allow_public_tip' => 'boolean',
-    ];
+    /*
+    |---------------------------------------------------------------------------
+    | Model Casting
+    |---------------------------------------------------------------------------
+    */
+    protected function casts(): array
+    {
+        return [
+            'allow_public_tip' => 'boolean',
+        ];
+    }
 
     /*
     |---------------------------------------------------------------------------

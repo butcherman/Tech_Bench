@@ -41,6 +41,11 @@ class User extends Authenticatable
         'UserRole',
     ];
 
+    /*
+    |---------------------------------------------------------------------------
+    | Model Casting
+    |---------------------------------------------------------------------------
+    */
     protected function casts(): array
     {
         return [

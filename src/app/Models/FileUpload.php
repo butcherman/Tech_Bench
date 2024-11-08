@@ -15,9 +15,16 @@ class FileUpload extends Model
     /** @var array<int, string> */
     protected $hidden = ['disk', 'created_at', 'folder', 'updated_at', 'public'];
 
-    /** @var array<string, string> */
-    protected $casts = [
-        'created_at' => 'datetime:M d, Y',
-        'updated_at' => 'datetime:M d, Y',
-    ];
+    /*
+    |---------------------------------------------------------------------------
+    | Model Casting
+    |---------------------------------------------------------------------------
+    */
+    protected function casts(): array
+    {
+        return [
+            'created_at' => 'datetime:M d, Y',
+            'updated_at' => 'datetime:M d, Y',
+        ];
+    }
 }

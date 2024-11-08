@@ -15,12 +15,19 @@ class TechTip extends Model
     /** @var array<int, string> */
     protected $hidden = ['deleted_at', 'tip_type_id', 'Bookmarks'];
 
-    /** @var array<string, string> */
-    protected $casts = [
-        'created_at' => 'datetime:M d, Y',
-        'updated_at' => 'datetime:M d, Y',
-        'deleted_at' => 'datetime:M d, Y',
-        'sticky' => 'boolean',
-        'public' => 'boolean',
-    ];
+    /*
+    |---------------------------------------------------------------------------
+    | Model Casting
+    |---------------------------------------------------------------------------
+    */
+    protected function casts(): array
+    {
+        return [
+            'created_at' => 'datetime:M d, Y',
+            'updated_at' => 'datetime:M d, Y',
+            'deleted_at' => 'datetime:M d, Y',
+            'sticky' => 'boolean',
+            'public' => 'boolean',
+        ];
+    }
 }

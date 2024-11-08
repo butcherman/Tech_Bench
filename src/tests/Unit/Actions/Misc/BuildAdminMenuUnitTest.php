@@ -135,7 +135,7 @@ class BuildAdminMenuUnitTest extends TestCase
                 [
                     'name' => 'Customer Settings',
                     'icon' => 'cog',
-                    'route' => '#', // route('customers.settings.edit'),
+                    'route' => route('customers.settings.edit'),
                 ],
                 [
                     'name' => 'Disabled Customers',
