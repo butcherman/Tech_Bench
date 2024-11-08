@@ -38,5 +38,7 @@
         <env name="BROADCAST_DRIVER" value="null" />
         <env name="SCOUT_DRIVER" value="database" />
         <env name="REQUIRE_2FA" value="false" />
+        <env name="DB_DATABASE" value="tech-bench-test" />
+        <env name="BASE_URL" value="localhost" />
     </php>
 </phpunit>
