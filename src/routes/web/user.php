@@ -15,6 +15,12 @@ use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Http\Controllers\PasswordResetLinkController;
 
+/*
+|---------------------------------------------------------------------------
+| User Based Routes
+|---------------------------------------------------------------------------
+*/
+
 Route::middleware('auth.secure')->group(function () {
 
     /*

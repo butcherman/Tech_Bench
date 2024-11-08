@@ -8,6 +8,12 @@ use App\Models\EquipmentType;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 use Illuminate\Support\Facades\Route;
 
+/*
+|-------------------------------------------------------------------------------
+| Equipment Based Routes
+|-------------------------------------------------------------------------------
+*/
+
 Route::middleware('auth.secure')->group(function () {
     Route::get('equipment-list', EquipmentListController::class)
         ->name('equipment-list');

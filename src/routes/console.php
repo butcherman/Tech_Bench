@@ -4,6 +4,12 @@ use App\Jobs\Admin\CheckAzureCertificateJob;
 use App\Jobs\Admin\CheckSslCertificateJob;
 use Illuminate\Support\Facades\Schedule;
 
+/*
+|---------------------------------------------------------------------------
+| Maintenance commands run throughout the day
+|---------------------------------------------------------------------------
+*/
+
 Schedule::command('telescope:prune')->daily();
 Schedule::command('horizon:snapshot')->everyFifteenMinutes();
 Schedule::command('auth:clear-resets')->everyFifteenMinutes();
