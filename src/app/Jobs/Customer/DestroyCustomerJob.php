@@ -1,0 +1,33 @@
+<?php
+
+namespace App\Jobs\Customer;
+
+use App\Models\Customer;
+use App\Services\Customer\CustomerService;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Support\Facades\Log;
+
+class DestroyCustomerJob implements ShouldQueue
+{
+    use Queueable;
+
+    /**
+     * Create a new job instance.
+     */
+    public function __construct(protected Customer $customer) {}
+
+    /**
+     * Execute the job.
+     */
+    public function handle(CustomerService $custSvc): void
+    {
+        Log::info('Destroying Customer - '.$this->customer->name);
+
+        // $fileSvc->destroyAllCustomerFiles($this->customer);
+        $custSvc->destroyAllSites($this->customer);
+        $custSvc->destroyCustomer($this->customer, 'Force Deleting Customer', true);
+
+        Log::info('Customer '.$this->customer->name.' has been destroyed');
+    }
+}

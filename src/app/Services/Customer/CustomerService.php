@@ -3,8 +3,10 @@
 namespace App\Services\Customer;
 
 use App\Events\Customer\CustomerSlugChangedEvent;
+use App\Facades\DbException;
 use App\Models\Customer;
 use App\Models\CustomerSite;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
@@ -73,7 +75,11 @@ class CustomerService
         ?bool $force = false
     ): void {
         if ($force) {
-            $customer->forceDelete();
+            try {
+                $customer->forceDelete();
+            } catch (QueryException $e) {
+                DbException::check($e);
+            }
 
             return;
         }

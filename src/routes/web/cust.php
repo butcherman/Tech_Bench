@@ -39,6 +39,25 @@ Route::middleware('auth.secure')->group(function () {
             ->breadcrumb('Customer Settings', 'admin.index');
         Route::put('settings', [CustomerAdministrationController::class, 'update'])
             ->name('settings.update');
+
+        // Route::get('re-assign-site', [ReAssignCustomerController::class, 'edit'])
+        //     ->name('re-assign.edit')
+        //     ->breadcrumb('Re-Assign Customer Site', 'customers.settings.edit');
+        // Route::put('re-assign-site', [ReAssignCustomerController::class, 'update'])
+        //     ->name('re-assign.update');
+
+        Route::prefix('disabled-customers')->name('disabled.')->group(function () {
+            // Route::get('/', DisabledCustomerController::class)
+            //     ->name('index')
+            //     ->breadcrumb('Disabled Customers', 'admin.index');
+            Route::get('{customer}/restore', [CustomerController::class, 'restore'])
+                ->withTrashed()
+                ->name('restore');
+            Route::delete('{customer}/force-delete', [CustomerController::class, 'forceDelete'])
+                ->withTrashed()
+                ->name('force-delete');
+        });
+
     });
 
     /*

@@ -2,9 +2,12 @@
 
 namespace Tests\Unit\Services\Customer;
 
+use App\Events\Customer\CustomerSlugChangedEvent;
+use App\Exceptions\Database\RecordInUseException;
 use App\Models\Customer;
 use App\Models\CustomerSite;
 use App\Services\Customer\CustomerService;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
@@ -121,6 +124,8 @@ class CustomerServiceUnitTest extends TestCase
 
     public function test_update_customer(): void
     {
+        Event::fake();
+
         $customer = Customer::factory()->createQuietly();
         $newSite = CustomerSite::factory()->createQuietly([
             'cust_id' => $customer->cust_id,
@@ -143,6 +148,8 @@ class CustomerServiceUnitTest extends TestCase
             'cust_id' => $customer->cust_id,
             'name' => $updated->name,
         ]);
+
+        Event::assertDispatched(CustomerSlugChangedEvent::class);
     }
 
     public function test_update_customer_disable_change_slug(): void
@@ -201,6 +208,18 @@ class CustomerServiceUnitTest extends TestCase
         $testObj->destroyCustomer($cust, 'For Testing Purposes', true);
 
         $this->assertDatabaseMissing('customers', $cust->only(['cust_id']));
+    }
+
+    public function test_destroy_customer_force_in_use(): void
+    {
+        $cust = Customer::factory()->createQuietly();
+
+        $this->expectException(RecordInUseException::class);
+
+        $testObj = new CustomerService;
+        $testObj->destroyCustomer($cust, 'For Testing Purposes', true);
+
+        $this->assertDatabaseHas('customers', $cust->only(['cust_id']));
     }
 
     public function test_restore_customer(): void

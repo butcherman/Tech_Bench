@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Customer;
 use App\Facades\UserPermissions;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customer\CustomerRequest;
+use App\Http\Requests\Customer\DisableCustomerRequest;
+use App\Jobs\Customer\DestroyCustomerJob;
 use App\Models\Customer;
 use App\Services\Customer\CustomerService;
 use Illuminate\Http\RedirectResponse;
@@ -57,7 +59,7 @@ class CustomerController extends Controller
     /**
      * Display the specified customer.
      */
-    public function show(Request $request, Customer $customer)
+    public function show(Request $request, Customer $customer): Response
     {
         // If the customer has multiple sites, show the Customer Home Page
         if ($customer->CustomerSite->count() > 1 || $customer->CustomerSite->count() == 0) {
@@ -92,24 +94,67 @@ class CustomerController extends Controller
     /**
      * Show the form for editing the customer.
      */
-    public function edit(string $id)
+    public function edit(Customer $customer): Response
     {
-        //
+        $this->authorize('update', $customer);
+
+        return Inertia::render('Customer/Edit', [
+            'selectId' => fn () => (bool) config('customer.select_id'),
+            'default-state' => fn () => config('customer.default_state'),
+            'customer' => fn () => $customer,
+            'siteList' => fn () => $customer->CustomerSite,
+        ]);
     }
 
     /**
      * Update the customer.
      */
-    public function update(Request $request, string $id)
+    public function update(CustomerRequest $request, Customer $customer): RedirectResponse
     {
-        //
+        $updatedCustomer = $this->svc
+            ->updateCustomer($request->safe()->collect(), $customer);
+
+        return redirect(route('customers.show', $updatedCustomer->slug))
+            ->with('success', __('cust.updated', [
+                'name' => $updatedCustomer->name,
+            ]));
     }
 
     /**
      * Soft Delete the customer.
      */
-    public function destroy(string $id)
+    public function destroy(DisableCustomerRequest $request, Customer $customer): RedirectResponse
     {
-        //
+        $this->svc->destroyCustomer($customer, $request->reason);
+
+        return redirect(route('customers.index'))
+            ->with('danger', __('cust.destroy', ['name' => $customer->name]));
+    }
+
+    /**
+     * Restore a soft deleted customer
+     */
+    public function restore(Customer $customer): RedirectResponse
+    {
+        $this->authorize('restore', $customer);
+
+        $this->svc->restoreCustomer($customer);
+
+        return back()
+            ->with('success', __('cust.restored', ['name' => $customer->name]));
+    }
+
+    /**
+     * Completely remove a soft deleted customer
+     */
+    public function forceDelete(Customer $customer): RedirectResponse
+    {
+        $this->authorize('forceDelete', $customer);
+
+        dispatch(new DestroyCustomerJob($customer));
+
+        return back()->with('danger', __('cust.force_deleted', [
+            'name' => $customer->name,
+        ]));
     }
 }
