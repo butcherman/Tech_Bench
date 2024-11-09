@@ -2,19 +2,24 @@
 
 namespace App\Http\Controllers\Customer;
 
+use App\Facades\UserPermissions;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-
+use Inertia\Response;
 
 class CustomerController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request): Response
     {
-        //
+        return Inertia::render('Customer/Index', [
+            'permissions' => UserPermissions::customerPermissions(
+                $request->user()
+            ),
+        ]);
     }
 
     /**

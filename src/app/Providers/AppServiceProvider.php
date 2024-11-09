@@ -6,6 +6,7 @@ use App\Actions\Misc\BuildTimezoneList;
 use App\Actions\Misc\CheckDatabaseError;
 use App\Policies\GatePolicy;
 use App\Services\Misc\CacheHelper;
+use App\Services\User\UserPermissionsService;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
@@ -33,6 +34,9 @@ class AppServiceProvider extends ServiceProvider
 
         // Timezone Facade
         $this->app->bind('TimezoneList', BuildTimezoneList::class);
+
+        // User Permission Facade
+        $this->app->bind('UserPermissions', UserPermissionsService::class);
 
         //  Gate to determine if the Administration link should show up on the navigation menu
         Gate::define('admin-link', [GatePolicy::class, 'adminLink']);

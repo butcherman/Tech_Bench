@@ -3,7 +3,9 @@
 namespace App\Models;
 
 use App\Observers\CustomerObserver;
+use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\BroadcastableModelEventOccurred;
 use Illuminate\Database\Eloquent\BroadcastsEvents;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -137,26 +139,22 @@ class Customer extends Model
     |---------------------------------------------------------------------------
     */
 
-    // public function broadcastOn(string $event): array
-    // {
-    //     Log::debug('Broadcasting Customer Event');
+    public function broadcastOn(string $event): array
+    {
+        return match ($event) {
+            'deleted', 'trashed', 'created' => [],
+            default => [
+                new PrivateChannel('customer.'.$this->slug),
+            ],
+        };
+    }
 
-    //     return match ($event) {
-    //         'deleted', 'trashed', 'created' => [],
-    //         default => [
-    //             new PrivateChannel('customer.'.$this->slug),
-    //         ],
-    //     };
-    // }
-
-    // public function newBroadcastableModelEvent(string $event): BroadcastableModelEventOccurred
-    // {
-    //     Log::debug('Calling Dont Broadcast to Current User');
-
-    //     return (new BroadcastableModelEventOccurred(
-    //         $this, $event
-    //     ))->dontBroadcastToCurrentUser();
-    // }
+    public function newBroadcastableModelEvent(string $event): BroadcastableModelEventOccurred
+    {
+        return (new BroadcastableModelEventOccurred(
+            $this, $event
+        ))->dontBroadcastToCurrentUser();
+    }
 
     /*
     |---------------------------------------------------------------------------
