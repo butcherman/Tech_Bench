@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\BroadcastsEvents;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Scout\Searchable;
@@ -93,45 +94,45 @@ class Customer extends Model
         return $this->hasMany(CustomerAlert::class, 'cust_id', 'cust_id');
     }
 
-    // public function CustomerEquipment()
-    // {
-    //     return $this->hasMany(CustomerEquipment::class, 'cust_id', 'cust_id');
-    // }
+    public function CustomerEquipment(): HasMany
+    {
+        return $this->hasMany(CustomerEquipment::class, 'cust_id', 'cust_id');
+    }
 
-    // public function CustomerContact()
-    // {
-    //     return $this->hasMany(CustomerContact::class, 'cust_id', 'cust_id');
-    // }
+    public function CustomerContact(): HasMany
+    {
+        return $this->hasMany(CustomerContact::class, 'cust_id', 'cust_id');
+    }
 
-    // public function CustomerNote()
-    // {
-    //     return $this->hasMany(CustomerNote::class, 'cust_id', 'cust_id');
-    // }
+    public function CustomerNote(): HasMany
+    {
+        return $this->hasMany(CustomerNote::class, 'cust_id', 'cust_id');
+    }
 
-    // public function CustomerFile()
-    // {
-    //     return $this->hasMany(CustomerFile::class, 'cust_id', 'cust_id');
-    // }
+    public function CustomerFile(): HasMany
+    {
+        return $this->hasMany(CustomerFile::class, 'cust_id', 'cust_id');
+    }
 
-    // public function Bookmarks()
-    // {
-    //     return $this->belongsToMany(
-    //         User::class,
-    //         'user_customer_bookmarks',
-    //         'cust_id',
-    //         'user_id'
-    //     )->withTimestamps();
-    // }
+    public function Bookmarks(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            User::class,
+            'user_customer_bookmarks',
+            'cust_id',
+            'user_id'
+        )->withTimestamps();
+    }
 
-    // public function Recent()
-    // {
-    //     return $this->belongsToMany(
-    //         User::class,
-    //         'user_customer_recents',
-    //         'cust_id',
-    //         'user_id'
-    //     )->withTimestamps();
-    // }
+    public function Recent(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            User::class,
+            'user_customer_recents',
+            'cust_id',
+            'user_id'
+        )->withTimestamps();
+    }
 
     /*
     |---------------------------------------------------------------------------
@@ -162,24 +163,26 @@ class Customer extends Model
     |---------------------------------------------------------------------------
     */
 
-    // public function isFav(User $user)
-    // {
-    //     $bookmarks = $this->Bookmarks->pluck('user_id')->toArray();
+    /**
+     * Determine if the user requesting the page has bookmarked customer
+     */
+    public function isFav(User $user)
+    {
+        $bookmarks = $this->Bookmarks->pluck('user_id')->toArray();
 
-    //     return in_array($user->user_id, $bookmarks);
-    // }
+        return in_array($user->user_id, $bookmarks);
+    }
 
-    // /**
-    //  * Update the Users Recent Tech Tip activity
-    //  */
-    // public function touchRecent(User $user)
-    // {
-    //     $isRecent = $this->Recent->where('user_id', $user->user_id)->first();
-    //     if ($isRecent) {
-    //         $isRecent->touch();
-    //     } else {
-    //         $this->Recent()->attach($user);
-    //     }
-
-    // }
+    /**
+     * Update the Users Recent Tech Tip activity
+     */
+    public function touchRecent(User $user): void
+    {
+        $isRecent = $this->Recent->where('user_id', $user->user_id)->first();
+        if ($isRecent) {
+            $isRecent->touch();
+        } else {
+            $this->Recent()->attach($user);
+        }
+    }
 }

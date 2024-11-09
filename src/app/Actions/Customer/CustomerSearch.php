@@ -9,7 +9,7 @@ use Illuminate\Support\Collection;
 class CustomerSearch
 {
     /**
-     * Use Scout to search for Customer Models
+     * Perform a search for customer.  No search param returns all Models
      */
     public function __invoke(Collection $searchData): mixed
     {
@@ -17,14 +17,29 @@ class CustomerSearch
             return $this->filteredSearch($searchData);
         }
 
+        if ($searchData->has('cust_id')) {
+            return $this->searchById($searchData->get('cust_id'));
+        }
+
         return Customer::with('CustomerSite')
             ->orderBy('name', 'asc')
             ->paginate($searchData->get('perPage'));
     }
 
+    /**
+     * Use Scout to perform a detailed search
+     */
     protected function filteredSearch(Collection $searchData): LengthAwarePaginator
     {
         return Customer::search($searchData->get('searchFor'))
             ->paginate($searchData->get('perPage'));
+    }
+
+    /**
+     * Check to see if a Customer ID is currently in use
+     */
+    protected function searchById(int $id): ?Customer
+    {
+        return Customer::find($id);
     }
 }

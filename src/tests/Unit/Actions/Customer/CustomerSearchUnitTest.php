@@ -71,4 +71,28 @@ class CustomerSearchUnitTest extends TestCase
         // Test will return zero results, we just need to verify method fires
         $this->assertCount(0, $res->toArray()['data']);
     }
+
+    public function test_search_for_id(): void
+    {
+        $searchData = [
+            'cust_id' => 5,
+        ];
+
+        $testObj = new CustomerSearch;
+        $res = $testObj(collect($searchData));
+
+        $this->assertEquals($res->toArray(), Customer::find(5)->toArray());
+    }
+
+    public function test_search_for_id_bad_id(): void
+    {
+        $searchData = [
+            'cust_id' => 55555,
+        ];
+
+        $testObj = new CustomerSearch;
+        $res = $testObj(collect($searchData));
+
+        $this->assertNull($res);
+    }
 }
