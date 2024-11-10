@@ -2,6 +2,7 @@
 
 use App\Exceptions\Customer\CustomerNotFoundException;
 use App\Http\Controllers\Customer\CustomerAdministrationController;
+use App\Http\Controllers\Customer\CustomerAlertController;
 use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\Customer\CustomerIdController;
 use App\Http\Controllers\Customer\CustomerSearchController;
@@ -77,6 +78,18 @@ Route::middleware('auth.secure')->group(function () {
         })->missing(function () {
             throw new CustomerNotFoundException;
         });
+
+    Route::prefix('customers/{customer}')->name('customers.')->group(function () {
+        /*
+        |-----------------------------------------------------------------------
+        | Customer Alerts
+        |-----------------------------------------------------------------------
+        */
+        Route::resource('alerts', CustomerAlertController::class)
+            ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
+                $breadcrumbs->index('Alerts', 'customers.show');
+            })->only(['index', 'store', 'update', 'destroy']);
+    });
 });
 
 /*******************************************************************************
@@ -93,10 +106,6 @@ Route::get('show-site', function () {
 Route::get('bookmark', function () {
     return 'bookmark';
 })->name('customers.bookmark');
-
-Route::get('alerts', function () {
-    return 'alerts';
-})->name('customers.alerts.index');
 
 Route::get('deleted-items', function () {
     return 'deleted items';

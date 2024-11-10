@@ -2,6 +2,8 @@
 
 namespace App\Services\Customer;
 
+use App\Models\Customer;
+use App\Models\CustomerAlert;
 use App\Traits\AppSettingsTrait;
 use Illuminate\Support\Collection;
 
@@ -20,46 +22,28 @@ class CustomerAdministrationService
     /**
      * Create a new Customer Alert
      */
-    // public function createCustomerAlert(
-    //     CustomerAlertRequest $requestData,
-    //     Customer $customer
-    // ): void {
-    //     $newAlert = new CustomerAlert($requestData->all());
+    public function createCustomerAlert(Collection $requestData, Customer $customer): void
+    {
+        $newAlert = new CustomerAlert($requestData->all());
 
-    //     $customer->CustomerAlert()->save($newAlert);
-
-    //     Log::info('New Customer Alert created for '.$customer->name.' by '.
-    //         $requestData->user()->username, $newAlert->toArray());
-
-    //     event(new CustomerAlertEvent($customer));
-    // }
+        $customer->CustomerAlert()->save($newAlert);
+    }
 
     /**
      * Update an existing Customer Alert
      */
-    // public function updateCustomerAlert(
-    //     CustomerAlertRequest $requestData,
-    //     Customer $customer,
-    //     CustomerAlert $alert
-    // ): void {
-    //     $alert->update($requestData->all());
-
-    //     Log::info('Customer Alert Updated for '.$customer->name.
-    //     ' by '.$requestData->user()->username, $alert->toArray());
-
-    //     event(new CustomerAlertEvent($customer));
-    // }
+    public function updateCustomerAlert(
+        Collection $requestData,
+        CustomerAlert $alert
+    ): void {
+        $alert->update($requestData->all());
+    }
 
     /**
      * Remove an existing Customer Alert
      */
-    // public function removeCustomerAlert(Customer $customer, CustomerAlert $alert)
-    // {
-    //     $alert->delete();
-
-    //     Log::info('Customer Alert for '.$customer->name.
-    //         ' deleted by '.request()->user()->username, $alert->toArray());
-
-    //     event(new CustomerAlertEvent($customer));
-    // }
+    public function destroyCustomerAlert(CustomerAlert $alert): void
+    {
+        $alert->delete();
+    }
 }

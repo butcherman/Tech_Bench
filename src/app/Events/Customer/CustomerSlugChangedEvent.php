@@ -23,6 +23,8 @@ class CustomerSlugChangedEvent
 
     /**
      * Get the channels the event should broadcast on.
+     *
+     * @codeCoverageIgnore
      */
     public function broadcastOn(): array
     {
@@ -32,7 +34,9 @@ class CustomerSlugChangedEvent
     }
 
     /**
-     * Get the name the event should broadcast as
+     * Get the name the event should broadcast as.
+     *
+     * @codeCoverageIgnore
      */
     public function broadcastAs(): string
     {
