@@ -7,7 +7,9 @@ use App\Http\Controllers\Customer\CustomerBookmarkController;
 use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\Customer\CustomerIdController;
 use App\Http\Controllers\Customer\CustomerSearchController;
+use App\Http\Controllers\Customer\CustomerSiteController;
 use App\Models\Customer;
+use App\Models\CustomerSite;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 use Illuminate\Support\Facades\Route;
 
@@ -30,6 +32,17 @@ Route::middleware('auth.secure')->group(function () {
         Route::post('search', CustomerSearchController::class)->name('search');
         Route::get('check-id/{custId}', CustomerIdController::class)->name('check-id');
         Route::post('bookmark/{customer}', CustomerBookmarkController::class)->name('bookmark');
+
+        /*
+        |---------------------------------------------------------------------------
+        | Customer Sites without parents
+        |---------------------------------------------------------------------------
+        */
+        Route::get('create-site', [CustomerSiteController::class, 'create'])
+            ->name('create-site')
+            ->breadcrumb('New Customer Site', 'customers.index');
+        Route::post('create-site', [CustomerSiteController::class, 'store'])
+            ->name('store-site');
 
         /*
         |-----------------------------------------------------------------------
@@ -82,40 +95,44 @@ Route::middleware('auth.secure')->group(function () {
         });
 
     Route::prefix('customers/{customer}')->name('customers.')->group(function () {
+
         /*
         |-----------------------------------------------------------------------
         | Customer Alerts
         |-----------------------------------------------------------------------
         */
+
         Route::resource('alerts', CustomerAlertController::class)
             ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
                 $breadcrumbs->index('Alerts', 'customers.show');
             })->only(['index', 'store', 'update', 'destroy']);
+
+        /*
+        |-----------------------------------------------------------------------
+        | Customer Sites
+        |-----------------------------------------------------------------------
+        */
+        Route::resource('sites', CustomerSiteController::class)
+            ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
+                $breadcrumbs->index('Sites', 'customers.show')
+                    ->create('New Customer Site')
+                    ->show(fn (Customer $customer, CustomerSite|string $site) => gettype($site) === 'object'
+                        ? $site->site_name
+                        : $site
+                    )->edit('Edit Site');
+            })->missing(function () {
+                throw new CustomerNotFoundException;
+            });
     });
 });
 
 /*******************************************************************************
  * TMP GO AWAY
  *******************************************************************************/
-Route::get('create-site', function () {
-    return 'create site';
-})->name('customers.create-site');
-
-Route::get('show-site', function () {
-    return 'show site';
-})->name('customers.sites.show');
 
 Route::get('deleted-items', function () {
     return 'deleted items';
 })->name('customers.deleted-items.index');
-
-Route::get('sites', function () {
-    return 'sites edit';
-})->name('customers.sites.edit');
-
-Route::get('sites-new', function () {
-    return 'sites new';
-})->name('customers.sites.create');
 
 Route::get('notes', function () {
     return 'create notes';

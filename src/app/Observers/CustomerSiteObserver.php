@@ -32,10 +32,13 @@ class CustomerSiteObserver extends Observer
         );
     }
 
-    // public function restored(CustomerSite $site): void
-    // {
-    //     //
-    // }
+    public function restored(CustomerSite $site): void
+    {
+        Log::alert(
+            'Customer Site '.$site->site_name.' has been restored by '.
+                $this->user
+        );
+    }
 
     public function forceDeleted(CustomerSite $site): void
     {

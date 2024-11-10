@@ -54,10 +54,10 @@ class CustomerSite extends Model
 
     /*
     |---------------------------------------------------------------------------
-    | For Route/Model binding we will use either the slug or cust_id columns
+    | For Route/Model binding we will use either the site_slug or cust_site_id columns
     |---------------------------------------------------------------------------
     */
-    public function resolveRouteBinding($value, $field = null): Customer
+    public function resolveRouteBinding($value, $field = null): CustomerSite
     {
         return $this->where('site_slug', $value)
             ->orWhere('cust_site_id', $value)
@@ -69,7 +69,7 @@ class CustomerSite extends Model
     | Model Attributes
     |---------------------------------------------------------------------------
     */
-    protected $appends = ['is_primary', 'href'];
+    protected $appends = ['is_primary'];
 
     public function isPrimary(): Attribute
     {
@@ -172,49 +172,49 @@ class CustomerSite extends Model
     | Additional Methods
     |---------------------------------------------------------------------------
     */
-    // public function EquipmentNote()
-    // {
-    //     return CustomerNote::whereIn(
-    //         'cust_equip_id',
-    //         $this->SiteEquipment->pluck('cust_equip_id')
-    //     )->get();
-    // }
+    public function EquipmentNote()
+    {
+        return CustomerNote::whereIn(
+            'cust_equip_id',
+            $this->SiteEquipment->pluck('cust_equip_id')
+        )->get();
+    }
 
-    // public function EquipmentFile()
-    // {
-    //     return CustomerFile::whereIn(
-    //         'cust_equip_id',
-    //         $this->SiteEquipment->pluck('cust_equip_id')
-    //     )->get();
-    // }
+    public function EquipmentFile()
+    {
+        return CustomerFile::whereIn(
+            'cust_equip_id',
+            $this->SiteEquipment->pluck('cust_equip_id')
+        )->get();
+    }
 
-    // public function GeneralNote()
-    // {
-    //     return CustomerNote::where('cust_id', $this->Customer->cust_id)
-    //         ->whereNull('cust_equip_id')
-    //         ->doesntHave('CustomerSite')
-    //         ->get();
-    // }
+    public function GeneralNote()
+    {
+        return CustomerNote::where('cust_id', $this->Customer->cust_id)
+            ->whereNull('cust_equip_id')
+            ->doesntHave('CustomerSite')
+            ->get();
+    }
 
-    // public function GeneralFile()
-    // {
-    //     return CustomerFile::where('cust_id', $this->Customer->cust_id)
-    //         ->whereNull('cust_equip_id')
-    //         ->doesntHave('CustomerSite')
-    //         ->get();
-    // }
+    public function GeneralFile()
+    {
+        return CustomerFile::where('cust_id', $this->Customer->cust_id)
+            ->whereNull('cust_equip_id')
+            ->doesntHave('CustomerSite')
+            ->get();
+    }
 
-    // public function getNotes()
-    // {
-    //     return $this->SiteNote
-    //         ->concat($this->EquipmentNote())
-    //         ->concat($this->GeneralNote());
-    // }
+    public function getNotes()
+    {
+        return $this->SiteNote
+            ->concat($this->EquipmentNote())
+            ->concat($this->GeneralNote());
+    }
 
-    // public function getFiles()
-    // {
-    //     return $this->SiteFile
-    //         ->concat($this->EquipmentFile())
-    //         ->concat($this->GeneralFile());
-    // }
+    public function getFiles()
+    {
+        return $this->SiteFile
+            ->concat($this->EquipmentFile())
+            ->concat($this->GeneralFile());
+    }
 }

@@ -61,6 +61,8 @@ class CustomerController extends Controller
      */
     public function show(Request $request, Customer $customer): Response
     {
+        $customer->touchRecent($request->user());
+
         // If the customer has multiple sites, show the Customer Home Page
         if ($customer->CustomerSite->count() > 1 || $customer->CustomerSite->count() == 0) {
             return Inertia::render('Customer/Show', [

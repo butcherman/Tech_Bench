@@ -3,19 +3,10 @@
 namespace App\Observers;
 
 use App\Models\Customer;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class CustomerObserver extends Observer
 {
-    public function retrieved(Customer $customer): void
-    {
-        // TODO - Should this be here or in controller???
-        if (Auth::check()) {
-            $customer->touchRecent(Auth::user());
-        }
-    }
-
     public function created(Customer $customer): void
     {
         Log::info('New Customer created by '.$this->user, $customer->toArray());
