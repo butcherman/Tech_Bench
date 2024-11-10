@@ -3,6 +3,7 @@
 use App\Exceptions\Customer\CustomerNotFoundException;
 use App\Http\Controllers\Customer\CustomerAdministrationController;
 use App\Http\Controllers\Customer\CustomerAlertController;
+use App\Http\Controllers\Customer\CustomerBookmarkController;
 use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\Customer\CustomerIdController;
 use App\Http\Controllers\Customer\CustomerSearchController;
@@ -28,6 +29,7 @@ Route::middleware('auth.secure')->group(function () {
         Route::inertia('not-found', 'Customer/NotFound')->name('not-found');
         Route::post('search', CustomerSearchController::class)->name('search');
         Route::get('check-id/{custId}', CustomerIdController::class)->name('check-id');
+        Route::post('bookmark/{customer}', CustomerBookmarkController::class)->name('bookmark');
 
         /*
         |-----------------------------------------------------------------------
@@ -102,10 +104,6 @@ Route::get('create-site', function () {
 Route::get('show-site', function () {
     return 'show site';
 })->name('customers.sites.show');
-
-Route::get('bookmark', function () {
-    return 'bookmark';
-})->name('customers.bookmark');
 
 Route::get('deleted-items', function () {
     return 'deleted items';

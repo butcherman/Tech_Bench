@@ -185,4 +185,16 @@ class Customer extends Model
             $this->Recent()->attach($user);
         }
     }
+
+    /**
+     * Attach or Detach a user's bookmark
+     */
+    public function toggleBookmark(User $user, bool $value): void
+    {
+        if ($value) {
+            $this->Bookmarks()->attach($user);
+        } else {
+            $this->Bookmarks()->detach($user);
+        }
+    }
 }
