@@ -68,7 +68,7 @@ class CustomerNote extends Model
     public function updatedAuthor(): ?Attribute
     {
         return Attribute::make(
-            get: fn () => $this->updatedBy
+            get: fn () => $this->updated_by
                 ? User::withTrashed()
                     ->find($this->updated_by)
                     ->full_name

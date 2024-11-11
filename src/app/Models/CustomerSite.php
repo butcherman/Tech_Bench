@@ -34,7 +34,6 @@ class CustomerSite extends Model
         'deleted_at',
         'deleted_reason',
         'Customer',
-        'href',
         'pivot',
     ];
 
@@ -54,7 +53,7 @@ class CustomerSite extends Model
 
     /*
     |---------------------------------------------------------------------------
-    | For Route/Model binding we will use either the site_slug or cust_site_id columns
+    | For Route/Model binding use either the site_slug or cust_site_id columns
     |---------------------------------------------------------------------------
     */
     public function resolveRouteBinding($value, $field = null): CustomerSite
@@ -81,10 +80,10 @@ class CustomerSite extends Model
     public function href(): Attribute
     {
         return Attribute::make(
-            get: fn () => [
+            get: fn () => route('customers.sites.show', [
                 $this->Customer->slug,
                 $this->site_slug,
-            ]
+            ])
         );
     }
 

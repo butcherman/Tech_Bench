@@ -3,13 +3,14 @@
 namespace Tests\Unit\Models;
 
 use App\Models\Customer;
-use App\Models\CustomerContact;
-use App\Models\CustomerContactPhone;
+use App\Models\CustomerEquipment;
+use App\Models\CustomerNote;
 use App\Models\CustomerSite;
+use App\Models\User;
 use Illuminate\Support\Facades\Artisan;
 use Tests\TestCase;
 
-class CustomerContactUnitTest extends TestCase
+class CustomerNoteUnitTest extends TestCase
 {
     protected $model;
 
@@ -19,10 +20,22 @@ class CustomerContactUnitTest extends TestCase
     {
         parent::setUp();
 
-        $this->customer = Customer::factory()->createQuietly();
-        $this->model = CustomerContact::factory()
-            ->createQuietly(['cust_id' => $this->customer->cust_id]);
+        $this->customer = Customer::factory()->create();
+        $this->model = CustomerNote::factory()
+            ->create([
+                'cust_id' => $this->customer->cust_id,
+                'updated_by' => User::factory(),
+            ]);
         $this->model->CustomerSite()->sync([$this->customer->primary_site_id]);
+    }
+
+    /**
+     * Model Attributes
+     */
+    public function test_model_attributes(): void
+    {
+        $this->assertArrayHasKey('author', $this->model->toArray());
+        $this->assertArrayHasKey('updated_author', $this->model->toArray());
     }
 
     /**
@@ -38,17 +51,15 @@ class CustomerContactUnitTest extends TestCase
         );
     }
 
-    public function test_customer_contact_phone_relationship(): void
+    public function test_customer_equipment_relationship(): void
     {
-        $data = CustomerContactPhone::factory()
-            ->createQuietly(['cont_id' => $this->model->cont_id]);
+        $data = CustomerEquipment::factory()
+            ->create(['cust_id' => $this->customer->cust_id]);
+        $this->model->update(['cust_equip_id' => $data->cust_equip_id]);
 
         $this->assertEquals(
-            $data->toArray(),
-            $this->model
-                ->CustomerContactPhone[0]
-                ->makeHidden(['PhoneNumberType'])
-                ->toArray()
+            $data->makeHidden('Customer')->toArray(),
+            $this->model->CustomerEquipment->toArray()
         );
     }
 
@@ -57,9 +68,9 @@ class CustomerContactUnitTest extends TestCase
      */
     public function test_prunable(): void
     {
-        $models = CustomerContact::factory()
+        $models = CustomerNote::factory()
             ->count(5)
-            ->createQuietly(['cust_id' => $this->customer->cust_id]);
+            ->create(['cust_id' => $this->customer->cust_id]);
 
         $models[0]->delete();
         $this->travel(30)->days(); // 120 days ago
@@ -75,8 +86,9 @@ class CustomerContactUnitTest extends TestCase
 
         $models[4]->delete(); // now
 
-        Artisan::call('model:prune', ['--model' => CustomerContact::class]);
-        $totalContacts = CustomerContact::where('cust_id', $this->customer->cust_id)
+        Artisan::call('model:prune', ['--model' => CustomerNote::class]);
+
+        $totalContacts = CustomerNote::where('cust_id', $this->customer->cust_id)
             ->withTrashed()
             ->count();
 
@@ -87,9 +99,9 @@ class CustomerContactUnitTest extends TestCase
     {
         config(['customer.auto_purge' => false]);
 
-        $models = CustomerContact::factory()
+        $models = CustomerNote::factory()
             ->count(5)
-            ->createQuietly(['cust_id' => $this->customer->cust_id]);
+            ->create(['cust_id' => $this->customer->cust_id]);
 
         $models[0]->delete();
         $this->travel(30)->days(); // 120 days ago
@@ -105,8 +117,9 @@ class CustomerContactUnitTest extends TestCase
 
         $models[4]->delete(); // now
 
-        Artisan::call('model:prune', ['--model' => CustomerContact::class]);
-        $totalContacts = CustomerContact::where('cust_id', $this->customer->cust_id)
+        Artisan::call('model:prune', ['--model' => CustomerNote::class]);
+
+        $totalContacts = CustomerNote::where('cust_id', $this->customer->cust_id)
             ->withTrashed()
             ->count();
 

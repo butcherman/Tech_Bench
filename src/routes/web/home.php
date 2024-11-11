@@ -19,3 +19,8 @@ Route::middleware('auth.secure')->group(function () {
         ->name('about')
         ->breadcrumb('About', 'dashboard');
 });
+
+Route::get('download/{file}/{fileName}', function () {
+    return 'test download';
+})    // DownloadFileController::class)
+    ->name('download');
