@@ -2,11 +2,24 @@
 
 namespace App\Models;
 
+use Illuminate\Broadcasting\PrivateChannel;
+use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\BroadcastableModelEventOccurred;
+use Illuminate\Database\Eloquent\BroadcastsEvents;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Prunable;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Log;
 
 class CustomerContact extends Model
 {
+    use BroadcastsEvents;
+    use HasFactory;
+    use Prunable;
     use SoftDeletes;
 
     /** @var string */
@@ -30,5 +43,76 @@ class CustomerContact extends Model
             'local' => 'boolean',
             'decision_maker' => 'boolean',
         ];
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | Model Relationships
+    |---------------------------------------------------------------------------
+    */
+    public function Customer(): BelongsTo
+    {
+        return $this->belongsTo(Customer::class, 'cust_id', 'cust_id');
+    }
+
+    public function CustomerSite(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            CustomerSite::class,
+            'customer_site_contacts',
+            'cont_id',
+            'cust_site_id'
+        );
+    }
+
+    public function CustomerContactPhone(): HasMany
+    {
+        return $this->hasMany(CustomerContactPhone::class, 'cont_id', 'cont_id');
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | Model Broadcasting
+    |---------------------------------------------------------------------------
+    */
+
+    public function broadcastOn(string $event): array
+    {
+        $siteChannels = $this->getSiteChannels(
+            $this->CustomerSite->pluck('site_slug')->toArray()
+        );
+
+        $allChannels = array_merge(
+            $siteChannels,
+            [new PrivateChannel('customer.'.$this->Customer->slug)]
+        );
+
+        return match ($event) {
+            'trashed', 'deleted' => [],
+            default => $allChannels,
+        };
+    }
+
+    public function newBroadcastableModelEvent(string $event): BroadcastableModelEventOccurred
+    {
+        return (new BroadcastableModelEventOccurred(
+            $this, $event
+        ))->dontBroadcastToCurrentUser();
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | Prune soft deleted models after 90 days
+    |---------------------------------------------------------------------------
+    */
+    public function prunable(): Builder
+    {
+        Log::debug('Calling Prune Customer Contacts');
+
+        if (config('customer.auto_purge')) {
+            return static::whereDate('deleted_at', '<=', now()->subDays(90));
+        }
+
+        return static::whereContId(0);
     }
 }
