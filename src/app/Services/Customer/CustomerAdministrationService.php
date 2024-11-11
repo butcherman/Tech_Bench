@@ -22,8 +22,10 @@ class CustomerAdministrationService
     /**
      * Create a new Customer Alert
      */
-    public function createCustomerAlert(Collection $requestData, Customer $customer): void
-    {
+    public function createCustomerAlert(
+        Collection $requestData,
+        Customer $customer
+    ): void {
         $newAlert = new CustomerAlert($requestData->all());
 
         $customer->CustomerAlert()->save($newAlert);
