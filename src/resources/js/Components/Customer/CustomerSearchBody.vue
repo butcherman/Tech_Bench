@@ -17,10 +17,7 @@ import { searchResults } from '../../Modules/CustomerSearch.module';
                     <table class="w-100 border-start">
                         <tbody>
                             <tr
-                                v-for="site in sortCustSites(
-                                    res.customer_site,
-                                    res.primary_site_id
-                                )"
+                                v-for="site in res.customer_site"
                                 :key="site.cust_site_id"
                             >
                                 <td>
@@ -46,10 +43,7 @@ import { searchResults } from '../../Modules/CustomerSearch.module';
                     <table class="w-100">
                         <tbody>
                             <tr
-                                v-for="site in sortCustSites(
-                                    res.customer_site,
-                                    res.primary_site_id
-                                )"
+                                v-for="site in res.customer_site"
                                 :key="site.cust_site_id"
                             >
                                 <td>

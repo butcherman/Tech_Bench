@@ -4,17 +4,17 @@ current:
   label: v
   major: 7
   minor: 0
-  patch: 0
+  patch: 1
   prerelease: null
   buildmetadata: null
-  commit: '918'
+  commit: '919'
   timestamp:
     year: 2024
-    month: 10
-    day: 24
+    month: 11
+    day: 11
     hour: 22
-    minute: 51
-    second: 41
+    minute: 53
+    second: 47
     timezone: UTC
 commit:
   mode: git-local
