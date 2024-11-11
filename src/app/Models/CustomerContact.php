@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\CustomerBroadcastingTrait;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\BroadcastableModelEventOccurred;
@@ -18,6 +19,7 @@ use Illuminate\Support\Facades\Log;
 class CustomerContact extends Model
 {
     use BroadcastsEvents;
+    use CustomerBroadcastingTrait;
     use HasFactory;
     use Prunable;
     use SoftDeletes;

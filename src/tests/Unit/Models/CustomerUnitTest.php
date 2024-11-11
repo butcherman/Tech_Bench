@@ -67,71 +67,71 @@ class CustomerUnitTest extends TestCase
         );
     }
 
-    // public function test_customer_alert_relationship(): void
-    // {
-    //     $data = CustomerAlert::factory()
-    //         ->create(['cust_id' => $this->model->cust_id]);
+    public function test_customer_alert_relationship(): void
+    {
+        $data = CustomerAlert::factory()
+            ->create(['cust_id' => $this->model->cust_id]);
 
-    //     $this->assertEquals(
-    //         $data->toArray(),
-    //         $this->model->CustomerAlert[0]->toArray()
-    //     );
-    // }
+        $this->assertEquals(
+            $data->makeHidden('Customer')->toArray(),
+            $this->model->CustomerAlert[0]->toArray()
+        );
+    }
 
-    // public function test_customer_equipment_relationship(): void
-    // {
-    //     $data = CustomerEquipment::factory()
-    //         ->create(['cust_id' => $this->model->cust_id]);
+    public function test_customer_equipment_relationship(): void
+    {
+        $data = CustomerEquipment::factory()
+            ->create(['cust_id' => $this->model->cust_id]);
 
-    //     $this->assertEquals(
-    //         $data->makeHidden('Customer')->toArray(),
-    //         $this->model->CustomerEquipment[0]->toArray()
-    //     );
-    // }
+        $this->assertEquals(
+            $data->makeHidden('Customer')->toArray(),
+            $this->model->CustomerEquipment[0]->toArray()
+        );
+    }
 
-    // public function test_customer_contact_relationship(): void
-    // {
-    //     $data = CustomerContact::factory()
-    //         ->create(['cust_id' => $this->model->cust_id]);
+    public function test_customer_contact_relationship(): void
+    {
+        $data = CustomerContact::factory()
+            ->create(['cust_id' => $this->model->cust_id]);
 
-    //     $this->assertEquals(
-    //         $data->makeHidden('Customer')->toArray(),
-    //         $this->model
-    //             ->CustomerContact[0]
-    //             ->makeHidden(['CustomerContactPhone', 'CustomerSite'])
-    //             ->toArray()
-    //     );
-    // }
+        $this->assertEquals(
+            $data->makeHidden('Customer')->toArray(),
+            $this->model
+                ->CustomerContact[0]
+                ->makeHidden(['CustomerContactPhone', 'CustomerSite'])
+                ->toArray()
+        );
+    }
 
-    // public function test_customer_note_relationship(): void
-    // {
-    //     $data = CustomerNote::factory()
-    //         ->create(['cust_id' => $this->model->cust_id]);
+    public function test_customer_note_relationship(): void
+    {
+        $data = CustomerNote::factory()
+            ->create(['cust_id' => $this->model->cust_id]);
 
-    //     $this->assertEquals(
-    //         $data->makeHidden('Customer')->toArray(),
-    //         $this->model
-    //             ->CustomerNote[0]
-    //             ->makeHidden([
-    //                 'cust_equip_id',
-    //                 'deleted_at',
-    //                 'CustomerEquipment',
-    //             ])->toArray()
-    //     );
-    // }
+        $this->assertEquals(
+            $data->makeHidden('Customer')->toArray(),
+            $this->model
+                ->CustomerNote[0]
+                ->makeHidden([
+                    'cust_equip_id',
+                    'deleted_at',
+                    'CustomerEquipment',
+                ])->toArray()
+        );
+    }
 
-    // public function test_customer_file_relationship(): void
-    // {
-    //     $data = CustomerFile::factory()
-    //         ->create(['cust_id' => $this->model->cust_id]);
-    //     $this->assertEquals(
-    //         $data->makeHidden('Customer')->toArray(),
-    //         $this->model
-    //             ->CustomerFile[0]
-    //             ->makeHidden(['CustomerSite'])
-    //             ->toArray()
-    //     );
-    // }
+    public function test_customer_file_relationship(): void
+    {
+        $data = CustomerFile::factory()
+            ->create(['cust_id' => $this->model->cust_id]);
+        $this->assertEquals(
+            $data->makeHidden('Customer')->toArray(),
+            $this->model
+                ->CustomerFile[0]
+                ->makeHidden(['CustomerSite'])
+                ->toArray()
+        );
+    }
 
     public function test_bookmark_relationship(): void
     {
@@ -214,6 +214,34 @@ class CustomerUnitTest extends TestCase
         $this->model->touchRecent($user);
 
         $this->assertDatabaseHas('user_customer_recents', [
+            'user_id' => $user->user_id,
+            'cust_id' => $this->model->cust_id,
+        ]);
+    }
+
+    public function test_toggle_bookmark_on(): void
+    {
+        $user = User::factory()->create();
+
+        $this->model->toggleBookmark($user, true);
+
+        $this->assertDatabaseHas('user_customer_bookmarks', [
+            'user_id' => $user->user_id,
+            'cust_id' => $this->model->cust_id,
+        ]);
+    }
+
+    public function test_toggle_bookmark_off(): void
+    {
+        $user = User::factory()->create();
+        DB::table('user_customer_bookmarks')->insert([
+            'user_id' => $user->user_id,
+            'cust_id' => $this->model->cust_id,
+        ]);
+
+        $this->model->toggleBookmark($user, false);
+
+        $this->assertDatabaseMissing('user_customer_bookmarks', [
             'user_id' => $user->user_id,
             'cust_id' => $this->model->cust_id,
         ]);

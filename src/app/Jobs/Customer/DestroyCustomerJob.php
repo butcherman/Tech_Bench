@@ -3,6 +3,7 @@
 namespace App\Jobs\Customer;
 
 use App\Models\Customer;
+use App\Services\Customer\CustomerFileService;
 use App\Services\Customer\CustomerService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
@@ -20,11 +21,11 @@ class DestroyCustomerJob implements ShouldQueue
     /**
      * Execute the job.
      */
-    public function handle(CustomerService $custSvc): void
+    public function handle(CustomerFileService $fileSvc, CustomerService $custSvc): void
     {
         Log::info('Destroying Customer - '.$this->customer->name);
 
-        // $fileSvc->destroyAllCustomerFiles($this->customer);
+        $fileSvc->destroyAllCustomerFiles($this->customer);
         $custSvc->destroyAllSites($this->customer);
         $custSvc->destroyCustomer($this->customer, 'Force Deleting Customer', true);
 

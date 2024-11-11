@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class PhoneNumberType extends Model
 {
-    /** @var array<int, string> */
+    /** @var string */
     protected $primaryKey = 'phone_type_id';
 
     /** @var array<int, string> */
