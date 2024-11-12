@@ -12,8 +12,8 @@ class CustomerContactPhoneService extends PhoneNumberService
      * Cycle through a Customer Contacts phone numbers and modify them in db.
      */
     public function processCustomerContactPhones(
-        CustomerContact $contact,
-        array $phoneNumbers
+        array $phoneNumbers,
+        CustomerContact $contact
     ): void {
         // Numbers that are added/updated
         $phoneIdList = [];
@@ -40,7 +40,7 @@ class CustomerContactPhoneService extends PhoneNumberService
         array $number
     ): int {
         if (is_null($number['number'])) {
-            return;
+            return 0;
         }
 
         // Determine if we are creating a record or updating it

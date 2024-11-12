@@ -11,14 +11,20 @@ class CustomerContactService
     /**
      * Create a new class instance.
      */
-    public function __construct(protected CustomerContactPhoneService $phoneSvc) {}
+    public function __construct(
+        protected CustomerContactPhoneService $phoneSvc
+    ) {}
 
     /**
      * Create a new contact for a customer
      */
-    public function createCustomerContact(Collection $requestData, Customer $customer): CustomerContact
-    {
-        $contact = new CustomerContact($requestData->except(['phones', 'site_list'])->toArray());
+    public function createCustomerContact(
+        Collection $requestData,
+        Customer $customer
+    ): CustomerContact {
+        $contact = new CustomerContact(
+            $requestData->except(['phones', 'site_list'])->toArray()
+        );
         $customer->CustomerContact()->save($contact);
 
         $this->processContact($requestData, $contact);
@@ -29,9 +35,13 @@ class CustomerContactService
     /**
      * Update an existing Customer Contact
      */
-    public function updateCustomerContact(Collection $requestData, CustomerContact $contact): CustomerContact
-    {
-        $contact->update($requestData->except(['phones', 'site_list'])->toArray());
+    public function updateCustomerContact(
+        Collection $requestData,
+        CustomerContact $contact
+    ): CustomerContact {
+        $contact->update(
+            $requestData->except(['phones', 'site_list'])->toArray()
+        );
 
         $this->processContact($requestData, $contact);
 
@@ -41,21 +51,25 @@ class CustomerContactService
     /**
      * Update Customer Sites and phone numbers
      */
-    public function processContact(Collection $requestData, CustomerContact $contact): void
-    {
+    public function processContact(
+        Collection $requestData,
+        CustomerContact $contact
+    ): void {
         // Attach sites
-        $contact->CustomerSite()->sync($requestData->site_list);
+        $contact->CustomerSite()->sync($requestData->get('site_list'));
 
         // Process Phone Numbers
         $this->phoneSvc
-            ->processCustomerContactPhones($contact, $requestData->phones);
+            ->processCustomerContactPhones($requestData->get('phones'), $contact);
     }
 
     /**
      * Delete a customer contact
      */
-    public function destroyContact(CustomerContact $contact, ?bool $force = false): void
-    {
+    public function destroyContact(
+        CustomerContact $contact,
+        ?bool $force = false
+    ): void {
         if ($force) {
             $contact->forceDelete();
 
