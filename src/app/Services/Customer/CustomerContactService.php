@@ -25,6 +25,7 @@ class CustomerContactService
         $contact = new CustomerContact(
             $requestData->except(['phones', 'site_list'])->toArray()
         );
+
         $customer->CustomerContact()->save($contact);
 
         $this->processContact($requestData, $contact);
