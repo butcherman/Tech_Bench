@@ -14,6 +14,11 @@ use Tests\TestCase;
 
 class UserAdministrationUnitTest extends TestCase
 {
+    /*
+    |---------------------------------------------------------------------------
+    | getAllUsers()
+    |---------------------------------------------------------------------------
+    */
     public function test_get_all_users(): void
     {
         $this->seed(UserSeeder::class);
@@ -34,6 +39,11 @@ class UserAdministrationUnitTest extends TestCase
         $this->assertEquals(5, $response->count());
     }
 
+    /*
+    |---------------------------------------------------------------------------
+    | createUser()
+    |---------------------------------------------------------------------------
+    */
     public function test_create_user(): void
     {
         Bus::fake();
@@ -94,6 +104,11 @@ class UserAdministrationUnitTest extends TestCase
         Bus::assertDispatched(CreateUserSettingsJob::class);
     }
 
+    /*
+    |---------------------------------------------------------------------------
+    | updateUser()
+    |---------------------------------------------------------------------------
+    */
     public function test_update_user(): void
     {
         Event::fake();
@@ -122,6 +137,11 @@ class UserAdministrationUnitTest extends TestCase
         Event::assertDispatched(FeatureChangedEvent::class);
     }
 
+    /*
+    |---------------------------------------------------------------------------
+    | destroyUser()
+    |---------------------------------------------------------------------------
+    */
     public function test_destroy_user(): void
     {
         $user = User::factory()->create();
@@ -144,6 +164,11 @@ class UserAdministrationUnitTest extends TestCase
 
     // TODO - Test Try Catch - User has stuff....
 
+    /*
+    |---------------------------------------------------------------------------
+    | restoreUser()
+    |---------------------------------------------------------------------------
+    */
     public function test_restore(): void
     {
         $user = User::factory()->create();
@@ -161,6 +186,11 @@ class UserAdministrationUnitTest extends TestCase
         );
     }
 
+    /*
+    |---------------------------------------------------------------------------
+    | resetPasswordExpire()
+    |---------------------------------------------------------------------------
+    */
     public function test_reset_password_expire(): void
     {
         config(['auth.passwords.settings.expire' => 60]);

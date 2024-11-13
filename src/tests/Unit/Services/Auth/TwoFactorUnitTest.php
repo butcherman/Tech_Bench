@@ -14,6 +14,11 @@ class TwoFactorUnitTest extends TestCase
     /** @var string */
     protected $httpUserAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36';
 
+    /*
+    |---------------------------------------------------------------------------
+    | processVerificationResponse()
+    |---------------------------------------------------------------------------
+    */
     public function test_process_verification_response_remember_on(): void
     {
         Event::fake();
@@ -69,6 +74,11 @@ class TwoFactorUnitTest extends TestCase
         );
     }
 
+    /*
+    |---------------------------------------------------------------------------
+    | generateRememberDeviceToken()
+    |---------------------------------------------------------------------------
+    */
     public function test_generate_remember_device_token(): void
     {
         /** @var User $user */
@@ -87,6 +97,11 @@ class TwoFactorUnitTest extends TestCase
         ]);
     }
 
+    /*
+    |---------------------------------------------------------------------------
+    | destroyDeviceToken()
+    |---------------------------------------------------------------------------
+    */
     public function test_destroy_device_token(): void
     {
         /** @var User $user */

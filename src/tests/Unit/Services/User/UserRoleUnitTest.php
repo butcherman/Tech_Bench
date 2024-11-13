@@ -16,6 +16,11 @@ class UserRoleUnitTest extends TestCase
 {
     use WithFaker;
 
+    /*
+    |---------------------------------------------------------------------------
+    | getAllRoles()
+    |---------------------------------------------------------------------------
+    */
     public function test_get_all_roles(): void
     {
         $shouldBe = UserRole::get()->toArray();
@@ -26,6 +31,11 @@ class UserRoleUnitTest extends TestCase
         $this->assertEquals($shouldBe, $res->toArray());
     }
 
+    /*
+    |---------------------------------------------------------------------------
+    | getRole()
+    |---------------------------------------------------------------------------
+    */
     public function test_get_role(): void
     {
         $shouldBe = UserRole::find(1)->toArray();
@@ -46,6 +56,11 @@ class UserRoleUnitTest extends TestCase
         $this->assertEquals($shouldBe, $res);
     }
 
+    /*
+    |---------------------------------------------------------------------------
+    | createNewRole()
+    |---------------------------------------------------------------------------
+    */
     public function test_create_new_role(): void
     {
         Event::fake();
@@ -91,6 +106,11 @@ class UserRoleUnitTest extends TestCase
         Event::assertDispatched(FeatureChangedEvent::class);
     }
 
+    /*
+    |---------------------------------------------------------------------------
+    | updateExistingRole()
+    |---------------------------------------------------------------------------
+    */
     public function test_update_existing_role(): void
     {
         Event::fake();
@@ -138,6 +158,11 @@ class UserRoleUnitTest extends TestCase
         Event::assertDispatched(FeatureChangedEvent::class);
     }
 
+    /*
+    |---------------------------------------------------------------------------
+    | destroyRole()
+    |---------------------------------------------------------------------------
+    */
     public function test_destroy_role(): void
     {
         $testRole = UserRole::factory()->createQuietly();

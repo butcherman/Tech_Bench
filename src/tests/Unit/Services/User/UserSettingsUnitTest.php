@@ -11,9 +11,11 @@ use Tests\TestCase;
 
 class UserSettingsUnitTest extends TestCase
 {
-    /**
-     * Update User Account Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | updateUserAccount()
+    |---------------------------------------------------------------------------
+    */
     public function test_update_user_account(): void
     {
         Event::fake(UserEmailChangedEvent::class);
@@ -64,9 +66,11 @@ class UserSettingsUnitTest extends TestCase
         Event::assertNotDispatched(UserEmailChangedEvent::class);
     }
 
-    /**
-     * Update User Settings Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | updateUserSettings()
+    |---------------------------------------------------------------------------
+    */
     public function test_update_user_settings(): void
     {
         Event::fake(UserSettingsUpdatedEvent::class);
