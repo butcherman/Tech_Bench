@@ -14,6 +14,11 @@ use Tests\TestCase;
 
 class CustomerEquipmentUnitTest extends TestCase
 {
+    /*
+    |---------------------------------------------------------------------------
+    | createEquipment()
+    |---------------------------------------------------------------------------
+    */
     public function test_create_equipment(): void
     {
         Bus::fake();
@@ -55,6 +60,11 @@ class CustomerEquipmentUnitTest extends TestCase
         Bus::assertDispatched(CreateCustomerDataFieldsJob::class);
     }
 
+    /*
+    |---------------------------------------------------------------------------
+    | updateEquipment()
+    |---------------------------------------------------------------------------
+    */
     public function test_update_equipment_sites(): void
     {
         $customer = Customer::factory()
@@ -102,6 +112,11 @@ class CustomerEquipmentUnitTest extends TestCase
         ]);
     }
 
+    /*
+    |---------------------------------------------------------------------------
+    | destroyEquipment()
+    |---------------------------------------------------------------------------
+    */
     public function test_destroy_equipment(): void
     {
         $customer = Customer::factory()->create();
@@ -132,6 +147,11 @@ class CustomerEquipmentUnitTest extends TestCase
         ]);
     }
 
+    /*
+    |---------------------------------------------------------------------------
+    | restoreEquipment()
+    |---------------------------------------------------------------------------
+    */
     public function test_restore_equipment(): void
     {
         $customer = Customer::factory()->create();

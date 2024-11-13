@@ -9,6 +9,11 @@ use Tests\TestCase;
 
 class CustomerAdministrationUnitTest extends TestCase
 {
+    /*
+    |---------------------------------------------------------------------------
+    | updateCustomerSettings()
+    |---------------------------------------------------------------------------
+    */
     public function test_update_customer_settings(): void
     {
         $data = [
@@ -36,6 +41,11 @@ class CustomerAdministrationUnitTest extends TestCase
         ]);
     }
 
+    /*
+    |---------------------------------------------------------------------------
+    | createCustomerAlert()
+    |---------------------------------------------------------------------------
+    */
     public function test_create_customer_alert(): void
     {
         $cust = Customer::factory()->create();
@@ -47,6 +57,11 @@ class CustomerAdministrationUnitTest extends TestCase
         $this->assertDatabaseHas('customer_alerts', $data);
     }
 
+    /*
+    |---------------------------------------------------------------------------
+    | updateCustomerAlert()
+    |---------------------------------------------------------------------------
+    */
     public function test_update_customer_alert(): void
     {
         $cust = Customer::factory()->create();
@@ -59,6 +74,11 @@ class CustomerAdministrationUnitTest extends TestCase
         $this->assertDatabaseHas('customer_alerts', $data);
     }
 
+    /*
+    |---------------------------------------------------------------------------
+    | destroyCustomerAlert()
+    |---------------------------------------------------------------------------
+    */
     public function test_destroy_customer_alert(): void
     {
         $alert = CustomerAlert::factory()->create();

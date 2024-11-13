@@ -32,9 +32,11 @@ class CustomerNoteService
         CustomerNote $note,
         User $user
     ): CustomerNote {
-        $requestData->merge(['updated_by' => $user->user_id]);
         $note->update($requestData->except(['note_type', 'site_list'])
             ->toArray());
+
+        $note->updated_by = $user->user_id;
+        $note->save();
 
         $this->processAssociations($requestData, $note);
 

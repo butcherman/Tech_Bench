@@ -10,6 +10,11 @@ use Tests\TestCase;
 
 class CustomerFileTypeUnitTest extends TestCase
 {
+    /*
+    |---------------------------------------------------------------------------
+    | createFileType()
+    |---------------------------------------------------------------------------
+    */
     public function test_create_file_type(): void
     {
         $data = [
@@ -24,6 +29,11 @@ class CustomerFileTypeUnitTest extends TestCase
         $this->assertDatabaseHas('customer_file_types', $data);
     }
 
+    /*
+    |---------------------------------------------------------------------------
+    | updateFileType()
+    |---------------------------------------------------------------------------
+    */
     public function test_update_file_type(): void
     {
         $type = CustomerFileType::create(['description' => 'New File Type']);
@@ -42,6 +52,11 @@ class CustomerFileTypeUnitTest extends TestCase
         ]);
     }
 
+    /*
+    |---------------------------------------------------------------------------
+    | destroyFileType()
+    |---------------------------------------------------------------------------
+    */
     public function test_destroy_file_type(): void
     {
         $type = CustomerFileType::create(['description' => 'testing']);

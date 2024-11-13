@@ -67,7 +67,7 @@ class CustomerEquipmentDataService
     */
     protected function verifyDataFields(
         CustomerEquipment $custEquip,
-        DataField $equipDataFields
+        Collection $equipDataFields
     ): void {
         // Get the customers existing Data Fields
         $dataFields = CustomerEquipmentData::where(

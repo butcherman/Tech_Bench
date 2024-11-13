@@ -13,6 +13,11 @@ use Tests\TestCase;
 
 class CustomerServiceUnitTest extends TestCase
 {
+    /*
+    |---------------------------------------------------------------------------
+    | createCustomer()
+    |---------------------------------------------------------------------------
+    */
     public function test_create_customer(): void
     {
         $cust = Customer::factory()->make();
@@ -80,7 +85,7 @@ class CustomerServiceUnitTest extends TestCase
         ]);
     }
 
-    public function test_store_second_duplicate_slug(): void
+    public function test_create_customer_second_duplicate_slug(): void
     {
         $existing1 = Customer::factory()
             ->has(CustomerSite::factory())
@@ -122,6 +127,11 @@ class CustomerServiceUnitTest extends TestCase
         ]);
     }
 
+    /*
+    |---------------------------------------------------------------------------
+    | updateCustomer()
+    |---------------------------------------------------------------------------
+    */
     public function test_update_customer(): void
     {
         Event::fake();
@@ -182,6 +192,11 @@ class CustomerServiceUnitTest extends TestCase
         ]);
     }
 
+    /*
+    |---------------------------------------------------------------------------
+    | destroyCustomer()
+    |---------------------------------------------------------------------------
+    */
     public function test_destroy_customer(): void
     {
         $cust = Customer::factory()->createQuietly();
@@ -222,6 +237,11 @@ class CustomerServiceUnitTest extends TestCase
         $this->assertDatabaseHas('customers', $cust->only(['cust_id']));
     }
 
+    /*
+    |---------------------------------------------------------------------------
+    | restoreCustomer()
+    |---------------------------------------------------------------------------
+    */
     public function test_restore_customer(): void
     {
         $cust = Customer::factory()->createQuietly();
@@ -243,6 +263,11 @@ class CustomerServiceUnitTest extends TestCase
     |---------------------------------------------------------------------------
     */
 
+    /*
+    |---------------------------------------------------------------------------
+    | createSite()
+    |---------------------------------------------------------------------------
+    */
     public function test_create_site(): void
     {
         $customer = Customer::factory()->create();
@@ -287,6 +312,11 @@ class CustomerServiceUnitTest extends TestCase
         );
     }
 
+    /*
+    |---------------------------------------------------------------------------
+    | updateSite()
+    |---------------------------------------------------------------------------
+    */
     public function test_update_site(): void
     {
         $site = CustomerSite::factory()->create();
@@ -331,6 +361,11 @@ class CustomerServiceUnitTest extends TestCase
         ]);
     }
 
+    /*
+    |---------------------------------------------------------------------------
+    | destroySite()
+    |---------------------------------------------------------------------------
+    */
     public function test_destroy_site(): void
     {
         $site = CustomerSite::factory()->create();
