@@ -37,6 +37,8 @@ abstract class ApplicationEnvironment
 
     /**
      * Write a new env key with new value
+     *
+     * @codeCoverageIgnore
      */
     protected function writeNewEnvironmentFileWith(string $key, string $value): bool
     {
@@ -55,6 +57,8 @@ abstract class ApplicationEnvironment
 
     /**
      * Replace an existing key in the .env file with a new value
+     *
+     * @codeCoverageIgnore
      */
     protected function writeNewEnvironmentFileReplacing(
         string $key,
@@ -88,6 +92,8 @@ abstract class ApplicationEnvironment
 
     /**
      * Clear and rebuild the existing configuration cache
+     *
+     * @codeCoverageIgnore
      */
     protected function rebuildCache(): void
     {
@@ -105,6 +111,8 @@ abstract class ApplicationEnvironment
 
     /**
      * Use NPM to rebuild application JS files
+     *
+     * @codeCoverageIgnore
      */
     protected function rebuildAppFiles(): void
     {

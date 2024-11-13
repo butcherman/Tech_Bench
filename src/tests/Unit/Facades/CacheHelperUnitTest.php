@@ -2,6 +2,9 @@
 
 namespace Tests\Unit\Facades;
 
+use App\Models\DataFieldType;
+use App\Models\EquipmentCategory;
+use App\Models\EquipmentType;
 use App\Models\UserRole;
 use App\Models\UserSettingType;
 use App\Services\Misc\CacheHelper;
@@ -208,5 +211,62 @@ class CacheHelperUnitTest extends TestCase
         $settingTypeList = $this->helperObj->userSettingsType();
 
         $this->assertEquals($shouldBe->toArray(), $settingTypeList->toArray());
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | Equipment Categories
+    |---------------------------------------------------------------------------
+    */
+    public function test_equipment_categories(): void
+    {
+        $shouldBe = EquipmentCategory::with('EquipmentType')->get();
+
+        Cache::shouldReceive('rememberForever')
+            ->once()
+            ->with('equipmentCategories', \Closure::class)
+            ->andReturn($shouldBe);
+
+        $equip = $this->helperObj->equipmentCategories();
+
+        $this->assertEquals($shouldBe->toArray(), $equip->toArray());
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | Equipment Types
+    |---------------------------------------------------------------------------
+    */
+    public function test_equipment_types(): void
+    {
+        $shouldBe = EquipmentType::all();
+
+        Cache::shouldReceive('rememberForever')
+            ->once()
+            ->with('equipmentTypes', \Closure::class)
+            ->andReturn($shouldBe);
+
+        $equip = $this->helperObj->equipmentTypes();
+
+        $this->assertEquals($shouldBe->toArray(), $equip->toArray());
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | Data Field Types
+    |---------------------------------------------------------------------------
+    */
+    public function test_data_field_types(): void
+    {
+        $shouldBe = DataFieldType::all();
+
+        Cache::shouldReceive('rememberForever')
+            ->once()
+            ->with('dataFieldTypes', \Closure::class)
+            ->andReturn($shouldBe);
+
+        $data = $this->helperObj->dataFieldTypes();
+
+        $this->assertEquals($shouldBe->toArray(), $data->toArray());
     }
 }
