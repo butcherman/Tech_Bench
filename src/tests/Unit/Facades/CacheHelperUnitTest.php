@@ -220,6 +220,8 @@ class CacheHelperUnitTest extends TestCase
     */
     public function test_equipment_categories(): void
     {
+        Cache::flush();
+
         $shouldBe = EquipmentCategory::with('EquipmentType')->get();
 
         Cache::shouldReceive('rememberForever')
@@ -239,6 +241,8 @@ class CacheHelperUnitTest extends TestCase
     */
     public function test_equipment_types(): void
     {
+        Cache::flush();
+
         $shouldBe = EquipmentType::all();
 
         Cache::shouldReceive('rememberForever')
@@ -258,6 +262,8 @@ class CacheHelperUnitTest extends TestCase
     */
     public function test_data_field_types(): void
     {
+        Cache::flush();
+
         $shouldBe = DataFieldType::all();
 
         Cache::shouldReceive('rememberForever')

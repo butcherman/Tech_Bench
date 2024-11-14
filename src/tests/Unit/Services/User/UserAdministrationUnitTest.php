@@ -3,8 +3,10 @@
 namespace Tests\Unit\Services\User;
 
 use App\Events\Feature\FeatureChangedEvent;
+use App\Exceptions\Database\RecordInUseException;
 use App\Jobs\User\CreateUserSettingsJob;
 use App\Jobs\User\SendWelcomeEmailJob;
+use App\Models\CustomerNote;
 use App\Models\User;
 use App\Services\User\UserAdministrationService;
 use Database\Seeders\UserSeeder;
@@ -149,7 +151,10 @@ class UserAdministrationUnitTest extends TestCase
         $testObj = new UserAdministrationService;
         $testObj->destroyUser($user);
 
-        $this->assertSoftDeleted('users', $user->only(['user_id', 'username']));
+        $this->assertSoftDeleted(
+            'users',
+            $user->only(['user_id', 'username'])
+        );
     }
 
     public function test_destroy_user_force(): void
@@ -159,10 +164,27 @@ class UserAdministrationUnitTest extends TestCase
         $testObj = new UserAdministrationService;
         $testObj->destroyUser($user, true);
 
-        $this->assertDatabaseMissing('users', $user->only(['user_id', 'username']));
+        $this->assertDatabaseMissing(
+            'users',
+            $user->only(['user_id', 'username'])
+        );
     }
 
-    // TODO - Test Try Catch - User has stuff....
+    public function test_destroy_user_has_contributions(): void
+    {
+        $user = User::factory()->create();
+
+        CustomerNote::factory()
+            ->count(5)
+            ->create(['created_by' => $user->user_id]);
+
+        $this->expectException(RecordInUseException::class);
+
+        $testObj = new UserAdministrationService;
+        $testObj->destroyUser($user, true);
+
+        $this->assertDatabaseHas('users', $user->only(['user_id', 'username']));
+    }
 
     /*
     |---------------------------------------------------------------------------

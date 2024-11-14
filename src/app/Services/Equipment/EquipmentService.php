@@ -3,6 +3,7 @@
 namespace App\Services\Equipment;
 
 use App\Facades\DbException;
+use App\Jobs\Customer\UpdateCustomerDataFieldsJob;
 use App\Models\DataFieldType;
 use App\Models\EquipmentCategory;
 use App\Models\EquipmentType;
@@ -11,6 +12,11 @@ use Illuminate\Support\Collection;
 
 class EquipmentService
 {
+    /*
+    |---------------------------------------------------------------------------
+    | Create a new Equipment Category.
+    |---------------------------------------------------------------------------
+    */
     public function createCategory(Collection $requestData): EquipmentCategory
     {
         $newCat = EquipmentCategory::create($requestData->toArray());
@@ -18,6 +24,11 @@ class EquipmentService
         return $newCat;
     }
 
+    /*
+    |---------------------------------------------------------------------------
+    | Update an existing Equipment Category.
+    |---------------------------------------------------------------------------
+    */
     public function updateCategory(
         Collection $requestData,
         EquipmentCategory $category
@@ -27,6 +38,12 @@ class EquipmentService
         return $category;
     }
 
+    /*
+    |---------------------------------------------------------------------------
+    | Destroy an Equipment Category.
+    | Note:  Category cannot be destroyed if it is in use.
+    |---------------------------------------------------------------------------
+    */
     public function destroyCategory(EquipmentCategory $category): void
     {
         try {
@@ -39,6 +56,11 @@ class EquipmentService
         }
     }
 
+    /*
+    |---------------------------------------------------------------------------
+    | Create a new Equipment Type.
+    |---------------------------------------------------------------------------
+    */
     public function createEquipmentType(Collection $requestData): EquipmentType
     {
         $newEquipment = EquipmentType::create($requestData->only([
@@ -52,6 +74,11 @@ class EquipmentService
         return $newEquipment;
     }
 
+    /*
+    |---------------------------------------------------------------------------
+    | Update an existing Equipment Type.
+    |---------------------------------------------------------------------------
+    */
     public function updateEquipmentType(
         Collection $requestData,
         EquipmentType $equipment
@@ -63,12 +90,18 @@ class EquipmentService
 
         $this->processDataFields($equipment, $requestData->get('custData'));
 
-        // TODO - Create Job
-        // UpdateCustomerDataFieldsJob::dispatch($equipment);
+        UpdateCustomerDataFieldsJob::dispatch($equipment);
 
         return $equipment;
     }
 
+    /*
+    |---------------------------------------------------------------------------
+    | Destroy an Equipment Type.
+    | Note:  Equipment cannot be destroyed if it is in use by a customer
+    |        or Tech Tip.
+    |---------------------------------------------------------------------------
+    */
     public function destroyEquipmentType(EquipmentType $equipment): void
     {
         try {
@@ -81,9 +114,11 @@ class EquipmentService
         }
     }
 
-    /**
-     * Process the Customer Equipment Entries, add or remove any necessary
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Process the Customer Equipment Entries, add or remove any necessary
+    |---------------------------------------------------------------------------
+    */
     protected function processDataFields(
         EquipmentType $equipment,
         array $fieldList
@@ -91,7 +126,7 @@ class EquipmentService
         // Make field list a collection for easier processing
         $fieldList = collect($fieldList);
 
-        // Cycle through all submitted fields to determine if any need to be created
+        // Cycle through submitted fields to determine if any are to be created
         $equipmentFields = $this->buildDataFieldIdList($fieldList);
         $dataToSync = [];
 
@@ -105,9 +140,11 @@ class EquipmentService
         $equipment->DataFieldType()->sync($dataToSync);
     }
 
-    /**
-     * Create a list of Filed ID's that belong to this equipment
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Create a list of Filed ID's that belong to this equipment
+    |---------------------------------------------------------------------------
+    */
     protected function buildDataFieldIdList(Collection $fieldList): Collection
     {
         return $fieldList->map(function ($field) {
