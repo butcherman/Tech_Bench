@@ -59,7 +59,7 @@ class CustomerEquipment extends Model
     /** @var array<int, string> */
     protected $appends = ['equip_name'];
 
-    public function getEquipNameAttribute(): Attribute
+    public function equipName(): Attribute
     {
         return Attribute::make(
             get: fn () => $this->EquipmentType->name

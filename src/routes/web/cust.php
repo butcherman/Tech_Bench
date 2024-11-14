@@ -4,11 +4,15 @@ use App\Exceptions\Customer\CustomerNotFoundException;
 use App\Http\Controllers\Customer\CustomerAdministrationController;
 use App\Http\Controllers\Customer\CustomerAlertController;
 use App\Http\Controllers\Customer\CustomerBookmarkController;
+use App\Http\Controllers\Customer\CustomerContactController;
 use App\Http\Controllers\Customer\CustomerController;
+use App\Http\Controllers\Customer\CustomerDeletedItemsController;
+use App\Http\Controllers\Customer\CustomerEquipmentController;
 use App\Http\Controllers\Customer\CustomerIdController;
 use App\Http\Controllers\Customer\CustomerSearchController;
 use App\Http\Controllers\Customer\CustomerSiteController;
 use App\Models\Customer;
+use App\Models\CustomerEquipment;
 use App\Models\CustomerSite;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 use Illuminate\Support\Facades\Route;
@@ -109,6 +113,46 @@ Route::middleware('auth.secure')->group(function () {
 
         /*
         |-----------------------------------------------------------------------
+        | Customer Deleted Items
+        |-----------------------------------------------------------------------
+        */
+
+        Route::prefix('deleted-items')->name('deleted-items.')->group(function () {
+            Route::get('/', CustomerDeletedItemsController::class)
+                ->name('index')
+                ->breadcrumb('Deleted Items', 'customers.show');
+            Route::prefix('restore')->name('restore.')->group(function () {
+                Route::get('equipment/{equipment}', [CustomerEquipmentController::class, 'restore'])
+                    ->withTrashed()
+                    ->name('equipment');
+                Route::get('contacts/{contact}', [CustomerContactController::class, 'restore'])
+                    ->withTrashed()
+                    ->name('contacts');
+                // Route::get('notes/{note}', [CustomerNoteController::class, 'restore'])
+                //     ->withTrashed()
+                //     ->name('notes');
+                // Route::get('files/{file}', [CustomerFileController::class, 'restore'])
+                //     ->withTrashed()
+                //     ->name('files');
+            });
+            Route::prefix('force-delete')->name('force-delete.')->group(function () {
+                Route::delete('equipment/{equipment}', [CustomerEquipmentController::class, 'forceDelete'])
+                    ->withTrashed()
+                    ->name('equipment');
+                Route::delete('contacts/{contact}', [CustomerContactController::class, 'forceDelete'])
+                    ->withTrashed()
+                    ->name('contacts');
+                // Route::delete('notes/{note}', [CustomerNoteController::class, 'forceDelete'])
+                //     ->withTrashed()
+                //     ->name('notes');
+                // Route::delete('files/{file}', [CustomerFileController::class, 'forceDelete'])
+                //     ->withTrashed()
+                //     ->name('files');
+            });
+        });
+
+        /*
+        |-----------------------------------------------------------------------
         | Customer Sites
         |-----------------------------------------------------------------------
         */
@@ -123,16 +167,73 @@ Route::middleware('auth.secure')->group(function () {
             })->missing(function () {
                 throw new CustomerNotFoundException;
             });
+
+        /*
+        |-----------------------------------------------------------------------
+        | Customer Equipment Routes
+        |-----------------------------------------------------------------------
+        */
+        // Route::get('equipment/{equipment}/note/create', [CustomerNoteController::class, 'createEquipmentNote'])
+        //     ->name('equipment.note.create');
+
+        Route::resource('equipment', CustomerEquipmentController::class)
+            ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
+                $breadcrumbs->index('Equipment', 'customers.show')
+                    ->show(
+                        fn (Customer $customer, CustomerEquipment $equipment) => $equipment->equip_name
+                    );
+            })->except(['create', 'edit']);
+        // Route::put('equipment-data', CustomerEquipmentDataController::class)
+        //     ->name('update-equipment-data');
+
+        /*
+        |---------------------------------------------------------------------------
+        | Customer Contacts Routes
+        |---------------------------------------------------------------------------
+        */
+        Route::resource('contacts', CustomerContactController::class)
+            ->only(['store', 'update', 'destroy']);
+
+        /***********************************************************************
+         *                     Customer Notes Routes                           *
+         ***********************************************************************/
+        // Route::get('{note}/download', DownloadNoteController::class)
+        //     ->name('notes.download');
+        // Route::resource('notes', CustomerNoteController::class)
+        //     ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
+        //         $breadcrumbs->index('Customer Notes', 'customers.show')
+        //             ->create('New Note')
+        //             ->show('Note Details')
+        //             ->edit('Edit Note');
+        //     });
+        // Route::prefix('site/{site}')->name('site.')->group(function () {
+        //     Route::resource('notes', CustomerNoteSiteController::class)
+        //         ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
+        //             $breadcrumbs->create('New Note', 'customers.sites.show')
+        //                 ->show('Note Details', 'customers.sites.show')
+        //                 ->edit('Edit Note');
+        //         })->except(['index']);
+        // });
+        // Route::prefix('equipment/{equipment}')->name('equipment.')->group(function () {
+        //     Route::resource('notes', CustomerNoteEquipmentController::class)
+        //         ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
+        //             $breadcrumbs->create('New Note', 'customers.equipment.show')
+        //                 ->show('Note Details', 'customers.equipment.show')
+        //                 ->edit('Edit Note');
+        //         })->except(['index']);
+        // });
+
+        /***********************************************************************
+         *                     Customer Files Routes                           *
+         ***********************************************************************/
+        // Route::resource('files', CustomerFileController::class)
+        //     ->except(['index', 'show', 'edit', 'create']);
     });
 });
 
 /*******************************************************************************
  * TMP GO AWAY
  *******************************************************************************/
-
-Route::get('deleted-items', function () {
-    return 'deleted items';
-})->name('customers.deleted-items.index');
 
 Route::get('notes', function () {
     return 'create notes';
