@@ -8,9 +8,13 @@ use Illuminate\Database\QueryException;
 
 class CheckDatabaseError
 {
-    /**
-     * Create a new class instance.
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Examine a QueryException to see if it contains errors indicating that the
+    | selected record could not be deleted because it is in use by another
+    | record.  If so, throw a new RecordInUseException.
+    |---------------------------------------------------------------------------
+    */
     public function check(
         QueryException $e,
         ?string $message = 'Database Record In Use'

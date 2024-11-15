@@ -8,9 +8,11 @@ use Illuminate\Support\Collection;
 
 class CustomerSearch
 {
-    /**
-     * Perform a search for customer.  No search param returns all Models
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Perform a search for customer.  No search param returns all Models.
+    |---------------------------------------------------------------------------
+    */
     public function __invoke(Collection $searchData): mixed
     {
         if ($searchData->get('searchFor')) {
@@ -26,18 +28,22 @@ class CustomerSearch
             ->paginate($searchData->get('perPage'));
     }
 
-    /**
-     * Use Scout to perform a detailed search
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Use Scout to perform a detailed search
+    |---------------------------------------------------------------------------
+    */
     protected function filteredSearch(Collection $searchData): LengthAwarePaginator
     {
         return Customer::search($searchData->get('searchFor'))
             ->paginate($searchData->get('perPage'));
     }
 
-    /**
-     * Check to see if a Customer ID is currently in use
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Check to see if a Customer ID is currently in use
+    |---------------------------------------------------------------------------
+    */
     protected function searchById(int $id): ?Customer
     {
         return Customer::find($id);

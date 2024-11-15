@@ -10,9 +10,11 @@ use Symfony\Component\Mailer\Exception\TransportException;
 
 class SendTestEmail
 {
-    /**
-     * Send a test email to the currently authenticated user
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Send a test email to the currently authenticated user
+    |---------------------------------------------------------------------------
+    */
     public function __invoke(User $user)
     {
         try {
