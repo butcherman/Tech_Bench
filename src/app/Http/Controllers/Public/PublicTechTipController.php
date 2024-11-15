@@ -7,7 +7,6 @@ use App\Http\Requests\TechTips\SearchTipsRequest;
 use App\Models\EquipmentCategory;
 use App\Models\TechTip;
 use App\Service\TechTipSearchService;
-use Illuminate\Http\JsonResponse;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -30,11 +29,11 @@ class PublicTechTipController extends Controller
     /**
      * Search for a Public Tech Tip
      */
-    public function search(SearchTipsRequest $request): JsonResponse
+    public function search(SearchTipsRequest $request)
     {
         $searchObj = new TechTipSearchService($request);
 
-        return response()->json($searchObj->publicSearch());
+        return $searchObj->publicSearch();
     }
 
     /**
