@@ -7,6 +7,11 @@ use Tests\TestCase;
 
 class CustomerSearchTest extends TestCase
 {
+    /*
+    |---------------------------------------------------------------------------
+    | Invoke Method
+    |---------------------------------------------------------------------------
+    */
     public function test_search_guest(): void
     {
         $searchData = [

@@ -17,9 +17,11 @@ class CustomerAlertTest extends TestCase
         $this->customer = Customer::factory()->createQuietly();
     }
 
-    /**
-     * Index Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Index Method
+    |---------------------------------------------------------------------------
+    */
     public function test_index_guest(): void
     {
         $response = $this->get(
@@ -53,9 +55,11 @@ class CustomerAlertTest extends TestCase
         $response->assertSuccessful();
     }
 
-    /**
-     * Store Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Store Method
+    |---------------------------------------------------------------------------
+    */
     public function test_store_guest(): void
     {
         $data = CustomerAlert::factory()->make()->only(['message', 'type']);
@@ -77,7 +81,10 @@ class CustomerAlertTest extends TestCase
         $data = CustomerAlert::factory()->make()->only(['message', 'type']);
 
         $response = $this->actingAs($user)
-            ->post(route('customers.alerts.store', $this->customer->slug), $data);
+            ->post(
+                route('customers.alerts.store', $this->customer->slug),
+                $data
+            );
 
         $response->assertForbidden();
     }
@@ -100,9 +107,11 @@ class CustomerAlertTest extends TestCase
         $this->assertDatabaseHas('customer_alerts', $data);
     }
 
-    /**
-     * Update Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Update Method
+    |---------------------------------------------------------------------------
+    */
     public function test_update_guest(): void
     {
         $alert = CustomerAlert::factory()
@@ -165,9 +174,11 @@ class CustomerAlertTest extends TestCase
         $this->assertDatabaseHas('customer_alerts', $data);
     }
 
-    /**
-     * Destroy Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Destroy Method
+    |---------------------------------------------------------------------------
+    */
     public function test_destroy_guest(): void
     {
         $alert = CustomerAlert::factory()

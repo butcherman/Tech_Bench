@@ -2,12 +2,11 @@
 
 namespace Tests\Feature\Customer;
 
-use App\Models\Customer;
 use App\Models\User;
 use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
-class CustomerDeletedItemsTest extends TestCase
+class DisabledCustomerTest extends TestCase
 {
     /*
     |---------------------------------------------------------------------------
@@ -16,11 +15,7 @@ class CustomerDeletedItemsTest extends TestCase
     */
     public function test_invoke_guest(): void
     {
-        $customer = Customer::factory()->create();
-
-        $response = $this->get(
-            route('customers.deleted-items.index', $customer->slug)
-        );
+        $response = $this->get(route('customers.disabled.index'));
 
         $response->assertStatus(302)
             ->assertRedirect(route('login'));
@@ -32,10 +27,8 @@ class CustomerDeletedItemsTest extends TestCase
         /** @var User $user */
         $user = User::factory()->createQuietly();
 
-        $customer = Customer::factory()->createQuietly();
-
         $response = $this->actingAs($user)
-            ->get(route('customers.deleted-items.index', $customer->slug));
+            ->get(route('customers.disabled.index'));
 
         $response->assertForbidden();
     }
@@ -44,16 +37,14 @@ class CustomerDeletedItemsTest extends TestCase
     {
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);
-        $customer = Customer::factory()->create();
 
         $response = $this->actingAs($user)
-            ->get(route('customers.deleted-items.index', $customer->slug));
+            ->get(route('customers.disabled.index'));
 
         $response->assertSuccessful()
             ->assertInertia(fn (Assert $page) => $page
-                ->component('Customer/DeletedItems')
-                ->has('customer')
-                ->has('deleted-items')
+                ->component('Customer/Disabled')
+                ->has('disabled-list')
             );
     }
 }

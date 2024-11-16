@@ -13,9 +13,11 @@ use Tests\TestCase;
 
 class CustomerTest extends TestCase
 {
-    /**
-     * Index Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Index Method
+    |---------------------------------------------------------------------------
+    */
     public function test_index_guest(): void
     {
         $response = $this->get(route('customers.index'));
@@ -39,9 +41,11 @@ class CustomerTest extends TestCase
                 ->has('permissions'));
     }
 
-    /**
-     * Create Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Create Method
+    |---------------------------------------------------------------------------
+    */
     public function test_create_guest(): void
     {
         $response = $this->get(route('customers.create'));
@@ -79,9 +83,11 @@ class CustomerTest extends TestCase
                 ->has('default-state'));
     }
 
-    /**
-     * Store Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Store Method
+    |---------------------------------------------------------------------------
+    */
     public function test_store_guest(): void
     {
         $cust = Customer::factory()->make();
@@ -174,9 +180,11 @@ class CustomerTest extends TestCase
         ]);
     }
 
-    /**
-     * Show Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Show Method
+    |---------------------------------------------------------------------------
+    */
     public function test_show_guest(): void
     {
         $cust = Customer::factory()->create();
@@ -247,9 +255,11 @@ class CustomerTest extends TestCase
             ->assertRedirect(route('customers.not-found'));
     }
 
-    /**
-     * Edit Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Edit Method
+    |---------------------------------------------------------------------------
+    */
     public function test_edit_guest(): void
     {
         $customer = Customer::factory()->create();
@@ -294,9 +304,11 @@ class CustomerTest extends TestCase
                 ->has('siteList'));
     }
 
-    /**
-     * Update Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Update Method
+    |---------------------------------------------------------------------------
+    */
     public function test_update_guest(): void
     {
         $customer = Customer::factory()->createQuietly();
@@ -364,9 +376,11 @@ class CustomerTest extends TestCase
         ]);
     }
 
-    /**
-     * Destroy Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Destroy Method
+    |---------------------------------------------------------------------------
+    */
     public function test_destroy_guest(): void
     {
         $cust = Customer::factory()->createQuietly();
@@ -424,9 +438,11 @@ class CustomerTest extends TestCase
         $this->assertSoftDeleted('customers', $cust->only(['cust_id']));
     }
 
-    /**
-     * Restore Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Restore Method
+    |---------------------------------------------------------------------------
+    */
     public function test_restore_guest(): void
     {
         $cust = Customer::factory()->createQuietly();
@@ -476,9 +492,11 @@ class CustomerTest extends TestCase
         ]);
     }
 
-    /**
-     * Force Delete Function
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Force Delete Function
+    |---------------------------------------------------------------------------
+    */
     public function test_force_delete_guest(): void
     {
         $cust = Customer::factory()->createQuietly();

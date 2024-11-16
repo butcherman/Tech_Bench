@@ -32,9 +32,11 @@ class CustomerEquipmentTest extends TestCase
         $this->customer->save();
     }
 
-    /**
-     * Index Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Index Method
+    |---------------------------------------------------------------------------
+    */
     public function test_index_guest(): void
     {
         $response = $this->get(
@@ -64,9 +66,11 @@ class CustomerEquipmentTest extends TestCase
             );
     }
 
-    /**
-     * Store Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Store Method
+    |---------------------------------------------------------------------------
+    */
     public function test_store_guest(): void
     {
         $data = [
@@ -189,9 +193,11 @@ class CustomerEquipmentTest extends TestCase
             ->assertSessionHasErrors(['site_list']);
     }
 
-    /**
-     * Show Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Show Method
+    |---------------------------------------------------------------------------
+    */
     public function test_show_guest(): void
     {
         $equip = CustomerEquipment::factory()->create([
@@ -236,9 +242,11 @@ class CustomerEquipmentTest extends TestCase
             );
     }
 
-    /**
-     * Update Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Update Method
+    |---------------------------------------------------------------------------
+    */
     public function test_update_guest(): void
     {
         $equip = CustomerEquipment::factory()->create([
@@ -363,9 +371,11 @@ class CustomerEquipmentTest extends TestCase
         ]);
     }
 
-    /**
-     * Destroy Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Destroy Method
+    |---------------------------------------------------------------------------
+    */
     public function test_destroy_guest(): void
     {
         $equip = CustomerEquipment::factory()->create([
@@ -422,9 +432,11 @@ class CustomerEquipmentTest extends TestCase
         ]);
     }
 
-    /**
-     * Restore Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Restore Method
+    |---------------------------------------------------------------------------
+    */
     public function test_restore_guest(): void
     {
         $equip = CustomerEquipment::factory()->create([
@@ -486,9 +498,11 @@ class CustomerEquipmentTest extends TestCase
         ]));
     }
 
-    /**
-     * Force Delete Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Force Delete Method
+    |---------------------------------------------------------------------------
+    */
     public function test_force_delete_guest(): void
     {
         $equip = CustomerEquipment::factory()->create([

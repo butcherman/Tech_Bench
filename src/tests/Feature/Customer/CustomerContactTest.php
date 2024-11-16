@@ -11,9 +11,11 @@ use Tests\TestCase;
 
 class CustomerContactTest extends TestCase
 {
-    /**
-     * Store Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Store Method
+    |---------------------------------------------------------------------------
+    */
     public function test_store_guest(): void
     {
         $cust = Customer::factory()->createQuietly();
@@ -118,9 +120,11 @@ class CustomerContactTest extends TestCase
         ]);
     }
 
-    /**
-     * Update Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Update Method
+    |---------------------------------------------------------------------------
+    */
     public function test_update_guest(): void
     {
         $cust = Customer::factory()->createQuietly();
@@ -297,9 +301,11 @@ class CustomerContactTest extends TestCase
         );
     }
 
-    /**
-     * Destroy Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Destroy Method
+    |---------------------------------------------------------------------------
+    */
     public function test_destroy_guest(): void
     {
         $cont = CustomerContact::factory()->createQuietly();
@@ -353,9 +359,11 @@ class CustomerContactTest extends TestCase
         $this->assertSoftDeleted('customer_contacts', $cont->toArray());
     }
 
-    /**
-     * Restore Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Restore Method
+    |---------------------------------------------------------------------------
+    */
     public function test_restore_guest(): void
     {
         $cont = CustomerContact::factory()->createQuietly();
@@ -410,9 +418,11 @@ class CustomerContactTest extends TestCase
         $this->assertDatabaseHas('customer_contacts', $cont->only(['cont_id']));
     }
 
-    /**
-     * Force Delete Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Force Delete Method
+    |---------------------------------------------------------------------------
+    */
     public function test_force_delete_guest(): void
     {
         $cont = CustomerContact::factory()->createQuietly();

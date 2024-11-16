@@ -7,9 +7,11 @@ use Tests\TestCase;
 
 class CustomerAdministrationTest extends TestCase
 {
-    /**
-     * Edit Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Edit Method
+    |---------------------------------------------------------------------------
+    */
     public function test_edit_guest(): void
     {
         $response = $this->get(route('customers.settings.edit'));
@@ -41,9 +43,11 @@ class CustomerAdministrationTest extends TestCase
         $response->assertSuccessful();
     }
 
-    /**
-     * Update Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Update Method
+    |---------------------------------------------------------------------------
+    */
     public function test_update_guest(): void
     {
         $data = [

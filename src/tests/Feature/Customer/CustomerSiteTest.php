@@ -10,9 +10,11 @@ use Tests\TestCase;
 
 class CustomerSiteTest extends TestCase
 {
-    /**
-     * Index Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Index Method
+    |---------------------------------------------------------------------------
+    */
     public function test_index_guest(): void
     {
         $customer = Customer::factory()->create();
@@ -43,9 +45,11 @@ class CustomerSiteTest extends TestCase
             );
     }
 
-    /**
-     * Create Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Create Method
+    |---------------------------------------------------------------------------
+    */
     public function test_create_guest(): void
     {
         $customer = Customer::factory()->create();
@@ -108,9 +112,11 @@ class CustomerSiteTest extends TestCase
             );
     }
 
-    /**
-     * Store Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Store Method
+    |---------------------------------------------------------------------------
+    */
     public function test_store_guest(): void
     {
         $customer = Customer::factory()->create();
@@ -246,9 +252,11 @@ class CustomerSiteTest extends TestCase
         ]));
     }
 
-    /**
-     * Show Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Show Method
+    |---------------------------------------------------------------------------
+    */
     public function test_show_guest(): void
     {
         $site = CustomerSite::factory()->create();
@@ -291,9 +299,11 @@ class CustomerSiteTest extends TestCase
             );
     }
 
-    /**
-     * Edit Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Edit Method
+    |---------------------------------------------------------------------------
+    */
     public function test_edit_guest(): void
     {
         $site = CustomerSite::factory()->create();
@@ -347,9 +357,11 @@ class CustomerSiteTest extends TestCase
             );
     }
 
-    /**
-     * Update Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Update Method
+    |---------------------------------------------------------------------------
+    */
     public function test_update_guest(): void
     {
         $site = CustomerSite::factory()->create();
@@ -426,9 +438,11 @@ class CustomerSiteTest extends TestCase
         ]);
     }
 
-    /**
-     * Destroy Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Destroy Method
+    |---------------------------------------------------------------------------
+    */
     public function test_destroy_guest(): void
     {
         $site = CustomerSite::factory()->create();

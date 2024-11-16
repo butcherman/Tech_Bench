@@ -8,9 +8,11 @@ use Tests\TestCase;
 
 class CustomerBookmarkTest extends TestCase
 {
-    /**
-     * Invoke Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Invoke Method
+    |---------------------------------------------------------------------------
+    */
     public function test_invoke_guest(): void
     {
         $customer = Customer::factory()->createQuietly();
