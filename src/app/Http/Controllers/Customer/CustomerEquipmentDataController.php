@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Customer;
 
+use App\Events\Customer\CustomerEquipmentDataFieldChanged;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customer\CustomerEquipmentDataRequest;
 use App\Models\Customer;
@@ -21,6 +22,8 @@ class CustomerEquipmentDataController extends Controller
     ): RedirectResponse {
         $this->svc
             ->updateDataFieldValue($request->safe()->collect(), $customer);
+
+        event(new CustomerEquipmentDataFieldChanged($customer));
 
         return back()->with('success', 'Saved Successfully');
     }

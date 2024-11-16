@@ -2,6 +2,7 @@
 
 namespace App\Events\Customer;
 
+use App\Models\Customer;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Foundation\Events\Dispatchable;
@@ -14,18 +15,17 @@ class CustomerEquipmentDataFieldChanged
     /**
      * Create a new event instance.
      */
-    public function __construct()
-    {
-        // TODO - Event is triggered in CustomerEquipmentData Controller
-    }
+    public function __construct(public Customer $customer) {}
 
     /**
      * Get the channels the event should broadcast on.
+     *
+     * @codeCoverageIgnore
      */
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('channel-name'),
+            new PrivateChannel('customer.'.$this->customer->slug),
         ];
     }
 }

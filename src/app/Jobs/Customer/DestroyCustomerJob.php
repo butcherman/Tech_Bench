@@ -25,7 +25,7 @@ class DestroyCustomerJob implements ShouldQueue
     {
         Log::info('Destroying Customer - '.$this->customer->name);
 
-        $fileSvc->destroyAllCustomerFiles($this->customer);
+        // $fileSvc->destroyAllCustomerFiles($this->customer); TODO - Create This Method
         $custSvc->destroyAllSites($this->customer);
         $custSvc->destroyCustomer($this->customer, 'Force Deleting Customer', true);
 

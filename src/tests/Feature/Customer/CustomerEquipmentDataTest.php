@@ -2,11 +2,13 @@
 
 namespace Tests\Feature\Customer;
 
+use App\Events\Customer\CustomerEquipmentDataFieldChanged;
 use App\Models\Customer;
 use App\Models\CustomerEquipment;
 use App\Models\CustomerEquipmentData;
 use App\Models\DataField;
 use App\Models\User;
+use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
 class CustomerEquipmentDataTest extends TestCase
@@ -50,6 +52,8 @@ class CustomerEquipmentDataTest extends TestCase
 
     public function test_invoke_one_field(): void
     {
+        Event::fake();
+
         /** @var User $user */
         $user = User::factory()->createQuietly();
         $fields = DataField::factory()
@@ -115,10 +119,14 @@ class CustomerEquipmentDataTest extends TestCase
             'field_id' => $fields[3]->field_id,
             'value' => $value3,
         ]);
+
+        Event::assertDispatched(CustomerEquipmentDataFieldChanged::class);
     }
 
     public function test_invoke_all_fields(): void
     {
+        Event::fake();
+
         /** @var User $user */
         $user = User::factory()->createQuietly();
         $fields = DataField::factory()
@@ -195,5 +203,7 @@ class CustomerEquipmentDataTest extends TestCase
             'field_id' => $fields[3]->field_id,
             'value' => $newVal3,
         ]);
+
+        Event::assertDispatched(CustomerEquipmentDataFieldChanged::class);
     }
 }
