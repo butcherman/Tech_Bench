@@ -25,7 +25,6 @@ class DataTypeRequest extends FormRequest
             'name' => [
                 'required',
                 'string',
-                // 'unique:data_field_types,name'
                 Rule::unique('data_field_types')
                     ->ignore($this->equipment_datum),
             ],

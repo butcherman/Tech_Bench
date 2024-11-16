@@ -16,7 +16,7 @@ class LogDebugVisits
      *
      * @var array<int, string>
      */
-    protected $ignore = ['_token', 'token'];
+    protected $ignore = ['_token'];
 
     /**
      * Sensitive data is logged as received, but the values will be redacted
@@ -27,6 +27,8 @@ class LogDebugVisits
         'password',
         'password_confirmation',
         'current_password',
+        'client_secret',
+        'code',
     ];
 
     /**
@@ -40,13 +42,22 @@ class LogDebugVisits
         'administration/telescope/*',
     ];
 
-    /**
-     * When Debug Logging is one, log every page visit and all $request data
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Add Trace Data to each log entry Context
+    |---------------------------------------------------------------------------
+    */
     public function handle(Request $request, Closure $next): Response
     {
-        // Generate unique ID and add to Context to be tagged in all logging entries
+        /**
+         * Add Unique ID, User, and IP Address to all log entries
+         */
         Context::add('trace_id', Str::uuid()->toString());
+        Context::add(
+            'user_id',
+            $request->user() ? $request->user()->user_id : null
+        );
+        Context::add('ip_address', $request->ip());
 
         // If log level is not set to debug, continue on
         if (config('logging.channels.daily.level') === 'debug') {
@@ -56,6 +67,11 @@ class LogDebugVisits
         return $next($request);
     }
 
+    /*
+    |---------------------------------------------------------------------------
+    | If Debug Logging is turned on, add additional information about visit.
+    |---------------------------------------------------------------------------
+    */
     protected function logDebugVisit(Request $request): void
     {
         // Determine if we need to bypass this URL
@@ -70,24 +86,41 @@ class LogDebugVisits
             ? $request->user()->full_name
             : $request->ip();
 
-        $requestData = $request->all();
         $currentRoute = $request->path();
 
         Log::debug('Route '.$currentRoute.' visited by '.$user);
 
-        if ($requestData) {
-            // Verify we do not log any sensitive data
-            foreach ($requestData as $index => $data) {
-                if (in_array($data, $this->ignore)) {
-                    unset($requestData[$index]);
-                }
+        $requestData = $this->checkRequestArray($request->toArray());
 
-                if (in_array($data, $this->redact)) {
-                    $requestData[$index] = '[REDACTED]';
-                }
+        if ($requestData) {
+            Log::debug('Submitted Data', $requestData);
+        }
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | Determine if we need to redact or omit any data from logging request.
+    |---------------------------------------------------------------------------
+    */
+    protected function checkRequestArray(array $requestData)
+    {
+        foreach ($requestData as $key => $value) {
+            // If the value is an array, process the array
+            if (is_array($value)) {
+                $this->checkRequestArray($value);
             }
 
-            Log::debug('Submitted Data ', $requestData);
+            // Check for keys that should be ignored
+            if (in_array($key, $this->ignore)) {
+                unset($requestData[$key]);
+            }
+
+            // Check for keys that should be redacted
+            if (in_array($key, $this->redact)) {
+                $requestData[$key] = '[REDACTED]';
+            }
         }
+
+        return $requestData;
     }
 }
