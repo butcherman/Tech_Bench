@@ -6,6 +6,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Context;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
@@ -51,21 +52,23 @@ class LogDebutVisits
             }
 
             // Collect information needed for logging
-            $user = $request->user() ? $request->user()->full_name : $request->ip();
+            $user = $request->user()
+                ? $request->user()->full_name
+                : $request->ip();
             $requestData = $request->all();
             $currentRoute = $request->path();
 
             Log::debug('Route '.$currentRoute.' visited by '.$user);
 
             if ($requestData) {
-                // Verify we do not log any sensitive data
-                foreach ($requestData as $index => $data) {
-                    if (in_array($data, $this->ignore)) {
-                        unset($requestData[$index]);
+                foreach ($this->redact as $i) {
+                    if (Arr::exists($requestData, $i)) {
+                        $requestData[$i] = '[REDACTED]';
                     }
-
-                    if (in_array($data, $this->redact)) {
-                        $requestData[$index] = '[REDACTED]';
+                }
+                foreach ($this->ignore as $i) {
+                    if (Arr::exists($requestData, $i)) {
+                        unset($requestData[$i]);
                     }
                 }
 
