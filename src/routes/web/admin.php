@@ -17,7 +17,6 @@ use Illuminate\Support\Facades\Route;
 | System Administration Routes
 |-------------------------------------------------------------------------------
 */
-
 Route::middleware('auth.secure')->prefix('administration')->name('admin.')->group(function () {
     Route::get('/', AdministrationController::class)
         ->name('index')
@@ -28,44 +27,72 @@ Route::middleware('auth.secure')->prefix('administration')->name('admin.')->grou
     | User Settings Administration
     |---------------------------------------------------------------------------
     */
-
     Route::prefix('users')->name('user.')->group(function () {
-        Route::get('password-policy', [PasswordPolicyController::class, 'edit'])
-            ->name('password-policy.edit')
-            ->breadcrumb('Password Policy', 'admin.index');
-        Route::put('password-policy', [PasswordPolicyController::class, 'update'])
-            ->name('password-policy.update');
+        /*
+        |-----------------------------------------------------------------------
+        | Password Policy
+        |-----------------------------------------------------------------------
+        */
+        Route::controller(PasswordPolicyController::class)->group(function () {
+            Route::get('password-policy', 'edit')
+                ->name('password-policy.edit')
+                ->breadcrumb('Password Policy', 'admin.index');
+            Route::put('password-policy', 'update')
+                ->name('password-policy.update');
+        });
 
-        Route::get('user-settings', [UserSettingsController::class, 'edit'])
-            ->name('user-settings.edit')
-            ->breadcrumb('User Settings', 'admin.index');
-        Route::put('user-settings', [UserSettingsController::class, 'update'])
-            ->name('user-settings.update');
+        /*
+        |-----------------------------------------------------------------------
+        | User Settings
+        |-----------------------------------------------------------------------
+        */
+        Route::controller(UserSettingsController::class)->group(function () {
+            Route::get('user-settings', 'edit')
+                ->name('user-settings.edit')
+                ->breadcrumb('User Settings', 'admin.index');
+            Route::put('user-settings', 'update')
+                ->name('user-settings.update');
+        });
     });
 
     /*
     |---------------------------------------------------------------------------
-    | Application Configuration
+    | Application Logo
     |---------------------------------------------------------------------------
     */
+    Route::controller(LogoController::class)->group(function () {
+        Route::get('logo', 'edit')
+            ->name('logo.edit')
+            ->breadcrumb('Tech Bench Logo', 'admin.index');
+        Route::post('logo', 'update')
+            ->name('logo.update');
+    });
 
-    Route::get('logo', [LogoController::class, 'edit'])
-        ->name('logo.edit')
-        ->breadcrumb('Tech Bench Logo', 'admin.index');
-    Route::post('logo', [LogoController::class, 'update'])
-        ->name('logo.update');
+    /*
+    |---------------------------------------------------------------------------
+    | Basic App Settings
+    |---------------------------------------------------------------------------
+    */
+    Route::controller(BasicSettingsController::class)->group(function () {
+        Route::get('basic-settings', 'edit')
+            ->name('basic-settings.edit')
+            ->breadcrumb('Tech Bench Settings', 'admin.index');
+        Route::put('basic-settings', 'update')
+            ->name('basic-settings.update');
+    });
 
-    Route::get('basic-settings', [BasicSettingsController::class, 'edit'])
-        ->name('basic-settings.edit')
-        ->breadcrumb('Tech Bench Settings', 'admin.index');
-    Route::put('basic-settings', [BasicSettingsController::class, 'update'])
-        ->name('basic-settings.update');
-
-    Route::get('email-settings', [EmailSettingsController::class, 'edit'])
-        ->name('email-settings.edit')
-        ->breadcrumb('Email Settings', 'admin.index');
-    Route::put('email-settings', [EmailSettingsController::class, 'update'])
-        ->name('email-settings.update');
+    /*
+    |---------------------------------------------------------------------------
+    | Email Settings
+    |---------------------------------------------------------------------------
+    */
+    Route::controller(EmailSettingsController::class)->group(function () {
+        Route::get('email-settings', 'edit')
+            ->name('email-settings.edit')
+            ->breadcrumb('Email Settings', 'admin.index');
+        Route::put('email-settings', 'update')
+            ->name('email-settings.update');
+    });
     Route::get('test-email', SendTestEmailController::class)
         ->name('test-email');
 
@@ -74,19 +101,19 @@ Route::middleware('auth.secure')->prefix('administration')->name('admin.')->grou
     | Feature Configuration
     |---------------------------------------------------------------------------
     */
-
-    Route::get('features', [FeatureController::class, 'edit'])
-        ->name('features.edit')
-        ->breadcrumb('App Features', 'admin.index');
-    Route::put('features', [FeatureController::class, 'update'])
-        ->name('features.update');
+    Route::controller(FeatureController::class)->group(function () {
+        Route::get('features', 'edit')
+            ->name('features.edit')
+            ->breadcrumb('App Features', 'admin.index');
+        Route::put('features', 'update')
+            ->name('features.update');
+    });
 
     /*
     |---------------------------------------------------------------------------
     | SSL Certificate Administration
     |---------------------------------------------------------------------------
     */
-
     Route::resource('security', SecurityController::class)
         ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
             $breadcrumbs->index('SSL Certificate', 'admin.index')

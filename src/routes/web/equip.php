@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Route;
 | Equipment Based Routes
 |-------------------------------------------------------------------------------
 */
-
 Route::middleware('auth.secure')->group(function () {
     Route::get('equipment-list', EquipmentListController::class)
         ->name('equipment-list');
@@ -23,7 +22,6 @@ Route::middleware('auth.secure')->group(function () {
     | Equipment Type Administration
     |---------------------------------------------------------------------------
     */
-
     Route::resource('equipment', EquipmentTypeController::class)
         ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
             $breadcrumbs->index('Equipment Categories and Types', 'admin.index')
@@ -40,7 +38,6 @@ Route::middleware('auth.secure')->group(function () {
     | Equipment Category Administration
     |---------------------------------------------------------------------------
     */
-
     Route::resource('equipment-category', EquipmentCategoryController::class)
         ->only(['store', 'update', 'destroy']);
 
@@ -49,7 +46,6 @@ Route::middleware('auth.secure')->group(function () {
     | Equipment Data Administration
     |---------------------------------------------------------------------------
     */
-
     Route::resource('equipment-data', EquipmentDataTypeController::class)
         ->except('show')
         ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {

@@ -1,5 +1,6 @@
 <?php
 
+use App\Exceptions\Auth\InitializeUserLinkMissingException;
 use App\Http\Controllers\Admin\User\DisabledUserController;
 use App\Http\Controllers\Admin\User\ReSendWelcomeEmailController;
 use App\Http\Controllers\Admin\User\UserAdministrationController;
@@ -16,11 +17,10 @@ use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Http\Controllers\PasswordResetLinkController;
 
 /*
-|---------------------------------------------------------------------------
+|-------------------------------------------------------------------------------
 | User Based Routes
-|---------------------------------------------------------------------------
+|-------------------------------------------------------------------------------
 */
-
 Route::middleware('auth.secure')->group(function () {
 
     /*
@@ -28,7 +28,6 @@ Route::middleware('auth.secure')->group(function () {
     | User Account Routes
     |---------------------------------------------------------------------------
     */
-
     Route::prefix('user')->name('user.')->group(function () {
         Route::get('change-password', UserPasswordController::class)
             ->name('change-password.show')
@@ -77,10 +76,6 @@ Route::middleware('auth.secure')->group(function () {
             Route::get('deactivated-users', DisabledUserController::class)
                 ->name('deactivated')
                 ->breadcrumb('Disabled Users', 'admin.user.index');
-
-            Route::get('{user}/restore', [UserAdministrationController::class, 'restore'])
-                ->withTrashed()
-                ->name('restore');
         });
 
         Route::resource('user', UserAdministrationController::class)
@@ -96,7 +91,6 @@ Route::middleware('auth.secure')->group(function () {
         | User Roles Administration
         |-----------------------------------------------------------------------
         */
-
         Route::post('user-roles/create', [UserRolesController::class, 'create'])
             ->name('user-roles.copy')
             ->breadcrumb('Build New Role', 'admin.user-roles.index');
@@ -116,13 +110,12 @@ Route::middleware('auth.secure')->group(function () {
 | Finish Setting Up User Account Routes
 |-------------------------------------------------------------------------------
 */
-
-Route::middleware('guest')->group(function () {
-    Route::get('initialize-account/{token}', [InitializeUserController::class, 'show'])
+Route::middleware('guest')->controller(InitializeUserController::class)->group(function () {
+    Route::get('initialize-account/{token}', 'show')
         ->name('initialize')
         ->missing(function () {
-            abort(404, 'Cannot Find the Requested Page');
+            throw new InitializeUserLinkMissingException;
         });
-    Route::put('initialize-account/{token}', [InitializeUserController::class, 'update'])
+    Route::put('initialize-account/{token}', 'update')
         ->name('initialize.update');
 });

@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Route;
 | Primary/Non-Specific Routes for Authenticated Users
 |-------------------------------------------------------------------------------
 */
-
 Route::middleware('auth.secure')->group(function () {
     Route::get('dashboard', DashboardController::class)
         ->name('dashboard')
