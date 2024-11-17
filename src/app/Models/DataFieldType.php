@@ -20,7 +20,12 @@ class DataFieldType extends Model
     protected $guarded = ['type_id', 'created_at', 'updated_at'];
 
     /** @var array<int, string> */
-    protected $hidden = ['updated_at', 'created_at', 'laravel_through_key'];
+    protected $hidden = [
+        'updated_at',
+        'created_at',
+        'laravel_through_key',
+        'pivot',
+    ];
 
     /*
     |---------------------------------------------------------------------------
@@ -33,6 +38,7 @@ class DataFieldType extends Model
             'is_hyperlink' => 'boolean',
             'masked' => 'boolean',
             'allow_copy' => 'boolean',
+            'do_not_log_value' => 'boolean',
         ];
     }
 

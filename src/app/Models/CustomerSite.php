@@ -73,7 +73,8 @@ class CustomerSite extends Model
     public function isPrimary(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->Customer->primary_site_id === $this->cust_site_id,
+            get: fn () => $this->Customer
+                && $this->Customer->primary_site_id === $this->cust_site_id,
         );
     }
 

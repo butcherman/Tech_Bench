@@ -7,6 +7,8 @@ use App\Http\Controllers\Admin\Config\FeatureController;
 use App\Http\Controllers\Admin\Config\LogoController;
 use App\Http\Controllers\Admin\Config\SecurityController;
 use App\Http\Controllers\Admin\Config\SendTestEmailController;
+use App\Http\Controllers\Admin\Misc\ContactPhoneTypesController;
+use App\Http\Controllers\Admin\Misc\UploadedFileTypesController;
 use App\Http\Controllers\Admin\User\PasswordPolicyController;
 use App\Http\Controllers\Admin\User\UserSettingsController;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
@@ -120,4 +122,24 @@ Route::middleware('auth.secure')->prefix('administration')->name('admin.')->grou
                 ->create('Upload New Certificate')
                 ->edit('Generate CSR', 'admin.security.index');
         })->except(['show']);
+
+    /*
+    |---------------------------------------------------------------------------
+    | File Types for Uploaded Files
+    |---------------------------------------------------------------------------
+    */
+    Route::resource('file-types', UploadedFileTypesController::class)
+        ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
+            $breadcrumbs->index('Uploaded File Types', 'admin.index');
+        })->except(['edit', 'show']);
+
+    /*
+    |---------------------------------------------------------------------------
+    | Phone Number Types for Contacts
+    |---------------------------------------------------------------------------
+    */
+    Route::resource('phone-types', ContactPhoneTypesController::class)
+        ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
+            $breadcrumbs->index('Contact Phone Types', 'admin.index');
+        })->except(['edit', 'show']);
 });

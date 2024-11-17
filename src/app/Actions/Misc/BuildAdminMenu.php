@@ -98,22 +98,22 @@ class BuildAdminMenu
                 [
                     'name' => 'Disabled Customers',
                     'icon' => 'ban',
-                    'route' => '#', // route('customers.disabled.index'),
+                    'route' => route('customers.disabled.index'),
                 ],
                 [
                     'name' => 'Uploaded File Types',
                     'icon' => 'file-import',
-                    'route' => '#', // route('admin.file-types.index'),
+                    'route' => route('admin.file-types.index'),
                 ],
                 [
                     'name' => 'Contact Phone Types',
                     'icon' => 'phone',
-                    'route' => '#', // route('admin.phone-types.index'),
+                    'route' => route('admin.phone-types.index'),
                 ],
                 [
                     'name' => 'Re-Assign Customer Site',
                     'icon' => 'truck-moving',
-                    'route' => '#', // route('customers.re-assign.edit'),
+                    'route' => route('customers.re-assign.edit'),
                 ],
             ];
         }

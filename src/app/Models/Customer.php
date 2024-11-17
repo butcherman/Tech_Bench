@@ -37,6 +37,7 @@ class Customer extends Model
         'deleted_reason',
         'CustomerAlert',
         'CustomerEquipment',
+        'laravel_through_key',
     ];
 
     /*

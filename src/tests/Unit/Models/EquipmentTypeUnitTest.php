@@ -2,6 +2,8 @@
 
 namespace Tests\Unit\Models;
 
+use App\Models\Customer;
+use App\Models\CustomerEquipment;
 use App\Models\DataField;
 use App\Models\DataFieldType;
 use App\Models\EquipmentCategory;
@@ -34,20 +36,31 @@ class EquipmentTypeUnitTest extends TestCase
         );
     }
 
-    // public function test_data_field_type_relationship(): void
-    // {
-    //     $typeList = DataFieldType::factory()->count(5)->create();
-    //     $typeList->each(function ($type) {
-    //         DataField::create([
-    //             'equip_id' => $this->model->equip_id,
-    //             'type_id' => $type->type_id,
-    //             'order' => 1,
-    //         ]);
-    //     });
+    public function test_data_field_type_relationship(): void
+    {
+        $typeList = DataFieldType::factory()->count(5)->create();
+        $typeList->each(function ($type) {
+            DataField::create([
+                'equip_id' => $this->model->equip_id,
+                'type_id' => $type->type_id,
+                'order' => 1,
+            ]);
+        });
 
-    //     $this->assertEquals(
-    //         $typeList->toArray(),
-    //         $this->model->DataFieldType->toArray()
-    //     );
-    // }
+        $this->assertEquals(
+            $typeList->toArray(),
+            $this->model->DataFieldType->toArray()
+        );
+    }
+
+    public function test_customer_relationship(): void
+    {
+        $cust = Customer::factory()->create();
+        CustomerEquipment::create([
+            'cust_id' => $cust->cust_id,
+            'equip_id' => $this->model->equip_id,
+        ]);
+
+        $this->assertEquals($cust->toArray(), $this->model->Customer[0]->toArray());
+    }
 }
