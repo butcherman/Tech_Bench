@@ -2,9 +2,11 @@
 
 namespace App\Services\Misc;
 
+use App\Models\CustomerFileType;
 use App\Models\DataFieldType;
 use App\Models\EquipmentCategory;
 use App\Models\EquipmentType;
+use App\Models\PhoneNumberType;
 use App\Models\UserRole;
 use App\Models\UserSettingType;
 use Illuminate\Support\Facades\Cache;
@@ -148,6 +150,30 @@ class CacheHelper
     {
         return Cache::rememberForever('dataFieldTypes', function () {
             return DataFieldType::all();
+        });
+    }
+
+    /**
+     * Get a list of all Customer File Types for uploaded files.
+     *
+     * @return \Illuminate\Cache\TCacheValue
+     */
+    public function fileTypes()
+    {
+        return Cache::rememberForever('fileTypes', function () {
+            return CustomerFileType::all();
+        });
+    }
+
+    /**
+     * Get a list of all phone types for contact phone numbers
+     *
+     * @return \Illuminate\Cache\TCacheValue
+     */
+    public function phoneTypes()
+    {
+        return Cache::rememberForever('phoneTypes', function () {
+            return PhoneNumberType::all();
         });
     }
 }

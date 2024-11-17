@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class CustomerFileType extends Model
 {
+    use HasFactory;
+
     /** @var array<int, string> */
     protected $primaryKey = 'file_type_id';
 

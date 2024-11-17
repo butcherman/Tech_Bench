@@ -2,66 +2,63 @@
 
 namespace App\Http\Controllers\Admin\Misc;
 
+use App\Facades\CacheFacade;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\Admin\Misc\UploadedFileTypesRequest;
+use App\Models\Customer;
+use App\Models\CustomerFileType;
+use App\Services\Customer\CustomerFileTypeService;
+use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
-
+use Inertia\Response;
 
 class UploadedFileTypesController extends Controller
 {
+    public function __construct(protected CustomerFileTypeService $svc) {}
+
     /**
-     * Display a listing of the resource.
+     * Show a listing of all current File Types (from cache)
      */
-    public function index()
+    public function index(): Response
     {
-        //
+        $this->authorize('manage', Customer::class);
+
+        return Inertia::render('Admin/FileType/Index', [
+            'file-types' => CacheFacade::fileTypes(),
+        ]);
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Store a newly created File Type.
      */
-    public function create()
+    public function store(UploadedFileTypesRequest $request): RedirectResponse
     {
-        //
+        $this->svc->createFileType($request->safe()->collect());
+
+        return back()->with('success', __('admin.file-type.created'));
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Update the File Type.
      */
-    public function store(Request $request)
-    {
-        //
+    public function update(
+        UploadedFileTypesRequest $request,
+        CustomerFileType $file_type
+    ): RedirectResponse {
+        $this->svc->updateFileType($request->safe()->collect(), $file_type);
+
+        return back()->with('success', __('admin.file-type.updated'));
     }
 
     /**
-     * Display the specified resource.
+     * Remove the File Type.
      */
-    public function show(string $id)
+    public function destroy(CustomerFileType $file_type): RedirectResponse
     {
-        //
-    }
+        $this->authorize('manage', Customer::class);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+        $this->svc->destroyFileType($file_type);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return back()->with('warning', __('admin.file-type.destroyed'));
     }
 }

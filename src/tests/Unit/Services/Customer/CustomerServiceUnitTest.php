@@ -392,6 +392,11 @@ class CustomerServiceUnitTest extends TestCase
         );
     }
 
+    /*
+    |---------------------------------------------------------------------------
+    | destroyAllSites()
+    |---------------------------------------------------------------------------
+    */
     public function test_destroy_all_sites(): void
     {
         $cust = Customer::factory()->has(CustomerSite::factory(5))->create();
@@ -400,5 +405,24 @@ class CustomerServiceUnitTest extends TestCase
         $testObj->destroyAllSites($cust);
 
         $this->assertCount(0, $cust->fresh()->CustomerSite->toArray());
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | Restore Site
+    |---------------------------------------------------------------------------
+    */
+    public function test_restore_site(): void
+    {
+        $site = CustomerSite::factory()->create();
+        $site->delete();
+
+        $testObj = new CustomerService;
+        $testObj->restoreCustomerSite($site);
+
+        $this->assertDatabaseHas('customer_sites', [
+            'cust_site_id' => $site->cust_site_id,
+            'deleted_at' => null,
+        ]);
     }
 }

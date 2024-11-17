@@ -188,6 +188,14 @@ class CustomerService
     }
 
     /**
+     * Restore a Customer Site.
+     */
+    public function restoreCustomerSite(CustomerSite $site): void
+    {
+        $site->restore();
+    }
+
+    /**
      * Generate a unique slug to reference the customer in URL
      */
     protected function generateSlug(

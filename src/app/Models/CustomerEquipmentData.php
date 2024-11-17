@@ -84,7 +84,9 @@ class CustomerEquipmentData extends Model
     public function broadcastOn(string $event): array
     {
         return match ($event) {
+            // @codeCoverageIgnoreStart
             'trashed', 'deleted' => [],
+            // @codeCoverageIgnoreEnd
             default => [
                 new PrivateChannel('customer-equipment.'.$this->cust_equip_id),
             ],
