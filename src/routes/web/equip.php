@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\Equipment\EquipmentCategoryController;
 use App\Http\Controllers\Equipment\EquipmentDataTypeController;
-use App\Http\Controllers\Equipment\EquipmentListController;
 use App\Http\Controllers\Equipment\EquipmentTypeController;
 use App\Models\EquipmentType;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
@@ -14,9 +13,6 @@ use Illuminate\Support\Facades\Route;
 |-------------------------------------------------------------------------------
 */
 Route::middleware('auth.secure')->group(function () {
-    Route::get('equipment-list', EquipmentListController::class)
-        ->name('equipment-list');
-
     /*
     |---------------------------------------------------------------------------
     | Equipment Type Administration

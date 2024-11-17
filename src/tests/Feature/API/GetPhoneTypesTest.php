@@ -1,18 +1,18 @@
 <?php
 
-namespace Tests\Feature\Equipment;
+namespace Tests\Feature\API;
 
 use App\Models\User;
 use Tests\TestCase;
 
-class EquipmentListTest extends TestCase
+class GetPhoneTypesTest extends TestCase
 {
     /**
      * Invoke Method
      */
     public function test_invoke_guest(): void
     {
-        $response = $this->get(route('equipment-list'));
+        $response = $this->get(route('phone-types'));
 
         $response->assertStatus(302)
             ->assertRedirect(route('login'));
@@ -24,7 +24,7 @@ class EquipmentListTest extends TestCase
         /** @var User $user */
         $user = User::factory()->createQuietly();
 
-        $response = $this->actingAs($user)->get(route('equipment-list'));
+        $response = $this->actingAs($user)->get(route('phone-types'));
 
         $response->assertSuccessful();
     }

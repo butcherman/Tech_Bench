@@ -12,6 +12,6 @@ class EquipmentListController extends Controller
      */
     public function __invoke()
     {
-        return CacheFacade::equipmentTypes();
+        return CacheFacade::equipmentCategories();
     }
 }
