@@ -79,8 +79,8 @@ class CustomerSiteController extends Controller
             'alerts' => fn () => $customer->CustomerAlert,
             'equipmentList' => fn () => $site->SiteEquipment,
             'contacts' => fn () => $customer->CustomerContact,
-            'notes' => [], // fn () => $site->getNotes(),
-            'files' => [], // fn () => $site->getFiles()->append('href'),
+            'notes' => fn () => $site->getNotes(),
+            'files' => fn () => $site->getFiles()->append('href'),
             'is-fav' => fn () => $customer->isFav($request->user()),
         ]);
     }

@@ -207,6 +207,7 @@ Route::middleware('auth.secure')->group(function () {
          ***********************************************************************/
         Route::get('{note}/download', DownloadNoteController::class)
             ->name('notes.download');
+
         Route::resource('notes', CustomerNoteController::class)
             ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
                 $breadcrumbs->index('Customer Notes', 'customers.show')
