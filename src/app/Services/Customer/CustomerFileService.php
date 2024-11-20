@@ -47,7 +47,7 @@ class CustomerFileService extends HandleFileUploadService
         User $user
     ): CustomerFile {
         $custFile = new CustomerFile;
-        $custFile->name = json_decode($requestData->get('name'));
+        $custFile->name = $requestData->get('name');
         $custFile->file_type_id = $requestData->get('file_type_id');
 
         // Attach Relationships

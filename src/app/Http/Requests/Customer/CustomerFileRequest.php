@@ -3,10 +3,13 @@
 namespace App\Http\Requests\Customer;
 
 use App\Models\CustomerFile;
+use App\Traits\Requests\NormalizeJson;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CustomerFileRequest extends FormRequest
 {
+    use NormalizeJson;
+
     /**
      * Determine if the user is authorized to make this request.
      */
