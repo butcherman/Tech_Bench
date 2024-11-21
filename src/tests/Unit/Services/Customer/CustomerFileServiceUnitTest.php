@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Services\Customer;
 
+use App\Events\File\FileUploadDeletedEvent;
 use App\Models\Customer;
 use App\Models\CustomerEquipment;
 use App\Models\CustomerFile;
@@ -10,6 +11,7 @@ use App\Models\CustomerSite;
 use App\Models\FileUpload;
 use App\Models\User;
 use App\Services\Customer\CustomerFileService;
+use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
 class CustomerFileServiceUnitTest extends TestCase
@@ -274,6 +276,8 @@ class CustomerFileServiceUnitTest extends TestCase
 
     public function test_destroy_customer_file_force(): void
     {
+        Event::fake(FileUploadDeletedEvent::class);
+
         $file = CustomerFile::factory()->create();
 
         $testObj = new CustomerFileService;
@@ -283,6 +287,8 @@ class CustomerFileServiceUnitTest extends TestCase
             'customer_files',
             $file->only(['cust_file_id', 'file_id', 'file_type_id', 'name'])
         );
+
+        Event::assertDispatched(FileUploadDeletedEvent::class);
     }
 
     /*

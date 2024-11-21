@@ -88,7 +88,7 @@ class CustomerController extends Controller
             'equipmentList' => fn () => $customer->CustomerEquipment,
             'contacts' => fn () => $customer->CustomerContact,
             'notes' => fn () => $customer->CustomerNote,
-            'files' => fn () => $customer->CustomerFile, // ->append('href'),
+            'files' => fn () => $customer->CustomerFile->append('href'),
             'is-fav' => fn () => $customer->isFav($request->user()),
         ]);
     }

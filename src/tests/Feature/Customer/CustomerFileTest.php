@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Customer;
 
+use App\Events\File\FileUploadDeletedEvent;
 use App\Models\Customer;
 use App\Models\CustomerEquipment;
 use App\Models\CustomerFile;
@@ -476,7 +477,7 @@ class CustomerFileTest extends TestCase
 
     public function test_force_delete(): void
     {
-        // Event::fake();
+        Event::fake(FileUploadDeletedEvent::class);
 
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);
@@ -494,6 +495,6 @@ class CustomerFileTest extends TestCase
 
         $this->assertDatabaseMissing('customer_files', $file->only(['file_id']));
 
-        // Event::assertDispatched(FileDataDeletedEvent::class);
+        Event::assertDispatched(FileUploadDeletedEvent::class);
     }
 }

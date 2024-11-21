@@ -3,15 +3,16 @@
 namespace App\Models;
 
 use App\Observers\DeviceTokenObserver;
+use App\Traits\Models\HasUser;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 
 #[ObservedBy([DeviceTokenObserver::class])]
 class DeviceToken extends Model
 {
     use HasFactory;
+    use HasUser;
 
     /** @var string */
     protected $primaryKey = 'device_id';
@@ -33,15 +34,5 @@ class DeviceToken extends Model
             'created_at' => 'datetime:M d, Y',
             'updated_at' => 'datetime:M d, Y',
         ];
-    }
-
-    /*
-    |---------------------------------------------------------------------------
-    | Model Relationships
-    |---------------------------------------------------------------------------
-    */
-    public function User(): HasOne
-    {
-        return $this->hasOne(User::class, 'user_id', 'user_id');
     }
 }

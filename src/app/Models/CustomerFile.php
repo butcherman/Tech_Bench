@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Observers\CustomerFileObserver;
 use App\Traits\CustomerBroadcastingTrait;
+use App\Traits\Models\HasUser;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
@@ -25,6 +26,7 @@ class CustomerFile extends Model
     use BroadcastsEvents;
     use CustomerBroadcastingTrait;
     use HasFactory;
+    use HasUser;
     use Prunable;
     use SoftDeletes;
 
@@ -143,12 +145,6 @@ class CustomerFile extends Model
             'file_type_id',
             'file_type_id'
         );
-    }
-
-    public function User(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'user_id', 'user_id')
-            ->withTrashed();
     }
 
     public function Customer(): BelongsTo

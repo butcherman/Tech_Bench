@@ -92,7 +92,7 @@ class CustomerFileUnitTest extends TestCase
 
         $this->assertEquals(
             $data->makeHidden('Customer')->toArray(),
-            $this->model->CustomerEquipment->toArray()
+            $this->model->fresh()->CustomerEquipment->toArray()
         );
     }
 
