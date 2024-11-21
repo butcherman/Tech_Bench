@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use App\Observers\CustomerNoteObserver;
 use App\Traits\CustomerBroadcastingTrait;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\BroadcastableModelEventOccurred;
 use Illuminate\Database\Eloquent\BroadcastsEvents;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -16,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Log;
 
+#[ObservedBy([CustomerNoteObserver::class])]
 class CustomerNote extends Model
 {
     use BroadcastsEvents;
