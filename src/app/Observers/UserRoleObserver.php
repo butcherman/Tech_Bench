@@ -5,21 +5,15 @@ namespace App\Observers;
 use App\Models\UserRole;
 use Illuminate\Support\Facades\Log;
 
-class UserRoleObserver // extends Observer
+class UserRoleObserver extends Observer
 {
-    public function creating(UserRole $userRole)
-    {
-        Log::critical('creating role');
-    }
-
     /**
      * Handle the UserRole "created" event.
      */
     public function created(UserRole $userRole): void
     {
         Log::info(
-            // 'New User Role created by '.$this->user,
-            'New User Role created by ',
+            'New User Role created by '.$this->user,
             $userRole->toArray()
         );
     }
@@ -30,7 +24,7 @@ class UserRoleObserver // extends Observer
     public function updated(UserRole $userRole): void
     {
         Log::info(
-            'User Role updated by ', // .$this->user,
+            'User Role updated by '.$this->user,
             $userRole->toArray()
         );
     }
@@ -41,7 +35,7 @@ class UserRoleObserver // extends Observer
     public function deleted(UserRole $userRole): void
     {
         Log::info(
-            'User Role deleted by ', // .$this->user,
+            'User Role deleted by '.$this->user,
             $userRole->toArray()
         );
     }

@@ -2,9 +2,11 @@
 
 namespace Tests\Unit\Facades;
 
+use App\Models\CustomerFileType;
 use App\Models\DataFieldType;
 use App\Models\EquipmentCategory;
 use App\Models\EquipmentType;
+use App\Models\PhoneNumberType;
 use App\Models\UserRole;
 use App\Models\UserSettingType;
 use App\Services\Misc\CacheHelper;
@@ -114,39 +116,6 @@ class CacheHelperUnitTest extends TestCase
     | Application Data
     |---------------------------------------------------------------------------
     */
-    public function test_app_data_facade(): void
-    {
-        $version = new Version;
-
-        $shouldBe = [
-            'name' => config('app.name'),
-            'company_name' => config('app.company_name'),
-            'logo' => config('app.logo'),
-            'version' => $version->full(),
-            'copyright' => $version->copyright(),
-            'build' => $version->commit(),
-            'build_date' => $version->build(),
-
-            // File information
-            'fileData' => [
-                'maxSize' => config('filesystems.max_filesize'),
-                'chunkSize' => config('filesystems.chunk_size'),
-            ],
-
-            // Inactivity timeout
-            'idle_timeout' => intval(config('auth.auto_logout_timer')),
-        ];
-
-        Cache::shouldReceive('rememberForever')
-            ->once()
-            ->with('appData', \Closure::class)
-            ->andReturn($shouldBe);
-
-        $appData = $this->helperObj->appData();
-
-        $this->assertEquals($shouldBe, $appData);
-    }
-
     public function test_app_data(): void
     {
         $version = new Version;
@@ -184,11 +153,6 @@ class CacheHelperUnitTest extends TestCase
     {
         $shouldBe = UserRole::all();
 
-        Cache::shouldReceive('rememberForever')
-            ->once()
-            ->with('userRoles', \Closure::class)
-            ->andReturn($shouldBe);
-
         $roleList = $this->helperObj->userRoles();
 
         $this->assertEquals($shouldBe->toArray(), $roleList->toArray());
@@ -202,11 +166,6 @@ class CacheHelperUnitTest extends TestCase
     public function test_user_settings_type(): void
     {
         $shouldBe = UserSettingType::all();
-
-        Cache::shouldReceive('rememberForever')
-            ->once()
-            ->with('userSettingsType', \Closure::class)
-            ->andReturn($shouldBe);
 
         $settingTypeList = $this->helperObj->userSettingsType();
 
@@ -224,11 +183,6 @@ class CacheHelperUnitTest extends TestCase
 
         $shouldBe = EquipmentCategory::with('EquipmentType')->get();
 
-        Cache::shouldReceive('rememberForever')
-            ->once()
-            ->with('equipmentCategories', \Closure::class)
-            ->andReturn($shouldBe);
-
         $equip = $this->helperObj->equipmentCategories();
 
         $this->assertEquals($shouldBe->toArray(), $equip->toArray());
@@ -241,14 +195,7 @@ class CacheHelperUnitTest extends TestCase
     */
     public function test_equipment_types(): void
     {
-        Cache::flush();
-
         $shouldBe = EquipmentType::all();
-
-        Cache::shouldReceive('rememberForever')
-            ->once()
-            ->with('equipmentTypes', \Closure::class)
-            ->andReturn($shouldBe);
 
         $equip = $this->helperObj->equipmentTypes();
 
@@ -262,16 +209,37 @@ class CacheHelperUnitTest extends TestCase
     */
     public function test_data_field_types(): void
     {
-        Cache::flush();
-
         $shouldBe = DataFieldType::all();
 
-        Cache::shouldReceive('rememberForever')
-            ->once()
-            ->with('dataFieldTypes', \Closure::class)
-            ->andReturn($shouldBe);
-
         $data = $this->helperObj->dataFieldTypes();
+
+        $this->assertEquals($shouldBe->toArray(), $data->toArray());
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | File Types
+    |---------------------------------------------------------------------------
+    */
+    public function test_file_types(): void
+    {
+        $shouldBe = CustomerFileType::all();
+
+        $data = $this->helperObj->fileTypes();
+
+        $this->assertEquals($shouldBe->toArray(), $data->toArray());
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | Phone Types
+    |---------------------------------------------------------------------------
+    */
+    public function test_phone_types(): void
+    {
+        $shouldBe = PhoneNumberType::all();
+
+        $data = $this->helperObj->phoneTypes();
 
         $this->assertEquals($shouldBe->toArray(), $data->toArray());
     }

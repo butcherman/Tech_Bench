@@ -28,10 +28,8 @@ class HandleFileUploadedDeletedListener
 
             Log::notice('File '.$path.' on disk '.$fileData->disk.' has been deleted');
         } catch (QueryException $e) {
-            DbException::check($e);
             Log::error('Delete File Failed - '.$e->getMessage());
+            DbException::check($e);
         }
-
-        // TODO - Catch File Not Found Exception
     }
 }

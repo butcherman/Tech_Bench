@@ -63,7 +63,7 @@ class UserRoleUnitTest extends TestCase
     */
     public function test_create_new_role(): void
     {
-        Event::fake();
+        Event::fake(FeatureChangedEvent::class);
 
         $data = [
             'name' => 'New Role',
@@ -113,7 +113,7 @@ class UserRoleUnitTest extends TestCase
     */
     public function test_update_existing_role(): void
     {
-        Event::fake();
+        Event::fake(FeatureChangedEvent::class);
 
         $testRole = UserRole::factory()->createQuietly();
         $data = [

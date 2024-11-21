@@ -6,7 +6,6 @@ use App\Models\DeviceToken;
 use App\Models\User;
 use App\Models\UserVerificationCode;
 use App\Services\Auth\TwoFactorService;
-use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
 class TwoFactorUnitTest extends TestCase
@@ -21,8 +20,6 @@ class TwoFactorUnitTest extends TestCase
     */
     public function test_process_verification_response_remember_on(): void
     {
-        Event::fake();
-
         /** @var User $user */
         $user = User::factory()->create();
         $data = collect(['remember' => true]);
@@ -43,14 +40,12 @@ class TwoFactorUnitTest extends TestCase
         $this->assertNotNull($response);
         $this->assertDatabaseMissing(
             'user_verification_codes',
-            $code->toArray()
+            $code->only(['user_id', 'code'])
         );
     }
 
     public function test_process_verification_response_remember_off(): void
     {
-        Event::fake();
-
         /** @var User $user */
         $user = User::factory()->create();
         $data = collect(['remember' => false]);
@@ -70,7 +65,7 @@ class TwoFactorUnitTest extends TestCase
         $this->assertNull($response);
         $this->assertDatabaseMissing(
             'user_verification_codes',
-            $code->toArray()
+            $code->only(['user_id', 'code'])
         );
     }
 

@@ -119,6 +119,27 @@ class UserUnitTest extends TestCase
         Mail::assertQueued(VerificationCodeMail::class);
     }
 
+    public function test_generate_verification_code_again(): void
+    {
+        Mail::fake();
+
+        $this->model->generateVerificationCode();
+        $currentCode = UserVerificationCode::where(
+            'user_id',
+            $this->model->user_id
+        )->first();
+
+        // Re-submit the generate command
+        $this->model->generateVerificationCode();
+
+        $this->assertNotEquals(
+            $currentCode->toArray(),
+            $this->model->UserVerificationCode->toArray()
+        );
+
+        Mail::assertQueued(VerificationCodeMail::class);
+    }
+
     public function test_validate_device_token(): void
     {
         $token = DeviceToken::factory()

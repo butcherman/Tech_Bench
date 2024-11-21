@@ -30,7 +30,7 @@ class UserVerificationCodeObserver
     public function updated(UserVerificationCode $userVerificationCode): void
     {
         Log::info(
-            'Generated New User Verification Code',
+            'Regenerated User Verification Code',
             $userVerificationCode->load('User')->toArray()
         );
 
@@ -45,7 +45,7 @@ class UserVerificationCodeObserver
     public function deleted(UserVerificationCode $userVerificationCode): void
     {
         Log::debug(
-            'Expired Verification Code Deleted',
+            'Expired or Used Verification Code Deleted',
             $userVerificationCode->toArray()
         );
     }
