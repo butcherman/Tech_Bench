@@ -65,16 +65,25 @@ class CustomerFileController extends FileUploadController
     /**
      * Restore the Customer File.
      */
-    public function restore()
+    public function restore(Customer $customer, CustomerFile $file): RedirectResponse
     {
-        //
+        $this->authorize('restore', $file);
+
+        $this->svc->restoreCustomerFile($file);
+
+        return back()->with('success', __('cust.file.restored'));
     }
 
     /**
      * Force Delete the Customer File.
      */
-    public function forceDelete()
+    public function forceDelete(Customer $customer, CustomerFile $file): RedirectResponse
     {
-        //
+        $this->authorize('force-delete', $file);
+
+        $this->svc->destroyCustomerFile($file, true);
+
+        return back()
+            ->with('warning', __('cust.file.force_deleted'));
     }
 }

@@ -19,7 +19,7 @@ class CustomerFileServiceUnitTest extends TestCase
     | createCustomerFile()
     |---------------------------------------------------------------------------
     */
-    public function test_create_customer_file()
+    public function test_create_customer_file(): void
     {
         $customer = Customer::factory()->create();
         $file = FileUpload::factory()->create();
@@ -53,7 +53,7 @@ class CustomerFileServiceUnitTest extends TestCase
         ]);
     }
 
-    public function test_create_customer_equipment_file()
+    public function test_create_customer_equipment_file(): void
     {
         $customer = Customer::factory()->create();
         $file = FileUpload::factory()->create();
@@ -90,7 +90,7 @@ class CustomerFileServiceUnitTest extends TestCase
         ]);
     }
 
-    public function test_create_customer_site_file()
+    public function test_create_customer_site_file(): void
     {
         $customer = Customer::factory()->create();
         $file = FileUpload::factory()->create();
@@ -142,7 +142,7 @@ class CustomerFileServiceUnitTest extends TestCase
     | updateCustomerFile()
     |---------------------------------------------------------------------------
     */
-    public function test_update_customer_file()
+    public function test_update_customer_file(): void
     {
         $customer = Customer::factory()->create();
         $file = CustomerFile::factory()
@@ -174,7 +174,7 @@ class CustomerFileServiceUnitTest extends TestCase
         ]);
     }
 
-    public function test_update_customer_equipment_file()
+    public function test_update_customer_equipment_file(): void
     {
         $customer = Customer::factory()->create();
         $file = CustomerFile::factory()
@@ -209,7 +209,7 @@ class CustomerFileServiceUnitTest extends TestCase
         ]);
     }
 
-    public function test_update_customer_site_file()
+    public function test_update_customer_site_file(): void
     {
         $customer = Customer::factory()->create();
         $file = CustomerFile::factory()
@@ -259,7 +259,7 @@ class CustomerFileServiceUnitTest extends TestCase
     | destroyCustomerFile()
     |---------------------------------------------------------------------------
     */
-    public function test_destroy_customer_file()
+    public function test_destroy_customer_file(): void
     {
         $file = CustomerFile::factory()->create();
 
@@ -272,7 +272,7 @@ class CustomerFileServiceUnitTest extends TestCase
         );
     }
 
-    public function test_destroy_customer_file_force()
+    public function test_destroy_customer_file_force(): void
     {
         $file = CustomerFile::factory()->create();
 
@@ -290,7 +290,7 @@ class CustomerFileServiceUnitTest extends TestCase
     | restoreCustomerFile()
     |---------------------------------------------------------------------------
     */
-    public function test_restore_customer_file()
+    public function test_restore_customer_file(): void
     {
         $file = CustomerFile::factory()->create();
         $file->delete();
