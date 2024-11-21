@@ -2,39 +2,14 @@
 
 namespace App\Services\Customer;
 
-use App\Enums\DiskEnum;
 use App\Models\Customer;
 use App\Models\CustomerFile;
 use App\Models\FileUpload;
 use App\Models\User;
-use App\Services\_Base\HandleFileUploadService;
-use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
-class CustomerFileService extends HandleFileUploadService
+class CustomerFileService
 {
-    /*
-    |---------------------------------------------------------------------------
-    | Save the file chunk.  If upload is completed, save file and create
-    | a new Customer File Entry.
-    |---------------------------------------------------------------------------
-    */
-    public function processFileRequest(Request $request, Customer $customer)
-    {
-        $this->setFileData(DiskEnum::customers, $customer->cust_id);
-        $savedFile = $this->getChunk($request->file('file'), $request);
-
-        // If file is done, create the DB Entry
-        if ($savedFile instanceof \App\Models\FileUpload) {
-            $this->createCustomerFile(
-                $request->safe()->collect(),
-                $savedFile,
-                $customer,
-                $request->user()
-            );
-        }
-    }
-
     /*
     |---------------------------------------------------------------------------
     | Create a new Customer File
@@ -65,6 +40,51 @@ class CustomerFileService extends HandleFileUploadService
 
     /*
     |---------------------------------------------------------------------------
+    | Update an existing Customer File.
+    |---------------------------------------------------------------------------
+    */
+    public function updateCustomerFile(
+        Collection $requestData,
+        CustomerFile $custFile
+    ): CustomerFile {
+        $custFile->update($requestData->only(['name', 'file_type_id'])
+            ->toArray());
+
+        $this->processAssociations($requestData, $custFile);
+
+        return $custFile->fresh();
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | Soft Delete or Force Delete a Customer File.
+    |---------------------------------------------------------------------------
+    */
+    public function destroyCustomerFile(
+        CustomerFile $customerFile,
+        ?bool $force = false
+    ): void {
+        if ($force) {
+            $customerFile->forceDelete();
+
+            return;
+        }
+
+        $customerFile->delete();
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | Restore a Soft Deleted Customer File
+    |---------------------------------------------------------------------------
+    */
+    public function restoreCustomerFile(CustomerFile $customerFile): void
+    {
+        $customerFile->restore();
+    }
+
+    /*
+    |---------------------------------------------------------------------------
     | Add the proper associated models and remove all others
     |---------------------------------------------------------------------------
     */
@@ -75,13 +95,11 @@ class CustomerFileService extends HandleFileUploadService
         match ($requestData->get('file_type')) {
             'equipment' => $this->associateEquipment(
                 $customerFile,
-                $requestData->cust_equip_id
+                $requestData->get('cust_equip_id')
             ),
             'site' => $this->associateSites(
                 $customerFile,
-                is_array($requestData->site_list)
-                    ? $requestData->site_list
-                    : json_decode($requestData->site_list)
+                $requestData->get('site_list')
             ),
             default => $this->removeAssociations($customerFile),
         };

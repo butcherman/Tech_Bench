@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers\Customer;
 
-use App\Http\Controllers\Controller;
+use App\Enums\DiskEnum;
+use App\Http\Controllers\FileUploadController;
 use App\Http\Requests\Customer\CustomerFileRequest;
 use App\Models\Customer;
+use App\Models\CustomerFile;
 use App\Services\Customer\CustomerFileService;
-use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 
-class CustomerFileController extends Controller
+class CustomerFileController extends FileUploadController
 {
     public function __construct(protected CustomerFileService $svc) {}
 
@@ -18,7 +20,19 @@ class CustomerFileController extends Controller
      */
     public function store(CustomerFileRequest $request, Customer $customer): Response
     {
-        $this->svc->processFileRequest($request, $customer);
+        // Process File Upload First
+        $this->setFileData(DiskEnum::customers, $customer->cust_id);
+        $savedFile = $this->getChunk($request->file('file'), $request);
+
+        // If upload is complete, continue processing request
+        if ($savedFile) {
+            $this->svc->createCustomerFile(
+                $request->safe()->collect(),
+                $savedFile,
+                $customer,
+                $request->user()
+            );
+        }
 
         return response()->noContent();
     }
@@ -26,17 +40,26 @@ class CustomerFileController extends Controller
     /**
      * Update the Customer File.
      */
-    public function update(Request $request, string $id)
-    {
-        //
+    public function update(
+        CustomerFileRequest $request,
+        Customer $customer,
+        CustomerFile $file
+    ): RedirectResponse {
+        $this->svc->updateCustomerFile($request->safe()->collect(), $file);
+
+        return back()->with('success', __('cust.file.updated'));
     }
 
     /**
      * Remove the Customer File.
      */
-    public function destroy(string $id)
+    public function destroy(Customer $customer, CustomerFile $file): RedirectResponse
     {
-        //
+        $this->authorize('delete', $file);
+
+        $this->svc->destroyCustomerFile($file);
+
+        return back()->with('warning', __('cust.file.deleted'));
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\_Base;
+namespace App\Http\Controllers;
 
 use App\Enums\DiskEnum;
 use App\Exceptions\File\FileChunkMissingException;
@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Storage;
 use Pion\Laravel\ChunkUpload\Handler\HandlerFactory;
 use Pion\Laravel\ChunkUpload\Receiver\FileReceiver;
 
-abstract class HandleFileUploadService
+abstract class FileUploadController extends Controller
 {
     /**
      * Storage Disk file will be saved to.
@@ -56,7 +56,7 @@ abstract class HandleFileUploadService
     | chunks and save the file.
     |---------------------------------------------------------------------------
     */
-    protected function getChunk(UploadedFile $fileChunk, Request $request): FileUpload|int
+    protected function getChunk(UploadedFile $fileChunk, Request $request): FileUpload|false
     {
         $receiver = new FileReceiver(
             $fileChunk,
@@ -86,7 +86,7 @@ abstract class HandleFileUploadService
             'percentage-done' => $handler->getPercentageDone(),
         ]);
 
-        return $handler->getPercentageDone();
+        return false;
     }
 
     /**
