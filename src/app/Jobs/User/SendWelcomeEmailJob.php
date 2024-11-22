@@ -16,10 +16,12 @@ class SendWelcomeEmailJob implements ShouldQueue
 
     public function __construct(protected User $user) {}
 
-    /**
-     * Create a link that allows the user to finish setting up their account and
-     * email it to them.
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Create a link that allows the user to finish setting up their account and
+    | email it to them.
+    |---------------------------------------------------------------------------
+    */
     public function handle(): void
     {
         $token = Str::uuid();

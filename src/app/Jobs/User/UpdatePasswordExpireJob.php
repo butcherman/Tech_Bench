@@ -11,9 +11,11 @@ class UpdatePasswordExpireJob implements ShouldQueue
 {
     use Queueable;
 
-    /**
-     * Create a new job instance.
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Modify the password_expires field for all users with the new value.
+    |---------------------------------------------------------------------------
+    */
     public function __construct() {}
 
     /**

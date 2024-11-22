@@ -10,9 +10,11 @@ class ReAssignSiteJob implements ShouldQueue
 {
     use Queueable;
 
-    /**
-     * Create a new job instance.
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Move a Customer Site from one Customer to another.
+    |---------------------------------------------------------------------------
+    */
     public function __construct(protected int $siteId, protected int $toCustId) {}
 
     /**

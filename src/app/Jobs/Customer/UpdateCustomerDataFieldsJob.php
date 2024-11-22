@@ -11,9 +11,11 @@ class UpdateCustomerDataFieldsJob implements ShouldQueue
 {
     use Queueable;
 
-    /**
-     * Create a new job instance.
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Add or remove any data fields needed for Customer Equipment.
+    |---------------------------------------------------------------------------
+    */
     public function __construct(protected EquipmentType $equipment) {}
 
     /**

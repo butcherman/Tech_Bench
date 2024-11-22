@@ -13,9 +13,11 @@ class DestroyCustomerJob implements ShouldQueue
 {
     use Queueable;
 
-    /**
-     * Create a new job instance.
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Remove all data attached to a customer, and then destroy the customer.
+    |---------------------------------------------------------------------------
+    */
     public function __construct(protected Customer $customer) {}
 
     /**

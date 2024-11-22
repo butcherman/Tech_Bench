@@ -15,10 +15,12 @@ class CreateUserSettingsJob implements ShouldQueue
 
     public function __construct(protected User $user) {}
 
-    /**
-     * Create a database table entry of user settings for the new user.
-     * By default, all values are set to true
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Create a database table entry of user settings for the new user. By
+    | default, all values are set to true.
+    |---------------------------------------------------------------------------
+    */
     public function handle(): void
     {
         Log::info('Building User Settings for New User '.$this->user->full_name);

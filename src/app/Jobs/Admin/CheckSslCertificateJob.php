@@ -11,10 +11,12 @@ class CheckSslCertificateJob implements ShouldQueue
 {
     use Queueable;
 
-    /**
-     * Check to see if the SSL Certificate is set to expire soon and email
-     * installer level users if it is.
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Check to see if the SSL Certificate is set to expire soon and email
+    | installer level users if it is.
+    |---------------------------------------------------------------------------
+    */
     public function handle(CheckSslCertificate $svc): void
     {
         Log::debug('Starting Check SSL Certificate Job');

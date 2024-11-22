@@ -11,9 +11,12 @@ class CreateCustomerDataFieldsJob implements ShouldQueue
 {
     use Queueable;
 
-    /**
-     * Create a new job instance.
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | When Equipment is added to a customer, create the data fields to allow
+    | the user to add information about the equipment.
+    |---------------------------------------------------------------------------
+    */
     public function __construct(protected CustomerEquipment $equipment) {}
 
     /**
