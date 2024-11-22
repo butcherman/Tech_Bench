@@ -4,10 +4,11 @@ namespace App\Listeners\Auth;
 
 use App\Mail\Auth\PasswordChangedMail;
 use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
-class HandlePasswordResetListener
+class HandlePasswordResetListener implements ShouldQueue
 {
     /**
      * Send a notification email letting the user know that their password has

@@ -28,22 +28,18 @@ class CustomerSearch
             ->paginate($searchData->get('perPage'));
     }
 
-    /*
-    |---------------------------------------------------------------------------
-    | Use Scout to perform a detailed search
-    |---------------------------------------------------------------------------
-    */
+    /**
+     * Use Scout to perform a detailed search
+     */
     protected function filteredSearch(Collection $searchData): LengthAwarePaginator
     {
         return Customer::search($searchData->get('searchFor'))
             ->paginate($searchData->get('perPage'));
     }
 
-    /*
-    |---------------------------------------------------------------------------
-    | Check to see if a Customer ID is currently in use
-    |---------------------------------------------------------------------------
-    */
+    /**
+     * Check to see if a Customer ID is currently in use
+     */
     protected function searchById(int $id): ?Customer
     {
         return Customer::find($id);

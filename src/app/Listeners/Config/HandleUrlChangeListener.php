@@ -4,9 +4,10 @@ namespace App\Listeners\Config;
 
 use App\Actions\Admin\UpdateApplicationUrl;
 use App\Events\Config\UrlChangedEvent;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Log;
 
-class HandleUrlChangeListener
+class HandleUrlChangeListener implements ShouldQueue
 {
     /**
      * Create the event listener.

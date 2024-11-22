@@ -3,9 +3,10 @@
 namespace App\Listeners\Feature;
 
 use App\Events\Feature\FeatureChangedEvent;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Laravel\Pennant\Feature;
 
-class HandleFeatureChangedListener
+class HandleFeatureChangedListener implements ShouldQueue
 {
     /**
      * Handle the event.

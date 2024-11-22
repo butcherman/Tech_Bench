@@ -15,11 +15,14 @@ class CustomerSlugChangedEvent
     /**
      * Create a new event instance.
      */
-    public function __construct(
-        public Customer $customer,
-        public string $oldSlug,
-        public string $newSlug
-    ) {}
+    /*
+    |---------------------------------------------------------------------------
+    | This event is triggered when the unique slug for a customer URL is
+    | modified.  This means that anyone viewing the same customer is now
+    | on an invalid URL and any clicked links will result in a 404 error.
+    |---------------------------------------------------------------------------
+    */
+    public function __construct(public Customer $customer, public string $oldSlug, public string $newSlug) {}
 
     /**
      * Get the channels the event should broadcast on.

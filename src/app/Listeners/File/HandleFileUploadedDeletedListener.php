@@ -4,11 +4,12 @@ namespace App\Listeners\File;
 
 use App\Events\File\FileUploadDeletedEvent;
 use App\Facades\DbException;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
-class HandleFileUploadedDeletedListener
+class HandleFileUploadedDeletedListener implements ShouldQueue
 {
     /**
      * Listener will try to delete the file upload from the database.  If
@@ -20,6 +21,7 @@ class HandleFileUploadedDeletedListener
         /** @var FileUpload */
         $fileData = $event->fileUpload;
 
+        // TODO - Move the logic to a service class
         try {
             $path = $fileData->folder.DIRECTORY_SEPARATOR.$fileData->file_name;
 

@@ -12,17 +12,19 @@ use Illuminate\Support\Facades\Mail;
 class CheckSocialiteSecret extends UserGlobalSettingsService
 {
     /**
-     * # of days before the certificate expires that a notification should be sent
+     * # of days before the certificate expires that a notification will be sent
      *
      * @var array
      */
     protected $notificationDays = [15, 30, 60, 90];
 
-    /**
-     * Check if the Azure Client Secret is set to expire soon.  If so, email
-     * the users with the Installer Role to notify them of the upcoming
-     * expiration date.
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Check if the Azure Client Secret is set to expire soon.  If so, email the
+    | users with the Installer Role to notify them of the upcoming expiration
+    | date.
+    |---------------------------------------------------------------------------
+    */
     public function __invoke(): void
     {
         Log::info('Checking Azure Certificate expiration date');

@@ -15,6 +15,12 @@ class ProcessUploadedImage
      */
     protected $basePath = 'images/uploaded/';
 
+    /*
+    |---------------------------------------------------------------------------
+    | Take an image that was uploaded via TinyMCE Editor and save it to a
+    | folder that can be accessed publicly.
+    |---------------------------------------------------------------------------
+    */
     public function __invoke(UploadedFile $file, ?string $folder = null): string
     {
         if ($folder) {

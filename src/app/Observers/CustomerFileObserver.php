@@ -64,8 +64,7 @@ class CustomerFileObserver extends Observer
         event(new FileUploadDeletedEvent($customerFile->FileUpload));
 
         Log::info(
-            'Customer File deleted for '.$customerFile->Customer->name.
-                ' by '.$this->user,
+            'Customer File trashed by '.$this->user,
             $customerFile->toArray()
         );
     }

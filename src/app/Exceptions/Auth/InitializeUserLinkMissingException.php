@@ -7,6 +7,12 @@ use Illuminate\Support\Facades\Log;
 
 class InitializeUserLinkMissingException extends Exception
 {
+    /*
+    |---------------------------------------------------------------------------
+    | Exception notes that someone tried to visit an invalid User Initialization
+    | link.  Attempt is logged and 404 page is shown.
+    |---------------------------------------------------------------------------
+    */
     public function report(): void
     {
         Log::notice(

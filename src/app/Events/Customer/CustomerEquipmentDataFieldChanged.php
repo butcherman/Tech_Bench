@@ -12,9 +12,13 @@ class CustomerEquipmentDataFieldChanged
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    /**
-     * Create a new event instance.
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | This event is triggered when a user changes a data field for a customer.
+    | The event is broadcast to the customer equipment channel to notify other
+    | users viewing the page that the data has been modified.
+    |---------------------------------------------------------------------------
+    */
     public function __construct(public Customer $customer) {}
 
     /**
@@ -25,6 +29,7 @@ class CustomerEquipmentDataFieldChanged
     public function broadcastOn(): array
     {
         return [
+            // TODO - Change to Customer Equipment Channel?
             new PrivateChannel('customer.'.$this->customer->slug),
         ];
     }

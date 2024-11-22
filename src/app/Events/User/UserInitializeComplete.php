@@ -11,8 +11,10 @@ class UserInitializeComplete
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    /**
-     * Create a new event instance.
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Event is triggered when a new user has finished setting up their account.
+    |---------------------------------------------------------------------------
+    */
     public function __construct(public UserInitialize $token) {}
 }

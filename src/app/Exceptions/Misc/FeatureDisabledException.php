@@ -8,6 +8,12 @@ use Illuminate\Support\Facades\Log;
 
 class FeatureDisabledException extends Exception
 {
+    /*
+    |---------------------------------------------------------------------------
+    | Exception notes that someone tried to access a feature that is currently
+    | disabled.
+    |---------------------------------------------------------------------------
+    */
     public function report(): void
     {
         $user = Auth::check() ? Auth::user()->username : request()->ip();

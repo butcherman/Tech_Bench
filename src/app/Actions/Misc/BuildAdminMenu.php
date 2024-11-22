@@ -15,10 +15,12 @@ class BuildAdminMenu
     /** @var array<string, array> */
     protected $menu;
 
-    /**
-     * Based on the users permissions, build the Administration links that they
-     * have permission to view
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Based on the users permissions, build the Administration links that they
+    | have permission to view.
+    |---------------------------------------------------------------------------
+    */
     public function handle(User $user): array
     {
         $this->user = $user;

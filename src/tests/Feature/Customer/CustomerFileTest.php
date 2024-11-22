@@ -394,6 +394,7 @@ class CustomerFileTest extends TestCase
     public function test_restore_guest(): void
     {
         $file = CustomerFile::factory()->create();
+        $file->delete();
 
         $response = $this->get(route('customers.deleted-items.restore.files', [
             $file->cust_id,
@@ -410,6 +411,7 @@ class CustomerFileTest extends TestCase
         /** @var User $user */
         $user = User::factory()->createQuietly();
         $file = CustomerFile::factory()->create();
+        $file->delete();
 
         $response = $this->actingAs($user)
             ->get(route('customers.deleted-items.restore.files', [
@@ -425,6 +427,7 @@ class CustomerFileTest extends TestCase
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);
         $file = CustomerFile::factory()->create();
+        $file->delete();
 
         $response = $this->actingAs($user)
             ->get(route('customers.deleted-items.restore.files', [

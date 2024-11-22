@@ -21,9 +21,13 @@ class AuthorizeUser
         }
     }
 
-    /**
-     * Attempt to authenticate azure user
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Attempt to authenticate azure user.  If the user does not currently
+    | exist in the database, configuration will determine if the user is
+    | to be created.
+    |---------------------------------------------------------------------------
+    */
     public function handle(): User
     {
         $azureUser = Socialite::driver('azure')->user();

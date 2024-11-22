@@ -4,9 +4,10 @@ namespace App\Listeners\User;
 
 use App\Events\User\UserEmailChangedEvent;
 use App\Mail\User\EmailChangedMail;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Mail;
 
-class HandleUserEmailChangedListener
+class HandleUserEmailChangedListener implements ShouldQueue
 {
     /**
      * Send the user an email letting them know that their email address has

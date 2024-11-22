@@ -11,8 +11,13 @@ class FileUploadDeletedEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    /**
-     * Create a new event instance.
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Event is called when a File Upload foreign key is deleted from a child
+    | table.  The Listener will verify the file is no longer in use and
+    | remove the file from the database and storage system if it is
+    | no longer needed.
+    |---------------------------------------------------------------------------
+    */
     public function __construct(public FileUpload $fileUpload) {}
 }

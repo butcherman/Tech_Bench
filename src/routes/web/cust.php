@@ -129,6 +129,7 @@ Route::middleware('auth.secure')->group(function () {
             Route::get('/', CustomerDeletedItemsController::class)
                 ->name('index')
                 ->breadcrumb('Deleted Items', 'customers.show');
+
             Route::prefix('restore')->name('restore.')->group(function () {
                 Route::get('equipment/{equipment}', [CustomerEquipmentController::class, 'restore'])
                     ->withTrashed()
@@ -143,6 +144,7 @@ Route::middleware('auth.secure')->group(function () {
                     ->withTrashed()
                     ->name('files');
             });
+
             Route::prefix('force-delete')->name('force-delete.')->group(function () {
                 Route::delete('equipment/{equipment}', [CustomerEquipmentController::class, 'forceDelete'])
                     ->withTrashed()

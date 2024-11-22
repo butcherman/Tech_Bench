@@ -12,9 +12,11 @@ class BuildNavBar
     /** @var User */
     protected $user;
 
-    /**
-     * Build the dynamic Navigation Bar for the authenticated user
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Build the dynamic Navigation Bar for the authenticated user
+    |---------------------------------------------------------------------------
+    */
     public function handle(User $user): array
     {
         $this->user = $user;

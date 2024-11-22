@@ -12,7 +12,9 @@ class SendTestEmail
 {
     /*
     |---------------------------------------------------------------------------
-    | Send a test email to the currently authenticated user
+    | Send a test email to the currently authenticated user.  Message is not
+    | queued so that a live result can be sent in response with any possible
+    | errors that may have occurred.
     |---------------------------------------------------------------------------
     */
     public function __invoke(User $user)

@@ -9,6 +9,13 @@ use SocialiteProviders\Azure\User;
 
 class UnableToCreateSocialiteUserException extends Exception
 {
+    /*
+    |---------------------------------------------------------------------------
+    | Exception notes that a user valid to the Azure Database tried to log in,
+    | but this user does not currently have a Tech Bench account and the
+    | system configuration does not allow the auto creation of accounts.
+    |---------------------------------------------------------------------------
+    */
     public function __construct(protected User $user)
     {
         parent::__construct();

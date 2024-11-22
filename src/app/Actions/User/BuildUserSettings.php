@@ -12,10 +12,14 @@ class BuildUserSettings
     /** @var User */
     protected $user;
 
+    /*
+    |---------------------------------------------------------------------------
+    | Build a list of user settings that the user can make adjustments to.  Skip
+    | any that the user does not have permission to adjust
+    |---------------------------------------------------------------------------
+    */
+
     /**
-     * Build a list of user settings that the user can make adjustments to.
-     * Skip any that the user does not have permission to adjust
-     *
      * @return Collection<UserRolePermission>
      */
     public function __invoke(User $user): Collection

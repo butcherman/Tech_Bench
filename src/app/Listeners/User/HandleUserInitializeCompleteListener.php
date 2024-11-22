@@ -3,9 +3,10 @@
 namespace App\Listeners\User;
 
 use App\Events\User\UserInitializeComplete;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Log;
 
-class HandleUserInitializeCompleteListener
+class HandleUserInitializeCompleteListener implements ShouldQueue
 {
     /**
      * Handle the event.

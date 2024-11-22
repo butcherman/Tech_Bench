@@ -8,6 +8,12 @@ use Illuminate\Support\Facades\Log;
 
 class CustomerNotFoundException extends Exception
 {
+    /*
+    |---------------------------------------------------------------------------
+    | Exception notes that a customer slug or customer ID does not exist in
+    | the database.  A custom customer not found page will be rendered.
+    |---------------------------------------------------------------------------
+    */
     public function report(): void
     {
         Log::warning('Unable to find request customer page', [
