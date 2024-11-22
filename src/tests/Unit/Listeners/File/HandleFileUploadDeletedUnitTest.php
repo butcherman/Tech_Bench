@@ -18,87 +18,87 @@ class HandleFileUploadDeletedUnitTest extends TestCase
     | Test Job
     |---------------------------------------------------------------------------
     */
-    // public function test_handle(): void
-    // {
-    //     Storage::fake('local');
+    public function test_handle(): void
+    {
+        Storage::fake('local');
 
-    //     $fileUpload = FileUpload::factory()
-    //         ->create([
-    //             'disk' => 'local',
-    //             'file_name' => 'testPhoto.png',
-    //         ]);
+        $fileUpload = FileUpload::factory()
+            ->create([
+                'disk' => 'local',
+                'file_name' => 'testPhoto.png',
+            ]);
 
-    //     Storage::disk($fileUpload->disk)
-    //         ->putFile(
-    //             $fileUpload->folder,
-    //             UploadedFile::fake()->image('testPhoto.png')
-    //         );
+        Storage::disk($fileUpload->disk)
+            ->putFile(
+                $fileUpload->folder,
+                UploadedFile::fake()->image('testPhoto.png')
+            );
 
-    //     $event = new FileUploadDeletedEvent($fileUpload);
+        $event = new FileUploadDeletedEvent($fileUpload);
 
-    //     $listener = new HandleFileUploadedDeletedListener;
-    //     $listener->handle($event);
+        $listener = new HandleFileUploadedDeletedListener;
+        $listener->handle($event);
 
-    //     $this->assertDatabaseMissing('file_uploads', $fileUpload->toArray());
+        $this->assertDatabaseMissing('file_uploads', $fileUpload->toArray());
 
-    //     Storage::disk('local')
-    //         ->assertMissing(
-    //             $fileUpload->folder.DIRECTORY_SEPARATOR.$fileUpload->file_name
-    //         );
-    // }
+        Storage::disk('local')
+            ->assertMissing(
+                $fileUpload->folder.DIRECTORY_SEPARATOR.$fileUpload->file_name
+            );
+    }
 
-    // public function test_handle_in_use(): void
-    // {
-    //     Storage::fake('local');
+    public function test_handle_in_use(): void
+    {
+        Storage::fake('local');
 
-    //     $fileUpload = FileUpload::factory()
-    //         ->create([
-    //             'disk' => 'local',
-    //             'file_name' => 'testPhoto.png',
-    //         ]);
-    //     CustomerFile::factory()->create(['file_id' => $fileUpload->file_id]);
+        $fileUpload = FileUpload::factory()
+            ->create([
+                'disk' => 'local',
+                'file_name' => 'testPhoto.png',
+            ]);
+        CustomerFile::factory()->create(['file_id' => $fileUpload->file_id]);
 
-    //     Storage::disk($fileUpload->disk)
-    //         ->putFile(
-    //             $fileUpload->folder,
-    //             UploadedFile::fake()->image('testPhoto.png')
-    //         );
+        Storage::disk($fileUpload->disk)
+            ->putFile(
+                $fileUpload->folder,
+                UploadedFile::fake()->image('testPhoto.png')
+            );
 
-    //     $event = new FileUploadDeletedEvent($fileUpload);
+        $event = new FileUploadDeletedEvent($fileUpload);
 
-    //     $this->expectException(RecordInUseException::class);
+        $this->expectException(RecordInUseException::class);
 
-    //     $listener = new HandleFileUploadedDeletedListener;
-    //     $listener->handle($event);
+        $listener = new HandleFileUploadedDeletedListener;
+        $listener->handle($event);
 
-    //     $this->assertDatabaseHas('file_uploads', $fileUpload->toArray());
+        $this->assertDatabaseHas('file_uploads', $fileUpload->toArray());
 
-    //     Storage::disk('local')
-    //         ->assertExists(
-    //             $fileUpload->folder.DIRECTORY_SEPARATOR.$fileUpload->file_name
-    //         );
-    // }
+        Storage::disk('local')
+            ->assertExists(
+                $fileUpload->folder.DIRECTORY_SEPARATOR.$fileUpload->file_name
+            );
+    }
 
-    // public function test_handle_missing_file(): void
-    // {
-    //     Storage::fake('local');
+    public function test_handle_missing_file(): void
+    {
+        Storage::fake('local');
 
-    //     $fileUpload = FileUpload::factory()
-    //         ->create([
-    //             'disk' => 'local',
-    //             'file_name' => 'testPhoto.png',
-    //         ]);
+        $fileUpload = FileUpload::factory()
+            ->create([
+                'disk' => 'local',
+                'file_name' => 'testPhoto.png',
+            ]);
 
-    //     $event = new FileUploadDeletedEvent($fileUpload);
+        $event = new FileUploadDeletedEvent($fileUpload);
 
-    //     $listener = new HandleFileUploadedDeletedListener;
-    //     $listener->handle($event);
+        $listener = new HandleFileUploadedDeletedListener;
+        $listener->handle($event);
 
-    //     $this->assertDatabaseMissing('file_uploads', $fileUpload->toArray());
+        $this->assertDatabaseMissing('file_uploads', $fileUpload->toArray());
 
-    //     Storage::disk('local')
-    //         ->assertMissing(
-    //             $fileUpload->folder.DIRECTORY_SEPARATOR.$fileUpload->file_name
-    //         );
-    // }
+        Storage::disk('local')
+            ->assertMissing(
+                $fileUpload->folder.DIRECTORY_SEPARATOR.$fileUpload->file_name
+            );
+    }
 }

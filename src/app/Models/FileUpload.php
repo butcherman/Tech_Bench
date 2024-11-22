@@ -30,4 +30,17 @@ class FileUpload extends Model
             'updated_at' => 'datetime:M d, Y',
         ];
     }
+
+    /****************************************************************************
+     * Model Attributes
+     ***************************************************************************/
+    // public function getHrefAttribute()
+    // {
+    //     return route('download', [$this->file_id, $this->file_name]);
+    // }
+
+    // public function getCreatedStampAttribute()
+    // {
+    //     return $this->created_at;
+    // }
 }

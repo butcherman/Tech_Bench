@@ -21,12 +21,10 @@ abstract class TestCase extends BaseTestCase
         ]);
     }
 
-    /*
-    |---------------------------------------------------------------------------
-    | Change a Permission Value for the selected Role based on the
-    | permission field name.
-    |---------------------------------------------------------------------------
-    */
+    /**
+     * Change a Permission Value for the selected Role based on the permission
+     * field name.
+     */
     protected function changeRolePermission(
         int $roleId,
         string $permName,

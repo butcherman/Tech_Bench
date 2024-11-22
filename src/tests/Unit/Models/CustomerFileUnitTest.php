@@ -10,6 +10,7 @@ use App\Models\CustomerSite;
 use App\Models\FileUpload;
 use App\Models\User;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
 class CustomerFileUnitTest extends TestCase
@@ -101,6 +102,8 @@ class CustomerFileUnitTest extends TestCase
      */
     public function test_prunable(): void
     {
+        Event::fake();
+
         $models = CustomerFile::factory()
             ->count(5)
             ->create(['cust_id' => $this->customer->cust_id]);
@@ -130,6 +133,8 @@ class CustomerFileUnitTest extends TestCase
 
     public function test_prunable_disabled(): void
     {
+        Event::fake();
+
         config(['customer.auto_purge' => false]);
 
         $models = CustomerFile::factory()
