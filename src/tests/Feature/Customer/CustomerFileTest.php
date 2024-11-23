@@ -391,113 +391,113 @@ class CustomerFileTest extends TestCase
     /**
      * Restore Method
      */
-    // public function test_restore_guest(): void
-    // {
-    //     $file = CustomerFile::factory()->create();
-    //     $file->delete();
+    public function test_restore_guest(): void
+    {
+        $file = CustomerFile::factory()->create();
+        $file->delete();
 
-    //     $response = $this->get(route('customers.deleted-items.restore.files', [
-    //         $file->cust_id,
-    //         $file->file_id,
-    //     ]));
+        $response = $this->get(route('customers.deleted-items.restore.files', [
+            $file->cust_id,
+            $file->cust_file_id,
+        ]));
 
-    //     $response->assertStatus(302)
-    //         ->assertRedirect(route('login'));
-    //     $this->assertGuest();
-    // }
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
+        $this->assertGuest();
+    }
 
-    // public function test_restore_no_permission(): void
-    // {
-    //     /** @var User $user */
-    //     $user = User::factory()->createQuietly();
-    //     $file = CustomerFile::factory()->create();
-    //     $file->delete();
+    public function test_restore_no_permission(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+        $file = CustomerFile::factory()->create();
+        $file->delete();
 
-    //     $response = $this->actingAs($user)
-    //         ->get(route('customers.deleted-items.restore.files', [
-    //             $file->cust_id,
-    //             $file->file_id,
-    //         ]));
+        $response = $this->actingAs($user)
+            ->get(route('customers.deleted-items.restore.files', [
+                $file->cust_id,
+                $file->cust_file_id,
+            ]));
 
-    //     $response->assertForbidden();
-    // }
+        $response->assertForbidden();
+    }
 
-    // public function test_restore(): void
-    // {
-    //     /** @var User $user */
-    //     $user = User::factory()->createQuietly(['role_id' => 1]);
-    //     $file = CustomerFile::factory()->create();
-    //     $file->delete();
+    public function test_restore(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
+        $file = CustomerFile::factory()->create();
+        $file->delete();
 
-    //     $response = $this->actingAs($user)
-    //         ->get(route('customers.deleted-items.restore.files', [
-    //             $file->cust_id,
-    //             $file->file_id,
-    //         ]));
+        $response = $this->actingAs($user)
+            ->get(route('customers.deleted-items.restore.files', [
+                $file->cust_id,
+                $file->cust_file_id,
+            ]));
 
-    //     $response->assertStatus(302)
-    //         ->assertSessionHas('success', __('cust.file.restored'));
+        $response->assertStatus(302)
+            ->assertSessionHas('success', __('cust.file.restored'));
 
-    //     $this->assertDatabaseHas('customer_files', $file->only([
-    //         'file_id',
-    //     ]));
-    // }
+        $this->assertDatabaseHas('customer_files', $file->only([
+            'file_id',
+        ]));
+    }
 
     /**
      * Force Delete Method
      */
-    // public function test_force_delete_guest(): void
-    // {
-    //     $file = CustomerFile::factory()->create();
-    //     $file->delete();
+    public function test_force_delete_guest(): void
+    {
+        $file = CustomerFile::factory()->create();
+        $file->delete();
 
-    //     $response = $this->delete(
-    //         route('customers.deleted-items.force-delete.files', [
-    //             $file->cust_id,
-    //             $file->file_id,
-    //         ]));
+        $response = $this->delete(
+            route('customers.deleted-items.force-delete.files', [
+                $file->cust_id,
+                $file->cust_file_id,
+            ]));
 
-    //     $response->assertStatus(302)
-    //         ->assertRedirect(route('login'));
-    //     $this->assertGuest();
-    // }
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
+        $this->assertGuest();
+    }
 
-    // public function test_force_delete_no_permission(): void
-    // {
-    //     /** @var User $user */
-    //     $user = User::factory()->createQuietly();
-    //     $file = CustomerFile::factory()->create();
-    //     $file->delete();
+    public function test_force_delete_no_permission(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+        $file = CustomerFile::factory()->create();
+        $file->delete();
 
-    //     $response = $this->actingAs($user)
-    //         ->delete(route('customers.deleted-items.force-delete.files', [
-    //             $file->cust_id,
-    //             $file->file_id,
-    //         ]));
+        $response = $this->actingAs($user)
+            ->delete(route('customers.deleted-items.force-delete.files', [
+                $file->cust_id,
+                $file->cust_file_id,
+            ]));
 
-    //     $response->assertForbidden();
-    // }
+        $response->assertForbidden();
+    }
 
-    // public function test_force_delete(): void
-    // {
-    //     Event::fake(FileUploadDeletedEvent::class);
+    public function test_force_delete(): void
+    {
+        Event::fake(FileUploadDeletedEvent::class);
 
-    //     /** @var User $user */
-    //     $user = User::factory()->createQuietly(['role_id' => 1]);
-    //     $file = CustomerFile::factory()->create();
-    //     $file->delete();
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
+        $file = CustomerFile::factory()->create();
+        $file->delete();
 
-    //     $response = $this->actingAs($user)
-    //         ->delete(route('customers.deleted-items.force-delete.files', [
-    //             $file->cust_id,
-    //             $file->file_id,
-    //         ]));
+        $response = $this->actingAs($user)
+            ->delete(route('customers.deleted-items.force-delete.files', [
+                $file->cust_id,
+                $file->cust_file_id,
+            ]));
 
-    //     $response->assertStatus(302)
-    //         ->assertSessionHas('warning', __('cust.file.force_deleted'));
+        $response->assertStatus(302)
+            ->assertSessionHas('warning', __('cust.file.force_deleted'));
 
-    //     $this->assertDatabaseMissing('customer_files', $file->only(['file_id']));
+        $this->assertDatabaseMissing('customer_files', $file->only(['file_id']));
 
-    //     Event::assertDispatched(FileUploadDeletedEvent::class);
-    // }
+        Event::assertDispatched(FileUploadDeletedEvent::class);
+    }
 }
