@@ -40,6 +40,9 @@ class Customer extends Model
         'laravel_through_key',
     ];
 
+    /** @var array<int, string> */
+    protected $appends = ['site_count'];
+
     /*
     |---------------------------------------------------------------------------
     | Model Casting
@@ -71,8 +74,6 @@ class Customer extends Model
     | Model Attributes
     |---------------------------------------------------------------------------
     */
-    protected $appends = ['site_count'];
-
     public function siteCount(): Attribute
     {
         return Attribute::make(

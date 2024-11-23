@@ -23,14 +23,14 @@ class CustomerContactPhone extends Model
     /** @var array<int, string> */
     protected $with = ['PhoneNumberType'];
 
+    /** @var array<int, string> */
+    protected $appends = ['formatted'];
+
     /*
     |---------------------------------------------------------------------------
     | Model Attributes
     |---------------------------------------------------------------------------
     */
-    /** @var array<int, string> */
-    protected $appends = ['formatted'];
-
     public function formatted(): Attribute
     {
         // Get a readable number in a familiar NA format

@@ -80,7 +80,6 @@ class CustomerContact extends Model
     | Model Broadcasting
     |---------------------------------------------------------------------------
     */
-
     public function broadcastOn(string $event): array
     {
         $siteChannels = $this->getSiteChannels(

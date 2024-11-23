@@ -48,6 +48,14 @@ class CustomerFile extends Model
     ];
 
     /** @var array<int, string> */
+    protected $appends = [
+        'uploaded_by',
+        'file_type',
+        'equip_name',
+        'created_stamp',
+    ];
+
+    /** @var array<int, string> */
     protected $with = ['CustomerSite'];
 
     /*
@@ -69,15 +77,6 @@ class CustomerFile extends Model
     | Model Attributes
     |---------------------------------------------------------------------------
     */
-
-    /** @var array<int, string> */
-    protected $appends = [
-        'uploaded_by',
-        'file_type',
-        'equip_name',
-        'created_stamp',
-    ];
-
     public function fileType(): Attribute
     {
         return Attribute::make(
@@ -166,7 +165,6 @@ class CustomerFile extends Model
     | Model Broadcasting
     |---------------------------------------------------------------------------
     */
-
     public function broadcastOn(string $event): array
     {
         $siteChannels = $this->getSiteChannels(

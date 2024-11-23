@@ -42,6 +42,9 @@ class CustomerEquipment extends Model
         'EquipmentType',
     ];
 
+    /** @var array<int, string> */
+    protected $appends = ['equip_name'];
+
     /*
     |---------------------------------------------------------------------------
     | Model Casting
@@ -59,9 +62,6 @@ class CustomerEquipment extends Model
     | Model Attributes
     |---------------------------------------------------------------------------
     */
-    /** @var array<int, string> */
-    protected $appends = ['equip_name'];
-
     public function equipName(): Attribute
     {
         return Attribute::make(
@@ -126,7 +126,6 @@ class CustomerEquipment extends Model
     | Model Broadcasting
     |---------------------------------------------------------------------------
     */
-
     public function broadcastOn(string $event): array
     {
         $siteChannels = $this->getSiteChannels(

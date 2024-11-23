@@ -23,6 +23,14 @@ class UserSetting extends Model
         'UserSettingType',
     ];
 
+    /** @var array<string, string> */
+    protected $appends = ['name'];
+
+    /*
+    |---------------------------------------------------------------------------
+    | Model Casting
+    |---------------------------------------------------------------------------
+    */
     public function casts(): array
     {
         return [
@@ -35,9 +43,6 @@ class UserSetting extends Model
     | Model Attributes
     |---------------------------------------------------------------------------
     */
-    /** @var array<string, string> */
-    protected $appends = ['name'];
-
     public function name(): Attribute
     {
         return Attribute::make(

@@ -41,6 +41,9 @@ class User extends Authenticatable
         'UserRole',
     ];
 
+    /** @var array<string, string> */
+    protected $appends = ['initials', 'full_name'];
+
     /*
     |---------------------------------------------------------------------------
     | Model Casting
@@ -71,9 +74,6 @@ class User extends Authenticatable
     | Model Attributes
     |---------------------------------------------------------------------------
     */
-    /** @var array<string, string> */
-    protected $appends = ['initials', 'full_name'];
-
     public function fullName(): Attribute
     {
         return Attribute::make(

@@ -28,14 +28,14 @@ class CustomerEquipmentData extends Model
         'DataField',
     ];
 
+    /** @var array<int, string> */
+    protected $appends = ['field_name', 'order'];
+
     /*
     |---------------------------------------------------------------------------
     | Model Attributes
     |---------------------------------------------------------------------------
     */
-
-    /** @var array<int, string> */
-    protected $appends = ['field_name', 'order'];
 
     public function fieldName(): Attribute
     {
@@ -80,7 +80,6 @@ class CustomerEquipmentData extends Model
     | Model Broadcasting
     |---------------------------------------------------------------------------
     */
-
     public function broadcastOn(string $event): array
     {
         return match ($event) {

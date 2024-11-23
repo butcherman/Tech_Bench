@@ -36,6 +36,8 @@ class CustomerNote extends Model
     /** @var array<int, string> */
     protected $with = ['CustomerEquipment'];
 
+    protected $appends = ['author', 'updated_author'];
+
     /*
     |---------------------------------------------------------------------------
     | Model Casting
@@ -56,8 +58,6 @@ class CustomerNote extends Model
     | Model Attributes
     |---------------------------------------------------------------------------
     */
-    protected $appends = ['author', 'updated_author'];
-
     public function author(): Attribute
     {
         return Attribute::make(

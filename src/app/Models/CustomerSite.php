@@ -37,6 +37,9 @@ class CustomerSite extends Model
         'pivot',
     ];
 
+    /** @var array<int, string> */
+    protected $appends = ['is_primary'];
+
     /*
     |---------------------------------------------------------------------------
     | Model Casting
@@ -68,8 +71,6 @@ class CustomerSite extends Model
     | Model Attributes
     |---------------------------------------------------------------------------
     */
-    protected $appends = ['is_primary'];
-
     public function isPrimary(): Attribute
     {
         return Attribute::make(
