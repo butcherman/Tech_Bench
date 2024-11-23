@@ -16,6 +16,7 @@ Route::middleware('auth.secure')->group(function () {
     /*
     |---------------------------------------------------------------------------
     | Equipment Type Administration
+    | /equipment
     |---------------------------------------------------------------------------
     */
     Route::resource('equipment', EquipmentTypeController::class)
@@ -32,6 +33,7 @@ Route::middleware('auth.secure')->group(function () {
     /*
     |---------------------------------------------------------------------------
     | Equipment Category Administration
+    | /equipment-category
     |---------------------------------------------------------------------------
     */
     Route::resource('equipment-category', EquipmentCategoryController::class)
@@ -40,6 +42,7 @@ Route::middleware('auth.secure')->group(function () {
     /*
     |---------------------------------------------------------------------------
     | Equipment Data Administration
+    | /equipment-data
     |---------------------------------------------------------------------------
     */
     Route::resource('equipment-data', EquipmentDataTypeController::class)

@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 /*
 |-------------------------------------------------------------------------------
 | System Administration Routes
+| /administration
 |-------------------------------------------------------------------------------
 */
 Route::middleware('auth.secure')->prefix('administration')->name('admin.')->group(function () {
@@ -27,12 +28,14 @@ Route::middleware('auth.secure')->prefix('administration')->name('admin.')->grou
     /*
     |---------------------------------------------------------------------------
     | User Settings Administration
+    | /administration/users
     |---------------------------------------------------------------------------
     */
     Route::prefix('users')->name('user.')->group(function () {
         /*
         |-----------------------------------------------------------------------
         | Password Policy
+        | /administration/password-policy
         |-----------------------------------------------------------------------
         */
         Route::controller(PasswordPolicyController::class)->group(function () {
@@ -46,6 +49,7 @@ Route::middleware('auth.secure')->prefix('administration')->name('admin.')->grou
         /*
         |-----------------------------------------------------------------------
         | User Settings
+        | /administration/user-settings
         |-----------------------------------------------------------------------
         */
         Route::controller(UserSettingsController::class)->group(function () {
@@ -60,6 +64,7 @@ Route::middleware('auth.secure')->prefix('administration')->name('admin.')->grou
     /*
     |---------------------------------------------------------------------------
     | Application Logo
+    | /administration/logo
     |---------------------------------------------------------------------------
     */
     Route::controller(LogoController::class)->group(function () {
@@ -73,6 +78,7 @@ Route::middleware('auth.secure')->prefix('administration')->name('admin.')->grou
     /*
     |---------------------------------------------------------------------------
     | Basic App Settings
+    | /administration/basic-settings
     |---------------------------------------------------------------------------
     */
     Route::controller(BasicSettingsController::class)->group(function () {
@@ -86,6 +92,7 @@ Route::middleware('auth.secure')->prefix('administration')->name('admin.')->grou
     /*
     |---------------------------------------------------------------------------
     | Email Settings
+    | /administration/email-settings
     |---------------------------------------------------------------------------
     */
     Route::controller(EmailSettingsController::class)->group(function () {
@@ -95,12 +102,14 @@ Route::middleware('auth.secure')->prefix('administration')->name('admin.')->grou
         Route::put('email-settings', 'update')
             ->name('email-settings.update');
     });
+
     Route::get('test-email', SendTestEmailController::class)
         ->name('test-email');
 
     /*
     |---------------------------------------------------------------------------
     | Feature Configuration
+    | /administration/features
     |---------------------------------------------------------------------------
     */
     Route::controller(FeatureController::class)->group(function () {
@@ -114,6 +123,7 @@ Route::middleware('auth.secure')->prefix('administration')->name('admin.')->grou
     /*
     |---------------------------------------------------------------------------
     | SSL Certificate Administration
+    | /administration/security
     |---------------------------------------------------------------------------
     */
     Route::resource('security', SecurityController::class)
@@ -126,6 +136,7 @@ Route::middleware('auth.secure')->prefix('administration')->name('admin.')->grou
     /*
     |---------------------------------------------------------------------------
     | File Types for Uploaded Files
+    | /administration/file-types
     |---------------------------------------------------------------------------
     */
     Route::resource('file-types', UploadedFileTypesController::class)
@@ -136,6 +147,7 @@ Route::middleware('auth.secure')->prefix('administration')->name('admin.')->grou
     /*
     |---------------------------------------------------------------------------
     | Phone Number Types for Contacts
+    | /administration/phone-types
     |---------------------------------------------------------------------------
     */
     Route::resource('phone-types', ContactPhoneTypesController::class)

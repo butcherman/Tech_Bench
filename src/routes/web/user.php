@@ -26,6 +26,7 @@ Route::middleware('auth.secure')->group(function () {
     /*
     |---------------------------------------------------------------------------
     | User Account Routes
+    | /user
     |---------------------------------------------------------------------------
     */
     Route::prefix('user')->name('user.')->group(function () {
@@ -44,24 +45,26 @@ Route::middleware('auth.secure')->group(function () {
         Route::put('user-settings/{user}', UpdateUserSettingsController::class)
             ->name('user-settings.update');
 
-        Route::delete('remove-device/{user}/{token}', RemoveDeviceTokenController::class)
-            ->name('remove-device');
+        Route::delete(
+            'remove-device/{user}/{token}',
+            RemoveDeviceTokenController::class
+        )->name('remove-device');
     });
 
     /*
     |---------------------------------------------------------------------------
     | User Administration Routes
+    | /administration
     |---------------------------------------------------------------------------
     */
-
     Route::prefix('administration')->name('admin.')->group(function () {
 
         /*
         |-----------------------------------------------------------------------
         | User Account Administration
+        | /administration/users
         |-----------------------------------------------------------------------
         */
-
         Route::prefix('users')->name('user.')->group(function () {
             Route::get('{user}/restore', [UserAdministrationController::class, 'restore'])
                 ->name('restore')
@@ -89,6 +92,7 @@ Route::middleware('auth.secure')->group(function () {
         /*
         |-----------------------------------------------------------------------
         | User Roles Administration
+        | /administration/user-roles
         |-----------------------------------------------------------------------
         */
         Route::post('user-roles/create', [UserRolesController::class, 'create'])
