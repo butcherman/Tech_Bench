@@ -29,9 +29,10 @@ class HandleFileUploadDeletedUnitTest extends TestCase
             ]);
 
         Storage::disk($fileUpload->disk)
-            ->putFile(
+            ->putFileAs(
                 $fileUpload->folder,
-                UploadedFile::fake()->image('testPhoto.png')
+                UploadedFile::fake()->image('testPhoto.png'),
+                $fileUpload->file_name
             );
 
         $event = new FileUploadDeletedEvent($fileUpload);
@@ -39,7 +40,7 @@ class HandleFileUploadDeletedUnitTest extends TestCase
         $listener = new HandleFileUploadedDeletedListener;
         $listener->handle($event);
 
-        $this->assertDatabaseMissing('file_uploads', $fileUpload->toArray());
+        $this->assertDatabaseMissing('file_uploads', $fileUpload->makeHidden(['href', 'created_stamp'])->toArray());
 
         Storage::disk('local')
             ->assertMissing(
@@ -59,9 +60,10 @@ class HandleFileUploadDeletedUnitTest extends TestCase
         CustomerFile::factory()->create(['file_id' => $fileUpload->file_id]);
 
         Storage::disk($fileUpload->disk)
-            ->putFile(
+            ->putFileAs(
                 $fileUpload->folder,
-                UploadedFile::fake()->image('testPhoto.png')
+                UploadedFile::fake()->image('testPhoto.png'),
+                $fileUpload->file_name
             );
 
         $event = new FileUploadDeletedEvent($fileUpload);
@@ -71,7 +73,7 @@ class HandleFileUploadDeletedUnitTest extends TestCase
         $listener = new HandleFileUploadedDeletedListener;
         $listener->handle($event);
 
-        $this->assertDatabaseHas('file_uploads', $fileUpload->toArray());
+        $this->assertDatabaseHas('file_uploads', $fileUpload->makeHidden(['href', 'created_stamp'])->toArray());
 
         Storage::disk('local')
             ->assertExists(
@@ -94,7 +96,7 @@ class HandleFileUploadDeletedUnitTest extends TestCase
         $listener = new HandleFileUploadedDeletedListener;
         $listener->handle($event);
 
-        $this->assertDatabaseMissing('file_uploads', $fileUpload->toArray());
+        $this->assertDatabaseMissing('file_uploads', $fileUpload->makeHidden(['href', 'created_stamp'])->toArray());
 
         Storage::disk('local')
             ->assertMissing(

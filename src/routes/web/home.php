@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Home\AboutController;
 use App\Http\Controllers\Home\DashboardController;
+use App\Http\Controllers\Home\DownloadFileController;
 use App\Http\Controllers\Home\UploadImageController;
 use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
 use Illuminate\Support\Facades\Route;
@@ -25,7 +26,10 @@ Route::middleware('auth.secure')->group(function () {
         ->withoutMiddleware(ValidateCsrfToken::class);
 });
 
-Route::get('download/{file}/{fileName}', function () {
-    return 'test download';
-})    // DownloadFileController::class)
+/*
+|-------------------------------------------------------------------------------
+| Download a File
+|-------------------------------------------------------------------------------
+*/
+Route::get('download/{file}/{fileName}', DownloadFileController::class)
     ->name('download');
