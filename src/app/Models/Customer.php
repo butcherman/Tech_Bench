@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Observers\CustomerObserver;
+use App\Traits\Models\HasBookmarks;
+use App\Traits\Models\HasRecents;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\BroadcastableModelEventOccurred;
@@ -19,7 +21,9 @@ use Laravel\Scout\Searchable;
 class Customer extends Model
 {
     use BroadcastsEvents;
+    use HasBookmarks;
     use HasFactory;
+    use HasRecents;
     use Searchable;
     use SoftDeletes;
 
@@ -157,46 +161,5 @@ class Customer extends Model
         return (new BroadcastableModelEventOccurred(
             $this, $event
         ))->dontBroadcastToCurrentUser();
-    }
-
-    /*
-    |---------------------------------------------------------------------------
-    | Additional Model Methods
-    |---------------------------------------------------------------------------
-    */
-
-    /**
-     * Determine if the user requesting the page has bookmarked customer
-     */
-    public function isFav(User $user)
-    {
-        $bookmarks = $this->Bookmarks->pluck('user_id')->toArray();
-
-        return in_array($user->user_id, $bookmarks);
-    }
-
-    /**
-     * Update the Users Recent Tech Tip activity
-     */
-    public function touchRecent(User $user): void
-    {
-        $isRecent = $this->Recent->where('user_id', $user->user_id)->first();
-        if ($isRecent) {
-            $isRecent->touch();
-        } else {
-            $this->Recent()->attach($user);
-        }
-    }
-
-    /**
-     * Attach or Detach a user's bookmark
-     */
-    public function toggleBookmark(User $user, bool $value): void
-    {
-        if ($value) {
-            $this->Bookmarks()->attach($user);
-        } else {
-            $this->Bookmarks()->detach($user);
-        }
     }
 }
