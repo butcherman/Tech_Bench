@@ -56,6 +56,11 @@ class CheckSslCertificateJobUnitTest extends TestCase
         Storage::disk('security')->put('private/server.key', $this->key);
     }
 
+    /*
+    |---------------------------------------------------------------------------
+    | __invoke()
+    |---------------------------------------------------------------------------
+    */
     public function test_invoke_thirty_days_out()
     {
         Mail::fake();

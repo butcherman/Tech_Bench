@@ -28,6 +28,11 @@ class HandleUrlChangedUnitTest extends TestCase
         file_put_contents(App::environmentFilePath(), $this->envData);
     }
 
+    /*
+    |---------------------------------------------------------------------------
+    | handle()
+    |---------------------------------------------------------------------------
+    */
     public function test_handle(): void
     {
         $testObj = new HandleUrlChangeListener(new UpdateApplicationUrl);

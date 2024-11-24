@@ -12,6 +12,11 @@ use Tests\TestCase;
 
 class SendWelcomeEmailUnitTest extends TestCase
 {
+    /*
+    |---------------------------------------------------------------------------
+    | handle()
+    |---------------------------------------------------------------------------
+    */
     public function test_handle(): void
     {
         Mail::fake();

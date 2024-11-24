@@ -9,6 +9,11 @@ use Tests\TestCase;
 
 class CreateUserSettingsUnitTest extends TestCase
 {
+    /*
+    |---------------------------------------------------------------------------
+    | handle()
+    |---------------------------------------------------------------------------
+    */
     public function test_handle(): void
     {
         $user = User::factory()->create();

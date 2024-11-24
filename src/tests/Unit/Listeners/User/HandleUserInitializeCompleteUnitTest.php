@@ -9,6 +9,11 @@ use Tests\TestCase;
 
 class HandleUserInitializeCompleteUnitTest extends TestCase
 {
+    /*
+    |---------------------------------------------------------------------------
+    | handle()
+    |---------------------------------------------------------------------------
+    */
     public function test_handle(): void
     {
         $token = UserInitialize::factory()->create();

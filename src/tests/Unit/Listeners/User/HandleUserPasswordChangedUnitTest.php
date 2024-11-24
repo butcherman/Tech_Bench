@@ -11,6 +11,11 @@ use Tests\TestCase;
 
 class HandleUserPasswordChangedUnitTest extends TestCase
 {
+    /*
+    |---------------------------------------------------------------------------
+    | handle()
+    |---------------------------------------------------------------------------
+    */
     public function test_handle(): void
     {
         Mail::fake();

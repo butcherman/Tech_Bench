@@ -8,6 +8,11 @@ use Tests\TestCase;
 
 class BuildAdminMenuUnitTest extends TestCase
 {
+    /*
+    |---------------------------------------------------------------------------
+    | build()
+    |---------------------------------------------------------------------------
+    */
     public function test_build_admin_menu_installer(): void
     {
         $user = User::factory()->create(['role_id' => 1]);
@@ -179,7 +184,7 @@ class BuildAdminMenuUnitTest extends TestCase
                 [
                     'name' => 'Tech Tip Types',
                     'icon' => 'file-alt',
-                    'route' => '#', // route('admin.tech-tips.tip-types.index'),
+                    'route' => route('admin.tech-tips.tip-types.index'),
                 ],
                 [
                     'name' => 'Disabled Tech Tips',

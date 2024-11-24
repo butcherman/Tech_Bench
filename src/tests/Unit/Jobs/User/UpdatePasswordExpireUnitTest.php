@@ -9,6 +9,11 @@ use Tests\TestCase;
 
 class UpdatePasswordExpireUnitTest extends TestCase
 {
+    /*
+    |---------------------------------------------------------------------------
+    | handle()
+    |---------------------------------------------------------------------------
+    */
     public function test_handle(): void
     {
         config(['auth.passwords.settings.expire' => 0]);

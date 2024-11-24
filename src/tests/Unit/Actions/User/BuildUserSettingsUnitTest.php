@@ -10,9 +10,11 @@ use Tests\TestCase;
 
 class BuildUserSettingsUnitTest extends TestCase
 {
-    /**
-     * Build Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | build()
+    |---------------------------------------------------------------------------
+    */
     public function test_build_as_default(): void
     {
         $testUser = User::factory()->createQuietly();

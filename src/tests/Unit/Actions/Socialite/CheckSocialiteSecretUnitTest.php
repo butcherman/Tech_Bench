@@ -11,6 +11,11 @@ use Tests\TestCase;
 
 class CheckSocialiteSecretUnitTest extends TestCase
 {
+    /*
+    |---------------------------------------------------------------------------
+    | handle()
+    |---------------------------------------------------------------------------
+    */
     public function test_handle_thirty_days_out(): void
     {
         Mail::fake();

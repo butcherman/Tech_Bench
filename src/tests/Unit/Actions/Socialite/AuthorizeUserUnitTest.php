@@ -17,6 +17,11 @@ use Tests\TestCase;
 
 class AuthorizeUserUnitTest extends TestCase
 {
+    /*
+    |---------------------------------------------------------------------------
+    | handle()
+    |---------------------------------------------------------------------------
+    */
     public function test_with_feature_disabled(): void
     {
         $this->expectException(FeatureDisabledException::class);

@@ -43,6 +43,11 @@ class CustomerSearchUnitTest extends TestCase
         }
     }
 
+    /*
+    |---------------------------------------------------------------------------
+    | __invoke()
+    |---------------------------------------------------------------------------
+    */
     public function test_search_all_results(): void
     {
         $searchData = [

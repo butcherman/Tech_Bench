@@ -15,7 +15,7 @@ class ReAssignCustomerSiteUnitTest extends TestCase
 {
     /*
     |---------------------------------------------------------------------------
-    | invoke()
+    | __invoke()
     |---------------------------------------------------------------------------
     */
     public function test_invoke_solo_customer(): void

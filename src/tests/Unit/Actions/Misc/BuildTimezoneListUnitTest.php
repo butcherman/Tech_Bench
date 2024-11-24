@@ -7,6 +7,11 @@ use Tests\TestCase;
 
 class BuildTimezoneListUnitTest extends TestCase
 {
+    /*
+    |---------------------------------------------------------------------------
+    | build()
+    |---------------------------------------------------------------------------
+    */
     public function test_build(): void
     {
         $shouldBe = $this->getBaseTimezoneList();

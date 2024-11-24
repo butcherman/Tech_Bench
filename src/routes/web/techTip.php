@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\TechTip\TechTipSettingsController;
+use App\Http\Controllers\TechTip\TechTipTypeController;
+use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -31,5 +33,16 @@ Route::middleware('auth.secure')->group(function () {
                     ->breadcrumb('Tech Tip Settings', 'admin.index');
                 Route::put('/', 'update')->name('update');
             });
+
+        /*
+        |-----------------------------------------------------------------------
+        | Tech Tip Types
+        | /administration/tech-tips/tip-types
+        |-----------------------------------------------------------------------
+        */
+        Route::resource('tip-types', TechTipTypeController::class)
+            ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
+                $breadcrumbs->index('Tech Tip Types', 'admin.index');
+            })->except(['create', 'edit', 'show']);
     });
 });

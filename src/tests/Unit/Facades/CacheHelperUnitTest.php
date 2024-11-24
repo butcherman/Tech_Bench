@@ -7,6 +7,7 @@ use App\Models\DataFieldType;
 use App\Models\EquipmentCategory;
 use App\Models\EquipmentType;
 use App\Models\PhoneNumberType;
+use App\Models\TechTipType;
 use App\Models\UserRole;
 use App\Models\UserSettingType;
 use App\Services\Misc\CacheHelper;
@@ -240,6 +241,20 @@ class CacheHelperUnitTest extends TestCase
         $shouldBe = PhoneNumberType::all();
 
         $data = $this->helperObj->phoneTypes();
+
+        $this->assertEquals($shouldBe->toArray(), $data->toArray());
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | Tech Tip Types
+    |---------------------------------------------------------------------------
+    */
+    public function test_tech_tip_types(): void
+    {
+        $shouldBe = TechTipType::all();
+
+        $data = $this->helperObj->techTipTypes();
 
         $this->assertEquals($shouldBe->toArray(), $data->toArray());
     }

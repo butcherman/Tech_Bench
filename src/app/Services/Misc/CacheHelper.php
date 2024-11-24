@@ -7,6 +7,7 @@ use App\Models\DataFieldType;
 use App\Models\EquipmentCategory;
 use App\Models\EquipmentType;
 use App\Models\PhoneNumberType;
+use App\Models\TechTipType;
 use App\Models\UserRole;
 use App\Models\UserSettingType;
 use Illuminate\Support\Facades\Cache;
@@ -174,6 +175,18 @@ class CacheHelper
     {
         return Cache::rememberForever('phoneTypes', function () {
             return PhoneNumberType::all();
+        });
+    }
+
+    /**
+     * Get a list of all Tech Tip Types that can be assigned to a Tech Tip.
+     *
+     * @return \Illuminate\Cache\TCacheValue
+     */
+    public function techTipTypes()
+    {
+        return Cache::rememberForever('techTipTypes', function () {
+            return TechTipType::all();
         });
     }
 }

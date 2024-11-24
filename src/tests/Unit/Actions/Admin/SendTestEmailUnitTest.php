@@ -11,6 +11,11 @@ use Tests\TestCase;
 
 class SendTestEmailUnitTest extends TestCase
 {
+    /*
+    |---------------------------------------------------------------------------
+    | __invoke()
+    |---------------------------------------------------------------------------
+    */
     public function test_invoke(): void
     {
         Mail::fake();

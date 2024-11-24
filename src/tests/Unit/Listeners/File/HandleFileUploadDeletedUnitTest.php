@@ -15,7 +15,7 @@ class HandleFileUploadDeletedUnitTest extends TestCase
 {
     /*
     |---------------------------------------------------------------------------
-    | Test Job
+    | handle()
     |---------------------------------------------------------------------------
     */
     public function test_handle(): void
@@ -40,7 +40,10 @@ class HandleFileUploadDeletedUnitTest extends TestCase
         $listener = new HandleFileUploadedDeletedListener;
         $listener->handle($event);
 
-        $this->assertDatabaseMissing('file_uploads', $fileUpload->makeHidden(['href', 'created_stamp'])->toArray());
+        $this->assertDatabaseMissing(
+            'file_uploads',
+            $fileUpload->makeHidden(['href', 'created_stamp'])->toArray()
+        );
 
         Storage::disk('local')
             ->assertMissing(
@@ -73,7 +76,10 @@ class HandleFileUploadDeletedUnitTest extends TestCase
         $listener = new HandleFileUploadedDeletedListener;
         $listener->handle($event);
 
-        $this->assertDatabaseHas('file_uploads', $fileUpload->makeHidden(['href', 'created_stamp'])->toArray());
+        $this->assertDatabaseHas(
+            'file_uploads',
+            $fileUpload->makeHidden(['href', 'created_stamp'])->toArray()
+        );
 
         Storage::disk('local')
             ->assertExists(
@@ -96,7 +102,10 @@ class HandleFileUploadDeletedUnitTest extends TestCase
         $listener = new HandleFileUploadedDeletedListener;
         $listener->handle($event);
 
-        $this->assertDatabaseMissing('file_uploads', $fileUpload->makeHidden(['href', 'created_stamp'])->toArray());
+        $this->assertDatabaseMissing(
+            'file_uploads',
+            $fileUpload->makeHidden(['href', 'created_stamp'])->toArray()
+        );
 
         Storage::disk('local')
             ->assertMissing(

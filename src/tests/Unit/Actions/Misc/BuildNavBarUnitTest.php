@@ -8,6 +8,11 @@ use Tests\TestCase;
 
 class BuildNavBarUnitTest extends TestCase
 {
+    /*
+    |---------------------------------------------------------------------------
+    | build()
+    |---------------------------------------------------------------------------
+    */
     public function test_build_default_navbar(): void
     {
         $shouldBe = [

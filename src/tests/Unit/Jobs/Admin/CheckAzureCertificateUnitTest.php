@@ -12,6 +12,11 @@ use Tests\TestCase;
 
 class CheckAzureCertificateUnitTest extends TestCase
 {
+    /*
+    |---------------------------------------------------------------------------
+    | handle()
+    |---------------------------------------------------------------------------
+    */
     public function test_handle_thirty_days_out(): void
     {
         config(['services.azure.allow_login' => true]);

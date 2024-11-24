@@ -3,7 +3,6 @@
 namespace App\Observers;
 
 use App\Models\TechTipType;
-use App\Models\User;
 use Illuminate\Support\Facades\Log;
 
 class TechTipTypeObserver extends Observer
@@ -13,7 +12,10 @@ class TechTipTypeObserver extends Observer
      */
     public function created(TechTipType $techTipType): void
     {
-        //
+        Log::info(
+            'New Tech Tip Type created by '.$this->user,
+            $techTipType->toArray()
+        );
     }
 
     /**
@@ -21,7 +23,10 @@ class TechTipTypeObserver extends Observer
      */
     public function updated(TechTipType $techTipType): void
     {
-        //
+        Log::info(
+            'Tech Tip Type updated by '.$this->user,
+            $techTipType->toArray()
+        );
     }
 
     /**
@@ -29,22 +34,9 @@ class TechTipTypeObserver extends Observer
      */
     public function deleted(TechTipType $techTipType): void
     {
-        //
-    }
-
-    /**
-     * Handle the TechTipType "restored" event.
-     */
-    public function restored(TechTipType $techTipType): void
-    {
-        //
-    }
-
-    /**
-     * Handle the TechTipType "force deleted" event.
-     */
-    public function forceDeleted(TechTipType $techTipType): void
-    {
-        //
+        Log::info(
+            'Tech Tip Type deleted by '.$this->user,
+            $techTipType->toArray()
+        );
     }
 }
