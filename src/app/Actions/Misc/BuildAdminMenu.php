@@ -160,7 +160,7 @@ class BuildAdminMenu
                 [
                     'name' => 'Tech Tip Settings',
                     'icon' => 'cog',
-                    'route' => '#', // route('admin.tech-tips.settings.edit'),
+                    'route' => route('admin.tech-tips.settings.edit'),
                 ],
                 [
                     'name' => 'Tech Tip Types',
