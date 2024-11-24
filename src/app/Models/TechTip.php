@@ -35,7 +35,7 @@ class TechTip extends Model
     protected $hidden = ['deleted_at', 'tip_type_id', 'Bookmarks'];
 
     /** @var array<int, string> */
-    protected $appends = ['href', 'public_href', 'equipList', 'fileList'];
+    protected $appends = ['href', 'public_href', 'equip_list', 'file_list'];
 
     /*
     |---------------------------------------------------------------------------
@@ -77,13 +77,14 @@ class TechTip extends Model
         );
     }
 
-    public function publicHref(): Attribute
+    public function publicHref(): ?Attribute
     {
-        if ($this->public) {
-            return Attribute::make(
-                get: fn () => route('publicTips.show', $this->slug),
-            );
-        }
+        return Attribute::make(
+            get: fn () => $this->is_public
+                ? route('publicTips.show', $this->slug)
+                : null,
+        );
+
     }
 
     protected function equipList(): Attribute
@@ -192,15 +193,15 @@ class TechTip extends Model
     //             ->makeHidden(['email', 'initials', 'role_name', 'username']);
     //     }
 
-    //     if (! $isDeleted) {
-    //         // Increase Views counter
-    //         $this->TechTipView->increment('views');
+    //     // if (! $isDeleted) {
+    //     //     // Increase Views counter
+    //     //     $this->TechTipView->increment('views');
 
-    //         // Add Tip to users Recent visits
-    //         if (request()->user()) {
-    //             $this->touchRecent(request()->user());
-    //         }
-    //     }
+    //     //     // Add Tip to users Recent visits
+    //     //     if (request()->user()) {
+    //     //         $this->touchRecent(request()->user());
+    //     //     }
+    //     // }
     // }
 
     /**

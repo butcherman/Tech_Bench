@@ -170,7 +170,7 @@ class BuildAdminMenu
                 [
                     'name' => 'Disabled Tech Tips',
                     'icon' => 'ban',
-                    'route' => '#', // route('admin.tech-tips.deleted-tips'),
+                    'route' => route('admin.tech-tips.deleted-tips'),
                 ],
             ];
 

@@ -10,7 +10,8 @@ use Illuminate\Database\Seeder;
 class EquipmentSeeder extends Seeder
 {
     /**
-     *  Create sample categories and equipment (rather than relying on Faker to generate random words)
+     *  Create sample categories and equipment
+     * (rather than relying on Faker to generate random words)
      */
     public function run(): void
     {

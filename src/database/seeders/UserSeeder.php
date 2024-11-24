@@ -10,7 +10,7 @@ use Illuminate\Database\Seeder;
 class UserSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
+     * Create 21 users.
      */
     public function run(): void
     {
