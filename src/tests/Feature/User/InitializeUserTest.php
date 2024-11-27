@@ -12,11 +12,14 @@ use Tests\TestCase;
 
 class InitializeUserTest extends TestCase
 {
+    /** @var string */
     protected $password = 'ChangeMe$secure1';
 
-    /**
-     * Show Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Show Method
+    |---------------------------------------------------------------------------
+    */
     public function test_show_while_logged_in(): void
     {
         /** @var User $actingAs */
@@ -67,9 +70,11 @@ class InitializeUserTest extends TestCase
             );
     }
 
-    /**
-     * Update Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Update Method
+    |---------------------------------------------------------------------------
+    */
     public function test_set_while_logged_in(): void
     {
         /** @var User $actingAs */

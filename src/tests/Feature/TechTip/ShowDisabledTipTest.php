@@ -1,12 +1,13 @@
 <?php
 
-namespace Tests\Feature\Admin;
+namespace Tests\Feature\TechTip;
 
+use App\Models\TechTip;
 use App\Models\User;
 use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
-class AdministrationTest extends TestCase
+class ShowDisabledTipTest extends TestCase
 {
     /*
     |---------------------------------------------------------------------------
@@ -15,7 +16,12 @@ class AdministrationTest extends TestCase
     */
     public function test_invoke_guest(): void
     {
-        $response = $this->get(route('admin.index'));
+        $techTip = TechTip::factory()->create();
+        $techTip->delete();
+
+        $response = $this->get(
+            route('admin.tech-tips.deleted-tips.show', $techTip->tip_id)
+        );
 
         $response->assertStatus(302)
             ->assertRedirect(route('login'));
@@ -26,9 +32,12 @@ class AdministrationTest extends TestCase
     {
         /** @var User $user */
         $user = User::factory()->createQuietly();
+        $techTip = TechTip::factory()->create();
+        $techTip->delete();
 
-        $response = $this->actingAs($user)
-            ->get(route('admin.index'));
+        $response = $this->ActingAs($user)->get(
+            route('admin.tech-tips.deleted-tips.show', $techTip->tip_id)
+        );
         $response->assertForbidden();
     }
 
@@ -36,14 +45,20 @@ class AdministrationTest extends TestCase
     {
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);
+        $techTip = TechTip::factory()->create();
+        $techTip->delete();
 
-        $response = $this->actingAs($user)
-            ->get(route('admin.index'));
+        $response = $this->ActingAs($user)->get(
+            route('admin.tech-tips.deleted-tips.show', $techTip->tip_id)
+        );
 
         $response->assertSuccessful()
             ->assertInertia(fn (Assert $page) => $page
-                ->component('Admin/Index')
-                ->has('menu')
+                ->component('TechTips/Deleted/Show')
+                ->has('tip-data')
+                ->has('tip-equipment')
+                ->has('tip-files')
+                ->has('tip-comments')
             );
     }
 }

@@ -8,9 +8,11 @@ use Tests\TestCase;
 
 class LoginControllerTest extends TestCase
 {
-    /**
-     * Invoke Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Invoke Method
+    |---------------------------------------------------------------------------
+    */
     public function test_invoke_guest(): void
     {
         // Enable Features to have them displayed on login page

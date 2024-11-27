@@ -15,9 +15,11 @@ use Tests\TestCase;
 
 class SocialiteTest extends TestCase
 {
-    /**
-     * RedirectAuth Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | RedirectAuth Method
+    |---------------------------------------------------------------------------
+    */
     public function test_redirect_auth_disabled(): void
     {
         config(['services.azure.allow_login' => false]);
@@ -36,9 +38,11 @@ class SocialiteTest extends TestCase
         $response->assertStatus(302);
     }
 
-    /**
-     * Callback Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Callback Method
+    |---------------------------------------------------------------------------
+    */
     public function test_callback_feature_disabled(): void
     {
         config(['services.azure.allow_login' => false]);

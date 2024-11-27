@@ -8,9 +8,11 @@ use Tests\TestCase;
 
 class EmailSettingsTest extends TestCase
 {
-    /**
-     * Edit Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Edit Method
+    |---------------------------------------------------------------------------
+    */
     public function test_edit_guest(): void
     {
         $response = $this->get(route('admin.email-settings.edit'));
@@ -46,9 +48,11 @@ class EmailSettingsTest extends TestCase
             );
     }
 
-    /**
-     * Update Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Update Method
+    |---------------------------------------------------------------------------
+    */
     public function test_update_guest(): void
     {
         $data = [

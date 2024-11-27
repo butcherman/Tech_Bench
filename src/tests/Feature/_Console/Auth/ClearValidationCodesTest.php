@@ -8,6 +8,11 @@ use Tests\TestCase;
 
 class ClearValidationCodesTest extends TestCase
 {
+    /*
+    |---------------------------------------------------------------------------
+    | Handle Method
+    |---------------------------------------------------------------------------
+    */
     public function test_command(): void
     {
         Mail::fake();

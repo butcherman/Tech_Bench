@@ -7,9 +7,11 @@ use Tests\TestCase;
 
 class GetEquipmentListTest extends TestCase
 {
-    /**
-     * Invoke Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Invoke Method
+    |---------------------------------------------------------------------------
+    */
     public function test_invoke_guest(): void
     {
         $response = $this->get(route('equipment-list'));

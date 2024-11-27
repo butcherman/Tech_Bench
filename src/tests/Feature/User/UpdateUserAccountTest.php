@@ -9,9 +9,11 @@ use Tests\TestCase;
 
 class UpdateUserAccountTest extends TestCase
 {
-    /**
-     * Store Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Store Method
+    |---------------------------------------------------------------------------
+    */
     public function test_store_guest(): void
     {
         $user = User::factory()->createQuietly();

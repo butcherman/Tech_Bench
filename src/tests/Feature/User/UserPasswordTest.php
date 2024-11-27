@@ -9,9 +9,11 @@ use Tests\TestCase;
 
 class UserPasswordTest extends TestCase
 {
-    /**
-     * Invoke Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Invoke Method
+    |---------------------------------------------------------------------------
+    */
     public function test_invoke_guest(): void
     {
         $response = $this->get(route('user.change-password.show'));

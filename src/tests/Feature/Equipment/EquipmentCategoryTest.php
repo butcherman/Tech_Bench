@@ -9,9 +9,11 @@ use Tests\TestCase;
 
 class EquipmentCategoryTest extends TestCase
 {
-    /**
-     * Store Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Store Method
+    |---------------------------------------------------------------------------
+    */
     public function test_store_guest(): void
     {
         $data = [
@@ -54,9 +56,11 @@ class EquipmentCategoryTest extends TestCase
         $this->assertDatabaseHas('equipment_categories', ['name' => 'Cisco']);
     }
 
-    /**
-     * Update Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Update Method
+    |---------------------------------------------------------------------------
+    */
     public function test_update_guest(): void
     {
         $cat = EquipmentCategory::factory()->create();
@@ -110,9 +114,11 @@ class EquipmentCategoryTest extends TestCase
         ]);
     }
 
-    /**
-     * Destroy Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Destroy Method
+    |---------------------------------------------------------------------------
+    */
     public function test_destroy_guest(): void
     {
         $cat = EquipmentCategory::factory()->create();

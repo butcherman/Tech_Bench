@@ -9,9 +9,11 @@ use Tests\TestCase;
 
 class LogoTest extends TestCase
 {
-    /**
-     * Edit Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Edit Method
+    |---------------------------------------------------------------------------
+    */
     public function test_edit_guest(): void
     {
         $response = $this->get(route('admin.logo.edit'));
@@ -45,9 +47,11 @@ class LogoTest extends TestCase
                 ->component('Admin/Config/Logo'));
     }
 
-    /**
-     * Update Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Update Method
+    |---------------------------------------------------------------------------
+    */
     public function test_update_guest(): void
     {
         $data = [

@@ -21,9 +21,11 @@ class SecurityTest extends TestCase
     /** @var OpenSSLCertificate */
     protected $intermediate;
 
-    /**
-     * Setup will generate a self signed cert for testing with
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Setup will generate a self signed cert for testing with
+    |---------------------------------------------------------------------------
+    */
     public function setUp(): void
     {
         parent::setUp();
@@ -56,9 +58,11 @@ class SecurityTest extends TestCase
         );
     }
 
-    /**
-     * Index Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Index Method
+    |---------------------------------------------------------------------------
+    */
     public function test_index_guest(): void
     {
         $response = $this->get(route('admin.security.index'));
@@ -114,9 +118,11 @@ class SecurityTest extends TestCase
             );
     }
 
-    /**
-     * Create Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Create Method
+    |---------------------------------------------------------------------------
+    */
     public function test_create_guest(): void
     {
         $response = $this->get(route('admin.security.create'));
@@ -152,9 +158,11 @@ class SecurityTest extends TestCase
             );
     }
 
-    /**
-     * Store Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Store Method
+    |---------------------------------------------------------------------------
+    */
     public function test_store_guest(): void
     {
         $response = $this->post(
@@ -249,9 +257,11 @@ class SecurityTest extends TestCase
             ->assertSessionHasErrors(['certificate']);
     }
 
-    /**
-     * Edit Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Edit Method
+    |---------------------------------------------------------------------------
+    */
     public function test_edit_guest(): void
     {
         $response = $this->get(route('admin.security.edit', 'csr-request'));
@@ -286,9 +296,11 @@ class SecurityTest extends TestCase
             );
     }
 
-    /**
-     * Update Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Update Method
+    |---------------------------------------------------------------------------
+    */
     public function test_update_guest(): void
     {
         $data = [
@@ -357,9 +369,11 @@ class SecurityTest extends TestCase
             );
     }
 
-    /**
-     * Destroy Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Destroy Method
+    |---------------------------------------------------------------------------
+    */
     public function test_destroy_guest(): void
     {
         $response = $this->delete(route('admin.security.destroy', 'cert'));

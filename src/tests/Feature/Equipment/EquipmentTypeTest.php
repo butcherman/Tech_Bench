@@ -13,9 +13,11 @@ use Tests\TestCase;
 
 class EquipmentTypeTest extends TestCase
 {
-    /**
-     * Index Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Index Method
+    |---------------------------------------------------------------------------
+    */
     public function test_index_guest(): void
     {
         $response = $this->get(route('equipment.index'));
@@ -51,9 +53,11 @@ class EquipmentTypeTest extends TestCase
             );
     }
 
-    /**
-     * Create method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Create method
+    |---------------------------------------------------------------------------
+    */
     public function test_create_guest(): void
     {
         $response = $this->get(route('equipment.create'));
@@ -91,9 +95,11 @@ class EquipmentTypeTest extends TestCase
             );
     }
 
-    /**
-     * Store Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Store Method
+    |---------------------------------------------------------------------------
+    */
     public function test_store_guest(): void
     {
         $category = EquipmentCategory::factory()->create();
@@ -183,9 +189,11 @@ class EquipmentTypeTest extends TestCase
         }
     }
 
-    /**
-     * Show Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Show Method
+    |---------------------------------------------------------------------------
+    */
     public function test_show_guest(): void
     {
         $equip = EquipmentType::factory()->create();
@@ -225,9 +233,11 @@ class EquipmentTypeTest extends TestCase
             );
     }
 
-    /**
-     * Edit Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Edit Method
+    |---------------------------------------------------------------------------
+    */
     public function test_edit_guest(): void
     {
         $equip = EquipmentType::factory()->create();
@@ -270,9 +280,11 @@ class EquipmentTypeTest extends TestCase
             );
     }
 
-    /**
-     * Update Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Update Method
+    |---------------------------------------------------------------------------
+    */
     public function test_update_guest(): void
     {
         $existing = EquipmentType::factory()->create();
@@ -431,9 +443,11 @@ class EquipmentTypeTest extends TestCase
         // Bus::assertDispatched(UpdateCustomerDataFieldsJob::class);
     }
 
-    /**
-     * Destroy Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Destroy Method
+    |---------------------------------------------------------------------------
+    */
     public function test_destroy_guest(): void
     {
         $equip = EquipmentType::factory()->create();

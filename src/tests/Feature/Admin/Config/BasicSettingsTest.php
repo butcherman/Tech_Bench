@@ -10,9 +10,11 @@ use Tests\TestCase;
 
 class BasicSettingsTest extends TestCase
 {
-    /**
-     * Edit Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Edit Method
+    |---------------------------------------------------------------------------
+    */
     public function test_edit_guest(): void
     {
         $response = $this->get(route('admin.basic-settings.edit'));
@@ -48,9 +50,11 @@ class BasicSettingsTest extends TestCase
             );
     }
 
-    /**
-     * Update Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Update Method
+    |---------------------------------------------------------------------------
+    */
     public function test_update_guest(): void
     {
         Event::fake(UrlChangedEvent::class);

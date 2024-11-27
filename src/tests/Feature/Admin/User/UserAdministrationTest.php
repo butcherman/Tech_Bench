@@ -13,9 +13,11 @@ use Tests\TestCase;
 
 class UserAdministrationTest extends TestCase
 {
-    /**
-     * Index Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Index Method
+    |---------------------------------------------------------------------------
+    */
     public function test_index_guest(): void
     {
         $response = $this->get(route('admin.user.index'));
@@ -49,9 +51,11 @@ class UserAdministrationTest extends TestCase
             );
     }
 
-    /**
-     * Create Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Create Method
+    |---------------------------------------------------------------------------
+    */
     public function test_create_guest(): void
     {
         $response = $this->get(route('admin.user.create'));
@@ -87,9 +91,11 @@ class UserAdministrationTest extends TestCase
             );
     }
 
-    /**
-     * Store Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Store Method
+    |---------------------------------------------------------------------------
+    */
     public function test_store_guest(): void
     {
         Bus::fake();
@@ -167,9 +173,11 @@ class UserAdministrationTest extends TestCase
         Bus::assertDispatched(CreateUserSettingsJob::class);
     }
 
-    /**
-     * Show Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Show Method
+    |---------------------------------------------------------------------------
+    */
     public function test_show_guest(): void
     {
         $user = User::factory()->createQuietly();
@@ -212,9 +220,11 @@ class UserAdministrationTest extends TestCase
             );
     }
 
-    /**
-     * Edit Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Edit Method
+    |---------------------------------------------------------------------------
+    */
     public function test_edit_guest(): void
     {
         $user = User::factory()->createQuietly();
@@ -255,9 +265,11 @@ class UserAdministrationTest extends TestCase
             );
     }
 
-    /**
-     * Update Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Update Method
+    |---------------------------------------------------------------------------
+    */
     public function test_update_guest(): void
     {
         $user = User::factory()->createQuietly();
@@ -351,9 +363,11 @@ class UserAdministrationTest extends TestCase
         Event::assertDispatched(FeatureChangedEvent::class);
     }
 
-    /**
-     * Destroy Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Destroy Method
+    |---------------------------------------------------------------------------
+    */
     public function test_destroy_guest(): void
     {
         $user = User::factory()->createQuietly();
@@ -414,9 +428,11 @@ class UserAdministrationTest extends TestCase
         );
     }
 
-    /**
-     * Restore Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Restore Method
+    |---------------------------------------------------------------------------
+    */
     public function test_restore_guest(): void
     {
         $user = User::factory()->createQuietly();

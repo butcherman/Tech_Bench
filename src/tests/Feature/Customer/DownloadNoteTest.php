@@ -9,9 +9,11 @@ use Tests\TestCase;
 
 class DownloadNoteTest extends TestCase
 {
-    /**
-     * Invoke Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Invoke Method
+    |---------------------------------------------------------------------------
+    */
     public function test_invoke_guest(): void
     {
         $customer = Customer::factory()->create();

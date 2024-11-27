@@ -9,16 +9,20 @@ use Tests\TestCase;
 
 class ReSendWelcomeEmailTest extends TestCase
 {
-    /**
-     * Invoke Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Invoke Method
+    |---------------------------------------------------------------------------
+    */
     public function test_invoke_guest()
     {
         Bus::fake();
 
         $user = User::factory()->createQuietly();
 
-        $response = $this->get(route('admin.user.send-welcome', $user->username));
+        $response = $this->get(
+            route('admin.user.send-welcome', $user->username)
+        );
 
         $response->assertStatus(302)
             ->assertRedirect(route('login'));

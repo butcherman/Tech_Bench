@@ -14,9 +14,11 @@ class UserRolesTest extends TestCase
 {
     use WithFaker;
 
-    /**
-     * Index Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Index Method
+    |---------------------------------------------------------------------------
+    */
     public function test_index_guest(): void
     {
         $response = $this->get(route('admin.user-roles.index'));
@@ -52,9 +54,11 @@ class UserRolesTest extends TestCase
             );
     }
 
-    /**
-     * Create Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Create Method
+    |---------------------------------------------------------------------------
+    */
     public function test_create_guest(): void
     {
         $response = $this->get(route('admin.user-roles.create'));
@@ -109,9 +113,11 @@ class UserRolesTest extends TestCase
             );
     }
 
-    /**
-     * Store Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Store Method
+    |---------------------------------------------------------------------------
+    */
     public function test_store_guest(): void
     {
         Event::fake(FeatureChangedEvent::class);
@@ -213,9 +219,11 @@ class UserRolesTest extends TestCase
         Event::assertDispatched(FeatureChangedEvent::class);
     }
 
-    /**
-     * Show Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Show Method
+    |---------------------------------------------------------------------------
+    */
     public function test_show_guest(): void
     {
         $role = UserRole::factory()->createQuietly();
@@ -257,9 +265,11 @@ class UserRolesTest extends TestCase
             );
     }
 
-    /**
-     * Edit Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Edit Method
+    |---------------------------------------------------------------------------
+    */
     public function test_edit_guest(): void
     {
         $testRole = UserRole::factory()->createQuietly();
@@ -303,9 +313,11 @@ class UserRolesTest extends TestCase
             );
     }
 
-    /**
-     * Update Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Update Method
+    |---------------------------------------------------------------------------
+    */
     public function test_update_guest(): void
     {
         Event::fake(FeatureChangedEvent::class);
@@ -446,9 +458,11 @@ class UserRolesTest extends TestCase
         Event::assertNotDispatched(FeatureChangedEvent::class);
     }
 
-    /**
-     * Destroy Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Destroy Method
+    |---------------------------------------------------------------------------
+    */
     public function test_destroy_guest(): void
     {
         $testRole = UserRole::factory()->createQuietly();

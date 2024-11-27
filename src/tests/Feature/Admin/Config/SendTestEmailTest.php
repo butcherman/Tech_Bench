@@ -10,9 +10,11 @@ use Tests\TestCase;
 
 class SendTestEmailTest extends TestCase
 {
-    /**
-     * Invoke Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Invoke Method
+    |---------------------------------------------------------------------------
+    */
     public function test_invoke_guest(): void
     {
         $response = $this->get(route('admin.test-email'));

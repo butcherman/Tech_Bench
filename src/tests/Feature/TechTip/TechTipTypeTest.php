@@ -9,9 +9,11 @@ use Tests\TestCase;
 
 class TechTipTypeTest extends TestCase
 {
-    /**
-     * Index Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Index Method
+    |---------------------------------------------------------------------------
+    */
     public function test_index_guest(): void
     {
         $response = $this->get(route('admin.tech-tips.tip-types.index'));
@@ -47,9 +49,11 @@ class TechTipTypeTest extends TestCase
             );
     }
 
-    /**
-     * Store Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Store Method
+    |---------------------------------------------------------------------------
+    */
     public function test_store_guest(): void
     {
         $data = [
@@ -97,9 +101,11 @@ class TechTipTypeTest extends TestCase
         $this->assertDatabaseHas('tech_tip_types', $data);
     }
 
-    /**
-     * Update Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Update Method
+    |---------------------------------------------------------------------------
+    */
     public function test_update_guest(): void
     {
         $currentType = TechTipType::create(['description' => 'Old Tip Type']);
@@ -165,9 +171,11 @@ class TechTipTypeTest extends TestCase
         $this->assertDatabaseHas('tech_tip_types', $data);
     }
 
-    /**
-     * Destroy Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Destroy Method
+    |---------------------------------------------------------------------------
+    */
     public function test_destroy_guest(): void
     {
         $currentType = TechTipType::create(['description' => 'Old Tip Type']);

@@ -11,9 +11,11 @@ use Tests\TestCase;
 
 class EquipmentDataTypeTest extends TestCase
 {
-    /**
-     * Index Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Index Method
+    |---------------------------------------------------------------------------
+    */
     public function test_index_guest(): void
     {
         $response = $this->get(route('equipment-data.index'));
@@ -49,9 +51,11 @@ class EquipmentDataTypeTest extends TestCase
             );
     }
 
-    /**
-     * Create Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Create Method
+    |---------------------------------------------------------------------------
+    */
     public function test_create_guest(): void
     {
         $response = $this->get(route('equipment-data.create'));
@@ -86,9 +90,11 @@ class EquipmentDataTypeTest extends TestCase
             );
     }
 
-    /**
-     * Store Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Store Method
+    |---------------------------------------------------------------------------
+    */
     public function test_store_guest(): void
     {
         $data = [
@@ -151,9 +157,11 @@ class EquipmentDataTypeTest extends TestCase
         $this->assertDatabaseHas('data_field_types', $data);
     }
 
-    /**
-     * Edit Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Edit Method
+    |---------------------------------------------------------------------------
+    */
     public function test_edit_guest(): void
     {
         $type = DataFieldType::factory()->create();
@@ -193,9 +201,11 @@ class EquipmentDataTypeTest extends TestCase
             );
     }
 
-    /**
-     * Update Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Update Method
+    |---------------------------------------------------------------------------
+    */
     public function test_update_guest(): void
     {
         $type = DataFieldType::factory()->create();
@@ -267,9 +277,11 @@ class EquipmentDataTypeTest extends TestCase
         $this->assertDatabaseHas('data_field_types', $data);
     }
 
-    /**
-     * Destroy Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Destroy Method
+    |---------------------------------------------------------------------------
+    */
     public function test_destroy_guest(): void
     {
         $type = DataFieldType::factory()->create();

@@ -8,9 +8,11 @@ use Tests\TestCase;
 
 class UserSettingsTest extends TestCase
 {
-    /**
-     * Edit Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Edit Method
+    |---------------------------------------------------------------------------
+    */
     public function test_show_guest(): void
     {
         $response = $this->get(route('admin.user.user-settings.edit'));
@@ -47,9 +49,11 @@ class UserSettingsTest extends TestCase
             );
     }
 
-    /**
-     * Update Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Update Method
+    |---------------------------------------------------------------------------
+    */
     public function test_update_guest(): void
     {
         $data = [

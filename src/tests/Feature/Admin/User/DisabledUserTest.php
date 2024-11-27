@@ -8,9 +8,11 @@ use Tests\TestCase;
 
 class DisabledUserTest extends TestCase
 {
-    /**
-     * Invoke Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Invoke Method
+    |---------------------------------------------------------------------------
+    */
     public function test_invoke_guest()
     {
         $response = $this->get(route('admin.user.deactivated'));

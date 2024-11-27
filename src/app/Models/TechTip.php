@@ -115,7 +115,7 @@ class TechTip extends Model
 
     public function UpdatedBy(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'user_id', 'updated_id')
+        return $this->belongsTo(User::class, 'updated_id', 'user_id')
             ->withTrashed();
     }
 

@@ -8,9 +8,11 @@ use Tests\TestCase;
 
 class PasswordPolicyTest extends TestCase
 {
-    /**
-     * Show Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Show Method
+    |---------------------------------------------------------------------------
+    */
     public function test_edit_guest(): void
     {
         $response = $this->get(route('admin.user.password-policy.edit'));
@@ -46,9 +48,11 @@ class PasswordPolicyTest extends TestCase
             );
     }
 
-    /**
-     * Update Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Update Method
+    |---------------------------------------------------------------------------
+    */
     public function test_update_guest(): void
     {
         $data = [
@@ -61,7 +65,10 @@ class PasswordPolicyTest extends TestCase
             'disable_compromised' => 'false',
         ];
 
-        $response = $this->put(route('admin.user.password-policy.update'), $data);
+        $response = $this->put(
+            route('admin.user.password-policy.update'),
+            $data
+        );
 
         $response->assertStatus(302)
             ->assertRedirect(route('login'));

@@ -8,6 +8,11 @@ use Tests\TestCase;
 
 class RemoveDeviceTokenTest extends TestCase
 {
+    /*
+    |---------------------------------------------------------------------------
+    | Invoke Method
+    |---------------------------------------------------------------------------
+    */
     public function test_invoke_guest(): void
     {
         $user = User::factory()->createQuietly();

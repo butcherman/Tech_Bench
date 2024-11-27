@@ -9,9 +9,11 @@ use Tests\TestCase;
 
 class UploadImageTest extends TestCase
 {
-    /**
-     * Invoke Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Invoke Method
+    |---------------------------------------------------------------------------
+    */
     public function test_invoke_guest()
     {
         Storage::fake('public');

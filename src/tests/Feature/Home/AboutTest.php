@@ -8,9 +8,11 @@ use Tests\TestCase;
 
 class AboutTest extends TestCase
 {
-    /**
-     * Invoke Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Invoke Method
+    |---------------------------------------------------------------------------
+    */
     public function test_about_guest(): void
     {
         $response = $this->get(route('about'));

@@ -8,9 +8,11 @@ use Tests\TestCase;
 
 class UserSettingsTest extends TestCase
 {
-    /**
-     * Show Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Show Method
+    |---------------------------------------------------------------------------
+    */
     public function test_show_guest(): void
     {
         $response = $this->get(route('user.user-settings.show'));

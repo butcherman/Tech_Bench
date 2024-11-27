@@ -17,8 +17,10 @@ use Tests\TestCase;
 class CustomerFileTest extends TestCase
 {
     /*
-     *   Store Method
-     */
+    |---------------------------------------------------------------------------
+    | Store Method
+    |---------------------------------------------------------------------------
+    */
     public function test_store_guest(): void
     {
         $customer = Customer::factory()->create();
@@ -195,8 +197,10 @@ class CustomerFileTest extends TestCase
     }
 
     /*
-     *   Update Method
-     */
+    |---------------------------------------------------------------------------
+    | Update Method
+    |---------------------------------------------------------------------------
+    */
     public function test_update_guest(): void
     {
         $customer = Customer::factory()->create();
@@ -333,8 +337,10 @@ class CustomerFileTest extends TestCase
     }
 
     /*
-     *   Destroy Method
-     */
+    |---------------------------------------------------------------------------
+    | Destroy Method
+    |---------------------------------------------------------------------------
+    */
     public function test_destroy_guest(): void
     {
         $data = CustomerFile::factory()->create();
@@ -388,9 +394,11 @@ class CustomerFileTest extends TestCase
         ]));
     }
 
-    /**
-     * Restore Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Restore Method
+    |---------------------------------------------------------------------------
+    */
     public function test_restore_guest(): void
     {
         $file = CustomerFile::factory()->create();
@@ -443,9 +451,11 @@ class CustomerFileTest extends TestCase
         ]));
     }
 
-    /**
-     * Force Delete Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Force Delete Method
+    |---------------------------------------------------------------------------
+    */
     public function test_force_delete_guest(): void
     {
         $file = CustomerFile::factory()->create();

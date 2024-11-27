@@ -11,9 +11,11 @@ use Tests\TestCase;
 
 class TwoFactorTest extends TestCase
 {
-    /**
-     * Test the 2FA Middleware
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Test the 2FA Middleware
+    |---------------------------------------------------------------------------
+    */
     public function test_middleware(): void
     {
         Mail::fake();
@@ -68,9 +70,11 @@ class TwoFactorTest extends TestCase
         Mail::assertQueued(VerificationCodeMail::class);
     }
 
-    /**
-     * Show Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Show Method
+    |---------------------------------------------------------------------------
+    */
     public function test_show_guest(): void
     {
         $response = $this->get(route('2fa.show'));
@@ -94,9 +98,11 @@ class TwoFactorTest extends TestCase
             );
     }
 
-    /**
-     * Update Method
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Update Method
+    |---------------------------------------------------------------------------
+    */
     public function test_update_guest(): void
     {
         $data = [
