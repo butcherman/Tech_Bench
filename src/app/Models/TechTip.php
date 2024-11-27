@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -106,15 +107,15 @@ class TechTip extends Model
     | Model Relationships
     |---------------------------------------------------------------------------
     */
-    public function CreatedBy(): HasOne
+    public function CreatedBy(): BelongsTo
     {
-        return $this->hasOne(User::class, 'user_id', 'user_id')
+        return $this->belongsTo(User::class, 'user_id', 'user_id')
             ->withTrashed();
     }
 
-    public function UpdatedBy(): HasOne
+    public function UpdatedBy(): BelongsTo
     {
-        return $this->hasOne(User::class, 'user_id', 'updated_id')
+        return $this->belongsTo(User::class, 'user_id', 'updated_id')
             ->withTrashed();
     }
 
@@ -122,7 +123,7 @@ class TechTip extends Model
     {
         return $this->belongsToMany(
             EquipmentType::class,
-            'tech_tip_equipment',
+            TechTipEquipment::class,
             'tip_id',
             'equip_id'
         )->withTimestamps();
@@ -132,10 +133,10 @@ class TechTip extends Model
     {
         return $this->belongsToMany(
             FileUpload::class,
-            'tech_tip_files',
+            TechTipFile::class,
             'tip_id',
-            'file_id'
-        )->withTimestamps();
+            'file_id',
+        );
     }
 
     public function TechTipType(): HasOne
