@@ -2,7 +2,6 @@
 
 namespace App\Events\File;
 
-use App\Models\FileUpload;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
@@ -19,5 +18,5 @@ class FileUploadDeletedEvent
     | no longer needed.
     |---------------------------------------------------------------------------
     */
-    public function __construct(public FileUpload $fileUpload) {}
+    public function __construct(public string|array $fileData) {}
 }

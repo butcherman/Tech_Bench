@@ -61,7 +61,7 @@ class CustomerFileObserver extends Observer
      */
     public function forceDeleted(CustomerFile $customerFile): void
     {
-        event(new FileUploadDeletedEvent($customerFile->FileUpload));
+        event(new FileUploadDeletedEvent($customerFile->FileUpload->file_id));
 
         Log::info(
             'Customer File trashed by '.$this->user,

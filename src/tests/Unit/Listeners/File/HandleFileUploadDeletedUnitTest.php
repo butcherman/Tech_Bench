@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Listeners\File;
 
+use App\Actions\File\DeleteFileData;
 use App\Events\File\FileUploadDeletedEvent;
 use App\Exceptions\Database\RecordInUseException;
 use App\Listeners\File\HandleFileUploadedDeletedListener;
@@ -35,10 +36,11 @@ class HandleFileUploadDeletedUnitTest extends TestCase
                 $fileUpload->file_name
             );
 
-        $event = new FileUploadDeletedEvent($fileUpload);
+        $event = new FileUploadDeletedEvent($fileUpload->file_id);
 
+        $svc = new DeleteFileData;
         $listener = new HandleFileUploadedDeletedListener;
-        $listener->handle($event);
+        $listener->handle($event, $svc);
 
         $this->assertDatabaseMissing(
             'file_uploads',
@@ -69,12 +71,13 @@ class HandleFileUploadDeletedUnitTest extends TestCase
                 $fileUpload->file_name
             );
 
-        $event = new FileUploadDeletedEvent($fileUpload);
+        $event = new FileUploadDeletedEvent($fileUpload->file_id);
 
         $this->expectException(RecordInUseException::class);
 
+        $svc = new DeleteFileData;
         $listener = new HandleFileUploadedDeletedListener;
-        $listener->handle($event);
+        $listener->handle($event, $svc);
 
         $this->assertDatabaseHas(
             'file_uploads',
@@ -97,10 +100,11 @@ class HandleFileUploadDeletedUnitTest extends TestCase
                 'file_name' => 'testPhoto.png',
             ]);
 
-        $event = new FileUploadDeletedEvent($fileUpload);
+        $event = new FileUploadDeletedEvent($fileUpload->file_id);
 
+        $svc = new DeleteFileData;
         $listener = new HandleFileUploadedDeletedListener;
-        $listener->handle($event);
+        $listener->handle($event, $svc);
 
         $this->assertDatabaseMissing(
             'file_uploads',
