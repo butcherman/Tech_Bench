@@ -23,7 +23,7 @@ class TechTipTest extends TestCase
     | Index Method
     |---------------------------------------------------------------------------
     */
-    public function test_index_guest()
+    public function test_index_guest(): void
     {
         $response = $this->get(route('tech-tips.index'));
 
@@ -32,7 +32,7 @@ class TechTipTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_index()
+    public function test_index(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly();
@@ -53,7 +53,7 @@ class TechTipTest extends TestCase
     | Create Method
     |---------------------------------------------------------------------------
     */
-    public function test_create_guest()
+    public function test_create_guest(): void
     {
         $response = $this->get(route('tech-tips.create'));
 
@@ -62,7 +62,7 @@ class TechTipTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_create_no_permission()
+    public function test_create_no_permission(): void
     {
         $this->changeRolePermission(4, 'Add Tech Tip', false);
 
@@ -74,7 +74,7 @@ class TechTipTest extends TestCase
         $response->assertForbidden();
     }
 
-    public function test_create()
+    public function test_create(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);
@@ -94,7 +94,7 @@ class TechTipTest extends TestCase
     | Store Method
     |---------------------------------------------------------------------------
     */
-    public function test_store_guest()
+    public function test_store_guest(): void
     {
         $testEquip = EquipmentType::factory()
             ->count(5)
@@ -118,7 +118,7 @@ class TechTipTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_store_no_permission()
+    public function test_store_no_permission(): void
     {
         $this->changeRolePermission(4, 'Add Tech Tip', false);
 
@@ -146,7 +146,7 @@ class TechTipTest extends TestCase
         $response->assertForbidden();
     }
 
-    public function test_store()
+    public function test_store(): void
     {
         Event::fake(NotifiableTechTipEvent::class);
 
@@ -184,7 +184,7 @@ class TechTipTest extends TestCase
         Event::assertDispatched(NotifiableTechTipEvent::class);
     }
 
-    public function test_store_no_public_permission()
+    public function test_store_no_public_permission(): void
     {
         $this->changeRolePermission(4, 'Add Public Tech Tip', false);
 
@@ -212,7 +212,7 @@ class TechTipTest extends TestCase
         $response->assertForbidden();
     }
 
-    public function test_store_with_files()
+    public function test_store_with_files(): void
     {
         Event::fake(NotifiableTechTipEvent::class);
         Storage::fake('tips');
@@ -269,7 +269,7 @@ class TechTipTest extends TestCase
     | Show Method
     |---------------------------------------------------------------------------
     */
-    public function test_show_guest()
+    public function test_show_guest(): void
     {
         $tip = TechTip::factory()->create();
 
@@ -280,7 +280,7 @@ class TechTipTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_show_by_slug()
+    public function test_show_by_slug(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly();
@@ -301,7 +301,7 @@ class TechTipTest extends TestCase
             );
     }
 
-    public function test_show_by_id()
+    public function test_show_by_id(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly();
@@ -322,24 +322,24 @@ class TechTipTest extends TestCase
             );
     }
 
-    // TODO - Add back in
-    // public function test_show_missing_tip()
-    // {
-    //     /** @var User $user */
-    //     $user = User::factory()->createQuietly();
+    public function test_show_missing_tip(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
 
-    //     $response = $this->actingAs($user)
-    //         ->get(route('tech-tips.show', 'random-tip'));
+        $response = $this->actingAs($user)
+            ->get(route('tech-tips.show', 'random-tip'));
 
-    //     $response->assertSuccessful();
-    // }
+        $response->assertStatus(302)
+            ->assertRedirect(route('tech-tips.not-found'));
+    }
 
     /*
     |---------------------------------------------------------------------------
     | Edit Method
     |---------------------------------------------------------------------------
     */
-    public function test_edit_guest()
+    public function test_edit_guest(): void
     {
         $tip = TechTip::factory()->create();
 
@@ -349,7 +349,7 @@ class TechTipTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_edit_no_permission()
+    public function test_edit_no_permission(): void
     {
         $this->changeRolePermission(4, 'Edit Tech Tip', false);
 
@@ -363,7 +363,7 @@ class TechTipTest extends TestCase
         $response->assertForbidden();
     }
 
-    public function test_edit()
+    public function test_edit(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);
@@ -386,7 +386,7 @@ class TechTipTest extends TestCase
     | Update Method
     |---------------------------------------------------------------------------
     */
-    public function test_update_guest()
+    public function test_update_guest(): void
     {
         $tip = TechTip::factory()->create();
         $testEquip = EquipmentType::factory()
@@ -415,7 +415,7 @@ class TechTipTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_update_no_permission()
+    public function test_update_no_permission(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly();
@@ -442,7 +442,7 @@ class TechTipTest extends TestCase
         $response->assertForbidden();
     }
 
-    public function test_update()
+    public function test_update(): void
     {
         Event::fake(NotifiableTechTipEvent::class);
 
@@ -479,7 +479,7 @@ class TechTipTest extends TestCase
         Event::assertDispatched(NotifiableTechTipEvent::class);
     }
 
-    public function test_update_no_public_permission()
+    public function test_update_no_public_permission(): void
     {
         $this->changeRolePermission(4, 'Add Public Tech Tip', false);
 
@@ -508,7 +508,7 @@ class TechTipTest extends TestCase
         $response->assertForbidden();
     }
 
-    public function test_update_with_files()
+    public function test_update_with_files(): void
     {
         Event::fake();
 
@@ -590,7 +590,7 @@ class TechTipTest extends TestCase
     | Destroy Method
     |---------------------------------------------------------------------------
     */
-    public function test_destroy_guest()
+    public function test_destroy_guest(): void
     {
         $tip = TechTip::factory()->create();
 
@@ -601,7 +601,7 @@ class TechTipTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_destroy_no_permission()
+    public function test_destroy_no_permission(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly();
@@ -613,7 +613,7 @@ class TechTipTest extends TestCase
         $response->assertForbidden();
     }
 
-    public function test_destroy()
+    public function test_destroy(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);
@@ -634,7 +634,7 @@ class TechTipTest extends TestCase
     | Restore Method
     |---------------------------------------------------------------------------
     */
-    public function test_restore_guest()
+    public function test_restore_guest(): void
     {
         $tip = TechTip::factory()->create();
 
@@ -645,7 +645,7 @@ class TechTipTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_restore_no_permission()
+    public function test_restore_no_permission(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly();
@@ -657,7 +657,7 @@ class TechTipTest extends TestCase
         $response->assertForbidden();
     }
 
-    public function test_restore()
+    public function test_restore(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);
@@ -680,7 +680,7 @@ class TechTipTest extends TestCase
     | Force Delete Method
     |---------------------------------------------------------------------------
     */
-    public function test_force_delete_guest()
+    public function test_force_delete_guest(): void
     {
         $tip = TechTip::factory()->create();
 
@@ -693,7 +693,7 @@ class TechTipTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_force_delete_no_permission()
+    public function test_force_delete_no_permission(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly();
@@ -705,7 +705,7 @@ class TechTipTest extends TestCase
         $response->assertForbidden();
     }
 
-    public function test_force_delete()
+    public function test_force_delete(): void
     {
         Event::fake(FileUploadDeletedEvent::class);
 

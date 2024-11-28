@@ -1,5 +1,6 @@
 <?php
 
+use App\Exceptions\TechTip\TechTipNotFoundException;
 use App\Http\Controllers\TechTip\DisabledTechTipController;
 use App\Http\Controllers\TechTip\ShowDisabledTipController;
 use App\Http\Controllers\TechTip\TechTipController;
@@ -82,6 +83,8 @@ Route::middleware('auth.secure')->group(function () {
     | /tech-tips
     |---------------------------------------------------------------------------
     */
+    Route::inertia('tech-tips/not-found', 'TechTips/NotFound')
+        ->name('tech-tips.not-found');
     Route::resource('tech-tips', TechTipController::class)
         ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
             $breadcrumbs->index('Tech Tips')
@@ -90,9 +93,8 @@ Route::middleware('auth.secure')->group(function () {
                     fn (TechTip|string $tech_tip) => gettype($tech_tip) === 'object' ? $tech_tip->subject : $tech_tip
                 )
                 ->edit('Edit Tech Tip');
-        })->missing(function (Request $request) {
-            // throw new TechTipNotFoundException($request);
-            dd('not found');
+        })->missing(function () {
+            throw new TechTipNotFoundException;
         });
 });
 
