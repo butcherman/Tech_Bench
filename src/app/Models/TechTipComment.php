@@ -55,7 +55,7 @@ class TechTipComment extends Model
         );
     }
 
-    public function getAuthor(): Attribute
+    public function author(): Attribute
     {
         return Attribute::make(
             get: fn () => $this->User->full_name,

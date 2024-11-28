@@ -2,6 +2,7 @@
 
 use App\Exceptions\TechTip\TechTipNotFoundException;
 use App\Http\Controllers\TechTip\DisabledTechTipController;
+use App\Http\Controllers\TechTip\SearchTipsController;
 use App\Http\Controllers\TechTip\ShowDisabledTipController;
 use App\Http\Controllers\TechTip\TechTipController;
 use App\Http\Controllers\TechTip\TechTipSettingsController;
@@ -16,6 +17,21 @@ use Illuminate\Support\Facades\Route;
 |-------------------------------------------------------------------------------
 */
 Route::middleware('auth.secure')->group(function () {
+    /*
+    |---------------------------------------------------------------------------
+    | Tech Tip Searching and Verification
+    | /tech-tips
+    |---------------------------------------------------------------------------
+    */
+    Route::prefix('tech-tips')->name('tech-tips.')->group(function () {
+        Route::post('search', SearchTipsController::class)->name('search');
+        //     Route::post('upload-file', UploadTipFile::class)->name('upload');
+        //     Route::get('download/{techTip}', DownloadTipController::class)
+        //         ->name('download');
+        //     Route::post('bookmark/{techTip}', TechTipBookmarkController::class)
+        //         ->name('bookmark');
+    });
+
     /*
     |---------------------------------------------------------------------------
     | Tech Tip Administration
@@ -104,3 +120,6 @@ Route::middleware('auth.secure')->group(function () {
 Route::get('tip-download/{tip}', function () {
     return 'download tip';
 })->name('tech-tips.download');
+Route::get('tip-bookmark', function () {
+    return 'bookmakr';
+})->name('tech-tips.bookmark');
