@@ -14,9 +14,14 @@ class TechTipService
     /**
      * Create a new Tech Tip and attach all Equipment and Files.
      */
-    public function createTechTip(Collection $requestData, User $user, array $fileList): TechTip
-    {
-        $newTip = new TechTip($requestData->except(['equipList', 'suppress'])->toArray());
+    public function createTechTip(
+        Collection $requestData,
+        User $user,
+        array $fileList
+    ): TechTip {
+        $newTip = new TechTip(
+            $requestData->except(['equipList', 'suppress'])->toArray()
+        );
 
         // Attach user and generate a unique slug
         $newTip->CreatedBy()->associate($user);
@@ -40,9 +45,16 @@ class TechTipService
     /**
      * Update an existing Tech Tip and attach all Equipment and Files.
      */
-    public function updateTechTip(Collection $requestData, TechTip $techTip, User $user, array $fileList): TechTip
+    public function updateTechTip(
+        Collection $requestData,
+        TechTip $techTip,
+        User $user,
+        array $fileList): TechTip
     {
-        $techTip->update($requestData->except(['equipList', 'suppress', 'removedFiles'])->toArray());
+        $techTip->update(
+            $requestData->except(['equipList', 'suppress', 'removedFiles'])
+                ->toArray()
+        );
 
         // Note the user that updated the tip
         $techTip->updated_id = $user->user_id;

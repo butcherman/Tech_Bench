@@ -66,10 +66,10 @@ Route::middleware('auth.secure')->group(function () {
                 ->breadcrumb(fn (TechTip $techTip) => 'Tip Details - '.$techTip->subject, 'admin.tech-tips.deleted-tips');
 
             Route::controller(TechTipController::class)->group(function () {
-                Route::get('restore-tip/{techTip}', 'restore')
+                Route::get('restore-tip/{tech_tip}', 'restore')
                     ->name('restore')
                     ->withTrashed();
-                Route::delete('force-delete/{techTip}', 'forceDelete')
+                Route::delete('force-delete/{tech_tip}', 'forceDelete')
                     ->name('force-delete')
                     ->withTrashed();
             });

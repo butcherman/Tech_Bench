@@ -59,7 +59,7 @@ class TechTip extends Model
     | For Route/Model binding, we will use either the slug or tip_id
     |---------------------------------------------------------------------------
     */
-    public function resolveRouteBinding($value, $field = null): Customer
+    public function resolveRouteBinding($value, $field = null): TechTip
     {
         return $this->where('slug', $value)
             ->orWhere('tip_id', $value)
