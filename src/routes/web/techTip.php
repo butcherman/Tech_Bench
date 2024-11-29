@@ -121,5 +121,9 @@ Route::get('tip-download/{tip}', function () {
     return 'download tip';
 })->name('tech-tips.download');
 Route::get('tip-bookmark', function () {
-    return 'bookmakr';
+    return 'bookmark';
 })->name('tech-tips.bookmark');
+
+Route::post('upload-file', function () {
+    return 'upload file';
+})->name('tech-tips.upload');

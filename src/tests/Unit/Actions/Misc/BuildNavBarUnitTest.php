@@ -59,7 +59,7 @@ class BuildNavBarUnitTest extends TestCase
             ],
             [
                 'name' => 'Tech Tips',
-                'route' => '#', // route('tech-tips.index'),
+                'route' => route('tech-tips.index'),
                 'icon' => 'fas fa-tools',
             ],
         ];
@@ -90,7 +90,7 @@ class BuildNavBarUnitTest extends TestCase
             ],
             [
                 'name' => 'Tech Tips',
-                'route' => '#', // route('tech-tips.index'),
+                'route' => route('tech-tips.index'),
                 'icon' => 'fas fa-tools',
             ],
         ];

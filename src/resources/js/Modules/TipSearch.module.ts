@@ -78,11 +78,10 @@ export const triggerSearch = async () => {
     await axios
         .post(route("tech-tips.search"), searchParams.value)
         .then((res: AxiosResponse<axiosSearchResults>) => processResults(res))
-        .catch(
-            (err) => console.log(err)
-            // okModal(
-            //     "Unable to process request at this time.  Pleas try again later."
-            // )
+        .catch(() =>
+            okModal(
+                "Unable to process request at this time.  Pleas try again later."
+            )
         )
         .finally(() => (isLoading.value = false));
 };
@@ -114,8 +113,6 @@ export const resetSearch = () => {
  *                    Work with returned results                               *
  *******************************************************************************/
 const processResults = (res: AxiosResponse<axiosSearchResults>) => {
-    console.log(res);
-
     // Assign results
     searchResults.value = res.data.data;
 

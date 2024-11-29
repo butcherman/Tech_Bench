@@ -18,7 +18,7 @@ return [
     |
     */
 
-    'driver' => 'meilisearch',
+    'driver' => env('SCOUT_DRIVER', 'meilisearch'),
 
     /*
     |--------------------------------------------------------------------------

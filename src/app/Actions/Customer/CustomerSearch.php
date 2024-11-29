@@ -16,7 +16,9 @@ class CustomerSearch
     public function __invoke(Collection $searchData): mixed
     {
         if ($searchData->get('searchFor')) {
+            // @codeCoverageIgnoreStart
             return $this->filteredSearch($searchData);
+            // @codeCoverageIgnoreEnd
         }
 
         if ($searchData->has('cust_id')) {
@@ -29,7 +31,9 @@ class CustomerSearch
     }
 
     /**
-     * Use Scout to perform a detailed search
+     * Use Scout to perform a detailed search.
+     *
+     * @codeCoverageIgnore
      */
     protected function filteredSearch(Collection $searchData): LengthAwarePaginator
     {

@@ -37,17 +37,18 @@ const changeAlert = reactive({
     files: false,
 });
 
-
-const clearAlert = (key: "site" | "equipment" | "contacts" | "notes" | "files") => {
-    console.log('clear alert called');
+const clearAlert = (
+    key: "site" | "equipment" | "contacts" | "notes" | "files"
+) => {
     changeAlert[key] = false;
     loading[key] = false;
 };
 
-const triggerAlert = (key: "site" | "equipment" | "contacts" | "notes" | "files") => {
-    console.log('trigger alert called');
+const triggerAlert = (
+    key: "site" | "equipment" | "contacts" | "notes" | "files"
+) => {
     changeAlert[key] = true;
-}
+};
 
 /*******************************************************************************
  * Customer Information

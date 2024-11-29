@@ -116,4 +116,24 @@ class HandleFileUploadDeletedUnitTest extends TestCase
                 $fileUpload->folder.DIRECTORY_SEPARATOR.$fileUpload->file_name
             );
     }
+
+    public function test_handle_array(): void
+    {
+        $fileUpload = FileUpload::factory()->count(5)->create();
+
+        $event = new FileUploadDeletedEvent(
+            $fileUpload->pluck('file_id')->toArray()
+        );
+
+        $svc = new DeleteFileData;
+        $listener = new HandleFileUploadedDeletedListener;
+        $listener->handle($event, $svc);
+
+        foreach ($fileUpload as $fileData) {
+            $this->assertDatabaseMissing(
+                'file_uploads',
+                $fileData->makeHidden(['href', 'created_stamp'])->toArray()
+            );
+        }
+    }
 }

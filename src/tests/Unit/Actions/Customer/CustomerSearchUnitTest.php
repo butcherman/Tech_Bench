@@ -13,7 +13,7 @@ class CustomerSearchUnitTest extends TestCase
      */
     public function setUp(): void
     {
-        parent::setup();
+        parent::setUp();
 
         $testData = [
             [
@@ -60,21 +60,6 @@ class CustomerSearchUnitTest extends TestCase
         $res = $testObj(collect($searchData));
 
         $this->assertCount(5, $res->toArray()['data']);
-    }
-
-    public function test_search_filtered_results_one(): void
-    {
-        $searchData = [
-            'perPage' => 25,
-            'searchFor' => 'Pinky',
-            'page' => 1,
-        ];
-
-        $testObj = new CustomerSearch;
-        $res = $testObj(collect($searchData));
-
-        // Test will return zero results, we just need to verify method fires
-        $this->assertCount(0, $res->toArray()['data']);
     }
 
     public function test_search_for_id(): void

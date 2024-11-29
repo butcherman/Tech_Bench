@@ -6,6 +6,7 @@ use App\Actions\Misc\BuildTimezoneList;
 use App\Actions\Misc\CheckDatabaseError;
 use App\Policies\GatePolicy;
 use App\Services\Misc\CacheHelper;
+use App\Services\User\GetMailableUsers;
 use App\Services\User\UserPermissionsService;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Event;
@@ -38,6 +39,9 @@ class AppServiceProvider extends ServiceProvider
 
         // User Permission Facade
         $this->app->bind('UserPermissions', UserPermissionsService::class);
+
+        // Get Mailable Facade
+        $this->app->bind('GetMailable', GetMailableUsers::class);
 
         //  Gate to determine if the Administration link should show up on the navigation menu
         Gate::define('admin-link', [GatePolicy::class, 'adminLink']);
