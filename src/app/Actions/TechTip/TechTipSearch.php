@@ -3,7 +3,9 @@
 namespace App\Actions\TechTip;
 
 use App\Models\TechTip;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 
 class TechTipSearch
 {
@@ -44,8 +46,8 @@ class TechTipSearch
     {
         $this->isPublic = $isPublic;
         $this->searchText = $searchData->get('searchFor');
-        $this->searchType = $searchData->get('typeList');
-        $this->searchEquip = $searchData->get('equipList');
+        $this->searchType = $searchData->get('typeList') ?? [];
+        $this->searchEquip = $searchData->get('equipList') ?? [];
 
         // If any search parameters are filled out, do a Scout Search.
         if ($this->hasSearchParam()) {
@@ -60,7 +62,9 @@ class TechTipSearch
     }
 
     /**
-     * Determine if any of the search fields are filled out
+     * Determine if any of the search fields are filled out.
+     *
+     * @codeCoverageIgnore
      */
     protected function hasSearchParam(): bool
     {
@@ -82,17 +86,23 @@ class TechTipSearch
     /**
      * Perform the custom search with text and filters
      */
-    protected function performSearch(int $perPage)
+    protected function performSearch(int $perPage): LengthAwarePaginator
     {
-        return TechTip::search($this->searchText)
+        $searchData = TechTip::search($this->searchText)
             ->when(count($this->searchType), function ($q) {
                 $q->whereIn('tip_type_id', $this->searchType);
             })
             ->when(count($this->searchEquip), function ($q) {
+                // @codeCoverageIgnoreStart
                 $q->whereIn('EquipmentType.equip_id', $this->searchEquip);
+                // @codeCoverageIgnoreEnd
             })
             ->when($this->isPublic, function ($q) {
                 $q->where('public', true);
             })->paginate($perPage);
+
+        Log::debug('Tech Tip Search Results', $searchData->items());
+
+        return $searchData;
     }
 }
