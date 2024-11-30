@@ -72,6 +72,8 @@ class TechTipController extends Controller
      */
     public function show(Request $request, TechTip $tech_tip): Response
     {
+        $tech_tip->wasViewed();
+
         return Inertia::render('TechTips/Show', [
             'tip-data' => fn () => new TechTipResource($tech_tip),
             'tip-equipment' => fn () => $tech_tip->EquipmentType,

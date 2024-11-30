@@ -14,6 +14,7 @@
     >
         <div class="row">
             <div class="col-12">
+                {{-- FIXME - Logo Does Not Load --}}
                 <img
                     src="{{ config('app.logo') }}"
                     alt="Company Logo"

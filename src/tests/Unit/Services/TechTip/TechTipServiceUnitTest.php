@@ -4,11 +4,13 @@ namespace Tests\Unit\Services\TechTip;
 
 use App\Events\File\FileUploadDeletedEvent;
 use App\Events\TechTip\NotifiableTechTipEvent;
+use App\Jobs\File\MoveTmpFilesJob;
 use App\Models\EquipmentType;
 use App\Models\FileUpload;
 use App\Models\TechTip;
 use App\Models\User;
 use App\Services\TechTip\TechTipService;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
 use Tests\TestCase;
@@ -23,6 +25,7 @@ class TechTipServiceUnitTest extends TestCase
     public function test_create_tech_tip_with_files(): void
     {
         Event::fake();
+        Bus::fake();
 
         $user = User::factory()->create();
         $testEquip = EquipmentType::factory()
@@ -78,6 +81,7 @@ class TechTipServiceUnitTest extends TestCase
         }
 
         Event::assertDispatched(NotifiableTechTipEvent::class);
+        Bus::assertDispatched(MoveTmpFilesJob::class);
     }
 
     public function test_create_tech_tip_no_notification(): void
@@ -136,6 +140,7 @@ class TechTipServiceUnitTest extends TestCase
     public function test_update_tech_tip_with_files(): void
     {
         Event::fake();
+        Bus::fake();
 
         $techTip = TechTip::factory()
             ->has(FileUpload::factory(2))
@@ -220,6 +225,7 @@ class TechTipServiceUnitTest extends TestCase
         ]);
 
         Event::assertDispatched(NotifiableTechTipEvent::class);
+        Bus::assertDispatched(MoveTmpFilesJob::class);
     }
 
     public function test_update_tech_tip_no_notification(): void

@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Events\File\FileUploadDeletedEvent;
 use App\Models\TechTip;
+use App\Models\TechTipView;
 use Illuminate\Support\Facades\Log;
 
 class TechTipObserver extends Observer
@@ -13,6 +14,9 @@ class TechTipObserver extends Observer
      */
     public function created(TechTip $techTip): void
     {
+        // Create the Views Table Entry
+        $techTip->TechTipView()->save(new TechTipView);
+
         Log::info('New Tech Tip created by '.$this->user, $techTip->toArray());
     }
 

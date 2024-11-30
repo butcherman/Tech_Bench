@@ -2,11 +2,14 @@
 
 use App\Exceptions\TechTip\TechTipNotFoundException;
 use App\Http\Controllers\TechTip\DisabledTechTipController;
+use App\Http\Controllers\TechTip\DownloadTechTipController;
 use App\Http\Controllers\TechTip\SearchTipsController;
 use App\Http\Controllers\TechTip\ShowDisabledTipController;
+use App\Http\Controllers\TechTip\TechTipBookmarkController;
 use App\Http\Controllers\TechTip\TechTipController;
 use App\Http\Controllers\TechTip\TechTipSettingsController;
 use App\Http\Controllers\TechTip\TechTipTypeController;
+use App\Http\Controllers\TechTip\UploadTechTipFileController;
 use App\Models\TechTip;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 use Illuminate\Support\Facades\Route;
@@ -25,11 +28,12 @@ Route::middleware('auth.secure')->group(function () {
     */
     Route::prefix('tech-tips')->name('tech-tips.')->group(function () {
         Route::post('search', SearchTipsController::class)->name('search');
-        //     Route::post('upload-file', UploadTipFile::class)->name('upload');
-        //     Route::get('download/{techTip}', DownloadTipController::class)
-        //         ->name('download');
-        //     Route::post('bookmark/{techTip}', TechTipBookmarkController::class)
-        //         ->name('bookmark');
+        Route::post('upload-file', UploadTechTipFileController::class)
+            ->name('upload');
+        Route::get('download/{techTip}', DownloadTechTipController::class)
+            ->name('download');
+        Route::post('bookmark/{techTip}', TechTipBookmarkController::class)
+            ->name('bookmark');
     });
 
     /*
@@ -113,17 +117,3 @@ Route::middleware('auth.secure')->group(function () {
             throw new TechTipNotFoundException;
         });
 });
-
-/**
- * TODO - GO AWAY
- */
-Route::get('tip-download/{tip}', function () {
-    return 'download tip';
-})->name('tech-tips.download');
-Route::get('tip-bookmark', function () {
-    return 'bookmark';
-})->name('tech-tips.bookmark');
-
-Route::post('upload-file', function () {
-    return 'upload file';
-})->name('tech-tips.upload');

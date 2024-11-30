@@ -4,6 +4,7 @@ namespace App\Services\TechTip;
 
 use App\Enums\CrudAction;
 use App\Events\TechTip\NotifiableTechTipEvent;
+use App\Jobs\File\MoveTmpFilesJob;
 use App\Models\TechTip;
 use App\Models\User;
 use Illuminate\Support\Collection;
@@ -31,6 +32,10 @@ class TechTipService
         // Attach Equipment and Files
         $newTip->EquipmentType()->sync($requestData->get('equipList'));
         $newTip->FileUpload()->attach($fileList);
+
+        if (count($fileList)) {
+            MoveTmpFilesJob::dispatch($fileList, $newTip->tip_id);
+        }
 
         // Send out notifications if needed
         if (! $requestData->get('suppress')) {
@@ -68,6 +73,10 @@ class TechTipService
         $techTip->EquipmentType()->sync($requestData->get('equipList'));
         $techTip->FileUpload()->attach($fileList);
         $techTip->FileUpload()->detach($requestData->get('removedFiles'));
+
+        if (count($fileList)) {
+            MoveTmpFilesJob::dispatch($fileList, $techTip->tip_id);
+        }
 
         // Refresh Model
         $techTip->fresh();

@@ -53,7 +53,7 @@ const statsTable = reactive({
     updated_by: props.tipData.updated_id
         ? props.tipData.updated_by.full_name
         : "N/A",
-    views: props.tipData.tech_tip_view.views,
+    views: props.tipData.views,
     is_sticky: props.tipData.sticky,
     is_public: props.tipData.public,
 });

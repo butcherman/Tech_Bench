@@ -27,11 +27,12 @@ class TechTipResource extends JsonResource
             'updated_at' => Carbon::parse($this->updated_at)->format('M d, Y'),
             'href' => $this->href,
             'public_href' => $this->public_href,
+            'views' => $this->TechTipView->views ?? 0,
             'created_by' => [
                 'full_name' => $this->CreatedBy->full_name,
             ],
             'updated_by' => [
-                'full_name' => $this->UpdatedBy->full_name,
+                'full_name' => $this->UpdatedBy->full_name ?? null,
             ],
             'tech_tip_type' => $this->TechTipType,
         ];

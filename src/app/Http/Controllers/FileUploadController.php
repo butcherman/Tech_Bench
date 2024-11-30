@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\DiskEnum;
 use App\Exceptions\File\FileChunkMissingException;
 use App\Models\FileUpload;
+use App\Traits\HandleFileTrait;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
@@ -14,6 +15,8 @@ use Pion\Laravel\ChunkUpload\Receiver\FileReceiver;
 
 abstract class FileUploadController extends Controller
 {
+    use HandleFileTrait;
+
     /**
      * Storage Disk file will be saved to.
      *
@@ -113,61 +116,14 @@ abstract class FileUploadController extends Controller
     public function saveFileToDisk(UploadedFile $file): string
     {
         $properName = $this->cleanFilename($file->getClientOriginalName());
-        $fileName = $this->checkForDuplicate($properName);
+        $fileName = $this->checkForDuplicate(
+            $this->disk,
+            $this->folder,
+            $properName
+        );
 
         $file->storeAs($this->folder, $fileName, $this->disk);
 
         return $fileName;
-    }
-
-    /*
-    |---------------------------------------------------------------------------
-    | Sanitize the filename to remove any spaces or illegal characters.
-    |---------------------------------------------------------------------------
-    */
-    public function cleanFilename(string $name): string
-    {
-        $newName = str_replace(
-            ' ',
-            '_',
-            preg_replace("([^\w\s\d\-_~,;\[\]\(\).])", '', $name)
-        );
-
-        return $newName;
-    }
-
-    /*
-    |---------------------------------------------------------------------------
-    | Check if the filename already exists. If it does, append the filename
-    | with an index number.
-    |---------------------------------------------------------------------------
-    */
-    public function checkForDuplicate(string $name): string
-    {
-        if (
-            Storage::disk($this->disk)
-                ->exists($this->folder.DIRECTORY_SEPARATOR.$name)
-        ) {
-            // Index for appending filename
-            $number = 0;
-
-            $parts = pathinfo($name);
-
-            // File Extension
-            $ext = isset($parts['extension']) ? ('.'.$parts['extension']) : '';
-
-            // Base filename without extension or folder
-            $base = preg_replace('(\(\d\))', '', $parts['filename']);
-
-            // Append filename until it is unique
-            do {
-                $name = $base.'('.++$number.')'.$ext;
-            } while (
-                Storage::disk($this->disk)
-                    ->exists($this->folder.DIRECTORY_SEPARATOR.$name)
-            );
-        }
-
-        return $name;
     }
 }

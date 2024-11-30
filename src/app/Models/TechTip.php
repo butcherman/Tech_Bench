@@ -181,66 +181,18 @@ class TechTip extends Model
     */
 
     /**
-     * Load data needed to show the Tech Tip to user
+     * Increase the view counter
      */
-    // public function loadShowData(bool $isDeleted = false)
-    // {
-    //     $this->load(['CreatedBy', 'UpdatedBy', 'TechTipType', 'TechTipView'])
-    //         ->CreatedBy->makeHidden(['email', 'initials', 'role_name', 'username']);
+    public function wasViewed(): void
+    {
+        $this->TechTipView->increment('views');
+    }
 
-    //     // If Tip has been updated, load user data for who updated it
-    //     if ($this->UpdatedBy) {
-    //         $this->UpdatedBy
-    //             ->makeHidden(['email', 'initials', 'role_name', 'username']);
-    //     }
-
-    //     // if (! $isDeleted) {
-    //     //     // Increase Views counter
-    //     //     $this->TechTipView->increment('views');
-
-    //     //     // Add Tip to users Recent visits
-    //     //     if (request()->user()) {
-    //     //         $this->touchRecent(request()->user());
-    //     //     }
-    //     // }
-    // }
-
-    /**
-     * Load and hide data needed for Public Viewing
-     */
-    // public function loadPublicData()
-    // {
-    //     $this->makeHidden([
-    //         'user_id',
-    //         'updated_id',
-    //         'sticky',
-    //         'allow_comments',
-    //         'slug',
-    //         'views',
-    //         'href',
-    //         'equipList',
-    //         'fileList',
-    //     ]);
-    //     $this->load([
-    //         'EquipmentType' => function ($q) {
-    //             $q->where('allow_public_tip', true);
-    //         },
-    //     ]);
-    //     $this->EquipmentType->makeHidden([
-    //         'allow_public_tip',
-    //         'cat_id',
-    //         'equip_id',
-    //     ]);
-    //     $this->load([
-    //         'FileUpload' => function ($q) {
-    //             $q->where('public', true);
-    //         },
-    //     ]);
-    //     $this->FileUpload->makeHidden([
-    //         'file_size',
-    //         'pivot',
-    //     ]);
-    // }
+    /*
+    |---------------------------------------------------------------------------
+    | Meilisearch Search Data
+    |---------------------------------------------------------------------------
+    */
 
     /**
      * Search Results for Meilisearch
