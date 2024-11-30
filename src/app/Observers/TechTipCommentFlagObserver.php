@@ -3,8 +3,6 @@
 namespace App\Observers;
 
 use App\Models\TechTipCommentFlag;
-use App\Models\User;
-use Illuminate\Support\Facades\Log;
 
 class TechTipCommentFlagObserver extends Observer
 {

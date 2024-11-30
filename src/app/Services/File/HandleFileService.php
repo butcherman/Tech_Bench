@@ -15,9 +15,12 @@ class HandleFileService
     /**
      * Move a file to a new folder
      */
-    public function moveFile(FileUpload $fileUpload, string $newFolder)
+    public function moveFile(FileUpload $fileUpload, string $newFolder): void
     {
-        Log::debug('Preparing to move file to folder '.$newFolder, $fileUpload->toArray());
+        Log::debug(
+            'Preparing to move file to folder '.$newFolder,
+            $fileUpload->toArray()
+        );
 
         // Do not move if the file is already in the move-to folder
         if ($fileUpload->folder === $newFolder) {
@@ -49,7 +52,7 @@ class HandleFileService
 
         $fileUpload->folder = $newFolder;
         $fileUpload->file_name = $fileName;
-        $fileUpload()->save();
+        $fileUpload->save();
 
     }
 

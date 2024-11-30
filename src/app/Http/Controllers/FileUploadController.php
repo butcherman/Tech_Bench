@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Enums\DiskEnum;
-use App\Exceptions\File\FileChunkMissingException;
 use App\Models\FileUpload;
 use App\Traits\HandleFileTrait;
 use Illuminate\Http\Request;
@@ -66,11 +65,6 @@ abstract class FileUploadController extends Controller
             $request,
             HandlerFactory::classFromRequest($request)
         );
-
-        // Verify we are uploading a file
-        if (! $receiver->isUploaded()) {
-            throw new FileChunkMissingException;
-        }
 
         $save = $receiver->receive();
 

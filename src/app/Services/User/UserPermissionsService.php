@@ -8,6 +8,7 @@ use App\Models\CustomerEquipment;
 use App\Models\CustomerFile;
 use App\Models\CustomerNote;
 use App\Models\TechTip;
+use App\Models\TechTipComment;
 use App\Models\User;
 
 class UserPermissionsService
@@ -52,7 +53,7 @@ class UserPermissionsService
             'update' => $user->can('update', TechTip::class),
             'delete' => $user->can('delete', TechTip::class),
             'public' => $user->can('public', TechTip::class),
-            'comment' => false, // $user->can('create', TechTipCom::class),
+            'comment' => $user->can('create', TechTipComment::class),
         ];
     }
 }
