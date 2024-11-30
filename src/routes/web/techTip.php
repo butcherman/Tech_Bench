@@ -6,6 +6,7 @@ use App\Http\Controllers\TechTip\DownloadTechTipController;
 use App\Http\Controllers\TechTip\SearchTipsController;
 use App\Http\Controllers\TechTip\ShowDisabledTipController;
 use App\Http\Controllers\TechTip\TechTipBookmarkController;
+use App\Http\Controllers\TechTip\TechTipCommentController;
 use App\Http\Controllers\TechTip\TechTipController;
 use App\Http\Controllers\TechTip\TechTipSettingsController;
 use App\Http\Controllers\TechTip\TechTipTypeController;
@@ -20,22 +21,6 @@ use Illuminate\Support\Facades\Route;
 |-------------------------------------------------------------------------------
 */
 Route::middleware('auth.secure')->group(function () {
-    /*
-    |---------------------------------------------------------------------------
-    | Tech Tip Searching and Verification
-    | /tech-tips
-    |---------------------------------------------------------------------------
-    */
-    Route::prefix('tech-tips')->name('tech-tips.')->group(function () {
-        Route::post('search', SearchTipsController::class)->name('search');
-        Route::post('upload-file', UploadTechTipFileController::class)
-            ->name('upload');
-        Route::get('download/{techTip}', DownloadTechTipController::class)
-            ->name('download');
-        Route::post('bookmark/{techTip}', TechTipBookmarkController::class)
-            ->name('bookmark');
-    });
-
     /*
     |---------------------------------------------------------------------------
     | Tech Tip Administration
@@ -99,12 +84,46 @@ Route::middleware('auth.secure')->group(function () {
 
     /*
     |---------------------------------------------------------------------------
-    | Tech Tip Service Routes
+    | Tech Tip Searching and Verification
     | /tech-tips
     |---------------------------------------------------------------------------
     */
-    Route::inertia('tech-tips/not-found', 'TechTips/NotFound')
-        ->name('tech-tips.not-found');
+    Route::prefix('tech-tips')->name('tech-tips.')->group(function () {
+        Route::post('search', SearchTipsController::class)->name('search');
+        Route::post('upload-file', UploadTechTipFileController::class)
+            ->name('upload');
+        Route::get('download/{techTip}', DownloadTechTipController::class)
+            ->name('download');
+        Route::post('bookmark/{techTip}', TechTipBookmarkController::class)
+            ->name('bookmark');
+        Route::inertia('not-found', 'TechTips/NotFound')
+            ->name('not-found');
+
+        /*
+        |-----------------------------------------------------------------------
+        | Tech Tip Comments
+        | /tech-tips/comments
+        |-----------------------------------------------------------------------
+        */
+        Route::controller(TechTipCommentController::class)
+            ->prefix('comments')
+            ->name('comments.')
+            ->group(function () {
+                Route::Get('/', 'index')->name('index');
+                Route::delete('destroy/{comment}', 'destroy')->name('destroy');
+                Route::prefix('{tech_tip}')->group(function () {
+                    Route::post('/', 'store')->name('store');
+                    Route::put('{comment}', 'update')->name('update');
+                });
+            });
+    });
+
+    /*
+    |---------------------------------------------------------------------------
+    | Tech Tip Controller Routes
+    | /tech-tips
+    |---------------------------------------------------------------------------
+    */
     Route::resource('tech-tips', TechTipController::class)
         ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
             $breadcrumbs->index('Tech Tips')

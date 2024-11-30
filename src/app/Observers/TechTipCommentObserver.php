@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\TechTipComment;
+use Illuminate\Support\Facades\Log;
 
 class TechTipCommentObserver extends Observer
 {
@@ -11,7 +12,11 @@ class TechTipCommentObserver extends Observer
      */
     public function created(TechTipComment $techTipComment): void
     {
-        //
+        Log::info(
+            'New Tech Tip Comment created by '.$this->user.' for Tech Tip ID '.
+                $techTipComment->tip_id,
+            $techTipComment->toArray()
+        );
     }
 
     /**
@@ -19,7 +24,11 @@ class TechTipCommentObserver extends Observer
      */
     public function updated(TechTipComment $techTipComment): void
     {
-        //
+        Log::info(
+            'Tech Tip Comment updated by '.$this->user.' for Tech Tip ID '.
+                $techTipComment->tip_id,
+            $techTipComment->toArray()
+        );
     }
 
     /**
@@ -27,22 +36,10 @@ class TechTipCommentObserver extends Observer
      */
     public function deleted(TechTipComment $techTipComment): void
     {
-        //
-    }
-
-    /**
-     * Handle the TechTipComment "restored" event.
-     */
-    public function restored(TechTipComment $techTipComment): void
-    {
-        //
-    }
-
-    /**
-     * Handle the TechTipComment "force deleted" event.
-     */
-    public function forceDeleted(TechTipComment $techTipComment): void
-    {
-        //
+        Log::info(
+            'Tech Tip Comment deleted by '.$this->user.' for Tech Tip ID '.
+                $techTipComment->tip_id,
+            $techTipComment->toArray()
+        );
     }
 }

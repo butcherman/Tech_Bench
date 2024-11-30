@@ -14,11 +14,13 @@ class UploadTechTipFileController extends FileUploadController
      */
     public function __invoke(TechTipRequest $request): Response
     {
-        $this->setFileData(DiskEnum::tips, 'tmp');
-        $savedFile = $this->getChunk($request->file('file'), $request);
+        if ($request->has('file')) {
+            $this->setFileData(DiskEnum::tips, 'tmp');
+            $savedFile = $this->getChunk($request->file('file'), $request);
 
-        if ($savedFile) {
-            session()->push('tip-file', $savedFile->file_id);
+            if ($savedFile) {
+                session()->push('tip-file', $savedFile->file_id);
+            }
         }
 
         return response()->noContent();

@@ -18,7 +18,7 @@ class TechTipCommentFactory extends Factory
     {
         return [
             'tip_id' => TechTip::factory(),
-            'user_id' => User::inRandomOrder()->first()->user_id,
+            'user_id' => User::factory(),
             'comment' => $this->faker->realText(),
         ];
     }
