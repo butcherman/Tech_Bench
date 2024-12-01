@@ -26,7 +26,9 @@
                                 />
                                 <span
                                     v-if="
-                                        !canEdit(comment) && !canDelete(comment)
+                                        !canEdit(comment) &&
+                                        !canDelete(comment) &&
+                                        !comment.is_flagged
                                     "
                                     class="float-end text-muted pointer"
                                     title="Flag this comment as inappropriate"
@@ -36,11 +38,14 @@
                                     <fa-icon icon="flag" />
                                 </span>
                             </div>
-                            <span v-if="comment.is_flagged" class="text-danger">
+                            <div
+                                v-if="comment.is_flagged"
+                                class="text-danger text-center w-100"
+                            >
                                 <fa-icon icon="triangle-exclamation" />
                                 This comment has been flagged for review
                                 <fa-icon icon="triangle-exclamation" />
-                            </span>
+                            </div>
                             <span v-else>
                                 {{ comment.comment }}
                             </span>
@@ -140,14 +145,8 @@ const deleteComment = (commentData: tipComment) => {
  * Flag a comment for Administrative Review
  */
 const flagComment = (commentData: tipComment) => {
-    router.post(
-        route("tech-tips.comments.flag", [
-            props.tipSlug,
-            commentData.comment_id,
-        ]),
-        {
-            preserveScroll: true,
-        }
-    );
+    router.post(route("tech-tips.comments.flag", [commentData.comment_id]), {
+        preserveScroll: true,
+    });
 };
 </script>

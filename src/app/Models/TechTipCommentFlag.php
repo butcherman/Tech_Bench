@@ -7,6 +7,7 @@ use App\Traits\Models\HasUser;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 #[ObservedBy([TechTipCommentFlagObserver::class])]
 class TechTipCommentFlag extends Model
@@ -43,6 +44,20 @@ class TechTipCommentFlag extends Model
     {
         return Attribute::make(
             get: fn () => $this->User->full_name,
+        );
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | Model Relationships
+    |---------------------------------------------------------------------------
+    */
+    public function TechTipComment(): BelongsTo
+    {
+        return $this->belongsTo(
+            TechTipComment::class,
+            'comment_id',
+            'comment_id'
         );
     }
 }

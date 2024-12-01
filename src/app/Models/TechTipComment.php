@@ -94,7 +94,6 @@ class TechTipComment extends Model
     {
         $this->Flags()->save(new TechTipCommentFlag([
             'user_id' => $user->user_id,
-            'comment_id' => $this->comment_id,
         ]));
     }
 }

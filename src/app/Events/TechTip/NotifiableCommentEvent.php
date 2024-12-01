@@ -13,9 +13,11 @@ class NotifiableCommentEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    /**
-     * Create a new event instance.
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Event is triggered when someone comments on a Tech Tip.
+    |---------------------------------------------------------------------------
+    */
     public function __construct(
         public TechTipComment $comment,
         public CrudAction $action

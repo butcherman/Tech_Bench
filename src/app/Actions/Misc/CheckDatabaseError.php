@@ -2,6 +2,7 @@
 
 namespace App\Actions\Misc;
 
+use App\Exceptions\Database\DuplicateDataException;
 use App\Exceptions\Database\GeneralQueryException;
 use App\Exceptions\Database\RecordInUseException;
 use Illuminate\Database\QueryException;
@@ -19,12 +20,12 @@ class CheckDatabaseError
         QueryException $e,
         ?string $message = 'Database Record In Use'
     ): void {
-        if (in_array($e->errorInfo[1], [19, 1451])) {
-            throw new RecordInUseException($message, 0, $e);
-        } else {
+        match ($e->errorInfo[1]) {
+            19, 1451 => throw new RecordInUseException($message, 0, $e),
+            1062 => throw new DuplicateDataException($message, 0, $e),
             // @codeCoverageIgnoreStart
-            throw new GeneralQueryException('', 0, $e);
+            default => throw new GeneralQueryException('', 0, $e)
             // @codeCoverageIgnoreEnd
-        }
+        };
     }
 }

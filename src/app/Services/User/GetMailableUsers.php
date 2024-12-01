@@ -26,4 +26,22 @@ class GetMailableUsers
             $q->whereNot('user_id', $ignore->user_id);
         })->get();
     }
+
+    /**
+     * Return a list of Administrators and Installers that can get email
+     * notifications.
+     */
+    public function getAdminUsers(): Collection
+    {
+        return User::whereIn('role_id', [1, 2])
+            ->whereHas('UserSettings', function ($q) {
+                $settingName = 'Receive Email Notifications';
+                $settingId = UserSettingType::where('name', $settingName)
+                    ->first()
+                    ->setting_type_id;
+
+                $q->where('setting_type_id', $settingId)
+                    ->where('value', true);
+            })->get();
+    }
 }

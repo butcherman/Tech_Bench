@@ -3,6 +3,7 @@
 use App\Exceptions\TechTip\TechTipNotFoundException;
 use App\Http\Controllers\TechTip\DisabledTechTipController;
 use App\Http\Controllers\TechTip\DownloadTechTipController;
+use App\Http\Controllers\TechTip\FlagTechTipCommentController;
 use App\Http\Controllers\TechTip\SearchTipsController;
 use App\Http\Controllers\TechTip\ShowDisabledTipController;
 use App\Http\Controllers\TechTip\TechTipBookmarkController;
@@ -105,11 +106,13 @@ Route::middleware('auth.secure')->group(function () {
         | /tech-tips/comments
         |-----------------------------------------------------------------------
         */
+        Route::post('comments/{comment}/flag', FlagTechTipCommentController::class)
+            ->name('comments.flag');
         Route::controller(TechTipCommentController::class)
             ->prefix('comments')
             ->name('comments.')
             ->group(function () {
-                Route::Get('/', 'index')->name('index');
+                Route::get('/', 'index')->name('index');
                 Route::delete('destroy/{comment}', 'destroy')->name('destroy');
                 Route::prefix('{tech_tip}')->group(function () {
                     Route::post('/', 'store')->name('store');

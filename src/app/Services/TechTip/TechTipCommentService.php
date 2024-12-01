@@ -2,9 +2,11 @@
 
 namespace App\Services\TechTip;
 
+use App\Facades\DbException;
 use App\Models\TechTip;
 use App\Models\TechTipComment;
 use App\Models\User;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Collection;
 
 class TechTipCommentService
@@ -42,5 +44,17 @@ class TechTipCommentService
     public function destroyComment(TechTipComment $comment): void
     {
         $comment->delete();
+    }
+
+    /**
+     * Flag a comment for review
+     */
+    public function flagComment(TechTipComment $comment, User $flaggedBy): void
+    {
+        try {
+            $comment->flagComment($flaggedBy);
+        } catch (QueryException $e) {
+            DbException::check($e);
+        }
     }
 }

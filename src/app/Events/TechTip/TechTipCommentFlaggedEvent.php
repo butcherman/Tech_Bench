@@ -2,26 +2,19 @@
 
 namespace App\Events\TechTip;
 
-use App\Enums\CrudAction;
-use App\Models\TechTip;
-use App\Models\User;
+use App\Models\TechTipComment;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class NotifiableTechTipEvent
+class TechTipCommentFlaggedEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /*
     |---------------------------------------------------------------------------
-    | Event is triggered when a Tech Tip is created or updated and the "suppress
-    | notification" flag is off.
+    | Event is triggered when a Tech Tip Comment is flagged for review.
     |---------------------------------------------------------------------------
     */
-    public function __construct(
-        public TechTip $techTip,
-        public User $user,
-        public CrudAction $action
-    ) {}
+    public function __construct(public TechTipComment $comment) {}
 }

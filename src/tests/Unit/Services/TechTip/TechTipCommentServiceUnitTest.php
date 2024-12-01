@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Services\TechTip;
 
+use App\Exceptions\Database\DuplicateDataException;
 use App\Models\TechTip;
 use App\Models\TechTipComment;
 use App\Models\User;
@@ -80,5 +81,41 @@ class TechTipCommentServiceUnitTest extends TestCase
             'tech_tip_comments',
             $comment->makeHidden(['author', 'is_flagged'])->toArray()
         );
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | flagComment()
+    |---------------------------------------------------------------------------
+    */
+    public function test_flag_comment(): void
+    {
+        $comment = TechTipComment::factory()->create();
+        $user = User::factory()->create();
+
+        $testObj = new TechTipCommentService;
+        $testObj->flagComment($comment, $user);
+
+        $this->assertDatabaseHas('tech_tip_comment_flags', [
+            'comment_id' => $comment->comment_id,
+            'user_id' => $user->user_id,
+        ]);
+    }
+
+    public function test_flag_comment_duplicate(): void
+    {
+        $comment = TechTipComment::factory()->create();
+        $user = User::factory()->create();
+        $comment->flagComment($user);
+
+        $this->expectException(DuplicateDataException::class);
+
+        $testObj = new TechTipCommentService;
+        $testObj->flagComment($comment, $user);
+
+        $this->assertDatabaseHas('tech_tip_comment_flags', [
+            'comment_id' => $comment->comment_id,
+            'user_id' => $user->user_id,
+        ]);
     }
 }

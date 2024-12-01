@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\TechTipCommentFlag;
+use Illuminate\Support\Facades\Log;
 
 class TechTipCommentFlagObserver extends Observer
 {
@@ -11,15 +12,10 @@ class TechTipCommentFlagObserver extends Observer
      */
     public function created(TechTipCommentFlag $techTipCommentFlag): void
     {
-        //
-    }
-
-    /**
-     * Handle the TechTipCommentFlag "updated" event.
-     */
-    public function updated(TechTipCommentFlag $techTipCommentFlag): void
-    {
-        //
+        Log::notice(
+            'A Tech Tip Comment was flagged for review by '.$this->user,
+            $techTipCommentFlag->TechTipComment->toArray()
+        );
     }
 
     /**
@@ -27,22 +23,9 @@ class TechTipCommentFlagObserver extends Observer
      */
     public function deleted(TechTipCommentFlag $techTipCommentFlag): void
     {
-        //
-    }
-
-    /**
-     * Handle the TechTipCommentFlag "restored" event.
-     */
-    public function restored(TechTipCommentFlag $techTipCommentFlag): void
-    {
-        //
-    }
-
-    /**
-     * Handle the TechTipCommentFlag "force deleted" event.
-     */
-    public function forceDeleted(TechTipCommentFlag $techTipCommentFlag): void
-    {
-        //
+        Log::notice(
+            'A Tech Tip Flag was deleted by '.$this->user,
+            $techTipCommentFlag->TechTipComment->toArray()
+        );
     }
 }

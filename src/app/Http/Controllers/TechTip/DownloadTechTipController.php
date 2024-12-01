@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Log;
 class DownloadTechTipController extends Controller
 {
     /**
-     * Handle the incoming request.
+     * Download a Tech Tip in PDF Format.
      */
     public function __invoke(Request $request, TechTip $techTip): Response
     {

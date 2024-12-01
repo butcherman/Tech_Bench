@@ -16,7 +16,7 @@ class TechTipSettingsController extends Controller
     public function __construct(protected TechTipAdministrationService $svc) {}
 
     /**
-     * Show the form for editing the resource.
+     * Show the form for editing Tech Tip Settings.
      */
     public function edit(): Response
     {
@@ -31,7 +31,7 @@ class TechTipSettingsController extends Controller
     }
 
     /**
-     * Update the resource in storage.
+     * Update the Tech Tip Settings.
      */
     public function update(TechTipSettingsRequest $request): RedirectResponse
     {

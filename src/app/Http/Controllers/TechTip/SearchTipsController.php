@@ -5,12 +5,11 @@ namespace App\Http\Controllers\TechTip;
 use App\Actions\TechTip\TechTipSearch;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TechTip\SearchTipsRequest;
-use Illuminate\Http\Request;
 
 class SearchTipsController extends Controller
 {
     /**
-     * Handle the incoming request.
+     * Perform a search for a Tech Tip.
      */
     public function __invoke(
         TechTipSearch $search,
