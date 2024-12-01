@@ -5,12 +5,13 @@ namespace App\Mail\TechTip;
 use App\Models\TechTipComment;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class NewCommentMail extends Mailable
+class NewCommentMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 

@@ -18,7 +18,11 @@ class HandleNotifiableCommentListener implements ShouldQueue
         $userList = GetMailable::getAllMailable($event->comment->User);
 
         foreach ($userList as $user) {
-            Mail::to($user)->send(new NewCommentMail($user, $event->comment->load('TechTip')));
+            Mail::to($user)
+                ->send(
+                    new NewCommentMail($user, $event->comment->load('TechTip')
+                    )
+                );
         }
     }
 }

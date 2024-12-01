@@ -17,7 +17,7 @@ class GetMailableUsersUnitTest extends TestCase
     */
     public function test_get_all_mailable(): void
     {
-        User::factory()->count(10)->create();
+        User::factory()->count(10)->create(['role_id' => 4]);
 
         $testObj = new GetMailableUsers;
         $res = $testObj->getAllMailable();
@@ -27,7 +27,7 @@ class GetMailableUsersUnitTest extends TestCase
 
     public function test_get_all_mailable_ignore_installer(): void
     {
-        User::factory()->count(10)->create();
+        User::factory()->count(10)->create(['role_id' => 4]);
 
         $testObj = new GetMailableUsers;
         $res = $testObj->getAllMailable(User::find(1));
@@ -37,7 +37,7 @@ class GetMailableUsersUnitTest extends TestCase
 
     public function test_get_all_mailable_ignore_setting_off(): void
     {
-        $userList = User::factory()->count(10)->create();
+        $userList = User::factory()->count(10)->create(['role_id' => 4]);
         $settingId = UserSettingType::where(
             'name',
             'Receive Email Notifications'
@@ -57,5 +57,23 @@ class GetMailableUsersUnitTest extends TestCase
         $res = $testObj->getAllMailable();
 
         $this->assertCount(7, $res);
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | getAdminUsers()
+    |---------------------------------------------------------------------------
+    */
+    public function test_get_admin_users(): void
+    {
+        User::factory()->count(5)->create(['role_id' => 1]);
+        User::factory()->count(5)->create(['role_id' => 2]);
+        User::factory()->count(10)->create(['role_id' => 3]);
+        User::factory()->count(15)->create(['role_id' => 4]);
+
+        $testObj = new GetMailableUsers;
+        $res = $testObj->getAdminUsers();
+
+        $this->assertCount(11, $res);
     }
 }
