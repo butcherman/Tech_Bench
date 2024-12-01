@@ -1,6 +1,7 @@
 <?php
 
 use App\Exceptions\TechTip\TechTipNotFoundException;
+use App\Http\Controllers\TechTip\ClearTechTipCommentFlagController;
 use App\Http\Controllers\TechTip\DisabledTechTipController;
 use App\Http\Controllers\TechTip\DownloadTechTipController;
 use App\Http\Controllers\TechTip\FlagTechTipCommentController;
@@ -108,11 +109,15 @@ Route::middleware('auth.secure')->group(function () {
         */
         Route::post('comments/{comment}/flag', FlagTechTipCommentController::class)
             ->name('comments.flag');
+        Route::get('comments/{comment}/restore', ClearTechTipCommentFlagController::class)
+            ->name('comments.restore');
         Route::controller(TechTipCommentController::class)
             ->prefix('comments')
             ->name('comments.')
             ->group(function () {
-                Route::get('/', 'index')->name('index');
+                Route::get('/', 'index')
+                    ->name('index')
+                    ->breadcrumb('Flagged Tech Tip Comments', 'admin.index');
                 Route::delete('destroy/{comment}', 'destroy')->name('destroy');
                 Route::prefix('{tech_tip}')->group(function () {
                     Route::post('/', 'store')->name('store');

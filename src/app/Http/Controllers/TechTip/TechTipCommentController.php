@@ -25,11 +25,10 @@ class TechTipCommentController extends Controller
         $this->authorize('manage', TechTipComment::class);
 
         return Inertia::render('TechTips/Comments/Index', [
-            'tip-data' => null, //  $techTip,
-            'flagged-comments' => [], //  $techTip->TechTipComment()
-            // ->has('Flags')
-            // ->get()
-            // ->makeVisible('Flags'),
+            'flagged-comments' => TechTipComment::has('Flags')
+                ->with('TechTip')
+                ->get()
+                ->makeVisible('Flags'),
         ]);
     }
 

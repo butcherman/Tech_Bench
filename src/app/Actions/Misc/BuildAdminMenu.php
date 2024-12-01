@@ -2,6 +2,7 @@
 
 namespace App\Actions\Misc;
 
+use App\Features\TechTipCommentFeature;
 use App\Models\User;
 use App\Traits\AllowTrait;
 
@@ -174,13 +175,13 @@ class BuildAdminMenu
                 ],
             ];
 
-            // if ($this->user->features()->active(TechTipCommentFeature::class)) {
-            //     $techTipMenu[] = [
-            //         'name' => 'View Flagged Comments',
-            //         'icon' => 'flag',
-            //         'route' => '#', // route('tech-tips.comments.show-flagged'),
-            //     ];
-            // }
+            if ($this->user->features()->active(TechTipCommentFeature::class)) {
+                $techTipMenu[] = [
+                    'name' => 'View Flagged Comments',
+                    'icon' => 'flag',
+                    'route' => route('tech-tips.comments.index'),
+                ];
+            }
         }
 
         $this->menu['Tech Tips'] = $techTipMenu;

@@ -25,7 +25,7 @@ class TechTipFactory extends Factory
             'slug' => Str::slug($subject),
             'details' => $this->faker->paragraph(5),
             'updated_id' => User::inRandomOrder()->first()->user_id,
-            'public' => false,
+            'public' => rand(1, 10) % 3 === 0 ? true : false,
         ];
     }
 }

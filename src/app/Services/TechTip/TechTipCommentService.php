@@ -57,4 +57,15 @@ class TechTipCommentService
             DbException::check($e);
         }
     }
+
+    /**
+     * Remove a Flag from a Tech Tip Comment
+     */
+    public function removeCommentFlag(TechTipComment $comment): void
+    {
+        $flags = $comment->Flags;
+        foreach ($flags as $flag) {
+            $flag->delete();
+        }
+    }
 }

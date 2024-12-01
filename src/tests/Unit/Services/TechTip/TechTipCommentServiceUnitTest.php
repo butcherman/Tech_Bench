@@ -118,4 +118,23 @@ class TechTipCommentServiceUnitTest extends TestCase
             'user_id' => $user->user_id,
         ]);
     }
+
+    /*
+    |---------------------------------------------------------------------------
+    | removeCommentFlag()
+    |---------------------------------------------------------------------------
+    */
+    public function test_remove_comment_flag(): void
+    {
+        $comment = TechTipComment::factory()->create();
+        $user = User::factory()->create();
+        $comment->flagComment($user);
+
+        $testObj = new TechTipCommentService;
+        $testObj->removeCommentFlag($comment);
+
+        $this->assertDatabaseMissing('tech_tip_comment_flags', [
+            'comment_id' => $comment->comment_id,
+        ]);
+    }
 }

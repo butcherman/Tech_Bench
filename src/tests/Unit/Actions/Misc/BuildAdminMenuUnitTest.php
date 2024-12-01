@@ -191,11 +191,11 @@ class BuildAdminMenuUnitTest extends TestCase
                     'icon' => 'ban',
                     'route' => route('admin.tech-tips.deleted-tips'),
                 ],
-                // [
-                //     'name' => 'View Flagged Comments',
-                //     'icon' => 'flag',
-                //     'route' => '#', // route('tech-tips.comments.show-flagged'),
-                // ],
+                [
+                    'name' => 'View Flagged Comments',
+                    'icon' => 'flag',
+                    'route' => route('tech-tips.comments.index'),
+                ],
             ],
             'Settings' => [
                 [

@@ -73,7 +73,6 @@ class TechTipCommentTest extends TestCase
         $response->assertSuccessful()
             ->assertInertia(fn (Assert $page) => $page
                 ->component('TechTips/Comments/Index')
-                ->has('tip-data')
                 ->has('flagged-comments')
             );
     }

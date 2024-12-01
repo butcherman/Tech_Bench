@@ -8,6 +8,8 @@ use App\Models\DataField;
 use App\Models\DataFieldType;
 use App\Models\EquipmentCategory;
 use App\Models\EquipmentType;
+use App\Models\TechTip;
+use App\Models\TechTipEquipment;
 use Tests\TestCase;
 
 class EquipmentTypeUnitTest extends TestCase
@@ -61,6 +63,26 @@ class EquipmentTypeUnitTest extends TestCase
             'equip_id' => $this->model->equip_id,
         ]);
 
-        $this->assertEquals($cust->toArray(), $this->model->Customer[0]->toArray());
+        $this->assertEquals(
+            $cust->toArray(),
+            $this->model->Customer[0]->toArray()
+        );
+    }
+
+    public function test_tech_tip_relationship(): void
+    {
+        $tip = TechTip::factory()->create();
+        TechTipEquipment::create([
+            'tip_id' => $tip->tip_id,
+            'equip_id' => $this->model->equip_id,
+        ]);
+
+        $this->assertEquals(
+            $tip->toArray(),
+            $this->model
+                ->TechTip[0]
+                ->makeHidden(['allow_comments', 'laravel_through_key'])
+                ->toArray()
+        );
     }
 }
