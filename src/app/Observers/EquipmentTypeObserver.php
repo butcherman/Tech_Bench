@@ -15,6 +15,7 @@ class EquipmentTypeObserver extends Observer
     {
         CacheFacade::clearCache('equipmentTypes');
         CacheFacade::clearCache('equipmentCategories');
+        CacheFacade::clearCache('publicEquipmentCategories');
 
         Log::info(
             'New Equipment Type created by '.$this->user,
@@ -29,6 +30,7 @@ class EquipmentTypeObserver extends Observer
     {
         CacheFacade::clearCache('equipmentTypes');
         CacheFacade::clearCache('equipmentCategories');
+        CacheFacade::clearCache('publicEquipmentCategories');
 
         Log::info(
             'Equipment Type updated by '.$this->user,
@@ -43,6 +45,7 @@ class EquipmentTypeObserver extends Observer
     {
         CacheFacade::clearCache('equipmentTypes');
         CacheFacade::clearCache('equipmentCategories');
+        CacheFacade::clearCache('publicEquipmentCategories');
 
         Log::info(
             'Equipment Type deleted by '.$this->user,

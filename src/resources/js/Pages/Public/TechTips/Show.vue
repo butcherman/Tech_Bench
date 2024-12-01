@@ -7,11 +7,11 @@
         <div class="border-bottom border-secondary-subtle pb-2">
             <TipDetailsTitle :tip-data="tipData" public-shown />
         </div>
-        <TipEquipmentList :tip-equipment="tipData.equipment_type" />
+        <TipEquipmentList :tip-equipment="tipEquipment" />
         <TipDetails :tip-data="tipData" class="mt-4" />
         <TipFiles
             v-if="tipData.file_upload"
-            :tip-files="tipData.file_upload"
+            :tip-files="tipFiles"
             class="mt-4"
         />
     </div>
@@ -26,6 +26,8 @@ import TipFiles from "@/Components/TechTips/TipFiles.vue";
 
 defineProps<{
     tipData: techTip;
+    tipEquipment: equipment[];
+    tipFiles: fileUpload[];
 }>();
 </script>
 

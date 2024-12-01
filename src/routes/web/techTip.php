@@ -5,6 +5,8 @@ use App\Http\Controllers\TechTip\ClearTechTipCommentFlagController;
 use App\Http\Controllers\TechTip\DisabledTechTipController;
 use App\Http\Controllers\TechTip\DownloadTechTipController;
 use App\Http\Controllers\TechTip\FlagTechTipCommentController;
+use App\Http\Controllers\TechTip\Public\PublicTechTipController;
+use App\Http\Controllers\TechTip\Public\SearchPublicTechTipController;
 use App\Http\Controllers\TechTip\SearchTipsController;
 use App\Http\Controllers\TechTip\ShowDisabledTipController;
 use App\Http\Controllers\TechTip\TechTipBookmarkController;
@@ -13,6 +15,7 @@ use App\Http\Controllers\TechTip\TechTipController;
 use App\Http\Controllers\TechTip\TechTipSettingsController;
 use App\Http\Controllers\TechTip\TechTipTypeController;
 use App\Http\Controllers\TechTip\UploadTechTipFileController;
+use App\Http\Middleware\CheckPublicTechTipMiddleware;
 use App\Models\TechTip;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 use Illuminate\Support\Facades\Route;
@@ -144,3 +147,19 @@ Route::middleware('auth.secure')->group(function () {
             throw new TechTipNotFoundException;
         });
 });
+
+/*
+|-------------------------------------------------------------------------------
+| Public Tech Tips
+|-------------------------------------------------------------------------------
+*/
+Route::middleware(CheckPublicTechTipMiddleware::class)
+    ->prefix('knowledge-base')
+    ->name('publicTips.')
+    ->group(function () {
+        Route::controller(PublicTechTipController::class)->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('{tech_tip}', 'show')->name('show');
+        });
+        Route::post('/', SearchPublicTechTipController::class)->name('search');
+    });

@@ -81,7 +81,7 @@ class TechTip extends Model
     public function publicHref(): ?Attribute
     {
         return Attribute::make(
-            get: fn () => $this->is_public
+            get: fn () => $this->public
                 ? route('publicTips.show', $this->slug)
                 : null,
         );
@@ -143,6 +143,16 @@ class TechTip extends Model
             'tip_id',
             'equip_id'
         )->withTimestamps();
+    }
+
+    public function PublicEquipmentType(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            EquipmentType::class,
+            TechTipEquipment::class,
+            'tip_id',
+            'equip_id'
+        )->public()->withTimestamps();
     }
 
     public function FileUpload(): BelongsToMany

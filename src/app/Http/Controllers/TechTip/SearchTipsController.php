@@ -5,6 +5,7 @@ namespace App\Http\Controllers\TechTip;
 use App\Actions\TechTip\TechTipSearch;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TechTip\SearchTipsRequest;
+use App\Http\Resources\SearchTechTipResource;
 
 class SearchTipsController extends Controller
 {
@@ -15,9 +16,9 @@ class SearchTipsController extends Controller
         TechTipSearch $search,
         SearchTipsRequest $request
     ): mixed {
-        return $search(
+        return SearchTechTipResource::collection($search(
             $request->safe()->collect(),
             false
-        );
+        ));
     }
 }

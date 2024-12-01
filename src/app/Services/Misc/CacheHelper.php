@@ -126,7 +126,20 @@ class CacheHelper
     public function equipmentCategories()
     {
         return Cache::rememberForever('equipmentCategories', function () {
-            return EquipmentCategory::with('EquipmentType')->get();
+            return EquipmentCategory::equipment()->get();
+        });
+    }
+
+    /**
+     * Get a list of all Equipment Categories with their Equipment Types that
+     * are allowed to have Public Tech Tips tied to them.
+     *
+     * @return \Illuminate\Cache\TCacheValue
+     */
+    public function publicEquipmentCategories()
+    {
+        return Cache::rememberForever('publicEquipmentCategories', function () {
+            return EquipmentCategory::publicEquipment()->get();
         });
     }
 

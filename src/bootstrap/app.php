@@ -31,12 +31,11 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->web(append: [
             LogDebugVisits::class,
             HandleInertiaRequests::class,
-        ])
-            ->appendToGroup('auth.secure', [
-                Authenticate::class,
-                CheckForTwoFactor::class,
-                CheckPasswordExpiration::class,
-            ]);
+        ])->appendToGroup('auth.secure', [
+            Authenticate::class,
+            CheckForTwoFactor::class,
+            CheckPasswordExpiration::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

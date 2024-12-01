@@ -30,19 +30,19 @@ interface paginationData {
 
 interface axiosSearchResults {
     data: techTip[];
-    // meta: {
-    current_page: number;
-    first_page_url: string;
-    from: number;
-    last_page: number;
-    last_page_url: string;
-    next_page_url: string;
-    path: string;
-    per_page: number;
-    prev_page_url: string;
-    to: number;
-    total: number;
-    // };
+    meta: {
+        current_page: number;
+        first_page_url: string;
+        from: number;
+        last_page: number;
+        last_page_url: string;
+        next_page_url: string;
+        path: string;
+        per_page: number;
+        prev_page_url: string;
+        to: number;
+        total: number;
+    };
 }
 
 /*******************************************************************************
@@ -113,20 +113,17 @@ export const resetSearch = () => {
  *                    Work with returned results                               *
  *******************************************************************************/
 const processResults = (res: AxiosResponse<axiosSearchResults>) => {
+    console.log(res);
+
     // Assign results
     searchResults.value = res.data.data;
 
     // Build pagination footer
-    // paginationData.listFrom = res.data.meta.from;
-    // paginationData.listTo = res.data.meta.to;
-    // paginationData.listTotal = res.data.meta.total;
-    // paginationData.totalPages = res.data.meta.last_page;
-    // paginationData.currentPage = res.data.meta.current_page;
-    paginationData.listFrom = res.data.from;
-    paginationData.listTo = res.data.to;
-    paginationData.listTotal = res.data.total;
-    paginationData.totalPages = res.data.last_page;
-    paginationData.currentPage = res.data.current_page;
+    paginationData.listFrom = res.data.meta.from;
+    paginationData.listTo = res.data.meta.to;
+    paginationData.listTotal = res.data.meta.total;
+    paginationData.totalPages = res.data.meta.last_page;
+    paginationData.currentPage = res.data.meta.current_page;
 };
 
 /*******************************************************************************
