@@ -21,7 +21,7 @@ class TechTipUnitTest extends TestCase
         parent::setUp();
 
         $this->model = TechTip::factory()->create([
-            'is_public' => true,
+            'public' => true,
             'updated_id' => User::factory(),
         ]);
     }
