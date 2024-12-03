@@ -37,14 +37,14 @@ abstract class ApplicationEnvironment
 
     /**
      * Write a new env key with new value
-     *
-     * @codeCoverageIgnore
      */
     protected function writeNewEnvironmentFileWith(string $key, string $value): bool
     {
         $input = file_get_contents($this->envPath);
 
         if ($input === null) {
+            Log::critical('Unable to get Environment file data');
+
             return false;
         }
 
@@ -52,13 +52,16 @@ abstract class ApplicationEnvironment
 
         file_put_contents($this->envPath, $input);
 
+        Log::notice('Updated Environment File with new Key/Value pair', [
+            'key' => $key,
+            'value' => $value,
+        ]);
+
         return true;
     }
 
     /**
      * Replace an existing key in the .env file with a new value
-     *
-     * @codeCoverageIgnore
      */
     protected function writeNewEnvironmentFileReplacing(
         string $key,
@@ -71,10 +74,20 @@ abstract class ApplicationEnvironment
         );
 
         if ($replaced === $input || $replaced === null) {
+            Log::critical(
+                'Unable to get Key Replacement Pattern for Environment File'
+            );
+
             return false;
         }
 
         file_put_contents($this->envPath, $replaced);
+
+        Log::notice('Updated Environment File.', [
+            'key' => $key,
+            'new_value' => $newValue,
+            'old_value' => $replaced,
+        ]);
 
         return true;
     }

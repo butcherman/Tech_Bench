@@ -9,9 +9,15 @@ use Illuminate\Support\Facades\Storage;
 
 class GarbageCollection
 {
-    /**
-     * Create a new class instance.
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Garbage Collection will perform the following tasks:
+    |   - Remove failed jobs longer than 48 hours old.
+    |   - Retry all other failed jobs.
+    |   - Remove any leftover file chunks.
+    |   - Prune Models.
+    |---------------------------------------------------------------------------
+    */
     public function __invoke(): void
     {
         Log::notice('Garbage Collection Started');
