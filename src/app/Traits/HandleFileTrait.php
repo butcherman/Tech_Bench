@@ -59,4 +59,20 @@ trait HandleFileTrait
 
         return $name;
     }
+
+    /*
+    |---------------------------------------------------------------------------
+    | Simple function to convert size in bytes to readable file size
+    |---------------------------------------------------------------------------
+    */
+    protected function readableFileSize(int $bytes, int $decimals = 2)
+    {
+        $size = ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+        $factor = floor((strlen($bytes) - 1) / 3);
+
+        return sprintf(
+            "%.{$decimals}f",
+            $bytes / pow(1024, $factor)
+        ).@$size[$factor];
+    }
 }

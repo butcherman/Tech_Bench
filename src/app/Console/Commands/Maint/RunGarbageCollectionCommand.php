@@ -9,11 +9,15 @@ class RunGarbageCollectionCommand extends Command
 {
     /**
      * The name and signature of the console command
+     *
+     * @var string
      */
     protected $signature = 'app:collect-garbage';
 
     /**
-     * The console command description
+     * The console command description.
+     *
+     * @var string
      */
     protected $description = 'Nightly maintenance to clear failed jobs and dangling files';
 

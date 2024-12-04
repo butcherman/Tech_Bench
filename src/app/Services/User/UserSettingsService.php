@@ -5,6 +5,7 @@ namespace App\Services\User;
 use App\Events\User\UserSettingsUpdatedEvent;
 use App\Models\User;
 use App\Models\UserSetting;
+use App\Models\UserSettingType;
 use Illuminate\Support\Collection;
 
 class UserSettingsService
@@ -29,5 +30,43 @@ class UserSettingsService
         }
 
         event(new UserSettingsUpdatedEvent($user));
+    }
+
+    /**
+     * Verify that all users have all available settings options
+     */
+    public function verifyUserSettings(bool $fix): array
+    {
+        $failed = [];
+        $settingType = UserSettingType::all()->pluck('setting_type_id');
+        $userList = User::withTrashed()->with('UserSettings')->get();
+
+        // Go through each user and verify they have all setting type
+        foreach ($userList as $user) {
+            $userSettings = $user->UserSettings->pluck('setting_type_id');
+            $missing = $settingType->diff($userSettings);
+
+            if ($missing->isNotEmpty()) {
+                $failed[] = [
+                    'user_id' => $user->user_id,
+                    'full_name' => $user->full_name,
+                    'setting_type_id' => $missing->flatten(),
+                ];
+
+                // Fix if the fix flag is turned on
+                if ($fix) {
+                    foreach ($missing as $setting) {
+                        $settingData = new UserSetting([
+                            'setting_type_id' => $setting,
+                            'value' => true,
+                        ]);
+
+                        $user->UserSettings()->save($settingData);
+                    }
+                }
+            }
+        }
+
+        return $failed;
     }
 }

@@ -8,14 +8,13 @@ use App\Models\CustomerEquipmentData;
 use App\Models\DataField;
 use App\Models\EquipmentType;
 use Illuminate\Support\Collection;
+use Symfony\Component\Console\Helper\ProgressBar;
 
 class CustomerEquipmentDataService
 {
-    /*
-    |---------------------------------------------------------------------------
-    | Create new Data Fields for Customer Equipment
-    |---------------------------------------------------------------------------
-    */
+    /**
+     * Create new Data Fields for Customer Equipment
+     */
     public function createEquipmentDataFields(CustomerEquipment $custEquip)
     {
         $dataFields = DataField::where('equip_id', $custEquip->equip_id)->get();
@@ -29,11 +28,9 @@ class CustomerEquipmentDataService
         }
     }
 
-    /*
-    |---------------------------------------------------------------------------
-    | Add any missing data fields for all customers with selected equipment
-    |---------------------------------------------------------------------------
-    */
+    /**
+     * Add any missing data fields for all customers with selected equipment
+     */
     public function updateEquipmentDataFields(EquipmentType $equip)
     {
         // All Data Fields for this equipment
@@ -51,6 +48,9 @@ class CustomerEquipmentDataService
         }
     }
 
+    /**
+     * Update the value for a specific data field.
+     */
     public function updateDataFieldValue(Collection $requestData): void
     {
         foreach ($requestData->get('saveData') as $data) {
@@ -60,15 +60,14 @@ class CustomerEquipmentDataService
         }
     }
 
-    /*
-    |---------------------------------------------------------------------------
-    | Determine which data fields are missing
-    |---------------------------------------------------------------------------
-    */
+    /**
+     * Determine which data fields are missing
+     */
     protected function verifyDataFields(
         CustomerEquipment $custEquip,
-        Collection $equipDataFields
-    ): void {
+        Collection $equipDataFields,
+        ?bool $fix = true
+    ): Collection {
         // Get the customers existing Data Fields
         $dataFields = CustomerEquipmentData::where(
             'cust_equip_id',
@@ -81,12 +80,44 @@ class CustomerEquipmentDataService
         $fieldsToAdd = $equipDataFields->diff($dataFields);
 
         // Add all missing fields
-        foreach ($fieldsToAdd as $fieldId) {
-            CustomerEquipmentData::create([
-                'cust_equip_id' => $custEquip->cust_equip_id,
-                'field_id' => $fieldId,
-                'value' => null,
-            ]);
+        if ($fix) {
+            foreach ($fieldsToAdd as $fieldId) {
+                CustomerEquipmentData::create([
+                    'cust_equip_id' => $custEquip->cust_equip_id,
+                    'field_id' => $fieldId,
+                    'value' => null,
+                ]);
+            }
         }
+
+        return $fieldsToAdd;
+    }
+
+    /**
+     * Check All Customer Equipment Data Fields
+     */
+    public function checkAllCustomerEquipment(bool $fix, ?ProgressBar $progress)
+    {
+        $custEquip = CustomerEquipment::all();
+        $missing = [];
+
+        foreach ($custEquip as $equipment) {
+
+            $equipDataFields = DataField::where('equip_id', $equipment->equip_id)
+                ->get()
+                ->pluck('field_id');
+
+            $missing[] = $this->verifyDataFields(
+                $equipment,
+                $equipDataFields,
+                $fix
+            );
+
+            if ($progress) {
+                $progress->advance();
+            }
+        }
+
+        return $missing;
     }
 }

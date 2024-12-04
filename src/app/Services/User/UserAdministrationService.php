@@ -7,7 +7,8 @@ use App\Facades\DbException;
 use App\Jobs\User\CreateUserSettingsJob;
 use App\Jobs\User\SendWelcomeEmailJob;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Builder;
+use App\Models\UserRole;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
@@ -17,13 +18,42 @@ class UserAdministrationService
     /**
      * Return a list of active, or deactivated users
      */
-    public function getAllUsers(?bool $trashed = false): Collection|Builder
+    public function getAllUsers(?bool $trashed = false): EloquentCollection
     {
         if ($trashed) {
             return User::onlyTrashed()->get()->makeVisible('deleted_at');
         }
 
         return User::all();
+    }
+
+    /**
+     * Return a list of users with Installer Level Role.
+     */
+    public function getInstallerUsers(): EloquentCollection
+    {
+        return User::whereRoleId(1)
+            ->get(['user_id', 'first_name', 'last_name'])
+            ->makeHidden(['initials', 'role_name', 'full_name'])
+            ->makeVisible('user_id');
+    }
+
+    /**
+     * Return a list of user with any type of Admin Access
+     */
+    public function getAdminUsers(): EloquentCollection
+    {
+        $roleList = UserRole::whereHas('UserRolePermission', function ($q) {
+            $q->where('allow', true)
+                ->whereHas('UserRolePermissionType', function ($q2) {
+                    $q2->where('is_admin_link', true);
+                });
+        })->get()->pluck('role_id');
+
+        return User::whereIn('role_id', $roleList)
+            ->get(['user_id', 'first_name', 'last_name'])
+            ->makeHidden(['initials', 'role_name', 'full_name'])
+            ->makeVisible('user_id');
     }
 
     /**

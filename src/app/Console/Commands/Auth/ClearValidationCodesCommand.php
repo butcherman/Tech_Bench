@@ -28,7 +28,7 @@ class ClearValidationCodesCommand extends Command
     | Command will delete any User Authorization Codes more than 15 minutes old
     |---------------------------------------------------------------------------
     */
-    public function handle()
+    public function handle(): void
     {
         Log::debug('Running auth:clear-validation-codes command');
 

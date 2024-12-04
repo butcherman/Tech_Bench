@@ -10,11 +10,15 @@ class CleanupImageFoldersCommand extends Command
 {
     /**
      * The name and signature of the console command.
+     *
+     * @var string
      */
     protected $signature = 'app:cleanup-image-folders {--read-only}';
 
     /**
      * The console command description
+     *
+     * @var string
      */
     protected $description = 'Remove any unused images from Logo and Uploaded Folders';
 
