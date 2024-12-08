@@ -96,7 +96,7 @@ class CustomerEquipmentDataService
     /**
      * Check All Customer Equipment Data Fields
      */
-    public function checkAllCustomerEquipment(bool $fix, ?ProgressBar $progress)
+    public function checkAllCustomerEquipment(bool $fix, ?ProgressBar $progress = null): array
     {
         $custEquip = CustomerEquipment::all();
         $missing = [];

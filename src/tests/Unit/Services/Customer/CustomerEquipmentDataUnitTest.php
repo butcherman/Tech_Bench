@@ -13,6 +13,11 @@ use Tests\TestCase;
 
 class CustomerEquipmentDataUnitTest extends TestCase
 {
+    /*
+    |---------------------------------------------------------------------------
+    | createEquipmentDataFields()
+    |---------------------------------------------------------------------------
+    */
     public function test_create_equipment_data_fields(): void
     {
         $fields = DataFieldType::factory()->count(2)->createQuietly();
@@ -46,6 +51,11 @@ class CustomerEquipmentDataUnitTest extends TestCase
         ]);
     }
 
+    /*
+    |---------------------------------------------------------------------------
+    | updateEquipmentDataFields()
+    |---------------------------------------------------------------------------
+    */
     public function test_update_equipment_data_fields(): void
     {
         $fields = DataFieldType::factory()->count(3)->createQuietly();
@@ -160,6 +170,11 @@ class CustomerEquipmentDataUnitTest extends TestCase
         ]);
     }
 
+    /*
+    |---------------------------------------------------------------------------
+    | updateDataFieldValue()
+    |---------------------------------------------------------------------------
+    */
     public function test_update_data_field_value(): void
     {
         $cust = Customer::factory()->create();
@@ -234,5 +249,23 @@ class CustomerEquipmentDataUnitTest extends TestCase
             'field_id' => $fields[3]->field_id,
             'value' => $newVal3,
         ]);
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | checkAllCustomerEquipment()
+    |---------------------------------------------------------------------------
+    */
+    public function test_check_all_customer_equipment(): void
+    {
+        $customerList = Customer::factory()->count(2)->create();
+        $customerList->each(function ($cust) {
+            CustomerEquipment::factory()->create(['cust_id' => $cust->cust_id]);
+        });
+
+        $testObj = new CustomerEquipmentDataService;
+        $res = $testObj->checkAllCustomerEquipment(false);
+
+        $this->assertEquals($res, [collect([]), collect([])]);
     }
 }

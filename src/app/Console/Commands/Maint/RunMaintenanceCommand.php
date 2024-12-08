@@ -130,7 +130,6 @@ class RunMaintenanceCommand extends Command
             );
 
             if ($this->fix) {
-                // $userObj->fixUserSettings($missingSettings);
                 $this->info(count($missingSettings).' User Profiles Fixed');
             }
         } else {

@@ -60,7 +60,7 @@ class FileMaintenanceService
     public function getEmptyDirectories(
         array $directoryList,
         bool $fix,
-        ?ProgressBar $progressBar
+        ?ProgressBar $progressBar = null
     ): array {
         $emptyList = [];
 
@@ -118,7 +118,7 @@ class FileMaintenanceService
     /**
      * Put together a list of missing files and files without database pointers
      */
-    public function findMissingFiles(bool $fix, ?ProgressBar $progressBar): array
+    public function findMissingFiles(bool $fix, ?ProgressBar $progressBar = null): array
     {
         $missingList = [];
         $dbList = FileUpload::all();
@@ -161,39 +161,21 @@ class FileMaintenanceService
     public function findOrphanedFiles(
         array $fileList,
         bool $fix,
-        ProgressBar $progressBar
+        ?ProgressBar $progressBar = null
     ): array {
         $orphaned = [];
         foreach ($fileList as $fileUpload) {
             $parts = pathinfo($fileUpload);
-            $dbFile = FileUpload::where('file_name', $parts['basename'])->get();
+            $dbFile = FileUpload::where('file_name', $parts['basename'])
+                ->where('folder', $parts['dirname'])
+                ->first();
 
             // If file was not found, move on to the next
-            if (! $dbFile) {
+            if (empty($dbFile)) {
                 $orphaned[] = $fileUpload;
 
                 if ($fix) {
                     Storage::disk('local')->delete($fileUpload);
-                }
-            } else {
-                // Determine that the file is in the proper folder
-                $valid = false;
-                foreach ($dbFile as $db) {
-                    $dbPath = Storage::disk($db->disk)
-                        ->path($db->folder.DIRECTORY_SEPARATOR.$db->file_name);
-                    $stPath = Storage::disk('local')->path($fileUpload);
-
-                    if ($dbPath === $stPath) {
-                        $valid = true;
-                    }
-                }
-
-                if (! $valid) {
-                    $orphaned[] = $fileUpload;
-
-                    if ($fix) {
-                        Storage::disk('local')->delete($fileUpload);
-                    }
                 }
             }
 
@@ -222,8 +204,10 @@ class FileMaintenanceService
 
         try {
             $fileUpload->delete();
+            // @codeCoverageIgnoreStart
         } catch (Exception $e) {
             Log::error('Problem while trying to delete file - '.$e->getMessage());
         }
+        // @codeCoverageIgnoreEnd
     }
 }
