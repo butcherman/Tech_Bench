@@ -43,6 +43,46 @@ class UserAdministrationUnitTest extends TestCase
 
     /*
     |---------------------------------------------------------------------------
+    | getInstallerUsers()
+    |---------------------------------------------------------------------------
+    */
+    public function test_get_installer_users(): void
+    {
+        $testObj = new UserAdministrationService;
+        $response = $testObj->getInstallerUsers();
+
+        $this->assertEquals(
+            $response->toArray(),
+            User::where('role_id', 1)
+                ->get(['user_id', 'first_name', 'last_name'])
+                ->makeHidden(['initials', 'role_name', 'full_name'])
+                ->makeVisible('user_id')
+                ->toArray()
+        );
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | getAdminUsers()
+    |---------------------------------------------------------------------------
+    */
+    public function test_get_admin_users(): void
+    {
+        $testObj = new UserAdministrationService;
+        $response = $testObj->getAdminUsers();
+
+        $this->assertEquals(
+            $response->toArray(),
+            User::whereIn('role_id', [1, 2])
+                ->get(['user_id', 'first_name', 'last_name'])
+                ->makeHidden(['initials', 'role_name', 'full_name'])
+                ->makeVisible('user_id')
+                ->toArray()
+        );
+    }
+
+    /*
+    |---------------------------------------------------------------------------
     | createUser()
     |---------------------------------------------------------------------------
     */

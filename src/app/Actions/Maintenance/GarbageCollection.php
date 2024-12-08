@@ -56,9 +56,11 @@ class GarbageCollection
             try {
                 Log::info('Deleting File chunks');
                 Storage::deleteDirectory('chunks');
+                // @codeCoverageIgnoreStart
             } catch (Exception $e) {
                 report($e);
             }
+            // @codeCoverageIgnoreEnd
         }
     }
 }

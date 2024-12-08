@@ -6,6 +6,7 @@ use App\Events\User\UserEmailChangedEvent;
 use App\Events\User\UserSettingsUpdatedEvent;
 use App\Models\User;
 use App\Services\User\UserSettingsService;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
@@ -93,5 +94,72 @@ class UserSettingsUnitTest extends TestCase
         ]);
 
         Event::assertDispatched(UserSettingsUpdatedEvent::class);
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | verifyUserSettings()
+    |---------------------------------------------------------------------------
+    */
+    public function test_verify_user_settings(): void
+    {
+        $testUser = User::factory()->make();
+        User::factory()->count(10)->create();
+        DB::table('users')
+            ->insert($testUser->only([
+                'user_id',
+                'username',
+                'first_name',
+                'last_name',
+                'email',
+                'role_id',
+            ]));
+
+        $testObj = new UserSettingsService;
+        $res = $testObj->verifyUserSettings(false);
+
+        $pulledTestUser = User::where('username', $testUser->username)->first();
+
+        $this->assertCount(2, $res);
+
+        $this->assertDatabaseMissing('user_settings', [
+            'user_id' => $pulledTestUser->user_id,
+            'setting_type_id' => 1,
+        ]);
+        $this->assertDatabaseMissing('user_settings', [
+            'user_id' => $pulledTestUser->user_id,
+            'setting_type_id' => 2,
+        ]);
+    }
+
+    public function test_verify_user_settings_fix_on(): void
+    {
+        $testUser = User::factory()->make();
+        User::factory()->count(10)->create();
+        DB::table('users')
+            ->insert($testUser->only([
+                'user_id',
+                'username',
+                'first_name',
+                'last_name',
+                'email',
+                'role_id',
+            ]));
+
+        $testObj = new UserSettingsService;
+        $res = $testObj->verifyUserSettings(true);
+
+        $pulledTestUser = User::where('username', $testUser->username)->first();
+
+        $this->assertCount(2, $res);
+
+        $this->assertDatabaseHas('user_settings', [
+            'user_id' => $pulledTestUser->user_id,
+            'setting_type_id' => 1,
+        ]);
+        $this->assertDatabaseHas('user_settings', [
+            'user_id' => $pulledTestUser->user_id,
+            'setting_type_id' => 2,
+        ]);
     }
 }

@@ -91,4 +91,63 @@ class CustomerAdministrationUnitTest extends TestCase
             $alert->only(['alert_id'])
         );
     }
+
+    /*
+    |---------------------------------------------------------------------------
+    | verifyCustomerChildren()
+    |---------------------------------------------------------------------------
+    */
+    public function test_verify_customer_children(): void
+    {
+        $customerList = Customer::factory()->count(10)->create();
+
+        $customerList[5]->primary_site_id = null;
+        $customerList[5]->save();
+
+        $site = $customerList[5]->CustomerSite[0];
+        $site->cust_id = $customerList[4]->cust_id;
+        $site->save();
+
+        $testObj = new CustomerAdministrationService;
+        $res = $testObj->verifyCustomerChildren(false);
+
+        $this->assertEquals($res, [
+            [
+                'cust_id' => $customerList[5]->cust_id,
+                'name' => $customerList[5]->name,
+            ],
+        ]);
+
+        $this->assertDatabaseHas(
+            'customers',
+            $customerList[5]->only(['cust_id'])
+        );
+    }
+
+    public function test_verify_customer_children_fix_on(): void
+    {
+        $customerList = Customer::factory()->count(10)->create();
+
+        $customerList[5]->primary_site_id = null;
+        $customerList[5]->save();
+
+        $site = $customerList[5]->CustomerSite[0];
+        $site->cust_id = $customerList[4]->cust_id;
+        $site->save();
+
+        $testObj = new CustomerAdministrationService;
+        $res = $testObj->verifyCustomerChildren(true);
+
+        $this->assertEquals($res, [
+            [
+                'cust_id' => $customerList[5]->cust_id,
+                'name' => $customerList[5]->name,
+            ],
+        ]);
+
+        $this->assertDatabaseMissing(
+            'customers',
+            $customerList[5]->only(['cust_id'])
+        );
+    }
 }

@@ -30,7 +30,6 @@ class EquipmentSeeder extends Seeder
             'Hewlett-Packard' => [
                 'HSR6800 Router Series',
                 'MSR2000 Router Series',
-
             ],
         ]);
 
@@ -45,11 +44,13 @@ class EquipmentSeeder extends Seeder
             }
         }
 
+        // Update the Cisco equipment to allow Public Tips
+        EquipmentType::where('cat_id', 1)->update(['allow_public_tip' => true]);
+
         // Create the information to gather when adding a system mto a customer
         $equipList = EquipmentType::all();
         foreach ($equipList as $e) {
             for ($i = 1; $i < 7; $i++) {
-
                 DataField::create([
                     'equip_id' => $e->equip_id,
                     'type_id' => $i,

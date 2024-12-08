@@ -11,6 +11,7 @@ use App\Models\TechTipType;
 use App\Models\UserRole;
 use App\Models\UserSettingType;
 use App\Services\Misc\CacheHelper;
+use Database\Seeders\EquipmentSeeder;
 use Illuminate\Support\Facades\Cache;
 use PragmaRX\Version\Package\Version;
 use Tests\TestCase;
@@ -27,6 +28,8 @@ class CacheHelperUnitTest extends TestCase
         Cache::flush();
 
         $this->helperObj = new CacheHelper;
+
+        $this->seed(EquipmentSeeder::class);
     }
 
     /*
@@ -185,6 +188,15 @@ class CacheHelperUnitTest extends TestCase
         $shouldBe = EquipmentCategory::with('EquipmentType')->get();
 
         $equip = $this->helperObj->equipmentCategories();
+
+        $this->assertEquals($shouldBe->toArray(), $equip->toArray());
+    }
+
+    public function test_public_equipment_categories(): void
+    {
+        $shouldBe = EquipmentCategory::publicEquipment()->get();
+
+        $equip = $this->helperObj->publicEquipmentCategories();
 
         $this->assertEquals($shouldBe->toArray(), $equip->toArray());
     }

@@ -42,12 +42,6 @@ abstract class ApplicationEnvironment
     {
         $input = file_get_contents($this->envPath);
 
-        if ($input === null) {
-            Log::critical('Unable to get Environment file data');
-
-            return false;
-        }
-
         $input .= "\n{$key}={$value}\n";
 
         file_put_contents($this->envPath, $input);

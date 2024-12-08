@@ -6,28 +6,11 @@ use App\Actions\Admin\UpdateApplicationUrl;
 use App\Events\Config\UrlChangedEvent;
 use App\Listeners\Config\HandleUrlChangeListener;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class HandleUrlChangedUnitTest extends TestCase
 {
-    protected $envData;
-
-    public function setUp(): void
-    {
-        parent::setUp();
-
-        // Make a backup of the current .env file
-        $this->envData = file_get_contents(App::environmentFilePath());
-    }
-
-    public function tearDown(): void
-    {
-        parent::tearDown();
-
-        // Put the original .env contents back
-        file_put_contents(App::environmentFilePath(), $this->envData);
-    }
-
     /*
     |---------------------------------------------------------------------------
     | handle()
@@ -35,12 +18,33 @@ class HandleUrlChangedUnitTest extends TestCase
     */
     public function test_handle(): void
     {
+        Storage::fake();
+
+        $env = [
+            'APP_KEY=test',
+            'APP_URL=https://localhost',
+            'BASE_URL=localhost',
+        ];
+
+        Storage::put('env', print_r(implode("\r\n", $env), true));
+        $filePath = Storage::path('env');
+
+        App::partialMock()
+            ->shouldReceive('environmentFilePath')
+            ->once()
+            ->andReturn($filePath);
+
+        App::partialMock()
+            ->shouldReceive('environment')
+            ->once()
+            ->andReturn('testing');
+
         $testObj = new HandleUrlChangeListener(new UpdateApplicationUrl);
         $event = new UrlChangedEvent('newUrl.com', 'oldUrl.com');
 
         $testObj->handle($event);
 
-        $newFile = file_get_contents(App::environmentFilePath());
+        $newFile = file_get_contents($filePath);
         $this->assertStringContainsString('BASE_URL=newUrl.com', $newFile);
     }
 }
