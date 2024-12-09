@@ -73,6 +73,7 @@ class TechTipController extends Controller
     public function show(Request $request, TechTip $tech_tip): Response
     {
         $tech_tip->wasViewed();
+        $tech_tip->touchRecent($request->user());
 
         return Inertia::render('TechTips/Show', [
             'tip-data' => fn () => new TechTipResource($tech_tip),

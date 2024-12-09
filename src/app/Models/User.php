@@ -7,7 +7,9 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -116,6 +118,50 @@ class User extends Authenticatable
     public function UserRole(): HasOne
     {
         return $this->hasOne(UserRole::class, 'role_id', 'role_id');
+    }
+
+    public function RecentTechTips(): HasManyThrough
+    {
+        return $this->hasManyThrough(
+            TechTip::class,
+            UserTechTipRecent::class,
+            'user_id',
+            'tip_id'
+        )->latest('user_tech_tip_recents.created_at')
+            ->select(['slug', 'subject'])
+            ->limit(10);
+    }
+
+    public function RecentCustomers(): HasManyThrough
+    {
+        return $this->hasManyThrough(
+            Customer::class,
+            UserCustomerRecent::class,
+            'user_id',
+            'cust_id',
+        )->latest('user_customer_recents.created_at')
+            ->select(['slug', 'name'])
+            ->limit(10);
+    }
+
+    public function TechTipBookmarks(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            TechTip::class,
+            'user_tech_tip_bookmarks',
+            'user_id',
+            'tip_id'
+        )->select(['slug', 'subject']);
+    }
+
+    public function CustomerBookmarks(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Customer::class,
+            'user_customer_bookmarks',
+            'user_id',
+            'cust_id',
+        )->select(['slug', 'name']);
     }
 
     /*
