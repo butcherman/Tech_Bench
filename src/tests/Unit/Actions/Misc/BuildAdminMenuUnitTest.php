@@ -17,6 +17,20 @@ class BuildAdminMenuUnitTest extends TestCase
     {
         $user = User::factory()->create(['role_id' => 1]);
         $shouldBe = $this->getBaseMenu();
+        $shouldBe['File Links'] = [];
+
+        $testObj = new BuildAdminMenu;
+        $menu = $testObj->handle($user);
+
+        $this->assertEquals($shouldBe, $menu);
+    }
+
+    public function test_build_admin_menu_installer_file_links_enabled(): void
+    {
+        config(['file-link.feature_enabled' => true]);
+
+        $user = User::factory()->create(['role_id' => 1]);
+        $shouldBe = $this->getBaseMenu();
 
         $testObj = new BuildAdminMenu;
         $menu = $testObj->handle($user);
@@ -30,6 +44,7 @@ class BuildAdminMenuUnitTest extends TestCase
         $shouldBe = $this->getBaseMenu();
         $shouldBe['Settings'] = [];
         $shouldBe['Maintenance'] = [];
+        $shouldBe['File Links'] = [];
 
         $testObj = new BuildAdminMenu;
         $menu = $testObj->handle($user);
@@ -47,6 +62,7 @@ class BuildAdminMenuUnitTest extends TestCase
             'Equipment' => [],
             'Settings' => [],
             'Maintenance' => [],
+            'File Links' => [],
         ];
 
         $testObj = new BuildAdminMenu;
@@ -63,6 +79,7 @@ class BuildAdminMenuUnitTest extends TestCase
         $user = User::factory()->create(['role_id' => 1]);
         $shouldBe = $this->getBaseMenu();
         $shouldBe['Users'] = [];
+        $shouldBe['File Links'] = [];
 
         $testObj = new BuildAdminMenu;
         $menu = $testObj->handle($user);
@@ -77,6 +94,7 @@ class BuildAdminMenuUnitTest extends TestCase
         $user = User::factory()->create(['role_id' => 1]);
         $shouldBe = $this->getBaseMenu();
         $shouldBe['Customers'] = [];
+        $shouldBe['File Links'] = [];
 
         $testObj = new BuildAdminMenu;
         $menu = $testObj->handle($user);
@@ -91,6 +109,7 @@ class BuildAdminMenuUnitTest extends TestCase
         $user = User::factory()->create(['role_id' => 1]);
         $shouldBe = $this->getBaseMenu();
         $shouldBe['Tech Tips'] = [];
+        $shouldBe['File Links'] = [];
 
         $testObj = new BuildAdminMenu;
         $menu = $testObj->handle($user);
@@ -246,18 +265,18 @@ class BuildAdminMenuUnitTest extends TestCase
                     'route' => '#', // route('maint.backups.settings.show'),
                 ],
             ],
-            // 'File Links' => [
-            //     [
-            //         'name' => 'File Link Settings',
-            //         'icon' => 'cog',
-            //         'route' => '#', // route('admin.links.settings.show'),
-            //     ],
-            //     [
-            //         'name' => 'Manage File Links',
-            //         'icon' => 'tools',
-            //         'route' => '#', // route('admin.links.manage.index'),
-            //     ],
-            // ],
+            'File Links' => [
+                [
+                    'name' => 'File Link Settings',
+                    'icon' => 'cog',
+                    'route' => route('admin.links.settings.edit'),
+                ],
+                [
+                    'name' => 'Manage File Links',
+                    'icon' => 'tools',
+                    'route' => '#', // route('admin.links.manage.index'),
+                ],
+            ],
         ];
     }
 }

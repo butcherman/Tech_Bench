@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\AppSettings;
 use App\Models\DeviceToken;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Sequence;
@@ -14,6 +15,30 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
+        // Nerf the password policy for testing
+        AppSettings::upsert([
+            [
+                'key' => 'auth.passwords.settings.min_length',
+                'value' => json_encode(3),
+            ],
+            [
+                'key' => 'auth.passwords.settings.contains_uppercase',
+                'value' => json_encode(false),
+            ],
+            [
+                'key' => 'auth.passwords.settings.contains_lowercase',
+                'value' => json_encode(false),
+            ],
+            [
+                'key' => 'auth.passwords.settings.contains_number',
+                'value' => json_encode(false),
+            ],
+            [
+                'key' => 'auth.passwords.settings.contains_special',
+                'value' => json_encode(false),
+            ],
+        ], 'id');
+
         // Create a tech user if it does not already exist
         User::firstOrCreate(
             [

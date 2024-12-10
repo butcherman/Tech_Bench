@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\AppSettings;
 use App\Models\FileLink;
 use App\Models\FileLinkFile;
 use Illuminate\Database\Seeder;
@@ -16,6 +17,12 @@ class FileLinkSeeder extends Seeder
      */
     public function run(): void
     {
+        // Enable File Link Feature
+        AppSettings::create([
+            'key' => 'file-link.feature_enabled',
+            'value' => json_encode(true),
+        ]);
+
         /**
          * Create 10 File Links for the Administrator User
          */

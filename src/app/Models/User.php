@@ -164,6 +164,11 @@ class User extends Authenticatable
         )->select(['slug', 'name']);
     }
 
+    public function FileLinks(): HasMany
+    {
+        return $this->hasMany(FileLink::class, 'user_id', 'user_id');
+    }
+
     /*
     |---------------------------------------------------------------------------
     | Additional Model Methods

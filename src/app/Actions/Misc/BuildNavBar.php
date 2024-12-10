@@ -2,8 +2,10 @@
 
 namespace App\Actions\Misc;
 
+use App\Features\FileLinkFeature;
 use App\Models\User;
 use App\Traits\AllowTrait;
+use Illuminate\Support\Facades\Gate;
 
 class BuildNavBar
 {
@@ -23,9 +25,19 @@ class BuildNavBar
 
         $nav = $this->getPrimaryNav();
 
+        // If the Reports Nav exists, move it under Dashboard
+        if ($reportsNav = $this->getReportsNav()) {
+            array_splice($nav, 1, 0, [$reportsNav]);
+        }
+
         // If the Administration Nav exists, move it just under the Dashboard
         if ($adminNav = $this->getAdminNav()) {
             array_splice($nav, 1, 0, [$adminNav]);
+        }
+
+        // Add any additional features
+        if ($featureNav = $this->getFileLinkNav()) {
+            $nav[] = $featureNav;
         }
 
         return $nav;
@@ -68,6 +80,38 @@ class BuildNavBar
             'name' => 'Administration',
             'route' => route('admin.index'),
             'icon' => 'fas fa-user-shield',
+        ];
+    }
+
+    /**
+     * If the user can access the Reports link, include that link
+     */
+    protected function getReportsNav(): array|bool
+    {
+        if (! Gate::allows('reports-link', $this->user)) {
+            return false;
+        }
+
+        return [
+            'name' => 'Reports',
+            'icon' => 'chart-bar',
+            'route' => '#', // route('reports.index'),
+        ];
+    }
+
+    /**
+     * If the user can access File Links, include that link
+     */
+    protected function getFileLinkNav(): array|bool
+    {
+        if (! $this->user->features()->active(FileLinkFeature::class)) {
+            return false;
+        }
+
+        return [
+            'name' => 'File Links',
+            'icon' => 'link',
+            'route' => route('links.index'),
         ];
     }
 }

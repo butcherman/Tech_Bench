@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\AppSettings;
 use App\Models\EquipmentType;
 use App\Models\FileUpload;
 use App\Models\TechTip;
@@ -15,6 +16,12 @@ class TechTipSeeder extends Seeder
      */
     public function run(): void
     {
+        // Enable Public Tech Tips
+        AppSettings::create([
+            'key' => 'tech-tips.allow_public',
+            'value' => json_encode(true),
+        ]);
+
         $equipTypeCount = EquipmentType::all()->count();
 
         /**

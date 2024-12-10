@@ -35,15 +35,26 @@ Route::middleware('auth.secure')->group(function () {
                 ->edit('Edit Link');
         });
 
-    /**
-     * Routes for File Link Administration
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | File Link Administration
+    | /administration/file-links
+    |---------------------------------------------------------------------------
+    */
+    Route::prefix('administration/file-links')->name('admin.links.')->group(function () {
+        /*
+        |---------------------------------------------------------------------------
+        | File Link Settings
+        | /administration/file-links/settings
+        |---------------------------------------------------------------------------
+        */
+        Route::controller(FileLinkSettingsController::class)->name('settings.')->group(function () {
+            Route::get('settings', 'edit')->name('edit')->breadcrumb('File Link Settings', 'admin.index');
+            Route::put('settings', 'update')->name('update');
+        });
+    });
+
     // Route::prefix('administration/file-links')->name('admin.links.')->group(function () {
-    //     Route::get('settings', [FileLinkSettingsController::class, 'show'])
-    //         ->name('settings.show')
-    //         ->breadcrumb('File Link Settings', 'admin.index');
-    //     Route::put('settings', [FileLinkSettingsController::class, 'update'])
-    //         ->name('settings.update');
 
     //     Route::get('manage', [FileLinkAdminController::class, 'index'])
     //         ->name('manage.index')

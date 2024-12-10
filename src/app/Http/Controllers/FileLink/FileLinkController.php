@@ -3,18 +3,23 @@
 namespace App\Http\Controllers\FileLink;
 
 use App\Http\Controllers\Controller;
+use App\Models\FileLink;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-
+use Inertia\Response;
 
 class FileLinkController extends Controller
 {
     /**
      * Display a listing of the Models.
      */
-    public function index()
+    public function index(Request $request): Response
     {
-        //
+        $this->authorize('viewAny', FileLink::class);
+
+        return Inertia::render('FileLinks/Index', [
+            'link-list' => fn () => $request->user()->FileLinks,
+        ]);
     }
 
     /**

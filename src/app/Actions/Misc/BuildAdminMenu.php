@@ -30,7 +30,7 @@ class BuildAdminMenu
         $this->buildCustomerMenu();
         $this->buildTechTipMenu();
         $this->buildEquipmentMenu();
-        // $this->buildFileLinkMenu();
+        $this->buildFileLinkMenu();
         $this->buildSettingsMenu();
         $this->buildMaintenanceMenu();
 
@@ -265,28 +265,28 @@ class BuildAdminMenu
     /**
      * Administrative menu for File Links
      */
-    // protected function buildFileLinkMenu(): void
-    // {
-    //     $fileLinkMenu = [];
+    protected function buildFileLinkMenu(): void
+    {
+        $fileLinkMenu = [];
 
-    //     if (
-    //         config('file-link.feature_enabled')
-    //         && $this->checkPermission($this->user, 'Manage File Links')
-    //     ) {
-    //         $fileLinkMenu = [
-    //             [
-    //                 'name' => 'File Link Settings',
-    //                 'icon' => 'cog',
-    //                 'route' => '#', // route('admin.links.settings.show'),
-    //             ],
-    //             [
-    //                 'name' => 'Manage File Links',
-    //                 'icon' => 'tools',
-    //                 'route' => '#', // route('admin.links.manage.index'),
-    //             ],
-    //         ];
-    //     }
+        if (
+            config('file-link.feature_enabled')
+            && $this->checkPermission($this->user, 'Manage File Links')
+        ) {
+            $fileLinkMenu = [
+                [
+                    'name' => 'File Link Settings',
+                    'icon' => 'cog',
+                    'route' => route('admin.links.settings.edit'),
+                ],
+                [
+                    'name' => 'Manage File Links',
+                    'icon' => 'tools',
+                    'route' => '#', // route('admin.links.manage.index'),
+                ],
+            ];
+        }
 
-    //     $this->menu['File Links'] = $fileLinkMenu;
-    // }
+        $this->menu['File Links'] = $fileLinkMenu;
+    }
 }
