@@ -26,25 +26,17 @@ class HandleUrlChangedUnitTest extends TestCase
             'BASE_URL=localhost',
         ];
 
-        Storage::put('env', print_r(implode("\r\n", $env), true));
-        $filePath = Storage::path('env');
+        Storage::put('envTest/.env.testing', print_r(implode("\r\n", $env), true));
+        $filePath = Storage::path('envTest');
 
-        App::partialMock()
-            ->shouldReceive('environmentFilePath')
-            ->once()
-            ->andReturn($filePath);
-
-        App::partialMock()
-            ->shouldReceive('environment')
-            ->once()
-            ->andReturn('testing');
+        App::useEnvironmentPath($filePath);
 
         $testObj = new HandleUrlChangeListener(new UpdateApplicationUrl);
         $event = new UrlChangedEvent('newUrl.com', 'oldUrl.com');
 
         $testObj->handle($event);
 
-        $newFile = file_get_contents($filePath);
+        $newFile = file_get_contents($filePath.'/.env.testing');
         $this->assertStringContainsString('BASE_URL=newUrl.com', $newFile);
     }
 }

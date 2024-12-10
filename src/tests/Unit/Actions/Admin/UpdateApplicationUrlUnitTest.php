@@ -25,23 +25,15 @@ class UpdateApplicationUrlUnitTest extends TestCase
             'BASE_URL=localhost',
         ];
 
-        Storage::put('env', print_r(implode("\r\n", $env), true));
-        $filePath = Storage::path('env');
+        Storage::put('envTest/.env.testing', print_r(implode("\r\n", $env), true));
+        $filePath = Storage::path('envTest');
 
-        App::partialMock()
-            ->shouldReceive('environmentFilePath')
-            ->once()
-            ->andReturn($filePath);
-
-        App::partialMock()
-            ->shouldReceive('environment')
-            ->once()
-            ->andReturn('testing');
+        App::useEnvironmentPath($filePath);
 
         $testObj = new UpdateApplicationUrl;
         $testObj->handle('newUrl.org');
 
-        $newFile = file_get_contents($filePath);
+        $newFile = file_get_contents($filePath.'/.env.testing');
         $this->assertStringContainsString('BASE_URL=newUrl.org', $newFile);
     }
 

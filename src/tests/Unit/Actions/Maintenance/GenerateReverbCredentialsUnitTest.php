@@ -9,14 +9,6 @@ use Tests\TestCase;
 
 class GenerateReverbCredentialsUnitTest extends TestCase
 {
-    // public function setUp(): void
-    // {
-    //     parent::setUp();
-
-    //     App::fake();
-
-    // }
-
     /*
     |---------------------------------------------------------------------------
     | __invoke()
@@ -28,23 +20,15 @@ class GenerateReverbCredentialsUnitTest extends TestCase
 
         $env = ['APP_KEY=test', 'APP_URL=https://localhost'];
 
-        Storage::put('env', print_r(implode("\r\n", $env), true));
-        $filePath = Storage::path('env');
+        Storage::put('envTest/.env.testing', print_r(implode("\r\n", $env), true));
+        $filePath = Storage::path('envTest');
 
-        App::partialMock()
-            ->shouldReceive('environmentFilePath')
-            ->once()
-            ->andReturn($filePath);
-
-        App::partialMock()
-            ->shouldReceive('environment')
-            ->once()
-            ->andReturn('testing');
+        App::useEnvironmentPath($filePath);
 
         $testObj = new GenerateReverbCredentials;
         $testObj();
 
-        $envFile = file_get_contents($filePath);
+        $envFile = file_get_contents($filePath.'/.env.testing');
         $this->assertStringContainsString('REVERB_APP_ID=', $envFile);
         $this->assertStringContainsString('REVERB_APP_KEY=', $envFile);
         $this->assertStringContainsString('REVERB_APP_SECRET=', $envFile);
@@ -62,23 +46,15 @@ class GenerateReverbCredentialsUnitTest extends TestCase
             'REVERB_APP_SECRET=spp-secret',
         ];
 
-        Storage::put('env', print_r(implode("\r\n", $env), true));
-        $filePath = Storage::path('env');
+        Storage::put('envTest/.env.testing', print_r(implode("\r\n", $env), true));
+        $filePath = Storage::path('envTest');
 
-        App::partialMock()
-            ->shouldReceive('environmentFilePath')
-            ->once()
-            ->andReturn($filePath);
-
-        App::partialMock()
-            ->shouldReceive('environment')
-            ->once()
-            ->andReturn('testing');
+        App::useEnvironmentPath($filePath);
 
         $testObj = new GenerateReverbCredentials;
         $testObj();
 
-        $envFile = file_get_contents($filePath);
+        $envFile = file_get_contents($filePath.'/.env.testing');
         $this->assertStringContainsString('REVERB_APP_ID=', $envFile);
         $this->assertStringContainsString('REVERB_APP_KEY=', $envFile);
         $this->assertStringContainsString('REVERB_APP_SECRET=', $envFile);

@@ -20,23 +20,15 @@ class ValidateEnvironmentFileUnitTest extends TestCase
 
         $env = ['APP_KEY=test', 'APP_URL=https://localhost'];
 
-        Storage::put('env', print_r(implode("\r\n", $env), true));
-        $filePath = Storage::path('env');
+        Storage::put('envTest/.env.testing', print_r(implode("\r\n", $env), true));
+        $filePath = Storage::path('envTest');
 
-        App::partialMock()
-            ->shouldReceive('environmentFilePath')
-            ->twice()
-            ->andReturn($filePath);
-
-        App::partialMock()
-            ->shouldReceive('environment')
-            ->once()
-            ->andReturn('testing');
+        App::useEnvironmentPath($filePath);
 
         $testObj = new ValidateEnvironmentFile;
         $testObj();
 
-        $envFile = file_get_contents($filePath);
+        $envFile = file_get_contents($filePath.'/.env.testing');
         $this->assertStringContainsString('BASE_URL=', $envFile);
         $this->assertStringContainsString('APP_URL="https://${BASE_URL}', $envFile);
         $this->assertStringContainsString('REVERB_APP_ID=', $envFile);
