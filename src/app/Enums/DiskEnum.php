@@ -17,4 +17,5 @@ enum DiskEnum: string
     case logs = 'logs';
     case backups = 'backups';
     case security = 'security';
+    case links = 'fileLinks';
 }

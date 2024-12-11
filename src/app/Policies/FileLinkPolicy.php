@@ -29,6 +29,19 @@ class FileLinkPolicy
     }
 
     /**
+     * Determine whether the user can view any models.
+     */
+    public function view(User $user, FileLink $fileLink): bool
+    {
+        if ($this->manage($user)) {
+            return true;
+        }
+
+        return $user->features()->active(FileLinkFeature::class)
+            && $user->user_id === $fileLink->user_id;
+    }
+
+    /**
      * Determine if the user can create a File Link
      */
     public function create(User $user): bool

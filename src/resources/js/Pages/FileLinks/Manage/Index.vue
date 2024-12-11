@@ -8,7 +8,7 @@
                         <div class="card-title">Manage File Links</div>
                         <Table
                             :columns="columns"
-                            :rows="linkList.data"
+                            :rows="linkList"
                             :row-style-class="rowBgClassFn"
                             initial-sort="is_expired"
                             initial-sort-direction="desc"
@@ -46,11 +46,10 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import Table from "@/Components/_Base/Table.vue";
 import DeleteBadge from "@/Components/_Base/Badges/DeleteBadge.vue";
 import verifyModal from "@/Modules/verifyModal";
-import { ref, reactive, onMounted } from "vue";
 import { router } from "@inertiajs/vue3";
 
-const props = defineProps<{
-    linkList: { data: fileLink[] };
+defineProps<{
+    linkList: fileLink[];
 }>();
 
 const rowBgClassFn = (row: fileLink) => (row.is_expired ? "table-danger" : "");
@@ -86,7 +85,7 @@ const disableLink = (link: fileLink) => {
 const deleteLink = (link: fileLink) => {
     verifyModal("This link and its files will be destroyed").then((res) => {
         if (res) {
-            router.delete(route("links.destroy", link.link_id));
+            router.delete(route("admin.links.manage.destroy", link.link_id));
         }
     });
 };

@@ -14,7 +14,7 @@
         </div>
         <div v-if="link.allow_upload" class="row justify-content-center my-4">
             <div class="col">
-                <FileLinkTimeline :timeline="timeline" />
+                <FileLinkTimeline :timeline="timeline" :up-to-date="true" />
             </div>
         </div>
         <div v-if="link.allow_upload" class="row justify-content-center my-4">
@@ -48,9 +48,7 @@ import FileLinkTimeline from "@/Components/FileLink/FileLinkTimeline.vue";
 
 defineProps<{
     link: fileLink;
-    tableData: {
-        data: fileLink;
-    };
+    tableData: fileLink;
     timeline: fileLinkTimeline[];
     downloadableFiles: fileLinkUpload[];
     uploadedFiles: fileLinkUpload[];

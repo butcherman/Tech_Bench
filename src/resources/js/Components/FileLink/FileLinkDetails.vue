@@ -2,7 +2,7 @@
     <div class="card">
         <div class="card-body">
             <div class="card-title">Details:</div>
-            <TableStacked :rows="tableData.data" title-case />
+            <TableStacked :rows="tableData" title-case />
             <div v-if="!link.is_expired">
                 <ClipboardCopy
                     class="float-end"
@@ -24,8 +24,6 @@ import ClipboardCopy from "../_Base/Badges/ClipboardCopy.vue";
 
 defineProps<{
     link: fileLink;
-    tableData: {
-        data: fileLink;
-    };
+    tableData: fileLink;
 }>();
 </script>

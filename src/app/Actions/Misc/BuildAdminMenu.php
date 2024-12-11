@@ -282,7 +282,7 @@ class BuildAdminMenu
                 [
                     'name' => 'Manage File Links',
                     'icon' => 'tools',
-                    'route' => '#', // route('admin.links.manage.index'),
+                    'route' => route('admin.links.manage.index'),
                 ],
             ];
         }

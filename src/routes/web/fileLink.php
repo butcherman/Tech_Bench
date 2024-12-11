@@ -3,7 +3,7 @@
 use App\Exceptions\FileLink\FileLinkMissingException;
 use App\Http\Controllers\FileLink\ExpireFileLinkController;
 use App\Http\Controllers\FileLink\ExtendLinkController;
-use App\Http\Controllers\FileLink\FileLinkAdminController;
+use App\Http\Controllers\FileLink\FileLinkAdministrationController;
 use App\Http\Controllers\FileLink\FileLinkController;
 use App\Http\Controllers\FileLink\FileLinkFileController;
 use App\Http\Controllers\FileLink\FileLinkSettingsController;
@@ -20,6 +20,15 @@ Route::middleware('auth.secure')->group(function () {
     //     ->name('links.expire');
     // Route::get('{link}/extend', ExtendLinkController::class)
     //     ->name('links.extend');
+
+    Route::get('{link}/expire', function () {
+        return 'expire';
+    })
+        ->name('links.expire');
+    Route::get('{link}/extend', function () {
+        return 'extend';
+    })
+        ->name('links.extend');
 
     // File Link Files
     // Route::post('{link}/add-file', [FileLinkFileController::class, 'store'])
@@ -43,28 +52,32 @@ Route::middleware('auth.secure')->group(function () {
     */
     Route::prefix('administration/file-links')->name('admin.links.')->group(function () {
         /*
-        |---------------------------------------------------------------------------
+        |-----------------------------------------------------------------------
         | File Link Settings
         | /administration/file-links/settings
-        |---------------------------------------------------------------------------
+        |-----------------------------------------------------------------------
         */
-        Route::controller(FileLinkSettingsController::class)->name('settings.')->group(function () {
-            Route::get('settings', 'edit')->name('edit')->breadcrumb('File Link Settings', 'admin.index');
-            Route::put('settings', 'update')->name('update');
-        });
+        Route::controller(FileLinkSettingsController::class)
+            ->name('settings.')
+            ->group(function () {
+                Route::get('settings', 'edit')
+                    ->name('edit')
+                    ->breadcrumb('File Link Settings', 'admin.index');
+                Route::put('settings', 'update')->name('update');
+            });
+
+        Route::controller(FileLinkAdministrationController::class)
+            ->name('manage.')
+            ->group(function () {
+                Route::get('manage', 'index')
+                    ->name('index')
+                    ->breadcrumb('Manage File Links', 'admin.index');
+                Route::get('manage/{link}', 'show')
+                    ->name('show')
+                    ->breadcrumb('Link Details', 'admin.links.manage.index');
+                Route::delete('manage/{link}', 'destroy')->name('destroy');
+            });
     });
-
-    // Route::prefix('administration/file-links')->name('admin.links.')->group(function () {
-
-    //     Route::get('manage', [FileLinkAdminController::class, 'index'])
-    //         ->name('manage.index')
-    //         ->breadcrumb('Manage File Links');
-    //     Route::get('manage/{link}', [FileLinkAdminController::class, 'show'])
-    //         ->name('manage.show')
-    //         ->breadcrumb('Link Details', 'admin.links.manage.index');
-    //     Route::delete('manage/{link}', [FileLinkAdminController::class, 'destroy'])
-    //         ->name('manage.destroy');
-    // });
 });
 
 /**
