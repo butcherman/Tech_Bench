@@ -7,6 +7,7 @@ use App\Models\FileLink;
 use App\Models\FileUpload;
 use App\Models\User;
 use App\Services\FileLink\FileLinkService;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Bus;
 use Tests\TestCase;
 
@@ -116,6 +117,44 @@ class FileLinkUnitTest extends TestCase
         $this->assertDatabaseHas('file_links', [
             'link_id' => $link->link_id,
             'link_name' => $data['link_name'],
+        ]);
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | extendFileLink()
+    |---------------------------------------------------------------------------
+    */
+    public function test_extend_file_link(): void
+    {
+        $link = FileLink::factory()->create();
+        $currentExpire = $link->expire;
+
+        $testObj = new FileLinkService;
+        $testObj->extendFileLink($link);
+
+        $this->assertDatabaseHas('file_links', [
+            'link_id' => $link->link_id,
+            'expire' => $currentExpire->addDays(30)
+                ->format('Y-m-d'),
+        ]);
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | expireFileLink()
+    |---------------------------------------------------------------------------
+    */
+    public function test_expire_file_link(): void
+    {
+        $link = FileLink::factory()->create();
+
+        $testObj = new FileLinkService;
+        $testObj->expireFileLink($link);
+
+        $this->assertDatabaseHas('file_links', [
+            'link_id' => $link->link_id,
+            'expire' => Carbon::yesterday(),
         ]);
     }
 

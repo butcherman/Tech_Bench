@@ -4,6 +4,7 @@ namespace Tests\Feature\FileLink;
 
 use App\Jobs\File\MoveTmpFilesJob;
 use App\Models\FileLink;
+use App\Models\FileUpload;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Bus;
@@ -245,6 +246,32 @@ class FileLinkTest extends TestCase
             ->assertExists('tmp'.DIRECTORY_SEPARATOR.'testPhoto.png');
 
         Bus::assertNotDispatched(MoveTmpFilesJob::class);
+    }
+
+    public function test_store_with_file_saved(): void
+    {
+        config(['file-link.feature_enabled' => true]);
+
+        Storage::fake('fileLinks');
+        Bus::fake();
+
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+        $fileList = FileUpload::factory()->create()->pluck('file_id')->toArray();
+        $data = [
+            'link_name' => 'Test Link',
+            'expire' => '2030-12-12',
+            'allow_upload' => true,
+            'instructions' => 'Here are some instructions',
+        ];
+
+        $response = $this->actingAs($user)
+            ->withSession(['link-file' => $fileList])
+            ->post(route('links.store'), $data);
+
+        $response->assertStatus(302);
+
+        Bus::assertDispatched(MoveTmpFilesJob::class);
     }
 
     /*

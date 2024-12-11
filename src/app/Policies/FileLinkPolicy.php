@@ -54,11 +54,12 @@ class FileLinkPolicy
      */
     public function update(User $user, FileLink $fileLink): bool
     {
-        if (! $this->viewAny($user)) {
-            return false;
+        if ($this->manage($user)) {
+            return true;
         }
 
-        return $this->manage($user) || $user->user_id === $fileLink->user_id;
+        return $user->features()->active(FileLinkFeature::class)
+            && $user->user_id === $fileLink->user_id;
     }
 
     /**

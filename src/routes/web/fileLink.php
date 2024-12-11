@@ -2,7 +2,7 @@
 
 use App\Exceptions\FileLink\FileLinkMissingException;
 use App\Http\Controllers\FileLink\ExpireFileLinkController;
-use App\Http\Controllers\FileLink\ExtendLinkController;
+use App\Http\Controllers\FileLink\ExtendFileLinkController;
 use App\Http\Controllers\FileLink\FileLinkAdministrationController;
 use App\Http\Controllers\FileLink\FileLinkController;
 use App\Http\Controllers\FileLink\FileLinkFileController;
@@ -16,18 +16,9 @@ use Illuminate\Support\Facades\Route;
  * Routes for File Link Usage
  */
 Route::middleware('auth.secure')->group(function () {
-    // Route::get('{link}/expire', ExpireFileLinkController::class)
-    //     ->name('links.expire');
-    // Route::get('{link}/extend', ExtendLinkController::class)
-    //     ->name('links.extend');
-
-    Route::get('{link}/expire', function () {
-        return 'expire';
-    })
+    Route::get('{link}/expire', ExpireFileLinkController::class)
         ->name('links.expire');
-    Route::get('{link}/extend', function () {
-        return 'extend';
-    })
+    Route::get('{link}/extend', ExtendFileLinkController::class)
         ->name('links.extend');
 
     // File Link Files

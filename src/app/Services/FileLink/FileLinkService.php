@@ -6,6 +6,7 @@ use App\Jobs\File\MoveTmpFilesJob;
 use App\Models\FileLink;
 use App\Models\FileLinkTimeline;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
@@ -47,6 +48,26 @@ class FileLinkService
         $link->update($requestData->all());
 
         return $link;
+    }
+
+    /**
+     * Extend the Expiration Date of a File Link.
+     */
+    public function extendFileLink(FileLink $link): void
+    {
+        $link->update([
+            'expire' => $link->expire->addDays(30),
+        ]);
+    }
+
+    /**
+     * Expire a File Link - set expiration to yesterday.
+     */
+    public function expireFileLink(FileLink $link): void
+    {
+        $link->update([
+            'expire' => Carbon::yesterday(),
+        ]);
     }
 
     /**
