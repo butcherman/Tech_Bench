@@ -39,6 +39,39 @@ class BuildNavBarUnitTest extends TestCase
         $this->assertEquals($shouldBe, $navbar);
     }
 
+    public function test_build_file_link_navbar(): void
+    {
+        config(['file-link.feature_enabled' => true]);
+
+        $shouldBe = [
+            [
+                'name' => 'Dashboard',
+                'route' => route('dashboard'),
+                'icon' => 'fas fa-tachometer-alt',
+            ],
+            [
+                'name' => 'Customers',
+                'route' => route('customers.index'),
+                'icon' => 'fas fa-user-tie',
+            ],
+            [
+                'name' => 'Tech Tips',
+                'route' => route('tech-tips.index'),
+                'icon' => 'fas fa-tools',
+            ],
+            [
+                'name' => 'File Links',
+                'icon' => 'link',
+                'route' => route('links.index'),
+            ],
+        ];
+
+        $user = User::factory()->create();
+        $navbar = (new BuildNavBar)->handle($user);
+
+        $this->assertEquals($shouldBe, $navbar);
+    }
+
     public function test_build_installer_navbar(): void
     {
         $shouldBe = [
@@ -51,6 +84,11 @@ class BuildNavBarUnitTest extends TestCase
                 'name' => 'Administration',
                 'route' => route('admin.index'),
                 'icon' => 'fas fa-user-shield',
+            ],
+            [
+                'name' => 'Reports',
+                'icon' => 'chart-bar',
+                'route' => '#', // route('reports.index'),
             ],
             [
                 'name' => 'Customers',
@@ -82,6 +120,11 @@ class BuildNavBarUnitTest extends TestCase
                 'name' => 'Administration',
                 'route' => route('admin.index'),
                 'icon' => 'fas fa-user-shield',
+            ],
+            [
+                'name' => 'Reports',
+                'icon' => 'chart-bar',
+                'route' => '#', // route('reports.index'),
             ],
             [
                 'name' => 'Customers',

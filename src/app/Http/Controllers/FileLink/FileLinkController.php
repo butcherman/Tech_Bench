@@ -61,9 +61,14 @@ class FileLinkController extends FileUploadController
             return response()->noContent();
         }
 
+        $fileList = $request->session()->has('link-file')
+            ? $request->session()->pull('link-file')
+            : [];
+
         $newLink = $this->svc->createFileLink(
             $request->safe()->collect(),
-            $request->user()
+            $request->user(),
+            $fileList
         );
 
         return redirect(route('links.show', $newLink->link_id))

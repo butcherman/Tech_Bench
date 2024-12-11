@@ -5,7 +5,6 @@ namespace App\Actions\Misc;
 use App\Features\FileLinkFeature;
 use App\Models\User;
 use App\Traits\AllowTrait;
-use Illuminate\Support\Facades\Gate;
 
 class BuildNavBar
 {
@@ -88,7 +87,7 @@ class BuildNavBar
      */
     protected function getReportsNav(): array|bool
     {
-        if (! Gate::allows('reports-link', $this->user)) {
+        if (! $this->seeReportLink($this->user)) {
             return false;
         }
 

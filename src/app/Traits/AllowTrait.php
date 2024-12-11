@@ -42,4 +42,12 @@ trait AllowTrait
 
         return $userRole == 0 ? false : true;
     }
+
+    /**
+     * Determine if the user has access to the Reporting Link
+     */
+    protected function seeReportLink(User $user): bool
+    {
+        return $this->checkPermission($user, 'Run Reports');
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Services\FileLink;
 
+use App\Jobs\File\MoveTmpFilesJob;
 use App\Models\FileLink;
 use App\Models\FileLinkTimeline;
 use App\Models\User;
@@ -13,8 +14,11 @@ class FileLinkService
     /**
      * Create a new File Link for User
      */
-    public function createFileLink(Collection $requestData, User $user): FileLink
-    {
+    public function createFileLink(
+        Collection $requestData,
+        User $user,
+        array $fileList
+    ): FileLink {
         $newLink = new FileLink($requestData->all());
         $newLink->link_hash = Str::uuid()->toString();
 
@@ -26,11 +30,18 @@ class FileLinkService
             $newLink,
             $user->user_id
         );
-        $this->processLinkFiles($newLink, $timeline, false);
+
+        if (count($fileList)) {
+            $this->processLinkFiles($newLink, $timeline, false, $fileList);
+            MoveTmpFilesJob::dispatch($fileList, $newLink->link_id);
+        }
 
         return $newLink;
     }
 
+    /**
+     * Update an existing File Link
+     */
     public function updateFileLink(Collection $requestData, FileLink $link): FileLink
     {
         $link->update($requestData->all());
@@ -38,17 +49,23 @@ class FileLinkService
         return $link;
     }
 
+    /**
+     * Destroy a File Link
+     */
     public function destroyFileLink(FileLink $link): void
     {
         $link->delete();
     }
 
+    /**
+     * Attach any files associated with the link
+     */
     protected function processLinkFiles(
         FileLink $link,
         FileLinkTimeline $timeline,
-        bool $isUpload
+        bool $isUpload,
+        array $fileList
     ): FileLinkTimeline {
-        $fileList = session()->pull('link-file');
         if ($fileList) {
             $link->FileUpload()->attach($fileList, [
                 'timeline_id' => $timeline->timeline_id,
@@ -59,6 +76,9 @@ class FileLinkService
         return $timeline;
     }
 
+    /**
+     * Create a Timeline Entry to link files and notes to.
+     */
     protected function createTimelineEntry(FileLink $link, string|int $addedBy): FileLinkTimeline
     {
         $timeline = new FileLinkTimeline([

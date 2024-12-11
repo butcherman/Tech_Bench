@@ -73,17 +73,17 @@ Broadcast::channel('tech-tips.{tip_id}', function (User $user, int $tip_id) {
 | Active File Link Channel
 |------------------------------------------------------------------------------
 */
-// Broadcast::channel('file-link.{link_id}', function (User $user, int $link_id) {
-//     Log::debug(
-//         'User '.$user->username.' registering to File Link Channel for link ID '.$link_id
-//     );
+Broadcast::channel('file-link.{link_id}', function (User $user, int $link_id) {
+    Log::debug(
+        'User '.$user->username.' registering to File Link Channel for link ID '.$link_id
+    );
 
-//     if (! config('file-link.feature_enabled')) {
-//         return false;
-//     }
+    if (! config('file-link.feature_enabled')) {
+        return false;
+    }
 
-//     return $user->features()->active(FileLinkFeature::class);
-// });
+    return $user->features()->active(FileLinkFeature::class);
+});
 
 /*
 |------------------------------------------------------------------------------
