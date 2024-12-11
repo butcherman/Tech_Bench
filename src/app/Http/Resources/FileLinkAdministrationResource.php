@@ -6,6 +6,9 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @codeCoverageIgnore
+ */
 class FileLinkAdministrationResource extends JsonResource
 {
     /**
