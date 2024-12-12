@@ -94,7 +94,12 @@ class FileLinkService
         );
 
         if (count($fileList)) {
-            $this->processLinkFiles($link, $timeline, false, $fileList);
+            $this->processLinkFiles(
+                $link,
+                $timeline,
+                ! is_int($addedBy),
+                $fileList
+            );
         }
     }
 
