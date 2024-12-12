@@ -11,7 +11,7 @@ class CustomerSearchUnitTest extends TestCase
     /*
      *   Setup will populate five specific customers to search
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 

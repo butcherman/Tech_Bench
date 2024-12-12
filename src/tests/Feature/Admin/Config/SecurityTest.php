@@ -26,7 +26,7 @@ class SecurityTest extends TestCase
     | Setup will generate a self signed cert for testing with
     |---------------------------------------------------------------------------
     */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 

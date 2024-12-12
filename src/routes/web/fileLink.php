@@ -9,7 +9,6 @@ use App\Http\Controllers\FileLink\FileLinkFileController;
 use App\Http\Controllers\FileLink\FileLinkSettingsController;
 use App\Http\Controllers\FileLink\Public\PublicFileLinkController;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /**
@@ -81,8 +80,8 @@ Route::middleware('auth.secure')->group(function () {
 | /file-links/{link}
 |---------------------------------------------------------------------------
 */
-Route::controller(PublicFileLinkController::class)->prefix('file-links/{link:link_hash}')->name('guest-link.')->group(function() {
-    Route::get('/', 'show')->name('show')->missing(function() {
+Route::controller(PublicFileLinkController::class)->prefix('file-links/{link:link_hash}')->name('guest-link.')->group(function () {
+    Route::get('/', 'show')->name('show')->missing(function () {
         throw new FileLinkMissingException;
     });
     Route::post('/', 'update')->name('update');

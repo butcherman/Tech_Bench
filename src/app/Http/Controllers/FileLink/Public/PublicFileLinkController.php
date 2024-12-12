@@ -4,13 +4,10 @@ namespace App\Http\Controllers\FileLink\Public;
 
 use App\Enums\DiskEnum;
 use App\Events\FileLink\FileUploadedFromPublicEvent;
-use App\Http\Controllers\Controller;
 use App\Http\Controllers\FileUploadController;
 use App\Http\Requests\FileLink\PublicFileLinkRequest;
 use App\Models\FileLink;
-use App\Service\FileLink\FileLinkFileService;
 use App\Services\FileLink\FileLinkService;
-use App\Traits\FileTrait;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response as HttpResponse;
 use Inertia\Inertia;

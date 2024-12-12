@@ -17,7 +17,7 @@ class CustomerEquipmentDataTest extends TestCase
 
     protected $equipment;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->customer = Customer::factory()->create();

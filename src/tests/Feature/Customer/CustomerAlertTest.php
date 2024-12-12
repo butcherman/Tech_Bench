@@ -11,7 +11,7 @@ class CustomerAlertTest extends TestCase
 {
     protected $customer;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->customer = Customer::factory()->createQuietly();

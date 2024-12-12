@@ -3,12 +3,8 @@
 namespace App\Events\FileLink;
 
 use App\Models\FileLink;
-use App\Models\FileLinkTimeline;
-use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
@@ -22,7 +18,7 @@ class FileUploadedFromPublicEvent
     | public URL.
     |---------------------------------------------------------------------------
     */
-    public function __construct(public FileLink $link,) {}
+    public function __construct(public FileLink $link) {}
 
     /**
      * Get the channels the event should broadcast on
@@ -32,7 +28,7 @@ class FileUploadedFromPublicEvent
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('file-link.' . $this->link->link_id),
+            new PrivateChannel('file-link.'.$this->link->link_id),
         ];
     }
 

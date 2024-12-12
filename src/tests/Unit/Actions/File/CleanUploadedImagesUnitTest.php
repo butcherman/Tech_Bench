@@ -17,7 +17,7 @@ class CleanUploadedImagesUnitTest extends TestCase
     /** @var string */
     protected $logo;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 

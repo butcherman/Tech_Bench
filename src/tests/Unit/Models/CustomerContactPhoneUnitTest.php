@@ -10,7 +10,7 @@ class CustomerContactPhoneUnitTest extends TestCase
 {
     protected $model;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 

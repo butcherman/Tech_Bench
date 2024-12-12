@@ -7,8 +7,6 @@ use App\Models\FileLink;
 use App\Models\FileUpload;
 use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
@@ -47,7 +45,7 @@ class PublicFileLinkTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('Public/FileLinks/Show')
                     ->has('link-data')
                     ->has('link-files')
@@ -65,7 +63,7 @@ class PublicFileLinkTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('Public/FileLinks/Show')
                     ->has('link-data')
                     ->has('link-files')
@@ -138,7 +136,7 @@ class PublicFileLinkTest extends TestCase
         ]);
 
         Storage::disk('fileLinks')
-            ->assertExists($link->link_id . DIRECTORY_SEPARATOR . 'testPhoto.png');
+            ->assertExists($link->link_id.DIRECTORY_SEPARATOR.'testPhoto.png');
     }
 
     public function test_update_guest_file_upload_after_file(): void
