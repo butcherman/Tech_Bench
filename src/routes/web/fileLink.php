@@ -22,10 +22,11 @@ Route::middleware('auth.secure')->group(function () {
         ->name('links.extend');
 
     // File Link Files
-    // Route::post('{link}/add-file', [FileLinkFileController::class, 'store'])
-    //     ->name('links.add-file');
-    // Route::delete('{link}/delete-file/{linkFile}', [FileLinkFileController::class, 'destroy'])
-    //     ->name('links.destroy-file');
+    Route::controller(FileLinkFileController::class)->group(function () {
+        Route::post('{link}/add-file', 'store')->name('links.add-file');
+        Route::delete('{link}/delete-file/{linkFile}', 'destroy')
+            ->name('links.destroy-file');
+    });
 
     Route::resource('links', FileLinkController::class)
         ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {

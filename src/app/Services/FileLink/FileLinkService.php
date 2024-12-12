@@ -2,8 +2,10 @@
 
 namespace App\Services\FileLink;
 
+use App\Events\File\FileUploadDeletedEvent;
 use App\Jobs\File\MoveTmpFilesJob;
 use App\Models\FileLink;
+use App\Models\FileLinkFile;
 use App\Models\FileLinkTimeline;
 use App\Models\User;
 use Carbon\Carbon;
@@ -76,6 +78,35 @@ class FileLinkService
     public function destroyFileLink(FileLink $link): void
     {
         $link->delete();
+    }
+
+    /**
+     * Add a file to a File Link
+     */
+    public function addFileLinkFile(
+        FileLink $link,
+        array $fileList,
+        int|string $addedBy
+    ): void {
+        $timeline = $this->createTimelineEntry(
+            $link,
+            $addedBy
+        );
+
+        if (count($fileList)) {
+            $this->processLinkFiles($link, $timeline, false, $fileList);
+        }
+    }
+
+    /**
+     * Remove a File from a File Link
+     */
+    public function removeFileLinkFile(FileLinkFile $linkFile): void
+    {
+        $fileId = $linkFile->file_id;
+        $linkFile->delete();
+
+        event(new FileUploadDeletedEvent($fileId));
     }
 
     /**

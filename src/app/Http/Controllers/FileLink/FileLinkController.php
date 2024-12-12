@@ -84,11 +84,12 @@ class FileLinkController extends FileUploadController
 
         return Inertia::render('FileLinks/Show', [
             'link' => fn () => $link,
-            'table-data' => fn () => $link->only([
-                'link_name',
-                'expire',
-                'allow_upload',
-            ]),
+            'table-data' => fn () => [
+                'link_name' => $link->link_name,
+                'expire' => $link->expire->format('M d, Y'),
+                'allow_upload' => $link->allow_upload,
+                'has_instructions' => $link->instructions ? true : false,
+            ],
             'timeline' => fn () => $link->Timeline
                 ->load(['FileUpload', 'FileLinkNote']),
             'downloadable-files' => fn () => $link->FileUpload()

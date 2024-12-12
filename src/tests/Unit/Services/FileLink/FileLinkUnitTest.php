@@ -2,13 +2,16 @@
 
 namespace Tests\Unit\Services\FileLink;
 
+use App\Events\File\FileUploadDeletedEvent;
 use App\Jobs\File\MoveTmpFilesJob;
 use App\Models\FileLink;
+use App\Models\FileLinkFile;
 use App\Models\FileUpload;
 use App\Models\User;
 use App\Services\FileLink\FileLinkService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Bus;
+use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
 class FileLinkUnitTest extends TestCase
@@ -174,5 +177,47 @@ class FileLinkUnitTest extends TestCase
             'file_links',
             $link->only(['link_id', 'link_name'])
         );
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | addFileLinkFile()
+    |---------------------------------------------------------------------------
+    */
+    public function test_add_file_link_file(): void
+    {
+        $link = FileLink::factory()->create();
+        $fileList = FileUpload::factory()->count(2)->create()->pluck('file_id')->toArray();
+
+        $testObj = new FileLinkService;
+        $testObj->addFileLinkFile($link, $fileList, $link->user_id);
+
+        $this->assertDatabaseHas('file_link_files', [
+            'link_id' => $link->link_id,
+            'file_id' => $fileList[0],
+        ]);
+        $this->assertDatabaseHas('file_link_files', [
+            'link_id' => $link->link_id,
+            'file_id' => $fileList[1],
+        ]);
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | removeFileLinkFile()
+    |---------------------------------------------------------------------------
+    */
+    public function test_remove_file_link_file(): void
+    {
+        Event::fake();
+
+        $file = FileLinkFile::factory()->create();
+
+        $testObj = new FileLinkService;
+        $testObj->removeFileLinkFile($file);
+
+        $this->assertDatabaseMissing('file_link_files', $file->toArray());
+
+        Event::assertDispatched(FileUploadDeletedEvent::class);
     }
 }
