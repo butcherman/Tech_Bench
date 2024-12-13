@@ -94,7 +94,7 @@ class BuildNavBar
         return [
             'name' => 'Reports',
             'icon' => 'chart-bar',
-            'route' => '#', // route('reports.index'),
+            'route' => route('reports.index'),
         ];
     }
 
