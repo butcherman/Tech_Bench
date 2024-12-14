@@ -18,6 +18,8 @@ class RunReportController extends Controller
 
         return Inertia::render($contract->getReportDataPage(), [
             'report-data' => $contract->generateReportData($reportParams),
+            'start-date' => $request->get('start_date') ?? null,
+            'end-date' => $request->get('end_date') ?? null,
         ]);
     }
 }

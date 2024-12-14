@@ -39,7 +39,7 @@ interface ReportingContract
     /**
      * Generate the requested Report.
      *
-     * @return AnonymousResourceCollection
+     * @return mixed
      */
-    public function generateReportData(Collection $reportParams): AnonymousResourceCollection;
+    public function generateReportData(Collection $reportParams): mixed;
 }

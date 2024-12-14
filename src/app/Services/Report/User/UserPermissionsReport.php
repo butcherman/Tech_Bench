@@ -2,23 +2,22 @@
 
 namespace App\Services\Report\User;
 
-use App\Http\Resources\Reports\Users\UserSummaryResource;
+use App\Http\Resources\Reports\Users\UserPermissionsResource;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use App\Models\UserRolePermissionType;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
 
-class UserSummaryReport extends UserReportBase
+class UserPermissionsReport extends UserReportBase
 {
     /**
      * Create a new class instance.
      */
     public function __construct()
     {
-        $this->reportParamPage = 'Report/User/Details/Index';
-        $this->reportDataPage = 'Report/User/Details/Show';
+        $this->reportParamPage = 'Report/User/Permissions/Index';
+        $this->reportDataPage = 'Report/User/Permissions/Show';
         $this->reportParamProps = ['user-list' => User::all()];
     }
 
@@ -37,10 +36,13 @@ class UserSummaryReport extends UserReportBase
     /**
      * Run the report
      */
-    public function generateReportData(Collection $reportParams): AnonymousResourceCollection
+    public function generateReportData(Collection $reportParams): mixed
     {
         $userList = $this->getUserList($reportParams);
 
-        return UserSummaryResource::collection($userList);
+        return [
+            'permissions' => UserRolePermissionType::all()->groupBy('group'),
+            'data' => UserPermissionsResource::collection($userList),
+        ];
     }
 }

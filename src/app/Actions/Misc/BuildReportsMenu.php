@@ -22,15 +22,24 @@ class BuildReportsMenu
                 ],
                 [
                     'name' => 'User Login Activity Report',
-                    'route' => '#', // route('reports.user.activity'),
+                    'route' => route(
+                        'reports.params',
+                        ['users', 'user-login-activity-report']
+                    ),
                 ],
                 [
                     'name' => 'User Contributions Report',
-                    'route' => '#', // route('reports.user.contribution'),
+                    'route' => route(
+                        'reports.params',
+                        ['users', 'user-contributions-report']
+                    ),
                 ],
                 [
                     'name' => 'User Permissions Report',
-                    'route' => '#', // route('reports.user.permissions'),
+                    'route' => route(
+                        'reports.params',
+                        ['users', 'user-permissions-report']
+                    ),
                 ],
             ],
             'Customer Reports' => [

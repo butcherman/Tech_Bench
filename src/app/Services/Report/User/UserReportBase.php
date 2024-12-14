@@ -4,6 +4,7 @@ namespace App\Services\Report\User;
 
 use App\Contracts\ReportingContract;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Collection;
 
 abstract class UserReportBase implements ReportingContract
@@ -63,5 +64,19 @@ abstract class UserReportBase implements ReportingContract
     public function getReportDataPage(): string
     {
         return $this->reportDataPage;
+    }
+
+    /**
+     * Get the users that are part of the report.
+     */
+    protected function getUserList(Collection $reportParams): EloquentCollection
+    {
+        if ($reportParams->get('allUsers')) {
+            return User::when($reportParams->get('disabledUsers'), function ($q) {
+                return $q->withTrashed();
+            })->get();
+        }
+
+        return User::whereIn('username', $reportParams->get('user_list'))->get();
     }
 }

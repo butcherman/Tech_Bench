@@ -6,7 +6,12 @@
                     <div class="card-title">User Permissions Report</div>
                     <UserListReportsForm
                         :user-list="userList"
-                        submit-route="reports.user.run-permissions"
+                        :submit-route="
+                            $route('reports.run', [
+                                'users',
+                                'user-permissions-report',
+                            ])
+                        "
                     />
                 </div>
             </div>

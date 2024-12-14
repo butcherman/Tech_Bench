@@ -23,7 +23,7 @@
                                 {{ dataItem.status ? "Active" : "Disabled" }}
                             </p>
                             <div
-                                v-for="(group, name) in permissionList"
+                                v-for="(group, name) in reportData.permissions"
                                 :key="name"
                                 class="row"
                             >
@@ -62,6 +62,7 @@
 
 <script setup lang="ts">
 import AppLayout from "@/Layouts/AppLayout.vue";
+import { permissions } from "@/State/CustomerState";
 import { router } from "@inertiajs/vue3";
 
 interface report {
@@ -74,8 +75,11 @@ interface report {
 }
 
 defineProps<{
-    reportData: { data: report[] };
-    permissionList: userRolePermissionGroup;
+    reportData: {
+        data: report[];
+        permissions: userRolePermissionGroup;
+    };
+    // permissionList: userRolePermissionGroup;
 }>();
 
 const getPermValue = (userData: report, permTypeId: number) => {

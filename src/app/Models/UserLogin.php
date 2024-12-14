@@ -26,8 +26,8 @@ class UserLogin extends Model
     protected function casts(): array
     {
         return [
-            'created_at' => 'date',
-            'updated_at' => 'date',
+            'created_at' => 'datetime: M d, Y h:i',
+            'updated_at' => 'datetime',
         ];
     }
 }
