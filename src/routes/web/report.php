@@ -3,6 +3,8 @@
 use App\Http\Controllers\Report\Customer\CustomerFilesReportController;
 use App\Http\Controllers\Report\Customer\CustomerSummaryReportController;
 use App\Http\Controllers\Report\ReportController;
+use App\Http\Controllers\Report\ReportParametersController;
+use App\Http\Controllers\Report\RunReportController;
 use App\Http\Controllers\Report\User\UserActivityReportController;
 use App\Http\Controllers\Report\User\UserContributionReportController;
 use App\Http\Controllers\Report\User\UserDetailsReportController;
@@ -13,6 +15,14 @@ Route::middleware('auth.secure')->prefix('reports')->name('reports.')->group(fun
     Route::get('/', ReportController::class)
         ->name('index')
         ->breadcrumb('Reports');
+
+    Route::get('{group}/{report}', ReportParametersController::class)->name('params');
+    Route::put('{group}/{report}', RunReportController::class)->name('run');
+
+
+    Route::put('/', function () {
+        return 'run report';
+    })->name('user.run-details');
 
     /***************************************************************************
      * User Reports

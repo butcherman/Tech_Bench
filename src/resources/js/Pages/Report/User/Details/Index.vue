@@ -6,7 +6,12 @@
                     <div class="card-title">User Details Report</div>
                     <UserListReportsForm
                         :user-list="userList"
-                        submit-route="reports.user.run-details"
+                        :submit-route="
+                            $route('reports.run', [
+                                'users',
+                                'user-summary-report',
+                            ])
+                        "
                     />
                 </div>
             </div>

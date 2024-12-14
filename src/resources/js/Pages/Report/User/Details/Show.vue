@@ -10,7 +10,7 @@
                     <div class="card-body">
                         <div class="card-title">User Details Report</div>
                         <div
-                            v-for="userData in reportData.data"
+                            v-for="userData in reportData"
                             :key="userData.user_id"
                             class="row"
                         >
@@ -56,7 +56,7 @@ interface report {
 }
 
 defineProps<{
-    reportData: { data: report[] };
+    reportData: report[];
 }>();
 </script>
 

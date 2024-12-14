@@ -14,8 +14,11 @@ class BuildReportsMenu
         return [
             'User Reports' => [
                 [
-                    'name' => 'User Details Report',
-                    'route' => '#', // route('reports.user.details'),
+                    'name' => 'User Summary Report',
+                    'route' => route(
+                        'reports.params',
+                        ['users', 'user-summary-report']
+                    ),
                 ],
                 [
                     'name' => 'User Login Activity Report',

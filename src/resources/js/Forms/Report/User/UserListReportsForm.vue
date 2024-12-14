@@ -3,7 +3,7 @@
         ref="form"
         :initial-values="initValues"
         :validation-schema="schema"
-        :submit-route="$route(submitRoute)"
+        :submit-route="submitRoute"
         submit-method="put"
         submit-text="Run Report"
     >
