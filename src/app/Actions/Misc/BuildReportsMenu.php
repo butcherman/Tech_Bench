@@ -45,11 +45,17 @@ class BuildReportsMenu
             'Customer Reports' => [
                 [
                     'name' => 'Customer Summary Report',
-                    'route' => '#', // route('reports.customer.summary'),
+                    'route' => route(
+                        'reports.params',
+                        ['customers', 'customer-summary-report']
+                    ),
                 ],
                 [
                     'name' => 'Customer Files Report',
-                    'route' => '#', // route('reports.customer.files'),
+                    'route' => route(
+                        'reports.params',
+                        ['customers', 'customer-files-report']
+                    ),
                 ],
             ],
         ];

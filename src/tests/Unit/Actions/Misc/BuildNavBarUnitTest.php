@@ -88,7 +88,7 @@ class BuildNavBarUnitTest extends TestCase
             [
                 'name' => 'Reports',
                 'icon' => 'chart-bar',
-                'route' => '#', // route('reports.index'),
+                'route' => route('reports.index'),
             ],
             [
                 'name' => 'Customers',
@@ -124,7 +124,7 @@ class BuildNavBarUnitTest extends TestCase
             [
                 'name' => 'Reports',
                 'icon' => 'chart-bar',
-                'route' => '#', // route('reports.index'),
+                'route' => route('reports.index'),
             ],
             [
                 'name' => 'Customers',

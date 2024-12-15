@@ -14,7 +14,7 @@
                         </p>
                         <hr />
                         <div
-                            v-for="cust in reportData.data.data"
+                            v-for="cust in reportData.data"
                             :key="cust.customer_id"
                         >
                             <h6>{{ cust.name }}</h6>
@@ -36,16 +36,14 @@ import { router } from "@inertiajs/vue3";
 interface custReportData {
     total_customers: number;
     data: {
-        data: {
-            name: string;
-            customer_id: number;
-            sites: number;
-            equipment_assigned: number;
-            notes: number;
-            contacts: number;
-            files: number;
-        }[];
-    };
+        name: string;
+        customer_id: number;
+        sites: number;
+        equipment_assigned: number;
+        notes: number;
+        contacts: number;
+        files: number;
+    }[];
 }
 
 defineProps<{

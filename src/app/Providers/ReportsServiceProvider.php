@@ -19,6 +19,7 @@ class ReportsServiceProvider extends ServiceProvider
             $className = Str::studly($app->request->route('report'));
             $namespace = match ($app->request->route('group')) {
                 'users' =>  "App\Services\Report\User\\$className",
+                'customers' => "App\Services\Report\Customer\\$className",
                 default => abort(404),
             };
 

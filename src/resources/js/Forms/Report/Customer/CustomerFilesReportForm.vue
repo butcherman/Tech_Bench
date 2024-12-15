@@ -3,7 +3,9 @@
         ref="form"
         :initial-values="initValues"
         :validation-schema="schema"
-        :submit-route="$route('reports.customer.run-files')"
+        :submit-route="
+            $route('reports.run', ['customers', 'customer-files-report'])
+        "
         submit-method="put"
         submit-text="Run Report"
     >

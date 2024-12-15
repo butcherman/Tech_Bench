@@ -5,7 +5,12 @@
                 <div class="card-body">
                     <div class="card-title">Customer Summary Report</div>
                     <CustomerReportForm
-                        submit-route="reports.customer.summary"
+                        :submit-route="
+                            $route('reports.run', [
+                                'customers',
+                                'customer-summary-report',
+                            ])
+                        "
                     />
                 </div>
             </div>

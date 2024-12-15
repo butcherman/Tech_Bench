@@ -10,12 +10,13 @@
                     <div class="card-body">
                         <div class="card-title">Customer Files Report</div>
                         <div
-                            v-for="(data, name) in reportData"
+                            v-for="(data, name) in reportData.data"
                             :key="name"
                             class="mb-2"
                         >
                             <h6>
-                                Customer that {{ hasTag }} {{ name }} files:
+                                Customer that {{ reportData.hasTag }}
+                                {{ name }} files:
                                 <span class="float-end"
                                     >{{ data.length }} total</span
                                 >
@@ -47,8 +48,10 @@ interface reportData {
 }
 
 defineProps<{
-    reportData: reportData;
-    hasTag: "have" | "are missing";
+    reportData: {
+        data: reportData;
+        hasTag: "have" | "are missing";
+    };
 }>();
 </script>
 
