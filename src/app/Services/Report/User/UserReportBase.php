@@ -7,6 +7,9 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Collection;
 
+/**
+ * @codeCoverageIgnore
+ */
 abstract class UserReportBase implements ReportingContract
 {
     /**

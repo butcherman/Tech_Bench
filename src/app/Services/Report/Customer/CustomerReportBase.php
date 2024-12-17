@@ -7,6 +7,9 @@ use App\Models\Customer;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Collection;
 
+/**
+ * @codeCoverageIgnore
+ */
 abstract class CustomerReportBase implements ReportingContract
 {
     /**

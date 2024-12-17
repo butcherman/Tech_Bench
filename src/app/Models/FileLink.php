@@ -57,28 +57,28 @@ class FileLink extends Model
     public function isExpired(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->expire < Carbon::now(),
+            get: fn() => $this->expire < Carbon::now(),
         );
     }
 
     public function href(): Attribute
     {
         return Attribute::make(
-            get: fn () => route('links.show', $this->link_id),
+            get: fn() => route('links.show', $this->link_id),
         );
     }
 
     public function publicHref(): Attribute
     {
         return Attribute::make(
-            get: fn () => route('guest-link.show', $this->link_hash),
+            get: fn() => route('guest-link.show', $this->link_hash),
         );
     }
 
     public function createdStamp(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->created_at,
+            get: fn() => $this->created_at,
         );
     }
 
@@ -120,11 +120,13 @@ class FileLink extends Model
     /**
      * Verify that the link is valid
      */
-    public function validatePublicLink()
+    public function validatePublicLink(): bool
     {
         if (Carbon::parse($this->expire) < Carbon::now()) {
             throw new FileLinkExpiredException($this);
         }
+
+        return true;
     }
 
     /*
@@ -157,7 +159,7 @@ class FileLink extends Model
                     ->first()
                     ->value;
 
-                Log::debug('User ID '.$link->User->user_id.' has Override Value set to '.(bool) $settingValue);
+                Log::debug('User ID ' . $link->User->user_id . ' has Override Value set to ' . (bool) $settingValue);
                 if ((bool) $settingValue) {
                     $delList[] = $link->link_id;
                 }

@@ -25,6 +25,19 @@ class EquipmentTypeUnitTest extends TestCase
 
     /*
     |---------------------------------------------------------------------------
+    | Model Scopes
+    |---------------------------------------------------------------------------
+    */
+    public function test_public_scope(): void
+    {
+        $this->assertEquals(
+            EquipmentType::public()->get(),
+            EquipmentType::where('allow_public_tip', true)->get(),
+        );
+    }
+
+    /*
+    |---------------------------------------------------------------------------
     | Model Relationships
     |---------------------------------------------------------------------------
     */

@@ -105,6 +105,27 @@ class TechTipUnitTest extends TestCase
         );
     }
 
+    public function test_public_equipment_type_relationship(): void
+    {
+        $equip1 = EquipmentType::factory()->create(['allow_public_tip' => false]);
+        $equip2 = EquipmentType::factory()->create(['allow_public_tip' => true]);
+
+        TechTipEquipment::create([
+            'tip_id' => $this->model->tip_id,
+            'equip_id' => $equip1->equip_id,
+        ]);
+        TechTipEquipment::create([
+            'tip_id' => $this->model->tip_id,
+            'equip_id' => $equip2->equip_id,
+        ]);
+
+
+        $this->assertEquals(
+            [$equip2->toArray()],
+            $this->model->PublicEquipmentType->toArray()
+        );
+    }
+
     public function test_file_upload_relationship(): void
     {
         $file = FileUpload::factory()->create();

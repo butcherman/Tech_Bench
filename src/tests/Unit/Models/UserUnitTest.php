@@ -3,12 +3,19 @@
 namespace Tests\Unit\Models;
 
 use App\Mail\Auth\VerificationCodeMail;
+use App\Models\Customer;
 use App\Models\DeviceToken;
+use App\Models\FileLink;
+use App\Models\TechTip;
 use App\Models\User;
+use App\Models\UserCustomerRecent;
 use App\Models\UserLogin;
 use App\Models\UserRole;
+use App\Models\UserSetting;
+use App\Models\UserTechTipRecent;
 use App\Models\UserVerificationCode;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
@@ -24,27 +31,32 @@ class UserUnitTest extends TestCase
         $this->model = User::find(1);
     }
 
-    /**
-     * Route Model Binding Key
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Route Model Binding Key
+    |---------------------------------------------------------------------------
+    */
     public function test_route_binding_key(): void
     {
         $this->assertEquals($this->model->getRouteKeyName(), 'username');
     }
 
-    /**
-     * Model Attributes
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Model Attributes
+    |---------------------------------------------------------------------------
+    */
     public function test_model_attributes(): void
     {
         $this->assertArrayHasKey('full_name', $this->model->toArray());
         $this->assertArrayHasKey('initials', $this->model->toArray());
-        // $this->assertArrayHasKey('role_name', $this->model->toArray());
     }
 
-    /**
-     * Model Relationships
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Model Relationships
+    |---------------------------------------------------------------------------
+    */
     public function test_device_token_relationship(): void
     {
         $token = DeviceToken::factory()
@@ -80,6 +92,16 @@ class UserUnitTest extends TestCase
         $this->assertCount(1, $this->model->UserLogins->toArray());
     }
 
+    public function test_user_settings_relationship(): void
+    {
+        $settings = UserSetting::where('user_id', $this->model->user_id)->get();
+
+        $this->assertEquals(
+            $this->model->UserSettings->toArray(),
+            $settings->toArray()
+        );
+    }
+
     public function test_user_role_relationship(): void
     {
         $role = UserRole::where('role_id', $this->model->role_id)->first();
@@ -87,9 +109,63 @@ class UserUnitTest extends TestCase
         $this->assertEquals($this->model->UserRole, $role);
     }
 
-    /**
-     * Additional Model Methods
-     */
+    public function test_recent_tech_tips_relationship(): void
+    {
+        TechTip::factory()->create()->wasViewed($this->model);
+        TechTip::factory()->create()->wasViewed($this->model);
+
+        $recents = UserTechTipRecent::where('user_id', $this->model->user_id)
+            ->get();
+
+        $this->assertEquals(
+            $recents->toArray(),
+            $this->model->RecentTechTips->toArray()
+        );
+    }
+
+    public function test_tech_tip_bookmarks_relationship(): void
+    {
+        $tipList = TechTip::factory()->count(5)->create();
+        $tipList->each(function ($tip) {
+            DB::table('user_tech_tip_bookmarks')->insert([
+                'tip_id' => $tip->tip_id,
+                'user_id' => $this->model->user_id,
+            ]);
+        });
+
+        $this->assertCount(5, $this->model->TechTipBookmarks);
+    }
+
+    public function test_customer_bookmarks_relationship(): void
+    {
+        $custList = Customer::factory()->count(5)->create();
+        $custList->each(function ($cust) {
+            DB::table('user_customer_bookmarks')->insert([
+                'cust_id' => $cust->cust_id,
+                'user_id' => $this->model->user_id,
+            ]);
+        });
+
+        $this->assertCount(5, $this->model->CustomerBookmarks);
+    }
+
+    public function test_file_links_relationship(): void
+    {
+        $linkList = FileLink::factory()
+            ->count(5)
+            ->create(['user_id' => $this->model->user_id]);
+
+        $this->assertEquals(
+            $linkList->toArray(),
+            $this->model->FileLinks->toArray()
+        );
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | Additional Model Methods
+    |---------------------------------------------------------------------------
+    */
     public function test_get_new_expire_time(): void
     {
         // Test Immediate Expire

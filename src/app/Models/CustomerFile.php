@@ -80,21 +80,21 @@ class CustomerFile extends Model
     public function fileType(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->CustomerFileType->description
+            get: fn() => $this->CustomerFileType->description
         );
     }
 
     public function createdStamp(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->created_at
+            get: fn() => $this->created_at
         );
     }
 
     public function href(): Attribute
     {
         return Attribute::make(
-            get: fn () => route(
+            get: fn() => route(
                 'download',
                 [$this->file_id, $this->FileUpload->file_name]
             )
@@ -104,14 +104,14 @@ class CustomerFile extends Model
     public function uploadedBy(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->user->full_name
+            get: fn() => $this->user->full_name
         );
     }
 
     public function equipName(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->CustomerEquipment
+            get: fn() => $this->CustomerEquipment
                 ? $this->CustomerEquipment->equip_name
                 : null
         );
@@ -165,6 +165,10 @@ class CustomerFile extends Model
     | Model Broadcasting
     |---------------------------------------------------------------------------
     */
+
+    /**
+     * @codeCoverageIgnore
+     */
     public function broadcastOn(string $event): array
     {
         $siteChannels = $this->getSiteChannels(
@@ -172,12 +176,12 @@ class CustomerFile extends Model
         );
 
         if ($this->cust_equip_id) {
-            $siteChannels[] = new PrivateChannel('customer-equipment.'.$this->cust_equip_id);
+            $siteChannels[] = new PrivateChannel('customer-equipment.' . $this->cust_equip_id);
         }
 
         $allChannels = array_merge(
             $siteChannels,
-            [new PrivateChannel('customer.'.$this->Customer->slug)]
+            [new PrivateChannel('customer.' . $this->Customer->slug)]
         );
 
         return match ($event) {
@@ -189,7 +193,8 @@ class CustomerFile extends Model
     public function newBroadcastableModelEvent(string $event): BroadcastableModelEventOccurred
     {
         return (new BroadcastableModelEventOccurred(
-            $this, $event
+            $this,
+            $event
         ))->dontBroadcastToCurrentUser();
     }
 

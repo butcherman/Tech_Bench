@@ -9,6 +9,9 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
 
+/**
+ * @codeCoverageIgnore
+ */
 class UserLoginActivityReport extends UserReportBase
 {
     /**

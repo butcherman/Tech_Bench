@@ -19,6 +19,31 @@ class EquipmentCategoryUnitTest extends TestCase
 
     /*
     |---------------------------------------------------------------------------
+    | Model Scopes
+    |---------------------------------------------------------------------------
+    */
+    public function test_equipment_scope(): void
+    {
+        $this->assertEquals(
+            EquipmentCategory::with('EquipmentType')->get(),
+            EquipmentCategory::equipment()->get(),
+        );
+    }
+
+    public function test_public_equipment_scope(): void
+    {
+        $this->assertEquals(
+            EquipmentCategory::with(['EquipmentType' => function ($q) {
+                $q->where('allow_public_tip', true);
+            }])
+                ->get()
+                ->toArray(),
+            EquipmentCategory::publicEquipment()->get()->toArray(),
+        );
+    }
+
+    /*
+    |---------------------------------------------------------------------------
     | Model Relationships
     |---------------------------------------------------------------------------
     */
