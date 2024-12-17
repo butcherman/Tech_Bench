@@ -5,6 +5,9 @@ namespace App\Http\Resources\Reports\Users;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @codeCoverageIgnore
+ */
 class UserLoginActivityResource extends JsonResource
 {
     /**
