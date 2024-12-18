@@ -1,12 +1,13 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Console\Commands\Maint;
 
 use App\Jobs\Maintenance\RunBackupJob;
 use Illuminate\Console\Command;
 
+/**
+ * @codeCoverageIgnore
+ */
 class AppBackupCommand extends Command
 {
     /**
@@ -24,12 +25,8 @@ class AppBackupCommand extends Command
      */
     public function handle()
     {
-        // $this->line('Running System Backup');
+        $this->line('Running System Backup');
 
-        // RunBackupJob::dispatchSync();
-
-        $this->error('Oops, looks like I have not made it this far yet...');
-
-        return 1;
+        RunBackupJob::dispatchSync();
     }
 }

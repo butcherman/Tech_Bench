@@ -1,10 +1,8 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Console\Commands\Maint;
 
-use App\Service\Maint\RestoreService;
+use App\Service\Maintenance\RestoreService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\File;
@@ -17,6 +15,9 @@ use function Laravel\Prompts\select;
 use function Laravel\Prompts\spin;
 use function Laravel\Prompts\warning;
 
+/**
+ * @codeCoverageIgnore
+ */
 class BackupRestoreCommand extends Command
 {
     /**
@@ -41,146 +42,145 @@ class BackupRestoreCommand extends Command
         $this->error('Oops, looks like I have not made it this far yet...');
 
         return 1;
-        // $this->backupObj = new RestoreService;
-        // $this->components->alert('Database Restore');
+        $this->backupObj = new RestoreService;
+        $this->components->alert('Database Restore');
 
-        // // Notify this is a major risk
-        // $this->components->alert(
-        //     'WARNING: RESTORING DATABASE WILL OVERWRITE ALL EXISTING DATA'
-        // );
-        // $this->components->alert('PROCEED WITH CAUTION');
+        // Notify this is a major risk
+        $this->components->alert(
+            'WARNING: RESTORING DATABASE WILL OVERWRITE ALL EXISTING DATA'
+        );
+        $this->components->alert('PROCEED WITH CAUTION');
 
-        // // Have use select which backup file to use
-        // $backupChoice = select(
-        //     label: 'Select the upload to restore',
-        //     options: $this->getBackupList()
-        // );
+        // Have use select which backup file to use
+        $backupChoice = select(
+            label: 'Select the upload to restore',
+            options: $this->getBackupList()
+        );
 
-        // // Confirm that this is the correct file
-        // warning('You have selected '.$backupChoice);
-        // $confirm = confirm(
-        //     label: 'Are you sure you want to restore this backup?',
-        //     default: false,
-        // );
+        // Confirm that this is the correct file
+        warning('You have selected ' . $backupChoice);
+        $confirm = confirm(
+            label: 'Are you sure you want to restore this backup?',
+            default: false,
+        );
 
-        // // If user selected no, exit script
-        // if (! $confirm) {
-        //     warning('Exiting');
+        // If user selected no, exit script
+        if (! $confirm) {
+            warning('Exiting');
 
-        //     return;
-        // }
+            return;
+        }
 
-        // /***********************************************************************
-        //  * Validate the Backup File
-        //  ***********************************************************************/
-        // if (! spin(
-        //     message: 'Verifying File is Valid Tech Bench Backup',
-        //     callback: fn () => $this->backupObj->validateBackupFile($backupChoice)
-        // )) {
-        //     $this->components->error('Invalid Backup File');
-        //     $this->components->error('Exiting');
+        /***********************************************************************
+         * Validate the Backup File
+         ***********************************************************************/
+        if (! spin(
+            message: 'Verifying File is Valid Tech Bench Backup',
+            callback: fn() => $this->backupObj->validateBackupFile($backupChoice)
+        )) {
+            $this->components->error('Invalid Backup File');
+            $this->components->error('Exiting');
 
-        //     return;
-        // } else {
-        //     $this->components->success('Backup File is Valid');
-        // }
+            return;
+        } else {
+            $this->components->success('Backup File is Valid');
+        }
 
-        // /***********************************************************************
-        //  * Start the Restore Process
-        //  ***********************************************************************/
-        // $this->components->info('Putting Application in Maintenance Mode');
-        // $this->call('down');
+        /***********************************************************************
+         * Start the Restore Process
+         ***********************************************************************/
+        $this->components->info('Putting Application in Maintenance Mode');
+        $this->call('down');
 
-        // if (! $this->validateBackupVersion()) {
-        //     warning('Exiting');
-        //     $this->cleanup();
+        if (! $this->validateBackupVersion()) {
+            warning('Exiting');
+            $this->cleanup();
 
-        //     return;
-        // }
+            return;
+        }
 
-        // /**
-        //  * Extract the backup to temporary folder
-        //  */
-        // if (! spin(
-        //     message: 'Extracting Backup Files',
-        //     callback: fn () => $this->backupObj->extractBackup()
-        // )) {
-        //     $this->components->error('Unable to extract Backup File');
-        //     $this->cleanup();
+        /**
+         * Extract the backup to temporary folder
+         */
+        if (! spin(
+            message: 'Extracting Backup Files',
+            callback: fn() => $this->backupObj->extractBackup()
+        )) {
+            $this->components->error('Unable to extract Backup File');
+            $this->cleanup();
 
-        //     return;
-        // } else {
-        //     $this->components->success('Backup File Extracted');
-        // }
+            return;
+        } else {
+            $this->components->success('Backup File Extracted');
+        }
 
-        // /**
-        //  * Backup the .env file just in case
-        //  */
-        // File::copy(
-        //     base_path().DIRECTORY_SEPARATOR.'.env',
-        //     base_path().DIRECTORY_SEPARATOR.'.env.old',
-        // );
+        /**
+         * Backup the .env file just in case
+         */
+        File::copy(
+            base_path() . DIRECTORY_SEPARATOR . '.env',
+            base_path() . DIRECTORY_SEPARATOR . '.env.old',
+        );
 
-        // /***********************************************************************
-        //  * Restore the database
-        //  ***********************************************************************/
-        // if (! spin(
-        //     message: 'Restoring Database',
-        //     callback: fn () => $this->backupObj->restoreDatabase()
-        // )) {
-        //     $this->components->error('Restore Failed');
-        //     $this->components->error('Unable to Restore Database');
-        //     $this->cleanup();
+        /***********************************************************************
+         * Restore the database
+         ***********************************************************************/
+        if (! spin(
+            message: 'Restoring Database',
+            callback: fn() => $this->backupObj->restoreDatabase()
+        )) {
+            $this->components->error('Restore Failed');
+            $this->components->error('Unable to Restore Database');
+            $this->cleanup();
 
-        //     return;
-        // } else {
-        //     $this->components->success('Database Restored');
-        // }
+            return;
+        } else {
+            $this->components->success('Database Restored');
+        }
 
-        // /***********************************************************************
-        //  * Restore Disk Files
-        //  ***********************************************************************/
-        // $restorePaths = config('backup.backup.source.files.include');
-        // if (! spin(
-        //     message: 'Restoring Files',
-        //     callback: fn () => $this->backupObj->restoreFiles($restorePaths)
-        // )) {
-        //     $this->components->error('Unable to restore files');
-        //     $this->hasErrors = true;
+        /***********************************************************************
+         * Restore Disk Files
+         ***********************************************************************/
+        $restorePaths = config('backup.backup.source.files.include');
+        if (! spin(
+            message: 'Restoring Files',
+            callback: fn() => $this->backupObj->restoreFiles($restorePaths)
+        )) {
+            $this->components->error('Unable to restore files');
+            $this->hasErrors = true;
+        } else {
+            $this->components->success('Files Restored');
+        }
 
-        // } else {
-        //     $this->components->success('Files Restored');
-        // }
+        /**
+         * Move the .env file
+         */
+        if (! spin(
+            message: 'Building Application Environment',
+            callback: fn() => $this->backupObj->restoreEnv()
+        )) {
+            $this->components->error('Unable to restore Environment File');
+            $this->hasErrors = true;
+        } else {
+            $this->call('app:validate-env', ['--force' => true]);
+            $this->components->success('Environment Restored');
+        }
 
-        // /**
-        //  * Move the .env file
-        //  */
-        // if (! spin(
-        //     message: 'Building Application Environment',
-        //     callback: fn () => $this->backupObj->restoreEnv()
-        // )) {
-        //     $this->components->error('Unable to restore Environment File');
-        //     $this->hasErrors = true;
-        // } else {
-        //     $this->call('app:validate-env', ['--force' => true]);
-        //     $this->components->success('Environment Restored');
-        // }
+        /**
+         * Wrap up
+         */
+        $this->cleanup();
 
-        // /**
-        //  * Wrap up
-        //  */
-        // $this->cleanup();
+        /**
+         * Display final message
+         */
+        if ($this->hasErrors) {
+            $this->components->alert('Backup completed, but some files were not properly moved');
+        } else {
+            $this->components->success('Backup Completed Successfully');
+        }
 
-        // /**
-        //  * Display final message
-        //  */
-        // if ($this->hasErrors) {
-        //     $this->components->alert('Backup completed, but some files were not properly moved');
-        // } else {
-        //     $this->components->success('Backup Completed Successfully');
-        // }
-
-        // $this->components->info('Please Reboot Tech Bench to Complete Restore Process');
+        $this->components->info('Please Reboot Tech Bench to Complete Restore Process');
     }
 
     /**
@@ -206,7 +206,7 @@ class BackupRestoreCommand extends Command
         if ($valid == -1) {
             $this->components->error('Invalid Backup Version');
             $this->line('The Backup File is newer than the current Tech Bench Version');
-            $this->line('Please update Tech Bench to '.$backupVersion.' or higher');
+            $this->line('Please update Tech Bench to ' . $backupVersion . ' or higher');
 
             return false;
         }

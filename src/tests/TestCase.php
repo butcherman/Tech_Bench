@@ -16,9 +16,6 @@ abstract class TestCase extends BaseTestCase
         parent::setUp();
 
         $this->withoutVite();
-        $this->withoutMiddleware([
-            // \Spatie\CookieConsent\CookieConsentMiddleware::class,
-        ]);
     }
 
     /**
