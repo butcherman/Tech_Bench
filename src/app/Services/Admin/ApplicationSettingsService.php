@@ -45,7 +45,7 @@ class ApplicationSettingsService
             'app.company_name' => $requestData->get('company_name'),
             'app.schedule_timezone' => $requestData->get('timezone'),
             'filesystems.max_filesize' => $requestData->get('max_filesize'),
-            'services.azure.redirect' => 'https://'.$requestData->get('url').'/auth/callback',
+            'services.azure.redirect' => 'https://' . $requestData->get('url') . '/auth/callback',
         ];
 
         $this->saveSettingsArray($setArr);
@@ -113,10 +113,21 @@ class ApplicationSettingsService
         $storedFile = Storage::disk('public')
             ->putFile($path, new File($requestData->get('file')));
 
-        $this->saveSettings('app.logo', '/storage/'.$storedFile);
+        $this->saveSettings('app.logo', '/storage/' . $storedFile);
 
         CacheFacade::clearCache('appData');
 
         return $storedFile;
+    }
+
+    /**
+     * Save Backup Settings
+     */
+    public function processBackupSettings(Collection $requestData): void
+    {
+        $this->saveSettingsArray($requestData->only(['nightly_backup', 'nightly_cleanup'])->toArray(), 'backup');
+        $this->saveSettings('backup.backup.password', $requestData->get('password'));
+        $this->saveSettings('backup.backup.encryption', $requestData->get('encryption') ? 'default' : false);
+        $this->saveSettings('backup.notifications.mail.to', $requestData->get('mail_to'));
     }
 }

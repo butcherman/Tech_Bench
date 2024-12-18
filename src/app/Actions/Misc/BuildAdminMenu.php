@@ -249,12 +249,12 @@ class BuildAdminMenu
                 [
                     'name' => 'Backups',
                     'icon' => 'fa-hdd',
-                    'route' => '#', // route('maint.backup.index'),
+                    'route' => route('maint.backup.index'),
                 ],
                 [
                     'name' => 'Backup Settings',
                     'icon' => 'fa-cog',
-                    'route' => '#', // route('maint.backups.settings.show'),
+                    'route' => route('maint.backups.settings.show'),
                 ],
             ];
         }
