@@ -1,0 +1,12 @@
+<template>
+    <div id="auth-layout-wrapper">
+        <slot />
+    </div>
+</template>
+
+<style>
+body #auth-layout-wrapper {
+    background: linear-gradient(135deg, #1f0683 0%, #24308e 50%, #0b77ca 100%);
+    height: 100%;
+}
+</style>

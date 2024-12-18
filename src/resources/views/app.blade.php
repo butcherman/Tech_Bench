@@ -24,7 +24,6 @@
         </p>
     </noscript>
     @inertia
-    Hello World!!!
     @include('cookie-consent::index')
 </body>
 
