@@ -3,6 +3,7 @@
         <Head title="Login" />
         <div id="content-wrapper" class="container-fluid">
             <h1 class="text-center text-light">tech bench</h1>
+            <v-btn>This is a button</v-btn>
         </div>
         <div id="login-form-wrapper"></div>
     </div>
