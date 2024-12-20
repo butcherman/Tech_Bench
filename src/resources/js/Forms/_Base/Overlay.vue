@@ -13,6 +13,7 @@
 import LoadingVue from "vue3-loading-overlay";
 import TrinityRingsLoader from "@/Components/_Base/Loaders/TrinityRingsLoader.vue";
 
+// Overlay Styling
 import "vue3-loading-overlay/dist/vue3-loading-overlay.css";
 
 defineProps<{

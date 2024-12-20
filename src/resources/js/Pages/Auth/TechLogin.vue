@@ -72,6 +72,11 @@ const props = defineProps<{
 
 const app = useAppStore();
 
+/*
+|---------------------------------------------------------------------------
+| Links to be displayed under Logo
+|---------------------------------------------------------------------------
+*/
 const hasLinks = computed(
     () => props.welcomeMessage || props.homeLinks.length || props.publicLink
 );

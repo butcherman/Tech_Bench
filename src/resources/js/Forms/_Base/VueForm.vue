@@ -23,8 +23,9 @@ import { computed, ref } from "vue";
 import { useForm } from "vee-validate";
 import { useForm as useInertiaForm } from "@inertiajs/vue3";
 
-//  Overlay Styling
-import "vue3-loading-overlay/dist/vue3-loading-overlay.css";
+interface formData {
+    [key: string]: string;
+}
 
 const emit = defineEmits(["submitting", "success", "has-errors"]);
 const props = defineProps<{
@@ -81,12 +82,14 @@ const onSubmit = handleSubmit((form) => {
 | Handle Errors
 |-------------------------------------------------------------------------------
 */
-const handleErrors = (originalForm, formErrors) => {
+const handleErrors = (
+    originalForm: formData,
+    formErrors: Partial<Record<string | number, string>>
+) => {
     emit("has-errors", formErrors);
     const formKeys = Object.keys(originalForm);
 
-    console.log(formErrors);
-
+    // Cycle through errors and assign to proper field values
     for (const [key, value] of Object.entries(formErrors)) {
         if (value) {
             if (typeof value === "object") {
@@ -95,6 +98,8 @@ const handleErrors = (originalForm, formErrors) => {
                 if (formKeys.indexOf(key) != -1) {
                     setFieldError(key, value);
                 } else {
+                    // Values that are not part of the form are displayed as alert
+                    // TODO - Push Alert
                     // pushErrorAlert(value);
                     console.log("field error - ", value);
                 }
