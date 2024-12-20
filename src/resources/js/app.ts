@@ -18,11 +18,33 @@ import { createPinia } from "pinia";
 
 /*
 |-------------------------------------------------------------------------------
+| Font Awesome
+|-------------------------------------------------------------------------------
+*/
+import { aliases, fa } from "vuetify/iconsets/fa-svg";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { fas } from "@fortawesome/free-solid-svg-icons";
+import { far } from "@fortawesome/free-regular-svg-icons";
+
+library.add(fas);
+library.add(far);
+
+/*
+|-------------------------------------------------------------------------------
 | App Constants
 |-------------------------------------------------------------------------------
 */
 const appName = "Tech Bench";
-const vuetify = createVuetify();
+const vuetify = createVuetify({
+    icons: {
+        defaultSet: "fa",
+        aliases,
+        sets: {
+            fa,
+        },
+    },
+});
 const pinia = createPinia();
 
 /*
@@ -40,6 +62,7 @@ createInertiaApp({
             .use(plugin)
             .use(pinia)
             .use(vuetify)
+            .component("font-awesome-icon", FontAwesomeIcon)
             .component("Link", Link)
             .component("Head", Head);
 

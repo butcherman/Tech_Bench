@@ -6,6 +6,10 @@
         "dev": "vite"
     },
     "devDependencies": {
+        "@fortawesome/fontawesome-svg-core": "^6.7.2",
+        "@fortawesome/free-regular-svg-icons": "^6.7.2",
+        "@fortawesome/free-solid-svg-icons": "^6.7.2",
+        "@fortawesome/vue-fontawesome": "^3.0.8",
         "autoprefixer": "^10.4.20",
         "axios": "^1.7.4",
         "laravel-echo": "^1.16.1",
@@ -22,7 +26,10 @@
         "pinia": "^2.3.0",
         "typescript": "^5.7.2",
         "uuid": "^11.0.3",
+        "vee-validate": "^4.14.7",
         "vite-plugin-vuetify": "^2.0.4",
-        "vuetify": "^3.7.6"
+        "vue3-loading-overlay": "^0.0.0",
+        "vuetify": "^3.7.6",
+        "yup": "^1.6.1"
     }
 }
