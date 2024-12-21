@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Customer;
 use App\Models\CustomerSite;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class CustomerSeeder extends Seeder
@@ -36,6 +37,21 @@ class CustomerSeeder extends Seeder
             $customer->deleted_reason = 'Testing Seeder';
             $customer->save();
             $customer->delete();
+        });
+
+        /**
+         * Give the Administrator five bookmarks and five recent visits
+         */
+        $admin = User::find(1);
+
+        $custList1 = Customer::inRandomOrder()->limit(5)->get();
+        $custList1->each(function ($cust) use ($admin) {
+            $cust->toggleBookmark($admin, true);
+        });
+
+        $custList2 = Customer::inRandomOrder()->limit(5)->get();
+        $custList2->each(function ($cust) use ($admin) {
+            $cust->touchRecent($admin);
         });
     }
 }
