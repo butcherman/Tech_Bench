@@ -6,11 +6,7 @@
             class="grid grid-cols-1 md:grid-cols-4 md:h-screen"
         >
             <div class="md:col-span-3 justify-self-center self-center m-3">
-                <h1 class="text-center text-white text-3xl font-bold">
-                    {{ app.name }}
-                </h1>
-                <div class="bg-white m-2 p-4 rounded">
-                    <img :src="app.logo" />
+                <LogoImage>
                     <div v-if="hasLinks" class="mt-4">
                         <hr class="bg-gray-500" />
                         <h6
@@ -39,12 +35,13 @@
                             </li>
                         </ul>
                     </div>
-                </div>
+                </LogoImage>
             </div>
             <div
                 id="login-form-wrapper"
                 class="align-content-center bg-white md:h-full m-4 md:m-0 p-3"
             >
+                <AuthFlash />
                 <h1 class="text-center font-bold">Tech Login:</h1>
                 <TechLoginForm />
             </div>
@@ -53,9 +50,10 @@
 </template>
 
 <script setup lang="ts">
-import AuthLayout from "@/Layouts/AuthLayout.vue";
+import AuthLayout from "@/Layouts/Auth/AuthLayout.vue";
+import LogoImage from "../../Components/Main/LogoImage.vue";
 import TechLoginForm from "@/Forms/Auth/TechLoginForm.vue";
-import { useAppStore } from "@/Stores/AppStore";
+import AuthFlash from "@/Layouts/Auth/AuthFlash.vue";
 import { computed } from "vue";
 
 interface homeLinks {
@@ -70,13 +68,9 @@ const props = defineProps<{
     allowOath: boolean;
 }>();
 
-const app = useAppStore();
-
-/*
-|---------------------------------------------------------------------------
-| Links to be displayed under Logo
-|---------------------------------------------------------------------------
-*/
+/**
+ * If there are any links or message that should go under the logo
+ */
 const hasLinks = computed(
     () => props.welcomeMessage || props.homeLinks.length || props.publicLink
 );

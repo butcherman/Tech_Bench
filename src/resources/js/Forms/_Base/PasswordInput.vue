@@ -16,7 +16,7 @@
             <template #append-inner>
                 <span
                     @click="visibleIcon = !visibleIcon"
-                    class="cursor-pointer text-xs"
+                    class="cursor-pointer show-pass"
                 >
                     <v-icon :icon="visibleIcon ? 'fa-eye-slash' : 'fa-eye'" />
                 </span>
@@ -61,3 +61,10 @@ const visibleIcon = ref(false);
 const nameRef = toRef(props, "name");
 const { errorMessage, value } = useField(nameRef);
 </script>
+
+<style scoped>
+.show-pass {
+    color: #495057;
+    font-size: 0.6rem;
+}
+</style>

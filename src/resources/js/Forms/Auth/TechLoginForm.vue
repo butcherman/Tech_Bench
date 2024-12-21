@@ -19,6 +19,14 @@
             name="password"
             variant="underlined"
         />
+        <div class="text-right">
+            <Link
+                :href="$route('password.request')"
+                class="text-xs text-blue-400"
+            >
+                Forgot Password
+            </Link>
+        </div>
         <SwitchInput
             id="remember-me"
             name="remember"
