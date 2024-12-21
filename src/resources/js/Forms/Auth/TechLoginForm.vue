@@ -12,6 +12,7 @@
             name="username"
             variant="underlined"
             autocomplete="username"
+            focus
         />
         <PasswordInput
             id="password"

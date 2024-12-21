@@ -1,13 +1,24 @@
 <template>
-    <v-app-bar :elevation="0">
-        <template v-slot:prepend>
-            <v-app-bar-nav-icon></v-app-bar-nav-icon>
+    <v-app-bar :elevation="0" class="border-b">
+        <template #prepend>
+            <img :src="app.logo" class="object-contain h-75 md:ms-5" />
         </template>
-
-        <v-app-bar-title>Tech Bench</v-app-bar-title>
+        <v-app-bar-title>
+            <h1 class="text-center text-3xl font-bold">Tech Bench</h1>
+        </v-app-bar-title>
+        <template #append>
+            <v-app-bar-nav-icon
+                class="d-md-none"
+                @click="$emit('toggle-navbar')"
+            />
+        </template>
     </v-app-bar>
 </template>
 
 <script setup lang="ts">
-//
+import { useAppStore } from "@/Stores/AppStore";
+
+defineEmits(["toggle-navbar"]);
+
+const app = useAppStore();
 </script>

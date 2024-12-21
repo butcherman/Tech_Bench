@@ -15,6 +15,14 @@ import { createApp, DefineComponent, h } from "vue";
 import { createInertiaApp, Link, Head } from "@inertiajs/vue3";
 import { createVuetify } from "vuetify";
 import { createPinia } from "pinia";
+import "./echo";
+
+/*
+|---------------------------------------------------------------------------
+| Custom Directives
+|---------------------------------------------------------------------------
+*/
+import { vFocusDirective } from "./Directives/FocusDirective";
 
 /*
 |-------------------------------------------------------------------------------
@@ -62,6 +70,7 @@ createInertiaApp({
             .use(plugin)
             .use(pinia)
             .use(vuetify)
+            .directive("focus", vFocusDirective)
             .component("font-awesome-icon", FontAwesomeIcon)
             .component("Link", Link)
             .component("Head", Head);

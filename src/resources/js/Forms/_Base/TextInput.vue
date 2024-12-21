@@ -12,6 +12,7 @@
             :placeholder="placeholder"
             :type="type ?? 'text'"
             :variant="inputVariant"
+            :autofocus="focus"
         />
     </div>
 </template>
@@ -27,6 +28,7 @@ const props = defineProps<{
     name: string;
     autocomplete?: string;
     disabled?: boolean;
+    focus?: boolean;
     hint?: string;
     persistentHint?: boolean;
     placeholder?: string;

@@ -3,18 +3,18 @@ blade-directive: version
 current:
   label: v
   major: 7
-  minor: 0
-  patch: 1
-  prerelease: null
+  minor: 1
+  patch: 0
+  prerelease: dev
   buildmetadata: null
-  commit: '970'
+  commit: '971'
   timestamp:
     year: 2024
     month: 12
     day: 21
-    hour: 4
-    minute: 0
-    second: 39
+    hour: 5
+    minute: 41
+    second: 47
     timezone: UTC
 commit:
   mode: git-local
@@ -59,4 +59,4 @@ format:
   timestamp-datetime: '{$timestamp.year}-{$timestamp.month}-{$timestamp.day} {$timestamp.hour}:{$timestamp.minute}:{$timestamp.second}'
   timestamp-full: '{$timestamp.year}-{$timestamp.month}-{$timestamp.day} {$timestamp.hour}:{$timestamp.minute}:{$timestamp.second} {$timestamp.timezone}'
   build: '{$timestamp.month}-{$timestamp.day}-{$timestamp.year}'
-  copyright: 2016-2024
+  copyright: 2016-2025
