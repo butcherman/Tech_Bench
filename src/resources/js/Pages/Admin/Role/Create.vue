@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h4 class="text-center font-bold">Dashboard</h4>
+        <h4 class="text-center font-bold">Hello World</h4>
         <v-card elevation="2" subtitle="This is a Title">
             <p class="text-center">This is a new page</p>
         </v-card>
