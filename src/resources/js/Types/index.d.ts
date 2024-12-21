@@ -49,6 +49,11 @@ type breadcrumbs = {
     is_current_page: boolean;
 };
 
+type resourceList = {
+    name: string;
+    href: string;
+};
+
 // type toastData = {
 //     id: string;
 //     title: string;

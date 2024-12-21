@@ -79,14 +79,14 @@ class User extends Authenticatable
     public function fullName(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->first_name.' '.$this->last_name,
+            get: fn() => $this->first_name . ' ' . $this->last_name,
         );
     }
 
     public function initials(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->first_name[0].$this->last_name[0],
+            get: fn() => $this->first_name[0] . $this->last_name[0],
         );
     }
 
@@ -128,7 +128,6 @@ class User extends Authenticatable
             'user_id',
             'tip_id'
         )->latest('user_tech_tip_recents.created_at')
-            ->select(['slug', 'subject'])
             ->limit(10);
     }
 
@@ -140,7 +139,6 @@ class User extends Authenticatable
             'user_id',
             'cust_id',
         )->latest('user_customer_recents.created_at')
-            ->select(['slug', 'name'])
             ->limit(10);
     }
 
@@ -151,7 +149,7 @@ class User extends Authenticatable
             'user_tech_tip_bookmarks',
             'user_id',
             'tip_id'
-        )->select(['slug', 'subject']);
+        )->orderBy('subject', 'ASC');
     }
 
     public function CustomerBookmarks(): BelongsToMany
@@ -161,7 +159,7 @@ class User extends Authenticatable
             'user_customer_bookmarks',
             'user_id',
             'cust_id',
-        )->select(['slug', 'name']);
+        )->orderBy('name', 'ASC');
     }
 
     public function FileLinks(): HasMany
