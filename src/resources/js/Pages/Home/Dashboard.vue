@@ -2,7 +2,7 @@
     <div class="grid gap-4">
         <h1 class="font-bold mb-5">Hello {{ app.user?.full_name }}</h1>
         <Card title="Bookmarks">
-            <div class="grid grid-cols-2 mt-2">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
                 <div>
                     <h5 class="text-center font-bold">Customer Bookmarks</h5>
                     <ResourceList :list="bookmarks.customers" />
@@ -14,7 +14,7 @@
             </div>
         </Card>
         <Card title="Recent Visits">
-            <div class="grid grid-cols-2 mt-2">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
                 <div>
                     <h5 class="text-center font-bold">Customers</h5>
                     <ResourceList :list="recent.customers" />

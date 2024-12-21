@@ -60,10 +60,6 @@ class TechTipUnitTest extends TestCase
         $this->assertArrayHasKey('public_href', $this->model->toArray());
         $this->assertArrayHasKey('equip_list', $this->model->toArray());
         $this->assertArrayHasKey('file_list', $this->model->toArray());
-
-        // Depreciated Attributes - To Be Removed
-        $this->assertArrayHasKey('equipList', $this->model->toArray());
-        $this->assertArrayHasKey('fileList', $this->model->toArray());
     }
 
     /*

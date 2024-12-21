@@ -23,8 +23,8 @@
 </template>
 
 <script setup lang="ts">
-import { useAppStore } from "@/Stores/AppStore";
 import UserAvatar from "./UserAvatar.vue";
+import { useAppStore } from "@/Stores/AppStore";
 
 defineEmits(["toggle-navbar"]);
 

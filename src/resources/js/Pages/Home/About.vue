@@ -1,17 +1,33 @@
 <template>
-    <div>
-        <h4 class="text-center font-bold">Hello World</h4>
-        <v-card elevation="2" subtitle="This is a Title">
-            <p class="text-center">This is a new page</p>
-        </v-card>
+    <div class="flex justify-center">
+        <Card class="md:w-1/2">
+            <img
+                src="/images/TechBenchLogo.png"
+                class="mx-auto d-block img-fluid"
+                alt="Tech Bench"
+            />
+            <p class="text-center">
+                Tech Bench &copy; {{ app.copyright }}
+                <span class="d-inline-block">
+                    Butcherman - All Rights Reserved
+                </span>
+            </p>
+            <p class="text-center">{{ app.version }} (Build {{ build }})</p>
+            <p class="text-center">Build Date - {{ build_date }}</p>
+        </Card>
     </div>
 </template>
 
 <script setup lang="ts">
 import AppLayout from "@/Layouts/App/AppLayout.vue";
-import { ref, reactive, onMounted } from "vue";
+import { useAppStore } from "@/Stores/AppStore";
+import Card from "@/Components/Main/Card.vue";
 
-const props = defineProps<{}>();
+defineProps<{
+    build: string;
+    build_date: string;
+}>();
+const app = useAppStore();
 </script>
 
 <script lang="ts">

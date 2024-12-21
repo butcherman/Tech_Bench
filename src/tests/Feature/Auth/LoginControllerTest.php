@@ -21,12 +21,13 @@ class LoginControllerTest extends TestCase
         $response = $this->get(route('home'));
 
         $response->assertSuccessful()
-            ->assertInertia(fn (Assert $page) => $page
-                ->component('Auth/Login')
-                ->has('welcome-message')
-                ->has('home-links')
-                ->has('public-link')
-                ->has('allow-oath')
+            ->assertInertia(
+                fn(Assert $page) => $page
+                    ->component('Auth/TechLogin')
+                    ->has('welcome-message')
+                    ->has('home-links')
+                    ->has('public-link')
+                    ->has('allow-oath')
             );
         $this->assertGuest();
     }
@@ -39,12 +40,13 @@ class LoginControllerTest extends TestCase
         $response = $this->get(route('login'));
 
         $response->assertSuccessful()
-            ->assertInertia(fn (Assert $page) => $page
-                ->component('Auth/Login')
-                ->has('welcome-message')
-                ->has('home-links')
-                ->has('public-link')
-                ->has('allow-oath')
+            ->assertInertia(
+                fn(Assert $page) => $page
+                    ->component('Auth/TechLogin')
+                    ->has('welcome-message')
+                    ->has('home-links')
+                    ->has('public-link')
+                    ->has('allow-oath')
             );
         $this->assertGuest();
     }

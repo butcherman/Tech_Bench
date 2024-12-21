@@ -1,4 +1,5 @@
 <template>
+    <Head :title="breadcrumbs.at(-1)?.title" />
     <v-app id="app-layout-wrapper">
         <AppHeader @toggle-navbar="navbarActive = !navbarActive" />
         <AppSideNav :navbar-active="navbarActive" />
@@ -13,11 +14,27 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import AppHeader from "./AppHeader.vue";
 import AppSideNav from "./AppSideNav.vue";
 import AppFooter from "./AppFooter.vue";
 import AppBreadcrumbs from "./AppBreadcrumbs.vue";
+import { usePage, router } from "@inertiajs/vue3";
 
-const navbarActive = ref(null);
+/*
+|---------------------------------------------------------------------------
+| Dynamic Navbar Controls
+|---------------------------------------------------------------------------
+*/
+const navbarActive = ref<boolean | null>(null);
+router.on("navigate", () => (navbarActive.value = null));
+
+/*
+|---------------------------------------------------------------------------
+| Breadcrumbs are imported to set the Title Element
+|---------------------------------------------------------------------------
+*/
+const breadcrumbs = computed<breadcrumbs[]>(
+    () => usePage<pageProps>().props.breadcrumbs
+);
 </script>
