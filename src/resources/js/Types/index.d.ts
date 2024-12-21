@@ -13,7 +13,7 @@ type pageProps = {
     current_user: user | null;
     idle_timeout: number;
     navbar: navbar[];
-    // breadcrumbs: breadcrumbs[];
+    breadcrumbs: breadcrumbs[];
     errors: { [key: string]: string }[];
 };
 
@@ -43,17 +43,17 @@ type fileData = {
     maxSize: number;
 };
 
+type breadcrumbs = {
+    title: string;
+    url: string;
+    is_current_page: boolean;
+};
+
 // type toastData = {
 //     id: string;
 //     title: string;
 //     message: string;
 //     href?: string;
-// };
-
-// type breadcrumbs = {
-//     title: string;
-//     url: string;
-//     is_current_page: boolean;
 // };
 
 // type basicPermissions = {

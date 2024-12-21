@@ -10,7 +10,7 @@
             <Link href="#" class="mx-1 text-muted">
                 <font-awesome-icon icon="circle-question" />
             </Link>
-            <Link href="#" class="mx-1 text-muted">
+            <Link :href="$route('about')" class="mx-1 text-muted">
                 <font-awesome-icon icon="circle-info" />
             </Link>
             <UserAvatar />
