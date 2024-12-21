@@ -18,7 +18,12 @@
 </template>
 
 <script setup lang="ts">
-    import { ref, reactive, onMounted } from 'vue';
+import AppLayout from "@/Layouts/App/AppLayout.vue";
+import { ref, reactive, onMounted } from "vue";
 
-    const props = defineProps<{}>();
+const props = defineProps<{}>();
+</script>
+
+<script lang="ts">
+export default { layout: AppLayout };
 </script>
