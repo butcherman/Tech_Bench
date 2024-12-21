@@ -7,10 +7,8 @@
             <h1 class="text-center text-3xl font-bold">Tech Bench</h1>
         </v-app-bar-title>
         <template #append>
-            <Link href="#" class="mx-1 text-muted">
-                <font-awesome-icon icon="circle-question" />
-            </Link>
-            <Link :href="$route('about')" class="mx-1 text-muted">
+            <AppHelp />
+            <Link :href="$route('about')" class="m-1 text-muted">
                 <font-awesome-icon icon="circle-info" />
             </Link>
             <UserAvatar />
@@ -23,6 +21,7 @@
 </template>
 
 <script setup lang="ts">
+import AppHelp from "./AppHelp.vue";
 import UserAvatar from "./UserAvatar.vue";
 import { useAppStore } from "@/Stores/AppStore";
 
