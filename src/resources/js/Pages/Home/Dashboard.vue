@@ -1,19 +1,9 @@
 <template>
     <div>
-        <div class="row">
-            <div class="col-12">
-                <h4 class="text-center text-md-left">Hello World</h4>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        <p class="text-center">This is a new page</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <h4 class="text-center font-bold">Hello World</h4>
+        <v-card elevation="2" subtitle="This is a Title">
+            <p class="text-center">This is a new page</p>
+        </v-card>
     </div>
 </template>
 

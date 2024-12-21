@@ -7,6 +7,13 @@
             <h1 class="text-center text-3xl font-bold">Tech Bench</h1>
         </v-app-bar-title>
         <template #append>
+            <Link href="#" class="mx-1 text-muted">
+                <font-awesome-icon icon="circle-question" />
+            </Link>
+            <Link href="#" class="mx-1 text-muted">
+                <font-awesome-icon icon="circle-info" />
+            </Link>
+            <UserAvatar />
             <v-app-bar-nav-icon
                 class="d-md-none"
                 @click="$emit('toggle-navbar')"
@@ -17,6 +24,7 @@
 
 <script setup lang="ts">
 import { useAppStore } from "@/Stores/AppStore";
+import UserAvatar from "./UserAvatar.vue";
 
 defineEmits(["toggle-navbar"]);
 
