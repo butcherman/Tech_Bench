@@ -1,7 +1,7 @@
 <template>
     <v-menu rounded>
         <template #activator="{ props }">
-            <v-btn icon v-bind="props">
+            <v-btn icon v-bind="props" v-tooltip="'Account Information'">
                 <v-avatar color="blue-lighten-3">
                     <span class="text-h5">{{ app.user?.initials }}</span>
                 </v-avatar>

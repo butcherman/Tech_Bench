@@ -1,6 +1,7 @@
 <template>
     <Head :title="breadcrumbs.at(-1)?.title" />
     <v-app id="app-layout-wrapper">
+        <AppFlash />
         <AppHeader @toggle-navbar="navbarActive = !navbarActive" />
         <AppSideNav :navbar-active="navbarActive" />
         <v-main class="bg-stone-200">
@@ -9,17 +10,20 @@
                 <slot />
             </div>
             <AppFooter />
+            <AppNotificationToast />
         </v-main>
     </v-app>
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue";
 import AppHeader from "./AppHeader.vue";
 import AppSideNav from "./AppSideNav.vue";
 import AppFooter from "./AppFooter.vue";
 import AppBreadcrumbs from "./AppBreadcrumbs.vue";
+import AppFlash from "./AppFlash.vue";
+import AppNotificationToast from "./AppNotificationToast.vue";
 import { usePage, router } from "@inertiajs/vue3";
+import { computed, ref } from "vue";
 
 /*
 |---------------------------------------------------------------------------

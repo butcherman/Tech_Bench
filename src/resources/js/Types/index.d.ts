@@ -54,12 +54,12 @@ type resourceList = {
     href: string;
 };
 
-// type toastData = {
-//     id: string;
-//     title: string;
-//     message: string;
-//     href?: string;
-// };
+type toastData = {
+    id: string;
+    title: string;
+    message: string;
+    href?: string;
+};
 
 // type basicPermissions = {
 //     create: boolean;

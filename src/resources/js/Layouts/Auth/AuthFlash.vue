@@ -14,14 +14,7 @@
 
 <script setup lang="ts">
 import { useAppStore } from "@/Stores/AppStore";
+import { getFlashColor, getFlashIcon } from "@/Composables/Flash";
 
 const app = useAppStore();
-
-const getFlashColor = (flashType: string): string => {
-    return flashType === "status" ? "info" : flashType;
-};
-
-const getFlashIcon = (flashType: string): string => {
-    return flashType === "status" ? "$info" : "$" + flashType;
-};
 </script>

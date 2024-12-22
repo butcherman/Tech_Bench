@@ -5,6 +5,7 @@
                 v-bind="props"
                 icon="circle-question"
                 class="m-1 text-muted pointer"
+                v-tooltip="'Help'"
             />
         </template>
         <HelpBase />

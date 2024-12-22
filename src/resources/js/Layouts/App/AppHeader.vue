@@ -8,7 +8,11 @@
         </v-app-bar-title>
         <template #append>
             <AppHelp />
-            <Link :href="$route('about')" class="m-1 text-muted">
+            <Link
+                :href="$route('about')"
+                class="m-1 text-muted"
+                v-tooltip="'About'"
+            >
                 <font-awesome-icon icon="circle-info" />
             </Link>
             <UserAvatar />
