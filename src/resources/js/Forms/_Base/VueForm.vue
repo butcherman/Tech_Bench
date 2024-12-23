@@ -1,20 +1,25 @@
 <template>
-    <form class="vld-parent" @submit.prevent="onSubmit" novalidate>
-        <Overlay :loading="isSubmitting && !hideOverlay">
-            <slot />
-            <div class="w-full p-3">
-                <slot name="submit">
-                    <button
-                        type="submit"
-                        class="btn btn-blue w-full"
-                        :disabled="isSubmitting"
-                    >
-                        {{ submitText }}
-                    </button>
-                </slot>
+    <Overlay :loading="isSubmitting">
+        <form
+            class="vld-parent h-full flex flex-col"
+            @submit.prevent="onSubmit"
+            novalidate
+        >
+            <!-- <div class="flex-none">errors</div> -->
+            <div class="grow">
+                <slot />
             </div>
-        </Overlay>
-    </form>
+            <div class="flex-none">
+                <button
+                    type="submit"
+                    class="btn btn-blue w-full"
+                    :disabled="isSubmitting"
+                >
+                    {{ submitText }}
+                </button>
+            </div>
+        </form>
+    </Overlay>
 </template>
 
 <script setup lang="ts">

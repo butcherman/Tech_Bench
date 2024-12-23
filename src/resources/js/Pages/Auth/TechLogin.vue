@@ -41,9 +41,11 @@
                 id="login-form-wrapper"
                 class="align-content-center bg-white md:h-full m-4 md:m-0 p-3"
             >
-                <AuthFlash />
-                <h1 class="text-center font-bold">Tech Login:</h1>
-                <TechLoginForm />
+                <div>
+                    <AuthFlash />
+                    <h1 class="text-center font-bold">Tech Login:</h1>
+                    <TechLoginForm />
+                </div>
             </div>
         </div>
     </div>

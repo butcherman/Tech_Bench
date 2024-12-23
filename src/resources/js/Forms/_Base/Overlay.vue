@@ -1,5 +1,5 @@
 <template>
-    <div class="vld-parent">
+    <div class="vld-parent h-full">
         <LoadingVue :active="loading" :is-full-page="false">
             <slot name="loader">
                 <TrinityRingsLoader />

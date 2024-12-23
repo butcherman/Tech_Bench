@@ -4,7 +4,7 @@
             {{ emptyText ?? "Nothing to See Here..." }}
         </h5>
         <template v-for="(item, index) in list" :key="index">
-            <Link :href="item.href" class="w-full h-full">
+            <Link :href="item.href" class="w-full h-full hover:font-bold">
                 <v-list-item class="text-center border">
                     {{ item.name }}
                 </v-list-item>
