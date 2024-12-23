@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import Card from "@/Components/Main/Card.vue";
+import Card from "@/Components/_Base/Card.vue";
 import HelpError from "@/Help/HelpError.vue";
 import HelpLoader from "@/Help/HelpLoader.vue";
 import { computed, defineAsyncComponent, onMounted, ref } from "vue";

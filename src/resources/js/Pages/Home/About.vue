@@ -21,7 +21,7 @@
 <script setup lang="ts">
 import AppLayout from "@/Layouts/App/AppLayout.vue";
 import { useAppStore } from "@/Stores/AppStore";
-import Card from "@/Components/Main/Card.vue";
+import Card from "@/Components/_Base/Card.vue";
 
 defineProps<{
     build: string;

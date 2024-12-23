@@ -14,7 +14,7 @@
 
 <script setup lang="ts">
 import AppLayout from "@/Layouts/App/AppLayout.vue";
-import Card from "@/Components/Main/Card.vue";
+import Card from "@/Components/_Base/Card.vue";
 import UserAccountForm from "@/Forms/User/UserAccountForm.vue";
 import UserSettingsForm from "@/Forms/User/UserSettingsForm.vue";
 import { ref, reactive, onMounted } from "vue";

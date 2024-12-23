@@ -30,10 +30,10 @@
 
 <script setup lang="ts">
 import AppLayout from "@/Layouts/App/AppLayout.vue";
-import Card from "@/Components/Main/Card.vue";
+import Card from "@/Components/_Base/Card.vue";
 import { ref, reactive, onMounted } from "vue";
 import { useAppStore } from "@/Stores/AppStore";
-import ResourceList from "@/Components/Main/ResourceList.vue";
+import ResourceList from "@/Components/_Base/ResourceList.vue";
 
 defineProps<{
     bookmarks: {
