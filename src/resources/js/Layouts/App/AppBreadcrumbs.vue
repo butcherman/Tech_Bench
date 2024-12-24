@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-blue-300 rounded m-4 p-0">
+    <div v-if="breadcrumbs.length" class="bg-blue-300 rounded m-4 p-0">
         <v-breadcrumbs>
             <template v-for="(crumb, index) in breadcrumbs">
                 <span

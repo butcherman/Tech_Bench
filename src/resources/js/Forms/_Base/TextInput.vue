@@ -44,8 +44,6 @@ const props = defineProps<{
         | undefined;
 }>();
 
-// TODO - Add Focus Directive
-
 const inputVariant = computed(() => props.variant ?? "outlined");
 
 /*

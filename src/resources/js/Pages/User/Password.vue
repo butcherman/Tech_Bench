@@ -3,7 +3,6 @@
         <Card class="reasonable-width">
             <UserPasswordForm />
         </Card>
-
         <Card class="reasonable-width">
             <h5 class="text-center font-bold">Password Rules</h5>
             <ul class="text-center">

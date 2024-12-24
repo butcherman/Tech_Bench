@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import Overlay from "./Overlay.vue";
+import Overlay from "../../Components/_Base/Loaders/Overlay.vue";
 import { computed, ref } from "vue";
 import { useForm } from "vee-validate";
 import { useForm as useInertiaForm } from "@inertiajs/vue3";
