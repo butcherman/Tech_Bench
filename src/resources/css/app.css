@@ -15,6 +15,10 @@ body,
     cursor: pointer;
 }
 
+.reasonable-width {
+    @apply w-full md:w-1/2 xl:w-1/4;
+}
+
 /*
 |---------------------------------------------------------------------------
 | Overrides of built in styles
