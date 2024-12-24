@@ -1,9 +1,10 @@
 <template>
-    <div>
+    <div class="my-2">
         <v-text-field
             v-model="value"
             :id="id"
             :autocomplete="autocomplete ?? 'off'"
+            :autofocus="focus"
             :disabled="disabled"
             :error-messages="errorMessage"
             :hint="hint"
@@ -36,6 +37,7 @@ const props = defineProps<{
     name: string;
     autocomplete?: string;
     disabled?: boolean;
+    focus?: boolean;
     hint?: string;
     persistentHint?: boolean;
     placeholder?: string;

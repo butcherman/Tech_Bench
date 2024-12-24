@@ -9,13 +9,20 @@
             <div class="grow">
                 <slot />
             </div>
-            <div class="flex-none">
+            <div class="flex-none text-center">
                 <button
                     type="submit"
-                    class="btn btn-blue w-full"
+                    class="btn w-3/4 bg-blue-400 text-white"
                     :disabled="isSubmitting"
                 >
-                    {{ submitText }}
+                    <font-awesome-icon
+                        v-if="isSubmitting"
+                        icon="spinner"
+                        class="fa-spin-pulse"
+                    />
+                    <span v-else>
+                        {{ submitText }}
+                    </span>
                 </button>
             </div>
         </form>

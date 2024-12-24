@@ -12,7 +12,7 @@
             id="current-password"
             name="current_password"
             label="Current Password"
-            v-focus
+            focus
         />
         <PasswordInput id="password" name="password" label="New Password" />
         <PasswordInput
@@ -35,7 +35,6 @@ const props = defineProps<{
 }>();
 
 const userPasswordForm = ref<InstanceType<typeof VueForm> | null>(null);
-
 const submitRoute = computed<string>(() =>
     props.init ? route("init.step-4b.submit") : route("user-password.update")
 );

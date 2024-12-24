@@ -6,6 +6,7 @@
         <AppSideNav :navbar-active="navbarActive" />
         <v-main class="bg-stone-200">
             <AppBreadcrumbs />
+            <AppAlerts />
             <div class="p-4 mb-auto">
                 <slot />
             </div>
@@ -22,6 +23,7 @@ import AppFooter from "./AppFooter.vue";
 import AppBreadcrumbs from "./AppBreadcrumbs.vue";
 import AppFlash from "./AppFlash.vue";
 import AppNotificationToast from "./AppNotificationToast.vue";
+import AppAlerts from "./AppAlerts.vue";
 import { usePage, router } from "@inertiajs/vue3";
 import { computed, ref } from "vue";
 

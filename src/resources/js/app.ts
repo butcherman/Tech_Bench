@@ -18,13 +18,6 @@ import { createPinia } from "pinia";
 import "./echo";
 
 /*
-|---------------------------------------------------------------------------
-| Custom Directives
-|---------------------------------------------------------------------------
-*/
-import { vFocusDirective } from "./Directives/FocusDirective";
-
-/*
 |-------------------------------------------------------------------------------
 | Font Awesome
 |-------------------------------------------------------------------------------
@@ -70,7 +63,6 @@ createInertiaApp({
             .use(plugin)
             .use(pinia)
             .use(vuetify)
-            .directive("focus", vFocusDirective)
             .component("font-awesome-icon", FontAwesomeIcon)
             .component("Link", Link)
             .component("Head", Head);
