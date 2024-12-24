@@ -9,7 +9,12 @@
             for 180 days from the registration date.
         </p>
         <hr class="mb-2" />
-        <v-data-table :items="devices" :headers="headers" hide-default-footer>
+        <v-data-table
+            :items="devices"
+            :headers="headers"
+            :loading="isLoading"
+            hide-default-footer
+        >
             <template #item.action="{ item }">
                 <span
                     class="text-danger pointer"
@@ -24,16 +29,41 @@
 </template>
 
 <script setup lang="ts">
+import VerifyModal from "@/Modules/VerifyModal";
+import { ref } from "vue";
+import { router } from "@inertiajs/vue3";
+
 const props = defineProps<{
     user: user;
     devices: userDevice[];
 }>();
 
-const removeDevice = (device: userDevice) => {
-    console.log("remove device");
-    console.log(device);
+const isLoading = ref(false);
+
+/**
+ * Remove a saved device.
+ */
+const removeDevice = (device: userDevice): void => {
+    VerifyModal().then((res) => {
+        if (res) {
+            isLoading.value = true;
+            router.delete(
+                route("user.remove-device", [
+                    props.user.username,
+                    device.device_id,
+                ]),
+                {
+                    preserveScroll: true,
+                    onFinish: () => (isLoading.value = false),
+                }
+            );
+        }
+    });
 };
 
+/**
+ * Headers for Data Table
+ */
 const headers = [
     {
         title: "Device Type",
