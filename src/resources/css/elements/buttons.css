@@ -12,10 +12,12 @@
 | Blue Buttons with White Text
 |---------------------------------------------------------------------------
 */
-.btn-blue {
+.btn-blue,
+.btn-primary {
     @apply bg-blue-500;
     @apply text-white !important;
 }
-.btn-blue:hover {
+.btn-blue:hover,
+.btn-primary:hover {
     @apply bg-blue-700;
 }

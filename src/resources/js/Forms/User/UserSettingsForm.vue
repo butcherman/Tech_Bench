@@ -1,7 +1,7 @@
 <template>
     <VueForm
-        :initial-values="initValues"
-        :validation-schema="schema"
+        :initial-values="initValues()"
+        :validation-schema="schema()"
         :submit-route="$route('user.user-settings.update', user.username)"
         submit-method="put"
         submit-text="Update Settings"

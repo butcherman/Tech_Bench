@@ -1,4 +1,5 @@
 @import url("elements/buttons.css");
+@import url("elements/text.css");
 
 @tailwind base;
 @tailwind components;
@@ -10,14 +11,15 @@ body,
     min-height: 100vh;
 }
 
-.text-muted {
-    @apply text-slate-500;
-}
-
-.text-error {
-    @apply text-red-900;
-}
-
 .pointer {
     cursor: pointer;
+}
+
+/*
+|---------------------------------------------------------------------------
+| Overrides of built in styles
+|---------------------------------------------------------------------------
+*/
+.v-data-table__th {
+    font-weight: bold !important;
 }
