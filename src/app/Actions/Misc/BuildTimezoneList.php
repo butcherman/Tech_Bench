@@ -14,7 +14,7 @@ class BuildTimezoneList
 
         foreach ($tzBase as $key => $value) {
             foreach ($value as $zone => $offset) {
-                $tzList[$key][] = [
+                $tzList[] = [
                     'text' => $offset,
                     'value' => $zone,
                 ];

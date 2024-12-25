@@ -25,6 +25,7 @@
         "gsap": "^3.12.5",
         "lodash": "^4.17.21",
         "pinia": "^2.3.0",
+        "pretty-bytes": "^6.1.1",
         "typescript": "^5.7.2",
         "uuid": "^11.0.3",
         "vee-validate": "^4.14.7",

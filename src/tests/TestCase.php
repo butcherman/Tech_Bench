@@ -2,6 +2,7 @@
 
 namespace Tests;
 
+use App\Http\Middleware\CheckForInit;
 use App\Models\UserRolePermission;
 use App\Models\UserRolePermissionType;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -16,6 +17,7 @@ abstract class TestCase extends BaseTestCase
         parent::setUp();
 
         $this->withoutVite();
+        $this->withoutMiddleware(CheckForInit::class);
     }
 
     /**

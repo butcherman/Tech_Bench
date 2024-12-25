@@ -1,5 +1,5 @@
 <template>
-    <div :class="{ 'justify-items-center': center }">
+    <div class="my-2" :class="{ 'justify-items-center': center }">
         <v-switch
             v-model="value"
             color="primary"

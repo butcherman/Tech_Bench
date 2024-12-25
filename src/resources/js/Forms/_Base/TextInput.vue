@@ -7,13 +7,20 @@
             :autofocus="focus"
             :disabled="disabled"
             :error-messages="errorMessage"
-            :hint="hint"
+            :hint="hint ?? help"
             :label="label"
             :persistent-hint="persistentHint"
             :placeholder="placeholder"
             :type="type ?? 'text'"
             :variant="inputVariant"
-        />
+        >
+            <template #prepend-inner>
+                <slot name="prepend">{{ prepend }}</slot>
+            </template>
+            <template #append-inner>
+                <slot name="append">{{ append }}</slot>
+            </template>
+        </v-text-field>
     </div>
 </template>
 
@@ -26,12 +33,15 @@ const props = defineProps<{
     id: string;
     label: string;
     name: string;
+    append?: string;
     autocomplete?: string;
     disabled?: boolean;
     focus?: boolean;
     hint?: string;
+    help?: string;
     persistentHint?: boolean;
     placeholder?: string;
+    prepend?: string;
     type?: string;
     variant?:
         | "filled"
