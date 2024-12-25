@@ -15,7 +15,7 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        // Nerf the password policy for testing
+        // Nerf the password policy for testing and remove 2FA
         AppSettings::upsert([
             [
                 'key' => 'auth.passwords.settings.min_length',
@@ -35,6 +35,10 @@ class UserSeeder extends Seeder
             ],
             [
                 'key' => 'auth.passwords.settings.contains_special',
+                'value' => json_encode(false),
+            ],
+            [
+                'key' => 'auth.twoFa.required',
                 'value' => json_encode(false),
             ],
         ], 'id');
