@@ -13,6 +13,10 @@ COPY ./setup.dev.sh /scripts/
 RUN chmod 775 /scripts/startup.dev.sh
 RUN chmod 775 /scripts/setup.dev.sh
 
+# Copy Docker CLI
+COPY ./docker /usr/local/bin/docker
+RUN chmod 775 /usr/local/bin/docker
+
 #  Make sure image is up to date
 RUN apt update && apt upgrade -y --no-install-recommends
 

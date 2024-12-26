@@ -34,6 +34,7 @@ services:
             - ../src:/app
             - ./.env:/app/.env
             - backupData:/app/storage/backups/tech-bench
+            - /var/run/docker.sock:/var/run/docker.sock
         environment:
             - SERVICE=app
             - TB_URL=${BASE_URL}
