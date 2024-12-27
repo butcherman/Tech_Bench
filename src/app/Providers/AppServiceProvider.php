@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Actions\Misc\BuildTimezoneList;
 use App\Actions\Misc\CheckDatabaseError;
+use App\Models\User;
 use App\Policies\GatePolicy;
 use App\Services\Misc\CacheHelper;
 use App\Services\User\GetMailableUsers;
@@ -48,6 +49,11 @@ class AppServiceProvider extends ServiceProvider
 
         //  Gate to determine if the Reports link should show up on the navigation menu
         Gate::define('reports-link', [GatePolicy::class, 'reportsLink']);
+
+        // Gate to determine who can access the Pulse page
+        Gate::define('viewPulse', function (User $user) {
+            return $user->role_id === 1;
+        });
 
         // Listen to Socialite Events
         Event::listen(function (\SocialiteProviders\Manager\SocialiteWasCalled $event) {
