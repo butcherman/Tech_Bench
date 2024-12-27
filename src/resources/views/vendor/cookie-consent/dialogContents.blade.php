@@ -1,4 +1,7 @@
-<div class="js-cookie-consent absolute inset-x-0 bottom-0 bg-orange-100 border-l-4 text-orange-700 p-4">
+<div
+    class="js-cookie-consent absolute inset-x-0 bottom-0 bg-orange-100 border-l-4 text-orange-700 p-4"
+    style="z-index: 10000"
+>
     <div class="text-center">
         {!! __('cookie-consent::texts.message') !!}
         <button
