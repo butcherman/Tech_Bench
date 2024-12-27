@@ -1,17 +1,27 @@
 <template>
-    <div>
-        <h4 class="text-center font-bold">Admin-Index</h4>
-        <v-card elevation="2" subtitle="This is a Title">
-            <p class="text-center">This is a new page</p>
-        </v-card>
+    <div class="grid md:grid-cols-3 gap-3">
+        <div v-for="(items, group) in menu" :key="group">
+            <Card v-if="items.length" :title="group.toString()" class="h-full">
+                <ResourceList :list="items" link-name="route" no-border />
+            </Card>
+        </div>
     </div>
 </template>
 
 <script setup lang="ts">
+import Card from "@/Components/_Base/Card.vue";
+import ResourceList from "@/Components/_Base/ResourceList.vue";
 import AppLayout from "@/Layouts/App/AppLayout.vue";
-import { ref, reactive, onMounted } from "vue";
 
-const props = defineProps<{}>();
+defineProps<{
+    menu: {
+        [key: string]: {
+            icon: string;
+            route: string;
+            name: string;
+        }[];
+    };
+}>();
 </script>
 
 <script lang="ts">

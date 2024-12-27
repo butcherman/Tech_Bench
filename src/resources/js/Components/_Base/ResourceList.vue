@@ -4,8 +4,11 @@
             {{ emptyText ?? "Nothing to See Here..." }}
         </h5>
         <template v-for="(item, index) in list" :key="index">
-            <Link :href="item.href" class="w-full h-full hover:font-bold">
-                <v-list-item class="text-center border">
+            <Link :href="item[linkTag]" class="w-full h-full hover:font-bold">
+                <v-list-item
+                    :class="{ border: !noBorder, 'text-center': center }"
+                >
+                    <font-awesome-icon v-if="item.icon" :icon="item.icon" />
                     {{ item.name }}
                 </v-list-item>
             </Link>
@@ -14,11 +17,15 @@
 </template>
 
 <script setup lang="ts">
-defineProps<{
-    list: {
-        name: string;
-        href: string;
-    }[];
+import { computed } from "vue";
+
+const props = defineProps<{
+    list: any[];
     emptyText?: string;
+    linkName?: string;
+    noBorder?: boolean;
+    center?: boolean;
 }>();
+
+const linkTag = computed(() => props.linkName ?? "href");
 </script>

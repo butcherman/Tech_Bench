@@ -5,11 +5,11 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
                 <div>
                     <h5 class="text-center font-bold">Customer Bookmarks</h5>
-                    <ResourceList :list="bookmarks.customers" />
+                    <ResourceList :list="bookmarks.customers" center />
                 </div>
                 <div>
                     <h5 class="text-center font-bold">Tech Tip Bookmarks</h5>
-                    <ResourceList :list="bookmarks.techTips" />
+                    <ResourceList :list="bookmarks.techTips" center />
                 </div>
             </div>
         </Card>
@@ -17,11 +17,11 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
                 <div>
                     <h5 class="text-center font-bold">Customers</h5>
-                    <ResourceList :list="recent.customers" />
+                    <ResourceList :list="recent.customers" center />
                 </div>
                 <div>
                     <h5 class="text-center font-bold">Tech Tips</h5>
-                    <ResourceList :list="recent.techTips" />
+                    <ResourceList :list="recent.techTips" center />
                 </div>
             </div>
         </Card>
