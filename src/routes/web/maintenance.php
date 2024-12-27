@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\Maintenance\Backup\UploadBackupController;
 use App\Http\Controllers\Maintenance\Backup\BackupController;
 use App\Http\Controllers\Maintenance\Backup\BackupSettingsController;
+use App\Http\Controllers\Maintenance\Backup\UploadBackupController;
 use App\Http\Controllers\Maintenance\DownloadLogController;
 use App\Http\Controllers\Maintenance\LogSettingsController;
 use App\Http\Controllers\Maintenance\LogsIndexController;
@@ -42,7 +42,7 @@ Route::middleware('auth.secure')->prefix('maintenance')->name('maint.')->group(f
             Route::get('settings', 'show')
                 ->name('show')
                 ->breadcrumb('Backup Settings', 'maint.backup.index');
-            Route::put('settings',  'update')
+            Route::put('settings', 'update')
                 ->name('update');
         });
         Route::post('upload-backup', UploadBackupController::class)

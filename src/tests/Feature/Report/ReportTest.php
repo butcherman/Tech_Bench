@@ -3,8 +3,6 @@
 namespace Tests\Feature\Report;
 
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
@@ -43,7 +41,7 @@ class ReportTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('Report/Index')
                     ->has('menu')
             );

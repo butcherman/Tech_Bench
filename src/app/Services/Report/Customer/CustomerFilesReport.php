@@ -22,7 +22,7 @@ class CustomerFilesReport extends CustomerReportBase
     {
         $this->reportParamPage = 'Report/Customer/Files/Index';
         $this->reportDataPage = 'Report/Customer/Files/Show';
-        $this->reportParamProps = ['file-types' => CacheFacade::fileTypes(),];
+        $this->reportParamProps = ['file-types' => CacheFacade::fileTypes()];
     }
 
     /**
@@ -55,7 +55,7 @@ class CustomerFilesReport extends CustomerReportBase
 
         return [
             'data' => $reportData,
-            'hasTag' => $reportParams->get('hasInput')
+            'hasTag' => $reportParams->get('hasInput'),
         ];
     }
 

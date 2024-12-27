@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\AppSettings;
-use App\Models\Customer;
 use App\Models\EquipmentType;
 use App\Models\FileUpload;
 use App\Models\TechTip;

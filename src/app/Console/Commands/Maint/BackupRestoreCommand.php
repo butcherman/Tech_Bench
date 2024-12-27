@@ -58,7 +58,7 @@ class BackupRestoreCommand extends Command
         );
 
         // Confirm that this is the correct file
-        warning('You have selected ' . $backupChoice);
+        warning('You have selected '.$backupChoice);
         $confirm = confirm(
             label: 'Are you sure you want to restore this backup?',
             default: false,
@@ -76,7 +76,7 @@ class BackupRestoreCommand extends Command
          ***********************************************************************/
         if (! spin(
             message: 'Verifying File is Valid Tech Bench Backup',
-            callback: fn() => $this->backupObj->validateBackupFile($backupChoice)
+            callback: fn () => $this->backupObj->validateBackupFile($backupChoice)
         )) {
             $this->components->error('Invalid Backup File');
             $this->components->error('Exiting');
@@ -104,7 +104,7 @@ class BackupRestoreCommand extends Command
          */
         if (! spin(
             message: 'Extracting Backup Files',
-            callback: fn() => $this->backupObj->extractBackup()
+            callback: fn () => $this->backupObj->extractBackup()
         )) {
             $this->components->error('Unable to extract Backup File');
             $this->cleanup();
@@ -118,8 +118,8 @@ class BackupRestoreCommand extends Command
          * Backup the .env file just in case
          */
         File::copy(
-            base_path() . DIRECTORY_SEPARATOR . '.env',
-            base_path() . DIRECTORY_SEPARATOR . '.env.old',
+            base_path().DIRECTORY_SEPARATOR.'.env',
+            base_path().DIRECTORY_SEPARATOR.'.env.old',
         );
 
         /***********************************************************************
@@ -127,7 +127,7 @@ class BackupRestoreCommand extends Command
          ***********************************************************************/
         if (! spin(
             message: 'Restoring Database',
-            callback: fn() => $this->backupObj->restoreDatabase()
+            callback: fn () => $this->backupObj->restoreDatabase()
         )) {
             $this->components->error('Restore Failed');
             $this->components->error('Unable to Restore Database');
@@ -144,7 +144,7 @@ class BackupRestoreCommand extends Command
         $restorePaths = config('backup.backup.source.files.include');
         if (! spin(
             message: 'Restoring Files',
-            callback: fn() => $this->backupObj->restoreFiles($restorePaths)
+            callback: fn () => $this->backupObj->restoreFiles($restorePaths)
         )) {
             $this->components->error('Unable to restore files');
             $this->hasErrors = true;
@@ -157,7 +157,7 @@ class BackupRestoreCommand extends Command
          */
         if (! spin(
             message: 'Building Application Environment',
-            callback: fn() => $this->backupObj->restoreEnv()
+            callback: fn () => $this->backupObj->restoreEnv()
         )) {
             $this->components->error('Unable to restore Environment File');
             $this->hasErrors = true;
@@ -206,7 +206,7 @@ class BackupRestoreCommand extends Command
         if ($valid == -1) {
             $this->components->error('Invalid Backup Version');
             $this->line('The Backup File is newer than the current Tech Bench Version');
-            $this->line('Please update Tech Bench to ' . $backupVersion . ' or higher');
+            $this->line('Please update Tech Bench to '.$backupVersion.' or higher');
 
             return false;
         }

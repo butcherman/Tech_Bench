@@ -3,9 +3,7 @@
 namespace App\Http\Controllers\Init;
 
 use App\Http\Controllers\Controller;
-use App\Services\Admin\ApplicationSettingsService;
 use App\Services\Admin\UserGlobalSettingsService;
-use App\Services\User\UserAdministrationService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 

@@ -12,7 +12,6 @@ use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Inertia\Inertia;
 
 class SaveStepController extends Controller
 {
@@ -30,7 +29,7 @@ class SaveStepController extends Controller
             'basic-settings' => new BasicSettingsRequest($saveData),
             'email-settings' => new EmailSettingsRequest($saveData),
             'user-settings' => new PasswordPolicyRequest($saveData),
-                // 'admin' => new UserAdministrationRequest($saveData),
+            // 'admin' => new UserAdministrationRequest($saveData),
 
             default => null,
         };
@@ -70,7 +69,7 @@ class SaveStepController extends Controller
             }
         }
 
-        $request->session()->put('setup.' . end($path), $saveData);
+        $request->session()->put('setup.'.end($path), $saveData);
 
         return back();
     }

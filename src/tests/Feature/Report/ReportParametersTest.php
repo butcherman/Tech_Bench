@@ -3,9 +3,6 @@
 namespace Tests\Feature\Report;
 
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class ReportParametersTest extends TestCase
@@ -56,7 +53,7 @@ class ReportParametersTest extends TestCase
         $response = $this->actingAs($user)
             ->get(route('reports.params', [
                 'customers',
-                'customer-summary-report'
+                'customer-summary-report',
             ]));
 
         $response->assertSuccessful();

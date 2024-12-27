@@ -3,7 +3,6 @@
 namespace App\Providers;
 
 use App\Contracts\ReportingContract;
-use App\Services\Report\UserReports;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 
@@ -18,7 +17,7 @@ class ReportsServiceProvider extends ServiceProvider
 
             $className = Str::studly($app->request->route('report'));
             $namespace = match ($app->request->route('group')) {
-                'users' =>  "App\Services\Report\User\\$className",
+                'users' => "App\Services\Report\User\\$className",
                 'customers' => "App\Services\Report\Customer\\$className",
                 default => abort(404),
             };

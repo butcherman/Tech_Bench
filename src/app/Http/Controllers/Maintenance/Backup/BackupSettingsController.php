@@ -6,14 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Maintenance\BackupSettingsRequest;
 use App\Models\AppSettings;
 use App\Services\Admin\ApplicationSettingsService;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
-
 
 class BackupSettingsController extends Controller
 {
     public function __construct(protected ApplicationSettingsService $svc) {}
+
     /**
      * Display the resource.
      */
@@ -37,7 +36,7 @@ class BackupSettingsController extends Controller
     {
         $this->svc->processBackupSettings($request->safe()->collect());
 
-        Log::info('Backup Settings updated by ' . $request->user()->username);
+        Log::info('Backup Settings updated by '.$request->user()->username);
 
         return back()->with('success', __('admin.backups.settings-successful'));
     }

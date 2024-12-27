@@ -8,7 +8,6 @@ use App\Models\DeviceToken;
 use App\Models\FileLink;
 use App\Models\TechTip;
 use App\Models\User;
-use App\Models\UserCustomerRecent;
 use App\Models\UserLogin;
 use App\Models\UserRole;
 use App\Models\UserSetting;

@@ -47,7 +47,7 @@ class FortifyServiceProvider extends ServiceProvider
 
         RateLimiter::for('login', function (Request $request) {
             $throttleKey = Str::transliterate(
-                Str::lower($request->input(Fortify::username())) . '|' . $request->ip()
+                Str::lower($request->input(Fortify::username())).'|'.$request->ip()
             );
 
             // return Limit::perMinute(5)->by($throttleKey);
@@ -58,8 +58,8 @@ class FortifyServiceProvider extends ServiceProvider
 
                 return back()
                     ->withErrors([
-                        'throttle' => 'Too many failed login attempts, try again in ' .
-                            $availableIn . ' minutes',
+                        'throttle' => 'Too many failed login attempts, try again in '.
+                            $availableIn.' minutes',
                     ]);
             }
 

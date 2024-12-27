@@ -17,7 +17,7 @@ class DockerControlService
         $res = Process::run('docker ps');
 
         if ($res->failed()) {
-            throw new DockerNotAllowedException();
+            throw new DockerNotAllowedException;
         }
     }
 
@@ -26,7 +26,7 @@ class DockerControlService
      */
     public function rebootContainer(ContainerList $container): bool
     {
-        $status = Process::run('docker restart ' . $container->value);
+        $status = Process::run('docker restart '.$container->value);
 
         return $status->successful();
     }

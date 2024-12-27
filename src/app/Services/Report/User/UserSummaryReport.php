@@ -4,7 +4,6 @@ namespace App\Services\Report\User;
 
 use App\Http\Resources\Reports\Users\UserSummaryResource;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Collection;

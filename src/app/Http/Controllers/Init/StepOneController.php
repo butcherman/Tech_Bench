@@ -25,8 +25,8 @@ class StepOneController extends Controller
 
         return Inertia::render('Init/StepOne', [
             'step' => 1,
-            'settings' => fn() => $settingsData,
-            'timezone-list' => fn() => TimezoneList::build(),
+            'settings' => fn () => $settingsData,
+            'timezone-list' => fn () => TimezoneList::build(),
         ]);
     }
 }

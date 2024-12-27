@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Init;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class FinishController extends Controller

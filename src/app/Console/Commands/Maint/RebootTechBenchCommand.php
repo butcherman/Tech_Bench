@@ -6,8 +6,6 @@ use App\Enums\ContainerList;
 use App\Services\Maintenance\DockerControlService;
 use Illuminate\Console\Command;
 use Illuminate\Console\ConfirmableTrait;
-use Illuminate\Support\Facades\Process;
-use Illuminate\Support\Str;
 
 use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\select;
@@ -44,10 +42,10 @@ class RebootTechBenchCommand extends Command
          * Reboot all Containers
          */
         if ($this->option('all')) {
-            if (!$this->option('force')) {
-                if (!confirm(label: 'Are you sure you want to reboot?',)) {
+            if (! $this->option('force')) {
+                if (! confirm(label: 'Are you sure you want to reboot?')) {
                     return;
-                };
+                }
             }
 
             $this->info('Logging you out and Rebooting Tech Bench');
@@ -72,13 +70,13 @@ class RebootTechBenchCommand extends Command
 
             $container = ContainerList::from($selection);
 
-            if (!$this->option('force')) {
-                if (!confirm(label: 'Are you sure you want to reboot?',)) {
+            if (! $this->option('force')) {
+                if (! confirm(label: 'Are you sure you want to reboot?')) {
                     return;
-                };
+                }
             }
 
-            $this->info('Rebooting ' . $container->value);
+            $this->info('Rebooting '.$container->value);
             $svc->rebootContainer($container);
         }
 

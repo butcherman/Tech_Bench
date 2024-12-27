@@ -41,7 +41,7 @@ class CustomerSummaryReport extends CustomerReportBase
 
         return [
             'total_customers' => $customerList->count(),
-            'data' => CustomerSummaryResource::collection($customerList)
+            'data' => CustomerSummaryResource::collection($customerList),
         ];
     }
 }

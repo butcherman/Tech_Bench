@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
-
 class BackupController extends Controller
 {
     /**
@@ -25,8 +24,8 @@ class BackupController extends Controller
         $obj = new BackupService;
 
         return Inertia::render('Maint/Backup', [
-            'backup-running' => fn() => $obj->isBackupRunning(),
-            'backup-list' => fn() => $obj->getBackupFiles(),
+            'backup-running' => fn () => $obj->isBackupRunning(),
+            'backup-list' => fn () => $obj->getBackupFiles(),
         ]);
     }
 
@@ -39,7 +38,7 @@ class BackupController extends Controller
 
         dispatch(new RunBackupJob);
 
-        Log::info('Backup Operation called by ' . $request->user()->username);
+        Log::info('Backup Operation called by '.$request->user()->username);
 
         return back();
     }
@@ -57,10 +56,10 @@ class BackupController extends Controller
             throw new BackupFileMissingException($backupName);
         }
 
-        Log::info('Download file - ' . $backupName . ' downloaded by ' . $request->user()->username);
+        Log::info('Download file - '.$backupName.' downloaded by '.$request->user()->username);
 
-        return Storage::disk('backups')->download(config('backup.backup.name') .
-            DIRECTORY_SEPARATOR . $backupName);
+        return Storage::disk('backups')->download(config('backup.backup.name').
+            DIRECTORY_SEPARATOR.$backupName);
     }
 
     /**
@@ -78,7 +77,7 @@ class BackupController extends Controller
 
         $bakObj->deleteBackupFile($backupName);
 
-        Log::notice('Backup File ' . $backupName . ' deleted by ' . $request->user()->username);
+        Log::notice('Backup File '.$backupName.' deleted by '.$request->user()->username);
 
         return back()->with('success', __('admin.backups.deleted'));
     }

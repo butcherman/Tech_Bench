@@ -14,8 +14,8 @@ use Illuminate\Support\Facades\Route;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
-        commands: __DIR__ . '/../routes/console.php',
-        channels: __DIR__ . '/../routes/channels.php',
+        commands: __DIR__.'/../routes/console.php',
+        channels: __DIR__.'/../routes/channels.php',
         health: '/administration/up',   // TODO - make this work
         using: function () {
             Route::middleware('web')

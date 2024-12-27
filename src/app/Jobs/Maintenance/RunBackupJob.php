@@ -2,9 +2,7 @@
 
 namespace App\Jobs\Maintenance;
 
-use App\Events\Admin\AdministrationEvent;
 use App\Exceptions\Maintenance\BackupFailedException;
-use App\Service\Misc\ConsoleOutputService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Broadcasting\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -19,7 +17,7 @@ use Illuminate\Support\Facades\Process;
 /**
  * @codeCoverageIgnore
  */
-class RunBackupJob implements ShouldQueue, ShouldBeUnique
+class RunBackupJob implements ShouldBeUnique, ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -52,7 +50,7 @@ class RunBackupJob implements ShouldQueue, ShouldBeUnique
     protected function checkDiskSpace()
     {
         $backupFreeSpace = disk_free_space(storage_path('/backups'));
-        $storageProcess = Process::run('du -s ' . storage_path());
+        $storageProcess = Process::run('du -s '.storage_path());
         preg_match('/\d*/', $storageProcess->output(), $storageSize);
 
         Log::debug('Checking Disk Space before running backup', [

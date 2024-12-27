@@ -17,7 +17,7 @@ class DashboardController extends Controller
     public function __invoke(Request $request): Response
     {
         return Inertia::render('Home/Dashboard', [
-            'bookmarks' => fn() => [
+            'bookmarks' => fn () => [
                 'techTips' => TechTipListResource::collection(
                     $request->user()->TechTipBookmarks
                 ),
@@ -25,7 +25,7 @@ class DashboardController extends Controller
                     $request->user()->CustomerBookmarks
                 ),
             ],
-            'recent' => fn() => [
+            'recent' => fn () => [
                 'techTips' => TechTipListResource::collection(
                     $request->user()->RecentTechTips
                 ),

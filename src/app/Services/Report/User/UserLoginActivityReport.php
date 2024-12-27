@@ -3,9 +3,7 @@
 namespace App\Services\Report\User;
 
 use App\Models\User;
-use App\Models\UserLogin;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
 
