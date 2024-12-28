@@ -7,7 +7,7 @@
             >
                 <slot name="title">
                     {{ title }}
-                    <span class="float-end">
+                    <span class="float-end mb-1">
                         <slot name="append-title" />
                     </span>
                 </slot>

@@ -3,7 +3,7 @@
         <h5 v-if="!list.length" class="text-center">
             {{ emptyText ?? "Nothing to See Here..." }}
         </h5>
-        <template v-for="(item, index) in list" :key="index">
+        <template v-for="item in list">
             <Link :href="item[linkTag]" class="w-full h-full hover:font-bold">
                 <v-list-item
                     :class="{ border: !noBorder, 'text-center': center }"

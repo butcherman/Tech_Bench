@@ -1,11 +1,11 @@
 <template>
     <v-chip
         class="pointer"
-        color="orange"
+        color="red"
         size="x-small"
-        v-tooltip="tooltip ?? 'Edit'"
+        v-tooltip="tooltip ?? 'Delete'"
     >
-        <font-awesome-icon icon="pencil" />
+        <font-awesome-icon icon="trash-can" />
     </v-chip>
 </template>
 
