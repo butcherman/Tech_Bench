@@ -1,7 +1,7 @@
 <template>
-    <table class="table-auto border-collapse border">
+    <table class="table-auto border-collapse" :class="{ border: bordered }">
         <tbody>
-            <tr v-for="(value, index) in rows" class="border">
+            <tr v-for="(value, index) in rows" class="border-b">
                 <slot name="row" :row-data="{ value, index }">
                     <th class="text-end p-2">
                         <slot name="index" :row-data="{ value, index }">
@@ -41,6 +41,7 @@
 defineProps<{
     rows: any;
     titleCase?: boolean;
+    bordered?: boolean;
 }>();
 
 const toTitleCase = (str: string): string => {

@@ -16,6 +16,7 @@ type user = {
     updated_at: string;
     deleted_at: string;
     user_role: userRole;
+    role_name: string;
 };
 
 type userRole = {

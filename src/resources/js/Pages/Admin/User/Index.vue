@@ -1,40 +1,43 @@
 <template>
-    <div>
-        <Card title="User Administration">
-            <template #append-title>
-                <AddButton size="small" text="New User" pill />
+    <Card title="User Administration">
+        <template #append-title>
+            <AddButton
+                size="small"
+                text="New User"
+                :href="$route('admin.user.create')"
+                pill
+            />
+        </template>
+        <div class="md:w-1/3 md:float-end">
+            <v-text-field
+                v-model="filterData"
+                density="compact"
+                prepend-inner-icon="magnifying-glass"
+                variant="solo"
+                placeholder="Filter"
+                clearable
+            />
+        </div>
+        <v-data-table
+            :items="userList"
+            :headers="columns"
+            :search="filterData"
+            :loading="userList ? false : true"
+            @click:row="handleRowClick"
+        >
+            <template #item.actions="{ item }">
+                <v-chip
+                    color="red"
+                    size="x-small"
+                    class="pointer"
+                    v-tooltip="'Disable User'"
+                    @click.stop="disableUser(item)"
+                >
+                    <font-awesome-icon icon="user-slash" />
+                </v-chip>
             </template>
-            <div class="w-1/3 float-end">
-                <v-text-field
-                    v-model="filterData"
-                    density="compact"
-                    prepend-inner-icon="magnifying-glass"
-                    variant="solo"
-                    placeholder="Filter"
-                    clearable
-                />
-            </div>
-            <v-data-table
-                :items="userList"
-                :headers="columns"
-                :search="filterData"
-                :loading="userList ? false : true"
-                @click:row="handleRowClick"
-            >
-                <template #item.actions="{ item }">
-                    <v-chip
-                        color="red"
-                        size="x-small"
-                        class="pointer"
-                        v-tooltip="'Disable User'"
-                        @click.stop="disableUser(item)"
-                    >
-                        <font-awesome-icon icon="user-slash" />
-                    </v-chip>
-                </template>
-            </v-data-table>
-        </Card>
-    </div>
+        </v-data-table>
+    </Card>
 </template>
 
 <script setup lang="ts">

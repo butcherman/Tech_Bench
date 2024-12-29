@@ -1,12 +1,14 @@
 <template>
     <v-btn
-        prepend-icon="plus"
-        base-color="blue"
+        :prepend-icon="icon"
+        :base-color="color ?? 'blue'"
         :size="size ?? 'default'"
         :rounded="pill"
         @click="handleClick"
     >
-        {{ text ?? "Add" }}
+        <slot>
+            {{ text }}
+        </slot>
     </v-btn>
 </template>
 
@@ -19,6 +21,8 @@ const props = defineProps<{
     size?: "x-small" | "small" | "default" | "large" | "x-large";
     text?: string;
     href?: string;
+    icon?: string;
+    color?: string;
 }>();
 
 const handleClick = (event: MouseEvent) => {

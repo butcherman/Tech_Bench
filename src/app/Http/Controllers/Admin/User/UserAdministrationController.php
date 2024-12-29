@@ -26,7 +26,6 @@ class UserAdministrationController extends Controller
         $this->authorize('manage', User::class);
 
         return Inertia::render('Admin/User/Index', [
-            // 'user-list' => fn () => $this->svc->getAllUsers(),
             'user-list' => Inertia::defer(fn() => $this->svc->getAllUsers()),
         ]);
     }
