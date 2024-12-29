@@ -4,13 +4,30 @@
             <template #append-title>
                 <AddButton size="small" text="New User" pill />
             </template>
-            <v-data-table :items="userList" :headers="columns">
-                <template #item.actions>
+            <div class="w-1/3 float-end">
+                <v-text-field
+                    v-model="filterData"
+                    density="compact"
+                    prepend-inner-icon="magnifying-glass"
+                    variant="solo"
+                    placeholder="Filter"
+                    clearable
+                />
+            </div>
+            <v-data-table
+                :items="userList"
+                :headers="columns"
+                :search="filterData"
+                :loading="userList ? false : true"
+                @click:row="handleRowClick"
+            >
+                <template #item.actions="{ item }">
                     <v-chip
                         color="red"
                         size="x-small"
                         class="pointer"
                         v-tooltip="'Disable User'"
+                        @click.stop="disableUser(item)"
                     >
                         <font-awesome-icon icon="user-slash" />
                     </v-chip>
@@ -24,46 +41,60 @@
 import Card from "@/Components/_Base/Card.vue";
 import AppLayout from "@/Layouts/App/AppLayout.vue";
 import AddButton from "@/Components/_Base/Buttons/AddButton.vue";
-import { ref, reactive, onMounted } from "vue";
-import EditBadge from "@/Components/_Base/Badges/EditBadge.vue";
-import DeleteBadge from "@/Components/_Base/Badges/DeleteBadge.vue";
+import { ref } from "vue";
+import { router } from "@inertiajs/vue3";
+import VerifyModal from "@/Modules/VerifyModal";
 
-const props = defineProps<{
-    userList: user[];
+defineProps<{
+    userList?: user[];
 }>();
+
+const filterData = ref<string>("");
+
+/**
+ * Navigate to the Show User Details page
+ */
+const handleRowClick = (event: MouseEvent, row: { item: user }): void => {
+    let location = route("admin.user.show", row.item.username);
+
+    if (event.ctrlKey) {
+        window.open(location);
+    } else {
+        router.get(location);
+    }
+};
+
+/**
+ * Soft Delete/Disable User
+ */
+const disableUser = (user: user): void => {
+    VerifyModal("This users access will immediately be revoked").then((res) => {
+        if (res) {
+            router.delete(route("admin.user.destroy", user.username));
+        }
+    });
+};
 
 const columns = [
     {
         title: "Name",
         value: "full_name",
-        // sort: true,
-        // filterOptions: {
-        //     enabled: true,
-        //     placeholder: "Filter Name",
-        // },
+        sortable: true,
     },
     {
         title: "Username",
         value: "username",
-        // sort: true,
-        // filterOptions: {
-        //     enabled: true,
-        //     placeholder: "Filter Username",
-        // },
+        sortable: true,
     },
     {
         title: "Email",
         value: "email",
-        // sort: true,
-        // filterOptions: {
-        //     enabled: true,
-        //     placeholder: "Filter Email",
-        // },
+        sortable: true,
     },
     {
         title: "Role",
         value: "role_name",
-        // sort: true,
+        sortable: true,
     },
     {
         value: "actions",
