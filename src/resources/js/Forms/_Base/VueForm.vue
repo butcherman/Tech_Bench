@@ -10,9 +10,10 @@
                 <slot />
             </div>
             <div class="flex-none text-center">
-                <button
+                <v-btn
                     type="submit"
-                    class="btn w-3/4 bg-blue-400 text-white"
+                    class="md:w-3/4"
+                    color="blue"
                     :disabled="isSubmitting"
                 >
                     <font-awesome-icon
@@ -23,7 +24,7 @@
                     <span v-else>
                         {{ submitText }}
                     </span>
-                </button>
+                </v-btn>
             </div>
         </form>
     </Overlay>

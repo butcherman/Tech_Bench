@@ -33,8 +33,8 @@
                 />
             </template>
         </Card>
-        <div class="col-span-2 justify-items-center">
-            <Card title="User Activity" class="md:w-3/4">
+        <div class="md:col-span-2 justify-items-center">
+            <Card title="User Activity" class="w-full md:w-3/4">
                 <TableStacked class="w-full" :rows="userActivity" title-case />
             </Card>
         </div>

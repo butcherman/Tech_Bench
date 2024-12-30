@@ -45,6 +45,15 @@
                     <AuthFlash />
                     <h1 class="text-center font-bold">Tech Login:</h1>
                     <TechLoginForm />
+                    <div v-if="allowOath" class="w-full text-center">
+                        <div class="separator">or</div>
+                        <a :href="$route('azure-login')">
+                            <Button
+                                text="Login with Office 365"
+                                class="md:w-3/4"
+                            />
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -56,6 +65,7 @@ import AuthLayout from "@/Layouts/Auth/AuthLayout.vue";
 import LogoImage from "../../Components/Main/LogoImage.vue";
 import TechLoginForm from "@/Forms/Auth/TechLoginForm.vue";
 import AuthFlash from "@/Layouts/Auth/AuthFlash.vue";
+import Button from "@/Components/_Base/Buttons/Button.vue";
 import { computed } from "vue";
 
 interface homeLinks {

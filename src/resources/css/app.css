@@ -19,6 +19,32 @@ body,
     @apply w-full md:w-1/2 xl:w-1/4;
 }
 
+/**
+* Separation line with text in middle
+*/
+div.separator {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin-top: 2em;
+    margin-bottom: 2em;
+
+    &::before,
+    &::after {
+        content: "";
+        flex: 1;
+        border-bottom: 1px solid #7b7a7a;
+    }
+
+    &:not(:empty)::before {
+        margin-right: 0.25em;
+    }
+
+    &:not(:empty)::after {
+        margin-left: 0.25em;
+    }
+}
+
 /*
 |---------------------------------------------------------------------------
 | Overrides of built in styles
