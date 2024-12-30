@@ -19,6 +19,10 @@ body,
     @apply w-full md:w-1/2 xl:w-1/4;
 }
 
+.tb-card {
+    @apply w-full md:w-3/4 xl:w-1/2 justify-self-center;
+}
+
 /**
 * Separation line with text in middle
 */

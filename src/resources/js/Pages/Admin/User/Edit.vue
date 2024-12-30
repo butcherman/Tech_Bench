@@ -1,5 +1,5 @@
 <template>
-    <div class="md:w-3/4 justify-self-center">
+    <div class="tb-card">
         <Card title="Enter New User Information">
             <UserForm :roles="roles" :user="user" />
         </Card>

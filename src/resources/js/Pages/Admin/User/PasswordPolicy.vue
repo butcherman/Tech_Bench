@@ -1,5 +1,5 @@
 <template>
-    <Card class="md:w-3/4 justify-self-center">
+    <Card class="tb-card">
         <PasswordPolicyForm :policy="policy" />
     </Card>
 </template>
