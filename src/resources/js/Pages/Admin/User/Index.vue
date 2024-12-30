@@ -44,9 +44,9 @@
 import Card from "@/Components/_Base/Card.vue";
 import AppLayout from "@/Layouts/App/AppLayout.vue";
 import AddButton from "@/Components/_Base/Buttons/AddButton.vue";
+import VerifyModal from "@/Modules/VerifyModal";
 import { ref } from "vue";
 import { router } from "@inertiajs/vue3";
-import VerifyModal from "@/Modules/VerifyModal";
 
 defineProps<{
     userList?: user[];
