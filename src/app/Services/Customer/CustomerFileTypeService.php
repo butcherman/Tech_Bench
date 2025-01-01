@@ -2,6 +2,7 @@
 
 namespace App\Services\Customer;
 
+use App\Facades\CacheFacade;
 use App\Facades\DbException;
 use App\Models\CustomerFileType;
 use Illuminate\Database\QueryException;
@@ -11,6 +12,8 @@ class CustomerFileTypeService
 {
     public function createFileType(Collection $requestData): CustomerFileType
     {
+        CacheFacade::clearCache('fileTypes');
+
         return CustomerFileType::create($requestData->toArray());
     }
 
@@ -20,6 +23,8 @@ class CustomerFileTypeService
     ): CustomerFileType {
         $file_type->update($requestData->toArray());
 
+        CacheFacade::clearCache('fileTypes');
+
         return $file_type->fresh();
     }
 
@@ -27,6 +32,8 @@ class CustomerFileTypeService
     {
         try {
             $file_type->delete();
+
+            CacheFacade::clearCache('fileTypes');
         } catch (QueryException $e) {
             DbException::check(
                 $e,

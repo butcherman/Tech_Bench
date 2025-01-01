@@ -65,7 +65,7 @@ import AuthLayout from "@/Layouts/Auth/AuthLayout.vue";
 import LogoImage from "../../Components/Main/LogoImage.vue";
 import TechLoginForm from "@/Forms/Auth/TechLoginForm.vue";
 import AuthFlash from "@/Layouts/Auth/AuthFlash.vue";
-import Button from "@/Components/_Base/Buttons/Button.vue";
+import Button from "@/Components/_Base/Buttons/BaseButton.vue";
 import { computed } from "vue";
 
 interface homeLinks {

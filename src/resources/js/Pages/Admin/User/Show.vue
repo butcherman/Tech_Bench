@@ -44,7 +44,7 @@
 <script setup lang="ts">
 import AppLayout from "@/Layouts/App/AppLayout.vue";
 import Card from "@/Components/_Base/Card.vue";
-import Button from "@/Components/_Base/Buttons/Button.vue";
+import Button from "@/Components/_Base/Buttons/BaseButton.vue";
 import TableStacked from "@/Components/_Base/TableStacked.vue";
 import VerifyModal from "@/Modules/VerifyModal";
 import { router } from "@inertiajs/vue3";

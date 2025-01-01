@@ -75,10 +75,11 @@ type customerSite = {
 //     phone_number_type: phoneType;
 // };
 
-// type phoneType = {
-//     description: string;
-//     icon_class: string;
-// };
+type phoneType = {
+    phone_type_id?: number;
+    description: string;
+    icon_class: string;
+};
 
 /*******************************************************************************
  *                          Customer Notes
