@@ -24,7 +24,7 @@
         </p>
     </noscript>
     @inertia
-    @include('cookie-consent::index')
+    {{-- @include('cookie-consent::index') --}}
 </body>
 
 </html>
