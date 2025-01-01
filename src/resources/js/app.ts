@@ -45,6 +45,7 @@ const vuetify = createVuetify({
             fa,
         },
     },
+    theme: false,
 });
 const pinia = createPinia();
 
