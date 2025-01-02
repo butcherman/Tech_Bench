@@ -22,11 +22,15 @@ class FortifyServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Fortify::loginView(function () {
-            return Inertia::render('Auth/Login', [
+            return Inertia::render('Auth/TechLogin', [
                 'welcome-message' => config('app.welcome_message'),
                 'home-links' => config('app.home_links'),
-                'public-link' => false,
                 'allow-oath' => config('services.azure.allow_login'),
+                'public-link' => fn() => config('tech-tips.allow_public')
+                    ? [
+                        'url' => route('publicTips.index'),
+                        'text' => config('tech-tips.public_link_text'),
+                    ] : false,
             ]);
         });
 
@@ -47,7 +51,7 @@ class FortifyServiceProvider extends ServiceProvider
 
         RateLimiter::for('login', function (Request $request) {
             $throttleKey = Str::transliterate(
-                Str::lower($request->input(Fortify::username())).'|'.$request->ip()
+                Str::lower($request->input(Fortify::username())) . '|' . $request->ip()
             );
 
             // return Limit::perMinute(5)->by($throttleKey);
@@ -58,8 +62,8 @@ class FortifyServiceProvider extends ServiceProvider
 
                 return back()
                     ->withErrors([
-                        'throttle' => 'Too many failed login attempts, try again in '.
-                            $availableIn.' minutes',
+                        'throttle' => 'Too many failed login attempts, try again in ' .
+                            $availableIn . ' minutes',
                     ]);
             }
 

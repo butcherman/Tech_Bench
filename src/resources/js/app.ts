@@ -14,6 +14,7 @@ import { createApp, DefineComponent, h } from "vue";
 import { createInertiaApp, Link, Head } from "@inertiajs/vue3";
 import PrimeVue from "primevue/config";
 import { createPinia } from "pinia";
+import Aura from "@primevue/themes/aura";
 // import "./echo";
 
 /*
@@ -40,6 +41,23 @@ const pinia = createPinia();
 
 /*
 |-------------------------------------------------------------------------------
+| PrimeVue Configuration
+|-------------------------------------------------------------------------------
+*/
+const primeVueConfig = {
+    theme: {
+        preset: Aura,
+        options: {
+            cssLayer: {
+                name: "primevue",
+                order: "tailwind-base, primevue, tailwind-utilities",
+            },
+        },
+    },
+};
+
+/*
+|-------------------------------------------------------------------------------
 | Initialize App
 |-------------------------------------------------------------------------------
 */
@@ -52,7 +70,7 @@ createInertiaApp({
         const inertiaApp = createApp({ render: () => h(App, props) })
             .use(plugin)
             .use(pinia)
-            .use(PrimeVue, { unstyled: true })
+            .use(PrimeVue, primeVueConfig)
             .component("fa-icon", FontAwesomeIcon)
             .component("Link", Link)
             .component("Head", Head);
