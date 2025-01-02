@@ -1,21 +1,17 @@
 <template>
     <div v-if="app.flash.length">
-        <!-- <h1
-            v-for="flash in app.flash"
-            border="start"
-            class="text-center"
-            elevation="4"
-            :color="getFlashColor(flash.type)"
-            :icon="getFlashIcon(flash.type)"
-            :text="flash.message"
-        /> -->
-        <h1 v-for="flash in app.flash">{{ flash }}</h1>
+        <Message
+            v-for="msg in app.flash"
+            :severity="msg.type === 'status' ? 'info' : msg.type"
+        >
+            {{ msg.message }}
+        </Message>
     </div>
 </template>
 
 <script setup lang="ts">
+import { Message } from "primevue";
 import { useAppStore } from "@/Stores/AppStore";
-// import { getFlashColor, getFlashIcon } from "@/Composables/Flash";
 
 const app = useAppStore();
 </script>

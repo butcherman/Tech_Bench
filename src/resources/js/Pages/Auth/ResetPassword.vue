@@ -1,46 +1,31 @@
 <template>
-    <div class="row justify-content-center align-items-center h-100 p-3">
-        <Head title="Forgot Password" />
-        <div class="col-sm-8 col-md-6 col-xl-5 col-xxl-4">
-            <div class="card">
-                <div class="card-body h-100 text-center">
-                    <h5>Reset Your Password</h5>
-                    <div class="row align-items-center">
-                        <div class="col">
-                            <div v-if="app.flash.length">
-                                <div
-                                    v-for="flash in app.flash"
-                                    class="alert text-center"
-                                    :class="`alert-${flash.type}`"
-                                >
-                                    {{ flash.message }}
-                                </div>
-                            </div>
-                            <ResetPasswordForm :email="email" :token="token" />
-                        </div>
-                    </div>
-                </div>
+    <div>
+        <div
+            class="grid grid-cols-1 md:grid-cols-4 items-center h-full md:h-screen mx-1 py-1"
+        >
+            <div class="md:col-span-2 md:col-start-2">
+                <LogoImage>
+                    <AuthFlash />
+                    <ResetPasswordForm :email="email" :token="token" />
+                </LogoImage>
             </div>
-            <div class="card mt-4">
-                <div class="card-body text-center">
-                    <h5>Password Rules</h5>
-                    <ul class="list-group">
-                        <li v-for="rule in rules" class="list-group-item">
-                            {{ rule }}
-                        </li>
+            <div class="md:col-span-2 md:col-start-2 mt-2">
+                <Card title="Password Rules">
+                    <ul class="text-center">
+                        <li v-for="rule in rules">{{ rule }}</li>
                     </ul>
-                </div>
+                </Card>
             </div>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import AuthLayout from "@/Layouts/AuthLayout.vue";
+import AuthLayout from "@/Layouts/Auth/AuthLayout.vue";
+import AuthFlash from "@/Layouts/Auth/AuthFlash.vue";
+import LogoImage from "@/Components/_Base/LogoImage.vue";
 import ResetPasswordForm from "@/Forms/Auth/ResetPasswordForm.vue";
-import { useAppStore } from "@/Store/AppStore";
-
-const app = useAppStore();
+import Card from "@/Components/_Base/Card.vue";
 
 defineProps<{
     email: string;

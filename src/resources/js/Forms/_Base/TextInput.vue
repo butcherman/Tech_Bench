@@ -1,9 +1,9 @@
 <template>
-    <FloatLabel variant="on" class="py-2">
+    <FloatLabel variant="on">
         <InputText
             v-model="value"
             class="p-2"
-            type="text"
+            :type="type ?? 'text'"
             :autofocus="focus"
             :disabled="disabled"
             :id="id"
@@ -39,12 +39,13 @@ const props = defineProps<{
     id: string;
     label: string;
     name: string;
-    borderBottom?: boolean;
     autocomplete?: string;
-    help?: string;
+    borderBottom?: boolean;
+    disabled?: boolean;
     filled?: boolean;
     focus?: boolean;
-    disabled?: boolean;
+    help?: string;
+    type?: string;
 }>();
 
 const hasFocus = ref(false);

@@ -47,6 +47,11 @@ import PasswordInput from "../_Base/PasswordInput.vue";
 import SwitchInput from "../_Base/SwitchInput.vue";
 import { object, string, boolean } from "yup";
 
+/*
+|-------------------------------------------------------------------------------
+| Validation
+|-------------------------------------------------------------------------------
+*/
 const initValues = {
     username: null,
     password: null,
