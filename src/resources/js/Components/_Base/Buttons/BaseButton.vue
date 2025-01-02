@@ -50,7 +50,7 @@ const variantClass = computed(() => {
         case "warning":
             return "bg-yellow-400";
         default:
-            return "bg-blue-500";
+            return "bg-blue-500 text-white";
     }
 });
 </script>

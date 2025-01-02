@@ -6,6 +6,7 @@
         submit-text="Login"
         submit-method="post"
         submit-icon="user-check"
+        full-page-overlay
     >
         <TextInput
             id="username"
@@ -22,6 +23,14 @@
             help="Enter Your Password"
             border-bottom
         />
+        <div class="text-right">
+            <Link
+                :href="$route('password.request')"
+                class="text-xs text-blue-400"
+            >
+                Forgot Password
+            </Link>
+        </div>
         <SwitchInput
             id="remember-me"
             name="remember"

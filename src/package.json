@@ -37,6 +37,7 @@
         "uuid": "^9.0",
         "vee-validate": "^4.12",
         "vue": "^3.4",
+        "vue3-loading-overlay": "^0.0.0",
         "yup": "^1.4"
     }
 }

@@ -47,12 +47,16 @@
                     <TechLoginForm />
                     <div v-if="allowOath" class="w-full text-center">
                         <div class="separator">or</div>
-                        <!-- <a :href="$route('azure-login')">
-                            <Button
+                        <a :href="$route('azure-login')">
+                            <!-- <Button
                                 text="Login with Office 365"
                                 class="md:w-3/4"
+                            /> -->
+                            <BaseButton
+                                class="md:w-3/4"
+                                text="Login with Office 365"
                             />
-                        </a> -->
+                        </a>
                     </div>
                 </div>
             </div>
@@ -65,6 +69,7 @@ import AuthLayout from "@/Layouts/Auth/AuthLayout.vue";
 import AuthFlash from "@/Layouts/Auth/AuthFlash.vue";
 import LogoImage from "@/Components/_Base/LogoImage.vue";
 import TechLoginForm from "@/Forms/Auth/TechLoginForm.vue";
+import BaseButton from "@/Components/_Base/Buttons/BaseButton.vue";
 // import Button from "@/Components/_Base/Buttons/BaseButton.vue";
 import { computed } from "vue";
 
