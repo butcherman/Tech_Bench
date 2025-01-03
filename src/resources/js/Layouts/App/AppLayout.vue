@@ -1,6 +1,7 @@
 <template>
     <div id="app-layout-wrapper">
         <Head :title="appTitle" />
+        <AppFlash />
         <AppHeader
             id="app-header"
             @toggle-navbar="navbarHidden = !navbarHidden"
@@ -9,6 +10,7 @@
         <section id="app-content">
             <div id="app-page-wrapper">
                 <AppBreadcrumbs class="mb-2" />
+                <AppAlerts />
                 <slot />
             </div>
             <AppFooter />
@@ -17,7 +19,9 @@
 </template>
 
 <script setup lang="ts">
+import AppAlerts from "./AppAlerts.vue";
 import AppBreadcrumbs from "./AppBreadcrumbs.vue";
+import AppFlash from "./AppFlash.vue";
 import AppFooter from "./AppFooter.vue";
 import AppHeader from "./AppHeader.vue";
 import AppSideNav from "./AppSideNav.vue";
