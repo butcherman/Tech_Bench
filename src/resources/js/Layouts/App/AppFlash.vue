@@ -1,12 +1,16 @@
 <template>
     <Teleport to="body">
         <div
-            id="flash-wrapper"
+            id="app-flash-wrapper"
             class="absolute top-10 w-full justify-items-center"
         >
             <div class="w-11/12 md:w-1/2">
                 <TransitionGroup @enter="onEnter" @leave="onLeave" :css="false">
-                    <div v-for="flash in app.flashAlerts" :key="flash.id">
+                    <div
+                        v-for="flash in app.flashAlerts"
+                        :key="flash.id"
+                        class="app-flash-message"
+                    >
                         <Message
                             class="my-2"
                             :severity="getStatusType(flash.type)"
@@ -34,9 +38,9 @@ import { getStatusType, getStatusIcon } from "@/Composables/statusData.module";
 const app = useAppStore();
 
 /*
-|---------------------------------------------------------------------------
+|-------------------------------------------------------------------------------
 | Enter and Leave Animations
-|---------------------------------------------------------------------------
+|-------------------------------------------------------------------------------
 */
 const onEnter = (el: Element, done: () => void) => {
     gsap.from(el, {
@@ -56,9 +60,14 @@ const onLeave = (el: Element, done: () => void) => {
 };
 </script>
 
-<style>
-#flash-wrapper {
-    z-index: 10000;
+<style scoped>
+#app-flash-wrapper {
     overflow: hidden;
+    pointer-events: none;
+    z-index: 10000;
+}
+
+.app-flash-message {
+    pointer-events: auto;
 }
 </style>

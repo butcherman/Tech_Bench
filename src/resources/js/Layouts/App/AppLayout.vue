@@ -2,6 +2,7 @@
     <div id="app-layout-wrapper">
         <Head :title="appTitle" />
         <AppFlash />
+        <AppNotificationToast />
         <AppHeader
             id="app-header"
             @toggle-navbar="navbarHidden = !navbarHidden"
@@ -24,6 +25,7 @@ import AppBreadcrumbs from "./AppBreadcrumbs.vue";
 import AppFlash from "./AppFlash.vue";
 import AppFooter from "./AppFooter.vue";
 import AppHeader from "./AppHeader.vue";
+import AppNotificationToast from "./AppNotificationToast.vue";
 import AppSideNav from "./AppSideNav.vue";
 import { router, usePage } from "@inertiajs/vue3";
 import { computed, ref } from "vue";

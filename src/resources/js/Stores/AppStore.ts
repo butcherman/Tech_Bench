@@ -60,25 +60,36 @@ export const useAppStore = defineStore("appStore", () => {
     const flash = computed<flashData[]>(() => usePage<pageProps>().props.flash);
     const flashAlerts = ref<flashData[]>([]);
 
-    // Manually push new message
+    /**
+     * Manually push new message
+     */
     const pushFlashMsg = (flashMsg: flashData) => {
         flashMsg.id = uuidv4();
         flashAlerts.value.push(flashMsg);
         setFlashTimeout(flashMsg.id);
     };
-    // Manually remove message
+
+    /**
+     * Manually remove message
+     */
     const removeFlashMsg = (id: string) => {
         flashAlerts.value = flashAlerts.value.filter(
             (alert) => alert.id !== id
         );
     };
-    // Auto delete message after 15 seconds
+
+    /**
+     * Auto delete message after 15 seconds
+     */
     const setFlashTimeout = (id: string) => {
         setTimeout(() => {
             removeFlashMsg(id);
         }, 15000);
     };
-    // Watch page flash and push alerts when changed
+
+    /**
+     * Watch page flash and push alerts when changed
+     */
     watch(flash, (newFlash) => {
         newFlash.forEach((newAlert) => pushFlashMsg(newAlert));
     });

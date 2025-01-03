@@ -16,7 +16,7 @@ import { createPinia } from "pinia";
 import PrimeVue from "primevue/config";
 import Tooltip from "primevue/tooltip";
 import Aura from "@primevue/themes/aura";
-// import "./echo";
+import "./echo";
 
 /*
 |-------------------------------------------------------------------------------
