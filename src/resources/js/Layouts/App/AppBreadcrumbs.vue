@@ -1,0 +1,24 @@
+<template>
+    <Breadcrumb
+        v-if="breadcrumbs.length"
+        :model="breadcrumbs"
+        class="text-center bg-blue-300 rounded-lg"
+    >
+        <template #item="{ item }">
+            <Link v-if="!item.is_current_page" :href="item.url">
+                {{ item.title }}
+            </Link>
+            <span v-else>{{ item.title }}</span>
+        </template>
+    </Breadcrumb>
+</template>
+
+<script setup lang="ts">
+import { Breadcrumb } from "primevue";
+import { computed } from "vue";
+import { usePage } from "@inertiajs/vue3";
+
+const breadcrumbs = computed<breadcrumbs[]>(
+    () => usePage<pageProps>().props.breadcrumbs
+);
+</script>

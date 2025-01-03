@@ -8,6 +8,7 @@
         <AppSideNav id="app-navbar" :navbar-hidden="navbarHidden" />
         <section id="app-content">
             <div id="app-page-wrapper">
+                <AppBreadcrumbs class="mb-2" />
                 <slot />
             </div>
             <AppFooter />
@@ -16,6 +17,7 @@
 </template>
 
 <script setup lang="ts">
+import AppBreadcrumbs from "./AppBreadcrumbs.vue";
 import AppFooter from "./AppFooter.vue";
 import AppHeader from "./AppHeader.vue";
 import AppSideNav from "./AppSideNav.vue";
