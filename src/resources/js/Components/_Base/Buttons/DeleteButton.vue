@@ -7,8 +7,8 @@
         @click="handleClick"
     >
         <slot>
-            <fa-icon v-if="icon" :icon="icon" />
-            {{ text }}
+            <fa-icon :icon="icon ?? 'trash-alt'" />
+            {{ text ?? "Delete" }}
         </slot>
     </Button>
 </template>
@@ -36,7 +36,6 @@ const props = defineProps<{
         | "success"
         | "warning";
 }>();
-
 /*
 |---------------------------------------------------------------------------
 | If href prop is populated, treat click as a link.
@@ -76,7 +75,7 @@ const variantClass = computed(() => {
         case "warning":
             return "bg-yellow-400";
         default:
-            return "bg-blue-500 text-white";
+            return "bg-rose-500 text-white";
     }
 });
 </script>

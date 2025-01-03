@@ -7,8 +7,8 @@
         @click="handleClick"
     >
         <slot>
-            <fa-icon v-if="icon" :icon="icon" />
-            {{ text }}
+            <fa-icon :icon="icon ?? 'pencil'" />
+            {{ text ?? "Edit" }}
         </slot>
     </Button>
 </template>
@@ -76,7 +76,7 @@ const variantClass = computed(() => {
         case "warning":
             return "bg-yellow-400";
         default:
-            return "bg-blue-500 text-white";
+            return "bg-yellow-300";
     }
 });
 </script>
