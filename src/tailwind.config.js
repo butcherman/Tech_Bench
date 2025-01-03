@@ -6,7 +6,13 @@ export default {
     "./resources/**/*.vue",
   ],
   theme: {
-    extend: {},
+    extend: {
+        screens: {
+            '-sm': {max: '639px'},
+            '-md': {max: '767px'},
+            '-lg': {max: '1023px'}
+        }
+    },
   },
   plugins: [require('tailwindcss-primeui')],
 }

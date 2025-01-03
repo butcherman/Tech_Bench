@@ -1,6 +1,5 @@
 <template>
-    <h2>Hello First</h2>
-    <!-- <h1 v-for="n in 10">Hello World</h1> -->
+    <h1>Hello World</h1>
 </template>
 
 <script setup lang="ts">

@@ -12,8 +12,9 @@ import "../css/app.css";
 */
 import { createApp, DefineComponent, h } from "vue";
 import { createInertiaApp, Link, Head } from "@inertiajs/vue3";
-import PrimeVue from "primevue/config";
 import { createPinia } from "pinia";
+import PrimeVue from "primevue/config";
+import Tooltip from "primevue/tooltip";
 import Aura from "@primevue/themes/aura";
 // import "./echo";
 
@@ -22,7 +23,6 @@ import Aura from "@primevue/themes/aura";
 | Font Awesome
 |-------------------------------------------------------------------------------
 */
-// import { aliases, fa } from "vuetify/iconsets/fa-svg";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { fas } from "@fortawesome/free-solid-svg-icons";
@@ -73,7 +73,8 @@ createInertiaApp({
             .use(PrimeVue, primeVueConfig)
             .component("fa-icon", FontAwesomeIcon)
             .component("Link", Link)
-            .component("Head", Head);
+            .component("Head", Head)
+            .directive("tooltip", Tooltip);
 
         inertiaApp.config.globalProperties.$route = route;
 
