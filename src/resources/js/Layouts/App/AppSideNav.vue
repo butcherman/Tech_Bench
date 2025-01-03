@@ -1,23 +1,25 @@
 <template>
-    <div
-        id="app-side-nav"
-        class="w-64 z-50 h-full overflow-hidden -sm:rounded-lg -md:absolute -md:right-0 bg-blue-500"
-        :class="{ '-md:w-0 md:block': navbarHidden }"
-        style="border: 1px solid red"
-    >
-        navbar stuff
-    </div>
+    <nav :class="{ 'navbar-hidden': navbarHidden }">
+        <Menu :model="app.navbar" id="app-navbar-menu">
+            <template #item="{ item }">
+                <div class="my-2 mx-2">
+                    <Link :href="item.route">
+                        <fa-icon :icon="item.icon" />
+                        {{ item.name }}
+                    </Link>
+                </div>
+            </template>
+        </Menu>
+    </nav>
 </template>
 
 <script setup lang="ts">
+import { Menu } from "primevue";
+import { useAppStore } from "@/Stores/AppStore";
+
 defineProps<{
     navbarHidden: boolean | null;
 }>();
-</script>
 
-<style scoped lang="css">
-#app-side-nav {
-    transition: all;
-    transition-duration: 0.5s;
-}
-</style>
+const app = useAppStore();
+</script>
