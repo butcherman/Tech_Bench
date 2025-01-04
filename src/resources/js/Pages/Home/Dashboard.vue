@@ -16,14 +16,17 @@
             <pre>Pre Block</pre>
         </Card>
         <Card title="Buttons">
-            <BaseButton class="m-2" text="Base" />
-            <BaseButton class="m-2" text="Base" pill />
+            <BaseButton class="m-2" text="Button" />
+            <BaseButton class="m-2" text="Pill Button" pill />
+
             <br />
             <AddButton class="m-2" />
             <AddButton class="m-2" pill />
+            <AddBadge class="m-2" />
             <br />
             <EditButton class="m-2" />
             <EditButton class="m-2" pill />
+            <EditBadge class="m-2" />
             <br />
             <DeleteButton
                 class="m-2"
@@ -32,6 +35,16 @@
                 @accepted="console.log('accepted')"
             />
             <DeleteButton class="m-2" pill />
+            <DeleteBadge class="m-2" />
+            <br />
+            <BaseBadge
+                icon="house"
+                v-tooltip="'Base Badge'"
+                :href="$route('about')"
+                class="m-2"
+            />
+            <ClipboardCopy value="Random Text for Clipboard" class="m-2" />
+            <RefreshButton class="m-2" />
         </Card>
     </div>
 </template>
@@ -46,6 +59,12 @@ import Card from "@/Components/_Base/Card.vue";
 import { useAppStore } from "@/Stores/AppStore";
 import { useBroadcastStore } from "@/Stores/BroadcastStore";
 import { ref } from "vue";
+import BaseBadge from "@/Components/_Base/Badges/BaseBadge.vue";
+import AddBadge from "@/Components/_Base/Badges/AddBadge.vue";
+import EditBadge from "@/Components/_Base/Badges/EditBadge.vue";
+import DeleteBadge from "@/Components/_Base/Badges/DeleteBadge.vue";
+import ClipboardCopy from "@/Components/_Base/ClipboardCopy.vue";
+import RefreshButton from "@/Components/_Base/Buttons/RefreshButton.vue";
 
 const app = useAppStore();
 const broad = useBroadcastStore();
