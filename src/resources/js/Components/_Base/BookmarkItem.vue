@@ -5,6 +5,7 @@
 </template>
 
 <script setup lang="ts">
+import okModal from "@/Modules/okModal";
 import axios from "axios";
 import { ref, computed } from "vue";
 
@@ -58,8 +59,7 @@ const toggleBookmark = (): void => {
             }
         })
         .catch((err) => {
-            // okModal(err);
-            console.log("there was a problem.");
+            okModal(err.message);
         })
         .finally(() => {
             isLoading.value = false;

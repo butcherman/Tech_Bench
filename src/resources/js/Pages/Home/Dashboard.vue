@@ -135,7 +135,7 @@ const resourceListData = ref([
     {
         icon: "pencil",
         text: "This is A Link",
-        link: route("about"),
+        href: route("about"),
     },
     {
         icon: "eye",

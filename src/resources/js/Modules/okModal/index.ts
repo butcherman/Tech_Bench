@@ -9,7 +9,6 @@ export default (message: string, forceOk: boolean = false) => {
 
 const okModal = (message: string, forceOk: boolean) => {
     const promise = new Promise(function (resolve) {
-        console.log("promise started");
         let okClicked = false;
         const newComp = createApp({
             setup() {
