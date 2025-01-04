@@ -14,7 +14,7 @@
             <h3 class="text-center w-full">Test Footer</h3>
         </template>
     </Modal>
-    <div class="grid grid-cols-2 gap-2">
+    <div class="grid md:grid-cols-3 gap-2">
         <Card title="Typography">
             <h1>H1 Header</h1>
             <h2>H2 Header</h2>
@@ -57,6 +57,9 @@
             <ClipboardCopy value="Random Text for Clipboard" class="m-2" />
             <RefreshButton class="m-2" />
         </Card>
+        <Card title="Resource List">
+            <ResourceList :list="resourceListData" />
+        </Card>
     </div>
 </template>
 
@@ -78,6 +81,7 @@ import ClipboardCopy from "@/Components/_Base/ClipboardCopy.vue";
 import RefreshButton from "@/Components/_Base/Buttons/RefreshButton.vue";
 import Modal from "@/Components/_Base/Modal.vue";
 import LogoImage from "@/Components/_Base/LogoImage.vue";
+import ResourceList from "@/Components/_Base/ResourceList.vue";
 
 const app = useAppStore();
 const broad = useBroadcastStore();
@@ -99,6 +103,30 @@ const pushToast = () => {
     broad.pushToastMsg(`Message - ${index.value}`, "A Title", route("about"));
     index.value++;
 };
+
+const resourceListData = ref([
+    {
+        icon: "pencil",
+        text: "This is Text",
+        link: route("about"),
+    },
+    {
+        icon: "pencil",
+        text: "This is Text 1",
+    },
+    {
+        icon: "pencil",
+        text: "This is Text 2",
+    },
+    {
+        icon: "pencil",
+        text: "This is Text 3",
+    },
+    {
+        icon: "pencil",
+        text: "This is Text 4",
+    },
+]);
 </script>
 
 <script lang="ts">
