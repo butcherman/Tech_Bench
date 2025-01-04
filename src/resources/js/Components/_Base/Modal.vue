@@ -15,7 +15,7 @@
                         :class="modalPosition"
                     >
                         <div
-                            class="bg-white min-w-96 max-w-4xl min-h-48 rounded-lg p-5 flex flex-col relative"
+                            class="bg-white min-w-96 max-w-4xl min-h-32 rounded-lg p-5 flex flex-col relative"
                             @click.stop
                         >
                             <div
@@ -36,7 +36,7 @@
                             </div>
                             <div
                                 v-if="$slots.footer"
-                                class="border-t flex flex-row-reverse"
+                                class="border-t flex flex-row-reverse pt-2"
                             >
                                 <slot name="footer"></slot>
                             </div>
@@ -70,15 +70,15 @@ const props = defineProps<{
 /**
  * Current visual state of the Modal
  */
-const modalOpen = ref(false);
+const modalOpen = ref<boolean>(false);
 
 /**
  * Where to align the Modal (top, center, bottom)
  */
-const modalPosition = computed(() => {
+const modalPosition = computed<string>(() => {
     switch (props.position) {
         case "top":
-            return "items-start";
+            return "items-start mt-3";
         case "center":
             return "items-center";
         case "bottom":
@@ -91,7 +91,7 @@ const modalPosition = computed(() => {
 /**
  * How to handle a click outside of the Modal box
  */
-const backdropClicked = () => {
+const backdropClicked = (): void => {
     if (!props.preventOutsideClick) {
         hide();
     } else {
@@ -102,7 +102,7 @@ const backdropClicked = () => {
 /**
  * Open the Modal
  */
-const show = () => {
+const show = (): void => {
     emit("show");
     modalOpen.value = true;
 };
@@ -110,7 +110,7 @@ const show = () => {
 /**
  * Close the Modal
  */
-const hide = () => {
+const hide = (): void => {
     emit("hide");
     modalOpen.value = false;
 };

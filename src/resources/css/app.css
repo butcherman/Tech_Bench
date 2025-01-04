@@ -1,5 +1,6 @@
 @import url("./layout/appLayout.css");
 @import url("./elements/typography.css");
+@import url("./animations/shake.css");
 
 @tailwind base;
 @tailwind components;

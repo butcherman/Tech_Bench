@@ -7,7 +7,11 @@
             class="m-2"
             @click="dashboardModal?.show"
         />
-        <!-- <BaseButton text="OK Prompt" @click="okModal('Example OK Modal')" /> -->
+        <BaseButton
+            text="OK Prompt"
+            class="m-2"
+            @click="okModal('Example OK Modal', true)"
+        />
     </div>
     <Modal ref="dashboardModal" title="Example Modal">
         <LogoImage dark-header> </LogoImage>

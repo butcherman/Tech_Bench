@@ -1,11 +1,13 @@
 import OkModal from "./okModal.vue";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+
 import { createApp, h } from "vue";
 
-export default (message: string) => {
-    return okModal(message);
+export default (message: string, forceOk: boolean = false) => {
+    return okModal(message, forceOk);
 };
 
-const okModal = (message: string) => {
+const okModal = (message: string, forceOk: boolean) => {
     const promise = new Promise(function (resolve) {
         console.log("promise started");
         let okClicked = false;
@@ -14,12 +16,13 @@ const okModal = (message: string) => {
                 return () =>
                     h(OkModal, {
                         message: message,
+                        forceOk: forceOk,
                         onOkClicked: () => (okClicked = true),
                         onHide: () => resolve(okClicked),
                         onHidden: () => unmount(),
                     });
             },
-        });
+        }).component("fa-icon", FontAwesomeIcon);
 
         /**
          * Mount and show the new OK Modal
