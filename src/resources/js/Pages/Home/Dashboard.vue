@@ -3,15 +3,29 @@
         <BaseButton text="Add Flash Message" class="m-2" @click="pushFlash" />
         <BaseButton text="Add Message Toast" class="m-2" @click="pushToast" />
         <BaseButton
-            text="Open Modal"
+            text="Example Modal"
             class="m-2"
             @click="dashboardModal?.show"
         />
+        <!-- <BaseButton text="OK Prompt" @click="okModal('Example OK Modal')" /> -->
     </div>
     <Modal ref="dashboardModal" title="Example Modal">
-        <LogoImage dark-header />
+        <LogoImage dark-header> </LogoImage>
         <template #footer>
-            <h3 class="text-center w-full">Test Footer</h3>
+            <div class="mt-2">
+                <BaseButton
+                    text="Clicky Yes"
+                    variant="success"
+                    class="mx-1"
+                    @click="dashboardModal?.hide"
+                />
+                <BaseButton
+                    text="Clicky No"
+                    variant="danger"
+                    class="mx-1"
+                    @click="dashboardModal?.hide"
+                />
+            </div>
         </template>
     </Modal>
     <div class="grid md:grid-cols-3 gap-2">
@@ -29,7 +43,6 @@
         <Card title="Buttons">
             <BaseButton class="m-2" text="Button" />
             <BaseButton class="m-2" text="Pill Button" pill />
-
             <br />
             <AddButton class="m-2" />
             <AddButton class="m-2" pill />
@@ -56,9 +69,17 @@
             />
             <ClipboardCopy value="Random Text for Clipboard" class="m-2" />
             <RefreshButton class="m-2" />
+            <h3 class="inline">
+                <BookmarkItem :is-bookmark="false" toggle-route="#" />
+            </h3>
         </Card>
         <Card title="Resource List">
             <ResourceList :list="resourceListData" />
+        </Card>
+        <Card title="Stacked Table">stacked table</Card>
+        <Card title="Data Table" class="md:col-span-2">data table</Card>
+        <Card title="Step Navigation" class="md:col-span-3">
+            Step Navigation
         </Card>
     </div>
 </template>
@@ -82,6 +103,8 @@ import RefreshButton from "@/Components/_Base/Buttons/RefreshButton.vue";
 import Modal from "@/Components/_Base/Modal.vue";
 import LogoImage from "@/Components/_Base/LogoImage.vue";
 import ResourceList from "@/Components/_Base/ResourceList.vue";
+import BookmarkItem from "@/Components/_Base/BookmarkItem.vue";
+import okModal from "@/Modules/okModal";
 
 const app = useAppStore();
 const broad = useBroadcastStore();
@@ -107,24 +130,18 @@ const pushToast = () => {
 const resourceListData = ref([
     {
         icon: "pencil",
-        text: "This is Text",
+        text: "This is A Link",
         link: route("about"),
     },
     {
-        icon: "pencil",
-        text: "This is Text 1",
+        icon: "eye",
+        text: "This is a regular item",
     },
     {
-        icon: "pencil",
-        text: "This is Text 2",
+        text: "So is this",
     },
     {
-        icon: "pencil",
-        text: "This is Text 3",
-    },
-    {
-        icon: "pencil",
-        text: "This is Text 4",
+        text: "And this",
     },
 ]);
 </script>

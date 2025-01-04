@@ -9,9 +9,9 @@
 }
 
 #app-header {
-    @apply h-14 w-full bg-white border-b;
+    @apply h-14 w-full bg-white border-b z-20;
     @apply fixed top-0 left-0;
-    @apply flex flex-row z-50;
+    @apply flex flex-row;
 }
 
 #app-header-logo {
@@ -37,7 +37,7 @@
 }
 
 #app-navbar {
-    @apply h-full w-64 z-50;
+    @apply h-full w-64 z-20;
     @apply fixed top-14 border-e -md:border -md:right-0;
     @apply overflow-hidden border-e -md:rounded-lg md:rounded-none;
 

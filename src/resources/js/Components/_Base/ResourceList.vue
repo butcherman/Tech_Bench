@@ -23,29 +23,58 @@
     </ul>
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts" generic="T extends listItem">
 import { handleLinkClick } from "@/Composables/links.module";
 
-const emit = defineEmits(["row-clicked"]);
+export type listItem = {
+    href?: string;
+    icon?: string;
+    text?: string;
+};
+
+const emit = defineEmits<{
+    "row-clicked": [];
+}>();
+
 const props = defineProps<{
-    list: any[];
+    list: T[];
     center?: boolean;
     noBorder?: boolean;
     emptyText?: string;
-    textField?: string;
-    linkField?: string;
+    textField?: keyof listItem;
+    linkField?: keyof listItem;
     linkFn?: (row: any) => string;
 }>();
 
-const hasLink = (row) => row.href || props.linkField || props.linkFn;
+/**
+ * Determine if the row is clickable.
+ */
+const hasLink = (row: T): boolean =>
+    row.href || props.linkField || props.linkFn ? true : false;
 
-const handleClick = (event, item) => {
-    console.log("row clicked");
-    console.log(event, item);
+/**
+ * Get the link that the row should redirect to.
+ */
+const getLinkUrl = (row: T): string | undefined => {
+    if (props.linkField) {
+        return row[props.linkField];
+    }
 
-    if (hasLink(item)) {
-        let linkUrl = item.href || item[props.linkField] || props.linkFn(item);
+    if (props.linkFn) {
+        return props.linkFn(row);
+    }
 
+    return row.href;
+};
+
+/**
+ * Handle the rows click event.
+ */
+const handleClick = (event: MouseEvent, row: T): void => {
+    let linkUrl = getLinkUrl(row);
+    emit("row-clicked");
+
+    if (linkUrl) {
         handleLinkClick(event, linkUrl);
     }
 };
