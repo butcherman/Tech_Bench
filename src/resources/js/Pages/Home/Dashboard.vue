@@ -2,7 +2,18 @@
     <div class="text-center">
         <BaseButton text="Add Flash Message" class="m-2" @click="pushFlash" />
         <BaseButton text="Add Message Toast" class="m-2" @click="pushToast" />
+        <BaseButton
+            text="Open Modal"
+            class="m-2"
+            @click="dashboardModal?.show"
+        />
     </div>
+    <Modal ref="dashboardModal" title="Example Modal">
+        <LogoImage dark-header />
+        <template #footer>
+            <h3 class="text-center w-full">Test Footer</h3>
+        </template>
+    </Modal>
     <div class="grid grid-cols-2 gap-2">
         <Card title="Typography">
             <h1>H1 Header</h1>
@@ -65,9 +76,13 @@ import EditBadge from "@/Components/_Base/Badges/EditBadge.vue";
 import DeleteBadge from "@/Components/_Base/Badges/DeleteBadge.vue";
 import ClipboardCopy from "@/Components/_Base/ClipboardCopy.vue";
 import RefreshButton from "@/Components/_Base/Buttons/RefreshButton.vue";
+import Modal from "@/Components/_Base/Modal.vue";
+import LogoImage from "@/Components/_Base/LogoImage.vue";
 
 const app = useAppStore();
 const broad = useBroadcastStore();
+
+const dashboardModal = ref<InstanceType<typeof Modal> | null>(null);
 
 const index = ref(0);
 const pushFlash = () => {
