@@ -25,7 +25,12 @@
             <EditButton class="m-2" />
             <EditButton class="m-2" pill />
             <br />
-            <DeleteButton class="m-2" />
+            <DeleteButton
+                class="m-2"
+                confirm-msg="This Cannot Be Undone"
+                confirm
+                @accepted="console.log('accepted')"
+            />
             <DeleteButton class="m-2" pill />
         </Card>
     </div>

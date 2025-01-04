@@ -1,29 +1,49 @@
 <template>
-    <Button
-        class="px-4 py-2"
-        :class="variantClass"
-        :rounded="pill"
-        :raised="!flat"
-        @click="handleClick"
-    >
-        <slot>
-            <fa-icon :icon="icon ?? 'trash-alt'" />
-            {{ text ?? "Delete" }}
-        </slot>
-    </Button>
+    <span style="display: inline-flex">
+        <Button
+            class="px-4 py-2"
+            :class="variantClass"
+            :rounded="pill"
+            :raised="!flat"
+            @click="handleClick"
+        >
+            <slot>
+                <fa-icon :icon="icon ?? 'trash-alt'" />
+                {{ text ?? "Delete" }}
+            </slot>
+        </Button>
+        <ConfirmPopup>
+            <template #icon>
+                <fa-icon icon="exclamation-circle" class="text-danger" />
+            </template>
+            <template #accepticon>
+                <fa-icon icon="check" class="text-danger" />
+            </template>
+            <template #rejecticon>
+                <fa-icon icon="xmark" />
+            </template>
+        </ConfirmPopup>
+    </span>
 </template>
 
 <script setup lang="ts">
 import { Button } from "primevue";
 import { computed } from "vue";
 import { handleLinkClick } from "@/Composables/links.module";
+import { useConfirm } from "primevue";
+import ConfirmPopup from "primevue/confirmpopup";
 
+const emit = defineEmits(["accepted", "rejected"]);
 const props = defineProps<{
+    confirm?: boolean;
     flat?: boolean;
     href?: string;
     icon?: string;
     pill?: boolean;
     text?: string;
+    confirmMsg?: string;
+    acceptText?: string;
+    rejectText?: string;
     variant?:
         | "danger"
         | "dark"
@@ -36,12 +56,36 @@ const props = defineProps<{
         | "success"
         | "warning";
 }>();
+
+const confirm = useConfirm();
+
 /*
 |---------------------------------------------------------------------------
 | If href prop is populated, treat click as a link.
 |---------------------------------------------------------------------------
 */
 const handleClick = (event: MouseEvent) => {
+    if (props.confirm) {
+        confirm.require({
+            message: props.confirmMsg ?? "Are You Sure?",
+            acceptLabel: props.acceptText ?? "Yes",
+            acceptClass: "border px-2",
+            rejectLabel: props.rejectText ?? "No",
+            rejectClass: "border px-2",
+            accept: () => {
+                emit("accepted");
+                if (props.href) {
+                    handleLinkClick(event, props.href);
+                }
+            },
+            reject: () => {
+                emit("rejected");
+            },
+        });
+
+        return;
+    }
+
     if (props.href) {
         handleLinkClick(event, props.href);
     }

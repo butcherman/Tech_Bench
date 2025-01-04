@@ -15,6 +15,7 @@ import { createInertiaApp, Link, Head } from "@inertiajs/vue3";
 import { createPinia } from "pinia";
 import PrimeVue from "primevue/config";
 import Tooltip from "primevue/tooltip";
+import ConfirmationService from "primevue/confirmationservice";
 import Aura from "@primevue/themes/aura";
 import "./echo";
 
@@ -71,6 +72,7 @@ createInertiaApp({
             .use(plugin)
             .use(pinia)
             .use(PrimeVue, primeVueConfig)
+            .use(ConfirmationService)
             .component("fa-icon", FontAwesomeIcon)
             .component("Link", Link)
             .component("Head", Head)

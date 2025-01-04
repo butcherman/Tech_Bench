@@ -17,9 +17,9 @@
                             pt:text:class="grow text-center"
                             closable
                         >
-                            <template #icon
-                                ><fa-icon :icon="getStatusIcon(flash.type)"
-                            /></template>
+                            <template #icon>
+                                <fa-icon :icon="getStatusIcon(flash.type)" />
+                            </template>
                             {{ flash.message }}
                         </Message>
                     </div>
