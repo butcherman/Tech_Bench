@@ -32,6 +32,10 @@ h6 {
     @apply !text-sm !font-bold;
 }
 
+.text-success {
+    @apply text-green-500;
+}
+
 .text-muted {
     @apply text-slate-500;
 }

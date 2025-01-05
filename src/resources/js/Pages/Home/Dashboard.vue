@@ -49,21 +49,21 @@
             <BaseButton class="m-2" text="Pill Button" pill />
             <br />
             <AddButton class="m-2" />
-            <AddButton class="m-2" pill />
-            <AddBadge class="m-2" />
+            <AddButton class="m-2" text="Add Pill" pill />
+            <AddBadge class="m-2" v-tooltip="'Add Badge'" />
             <br />
             <EditButton class="m-2" />
-            <EditButton class="m-2" pill />
-            <EditBadge class="m-2" />
+            <EditButton class="m-2" text="Edit Pill" pill />
+            <EditBadge class="m-2" v-tooltip="'Edit Badge'" />
             <br />
             <DeleteButton
-                class="m-2"
+                class="m-1"
                 confirm-msg="This Cannot Be Undone"
                 confirm
                 @accepted="console.log('accepted')"
             />
-            <DeleteButton class="m-2" pill />
-            <DeleteBadge class="m-2" />
+            <DeleteButton class="m-1" text="Delete Pill" pill />
+            <DeleteBadge class="m-1" v-tooltip="'Delete Badge'" />
             <br />
             <BaseBadge
                 icon="house"
@@ -80,12 +80,20 @@
         <Card title="Resource List">
             <ResourceList :list="resourceListData" />
         </Card>
-        <Card title="Stacked Table">stacked table</Card>
+        <Card title="Stacked Table">
+            <TableStacked
+                :rows="stackedTable"
+                title-case
+                bordered
+                class="w-full"
+            />
+        </Card>
         <Card title="Data Table" class="md:col-span-2">data table</Card>
         <Card title="Step Navigation" class="md:col-span-3">
             Step Navigation
         </Card>
     </div>
+    <Card class="tb-card my-2" title="Form Inputs"> form data </Card>
 </template>
 
 <script setup lang="ts">
@@ -109,6 +117,7 @@ import LogoImage from "@/Components/_Base/LogoImage.vue";
 import ResourceList from "@/Components/_Base/ResourceList.vue";
 import BookmarkItem from "@/Components/_Base/BookmarkItem.vue";
 import okModal from "@/Modules/okModal";
+import TableStacked from "@/Components/_Base/TableStacked.vue";
 
 const app = useAppStore();
 const broad = useBroadcastStore();
@@ -148,6 +157,15 @@ const resourceListData = ref([
         text: "And this",
     },
 ]);
+
+const stackedTable = ref({
+    row_1: "Data 1",
+    row_2: "Data 2",
+    row_3: "Data 3",
+    row_4: "Data 4",
+    true_value: true,
+    false_value: false,
+});
 </script>
 
 <script lang="ts">

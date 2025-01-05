@@ -12,7 +12,7 @@
         <template #footer>
             <BaseButton
                 text="OK"
-                :class="{ 'shake-me': shakeOk }"
+                :class="{ 'fa-shake': shakeOk }"
                 @click="handleOkClick"
             />
         </template>
