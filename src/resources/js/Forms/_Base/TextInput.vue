@@ -1,43 +1,63 @@
 <template>
-    <FloatLabel variant="on">
-        <InputText
-            v-model="value"
-            class="p-2"
-            :type="type ?? 'text'"
-            :autofocus="focus"
-            :disabled="disabled"
-            :id="id"
-            :autocomplete="autocomplete ?? 'off'"
-            :class="borderType"
-            :variant="filled ? 'filled' : null"
-            fluid
-            @focus="hasFocus = true"
-            @blur="hasFocus = false"
-        />
-        <label :for="id">{{ label }}</label>
-        <Message size="small" severity="error" variant="simple">
-            {{ errorMessage }}
-        </Message>
-        <Message
-            v-if="hasFocus"
-            size="small"
-            severity="secondary"
-            variant="simple"
+    <InputGroup>
+        <InputGroupAddon
+            v-if="$slots['start-text']"
+            class="border border-e-0 my-2"
         >
-            {{ help }}
-        </Message>
-    </FloatLabel>
+            <slot name="start-text" />
+        </InputGroupAddon>
+        <FloatLabel variant="on" class="my-2">
+            <InputText
+                v-model="value"
+                class="p-2"
+                :type="type ?? 'text'"
+                :autofocus="focus"
+                :disabled="disabled"
+                :id="id"
+                :autocomplete="autocomplete ?? 'off'"
+                :class="borderType"
+                :variant="filled ? 'filled' : null"
+                fluid
+                @focus="hasFocus = true"
+                @blur="hasFocus = false"
+            />
+            <label :for="id">{{ label }}</label>
+            <Message size="small" severity="error" variant="simple">
+                {{ errorMessage }}
+            </Message>
+            <Message
+                v-if="hasFocus"
+                size="small"
+                severity="secondary"
+                variant="simple"
+            >
+                {{ help }}
+            </Message>
+        </FloatLabel>
+        <InputGroupAddon
+            v-if="$slots['end-text']"
+            class="border border-s-0 my-2"
+        >
+            <slot name="end-text" />
+        </InputGroupAddon>
+    </InputGroup>
 </template>
 
 <script setup lang="ts">
-import { InputText, FloatLabel, Message } from "primevue";
+import {
+    InputText,
+    FloatLabel,
+    Message,
+    InputGroup,
+    InputGroupAddon,
+} from "primevue";
 import { computed, ref, toRef } from "vue";
 import { useField } from "vee-validate";
 import type { Ref } from "vue";
 
 const props = defineProps<{
     id: string;
-    label: string;
+    label?: string;
     name: string;
     autocomplete?: string;
     borderBottom?: boolean;

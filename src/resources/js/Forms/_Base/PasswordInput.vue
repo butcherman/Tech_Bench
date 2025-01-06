@@ -1,5 +1,5 @@
 <template>
-    <FloatLabel variant="on" class="py-2">
+    <FloatLabel variant="on" class="my-2">
         <Password
             v-model="value"
             class="p-2"
