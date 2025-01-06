@@ -8,7 +8,7 @@
             @submit.prevent="onSubmit"
             novalidate
         >
-            <div class="flex-none my-4">
+            <div v-if="uncaughtErrors.length" class="flex-none my-4">
                 <Message
                     v-for="err in uncaughtErrors"
                     severity="error"

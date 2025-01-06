@@ -114,6 +114,8 @@
                     id="text-input"
                     label="Text Input"
                     name="text_input"
+                    placeholder="This is a Text Input"
+                    help="This is Help Text"
                 />
                 <PasswordInput
                     id="password-input"
@@ -132,14 +134,19 @@
                     name="otp_input"
                     :length="6"
                 />
-                <fieldset class="border p-2">
+                <fieldset class="border rounded-lg p-2">
                     <legend>Text Field Array</legend>
-                    <TextFieldArray
+                    <TextInputArray
                         id="text-field-array"
                         name="text_field_array"
                         drag
                     />
                 </fieldset>
+                <TextAreaInput
+                    id="text-area-input"
+                    label="Text Area Input"
+                    name="text_area_input"
+                />
             </VueForm>
         </Card>
     </div>
@@ -172,7 +179,8 @@ import TextInput from "@/Forms/_Base/TextInput.vue";
 import PasswordInput from "@/Forms/_Base/PasswordInput.vue";
 import SwitchInput from "@/Forms/_Base/SwitchInput.vue";
 import OtpInput from "@/Forms/_Base/OtpInput.vue";
-import TextFieldArray from "@/Forms/_Base/TextFieldArray.vue";
+import TextInputArray from "@/Forms/_Base/TextInputArray.vue";
+import TextAreaInput from "@/Forms/_Base/TextAreaInput.vue";
 
 const app = useAppStore();
 const broad = useBroadcastStore();
