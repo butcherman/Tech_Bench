@@ -9,17 +9,19 @@
             </InputGroupAddon>
             <FloatLabel variant="on" class="my-2">
                 <InputText
-                    v-model="value"
+                    v-model="formattedValue"
                     class="p-2"
-                    :type="type ?? 'text'"
+                    type="tel"
                     :autofocus="focus"
                     :disabled="disabled"
                     :id="id"
                     :autocomplete="autocomplete ?? 'off'"
                     :class="borderType"
                     :variant="filled ? 'filled' : null"
-                    :placeholder="placeholder"
                     fluid
+                    :placeholder="
+                        placeholder ? placeholder : '+1 (XXX) XXX-XXXX'
+                    "
                     @focus="hasFocus = true"
                     @blur="hasFocus = false"
                 />
@@ -48,47 +50,64 @@
 
 <script setup lang="ts">
 import {
-    InputText,
     FloatLabel,
+    InputText,
     Message,
     InputGroup,
     InputGroupAddon,
 } from "primevue";
-import { computed, ref, toRef } from "vue";
+import { ref, toRef, computed, watch, onMounted } from "vue";
 import { useField } from "vee-validate";
-import type { Ref } from "vue";
+
+defineEmits(["change"]);
 
 const props = defineProps<{
     id: string;
-    label?: string;
     name: string;
+    label?: string;
+    placeholder?: string;
+    focus?: boolean;
+    disabled?: boolean;
+    help?: string;
     autocomplete?: string;
     borderBottom?: boolean;
-    disabled?: boolean;
     filled?: boolean;
-    focus?: boolean;
-    help?: string;
-    type?: string;
-    placeholder?: string;
 }>();
 
 const hasFocus = ref(false);
+const formattedValue = ref<string | null>(null);
 
 const borderType = computed(() =>
     props.borderBottom ? "border-b rounded-none" : "border"
 );
 
-/*
-|-------------------------------------------------------------------------------
-| Vee-Validate
-|-------------------------------------------------------------------------------
-*/
+/**
+ * When a valid phone number in inserted, format to a readable number
+ * yet keep the value as only the 10 digit number
+ */
+watch(formattedValue, (newVal) => {
+    let cleaned = `${newVal}`.replace(/\D/g, "");
+    let parts = cleaned.match(/^(1|)?([2-9]{1}\d{2})(\d{3})(\d{4})$/);
+
+    if (parts) {
+        formattedValue.value = `+1 (${parts[2]}) ${parts[3]}-${parts[4]}`;
+    }
+
+    setValue(cleaned.replace(/^1/, ""));
+});
+
 const nameRef = toRef(props, "name");
-const {
-    errorMessage,
-    value,
-}: {
-    errorMessage: Ref<string | undefined, string | undefined>;
-    value: Ref<string>;
-} = useField(nameRef);
+const { errorMessage, value, setValue } = useField(nameRef);
+
+onMounted(() => {
+    if (typeof value.value === "string") {
+        formattedValue.value = value.value;
+    }
+});
 </script>
+
+<style>
+label {
+    font-weight: bold;
+}
+</style>

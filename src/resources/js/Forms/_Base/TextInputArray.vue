@@ -1,6 +1,6 @@
 <template>
     <draggable
-        :disabled="!drag"
+        :disabled="!draggable"
         :list="fields"
         item-key="index"
         @end="onDragEnd"
@@ -14,28 +14,25 @@
                     :placeholder="placeholder"
                     :datalist="datalist"
                 >
-                    <template v-if="drag" #start-text>
-                        <span
-                            class="input-group-text pointer"
-                            v-tooltip="'Drag to Re-Order'"
-                        >
+                    <template v-if="draggable" #start-text>
+                        <span class="pointer" v-tooltip="'Drag to Re-Order'">
                             <fa-icon icon="sort" />
                         </span>
                     </template>
                     <template #end-text>
                         <span
-                            class="input-group-text pointer"
+                            class="pointer text-danger"
                             v-tooltip="'Remove this item'"
                             @click="remove(index)"
                         >
-                            <fa-icon icon="xmark" class="text-danger" />
+                            <fa-icon icon="xmark" />
                         </span>
                     </template>
                 </TextInput>
             </div>
         </template>
         <template #footer>
-            <AddButton class="float-end px-2 py-0" pill @click="push('')" />
+            <AddButton class="float-end !px-2 !py-0" pill @click="push('')" />
         </template>
     </draggable>
 </template>
@@ -50,7 +47,7 @@ const props = defineProps<{
     name: string;
     label?: string;
     placeholder?: string;
-    drag?: boolean;
+    draggable?: boolean;
     datalist?: string[];
     removeWarning?: string;
 }>();

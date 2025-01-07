@@ -104,7 +104,12 @@
         </div>
         <Card class="tb-card my-2" title="Form Inputs">
             <VueForm
-                :initial-values="{ text_field_array: ['', ''] }"
+                :initial-values="{
+                    text_field_array: ['', ''],
+                    phone_input_array: [
+                        { type: 'mobile', number: '', ext: '' },
+                    ],
+                }"
                 :validation-schema="{}"
                 submit-route="#"
                 submit-method="post"
@@ -117,16 +122,70 @@
                     placeholder="This is a Text Input"
                     help="This is Help Text"
                 />
+                <fieldset class="border p-2">
+                    <legend>Text Input Array</legend>
+                    <TextInputArray
+                        id="text-input-array"
+                        name="text_field_array"
+                        draggable
+                    />
+                </fieldset>
                 <PasswordInput
                     id="password-input"
                     label="Password Input"
                     name="password_input"
                 />
-                <SwitchInput
-                    id="switch-input"
-                    label="Switch Input"
-                    name="switch_input"
-                    center
+                <PhoneInput
+                    id="phone-input"
+                    label="Phone Number Input"
+                    name="phone_input"
+                />
+                <fieldset class="border p-2">
+                    <legend>Phone Input Array</legend>
+                    <PhoneInputArray
+                        id="phone-input-array"
+                        name="phone_input_array"
+                        :phone-types="[
+                            {
+                                text: 'Mobile',
+                                value: 'mobile',
+                            },
+                            {
+                                text: 'Work',
+                                value: 'work',
+                            },
+                            {
+                                text: 'Home',
+                                value: 'home',
+                            },
+                        ]"
+                    />
+                </fieldset>
+                <SelectInput
+                    id="select-input"
+                    label="Select Input"
+                    name="select_input"
+                    :list="normalSelect"
+                />
+                <SelectInput
+                    id="select-input-group"
+                    label="Grouped Select Input"
+                    name="grouped_select_input"
+                    text-field="label"
+                    :list="selectGroup"
+                    group-text-field="label"
+                    group-children-field="items"
+                />
+                <MultiSelectInput
+                    id="multiselect-input"
+                    label="Multi Select Input"
+                    name="multi_select"
+                    :list="normalSelect"
+                />
+                <TextAreaInput
+                    id="text-area-input"
+                    label="Text Area Input"
+                    name="text_area_input"
                 />
                 <OtpInput
                     id="otp-input"
@@ -134,18 +193,11 @@
                     name="otp_input"
                     :length="6"
                 />
-                <fieldset class="border rounded-lg p-2">
-                    <legend>Text Field Array</legend>
-                    <TextInputArray
-                        id="text-field-array"
-                        name="text_field_array"
-                        drag
-                    />
-                </fieldset>
-                <TextAreaInput
-                    id="text-area-input"
-                    label="Text Area Input"
-                    name="text_area_input"
+                <SwitchInput
+                    id="switch-input"
+                    label="Switch Input"
+                    name="switch_input"
+                    center
                 />
             </VueForm>
         </Card>
@@ -153,34 +205,38 @@
 </template>
 
 <script setup lang="ts">
-import AppLayout from "@/Layouts/App/AppLayout.vue";
-import BaseButton from "@/Components/_Base/Buttons/BaseButton.vue";
+import AddBadge from "@/Components/_Base/Badges/AddBadge.vue";
 import AddButton from "@/Components/_Base/Buttons/AddButton.vue";
-import EditButton from "@/Components/_Base/Buttons/EditButton.vue";
-import DeleteButton from "@/Components/_Base/Buttons/DeleteButton.vue";
+import AppLayout from "@/Layouts/App/AppLayout.vue";
+import BaseBadge from "@/Components/_Base/Badges/BaseBadge.vue";
+import BaseButton from "@/Components/_Base/Buttons/BaseButton.vue";
+import BookmarkItem from "@/Components/_Base/BookmarkItem.vue";
 import Card from "@/Components/_Base/Card.vue";
+import ClipboardCopy from "@/Components/_Base/ClipboardCopy.vue";
+import DeleteBadge from "@/Components/_Base/Badges/DeleteBadge.vue";
+import DeleteButton from "@/Components/_Base/Buttons/DeleteButton.vue";
+import EditButton from "@/Components/_Base/Buttons/EditButton.vue";
+import EditBadge from "@/Components/_Base/Badges/EditBadge.vue";
+import RefreshButton from "@/Components/_Base/Buttons/RefreshButton.vue";
+import LogoImage from "@/Components/_Base/LogoImage.vue";
+import Modal from "@/Components/_Base/Modal.vue";
+import okModal from "@/Modules/okModal";
+import OtpInput from "@/Forms/_Base/OtpInput.vue";
+import PasswordInput from "@/Forms/_Base/PasswordInput.vue";
+import PhoneInput from "@/Forms/_Base/PhoneInput.vue";
+import ResourceList from "@/Components/_Base/ResourceList.vue";
+import SelectInput from "@/Forms/_Base/SelectInput.vue";
+import SwitchInput from "@/Forms/_Base/SwitchInput.vue";
+import TableStacked from "@/Components/_Base/TableStacked.vue";
+import TextAreaInput from "@/Forms/_Base/TextAreaInput.vue";
+import TextInput from "@/Forms/_Base/TextInput.vue";
+import VueForm from "@/Forms/_Base/VueForm.vue";
+import { ref } from "vue";
 import { useAppStore } from "@/Stores/AppStore";
 import { useBroadcastStore } from "@/Stores/BroadcastStore";
-import { ref } from "vue";
-import BaseBadge from "@/Components/_Base/Badges/BaseBadge.vue";
-import AddBadge from "@/Components/_Base/Badges/AddBadge.vue";
-import EditBadge from "@/Components/_Base/Badges/EditBadge.vue";
-import DeleteBadge from "@/Components/_Base/Badges/DeleteBadge.vue";
-import ClipboardCopy from "@/Components/_Base/ClipboardCopy.vue";
-import RefreshButton from "@/Components/_Base/Buttons/RefreshButton.vue";
-import Modal from "@/Components/_Base/Modal.vue";
-import LogoImage from "@/Components/_Base/LogoImage.vue";
-import ResourceList from "@/Components/_Base/ResourceList.vue";
-import BookmarkItem from "@/Components/_Base/BookmarkItem.vue";
-import okModal from "@/Modules/okModal";
-import TableStacked from "@/Components/_Base/TableStacked.vue";
-import VueForm from "@/Forms/_Base/VueForm.vue";
-import TextInput from "@/Forms/_Base/TextInput.vue";
-import PasswordInput from "@/Forms/_Base/PasswordInput.vue";
-import SwitchInput from "@/Forms/_Base/SwitchInput.vue";
-import OtpInput from "@/Forms/_Base/OtpInput.vue";
+import MultiSelectInput from "@/Forms/_Base/MultiSelectInput.vue";
+import PhoneInputArray from "@/Forms/_Base/PhoneInputArray.vue";
 import TextInputArray from "@/Forms/_Base/TextInputArray.vue";
-import TextAreaInput from "@/Forms/_Base/TextAreaInput.vue";
 
 const app = useAppStore();
 const broad = useBroadcastStore();
@@ -229,6 +285,44 @@ const stackedTable = ref({
     true_value: true,
     false_value: false,
 });
+
+const normalSelect = ref([
+    { text: "New York", value: "NY" },
+    { text: "Rome", value: "RM" },
+    { text: "London", value: "LDN" },
+    { text: "Istanbul", value: "IST" },
+    { text: "Paris", value: "PRS" },
+]);
+
+const selectGroup = ref([
+    {
+        label: "Germany",
+        items: [
+            { label: "Berlin", value: "Berlin" },
+            { label: "Frankfurt", value: "Frankfurt" },
+            { label: "Hamburg", value: "Hamburg" },
+            { label: "Munich", value: "Munich" },
+        ],
+    },
+    {
+        label: "USA",
+        items: [
+            { label: "Chicago", value: "Chicago" },
+            { label: "Los Angeles", value: "Los Angeles" },
+            { label: "New York", value: "New York" },
+            { label: "San Francisco", value: "San Francisco" },
+        ],
+    },
+    {
+        label: "Japan",
+        items: [
+            { label: "Kyoto", value: "Kyoto" },
+            { label: "Osaka", value: "Osaka" },
+            { label: "Tokyo", value: "Tokyo" },
+            { label: "Yokohama", value: "Yokohama" },
+        ],
+    },
+]);
 </script>
 
 <script lang="ts">
