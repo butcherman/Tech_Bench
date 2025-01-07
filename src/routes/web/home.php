@@ -3,6 +3,7 @@
 use App\Http\Controllers\Home\AboutController;
 use App\Http\Controllers\Home\DashboardController;
 use App\Http\Controllers\Home\DownloadFileController;
+use App\Http\Controllers\Home\TypographyController;
 use App\Http\Controllers\Home\UploadImageController;
 use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
 use Illuminate\Support\Facades\Route;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\Route;
 | Primary/Non-Specific Routes for Authenticated Users
 |-------------------------------------------------------------------------------
 */
+
 Route::middleware('auth.secure')->group(function () {
     Route::get('dashboard', DashboardController::class)
         ->name('dashboard')
@@ -24,6 +26,8 @@ Route::middleware('auth.secure')->group(function () {
     Route::post('upload-image/{folder?}', UploadImageController::class)
         ->name('upload-image')
         ->withoutMiddleware(ValidateCsrfToken::class);
+
+    Route::any('typography', TypographyController::class);
 });
 
 /*
