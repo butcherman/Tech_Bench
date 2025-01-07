@@ -1,21 +1,22 @@
 <template>
-    <Badge
-        class="rounded-full pointer"
+    <span
+        class="inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ring-1 ring-inset ring-gray-500/10"
         :class="variantClass"
         @click="handleClick"
     >
-        <fa-icon :icon="icon" />
-    </Badge>
+        <fa-icon v-if="icon" :icon="icon" />
+        {{ text }}
+    </span>
 </template>
 
 <script setup lang="ts">
-import { Badge } from "primevue";
 import { computed } from "vue";
 import { handleLinkClick } from "@/Composables/links.module";
 
 const props = defineProps<{
     href?: string;
-    icon: string;
+    icon?: string;
+    text?: string;
     variant?:
         | "danger"
         | "dark"
@@ -56,7 +57,7 @@ const variantClass = computed(() => {
         case "help":
             return "bg-violet-600 text-white";
         case "info":
-            return "bg-blue-300";
+            return "bg-blue-400 text-white";
         case "light":
             return "bg-neutral-300";
         case "primary":

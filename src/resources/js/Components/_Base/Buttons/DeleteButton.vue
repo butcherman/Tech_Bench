@@ -1,17 +1,16 @@
 <template>
-    <span style="display: inline-flex">
-        <Button
-            class="px-4 py-2"
-            :class="variantClass"
-            :rounded="pill"
-            :raised="!flat"
+    <div class="inline-flex">
+        <BaseButton
+            :flat="flat"
+            :pill="pill"
+            :variant="variant ?? 'danger'"
             @click="handleClick"
         >
             <slot>
                 <fa-icon :icon="icon ?? 'trash-alt'" />
                 {{ text ?? "Delete" }}
             </slot>
-        </Button>
+        </BaseButton>
         <ConfirmPopup>
             <template #icon>
                 <fa-icon icon="exclamation-circle" class="text-danger" />
@@ -23,13 +22,12 @@
                 <fa-icon icon="xmark" />
             </template>
         </ConfirmPopup>
-    </span>
+    </div>
 </template>
 
 <script setup lang="ts">
+import BaseButton from "./BaseButton.vue";
 import ConfirmPopup from "primevue/confirmpopup";
-import { Button } from "primevue";
-import { computed } from "vue";
 import { handleLinkClick } from "@/Composables/links.module";
 import { useConfirm } from "primevue";
 
@@ -57,13 +55,12 @@ const props = defineProps<{
         | "warning";
 }>();
 
-const confirm = useConfirm();
-
 /*
 |---------------------------------------------------------------------------
 | Use a Dialog Box to confirm delete
 |---------------------------------------------------------------------------
 */
+const confirm = useConfirm();
 const handleClick = (event: MouseEvent) => {
     if (props.confirm) {
         confirm.require({
@@ -90,36 +87,4 @@ const handleClick = (event: MouseEvent) => {
         handleLinkClick(event, props.href);
     }
 };
-
-/*
-|---------------------------------------------------------------------------
-| Background Color
-|---------------------------------------------------------------------------
-*/
-const variantClass = computed(() => {
-    switch (props.variant) {
-        case "danger":
-            return "bg-rose-600 text-white";
-        case "dark":
-            return "bg-gray-900 text-white";
-        case "error":
-            return "bg-red-500 text-white";
-        case "help":
-            return "bg-violet-600 text-white";
-        case "info":
-            return "bg-blue-300";
-        case "light":
-            return "bg-neutral-300";
-        case "primary":
-            return "bg-blue-500 text-white";
-        case "secondary":
-            return "bg-blue-300";
-        case "success":
-            return "bg-green-500 text-white";
-        case "warning":
-            return "bg-yellow-400";
-        default:
-            return "bg-rose-500 text-white";
-    }
-});
 </script>

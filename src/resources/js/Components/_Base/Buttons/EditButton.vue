@@ -1,22 +1,14 @@
 <template>
-    <Button
-        class="px-4 py-2"
-        :class="variantClass"
-        :rounded="pill"
-        :raised="!flat"
-        @click="handleClick"
-    >
+    <BaseButton v-bind="props" :variant="variant ?? 'warning'">
         <slot>
             <fa-icon :icon="icon ?? 'pencil'" />
             {{ text ?? "Edit" }}
         </slot>
-    </Button>
+    </BaseButton>
 </template>
 
 <script setup lang="ts">
-import { Button } from "primevue";
-import { computed } from "vue";
-import { handleLinkClick } from "@/Composables/links.module";
+import BaseButton from "./BaseButton.vue";
 
 const props = defineProps<{
     flat?: boolean;
@@ -36,47 +28,4 @@ const props = defineProps<{
         | "success"
         | "warning";
 }>();
-
-/*
-|---------------------------------------------------------------------------
-| If href prop is populated, treat click as a link.
-|---------------------------------------------------------------------------
-*/
-const handleClick = (event: MouseEvent) => {
-    if (props.href) {
-        handleLinkClick(event, props.href);
-    }
-};
-
-/*
-|---------------------------------------------------------------------------
-| Background Color
-|---------------------------------------------------------------------------
-*/
-const variantClass = computed(() => {
-    switch (props.variant) {
-        case "danger":
-            return "bg-rose-600 text-white";
-        case "dark":
-            return "bg-gray-900 text-white";
-        case "error":
-            return "bg-red-500 text-white";
-        case "help":
-            return "bg-violet-600 text-white";
-        case "info":
-            return "bg-blue-300";
-        case "light":
-            return "bg-neutral-300";
-        case "primary":
-            return "bg-blue-500 text-white";
-        case "secondary":
-            return "bg-blue-300";
-        case "success":
-            return "bg-green-500 text-white";
-        case "warning":
-            return "bg-yellow-400";
-        default:
-            return "bg-yellow-300";
-    }
-});
 </script>

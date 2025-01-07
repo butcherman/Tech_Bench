@@ -1,20 +1,21 @@
 <template>
-    <Button
-        class="px-4 py-2"
-        :class="variantClass"
-        :rounded="pill"
-        :raised="!flat"
+    <button
+        class="rounded-lg"
+        :class="[
+            sizeClass,
+            variantClass,
+            { '!rounded-full': pill, 'shadow-xl': !flat },
+        ]"
         @click="handleClick"
     >
         <slot>
             <fa-icon v-if="icon" :icon="icon" />
             {{ text }}
         </slot>
-    </Button>
+    </button>
 </template>
 
 <script setup lang="ts">
-import { Button } from "primevue";
 import { computed } from "vue";
 import { handleLinkClick } from "@/Composables/links.module";
 
@@ -24,6 +25,7 @@ const props = defineProps<{
     icon?: string;
     pill?: boolean;
     text?: string;
+    size?: "small" | "normal" | "large";
     variant?:
         | "danger"
         | "dark"
@@ -50,6 +52,23 @@ const handleClick = (event: MouseEvent) => {
 
 /*
 |---------------------------------------------------------------------------
+| Button Size
+|---------------------------------------------------------------------------
+*/
+const sizeClass = computed(() => {
+    switch (props.size) {
+        case "small":
+            return "px-2 py-1";
+        case "large":
+            return "px-3 py-4";
+        case "normal":
+        default:
+            return "px-3 py-2";
+    }
+});
+
+/*
+|---------------------------------------------------------------------------
 | Background Color
 |---------------------------------------------------------------------------
 */
@@ -64,7 +83,7 @@ const variantClass = computed(() => {
         case "help":
             return "bg-violet-600 text-white";
         case "info":
-            return "bg-blue-300";
+            return "bg-blue-400 text-white";
         case "light":
             return "bg-neutral-300";
         case "primary":
