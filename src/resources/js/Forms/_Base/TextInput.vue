@@ -92,3 +92,15 @@ const {
     value: Ref<string>;
 } = useField(nameRef);
 </script>
+
+<style>
+.p-inputtext::placeholder {
+    color: transparent;
+}
+
+.p-inputtext:focus::placeholder {
+    /* color: inherit; */
+    /* @apply text-muted; */
+    @apply text-muted-color;
+}
+</style>

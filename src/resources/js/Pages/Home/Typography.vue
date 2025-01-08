@@ -8,6 +8,10 @@
             <AdvancedButtons />
         </div>
         <DataComponents />
+        <div class="grid md:grid-cols-2 gap-3">
+            <BasicForm />
+            <AdvancedForm />
+        </div>
     </div>
 </template>
 
@@ -17,8 +21,9 @@ import TextComponent from "@/Components/_typography/TextTypography.vue";
 import BasicButtons from "@/Components/_typography/BasicButtons.vue";
 import AdvancedButtons from "@/Components/_typography/AdvancedButtons.vue";
 import Messages from "@/Components/_typography/Messages.vue";
-import Card from "@/Components/_Base/Card.vue";
 import DataComponents from "@/Components/_typography/DataComponents.vue";
+import BasicForm from "@/Components/_typography/BasicForm.vue";
+import AdvancedForm from "@/Components/_typography/AdvancedForm.vue";
 </script>
 
 <script lang="ts">

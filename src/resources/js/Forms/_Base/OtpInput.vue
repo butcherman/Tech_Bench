@@ -1,6 +1,6 @@
 <template>
     <div class="my-2 p-1 text-center">
-        <label :for="id" class="font-bold">{{ label }}</label>
+        <label :for="id" class="font-bold text-muted">{{ label }}</label>
         <InputOtp
             v-model="value"
             :id="id"
@@ -13,7 +13,7 @@
                     type="text"
                     v-bind="attrs"
                     v-on="events"
-                    class="border h-10 w-16 text-center rounded-lg"
+                    class="border h-8 md:h-10 w-8 md:w-16 text-center rounded-lg"
                 />
             </template>
         </InputOtp>

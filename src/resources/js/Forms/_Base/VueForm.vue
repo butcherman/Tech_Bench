@@ -2,6 +2,7 @@
     <Overlay
         :loading="isSubmitting && !hideOverlay"
         :full-page="fullPageOverlay"
+        class="h-full"
     >
         <form
             class="vld-parent h-full flex flex-col"

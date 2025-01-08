@@ -8,7 +8,7 @@
                 @focus="hasFocus = true"
                 @blur="hasFocus = false"
             />
-            <label :for="id" class="align-top ms-2">
+            <label :for="id" class="align-top ms-2 text-muted">
                 <slot name="label">
                     {{ label }}
                 </slot>
