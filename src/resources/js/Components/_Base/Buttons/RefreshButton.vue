@@ -4,6 +4,7 @@
         :pill="pill"
         v-tooltip="'Refresh'"
         :flat="flat"
+        size="small"
         @click="handleClick"
     >
         <slot>

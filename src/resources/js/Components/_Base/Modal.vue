@@ -29,7 +29,7 @@
                                 </div>
                                 <div
                                     v-if="$slots.header || title"
-                                    class="border-b"
+                                    class="border-b mb-3"
                                 >
                                     <slot name="header">
                                         <h5 class="text-muted">{{ title }}</h5>
@@ -40,7 +40,7 @@
                                 </div>
                                 <div
                                     v-if="$slots.footer"
-                                    class="border-t flex flex-row-reverse pt-2"
+                                    class="border-t flex flex-row-reverse pt-2 mt-3"
                                 >
                                     <slot name="footer"></slot>
                                 </div>

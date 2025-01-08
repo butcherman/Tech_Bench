@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col rounded-lg w-full h-full bg-white p-3 shadow-lg">
+    <div class="flex flex-col rounded-lg bg-white p-3 shadow-lg">
         <div v-if="title || $slots.title" class="text-muted border-b mb-5 pb-1">
             <slot name="title">
                 {{ title }}

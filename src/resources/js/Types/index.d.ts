@@ -33,7 +33,17 @@ type navbar = {
 
 type flashData = {
     id?: string;
-    type: string;
+    type:
+        | "danger"
+        | "dark"
+        | "error"
+        | "help"
+        | "info"
+        | "light"
+        | "primary"
+        | "secondary"
+        | "success"
+        | "warning";
     message: string;
 };
 

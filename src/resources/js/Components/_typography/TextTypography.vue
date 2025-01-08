@@ -9,6 +9,10 @@
         <p>Paragraph</p>
         <code>Code Block</code>
         <pre>Pre Block</pre>
+        <div class="text-success">Success Text</div>
+        <div class="text-muted">Muted Text</div>
+        <div class="text-error">Error Text</div>
+        <div class="text-danger">Danger Text</div>
     </Card>
 </template>
 

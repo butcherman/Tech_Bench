@@ -1,5 +1,5 @@
 <template>
-    <Card>
+    <Card title="Dashboard">
         <h1>Dashboard</h1>
     </Card>
 </template>

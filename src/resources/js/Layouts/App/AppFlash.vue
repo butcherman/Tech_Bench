@@ -9,19 +9,22 @@
                     <div
                         v-for="flash in app.flashAlerts"
                         :key="flash.id"
-                        class="app-flash-message"
+                        class="app-flash-message py-3 px-2 my-3 rounded-xl flex text-xl opacity-90"
+                        :class="getStatusType(flash.type)"
                     >
-                        <Message
-                            class="my-2"
-                            :severity="getStatusType(flash.type)"
-                            pt:text:class="grow text-center"
-                            closable
-                        >
-                            <template #icon>
-                                <fa-icon :icon="getStatusIcon(flash.type)" />
-                            </template>
+                        <div class="mx-2">
+                            <fa-icon :icon="getStatusIcon(flash.type)" />
+                        </div>
+                        <div class="grow text-center">
                             {{ flash.message }}
-                        </Message>
+                        </div>
+                        <div class="mx-2">
+                            <fa-icon
+                                icon="xmark"
+                                class="pointer"
+                                @click="app.removeFlashMsg(flash.id)"
+                            />
+                        </div>
                     </div>
                 </TransitionGroup>
             </div>
