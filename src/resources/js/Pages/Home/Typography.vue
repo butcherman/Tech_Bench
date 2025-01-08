@@ -7,6 +7,7 @@
             <BasicButtons />
             <AdvancedButtons />
         </div>
+        <DataComponents />
     </div>
 </template>
 
@@ -17,6 +18,7 @@ import BasicButtons from "@/Components/_typography/BasicButtons.vue";
 import AdvancedButtons from "@/Components/_typography/AdvancedButtons.vue";
 import Messages from "@/Components/_typography/Messages.vue";
 import Card from "@/Components/_Base/Card.vue";
+import DataComponents from "@/Components/_typography/DataComponents.vue";
 </script>
 
 <script lang="ts">

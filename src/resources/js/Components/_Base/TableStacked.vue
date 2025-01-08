@@ -1,15 +1,11 @@
 <template>
     <table class="table-auto border-collapse" :class="{ border: bordered }">
         <tbody>
-            <tr v-for="(value, index) in rows" class="border-b">
+            <tr v-for="(value, index) in items" class="border-b">
                 <slot name="row" :row-data="{ value, index }">
                     <th class="text-end p-2">
                         <slot name="index" :row-data="{ value, index }">
-                            {{
-                                titleCase
-                                    ? toTitleCase(index.toString())
-                                    : index
-                            }}:
+                            {{ toTitleCase(index.toString()) }}:
                         </slot>
                     </th>
                     <td class="p-2">
@@ -35,8 +31,7 @@
 
 <script setup lang="ts">
 defineProps<{
-    rows: any;
-    titleCase?: boolean;
+    items: { [key: string]: string | number | boolean };
     bordered?: boolean;
 }>();
 
