@@ -8,6 +8,7 @@
             class="vld-parent h-full flex flex-col"
             @submit.prevent="onSubmit"
             novalidate
+            v-focustrap
         >
             <div v-if="uncaughtErrors.length" class="flex-none my-4">
                 <Message

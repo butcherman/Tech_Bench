@@ -16,6 +16,7 @@ import { createPinia } from "pinia";
 import PrimeVue from "primevue/config";
 import Tooltip from "primevue/tooltip";
 import ConfirmationService from "primevue/confirmationservice";
+import FocusTrap from "primevue/focustrap";
 import Aura from "@primevue/themes/aura";
 import "./echo";
 
@@ -76,7 +77,8 @@ createInertiaApp({
             .component("fa-icon", FontAwesomeIcon)
             .component("Link", Link)
             .component("Head", Head)
-            .directive("tooltip", Tooltip);
+            .directive("tooltip", Tooltip)
+            .directive("focustrap", FocusTrap);
 
         inertiaApp.config.globalProperties.$route = route;
 
