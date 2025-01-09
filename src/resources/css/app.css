@@ -52,10 +52,3 @@ div.separator {
         margin-left: 0.25em;
     }
 }
-
-/**
-* Development class to show the items border
-*/
-.show-my-outline {
-    border: 1px solid red;
-}

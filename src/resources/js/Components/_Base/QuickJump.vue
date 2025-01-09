@@ -1,38 +1,49 @@
 <template>
     <Card class="duration-700 transition-all">
-        <div class="flex flex-wrap">
-            <h3 class="grow md:grow-0">{{ title ?? "Quick Jump" }}:</h3>
+        <div class="flex flex-row">
+            <div class="h-full grow md:grow-0">
+                <h3>{{ title ?? "Quick Jump" }}:</h3>
+            </div>
             <div class="md:hidden">
                 <BaseButton
                     icon="bars"
                     variant="light"
                     size="small"
-                    @click="hideNav = !hideNav"
+                    @click="showNav = !showNav"
                 />
             </div>
             <div
                 id="quick-jump-nav-list"
-                class="w-full md:w-fit md:grow md:text-center overflow-hidden md:h-full mt-1"
-                :class="{ 'h-0': hideNav }"
+                class="w-0 md:w-auto overflow-hidden h-0 md:h-auto md:grow md:ms-2 flex flex-wrap text-center"
             >
-                <div class="flex flex-col md:flex-row w-full">
-                    <div
-                        v-for="(item, index) in navList"
-                        class="grow text-muted"
-                        :class="{ 'md:border-e': index !== navList.length - 1 }"
-                    >
-                        <a @click="scrollToElement(item.navId)" class="pointer">
-                            {{ item.label }}
-                        </a>
-                    </div>
+                <div
+                    v-for="(item, index) in navList"
+                    class="grow text-muted mx-2 mt-1"
+                    :class="{ 'md:border-e': index !== navList.length - 1 }"
+                >
+                    <a @click="scrollToElement(item.navId)" class="pointer">
+                        {{ item.label }}
+                    </a>
                 </div>
             </div>
         </div>
+        <Drawer v-model:visible="showNav" header="Quick Jump" position="top">
+            <div
+                v-for="(item, index) in navList"
+                class="grow text-muted mx-2 mt-1"
+                :class="{ 'md:border-e': index !== navList.length - 1 }"
+            >
+                <a @click="scrollToElement(item.navId)" class="pointer">
+                    {{ item.label }}
+                </a>
+            </div>
+        </Drawer>
     </Card>
 </template>
 
 <script setup lang="ts">
 import { ref } from "vue";
+import { Drawer } from "primevue";
 import Card from "./Card.vue";
 import BaseButton from "./Buttons/BaseButton.vue";
 
@@ -46,7 +57,7 @@ defineProps<{
     title?: string;
 }>();
 
-const hideNav = ref(true);
+const showNav = ref(false);
 const currentSection = ref<string>();
 
 const scrollToElement = (elId: string) => {
@@ -54,14 +65,9 @@ const scrollToElement = (elId: string) => {
     document
         .getElementById(elId)
         ?.scrollIntoView({ behavior: "smooth", block: "center" });
+
+    if (showNav.value) {
+        showNav.value = false;
+    }
 };
 </script>
-
-<style scoped>
-#quick-jump-nav-list {
-    /* transition: max-height;
-    transition-duration: 0.5s; */
-    transition: all;
-    transition-duration: 2s;
-}
-</style>
