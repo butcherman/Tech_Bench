@@ -100,8 +100,6 @@
         >
             {{ help }}
         </Message>
-        <br />
-        {{ value }}
     </div>
 </template>
 

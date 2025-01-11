@@ -24,10 +24,9 @@
             />
             <SelectBoxInput
                 id="select-box-input"
-                label="Select Box Input"
+                label="Pick List Input"
                 name="select_box_input"
-                :list="['Sacramento', 'Los Angeles', 'Bakersfield', 'Reno']"
-                help="Standard Select Box Input"
+                :list="normalSelect"
             />
             <OtpInput
                 id="otp-input"
@@ -74,7 +73,7 @@ import { object } from "yup";
 import { ref } from "vue";
 import RadioGroupInput from "@/Forms/_Base/RadioGroupInput.vue";
 import RangeInput from "@/Forms/_Base/RangeInput.vue";
-import SelectBoxInput from "@/Forms/_Base/SelectBoxInput.vue";
+import SelectBoxInput from "@/Forms/_Base/PickListInput.vue";
 
 const normalSelect = ref([
     { label: "New York", value: "NY" },
@@ -116,7 +115,7 @@ const selectGroup = ref([
 
 const initValues = {
     range_input: 175,
-    // select_box_input: ["RM", "IST"],
+    select_box_input: ["RM", "IST"],
 };
 const schema = object({});
 </script>

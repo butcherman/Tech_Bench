@@ -2,7 +2,7 @@
     <div>
         <h2 class="text-center mb-4">Typography and Component Examples</h2>
         <QuickJump :nav-list="quickJumpList" />
-        <!-- <Messages id="messages" class="my-3" />
+        <Messages id="messages" class="my-3" />
         <div class="grid md:grid-cols-3 gap-3">
             <TextComponent id="typography" />
             <BasicButtons id="basic-buttons" />
@@ -15,7 +15,7 @@
                 :step-list="stepList"
                 :current-step="1"
             />
-        </Card> -->
+        </Card>
         <div class="grid md:grid-cols-2 gap-3">
             <BasicForm id="basic-forms" />
             <AdvancedForm id="advanced-forms" />
