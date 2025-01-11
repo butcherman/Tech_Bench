@@ -26,7 +26,7 @@
                 id="select-box-input"
                 label="Select Box Input"
                 name="select_box_input"
-                :list="normalSelect"
+                :list="['Sacramento', 'Los Angeles', 'Bakersfield', 'Reno']"
                 help="Standard Select Box Input"
             />
             <OtpInput
@@ -116,7 +116,7 @@ const selectGroup = ref([
 
 const initValues = {
     range_input: 175,
-    select_box_input: ["RM", "IST"],
+    // select_box_input: ["RM", "IST"],
 };
 const schema = object({});
 </script>

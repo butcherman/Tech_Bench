@@ -107,7 +107,7 @@
 
 <script setup lang="ts">
 import { Message } from "primevue";
-import { ref, toRef, computed, onMounted, nextTick } from "vue";
+import { ref, toRef, computed, onMounted } from "vue";
 import { useField } from "vee-validate";
 import type { Ref } from "vue";
 
@@ -119,7 +119,7 @@ export interface listBox {
 
 const props = defineProps<{
     id: string;
-    list: listBox[] | string[];
+    list: listBox[];
     name: string;
     availableText?: string;
     help?: string;
@@ -130,25 +130,25 @@ const props = defineProps<{
     valueField?: string;
 }>();
 
-const selectLabelKey = computed(() => props.labelField ?? "label");
-const selectValueKey = computed(() => props.valueField ?? "value");
+const selectLabelKey = computed<string>(() => props.labelField ?? "label");
+const selectValueKey = computed<string>(() => props.valueField ?? "value");
 
 // If the component is currently in focus
 const hasFocus = ref<boolean>(false);
 
 // Visible options in the select boxes
-const availableList = ref([]);
-const selectedList = ref([]);
+const availableList = ref<listBox[]>([]);
+const selectedList = ref<listBox[]>([]);
 
 // Highlighted items in each of the select boxes
-const availableHighlighted = ref([]);
-const selectedHighlighted = ref([]);
+const availableHighlighted = ref<listBox[]>([]);
+const selectedHighlighted = ref<listBox[]>([]);
 
 /**
  * Add one or more items to the value & selected list
  */
 const addItems = (init = false): void => {
-    availableHighlighted.value.forEach((item: listBox | string) => {
+    availableHighlighted.value.forEach((item: listBox) => {
         // Add to selected list, remove from available list
         selectedList.value.push(item);
         availableList.value.splice(availableList.value.indexOf(item), 1);
@@ -164,18 +164,19 @@ const addItems = (init = false): void => {
 /**
  * Add All items to the value & selected list
  */
-const addAllItems = () => {
+const addAllItems = (): void => {
     availableHighlighted.value = [];
     availableList.value.forEach((item) => {
         availableHighlighted.value.push(item);
     });
+
     addItems();
 };
 
 /**
  * Remove one or more items from the value & selected list
  */
-const removeItems = () => {
+const removeItems = (): void => {
     selectedHighlighted.value.forEach((item) => {
         // Add to available list, remove from selected list
         availableList.value.push(item);
@@ -192,7 +193,7 @@ const removeItems = () => {
 /**
  * Remove all items from the value & selected list
  */
-const removeAllItems = () => {
+const removeAllItems = (): void => {
     selectedHighlighted.value = [];
     selectedList.value.forEach((item) => {
         selectedHighlighted.value.push(item);
