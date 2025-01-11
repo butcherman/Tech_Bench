@@ -22,10 +22,12 @@
                 name="multi_select"
                 :list="normalSelect"
             />
-            <TextAreaInput
-                id="text-area-input"
-                label="Text Area Input"
-                name="text_area_input"
+            <SelectBoxInput
+                id="select-box-input"
+                label="Select Box Input"
+                name="select_box_input"
+                :list="normalSelect"
+                help="Standard Select Box Input"
             />
             <OtpInput
                 id="otp-input"
@@ -65,7 +67,6 @@
 import VueForm from "@/Forms/_Base/VueForm.vue";
 import SelectInput from "@/Forms/_Base/SelectInput.vue";
 import MultiSelectInput from "@/Forms/_Base/MultiSelectInput.vue";
-import TextAreaInput from "@/Forms/_Base/TextAreaInput.vue";
 import OtpInput from "@/Forms/_Base/OtpInput.vue";
 import SwitchInput from "@/Forms/_Base/SwitchInput.vue";
 import Card from "../_Base/Card.vue";
@@ -73,13 +74,14 @@ import { object } from "yup";
 import { ref } from "vue";
 import RadioGroupInput from "@/Forms/_Base/RadioGroupInput.vue";
 import RangeInput from "@/Forms/_Base/RangeInput.vue";
+import SelectBoxInput from "@/Forms/_Base/SelectBoxInput.vue";
 
 const normalSelect = ref([
-    { text: "New York", value: "NY" },
-    { text: "Rome", value: "RM" },
-    { text: "London", value: "LDN" },
-    { text: "Istanbul", value: "IST" },
-    { text: "Paris", value: "PRS" },
+    { label: "New York", value: "NY" },
+    { label: "Rome", value: "RM" },
+    { label: "London", value: "LDN" },
+    { label: "Istanbul", value: "IST" },
+    { label: "Paris", value: "PRS" },
 ]);
 
 const selectGroup = ref([
@@ -114,6 +116,7 @@ const selectGroup = ref([
 
 const initValues = {
     range_input: 175,
+    select_box_input: ["RM", "IST"],
 };
 const schema = object({});
 </script>

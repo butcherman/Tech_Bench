@@ -59,6 +59,11 @@
                 name="select_input"
                 :list="normalSelect"
             />
+            <TextAreaInput
+                id="text-area-input"
+                label="Text Area Input"
+                name="text_area_input"
+            />
         </VueForm>
     </Card>
 </template>
@@ -71,6 +76,7 @@ import PasswordInput from "@/Forms/_Base/PasswordInput.vue";
 import PhoneInput from "@/Forms/_Base/PhoneInput.vue";
 import PhoneInputArray from "@/Forms/_Base/PhoneInputArray.vue";
 import SelectInput from "@/Forms/_Base/SelectInput.vue";
+import TextAreaInput from "@/Forms/_Base/TextAreaInput.vue";
 import Card from "../_Base/Card.vue";
 import { object } from "yup";
 import { ref } from "vue";

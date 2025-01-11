@@ -7,7 +7,7 @@
             :filter="filter"
             :id="id"
             :options="list"
-            :option-label="textField ?? 'text'"
+            :option-label="textField ?? 'label'"
             :option-value="valueField ?? 'value'"
             :option-group-label="groupTextField"
             :option-group-children="groupChildrenField"
