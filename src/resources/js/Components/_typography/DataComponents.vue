@@ -10,7 +10,10 @@
             <DataTable
                 :columns="columnData"
                 :rows="customerData"
+                :row-class-rules="dataTableRow"
                 class="h-96"
+                paginate
+                @row-click="handleRowClick"
             />
         </Card>
     </div>
@@ -47,6 +50,14 @@ const stackedTable = ref({
     country: "United States",
     true_value: true,
     false_value: false,
+});
+
+const handleRowClick = (data) => {
+    console.log(data);
+};
+
+const dataTableRow = ref({
+    "bg-blue-100": "data.site_count > 1",
 });
 
 const columnData = ref([
