@@ -42,18 +42,20 @@
 </template>
 
 <script setup lang="ts" generic="T">
-import { FlexRender } from "@tanstack/vue-table";
+import TableHeaderCell from "./TableHeaderCell.vue";
+import { computed, h } from "vue";
 import {
     useVueTable,
     createColumnHelper,
     getCoreRowModel,
+    FlexRender,
 } from "@tanstack/vue-table";
-import { computed } from "vue";
 import type { AccessorFn, ColumnDef } from "@tanstack/vue-table";
 
 interface tableColumnProp {
     label: string;
     field: string;
+    icon?: string;
 }
 
 const props = defineProps<{
@@ -73,8 +75,9 @@ const tableColumns = computed<ColumnDef<T, unknown>[]>(() => {
     props.columns.forEach((col: tableColumnProp) => {
         cols.push(
             colHelper.accessor(col.field as unknown as AccessorFn<T>, {
+                id: col.field,
                 cell: (info) => info.getValue(),
-                header: col.label,
+                header: (data) => h(TableHeaderCell, { data, column: col }),
             })
         );
     });

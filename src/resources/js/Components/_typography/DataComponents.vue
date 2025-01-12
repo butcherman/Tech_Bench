@@ -65,6 +65,7 @@ const tableColumns = ref([
     {
         label: "Username",
         field: "username",
+        icon: "user",
     },
 ]);
 
