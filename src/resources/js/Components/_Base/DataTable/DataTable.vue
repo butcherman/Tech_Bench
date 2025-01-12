@@ -1,18 +1,16 @@
 <template>
-    <div class="w-full h-full">
-        <table
-            class="table-auto w-full border border-collapse border-slate-400"
-        >
+    <div class="overflow-x-auto w-full">
+        <table class="table-auto w-full">
             <thead>
                 <tr
                     v-for="headerGroup in table.getHeaderGroups()"
                     :key="headerGroup.id"
-                    class="bg-slate-100"
+                    class="bg-slate-300"
                 >
                     <th
                         v-for="headerCell in headerGroup.headers"
                         :key="headerCell.id"
-                        class="border border-slate-300 p-2 text-start"
+                        class="p-3 border border-slate-400"
                     >
                         <FlexRender
                             :render="headerCell.column.columnDef.header"
@@ -22,11 +20,15 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="row in table.getRowModel().rows" :key="row.id">
+                <tr
+                    v-for="(row, index) in table.getRowModel().rows"
+                    :key="row.id"
+                    :class="{ 'bg-slate-100': index % 2 === 1 }"
+                >
                     <td
                         v-for="cell in row.getAllCells()"
                         :key="cell.id"
-                        class="border border-slate-300 p-2"
+                        class="p-3 border border-slate-400"
                     >
                         <FlexRender
                             :render="cell.column.columnDef.cell"
@@ -40,13 +42,14 @@
 </template>
 
 <script setup lang="ts" generic="T">
-import { AccessorFn, ColumnDef, FlexRender } from "@tanstack/vue-table";
+import { FlexRender } from "@tanstack/vue-table";
 import {
     useVueTable,
     createColumnHelper,
     getCoreRowModel,
 } from "@tanstack/vue-table";
 import { computed } from "vue";
+import type { AccessorFn, ColumnDef } from "@tanstack/vue-table";
 
 interface tableColumnProp {
     label: string;
@@ -58,8 +61,12 @@ const props = defineProps<{
     rows: T[];
 }>();
 
+/*
+|-------------------------------------------------------------------------------
+| Table Header/Column Definitions
+|-------------------------------------------------------------------------------
+*/
 const colHelper = createColumnHelper<T>();
-
 const tableColumns = computed<ColumnDef<T, unknown>[]>(() => {
     let cols: ColumnDef<T, unknown>[] = [];
 
@@ -75,6 +82,11 @@ const tableColumns = computed<ColumnDef<T, unknown>[]>(() => {
     return cols;
 });
 
+/*
+|-------------------------------------------------------------------------------
+| Table State
+|-------------------------------------------------------------------------------
+*/
 const table = useVueTable({
     columns: tableColumns.value,
     data: props.rows,

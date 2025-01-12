@@ -2,12 +2,12 @@
     <div>
         <h2 class="text-center mb-4">Typography and Component Examples</h2>
         <QuickJump :nav-list="quickJumpList" />
-        <Messages id="messages" class="my-3" />
+        <!-- <Messages id="messages" class="my-3" />
         <div class="grid md:grid-cols-3 gap-3">
             <TextComponent id="typography" />
             <BasicButtons id="basic-buttons" />
             <AdvancedButtons id="advanced-buttons" />
-        </div>
+        </div> -->
         <DataComponents id="data-tables" />
         <Card class="my-3" title="Step Navigation">
             <StepNavigation
