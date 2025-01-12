@@ -18,6 +18,19 @@
                         />
                     </th>
                 </tr>
+                <tr v-if="showFilterRow">
+                    <th
+                        v-for="headerCell in table.getHeaderGroups()[0].headers"
+                        class="p-1 border border-slate-400 font-normal"
+                    >
+                        <TableHeaderFilter
+                            v-if="
+                                headerCell.column.columnDef.enableColumnFilter
+                            "
+                            v-bind="headerCell.getContext()"
+                        />
+                    </th>
+                </tr>
             </thead>
             <tbody>
                 <tr
@@ -43,11 +56,13 @@
 
 <script setup lang="ts" generic="T">
 import TableHeaderCell from "./TableHeaderCell.vue";
+import TableHeaderFilter from "./TableHeaderFilter.vue";
 import { computed, h } from "vue";
 import {
     useVueTable,
     createColumnHelper,
     getCoreRowModel,
+    getFilteredRowModel,
     FlexRender,
 } from "@tanstack/vue-table";
 import type { AccessorFn, ColumnDef } from "@tanstack/vue-table";
@@ -56,12 +71,25 @@ interface tableColumnProp {
     label: string;
     field: string;
     icon?: string;
+    filterable?: boolean;
 }
 
 const props = defineProps<{
     columns: tableColumnProp[];
     rows: T[];
 }>();
+
+const showFilterRow = computed(() => {
+    let show = false;
+
+    props.columns.map((col) => {
+        if (col.filterable) {
+            show = true;
+        }
+    });
+
+    return show;
+});
 
 /*
 |-------------------------------------------------------------------------------
@@ -78,6 +106,7 @@ const tableColumns = computed<ColumnDef<T, unknown>[]>(() => {
                 id: col.field,
                 cell: (info) => info.getValue(),
                 header: (data) => h(TableHeaderCell, { data, column: col }),
+                enableColumnFilter: col.filterable ?? false,
             })
         );
     });
@@ -94,5 +123,6 @@ const table = useVueTable({
     columns: tableColumns.value,
     data: props.rows,
     getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
 });
 </script>

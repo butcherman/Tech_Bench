@@ -49,14 +49,17 @@ const tableColumns = ref([
     {
         label: "First Name",
         field: "first_name",
+        filterable: true,
     },
     {
         label: "Last Name",
         field: "last_name",
+        filterable: true,
     },
     {
         label: "Email",
         field: "email",
+        filterable: false,
     },
     {
         label: "Initials",
