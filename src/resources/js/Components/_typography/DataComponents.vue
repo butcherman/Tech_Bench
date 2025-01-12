@@ -17,7 +17,7 @@ import { ref } from "vue";
 import Card from "../_Base/Card.vue";
 import ResourceList from "../_Base/ResourceList.vue";
 import TableStacked from "../_Base/TableStacked.vue";
-import DataTable from "../_Base/DataTable.vue";
+import DataTable from "../_Base/DataTable/DataTable.vue";
 
 const resourceListData = ref([
     {
