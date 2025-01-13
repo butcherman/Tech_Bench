@@ -10,7 +10,7 @@
                     <th
                         v-for="headerCell in headerGroup.headers"
                         :key="headerCell.id"
-                        class="p-3 border border-slate-400"
+                        class="p-3 border border-slate-400 border-b-0"
                     >
                         <FlexRender
                             :render="headerCell.column.columnDef.header"
@@ -18,15 +18,13 @@
                         />
                     </th>
                 </tr>
-                <tr v-if="showFilterRow">
+                <tr v-if="showFilterRow" class="bg-slate-300">
                     <th
                         v-for="headerCell in table.getHeaderGroups()[0].headers"
-                        class="p-1 border border-slate-400 font-normal"
+                        class="p-1 border border-t-0 border-slate-400 font-normal"
                     >
                         <TableHeaderFilter
-                            v-if="
-                                headerCell.column.columnDef.enableColumnFilter
-                            "
+                            v-if="headerCell.column.getCanFilter()"
                             v-bind="headerCell.getContext()"
                         />
                     </th>
@@ -72,6 +70,7 @@ interface tableColumnProp {
     field: string;
     icon?: string;
     filterable?: boolean;
+    filterSelect?: boolean;
 }
 
 const props = defineProps<{
@@ -105,8 +104,16 @@ const tableColumns = computed<ColumnDef<T, unknown>[]>(() => {
             colHelper.accessor(col.field as unknown as AccessorFn<T>, {
                 id: col.field,
                 cell: (info) => info.getValue(),
-                header: (data) => h(TableHeaderCell, { data, column: col }),
+                header: (data) =>
+                    h(TableHeaderCell, {
+                        label: col.label,
+                        meta: data.column.columnDef.meta,
+                    }),
                 enableColumnFilter: col.filterable ?? false,
+                meta: {
+                    icon: col.icon,
+                    filterSelect: col.filterSelect ?? false,
+                },
             })
         );
     });

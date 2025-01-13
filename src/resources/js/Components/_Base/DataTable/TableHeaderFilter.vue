@@ -3,7 +3,7 @@
         <input
             v-model="localValue"
             type="text"
-            class="border p-1"
+            class="border p-1 rounded-md w-full"
             @keyup="updateFilter"
         />
     </div>

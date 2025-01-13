@@ -47,13 +47,8 @@ const stackedTable = ref({
 
 const tableColumns = ref([
     {
-        label: "First Name",
-        field: "first_name",
-        filterable: true,
-    },
-    {
-        label: "Last Name",
-        field: "last_name",
+        label: "Name",
+        field: "full_name",
         filterable: true,
     },
     {
@@ -62,13 +57,15 @@ const tableColumns = ref([
         filterable: false,
     },
     {
-        label: "Initials",
-        field: "initials",
-    },
-    {
         label: "Username",
         field: "username",
         icon: "user",
+    },
+    {
+        label: "User Role",
+        field: "role_name",
+        filterable: true,
+        filterSelect: true,
     },
 ]);
 
@@ -80,6 +77,7 @@ const tableRows = ref([
         initials: "SA",
         last_name: "Administrator",
         username: "admin",
+        role_name: "Installer",
     },
     {
         email: "tech@em.com",
@@ -88,6 +86,7 @@ const tableRows = ref([
         initials: "TU",
         last_name: "User",
         username: "tech",
+        role_name: "Administrator",
     },
     {
         email: "Arthur.Grimes@noEm.com",
@@ -96,6 +95,7 @@ const tableRows = ref([
         initials: "AG",
         last_name: "Grimes",
         username: "Arthur.Grimes",
+        role_name: "Tech",
     },
     {
         email: "Shirley.Mayer@noEm.com",
@@ -104,6 +104,7 @@ const tableRows = ref([
         initials: "SM",
         last_name: "Mayer",
         username: "Shirley.Mayer",
+        role_name: "Reports",
     },
     {
         email: "Adrianna.Schneider@noEm.com",
@@ -112,6 +113,7 @@ const tableRows = ref([
         initials: "AS",
         last_name: "Schneider",
         username: "Adrianna.Schneider",
+        role_name: "Tech",
     },
     {
         email: "Syble.Abshire@noEm.com",
@@ -120,6 +122,7 @@ const tableRows = ref([
         initials: "SA",
         last_name: "Abshire",
         username: "Syble.Abshire",
+        role_name: "Tech",
     },
     {
         email: "Delia.Schuster@noEm.com",
@@ -128,6 +131,7 @@ const tableRows = ref([
         initials: "DS",
         last_name: "Schuster",
         username: "Delia.Schuster",
+        role_name: "Tech",
     },
     {
         email: "Fay.Tromp@noEm.com",
@@ -136,6 +140,7 @@ const tableRows = ref([
         initials: "FT",
         last_name: "Tromp",
         username: "Fay.Tromp",
+        role_name: "Tech",
     },
     {
         email: "Garth.Walker@noEm.com",
@@ -144,6 +149,7 @@ const tableRows = ref([
         initials: "GW",
         last_name: "Walker",
         username: "Garth.Walker",
+        role_name: "Tech",
     },
     {
         email: "Amara.Willms@noEm.com",
@@ -152,6 +158,7 @@ const tableRows = ref([
         initials: "AW",
         last_name: "Willms",
         username: "Amara.Willms",
+        role_name: "Tech",
     },
     {
         email: "Colby.Hagenes@noEm.com",
@@ -160,6 +167,7 @@ const tableRows = ref([
         initials: "CH",
         last_name: "Hagenes",
         username: "Colby.Hagenes",
+        role_name: "Tech",
     },
     {
         email: "Letitia.Morar@noEm.com",
@@ -168,6 +176,7 @@ const tableRows = ref([
         initials: "LM",
         last_name: "Morar",
         username: "Letitia.Morar",
+        role_name: "Administrator",
     },
     {
         email: "Harmony.Schroeder@noEm.com",
@@ -176,6 +185,7 @@ const tableRows = ref([
         initials: "HS",
         last_name: "Schroeder",
         username: "Harmony.Schroeder",
+        role_name: "Installer",
     },
     {
         email: "Amelia.Dicki@noEm.com",
@@ -184,6 +194,7 @@ const tableRows = ref([
         initials: "AD",
         last_name: "Dicki",
         username: "Amelia.Dicki",
+        role_name: "Tech",
     },
     {
         email: "Cary.Haag@noEm.com",
@@ -192,6 +203,7 @@ const tableRows = ref([
         initials: "CH",
         last_name: "Haag",
         username: "Cary.Haag",
+        role_name: "Tech",
     },
     {
         email: "Owen.Nader@noEm.com",
@@ -200,6 +212,7 @@ const tableRows = ref([
         initials: "ON",
         last_name: "Nader",
         username: "Owen.Nader",
+        role_name: "Tech",
     },
     {
         email: "Daren.Nitzsche@noEm.com",
@@ -208,6 +221,7 @@ const tableRows = ref([
         initials: "DN",
         last_name: "Nitzsche",
         username: "Daren.Nitzsche",
+        role_name: "Tech",
     },
     {
         email: "Madilyn.Torp@noEm.com",
@@ -216,6 +230,7 @@ const tableRows = ref([
         initials: "MT",
         last_name: "Torp",
         username: "Madilyn.Torp",
+        role_name: "Tech",
     },
     {
         email: "Janet.Kuhlman@noEm.com",
@@ -224,6 +239,7 @@ const tableRows = ref([
         initials: "JK",
         last_name: "Kuhlman",
         username: "Janet.Kuhlman",
+        role_name: "Reports",
     },
     {
         email: "Alphonso.Witting@noEm.com",
@@ -232,6 +248,7 @@ const tableRows = ref([
         initials: "AW",
         last_name: "Witting",
         username: "Alphonso.Witting",
+        role_name: "Administrator",
     },
     {
         email: "Marcelino.Doyle@noEm.com",
@@ -240,6 +257,7 @@ const tableRows = ref([
         initials: "MD",
         last_name: "Doyle",
         username: "Marcelino.Doyle",
+        role_name: "Tech",
     },
     {
         email: "Alfred.Russel@noEm.com",
@@ -248,6 +266,7 @@ const tableRows = ref([
         initials: "AR",
         last_name: "Russel",
         username: "Alfred.Russel",
+        role_name: "Tech",
     },
     {
         email: "Frieda.Dach@noEm.com",
@@ -256,6 +275,7 @@ const tableRows = ref([
         initials: "FD",
         last_name: "Dach",
         username: "Frieda.Dach",
+        role_name: "Tech",
     },
     {
         email: "Jadyn.Stoltenberg@noEm.com",
@@ -264,6 +284,7 @@ const tableRows = ref([
         initials: "JS",
         last_name: "Stoltenberg",
         username: "Jadyn.Stoltenberg",
+        role_name: "Tech",
     },
     {
         email: "Jaime.Jacobson@noEm.com",
@@ -272,6 +293,7 @@ const tableRows = ref([
         initials: "JJ",
         last_name: "Jacobson",
         username: "Jaime.Jacobson",
+        role_name: "Tech",
     },
     {
         email: "German.Windler@noEm.com",
@@ -280,6 +302,7 @@ const tableRows = ref([
         initials: "GW",
         last_name: "Windler",
         username: "German.Windler",
+        role_name: "Tech",
     },
     {
         email: "Meghan.Keeling@noEm.com",
@@ -288,6 +311,7 @@ const tableRows = ref([
         initials: "MK",
         last_name: "Keeling",
         username: "Meghan.Keeling",
+        role_name: "Tech",
     },
     {
         email: "Wilhelm.Buckridge@noEm.com",
@@ -296,6 +320,7 @@ const tableRows = ref([
         initials: "WB",
         last_name: "Buckridge",
         username: "Wilhelm.Buckridge",
+        role_name: "Tech",
     },
     {
         email: "Samanta.Rice@noEm.com",
@@ -304,6 +329,7 @@ const tableRows = ref([
         initials: "SR",
         last_name: "Rice",
         username: "Samanta.Rice",
+        role_name: "Tech",
     },
     {
         email: "Nickolas.Parker@noEm.com",
@@ -312,6 +338,7 @@ const tableRows = ref([
         initials: "NP",
         last_name: "Parker",
         username: "Nickolas.Parker",
+        role_name: "Tech",
     },
     {
         email: "Elody.Schaden@noEm.com",
@@ -320,6 +347,7 @@ const tableRows = ref([
         initials: "ES",
         last_name: "Schaden",
         username: "Elody.Schaden",
+        role_name: "Installer",
     },
     {
         email: "Harvey.Reichert@noEm.com",
@@ -328,6 +356,7 @@ const tableRows = ref([
         initials: "HR",
         last_name: "Reichert",
         username: "Harvey.Reichert",
+        role_name: "Tech",
     },
     {
         email: "Abner.Daniel@noEm.com",
@@ -336,6 +365,7 @@ const tableRows = ref([
         initials: "AD",
         last_name: "Daniel",
         username: "Abner.Daniel",
+        role_name: "Tech",
     },
     {
         email: "Elouise.Nolan@noEm.com",
@@ -344,6 +374,7 @@ const tableRows = ref([
         initials: "EN",
         last_name: "Nolan",
         username: "Elouise.Nolan",
+        role_name: "Tech",
     },
     {
         email: "Ewald.Nikolaus@noEm.com",
@@ -352,6 +383,7 @@ const tableRows = ref([
         initials: "EN",
         last_name: "Nikolaus",
         username: "Ewald.Nikolaus",
+        role_name: "Tech",
     },
     {
         email: "Kolby.Reichert@noEm.com",
@@ -360,6 +392,7 @@ const tableRows = ref([
         initials: "KR",
         last_name: "Reichert",
         username: "Kolby.Reichert",
+        role_name: "Tech",
     },
     {
         email: "Eudora.Sauer@noEm.com",
@@ -368,6 +401,7 @@ const tableRows = ref([
         initials: "ES",
         last_name: "Sauer",
         username: "Eudora.Sauer",
+        role_name: "Tech",
     },
     {
         email: "Alexis.Green@noEm.com",
@@ -376,6 +410,7 @@ const tableRows = ref([
         initials: "AG",
         last_name: "Green",
         username: "Alexis.Green",
+        role_name: "Tech",
     },
     {
         email: "Tom.Lang@noEm.com",
@@ -384,6 +419,7 @@ const tableRows = ref([
         initials: "TL",
         last_name: "Lang",
         username: "Tom.Lang",
+        role_name: "Tech",
     },
     {
         email: "Sven.Willms@noEm.com",
@@ -392,6 +428,7 @@ const tableRows = ref([
         initials: "SW",
         last_name: "Willms",
         username: "Sven.Willms",
+        role_name: "Tech",
     },
     {
         email: "Demario.Kihn@noEm.com",
@@ -400,6 +437,7 @@ const tableRows = ref([
         initials: "DK",
         last_name: "Kihn",
         username: "Demario.Kihn",
+        role_name: "Tech",
     },
     {
         email: "Lavina.Reichert@noEm.com",
@@ -408,6 +446,7 @@ const tableRows = ref([
         initials: "LR",
         last_name: "Reichert",
         username: "Lavina.Reichert",
+        role_name: "Tech",
     },
     {
         email: "Porter.Jacobi@noEm.com",
@@ -416,6 +455,7 @@ const tableRows = ref([
         initials: "PJ",
         last_name: "Jacobi",
         username: "Porter.Jacobi",
+        role_name: "Tech",
     },
     {
         email: "Emil.Fahey@noEm.com",
@@ -424,6 +464,7 @@ const tableRows = ref([
         initials: "EF",
         last_name: "Fahey",
         username: "Emil.Fahey",
+        role_name: "Tech",
     },
     {
         email: "Melisa.Roberts@noEm.com",
@@ -432,6 +473,7 @@ const tableRows = ref([
         initials: "MR",
         last_name: "Roberts",
         username: "Melisa.Roberts",
+        role_name: "Tech",
     },
     {
         email: "Lynn.Farrell@noEm.com",
@@ -440,6 +482,7 @@ const tableRows = ref([
         initials: "LF",
         last_name: "Farrell",
         username: "Lynn.Farrell",
+        role_name: "Tech",
     },
     {
         email: "Audie.Hills@noEm.com",
@@ -448,6 +491,7 @@ const tableRows = ref([
         initials: "AH",
         last_name: "Hills",
         username: "Audie.Hills",
+        role_name: "Tech",
     },
     {
         email: "Ima.VonRueden@noEm.com",
@@ -456,6 +500,7 @@ const tableRows = ref([
         initials: "IV",
         last_name: "VonRueden",
         username: "Ima.VonRueden",
+        role_name: "Tech",
     },
 ]);
 </script>
