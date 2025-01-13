@@ -1,10 +1,15 @@
 <template>
-    <div>
+    <div class="relative">
         <input
             v-model="localValue"
             type="text"
-            class="border p-1 rounded-md w-full"
+            class="border p-1 ps-2 rounded-md w-full"
+            placeholder="  Filter"
             @keyup="updateFilter"
+        />
+        <fa-icon
+            icon="filter"
+            class="absolute top-1/2 transform -translate-y-1/2 right-3 text-muted"
         />
     </div>
 </template>

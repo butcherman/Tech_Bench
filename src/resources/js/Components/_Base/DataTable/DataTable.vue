@@ -12,6 +12,14 @@
                         :key="headerCell.id"
                         class="p-3 border border-slate-400 border-b-0"
                     >
+                        <fa-icon
+                            v-if="headerCell.column.getCanSort()"
+                            :icon="
+                                getSortingIcon(headerCell.column.getIsSorted())
+                            "
+                            class="float-end mt-1 pointer"
+                            @click="headerCell.column.toggleSorting()"
+                        />
                         <FlexRender
                             :render="headerCell.column.columnDef.header"
                             :props="headerCell.getContext()"
@@ -61,6 +69,7 @@ import {
     createColumnHelper,
     getCoreRowModel,
     getFilteredRowModel,
+    getSortedRowModel,
     FlexRender,
 } from "@tanstack/vue-table";
 import type { AccessorFn, ColumnDef } from "@tanstack/vue-table";
@@ -71,6 +80,7 @@ interface tableColumnProp {
     icon?: string;
     filterable?: boolean;
     filterSelect?: boolean;
+    sort?: boolean;
 }
 
 const props = defineProps<{
@@ -78,6 +88,27 @@ const props = defineProps<{
     rows: T[];
 }>();
 
+/*
+|---------------------------------------------------------------------------
+| For Column Sorting
+|---------------------------------------------------------------------------
+*/
+const getSortingIcon = (col: false | "asc" | "desc") => {
+    switch (col) {
+        case "asc":
+            return "sort-down";
+        case "desc":
+            return "sort-up";
+        default:
+            return "sort";
+    }
+};
+
+/*
+|---------------------------------------------------------------------------
+| For Column Filtering
+|---------------------------------------------------------------------------
+*/
 const showFilterRow = computed(() => {
     let show = false;
 
@@ -110,6 +141,7 @@ const tableColumns = computed<ColumnDef<T, unknown>[]>(() => {
                         meta: data.column.columnDef.meta,
                     }),
                 enableColumnFilter: col.filterable ?? false,
+                enableSorting: col.sort ?? false,
                 meta: {
                     icon: col.icon,
                     filterSelect: col.filterSelect ?? false,
@@ -131,5 +163,6 @@ const table = useVueTable({
     data: props.rows,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
+    getSortedRowModel: getSortedRowModel(),
 });
 </script>

@@ -50,16 +50,19 @@ const tableColumns = ref([
         label: "Name",
         field: "full_name",
         filterable: true,
+        sort: true,
     },
     {
         label: "Email",
         field: "email",
         filterable: false,
+        sort: true,
     },
     {
         label: "Username",
         field: "username",
         icon: "user",
+        sort: false,
     },
     {
         label: "User Role",
