@@ -20,10 +20,15 @@
                             class="float-end mt-1 pointer"
                             @click="headerCell.column.toggleSorting()"
                         />
-                        <FlexRender
-                            :render="headerCell.column.columnDef.header"
-                            :props="headerCell.getContext()"
-                        />
+                        <slot
+                            :name="`header.${headerCell.id}`"
+                            :cellData="headerCell.column.columnDef.meta"
+                        >
+                            <FlexRender
+                                :render="headerCell.column.columnDef.header"
+                                :props="headerCell.getContext()"
+                            />
+                        </slot>
                     </th>
                 </tr>
                 <tr v-if="showFilterRow" class="bg-slate-300">
@@ -49,10 +54,15 @@
                         :key="cell.id"
                         class="p-3 border border-slate-400"
                     >
-                        <FlexRender
-                            :render="cell.column.columnDef.cell"
-                            :props="cell.getContext()"
-                        />
+                        <slot
+                            :name="`column.${cell.column.id}`"
+                            :cellData="cell.getValue()"
+                        >
+                            <FlexRender
+                                :render="cell.column.columnDef.cell"
+                                :props="cell.getContext()"
+                            />
+                        </slot>
                     </td>
                 </tr>
             </tbody>
@@ -89,9 +99,9 @@ const props = defineProps<{
 }>();
 
 /*
-|---------------------------------------------------------------------------
+|-------------------------------------------------------------------------------
 | For Column Sorting
-|---------------------------------------------------------------------------
+|-------------------------------------------------------------------------------
 */
 const getSortingIcon = (col: false | "asc" | "desc") => {
     switch (col) {
@@ -105,9 +115,9 @@ const getSortingIcon = (col: false | "asc" | "desc") => {
 };
 
 /*
-|---------------------------------------------------------------------------
+|-------------------------------------------------------------------------------
 | For Column Filtering
-|---------------------------------------------------------------------------
+|-------------------------------------------------------------------------------
 */
 const showFilterRow = computed(() => {
     let show = false;
@@ -143,6 +153,7 @@ const tableColumns = computed<ColumnDef<T, unknown>[]>(() => {
                 enableColumnFilter: col.filterable ?? false,
                 enableSorting: col.sort ?? false,
                 meta: {
+                    label: col.label,
                     icon: col.icon,
                     filterSelect: col.filterSelect ?? false,
                 },
