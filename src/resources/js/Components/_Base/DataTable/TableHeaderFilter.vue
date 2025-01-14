@@ -4,7 +4,7 @@
             v-model="localValue"
             type="text"
             class="border p-1 ps-2 rounded-md w-full"
-            placeholder="  Filter"
+            :placeholder="placeholder"
             @keyup="updateFilter"
         />
         <fa-icon
@@ -14,19 +14,20 @@
     </div>
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts" generic="T">
 import { ref } from "vue";
+import type { Column } from "@tanstack/vue-table";
 
 const props = defineProps<{
-    column: any;
-    table: any;
-    header: any;
+    column: Column<T>;
 }>();
 
-const localValue = ref("");
+const localValue = ref<string>("");
+const placeholder = ref<string>(
+    props.column.columnDef.meta?.filterPlaceholder ?? ""
+);
 
-const updateFilter = () => {
-    console.log("updating filter");
+const updateFilter = (): void => {
     props.column.setFilterValue(localValue.value);
 };
 </script>

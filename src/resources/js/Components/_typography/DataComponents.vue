@@ -7,7 +7,17 @@
             <TableStacked :items="stackedTable" class="w-full" bordered />
         </Card>
         <Card title="Data Table" class="md:col-span-2">
-            <DataTable :columns="tableColumns" :rows="tableRows"> </DataTable>
+            <DataTable
+                :columns="tableColumns"
+                :rows="tableRows"
+                striped
+                allow-row-click
+                :row-bg-fn="
+                    (row) =>
+                        row.role_name === 'Reports' ? 'bg-red-200' : false
+                "
+            >
+            </DataTable>
         </Card>
     </div>
 </template>
@@ -50,6 +60,7 @@ const tableColumns = ref([
         label: "Name",
         field: "full_name",
         filterable: true,
+        filterPlaceholder: "Filter By Name",
         sort: true,
     },
     {
