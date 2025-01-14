@@ -1,9 +1,11 @@
 <template>
     <ul class="h-full">
         <li v-if="!list.length">
-            <h4 class="text-center">
-                {{ emptyText ?? "Nothing to see here..." }}
-            </h4>
+            <slot name="empty-slot">
+                <h4 class="text-center">
+                    {{ emptyText ?? "No Data" }}
+                </h4>
+            </slot>
         </li>
         <li
             v-for="item in list"
@@ -25,6 +27,9 @@
 
 <script setup lang="ts" generic="T extends listItem">
 import { handleLinkClick } from "@/Composables/links.module";
+
+// TODO - Pagination
+// TODO - Simple string array
 
 export type listItem = {
     href?: string;

@@ -57,9 +57,12 @@ defineProps<{
     title?: string;
 }>();
 
-const showNav = ref(false);
+const showNav = ref<boolean>(false);
 const currentSection = ref<string>();
 
+/**
+ * Place the selected element at the center of the screen.
+ */
 const scrollToElement = (elId: string) => {
     currentSection.value = elId;
     document

@@ -24,6 +24,7 @@
 defineEmits<{
     "navigate-to": [stepId: number];
 }>();
+
 defineProps<{
     stepList: {
         id: number;

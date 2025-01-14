@@ -123,7 +123,7 @@ const hide = (): void => {
 /**
  * Watch the modal open variable
  */
-watch(modalOpen, (newVal) => {
+watch(modalOpen, (newVal: boolean): void => {
     if (newVal) {
         emit("shown");
     } else {

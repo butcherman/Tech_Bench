@@ -21,7 +21,7 @@ defineProps<{
 }>();
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .vld-overlay.is-active {
     background-color: rgba(197, 192, 192, 0.5);
 }

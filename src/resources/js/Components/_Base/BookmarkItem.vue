@@ -14,6 +14,9 @@ const props = defineProps<{
     toggleRoute: string;
 }>();
 
+/**
+ * Component State
+ */
 const isActive = ref<boolean>(props.isBookmark);
 const isLoading = ref<boolean>(false);
 
@@ -38,6 +41,7 @@ const bookmarkClass = computed<string>(() => {
 
     return isActive.value ? "bookmark-checked" : "bookmark-unchecked";
 });
+
 /**
  * Tooltip to show on the Bookmark Item
  */
@@ -67,7 +71,7 @@ const toggleBookmark = (): void => {
 };
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .bookmark-checked {
     color: #d46e70;
 }

@@ -1,5 +1,5 @@
 <template>
-    <span v-tooltip="tipText ?? 'Copy to Clipboard'" @click="copyToClipboard">
+    <span v-tooltip="tipText" @click="copyToClipboard">
         <BaseBadge icon="copy" :variant="bgVariant" />
     </span>
 </template>
@@ -29,9 +29,12 @@ const props = defineProps<{
 const tooltipBase = "Copy to Clipboard";
 
 const bgVariant = ref<variant>("info");
-const tipText = ref(props.tooltip ?? tooltipBase);
+const tipText = ref<string>(props.tooltip ?? tooltipBase);
 
-const copyToClipboard = () => {
+/**
+ * Copy the value to clipboard.  Change background of button temporarily.
+ */
+const copyToClipboard = (): void => {
     navigator.clipboard.writeText(props.value);
 
     emit("copied");
