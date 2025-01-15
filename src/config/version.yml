@@ -2,19 +2,19 @@ mode: increment
 blade-directive: version
 current:
   label: v
-  major: 7
+  major: 8
   minor: 0
-  patch: 1
-  prerelease: null
+  patch: 0
+  prerelease: dev
   buildmetadata: null
-  commit: 99a
+  commit: 99b
   timestamp:
     year: 2025
     month: 1
     day: 15
-    hour: 3
-    minute: 42
-    second: 30
+    hour: 4
+    minute: 39
+    second: 28
     timezone: UTC
 commit:
   mode: git-local
@@ -59,4 +59,4 @@ format:
   timestamp-datetime: '{$timestamp.year}-{$timestamp.month}-{$timestamp.day} {$timestamp.hour}:{$timestamp.minute}:{$timestamp.second}'
   timestamp-full: '{$timestamp.year}-{$timestamp.month}-{$timestamp.day} {$timestamp.hour}:{$timestamp.minute}:{$timestamp.second} {$timestamp.timezone}'
   build: '{$timestamp.month}-{$timestamp.day}-{$timestamp.year}'
-  copyright: 2016-2024
+  copyright: 2016-2025
