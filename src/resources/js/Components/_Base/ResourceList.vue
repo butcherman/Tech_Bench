@@ -3,9 +3,9 @@
         <ul class="rounded-lg border-collapse" :class="{ border: !noBorder }">
             <li v-if="!list.length">
                 <slot name="empty-slot">
-                    <h5 class="text-center text-muted">
+                    <h4 class="text-center">
                         {{ emptyText ?? "No Data" }}
-                    </h5>
+                    </h4>
                 </slot>
             </li>
             <li
@@ -19,7 +19,9 @@
                 }"
                 @click="onRowClicked($event, item)"
             >
-                {{ item[labelField] }}
+                <slot name="list-item" :item="item">
+                    {{ item[labelField] }}
+                </slot>
             </li>
         </ul>
     </div>
