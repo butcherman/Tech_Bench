@@ -7,7 +7,7 @@
 
 <script setup lang="ts" generic="T">
 defineProps<{
-    label: string;
+    label?: string;
     meta?: {
         icon?: string;
     };

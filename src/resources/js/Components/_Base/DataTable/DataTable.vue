@@ -43,8 +43,13 @@
                     </th>
                 </tr>
             </thead>
-            <tbody>
-                <tr v-if="!table.getRowModel().rows.length">
+            <TransitionGroup
+                name="data-table"
+                :css="false"
+                @beforeLeave="fadeOut"
+                @enter="fadeIn"
+            >
+                <tr v-if="!table.getRowModel().rows.length" :key="0">
                     <td :colspan="table.getAllColumns().length">
                         <slot name="no-results">
                             <h3 class="text-center text-muted">
@@ -76,7 +81,7 @@
                         </slot>
                     </td>
                 </tr>
-            </tbody>
+            </TransitionGroup>
             <tfoot>
                 <tr>
                     <td
@@ -194,6 +199,7 @@ import {
     FlexRender,
 } from "@tanstack/vue-table";
 import type { AccessorFn, ColumnDef } from "@tanstack/vue-table";
+import gsap from "gsap";
 
 interface tableColumnProp {
     label?: string;
@@ -391,4 +397,24 @@ const table = useVueTable({
     getFacetedUniqueValues: getFacetedUniqueValues(),
     getPaginationRowModel: props.paginate ? getPaginationRowModel() : undefined,
 });
+
+/*
+|---------------------------------------------------------------------------
+| Table Transition Animations
+|---------------------------------------------------------------------------
+*/
+const fadeOut = (el: Element) => {
+    gsap.to(el, {
+        opacity: 0,
+        duration: 0.8,
+    });
+};
+
+const fadeIn = (el: Element, done: () => void) => {
+    gsap.from(el, {
+        opacity: 0,
+        duration: 0.8,
+        onComplete: done,
+    });
+};
 </script>
