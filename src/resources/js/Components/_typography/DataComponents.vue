@@ -1,7 +1,7 @@
 <template>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-3 my-3">
         <Card title="Resource List">
-            <ResourceList :list="resourceListData" />
+            <ResourceList :list="resourceListData" label-field="text" />
         </Card>
         <Card title="Stacked Table">
             <TableStacked :items="stackedTable" class="w-full" bordered />
@@ -28,13 +28,10 @@ import DeleteBadge from "../_Base/Badges/DeleteBadge.vue";
 
 const resourceListData = ref([
     {
-        icon: "pencil",
-        text: "List Item that is a link",
-        href: route("about"),
+        text: "List Item",
     },
     {
-        icon: "eye",
-        text: "List Item with an icon",
+        text: "List Item number 2",
     },
     {
         text: "Plain Text Item",
