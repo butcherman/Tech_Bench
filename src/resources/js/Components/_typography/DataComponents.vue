@@ -8,6 +8,10 @@
         </Card>
         <Card title="Data Table" class="md:col-span-2">
             <DataTable :columns="tableColumns" :rows="tableRows" paginate>
+                <template #column.actions>
+                    <AddBadge />
+                    <DeleteBadge />
+                </template>
             </DataTable>
         </Card>
     </div>
@@ -19,6 +23,8 @@ import Card from "../_Base/Card.vue";
 import ResourceList from "../_Base/ResourceList.vue";
 import TableStacked from "../_Base/TableStacked.vue";
 import DataTable from "../_Base/DataTable/DataTable.vue";
+import AddBadge from "../_Base/Badges/AddBadge.vue";
+import DeleteBadge from "../_Base/Badges/DeleteBadge.vue";
 
 const resourceListData = ref([
     {
@@ -71,6 +77,9 @@ const tableColumns = ref([
         field: "role_name",
         filterable: true,
         filterSelect: true,
+    },
+    {
+        field: "actions",
     },
 ]);
 

@@ -196,7 +196,7 @@ import {
 import type { AccessorFn, ColumnDef } from "@tanstack/vue-table";
 
 interface tableColumnProp {
-    label: string;
+    label?: string;
     field: string;
     icon?: string;
     filterable?: boolean;
