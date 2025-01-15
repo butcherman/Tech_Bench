@@ -7,16 +7,7 @@
             <TableStacked :items="stackedTable" class="w-full" bordered />
         </Card>
         <Card title="Data Table" class="md:col-span-2">
-            <DataTable
-                :columns="tableColumns"
-                :rows="tableRows"
-                striped
-                allow-row-click
-                :row-bg-fn="
-                    (row) =>
-                        row.role_name === 'Reports' ? 'bg-red-200' : false
-                "
-            >
+            <DataTable :columns="tableColumns" :rows="tableRows" paginate>
             </DataTable>
         </Card>
     </div>
