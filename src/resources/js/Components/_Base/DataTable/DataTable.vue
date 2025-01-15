@@ -189,6 +189,8 @@ import {
     getFilteredRowModel,
     getSortedRowModel,
     getPaginationRowModel,
+    getFacetedRowModel,
+    getFacetedUniqueValues,
     FlexRender,
 } from "@tanstack/vue-table";
 import type { AccessorFn, ColumnDef } from "@tanstack/vue-table";
@@ -385,6 +387,8 @@ const table = useVueTable({
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
+    getFacetedRowModel: getFacetedRowModel(),
+    getFacetedUniqueValues: getFacetedUniqueValues(),
     getPaginationRowModel: props.paginate ? getPaginationRowModel() : undefined,
 });
 </script>
