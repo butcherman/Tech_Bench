@@ -71,8 +71,8 @@
                         :class="[paddingClass, borderClass]"
                     >
                         <slot
-                            :name="`column.${cell.column.id}`"
-                            :cellData="cell.getValue()"
+                            :name="`row.${cell.column.id}`"
+                            :rowData="row.original"
                         >
                             <FlexRender
                                 :render="cell.column.columnDef.cell"
@@ -82,7 +82,7 @@
                     </td>
                 </tr>
             </TransitionGroup>
-            <tfoot>
+            <tfoot v-if="paginate">
                 <tr>
                     <td
                         :colspan="table.getAllColumns().length"

@@ -1,6 +1,7 @@
 <template>
     <div class="inline-flex">
         <BaseBadge
+            class="pointer"
             :icon="icon ?? 'trash-alt'"
             :variant="variant ?? 'danger'"
             @click="handleClick"
@@ -55,6 +56,7 @@ const confirm = useConfirm();
 const handleClick = (event: MouseEvent) => {
     if (props.confirm) {
         confirm.require({
+            target: event.currentTarget as HTMLElement,
             message: props.confirmMsg ?? "Are You Sure?",
             acceptLabel: props.acceptText ?? "Yes",
             acceptClass: "border px-2",
