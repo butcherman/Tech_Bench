@@ -23,10 +23,14 @@
 <script setup lang="ts">
 import { handleLinkClick } from "@/Composables/links.module";
 import { useConfirm } from "primevue";
-import ConfirmPopup from "primevue/confirmpopup";
 import BaseBadge from "./BaseBadge.vue";
+import ConfirmPopup from "primevue/confirmpopup";
 
-const emit = defineEmits(["accepted", "rejected"]);
+const emit = defineEmits<{
+    accepted: [];
+    rejected: [];
+}>();
+
 const props = defineProps<{
     confirm?: boolean;
     confirmMsg?: string;
@@ -48,20 +52,20 @@ const props = defineProps<{
 }>();
 
 /*
-|---------------------------------------------------------------------------
+|-------------------------------------------------------------------------------
 | If href prop is populated, treat click as a link.
-|---------------------------------------------------------------------------
+|-------------------------------------------------------------------------------
 */
 const confirm = useConfirm();
 const handleClick = (event: MouseEvent) => {
     if (props.confirm) {
         confirm.require({
-            target: event.currentTarget as HTMLElement,
-            message: props.confirmMsg ?? "Are You Sure?",
-            acceptLabel: props.acceptText ?? "Yes",
             acceptClass: "border px-2",
-            rejectLabel: props.rejectText ?? "No",
+            acceptLabel: props.acceptText ?? "Yes",
+            message: props.confirmMsg ?? "Are You Sure?",
             rejectClass: "border px-2",
+            rejectLabel: props.rejectText ?? "No",
+            target: event.currentTarget as HTMLElement,
             accept: () => {
                 emit("accepted");
                 if (props.href) {

@@ -47,6 +47,11 @@ import { Drawer } from "primevue";
 import Card from "./Card.vue";
 import BaseButton from "./Buttons/BaseButton.vue";
 
+/*
+|-------------------------------------------------------------------------------
+| Local Types
+|-------------------------------------------------------------------------------
+*/
 interface navList {
     navId: string;
     label: string;

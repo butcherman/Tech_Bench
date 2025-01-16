@@ -1,10 +1,10 @@
 <template>
     <BaseButton
+        size="small"
         variant="light"
+        :flat="flat"
         :pill="pill"
         v-tooltip="'Refresh'"
-        :flat="flat"
-        size="small"
         @click="handleClick"
     >
         <slot>
@@ -18,10 +18,14 @@ import BaseButton from "./BaseButton.vue";
 import { ref } from "vue";
 import { router } from "@inertiajs/vue3";
 
-const emit = defineEmits(["loading-start", "loading-complete"]);
+const emit = defineEmits<{
+    "loading-start": [];
+    "loading-complete": [];
+}>();
+
 const props = defineProps<{
-    only?: string[];
     flat?: boolean;
+    only?: string[];
     pill?: boolean;
     variant?:
         | "danger"
@@ -37,6 +41,12 @@ const props = defineProps<{
 }>();
 
 const isLoading = ref<boolean>(false);
+
+/*
+|-------------------------------------------------------------------------------
+| Reload the page
+|-------------------------------------------------------------------------------
+*/
 const handleClick = (): void => {
     isLoading.value = true;
     emit("loading-start");

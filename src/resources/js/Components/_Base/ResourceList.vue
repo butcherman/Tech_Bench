@@ -35,15 +35,15 @@ const emit = defineEmits<{
 }>();
 
 const props = defineProps<{
-    list: T[];
-    labelField: keyof T;
     center?: boolean;
     emptyText?: string;
+    labelField: keyof T;
+    list: T[];
     noBorder?: boolean;
     linkFn?: (row: any) => string;
 }>();
 
-const onRowClicked = (event: MouseEvent, item: T) => {
+const onRowClicked = (event: MouseEvent, item: T): void => {
     emit("row-clicked", event, item);
 
     if (props.linkFn) {

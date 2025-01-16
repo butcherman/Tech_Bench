@@ -314,7 +314,6 @@ const showingEnd = computed(() =>
 );
 
 const goToPage = (pageIndex: number) => {
-    console.log(table.getPageOptions());
     table.setPageIndex(pageIndex);
 };
 
