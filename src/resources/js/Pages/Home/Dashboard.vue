@@ -1,5 +1,5 @@
 <template>
-    <div class="grid gap-4">
+    <div class="grid gap-2">
         <h2 class="pb-2">Hello {{ app.user?.full_name }}</h2>
         <Card title="Bookmarks">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
