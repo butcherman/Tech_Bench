@@ -116,6 +116,14 @@ const isLoading = ref(false);
 const paginationArray = ref([10, 25, 50, 100]);
 const perPage = ref(paginationArray.value[0]);
 
+const startLoad = (): void => {
+    isLoading.value = true;
+};
+
+const endLoad = (): void => {
+    isLoading.value = false;
+};
+
 /*
 |---------------------------------------------------------------------------
 | Table Events
@@ -220,4 +228,6 @@ const table = useVueTable({
 });
 
 provide<Table<T>, string>("table", table);
+
+defineExpose({ startLoad, endLoad });
 </script>
