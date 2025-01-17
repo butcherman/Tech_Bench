@@ -7,8 +7,11 @@
             <TableStacked :items="stackedTable" class="w-full" bordered />
         </Card>
         <Card title="Data Table" class="md:col-span-2">
-            <DataTable :columns="tableColumns" :rows="tableRows" paginate>
-                <template #column.actions>
+            <DataTable :columns="tableColumns" :rows="tableRows">
+                <template #header.email="{ cellData }">
+                    {{ cellData.label }}-Modified
+                </template>
+                <template #row.actions>
                     <AddBadge />
                     <DeleteBadge />
                 </template>
