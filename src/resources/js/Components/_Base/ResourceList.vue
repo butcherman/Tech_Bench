@@ -11,12 +11,15 @@
             <li
                 v-for="(item, index) in list"
                 :key="index"
-                class="p-3 border-collapse"
-                :class="{
-                    border: !noBorder,
-                    'text-center': center,
-                    'pointer hover:bg-slate-200': linkFn,
-                }"
+                class="border-collapse"
+                :class="[
+                    {
+                        border: !noBorder,
+                        'text-center': center,
+                        'pointer hover:bg-slate-200': linkFn,
+                    },
+                    paddingClass,
+                ]"
                 @click="onRowClicked($event, item)"
             >
                 <slot name="list-item" :item="item">
@@ -28,6 +31,7 @@
 </template>
 
 <script setup lang="ts" generic="T">
+import { computed } from "vue";
 import { handleLinkClick } from "../../Composables/links.module";
 
 const emit = defineEmits<{
@@ -36,12 +40,15 @@ const emit = defineEmits<{
 
 const props = defineProps<{
     center?: boolean;
+    compact?: boolean;
     emptyText?: string;
     labelField: keyof T;
     list: T[];
     noBorder?: boolean;
     linkFn?: (row: any) => string;
 }>();
+
+const paddingClass = computed(() => (props.compact ? "p-1" : "p-3"));
 
 const onRowClicked = (event: MouseEvent, item: T): void => {
     emit("row-clicked", event, item);
