@@ -22,8 +22,8 @@ type variant =
 
 const emit = defineEmits(["copied"]);
 const props = defineProps<{
-    value: any | any[];
     tooltip?: string;
+    value: any | any[];
 }>();
 
 const tooltipBase = "Copy to Clipboard";

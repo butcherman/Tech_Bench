@@ -31,17 +31,21 @@ import ConfirmPopup from "primevue/confirmpopup";
 import { handleLinkClick } from "@/Composables/links.module";
 import { useConfirm } from "primevue";
 
-const emit = defineEmits(["accepted", "rejected"]);
+const emit = defineEmits<{
+    accepted: [];
+    rejected: [];
+}>();
+
 const props = defineProps<{
+    acceptText?: string;
     confirm?: boolean;
+    confirmMsg?: string;
     flat?: boolean;
     href?: string;
     icon?: string;
     pill?: boolean;
-    text?: string;
-    confirmMsg?: string;
-    acceptText?: string;
     rejectText?: string;
+    text?: string;
     variant?:
         | "danger"
         | "dark"
@@ -56,19 +60,20 @@ const props = defineProps<{
 }>();
 
 /*
-|---------------------------------------------------------------------------
+|-------------------------------------------------------------------------------
 | Use a Dialog Box to confirm delete
-|---------------------------------------------------------------------------
+|-------------------------------------------------------------------------------
 */
 const confirm = useConfirm();
 const handleClick = (event: MouseEvent) => {
     if (props.confirm) {
         confirm.require({
-            message: props.confirmMsg ?? "Are You Sure?",
-            acceptLabel: props.acceptText ?? "Yes",
             acceptClass: "border px-2",
-            rejectLabel: props.rejectText ?? "No",
+            acceptLabel: props.acceptText ?? "Yes",
+            message: props.confirmMsg ?? "Are You Sure?",
             rejectClass: "border px-2",
+            rejectLabel: props.rejectText ?? "No",
+            target: event.currentTarget as HTMLElement,
             accept: () => {
                 emit("accepted");
                 if (props.href) {

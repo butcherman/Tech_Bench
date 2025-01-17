@@ -31,8 +31,8 @@
 
 <script setup lang="ts">
 defineProps<{
-    items: { [key: string]: string | number | boolean };
     bordered?: boolean;
+    items: { [key: string]: string | number | boolean };
 }>();
 
 /**

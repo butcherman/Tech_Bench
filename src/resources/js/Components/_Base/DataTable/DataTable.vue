@@ -1,63 +1,31 @@
 <template>
     <div class="overflow-x-auto w-full">
         <table class="table-auto w-full">
-            <thead class="border-b border-slate-300 border-collapse">
-                <tr
-                    v-for="headerGroup in table.getHeaderGroups()"
-                    :key="headerGroup.id"
-                    class="border-b border-slate-300"
+            <TableHeader>
+                <template
+                    v-for="name of Object.keys($slots)"
+                    v-slot:[name]="data"
                 >
-                    <th
-                        v-for="headerCell in headerGroup.headers"
-                        :key="headerCell.id"
-                        :class="paddingClass"
-                    >
-                        <fa-icon
-                            v-if="headerCell.column.getCanSort()"
-                            :icon="
-                                getSortingIcon(headerCell.column.getIsSorted())
-                            "
-                            class="float-end mt-1 pointer"
-                            @click="headerCell.column.toggleSorting()"
-                        />
-                        <slot
-                            :name="`header.${headerCell.id}`"
-                            :cellData="headerCell.column.columnDef.meta"
-                        >
-                            <FlexRender
-                                :render="headerCell.column.columnDef.header"
-                                :props="headerCell.getContext()"
-                            />
-                        </slot>
-                    </th>
-                </tr>
-                <tr v-if="showFilterRow">
-                    <th
-                        v-for="headerCell in table.getHeaderGroups()[0].headers"
-                        class="p-1 font-normal"
-                    >
-                        <TableHeaderFilter
-                            v-if="headerCell.column.getCanFilter()"
-                            :column="headerCell.getContext().column"
-                        />
-                    </th>
-                </tr>
-            </thead>
+                    <slot :name="name" v-bind="data" />
+                </template>
+            </TableHeader>
+            <TableBodyLoading v-if="isLoading" :key="1" />
+            <TableBodyEmpty
+                v-else-if="!table.getRowModel().rows.length"
+                :key="0"
+                :noResultsText="noResultsText"
+            >
+                <template #no-results>
+                    <slot name="no-results" />
+                </template>
+            </TableBodyEmpty>
             <TransitionGroup
+                v-else
                 name="data-table"
                 :css="false"
                 @beforeLeave="fadeOut"
                 @enter="fadeIn"
             >
-                <tr v-if="!table.getRowModel().rows.length" :key="0">
-                    <td :colspan="table.getAllColumns().length">
-                        <slot name="no-results">
-                            <h3 class="text-center text-muted">
-                                {{ noResultsText ?? "No Results" }}
-                            </h3>
-                        </slot>
-                    </td>
-                </tr>
                 <tr
                     v-for="(row, index) in table.getRowModel().rows"
                     :key="row.id"
@@ -71,8 +39,8 @@
                         :class="[paddingClass, borderClass]"
                     >
                         <slot
-                            :name="`column.${cell.column.id}`"
-                            :cellData="cell.getValue()"
+                            :name="`row.${cell.column.id}`"
+                            :rowData="row.original"
                         >
                             <FlexRender
                                 :render="cell.column.columnDef.cell"
@@ -82,111 +50,23 @@
                     </td>
                 </tr>
             </TransitionGroup>
-            <tfoot>
-                <tr>
-                    <td
-                        :colspan="table.getAllColumns().length"
-                        :class="paddingClass"
-                    >
-                        <slot name="footer">
-                            <div class="flex flex-row justify-between w-full">
-                                <div>
-                                    <select
-                                        v-model="perPage"
-                                        class="border border-slate-300 rounded-lg p-1"
-                                        @change="table.setPageSize(perPage)"
-                                    >
-                                        <option v-for="opt in paginationArray">
-                                            {{ opt }}
-                                        </option>
-                                    </select>
-                                    Results Per Page
-                                </div>
-                                <div>
-                                    <ul class="flex flex-row">
-                                        <li
-                                            class="border rounded-s-lg p-1"
-                                            :class="{
-                                                pointer: currentPage !== 0,
-                                                'text-muted': currentPage === 0,
-                                            }"
-                                            @click="goToFirstPage()"
-                                            v-tooltip="'First Page'"
-                                        >
-                                            <fa-icon icon="angles-left" />
-                                        </li>
-                                        <li
-                                            class="border p-1"
-                                            :class="{
-                                                pointer:
-                                                    table.getCanPreviousPage(),
-                                                'text-muted':
-                                                    !table.getCanPreviousPage(),
-                                            }"
-                                            @click="goToPreviousPage()"
-                                            v-tooltip="'Previous Page'"
-                                        >
-                                            <fa-icon icon="angle-left" />
-                                        </li>
-                                        <li
-                                            v-for="page in table.getPageOptions()"
-                                            :key="page"
-                                            class="border p-1 pointer"
-                                            :class="{
-                                                'bg-slate-300 font-bold':
-                                                    page === currentPage,
-                                            }"
-                                            @click="goToPage(page)"
-                                        >
-                                            {{ page + 1 }}
-                                        </li>
-                                        <li
-                                            class="border p-1"
-                                            :class="{
-                                                pointer: table.getCanNextPage(),
-                                                'text-muted':
-                                                    !table.getCanNextPage(),
-                                            }"
-                                            @click="goToNextPage()"
-                                            v-tooltip="'Next Page'"
-                                        >
-                                            <fa-icon icon="angle-right" />
-                                        </li>
-                                        <li
-                                            class="border rounded-e-lg p-1"
-                                            :class="{
-                                                pointer:
-                                                    currentPage !==
-                                                    table.getPageCount(),
-                                                'text-muted':
-                                                    !table.getCanNextPage(),
-                                            }"
-                                            @click="goToLastPage()"
-                                            v-tooltip="'Last Page'"
-                                        >
-                                            <fa-icon icon="angles-right" />
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div>
-                                    Showing Results {{ showingStart }} -
-                                    {{ showingEnd }} of
-                                    {{ table.getRowCount() }} results
-                                </div>
-                            </div>
-                        </slot>
-                    </td>
-                </tr>
-            </tfoot>
+            <TableFooter>
+                <template #footer>
+                    <slot name="footer" />
+                </template>
+            </TableFooter>
         </table>
     </div>
 </template>
 
 <script setup lang="ts" generic="T">
-import TableHeaderCell from "./TableHeaderCell.vue";
-import TableHeaderFilter from "./TableHeaderFilter.vue";
-import { computed, h, ref } from "vue";
+import TableBodyEmpty from "./Components/TableBodyEmpty.vue";
+import TableFooter from "./Components/TableFooter.vue";
+import TableHeader from "./Components/TableHeader.vue";
+import TableHeaderCell from "./Components/TableHeaderCell.vue";
+import { computed, h, provide, ref } from "vue";
 import { handleLinkClick } from "@/Composables/links.module";
+import { fadeOut, fadeIn } from "./JS/animation";
 import {
     useVueTable,
     createColumnHelper,
@@ -198,8 +78,8 @@ import {
     getFacetedUniqueValues,
     FlexRender,
 } from "@tanstack/vue-table";
-import type { AccessorFn, ColumnDef } from "@tanstack/vue-table";
-import gsap from "gsap";
+import type { AccessorFn, ColumnDef, Table } from "@tanstack/vue-table";
+import TableBodyLoading from "./Components/TableBodyLoading.vue";
 
 interface tableColumnProp {
     label?: string;
@@ -210,6 +90,10 @@ interface tableColumnProp {
     filterSelect?: boolean;
     sort?: boolean;
 }
+
+defineSlots<{
+    [key: string]: any;
+}>();
 
 const emit = defineEmits<{
     "row-click": [row: T];
@@ -227,6 +111,18 @@ const props = defineProps<{
     rowBgFn?: (row: T) => string | false;
     rowClickLink?: (row: T) => string;
 }>();
+
+const isLoading = ref(false);
+const paginationArray = ref([10, 25, 50, 100]);
+const perPage = ref(paginationArray.value[0]);
+
+const startLoad = (): void => {
+    isLoading.value = true;
+};
+
+const endLoad = (): void => {
+    isLoading.value = false;
+};
 
 /*
 |---------------------------------------------------------------------------
@@ -264,82 +160,6 @@ const bgClass = (row: T, index: number): string | false => {
     }
 
     return bgClass;
-};
-
-/*
-|-------------------------------------------------------------------------------
-| For Column Sorting
-|-------------------------------------------------------------------------------
-*/
-const getSortingIcon = (col: false | "asc" | "desc") => {
-    switch (col) {
-        case "asc":
-            return "sort-down";
-        case "desc":
-            return "sort-up";
-        default:
-            return "sort";
-    }
-};
-
-/*
-|-------------------------------------------------------------------------------
-| For Column Filtering
-|-------------------------------------------------------------------------------
-*/
-const showFilterRow = computed(() => {
-    let show = false;
-
-    props.columns.map((col) => {
-        if (col.filterable) {
-            show = true;
-        }
-    });
-
-    return show;
-});
-
-/*
-|---------------------------------------------------------------------------
-| For Pagination
-|---------------------------------------------------------------------------
-*/
-const paginationArray = ref([10, 25, 50, 100]);
-const perPage = ref(paginationArray.value[0]);
-
-const currentPage = computed(() => table.getState().pagination.pageIndex);
-const showingStart = computed(() => currentPage.value * perPage.value + 1);
-const showingEnd = computed(() =>
-    Math.min(table.getRowCount(), showingStart.value + perPage.value - 1)
-);
-
-const goToPage = (pageIndex: number) => {
-    console.log(table.getPageOptions());
-    table.setPageIndex(pageIndex);
-};
-
-const goToFirstPage = () => {
-    if (currentPage.value !== 0) {
-        table.firstPage();
-    }
-};
-
-const goToPreviousPage = () => {
-    if (table.getCanPreviousPage()) {
-        table.previousPage();
-    }
-};
-
-const goToNextPage = () => {
-    if (table.getCanNextPage()) {
-        table.nextPage();
-    }
-};
-
-const goToLastPage = () => {
-    if (currentPage.value !== table.getPageCount()) {
-        table.lastPage();
-    }
 };
 
 /*
@@ -390,31 +210,24 @@ const table = useVueTable({
             pageSize: perPage.value,
         },
     },
+    meta: {
+        borderClass: borderClass.value,
+        paddingClass: paddingClass.value,
+        paginate: props.paginate ?? false,
+        paginationArray: paginationArray.value,
+        perPage: perPage.value,
+        pointerClass: pointerClass.value,
+        bgClass,
+    },
     getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    getSortedRowModel: getSortedRowModel(),
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
+    getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: props.paginate ? getPaginationRowModel() : undefined,
+    getSortedRowModel: getSortedRowModel(),
 });
 
-/*
-|---------------------------------------------------------------------------
-| Table Transition Animations
-|---------------------------------------------------------------------------
-*/
-const fadeOut = (el: Element) => {
-    gsap.to(el, {
-        opacity: 0,
-        duration: 0.8,
-    });
-};
+provide<Table<T>, string>("table", table);
 
-const fadeIn = (el: Element, done: () => void) => {
-    gsap.from(el, {
-        opacity: 0,
-        duration: 0.8,
-        onComplete: done,
-    });
-};
+defineExpose({ startLoad, endLoad });
 </script>

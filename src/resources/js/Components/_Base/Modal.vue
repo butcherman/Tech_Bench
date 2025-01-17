@@ -65,11 +65,11 @@ const emit = defineEmits<{
 }>();
 
 const props = defineProps<{
-    title?: string;
     hideBackdrop?: boolean;
     hideClose?: boolean;
     position?: "top" | "center" | "bottom";
     preventOutsideClick?: boolean;
+    title?: string;
 }>();
 
 /**

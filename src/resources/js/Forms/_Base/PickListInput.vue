@@ -211,10 +211,8 @@ onMounted(() => {
     if (value.value) {
         availableList.value.forEach((listItem) => {
             let val = listItem[selectValueKey.value] ?? listItem;
-            console.log(val);
 
             if (value.value.includes(val)) {
-                console.log(listItem);
                 availableHighlighted.value.push(listItem);
             }
         });

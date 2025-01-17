@@ -26,13 +26,13 @@ defineEmits<{
 }>();
 
 defineProps<{
+    currentStep: number;
+    hideId?: boolean;
     stepList: {
         id: number;
         name: string;
         icon: string;
     }[];
-    currentStep: number;
-    hideId?: boolean;
 }>();
 </script>
 
