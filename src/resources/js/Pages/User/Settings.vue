@@ -16,9 +16,18 @@
                 authentication for 180 days from the registration date.
             </p>
             <hr class="mb-2" />
-            <DataTable :columns="tableHeaders" :rows="devices">
+            <DataTable
+                ref="deviceTable"
+                :columns="tableHeaders"
+                :rows="devices"
+            >
                 <template #row.action="{ rowData }">
-                    <DeleteBadge v-tooltip.left="'Delete Device'" confirm />
+                    <DeleteBadge
+                        v-tooltip.left="'Delete Device'"
+                        confirm-msg="Are you sure you want to remove this device?"
+                        confirm
+                        @accepted="deleteDevice(rowData)"
+                    />
                 </template>
             </DataTable>
         </Card>
@@ -30,16 +39,34 @@ import AppLayout from "@/Layouts/App/AppLayout.vue";
 import Card from "@/Components/_Base/Card.vue";
 import DataTable from "@/Components/_Base/DataTable/DataTable.vue";
 import DeleteBadge from "@/Components/_Base/Badges/DeleteBadge.vue";
-import DeleteButton from "@/Components/_Base/Buttons/DeleteButton.vue";
 import UserAccountForm from "@/Forms/User/UserAccountForm.vue";
 import UserSettingsForm from "@/Forms/User/UserSettingsForm.vue";
+import { router } from "@inertiajs/vue3";
+import { useTemplateRef } from "vue";
 
-defineProps<{
+const props = defineProps<{
     current_user: user;
     allowSaveDevice: boolean;
     devices: userDevice[];
     settings: userSettings[];
 }>();
+
+const deviceTable = useTemplateRef("deviceTable");
+
+const deleteDevice = (deviceData: userDevice) => {
+    console.log(deviceData);
+    deviceTable.value?.startLoad();
+    router.delete(
+        route("user.remove-device", [
+            props.current_user.username,
+            deviceData.device_id,
+        ]),
+        {
+            preserveScroll: true,
+            onFinish: () => deviceTable.value?.endLoad(),
+        }
+    );
+};
 
 const tableHeaders = [
     {

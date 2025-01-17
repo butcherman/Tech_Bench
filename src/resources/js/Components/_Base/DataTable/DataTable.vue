@@ -116,6 +116,8 @@ const isLoading = ref(false);
 const paginationArray = ref([10, 25, 50, 100]);
 const perPage = ref(paginationArray.value[0]);
 
+const tableRows = computed(() => props.rows);
+
 const startLoad = (): void => {
     isLoading.value = true;
 };
@@ -203,7 +205,7 @@ const tableColumns = computed<ColumnDef<T, unknown>[]>(() => {
 */
 const table = useVueTable({
     columns: tableColumns.value,
-    data: props.rows,
+    data: tableRows,
     initialState: {
         pagination: {
             pageIndex: 0,
