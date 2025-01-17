@@ -9,21 +9,23 @@
                     <slot :name="name" v-bind="data" />
                 </template>
             </TableHeader>
+            <TableBodyLoading v-if="isLoading" :key="1" />
+            <TableBodyEmpty
+                v-else-if="!table.getRowModel().rows.length"
+                :key="0"
+                :noResultsText="noResultsText"
+            >
+                <template #no-results>
+                    <slot name="no-results" />
+                </template>
+            </TableBodyEmpty>
             <TransitionGroup
+                v-else
                 name="data-table"
                 :css="false"
                 @beforeLeave="fadeOut"
                 @enter="fadeIn"
             >
-                <tr v-if="!table.getRowModel().rows.length" :key="0">
-                    <td :colspan="table.getAllColumns().length">
-                        <slot name="no-results">
-                            <h3 class="text-center text-muted">
-                                {{ noResultsText ?? "No Results" }}
-                            </h3>
-                        </slot>
-                    </td>
-                </tr>
                 <tr
                     v-for="(row, index) in table.getRowModel().rows"
                     :key="row.id"
@@ -58,11 +60,13 @@
 </template>
 
 <script setup lang="ts" generic="T">
-import TableHeader from "./TableHeader.vue";
-import TableHeaderCell from "./TableHeaderCell.vue";
-import TableFooter from "./TableFooter.vue";
+import TableBodyEmpty from "./Components/TableBodyEmpty.vue";
+import TableFooter from "./Components/TableFooter.vue";
+import TableHeader from "./Components/TableHeader.vue";
+import TableHeaderCell from "./Components/TableHeaderCell.vue";
 import { computed, h, provide, ref } from "vue";
 import { handleLinkClick } from "@/Composables/links.module";
+import { fadeOut, fadeIn } from "./JS/animation";
 import {
     useVueTable,
     createColumnHelper,
@@ -75,7 +79,7 @@ import {
     FlexRender,
 } from "@tanstack/vue-table";
 import type { AccessorFn, ColumnDef, Table } from "@tanstack/vue-table";
-import gsap from "gsap";
+import TableBodyLoading from "./Components/TableBodyLoading.vue";
 
 interface tableColumnProp {
     label?: string;
@@ -108,6 +112,7 @@ const props = defineProps<{
     rowClickLink?: (row: T) => string;
 }>();
 
+const isLoading = ref(false);
 const paginationArray = ref([10, 25, 50, 100]);
 const perPage = ref(paginationArray.value[0]);
 
@@ -215,24 +220,4 @@ const table = useVueTable({
 });
 
 provide<Table<T>, string>("table", table);
-
-/*
-|-------------------------------------------------------------------------------
-| Table Transition Animations
-|-------------------------------------------------------------------------------
-*/
-const fadeOut = (el: Element) => {
-    gsap.to(el, {
-        opacity: 0,
-        duration: 0.8,
-    });
-};
-
-const fadeIn = (el: Element, done: () => void) => {
-    gsap.from(el, {
-        opacity: 0,
-        duration: 0.8,
-        onComplete: done,
-    });
-};
 </script>

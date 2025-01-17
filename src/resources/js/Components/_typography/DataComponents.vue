@@ -7,7 +7,7 @@
             <TableStacked :items="stackedTable" class="w-full" bordered />
         </Card>
         <Card title="Data Table" class="md:col-span-2">
-            <DataTable :columns="tableColumns" :rows="tableRows">
+            <DataTable :columns="tableColumns" :rows="tableRows" paginate>
                 <template #header.email="{ cellData }">
                     {{ cellData.label }}-Modified
                 </template>
