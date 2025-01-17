@@ -1,9 +1,11 @@
 <?php
 
 use App\Actions\Misc\BuildNavBar;
+use App\Http\Middleware\CheckForInit;
 use App\Http\Middleware\CheckForTwoFactor;
 use App\Http\Middleware\CheckPasswordExpiration;
 use App\Http\Middleware\HandleInertiaRequests;
+use App\Http\Middleware\InitializeApp;
 use App\Http\Middleware\LogDebugVisits;
 use Illuminate\Auth\Middleware\Authenticate;
 use Illuminate\Foundation\Application;
@@ -35,10 +37,13 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->web(append: [
             LogDebugVisits::class,
             HandleInertiaRequests::class,
+            CheckForInit::class,
         ])->appendToGroup('auth.secure', [
             Authenticate::class,
             CheckForTwoFactor::class,
             CheckPasswordExpiration::class,
+        ])->alias([
+            'init' => InitializeApp::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
