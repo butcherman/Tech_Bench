@@ -9,10 +9,9 @@
                     <slot :name="name" v-bind="data" />
                 </template>
             </TableHeader>
-            <TableBodyLoading v-if="isLoading" :key="1" />
+            <TableBodyLoading v-if="isLoading" />
             <TableBodyEmpty
                 v-else-if="!table.getRowModel().rows.length"
-                :key="0"
                 :noResultsText="noResultsText"
             >
                 <template #no-results>
@@ -61,12 +60,14 @@
 
 <script setup lang="ts" generic="T">
 import TableBodyEmpty from "./Components/TableBodyEmpty.vue";
+import TableBodyLoading from "./Components/TableBodyLoading.vue";
 import TableFooter from "./Components/TableFooter.vue";
 import TableHeader from "./Components/TableHeader.vue";
 import TableHeaderCell from "./Components/TableHeaderCell.vue";
 import { computed, h, provide, ref } from "vue";
 import { handleLinkClick } from "@/Composables/links.module";
 import { fadeOut, fadeIn } from "./JS/animation";
+import { router } from "@inertiajs/vue3";
 import {
     useVueTable,
     createColumnHelper,
@@ -79,7 +80,6 @@ import {
     FlexRender,
 } from "@tanstack/vue-table";
 import type { AccessorFn, ColumnDef, Table } from "@tanstack/vue-table";
-import TableBodyLoading from "./Components/TableBodyLoading.vue";
 
 interface tableColumnProp {
     label?: string;
@@ -108,23 +108,37 @@ const props = defineProps<{
     allowRowClick?: boolean;
     noResultsText?: string;
     paginate?: boolean;
+    syncLoadingState?: boolean;
     rowBgFn?: (row: T) => string | false;
     rowClickLink?: (row: T) => string;
 }>();
 
-const isLoading = ref(false);
 const paginationArray = ref([10, 25, 50, 100]);
 const perPage = ref(paginationArray.value[0]);
 
 const tableRows = computed(() => props.rows);
 
-const startLoad = (): void => {
-    isLoading.value = true;
-};
+/*
+|-------------------------------------------------------------------------------
+| Sync Loading State with Inertia JS Loading or manually control
+|-------------------------------------------------------------------------------
+*/
+const isLoading = ref(false);
 
-const endLoad = (): void => {
-    isLoading.value = false;
-};
+router.on("start", () => {
+    if (props.syncLoadingState) {
+        isLoading.value = true;
+    }
+});
+
+router.on("finish", () => {
+    if (props.syncLoadingState) {
+        isLoading.value = false;
+    }
+});
+
+const startLoading = () => (isLoading.value = true);
+const endLoading = () => (isLoading.value = false);
 
 /*
 |---------------------------------------------------------------------------
@@ -231,5 +245,5 @@ const table = useVueTable({
 
 provide<Table<T>, string>("table", table);
 
-defineExpose({ startLoad, endLoad });
+defineExpose({ startLoading, endLoading });
 </script>

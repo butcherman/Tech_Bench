@@ -20,6 +20,7 @@
                 ref="deviceTable"
                 :columns="tableHeaders"
                 :rows="devices"
+                sync-loading-state
             >
                 <template #row.action="{ rowData }">
                     <DeleteBadge
@@ -42,7 +43,7 @@ import DeleteBadge from "@/Components/_Base/Badges/DeleteBadge.vue";
 import UserAccountForm from "@/Forms/User/UserAccountForm.vue";
 import UserSettingsForm from "@/Forms/User/UserSettingsForm.vue";
 import { router } from "@inertiajs/vue3";
-import { useTemplateRef } from "vue";
+import { ref } from "vue";
 
 const props = defineProps<{
     current_user: user;
@@ -51,11 +52,7 @@ const props = defineProps<{
     settings: userSettings[];
 }>();
 
-const deviceTable = useTemplateRef("deviceTable");
-
 const deleteDevice = (deviceData: userDevice) => {
-    console.log(deviceData);
-    deviceTable.value?.startLoad();
     router.delete(
         route("user.remove-device", [
             props.current_user.username,
@@ -63,7 +60,6 @@ const deleteDevice = (deviceData: userDevice) => {
         ]),
         {
             preserveScroll: true,
-            onFinish: () => deviceTable.value?.endLoad(),
         }
     );
 };

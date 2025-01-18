@@ -44,7 +44,7 @@ class User extends Authenticatable
     ];
 
     /** @var array<string, string> */
-    protected $appends = ['initials', 'full_name'];
+    protected $appends = ['initials', 'full_name', 'role_name'];
 
     /*
     |---------------------------------------------------------------------------
@@ -79,14 +79,21 @@ class User extends Authenticatable
     public function fullName(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->first_name.' '.$this->last_name,
+            get: fn() => $this->first_name . ' ' . $this->last_name,
         );
     }
 
     public function initials(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->first_name[0].$this->last_name[0],
+            get: fn() => $this->first_name[0] . $this->last_name[0],
+        );
+    }
+
+    public function roleName(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => $this->UserRole->name,
         );
     }
 

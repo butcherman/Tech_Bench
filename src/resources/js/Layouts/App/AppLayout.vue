@@ -12,7 +12,9 @@
             <div id="app-page-wrapper">
                 <AppBreadcrumbs class="mb-2" />
                 <AppAlerts />
-                <slot />
+                <div class="mt-4">
+                    <slot />
+                </div>
             </div>
             <AppFooter />
         </section>

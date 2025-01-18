@@ -23,7 +23,9 @@
                                     {{ opt }}
                                 </option>
                             </select>
-                            Results Per Page
+                            <span class="hidden lg:inline">
+                                Results Per Page
+                            </span>
                         </div>
                         <div>
                             <ul class="flex flex-row">
@@ -89,9 +91,12 @@
                             </ul>
                         </div>
                         <div>
-                            Showing Results {{ showingStart }} -
-                            {{ showingEnd }} of
-                            {{ table?.getRowCount() }} results
+                            <span class="hidden lg:inline">
+                                Showing Results
+                            </span>
+                            {{ showingStart }} - {{ showingEnd }} of
+                            {{ table?.getRowCount() }}
+                            <span class="hidden lg:inline"> results </span>
                         </div>
                     </div>
                 </slot>
