@@ -11,7 +11,6 @@
         <DataTable
             :columns="columns"
             :rows="userList"
-            :loading="tableLoading"
             :row-click-link="(row) => $route('admin.user.show', row.username)"
             paginate
             striped
@@ -34,19 +33,25 @@
 import AppLayout from "@/Layouts/App/AppLayout.vue";
 import Card from "@/Components/_Base/Card.vue";
 import DataTable from "@/Components/_Base/DataTable/DataTable.vue";
-import { ref } from "vue";
 import AddButton from "@/Components/_Base/Buttons/AddButton.vue";
 import BaseBadge from "@/Components/_Base/Badges/BaseBadge.vue";
 import verifyModal from "@/Modules/verifyModal";
 import { router } from "@inertiajs/vue3";
+import { useAppStore } from "@/Stores/AppStore";
+import okModal from "@/Modules/okModal";
 
 defineProps<{
     userList: user[];
 }>();
 
-const tableLoading = ref(false);
+const app = useAppStore();
 
 const disableUser = (row: user) => {
+    if (row.username === app.user?.username) {
+        okModal("You cannot disable yourself");
+        return;
+    }
+
     verifyModal("This User Will No Longer Be Allowed Access").then((res) => {
         if (res) {
             router.delete(route("admin.user.destroy", row.username), {

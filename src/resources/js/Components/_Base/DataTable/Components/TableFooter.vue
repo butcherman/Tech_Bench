@@ -91,12 +91,10 @@
                             </ul>
                         </div>
                         <div>
-                            <span class="hidden lg:inline">
-                                Showing Results
-                            </span>
+                            <span class="hidden lg:inline"> Showing </span>
                             {{ showingStart }} - {{ showingEnd }} of
                             {{ table?.getRowCount() }}
-                            <span class="hidden lg:inline"> results </span>
+                            <span class="hidden lg:inline"> Results </span>
                         </div>
                     </div>
                 </slot>
