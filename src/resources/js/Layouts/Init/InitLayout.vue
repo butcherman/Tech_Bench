@@ -1,13 +1,11 @@
 <template>
-    <div class="flex flex-col h-screen">
+    <div class="flex flex-col h-screen p-1">
         <Head title="First Time Setup" />
         <StepNavigation :step-list="stepList" :current-step="step" />
         <div class="flex grow place-items-center">
-            <Card class="tb-card mx-auto">
-                <div>
-                    <slot />
-                </div>
-            </Card>
+            <div class="tb-card mx-auto">
+                <slot />
+            </div>
         </div>
     </div>
 </template>

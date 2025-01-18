@@ -13,12 +13,19 @@ class BuildTimezoneList
             ->toArray(false);
 
         foreach ($tzBase as $key => $value) {
+            $groupList = [];
+
             foreach ($value as $zone => $offset) {
-                $tzList[$key][] = [
-                    'text' => $offset,
+                $groupList[] = [
+                    'label' => $offset,
                     'value' => $zone,
                 ];
             }
+
+            $tzList[] = [
+                'label' => $key,
+                'items' => $groupList,
+            ];
         }
 
         return $tzList;

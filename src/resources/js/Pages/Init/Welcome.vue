@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <Card>
         <h1 class="text-center font-bold text-2xl">
             Welcome to the Tech Bench
         </h1>
@@ -16,10 +16,11 @@
                 Setup Tech Bench
             </BaseButton>
         </p>
-    </div>
+    </Card>
 </template>
 
 <script setup lang="ts">
+import Card from "@/Components/_Base/Card.vue";
 import InitLayout from "@/Layouts/Init/InitLayout.vue";
 import BaseButton from "@/Components/_Base/Buttons/BaseButton.vue";
 </script>

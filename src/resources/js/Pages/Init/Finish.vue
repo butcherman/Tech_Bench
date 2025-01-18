@@ -1,17 +1,74 @@
 <template>
-    <div>
-        <h4 class="text-center font-bold">Hello World</h4>
-        <v-card elevation="2" subtitle="This is a Title">
-            <p class="text-center">This is a new page</p>
-        </v-card>
-    </div>
+    <Card title="Build Tech Bench">
+        <div>
+            <h6 class="font-bold text-2xl text-center">
+                Building Application...
+            </h6>
+            <div class="ms-4 mt-4">
+                <div v-for="msg in setupMsg">{{ msg }}</div>
+                <EllipsisLoader v-if="!isComplete" />
+            </div>
+        </div>
+        <div v-if="isComplete">
+            <hr />
+            <h5 class="text-center font-bold text-xl">Setup Complete!</h5>
+            <div v-if="!canReboot">
+                <p class="text-center">
+                    You have completed the Wizard and are ready to get going.
+                    Click the link below to log in again and start using Tech
+                    Bench.
+                </p>
+                <p class="text-center">
+                    The Tech Bench must be rebooted before you can log in and
+                    start using the Tech Bench. Please reboot the server and
+                    re-visit the login page.
+                </p>
+            </div>
+            <div v-else>
+                <p class="text-center">
+                    Tech Bench is rebooting. You will be redirected to the login
+                    page after the reboot is completed.
+                </p>
+            </div>
+        </div>
+    </Card>
 </template>
 
 <script setup lang="ts">
 import InitLayout from "@/Layouts/Init/InitLayout.vue";
-import { ref, reactive, onMounted } from "vue";
+import Card from "@/Components/_Base/Card.vue";
+import EllipsisLoader from "@/Components/_Base/Loaders/EllipsisLoader.vue";
+import axios from "axios";
+import { ref, onMounted } from "vue";
 
-const props = defineProps<{}>();
+const isComplete = ref<boolean>(false);
+const canReboot = ref<boolean>(false);
+const setupMsg = ref<string[]>([]);
+const newUrl = ref<string | null>(null);
+
+/**
+ * Run the Save Setup sequence
+ */
+onMounted(() => {
+    axios.get(route("init.save-setup")).then((res) => {
+        console.log(res);
+        newUrl.value = `${res.data.url}`;
+        canReboot.value = res.data.can_reboot;
+        isComplete.value = true;
+
+        redirectToLogin();
+    });
+});
+
+const redirectToLogin = () => {
+    if (canReboot.value) {
+        setTimeout(() => {
+            if (newUrl.value) {
+                window.location.href = `https://${newUrl.value?.toString()}`;
+            }
+        }, 60000);
+    }
+};
 </script>
 
 <script lang="ts">

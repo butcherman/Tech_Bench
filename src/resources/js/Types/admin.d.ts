@@ -1,7 +1,8 @@
 interface TimezoneList {
-    [key: string]: {
+    label: string;
+    items: {
         [key: string]: string;
-    };
+    }[];
 }
 
 type logLine = {

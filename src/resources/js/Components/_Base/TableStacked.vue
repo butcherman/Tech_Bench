@@ -29,10 +29,10 @@
     </table>
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts" generic="T">
 defineProps<{
     bordered?: boolean;
-    items: { [key: string]: string | number | boolean };
+    items: T;
 }>();
 
 /**

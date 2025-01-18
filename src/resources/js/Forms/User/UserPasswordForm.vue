@@ -11,7 +11,7 @@
             id="current-password"
             name="current_password"
             label="Current Password"
-            v-focus
+            focus
         />
         <PasswordInput id="password" name="password" label="New Password" />
         <PasswordInput
