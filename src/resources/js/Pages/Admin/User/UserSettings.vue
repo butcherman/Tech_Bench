@@ -1,17 +1,25 @@
 <template>
-    <div>
-        <h4 class="text-center font-bold">Hello World</h4>
-        <v-card elevation="2" subtitle="This is a Title">
-            <p class="text-center">This is a new page</p>
-        </v-card>
-    </div>
+    <Card class="tb-card">
+        <UserConfigurationForm
+            :auto-logout-timer="autoLogoutTimer"
+            :twoFa="twoFa"
+            :oath="oath"
+            :role-list="roleList"
+        />
+    </Card>
 </template>
 
 <script setup lang="ts">
 import AppLayout from "@/Layouts/App/AppLayout.vue";
-import { ref, reactive, onMounted } from "vue";
+import Card from "@/Components/_Base/Card.vue";
+import UserConfigurationForm from "@/Forms/Admin/User/UserConfigurationForm.vue";
 
-const props = defineProps<{}>();
+defineProps<{
+    autoLogoutTimer: number;
+    twoFa: twoFaConfig;
+    oath: oathConfig;
+    roleList: userRole[];
+}>();
 </script>
 
 <script lang="ts">
