@@ -1,6 +1,7 @@
 <template>
     <div class="inline-flex">
         <BaseButton
+            class="w-full"
             :flat="flat"
             :pill="pill"
             :variant="variant ?? 'danger'"
