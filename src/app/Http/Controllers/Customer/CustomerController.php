@@ -38,8 +38,8 @@ class CustomerController extends Controller
         $this->authorize('create', Customer::class);
 
         return Inertia::render('Customer/Create', [
-            'selectId' => fn () => (bool) config('customer.select_id'),
-            'default-state' => fn () => config('customer.default_state'),
+            'selectId' => fn() => (bool) config('customer.select_id'),
+            'default-state' => fn() => config('customer.default_state'),
         ]);
     }
 
@@ -66,30 +66,30 @@ class CustomerController extends Controller
         // If the customer has multiple sites, show the Customer Home Page
         if ($customer->CustomerSite->count() > 1 || $customer->CustomerSite->count() == 0) {
             return Inertia::render('Customer/Show', [
-                'permissions' => fn () => UserPermissions::customerPermissions($request->user()),
-                'customer' => fn () => $customer,
-                'siteList' => fn () => $customer->CustomerSite->makeVisible('href'),
-                'alerts' => fn () => $customer->CustomerAlert,
-                'equipmentList' => fn () => $customer->CustomerEquipment,
-                'contacts' => fn () => $customer->CustomerContact,
-                'notes' => fn () => $customer->CustomerNote,
-                'files' => fn () => $customer->CustomerFile->append('href'),
-                'is-fav' => fn () => $customer->isFav($request->user()),
+                'permissions' => fn() => UserPermissions::customerPermissions($request->user()),
+                'customer' => fn() => $customer,
+                'siteList' => fn() => $customer->CustomerSite->makeVisible('href'),
+                'alerts' => fn() => $customer->CustomerAlert,
+                'equipmentList' => fn() => $customer->CustomerEquipment,
+                'contacts' => fn() => $customer->CustomerContact,
+                'notes' => fn() => $customer->CustomerNote,
+                'files' => fn() => $customer->CustomerFile->append('href'),
+                'is-fav' => fn() => $customer->isFav($request->user()),
             ]);
         }
 
         // If the customer only has a single site, show that sites details
         return Inertia::render('Customer/Site/Show', [
-            'permissions' => fn () => UserPermissions::customerPermissions($request->user()),
-            'customer' => fn () => $customer,
-            'site' => fn () => $customer->CustomerSite[0],
-            'siteList' => fn () => $customer->CustomerSite,
-            'alerts' => fn () => $customer->CustomerAlert,
-            'equipmentList' => fn () => $customer->CustomerEquipment,
-            'contacts' => fn () => $customer->CustomerContact,
-            'notes' => fn () => $customer->CustomerNote,
-            'files' => fn () => $customer->CustomerFile->append('href'),
-            'is-fav' => fn () => $customer->isFav($request->user()),
+            'permissions' => fn() => UserPermissions::customerPermissions($request->user()),
+            'customer' => fn() => $customer,
+            'site' => fn() => $customer->CustomerSite[0],
+            'siteList' => fn() => $customer->CustomerSite,
+            'alerts' => fn() => $customer->CustomerAlert,
+            'equipmentList' => fn() => $customer->CustomerEquipment,
+            'contacts' => fn() => $customer->CustomerContact,
+            'notes' => fn() => $customer->CustomerNote,
+            'files' => fn() => $customer->CustomerFile->append('href'),
+            'is-fav' => fn() => $customer->isFav($request->user()),
         ]);
     }
 
@@ -101,10 +101,10 @@ class CustomerController extends Controller
         $this->authorize('update', $customer);
 
         return Inertia::render('Customer/Edit', [
-            'selectId' => fn () => (bool) config('customer.select_id'),
-            'default-state' => fn () => config('customer.default_state'),
-            'customer' => fn () => $customer,
-            'siteList' => fn () => $customer->CustomerSite,
+            'selectId' => fn() => (bool) config('customer.select_id'),
+            'default-state' => fn() => config('customer.default_state'),
+            'customer' => fn() => $customer,
+            'siteList' => fn() => $customer->CustomerSite,
         ]);
     }
 
@@ -157,6 +157,6 @@ class CustomerController extends Controller
 
         return back()->with('danger', __('cust.force_deleted', [
             'name' => $customer->name,
-        ]));
+        ]))->with('queued-customer', $customer->cust_id);
     }
 }

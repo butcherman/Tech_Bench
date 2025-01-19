@@ -2,6 +2,7 @@
 
 namespace App\Services\Misc;
 
+use App\Facades\CacheFacade;
 use App\Facades\DbException;
 use App\Models\PhoneNumberType;
 use Illuminate\Database\QueryException;
@@ -11,6 +12,7 @@ class PhoneTypeService
 {
     public function createPhoneType(Collection $requestData): PhoneNumberType
     {
+        CacheFacade::clearCache('phoneTypes');
         return PhoneNumberType::create($requestData->toArray());
     }
 
@@ -19,6 +21,7 @@ class PhoneTypeService
         PhoneNumberType $type
     ): PhoneNumberType {
         $type->update($requestData->toArray());
+        CacheFacade::clearCache('phoneTypes');
 
         return $type->fresh();
     }
@@ -27,6 +30,7 @@ class PhoneTypeService
     {
         try {
             $type->delete();
+            CacheFacade::clearCache('phoneTypes');
         } catch (QueryException $e) {
             DbException::check(
                 $e,

@@ -18,6 +18,9 @@ class DisabledCustomerController extends Controller
 
         return Inertia::render('Customer/Disabled', [
             'disabled-list' => Customer::onlyTrashed()
+                ->when(session()->has('queued-customer'), function ($q) {
+                    $q->where('cust_id', '!=', session()->pull('queued-customer'));
+                })
                 ->get()
                 ->makeHidden(['CustomerSite'])
                 ->makeVisible(['deleted_at', 'deleted_reason']),

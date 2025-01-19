@@ -2,6 +2,7 @@
 
 namespace App\Services\Customer;
 
+use App\Facades\CacheFacade;
 use App\Facades\DbException;
 use App\Models\CustomerFileType;
 use Illuminate\Database\QueryException;

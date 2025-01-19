@@ -16,8 +16,10 @@
                 @focus="hasFocus = true"
                 @blur="hasFocus = false"
             />
-            <label for="ingredient1" class="ms-1">
-                {{ typeof item === "string" ? item : item.label }}
+            <label :for="`radio-group-${name}-${index}`" class="ms-1">
+                <slot name="item-label" :item="item">
+                    {{ typeof item === "string" ? item : item.label }}
+                </slot>
             </label>
         </div>
         <Message size="small" severity="error" variant="simple">

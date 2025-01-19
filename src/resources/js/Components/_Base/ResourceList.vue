@@ -25,6 +25,9 @@
                 <slot name="list-item" :item="item">
                     {{ item[labelField] }}
                 </slot>
+                <div class="float-end">
+                    <slot name="actions" :item="item" />
+                </div>
             </li>
         </ul>
     </div>
