@@ -60,7 +60,10 @@ class TechTipAdministrationService
         try {
             $tipType->delete();
         } catch (QueryException $e) {
-            DbException::check($e);
+            DbException::check(
+                $e,
+                'Unable to delete.  This Tech Tip Type has at least one Tech Tip assigned to it.'
+            );
         }
     }
 }

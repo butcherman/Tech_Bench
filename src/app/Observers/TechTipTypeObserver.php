@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Facades\CacheFacade;
 use App\Models\TechTipType;
 use Illuminate\Support\Facades\Log;
 
@@ -12,8 +13,10 @@ class TechTipTypeObserver extends Observer
      */
     public function created(TechTipType $techTipType): void
     {
+        CacheFacade::clearCache('techTipTypes');
+
         Log::info(
-            'New Tech Tip Type created by '.$this->user,
+            'New Tech Tip Type created by ' . $this->user,
             $techTipType->toArray()
         );
     }
@@ -23,8 +26,10 @@ class TechTipTypeObserver extends Observer
      */
     public function updated(TechTipType $techTipType): void
     {
+        CacheFacade::clearCache('techTipTypes');
+
         Log::info(
-            'Tech Tip Type updated by '.$this->user,
+            'Tech Tip Type updated by ' . $this->user,
             $techTipType->toArray()
         );
     }
@@ -34,8 +39,10 @@ class TechTipTypeObserver extends Observer
      */
     public function deleted(TechTipType $techTipType): void
     {
+        CacheFacade::clearCache('techTipTypes');
+
         Log::info(
-            'Tech Tip Type deleted by '.$this->user,
+            'Tech Tip Type deleted by ' . $this->user,
             $techTipType->toArray()
         );
     }
