@@ -13,7 +13,7 @@
             @blur="hasFocus = false"
         >
         </Select>
-        <label :for="id" class="text-muted font-bold">{{ label }}</label>
+        <label :for="id" class="text-muted">{{ label }}</label>
         <Message size="small" severity="error" variant="simple">
             {{ errorMessage }}
         </Message>

@@ -133,8 +133,10 @@ class EquipmentService
         // Add Order property to Equipment Fields
         $order = 0;
         foreach ($equipmentFields as $fieldId) {
-            $dataToSync[$fieldId] = ['order' => $order];
-            $order++;
+            if ($fieldId) {
+                $dataToSync[$fieldId] = ['order' => $order];
+                $order++;
+            }
         }
 
         $equipment->DataFieldType()->sync($dataToSync);
@@ -148,15 +150,18 @@ class EquipmentService
     protected function buildDataFieldIdList(Collection $fieldList): Collection
     {
         return $fieldList->map(function ($field) {
-            // Determine if the field is a valid field already
-            $valid = DataFieldType::where('name', $field)->first();
+            if ($field) {
 
-            // If not, create it
-            if (! $valid) {
-                $valid = DataFieldType::create(['name' => $field]);
+                // Determine if the field is a valid field already
+                $valid = DataFieldType::where('name', $field)->first();
+
+                // If not, create it
+                if (! $valid) {
+                    $valid = DataFieldType::create(['name' => $field]);
+                }
+
+                return $valid->type_id;
             }
-
-            return $valid->type_id;
         });
     }
 }
