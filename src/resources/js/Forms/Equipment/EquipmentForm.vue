@@ -29,23 +29,23 @@
             <legend>
                 Customer Information to Gather <small>(drag to re-order)</small>
             </legend>
-            <TextInputArray
+            <AutoCompleteInputArray
                 name="custData"
-                placeholder="Information to gather for customer"
-                :datalist="dataList"
+                label="Information to gather for customer"
+                :data-list="dataList"
                 :remove-warning="removeWarning"
-                drag
+                draggable
             />
         </fieldset>
     </VueForm>
 </template>
 
 <script setup lang="ts">
+import AutoCompleteInputArray from "../_Base/AutoCompleteInputArray.vue";
 import VueForm from "@/Forms/_Base/VueForm.vue";
 import TextInput from "@/Forms/_Base/TextInput.vue";
 import SelectInput from "../_Base/SelectInput.vue";
 import SwitchInput from "../_Base/SwitchInput.vue";
-import TextInputArray from "../_Base/TextInputArray.vue";
 import { computed } from "vue";
 import { array, boolean, number, object, string } from "yup";
 

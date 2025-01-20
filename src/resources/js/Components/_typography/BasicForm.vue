@@ -53,6 +53,12 @@
                     ]"
                 />
             </fieldset>
+            <AutoCompleteInput
+                id="auto-complete-input"
+                label="Auto Complete Input"
+                name="auto_complete_input"
+                :data-list="['random', 'list', 'of', 'strings']"
+            />
             <SelectInput
                 id="select-input"
                 label="Select Input"
@@ -78,6 +84,7 @@ import PhoneInputArray from "@/Forms/_Base/PhoneInputArray.vue";
 import SelectInput from "@/Forms/_Base/SelectInput.vue";
 import TextAreaInput from "@/Forms/_Base/TextAreaInput.vue";
 import Card from "../_Base/Card.vue";
+import AutoCompleteInput from "@/Forms/_Base/AutoCompleteInput.vue";
 import { object } from "yup";
 import { ref } from "vue";
 
