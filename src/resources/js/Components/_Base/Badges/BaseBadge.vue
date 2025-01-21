@@ -1,6 +1,6 @@
 <template>
     <span
-        class="inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ring-1 ring-inset ring-gray-500/10"
+        class="inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ring-1 ring-inset ring-gray-500/10 pointer"
         :class="variantClass"
         @click="handleClick"
     >

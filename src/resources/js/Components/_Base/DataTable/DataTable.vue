@@ -41,7 +41,21 @@
                             :name="`row.${cell.column.id}`"
                             :rowData="row.original"
                         >
+                            <div
+                                v-if="typeof cell.getValue() === 'boolean'"
+                                class="text-center"
+                            >
+                                <fa-icon
+                                    :icon="cell.getValue() ? 'check' : 'xmark'"
+                                    :class="
+                                        cell.getValue()
+                                            ? 'text-success'
+                                            : 'text-danger'
+                                    "
+                                />
+                            </div>
                             <FlexRender
+                                v-else
                                 :render="cell.column.columnDef.cell"
                                 :props="cell.getContext()"
                             />
