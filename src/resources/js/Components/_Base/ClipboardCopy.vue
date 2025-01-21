@@ -5,8 +5,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
 import BaseBadge from "./Badges/BaseBadge.vue";
+import { ref } from "vue";
 
 type variant =
     | "danger"
@@ -20,7 +20,10 @@ type variant =
     | "success"
     | "warning";
 
-const emit = defineEmits(["copied"]);
+const emit = defineEmits<{
+    copied: [];
+}>();
+
 const props = defineProps<{
     tooltip?: string;
     value: any | any[];

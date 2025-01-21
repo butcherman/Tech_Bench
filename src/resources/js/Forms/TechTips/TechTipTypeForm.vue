@@ -17,8 +17,8 @@
 </template>
 
 <script setup lang="ts">
-import VueForm from "@/Forms/_Base/VueForm.vue";
 import TextInput from "@/Forms/_Base/TextInput.vue";
+import VueForm from "@/Forms/_Base/VueForm.vue";
 import { computed } from "vue";
 import { object, string } from "yup";
 
@@ -27,6 +27,11 @@ const props = defineProps<{
     tipType?: tipType;
 }>();
 
+/*
+|-------------------------------------------------------------------------------
+| Handle Form
+|-------------------------------------------------------------------------------
+*/
 const submitRoute = computed(() =>
     props.tipType
         ? route("admin.tech-tips.tip-types.update", props.tipType.tip_type_id)
@@ -37,9 +42,15 @@ const submitText = computed(() =>
     props.tipType ? "Edit Tech Tip Type" : "Create Tech Tip Type"
 );
 
+/*
+|-------------------------------------------------------------------------------
+| Validation
+|-------------------------------------------------------------------------------
+*/
 const initValues = {
     description: props.tipType?.description || "",
 };
+
 const schema = object({
     description: string().required(),
 });

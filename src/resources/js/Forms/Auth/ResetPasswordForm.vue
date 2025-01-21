@@ -29,9 +29,9 @@
 </template>
 
 <script setup lang="ts">
-import VueForm from "@/Forms/_Base/VueForm.vue";
-import TextInput from "@/Forms/_Base/TextInput.vue";
 import PasswordInput from "../_Base/PasswordInput.vue";
+import TextInput from "@/Forms/_Base/TextInput.vue";
+import VueForm from "@/Forms/_Base/VueForm.vue";
 import { ref as reference, object, string } from "yup";
 
 const props = defineProps<{
@@ -39,12 +39,18 @@ const props = defineProps<{
     token: string;
 }>();
 
+/*
+|-------------------------------------------------------------------------------
+| Validation
+|-------------------------------------------------------------------------------
+*/
 const initValues = {
     email: props.email,
     token: props.token,
     password: null,
     password_confirmation: null,
 };
+
 const schema = object({
     email: string().email().required(),
     token: string().required(),

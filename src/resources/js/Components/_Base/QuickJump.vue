@@ -42,10 +42,10 @@
 </template>
 
 <script setup lang="ts">
+import BaseButton from "./Buttons/BaseButton.vue";
+import Card from "./Card.vue";
 import { ref } from "vue";
 import { Drawer } from "primevue";
-import Card from "./Card.vue";
-import BaseButton from "./Buttons/BaseButton.vue";
 
 /*
 |-------------------------------------------------------------------------------

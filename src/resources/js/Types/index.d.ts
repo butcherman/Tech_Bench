@@ -33,19 +33,21 @@ type navbar = {
 
 type flashData = {
     id?: string;
-    type:
-        | "danger"
-        | "dark"
-        | "error"
-        | "help"
-        | "info"
-        | "light"
-        | "primary"
-        | "secondary"
-        | "success"
-        | "warning";
+    type: alertMessageType;
     message: string;
 };
+
+type alertMessageType =
+    | "danger"
+    | "dark"
+    | "error"
+    | "help"
+    | "info"
+    | "light"
+    | "primary"
+    | "secondary"
+    | "success"
+    | "warning";
 
 type toastData = {
     id: string;

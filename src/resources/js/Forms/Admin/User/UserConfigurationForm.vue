@@ -100,19 +100,19 @@
 </template>
 
 <script setup lang="ts">
-import VueForm from "@/Forms/_Base/VueForm.vue";
-import TextInput from "@/Forms/_Base/TextInput.vue";
-import SwitchInput from "@/Forms/_Base/SwitchInput.vue";
 import SelectInput from "@/Forms/_Base/SelectInput.vue";
+import SwitchInput from "@/Forms/_Base/SwitchInput.vue";
+import TextInput from "@/Forms/_Base/TextInput.vue";
+import VueForm from "@/Forms/_Base/VueForm.vue";
 import { object, string, boolean } from "yup";
 import { ref } from "vue";
 import { growShow, shrinkHide } from "@/Composables/animations.module";
 
 const props = defineProps<{
     autoLogoutTimer: number;
-    twoFa: twoFaConfig;
     oath: oathConfig;
     roleList: userRole[];
+    twoFa: twoFaConfig;
 }>();
 
 // TODO - Add Date Picker Input
@@ -121,9 +121,9 @@ const require2Fa = ref(props.twoFa.required);
 const allowOath = ref(props.oath.allow_login);
 
 /*
-|---------------------------------------------------------------------------
+|-------------------------------------------------------------------------------
 | Validation
-|---------------------------------------------------------------------------
+|-------------------------------------------------------------------------------
 */
 const initValues = {
     auto_logout_timer: props.autoLogoutTimer,

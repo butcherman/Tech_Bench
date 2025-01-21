@@ -21,10 +21,10 @@
 </template>
 
 <script setup lang="ts">
-import { handleLinkClick } from "@/Composables/links.module";
-import { useConfirm } from "primevue";
 import BaseBadge from "./BaseBadge.vue";
 import ConfirmPopup from "primevue/confirmpopup";
+import { handleLinkClick } from "@/Composables/links.module";
+import { useConfirm } from "primevue";
 
 const emit = defineEmits<{
     accepted: [];
@@ -32,12 +32,12 @@ const emit = defineEmits<{
 }>();
 
 const props = defineProps<{
+    acceptText?: string;
     confirm?: boolean;
     confirmMsg?: string;
-    acceptText?: string;
-    rejectText?: string;
     href?: string;
     icon?: string;
+    rejectText?: string;
     variant?:
         | "danger"
         | "dark"

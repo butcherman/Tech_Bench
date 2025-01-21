@@ -6,7 +6,8 @@
                 <Link
                     as="button"
                     :href="$route('admin.test-email')"
-                    class="w-3/4 rounded-lg px-3 py-2 bg-violet-600 text-white"
+                    class="w-3/4 rounded-lg px-3 py-2"
+                    :class="getVariantClass('help')"
                     preserve-state
                 >
                     Send Test Email (uses saved values)
@@ -20,6 +21,7 @@
 import AppLayout from "@/Layouts/App/AppLayout.vue";
 import Card from "@/Components/_Base/Card.vue";
 import EmailConfigForm from "@/Forms/Admin/Config/EmailConfigForm.vue";
+import { getVariantClass } from "@/Composables/styleData.module";
 
 defineProps<{
     settings: {

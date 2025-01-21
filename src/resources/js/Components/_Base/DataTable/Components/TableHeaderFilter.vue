@@ -1,7 +1,6 @@
 <template>
     <div class="relative">
         <template v-if="column.columnDef.meta?.filterSelect">
-            <!-- {{ uniqueValues }} -->
             <select
                 v-model="localValue"
                 class="border p-1 ps-2 rounded-md w-full"

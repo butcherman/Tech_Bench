@@ -55,9 +55,9 @@
 </template>
 
 <script setup lang="ts">
-import VueForm from "@/Forms/_Base/VueForm.vue";
-import TextInput from "@/Forms/_Base/TextInput.vue";
 import SwitchInput from "../_Base/SwitchInput.vue";
+import TextInput from "@/Forms/_Base/TextInput.vue";
+import VueForm from "@/Forms/_Base/VueForm.vue";
 import { ref } from "vue";
 import { boolean, number, object } from "yup";
 
@@ -72,12 +72,18 @@ const props = defineProps<{
 
 const disableFields = ref(!props.settings.auto_delete);
 
+/*
+|-------------------------------------------------------------------------------
+| Validation
+|-------------------------------------------------------------------------------
+*/
 const initValues = {
     default_link_life: props.settings.default_link_life,
     auto_delete: props.settings.auto_delete,
     auto_delete_days: props.settings.auto_delete_days,
     auto_delete_override: props.settings.auto_delete_override,
 };
+
 const schema = object({
     default_link_life: number().required(),
     auto_delete: boolean().required(),

@@ -2,10 +2,10 @@
     <VueForm
         ref="form"
         :initial-values="initValues"
-        :validation-schema="schema"
         :submit-route="submitRoute"
         :submit-method="submitMethod"
         :submit-text="submitText"
+        :validation-schema="schema"
     >
         <TextInput
             id="description"
@@ -32,9 +32,9 @@
 </template>
 
 <script setup lang="ts">
-import VueForm from "@/Forms/_Base/VueForm.vue";
-import TextInput from "@/Forms/_Base/TextInput.vue";
 import RadioGroupInput from "../_Base/RadioGroupInput.vue";
+import TextInput from "@/Forms/_Base/TextInput.vue";
+import VueForm from "@/Forms/_Base/VueForm.vue";
 import { computed } from "vue";
 import { object, string } from "yup";
 
@@ -46,6 +46,11 @@ const props = defineProps<{
     phoneType?: adminPhoneType;
 }>();
 
+/*
+|-------------------------------------------------------------------------------
+| Handle Form
+|-------------------------------------------------------------------------------
+*/
 const submitRoute = computed(() =>
     props.phoneType
         ? route("admin.phone-types.update", props.phoneType.phone_type_id)
@@ -56,15 +61,26 @@ const submitText = computed(() =>
     props.phoneType ? "Update Phone Type" : "Create Phone Type"
 );
 
+/*
+|-------------------------------------------------------------------------------
+| Validation
+|-------------------------------------------------------------------------------
+*/
 const initValues = {
     description: props.phoneType?.description,
     icon_class: props.phoneType?.icon_class,
 };
+
 const schema = object({
     description: string().required(),
     icon_class: string().required("Please chose an icon"),
 });
 
+/*
+|-------------------------------------------------------------------------------
+| List of possible icon values
+|-------------------------------------------------------------------------------
+*/
 const iconList = [
     {
         label: "home",

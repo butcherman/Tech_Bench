@@ -68,6 +68,6 @@
 </template>
 
 <script setup lang="ts">
-import Card from "../_Base/Card.vue";
 import BaseButton from "../_Base/Buttons/BaseButton.vue";
+import Card from "../_Base/Card.vue";
 </script>

@@ -108,13 +108,13 @@ import { inject, ref, computed } from "vue";
 import type { Table } from "@tanstack/vue-table";
 
 const table = inject<Table<T>>("table");
-const perPage = ref(table?.options.meta?.perPage ?? 10);
 
 /*
 |-------------------------------------------------------------------------------
 | Pagination Options
 |-------------------------------------------------------------------------------
 */
+const perPage = ref(table?.options.meta?.perPage ?? 10);
 const currentPage = computed<number>(
     () => table?.getState().pagination.pageIndex ?? 0
 );

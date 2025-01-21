@@ -16,7 +16,6 @@
                 :name="`${name}[${index}].number`"
                 :label="label"
                 :placeholder="placeholder"
-                :datalist="datalist"
                 class="grow"
             />
             <TextInput
@@ -41,20 +40,19 @@
 </template>
 
 <script setup lang="ts">
-import TextInput from "./TextInput.vue";
 import AddButton from "@/Components/_Base/Buttons/AddButton.vue";
-import { useFieldArray } from "vee-validate";
-import SelectInput from "./SelectInput.vue";
 import PhoneInput from "./PhoneInput.vue";
+import SelectInput from "./SelectInput.vue";
+import TextInput from "./TextInput.vue";
+import { useFieldArray } from "vee-validate";
 
 const props = defineProps<{
     name: string;
+    phoneTypes: { text: string; value: string }[];
+    drag?: boolean;
     label?: string;
     placeholder?: string;
-    drag?: boolean;
-    datalist?: string[];
     removeWarning?: string;
-    phoneTypes: { text: string; value: string }[];
 }>();
 
 const addPhone = () => {

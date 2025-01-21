@@ -48,12 +48,18 @@ const props = defineProps<{
     auto_purge: boolean;
 }>();
 
+/*
+|-------------------------------------------------------------------------------
+| Validation
+|-------------------------------------------------------------------------------
+*/
 const initValues = {
     select_id: props.select_id,
     update_slug: props.update_slug,
     default_state: props.default_state,
     auto_purge: props.auto_purge,
 };
+
 const schema = object({
     select_id: boolean().required(),
     update_slug: boolean().required(),

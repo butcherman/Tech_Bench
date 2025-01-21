@@ -40,6 +40,11 @@ const props = defineProps<{
     };
 }>();
 
+/*
+|-------------------------------------------------------------------------------
+| Validation
+|-------------------------------------------------------------------------------
+*/
 const initValues = {
     allow_comments: props.settings.allow_comments,
     allow_public: props.settings.allow_public,

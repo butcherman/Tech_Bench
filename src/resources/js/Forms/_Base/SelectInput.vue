@@ -2,13 +2,13 @@
     <FloatLabel variant="on" class="w-full my-2">
         <Select
             v-model="value"
+            class="w-full border"
             :id="id"
             :options="list"
             :option-label="textField ?? 'text'"
             :option-value="valueField ?? 'value'"
             :option-group-label="groupTextField"
             :option-group-children="groupChildrenField"
-            class="w-full border"
             @focus="hasFocus = true"
             @blur="hasFocus = false"
         >
@@ -36,15 +36,15 @@ import type { Ref } from "vue";
 
 const props = defineProps<{
     id: string;
-    name: string;
-    label?: string;
     list: any[];
+    name: string;
+    disabled?: boolean;
+    groupChildrenField?: string;
+    groupTextField?: string;
+    help?: string;
+    label?: string;
     textField?: string;
     valueField?: string;
-    groupTextField?: string;
-    groupChildrenField?: string;
-    disabled?: boolean;
-    help?: string;
 }>();
 
 const hasFocus = ref(false);

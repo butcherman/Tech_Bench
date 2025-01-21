@@ -21,8 +21,8 @@
         </Message>
         <Message
             v-if="hasFocus"
-            size="small"
             severity="secondary"
+            size="small"
             variant="simple"
         >
             {{ help }}
@@ -38,17 +38,17 @@ import type { Ref } from "vue";
 
 const props = defineProps<{
     id: string;
-    name: string;
     list: any[] | any;
-    label?: string;
-    textField?: string;
-    valueField?: string;
-    groupTextField?: string;
+    name: string;
+    filter?: boolean;
     groupChildrenField?: string;
+    groupTextField?: string;
+    help?: string;
+    label?: string;
     noChip?: boolean;
     placeholder?: string;
-    help?: string;
-    filter?: boolean;
+    textField?: string;
+    valueField?: string;
 }>();
 
 const hasFocus = ref(false);

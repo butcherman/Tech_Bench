@@ -12,16 +12,16 @@
                     v-model="formattedValue"
                     class="p-2"
                     type="tel"
+                    :autocomplete="autocomplete ?? 'off'"
                     :autofocus="focus"
+                    :class="borderType"
                     :disabled="disabled"
                     :id="id"
-                    :autocomplete="autocomplete ?? 'off'"
-                    :class="borderType"
-                    :variant="filled ? 'filled' : null"
-                    fluid
                     :placeholder="
                         placeholder ? placeholder : '+1 (XXX) XXX-XXXX'
                     "
+                    :variant="filled ? 'filled' : null"
+                    fluid
                     @focus="hasFocus = true"
                     @blur="hasFocus = false"
                 />
@@ -64,14 +64,14 @@ defineEmits(["change"]);
 const props = defineProps<{
     id: string;
     name: string;
-    label?: string;
-    placeholder?: string;
-    focus?: boolean;
-    disabled?: boolean;
-    help?: string;
     autocomplete?: string;
     borderBottom?: boolean;
+    disabled?: boolean;
     filled?: boolean;
+    focus?: boolean;
+    help?: string;
+    label?: string;
+    placeholder?: string;
 }>();
 
 const hasFocus = ref(false);

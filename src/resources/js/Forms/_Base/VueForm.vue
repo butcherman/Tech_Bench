@@ -6,9 +6,9 @@
     >
         <form
             class="vld-parent h-full flex flex-col"
-            @submit.prevent="onSubmit"
             novalidate
             v-focustrap
+            @submit.prevent="onSubmit"
         >
             <div v-if="uncaughtErrors.length" class="flex-none my-4">
                 <Message
@@ -24,11 +24,11 @@
             </div>
             <div class="flex-none text-center mt-4">
                 <BaseButton
+                    class="w-3/4"
                     type="submit"
                     variant="primary"
-                    class="w-3/4"
-                    :text="submitText"
                     :icon="submitIcon"
+                    :text="submitText"
                 >
                     <span v-if="isSubmitting">
                         <fa-icon icon="spinner" class="fa-spin-pulse" />
@@ -53,14 +53,14 @@ interface formData {
 
 const emit = defineEmits(["submitting", "success", "has-errors"]);
 const props = defineProps<{
-    validationSchema: object;
     initialValues: { [key: string]: any };
     submitMethod: "post" | "put" | "delete";
     submitRoute: string;
-    submitText?: string;
-    submitIcon?: string;
-    hideOverlay?: boolean;
+    validationSchema: object;
     fullPageOverlay?: boolean;
+    hideOverlay?: boolean;
+    submitIcon?: string;
+    submitText?: string;
 }>();
 
 const isSubmitting = ref<boolean>(false);

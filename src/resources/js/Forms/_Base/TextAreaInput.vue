@@ -3,10 +3,10 @@
         <Textarea
             v-model="value"
             class="w-full border p-2"
-            :id="id"
-            :rows="rows ?? 3"
-            :placeholder="placeholder"
             :disabled="disabled"
+            :id="id"
+            :placeholder="placeholder"
+            :rows="rows ?? 3"
             @focus="hasFocus = true"
             @blur="hasFocus = false"
         />
@@ -16,8 +16,8 @@
         </Message>
         <Message
             v-if="hasFocus"
-            size="small"
             severity="secondary"
+            size="small"
             variant="simple"
         >
             {{ help }}
@@ -37,10 +37,10 @@ defineEmits(["change"]);
 const props = defineProps<{
     id: string;
     name: string;
-    label?: string;
-    placeholder?: string;
     disabled?: boolean;
     help?: string;
+    label?: string;
+    placeholder?: string;
     rows?: number;
 }>();
 

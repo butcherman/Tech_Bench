@@ -1,5 +1,8 @@
 import gsap from "gsap";
 
+/**
+ * Increase the height of the element, then increase the opacity.
+ */
 export const growShow = (el: Element, done: () => void) => {
     let timeline = gsap.timeline();
 
@@ -27,6 +30,9 @@ export const growShow = (el: Element, done: () => void) => {
         );
 };
 
+/**
+ * Fade out via opacity, then bring height to 0 before exiting
+ */
 export const shrinkHide = (el: Element, done: () => void) => {
     let timeline = gsap.timeline();
 

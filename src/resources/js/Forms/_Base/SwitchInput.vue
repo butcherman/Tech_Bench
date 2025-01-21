@@ -37,11 +37,11 @@ import type { Ref } from "vue";
 const props = defineProps<{
     id: string;
     name: string;
-    label?: string;
+    center?: boolean;
     disabled?: boolean;
     help?: string;
     inline?: boolean; // TODO - Add This Class
-    center?: boolean;
+    label?: string;
 }>();
 
 const hasFocus = ref(false);

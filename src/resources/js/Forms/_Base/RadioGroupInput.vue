@@ -50,11 +50,11 @@ defineEmits(["change"]);
 
 const props = defineProps<{
     id: string;
-    name: string;
     list: string[] | radioGroupList[];
-    inline?: boolean;
-    help?: string;
+    name: string;
     disabled?: boolean;
+    help?: string;
+    inline?: boolean;
 }>();
 
 const hasFocus = ref(false);

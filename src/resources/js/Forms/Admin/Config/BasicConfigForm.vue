@@ -1,16 +1,16 @@
 <template>
     <VueForm
-        :initial-values="initValues"
-        :validation-schema="schema"
-        :submit-route="submitRoute"
         submit-method="put"
+        :initial-values="initValues"
+        :submit-route="submitRoute"
         :submit-text="submitText"
+        :validation-schema="schema"
         @success="$emit('success')"
     >
         <TextInput
             id="url"
-            name="url"
             label="Site URL"
+            name="url"
             prepend="https://"
             focus
         >
@@ -30,33 +30,40 @@
         />
         <RangeInput
             id="file-size"
-            name="max_filesize"
             label="Maximum Uploaded File Size"
+            format="prettybytes"
+            name="max_filesize"
             :min="5000"
             :max="10737418240"
-            format="prettybytes"
         />
     </VueForm>
 </template>
 
 <script setup lang="ts">
-import VueForm from "@/Forms/_Base/VueForm.vue";
-import TextInput from "@/Forms/_Base/TextInput.vue";
-import SelectInput from "@/Forms/_Base/SelectInput.vue";
 import RangeInput from "@/Forms/_Base/RangeInput.vue";
+import SelectInput from "@/Forms/_Base/SelectInput.vue";
+import TextInput from "@/Forms/_Base/TextInput.vue";
+import VueForm from "@/Forms/_Base/VueForm.vue";
 import { object, string, number } from "yup";
 import { computed } from "vue";
 
 defineEmits(["success"]);
 const props = defineProps<{
+    company_name: string;
+    maxFilesize: number;
+    timezone: string;
     tzList: TimezoneList[];
     url: string;
-    company_name: string;
-    timezone: string;
-    maxFilesize: number;
     init?: boolean;
 }>();
 
+// TODO - Add Pretty Bytes to value
+
+/*
+|-------------------------------------------------------------------------------
+| Handle Form
+|-------------------------------------------------------------------------------
+*/
 const submitRoute = computed(() =>
     props.init
         ? route("init.step-1.submit")
@@ -67,6 +74,11 @@ const submitText = computed(() =>
     props.init ? "Save and Continue" : "Update Application Configuration"
 );
 
+/*
+|-------------------------------------------------------------------------------
+| Validation
+|-------------------------------------------------------------------------------
+*/
 const initValues = {
     url: props.url,
     company_name: props.company_name,

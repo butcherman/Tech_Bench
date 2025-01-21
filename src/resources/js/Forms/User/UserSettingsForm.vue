@@ -17,14 +17,20 @@
 </template>
 
 <script setup lang="ts">
-import VueForm from "@/Forms/_Base/VueForm.vue";
 import SwitchInput from "../_Base/SwitchInput.vue";
+import VueForm from "@/Forms/_Base/VueForm.vue";
 import { object, boolean } from "yup";
 
 const props = defineProps<{
     settings: userSettings[];
     user: user;
 }>();
+
+/*
+|-------------------------------------------------------------------------------
+| Validation
+|-------------------------------------------------------------------------------
+*/
 
 /**
  * Dynamically build the Initial Values based on available settings

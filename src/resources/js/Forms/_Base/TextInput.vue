@@ -11,14 +11,14 @@
                 <InputText
                     v-model="value"
                     class="p-2"
-                    :type="type ?? 'text'"
+                    :autocomplete="autocomplete ?? 'off'"
                     :autofocus="focus"
+                    :class="borderType"
                     :disabled="disabled"
                     :id="id"
-                    :autocomplete="autocomplete ?? 'off'"
-                    :class="borderType"
-                    :variant="filled ? 'filled' : null"
                     :placeholder="placeholder"
+                    :type="type ?? 'text'"
+                    :variant="filled ? 'filled' : null"
                     fluid
                     @focus="hasFocus = true"
                     @blur="hasFocus = false"
@@ -60,7 +60,6 @@ import type { Ref } from "vue";
 
 const props = defineProps<{
     id: string;
-    label?: string;
     name: string;
     autocomplete?: string;
     borderBottom?: boolean;
@@ -68,8 +67,9 @@ const props = defineProps<{
     filled?: boolean;
     focus?: boolean;
     help?: string;
-    type?: string;
+    label?: string;
     placeholder?: string;
+    type?: string;
 }>();
 
 const hasFocus = ref(false);

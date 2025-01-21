@@ -33,10 +33,9 @@
 </template>
 
 <script setup lang="ts">
-import { Message } from "primevue";
 import { gsap } from "gsap";
 import { useAppStore } from "@/Stores/AppStore";
-import { getStatusType, getStatusIcon } from "@/Composables/statusData.module";
+import { getStatusType, getStatusIcon } from "@/Composables/styleData.module";
 
 const app = useAppStore();
 

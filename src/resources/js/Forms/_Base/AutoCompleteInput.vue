@@ -67,9 +67,10 @@ import type { Ref } from "vue";
 
 const props = defineProps<{
     id: string;
-    label?: string;
+    dataList: string[];
     name: string;
     autocomplete?: string;
+    label?: string;
     borderBottom?: boolean;
     disabled?: boolean;
     filled?: boolean;
@@ -77,7 +78,6 @@ const props = defineProps<{
     help?: string;
     type?: string;
     placeholder?: string;
-    dataList: string[];
 }>();
 
 const hasFocus = ref<boolean>(false);

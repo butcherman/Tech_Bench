@@ -23,8 +23,8 @@
 </template>
 
 <script setup lang="ts">
-import VueForm from "@/Forms/_Base/VueForm.vue";
 import PasswordInput from "../_Base/PasswordInput.vue";
+import VueForm from "@/Forms/_Base/VueForm.vue";
 import { object, string, ref as reference } from "yup";
 import { computed } from "vue";
 
@@ -34,10 +34,20 @@ const props = defineProps<{
     init?: boolean;
 }>();
 
+/*
+|-------------------------------------------------------------------------------
+| Handle Form
+|-------------------------------------------------------------------------------
+*/
 const submitRoute = computed(() =>
     props.init ? route("init.step-4b.submit") : route("user-password.update")
 );
 
+/*
+|-------------------------------------------------------------------------------
+| Validation
+|-------------------------------------------------------------------------------
+*/
 const initValues = {
     current_password: null,
     password: null,

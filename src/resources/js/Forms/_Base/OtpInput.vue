@@ -3,17 +3,17 @@
         <label :for="id" class="font-bold text-muted">{{ label }}</label>
         <InputOtp
             v-model="value"
-            :id="id"
-            size="large"
             class="flex justify-center"
+            size="large"
+            :id="id"
             :length="length ?? 4"
         >
             <template #default="{ attrs, events }">
                 <input
+                    class="border h-8 md:h-10 w-8 md:w-16 text-center rounded-lg"
                     type="text"
                     v-bind="attrs"
                     v-on="events"
-                    class="border h-8 md:h-10 w-8 md:w-16 text-center rounded-lg"
                 />
             </template>
         </InputOtp>
@@ -31,11 +31,11 @@ import type { Ref } from "vue";
 
 const props = defineProps<{
     id: string;
-    label?: string;
     name: string;
     autocomplete?: string;
     disabled?: boolean;
     focus?: boolean;
+    label?: string;
     length?: number;
 }>();
 

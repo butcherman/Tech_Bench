@@ -42,10 +42,10 @@
 
 <script setup lang="ts">
 import AutoCompleteInputArray from "../_Base/AutoCompleteInputArray.vue";
-import VueForm from "@/Forms/_Base/VueForm.vue";
-import TextInput from "@/Forms/_Base/TextInput.vue";
 import SelectInput from "../_Base/SelectInput.vue";
 import SwitchInput from "../_Base/SwitchInput.vue";
+import TextInput from "@/Forms/_Base/TextInput.vue";
+import VueForm from "@/Forms/_Base/VueForm.vue";
 import { computed } from "vue";
 import { array, boolean, number, object, string } from "yup";
 
@@ -62,6 +62,11 @@ const removeWarning = computed(() =>
         : undefined
 );
 
+/*
+|-------------------------------------------------------------------------------
+| Handle Form
+|-------------------------------------------------------------------------------
+*/
 const submitRoute = computed(() =>
     props.equipment
         ? route("equipment.update", props.equipment.equip_id)
@@ -72,6 +77,11 @@ const submitText = computed(() =>
     props.equipment ? "Update Equipment" : "Create New Equipment"
 );
 
+/*
+|-------------------------------------------------------------------------------
+| Validation
+|-------------------------------------------------------------------------------
+*/
 const initValues = {
     cat_id: props.equipment?.cat_id || null,
     name: props.equipment?.name || null,
@@ -82,6 +92,7 @@ const initValues = {
         null,
     ],
 };
+
 const schema = object({
     cat_id: number().required().label("Category"),
     name: string().required(),

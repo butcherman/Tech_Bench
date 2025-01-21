@@ -41,10 +41,10 @@
 </template>
 
 <script setup lang="ts">
-import VueForm from "@/Forms/_Base/VueForm.vue";
-import TextInput from "@/Forms/_Base/TextInput.vue";
 import PasswordInput from "../_Base/PasswordInput.vue";
 import SwitchInput from "../_Base/SwitchInput.vue";
+import TextInput from "@/Forms/_Base/TextInput.vue";
+import VueForm from "@/Forms/_Base/VueForm.vue";
 import { object, string, boolean } from "yup";
 
 /*
@@ -57,6 +57,7 @@ const initValues = {
     password: null,
     remember: false,
 };
+
 const schema = object({
     username: string().required(),
     password: string().required(),

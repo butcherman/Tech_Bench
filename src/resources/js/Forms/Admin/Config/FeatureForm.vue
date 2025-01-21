@@ -1,11 +1,10 @@
 <template>
     <VueForm
-        ref="form"
-        :initial-values="initValues"
-        :validation-schema="schema"
-        :submit-route="$route('admin.features.update')"
         submit-method="put"
         submit-text="Update Features"
+        :initial-values="initValues"
+        :submit-route="$route('admin.features.update')"
+        :validation-schema="schema"
     >
         <div class="flex place-content-center">
             <div>
@@ -46,11 +45,17 @@ const props = defineProps<{
     };
 }>();
 
+/*
+|-------------------------------------------------------------------------------
+| Validation
+|-------------------------------------------------------------------------------
+*/
 const initValues = {
     file_links: props.featureList.file_links,
     public_tips: props.featureList.public_tips,
     tip_comments: props.featureList.tip_comments,
 };
+
 const schema = object({
     file_links: boolean().required(),
     public_tips: boolean().required(),

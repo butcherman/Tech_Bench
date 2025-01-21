@@ -5,11 +5,11 @@
         </label>
         <Slider
             v-model="value"
+            class="my-2"
             :id="id"
             :name="name"
             :min="min"
             :max="max"
-            class="my-2"
             @focus="hasFocus = true"
             @blur="hasFocus = false"
         />
@@ -41,11 +41,11 @@ import type { Ref } from "vue";
 
 const props = defineProps<{
     id: string;
-    name: string;
     label: string;
+    name: string;
+    help?: string;
     min?: number;
     max?: number;
-    help?: string;
     valueText?: string;
 }>();
 

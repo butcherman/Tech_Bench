@@ -1,10 +1,10 @@
 <template>
     <VueForm
         :initial-values="initValues"
-        :validation-schema="schema"
         :submit-route="submitRoute"
         :submit-text="submitText"
         :submit-method="submitMethod"
+        :validation-schema="schema"
         @success="$emit('success')"
     >
         <TextInput id="username" name="username" label="Username" focus />
@@ -13,20 +13,20 @@
         <TextInput id="email" name="email" type="email" label="Email Address" />
         <SelectInput
             id="role"
-            name="role_id"
             label="Role"
-            :list="roles"
+            name="role_id"
             text-field="name"
             value-field="role_id"
             :disabled="init"
+            :list="roles"
         />
     </VueForm>
 </template>
 
 <script setup lang="ts">
-import VueForm from "@/Forms/_Base/VueForm.vue";
-import TextInput from "@/Forms/_Base/TextInput.vue";
 import SelectInput from "@/Forms/_Base/SelectInput.vue";
+import TextInput from "@/Forms/_Base/TextInput.vue";
+import VueForm from "@/Forms/_Base/VueForm.vue";
 import { computed } from "vue";
 import { number, object, string } from "yup";
 
@@ -37,6 +37,11 @@ const props = defineProps<{
     init?: boolean;
 }>();
 
+/*
+|-------------------------------------------------------------------------------
+| Handle Form
+|-------------------------------------------------------------------------------
+*/
 const submitText = computed(() =>
     props.user ? "Update User Profile" : "Create User"
 );
@@ -55,6 +60,11 @@ const submitMethod = computed(() => {
     return props.user ? "put" : "post";
 });
 
+/*
+|-------------------------------------------------------------------------------
+| Validation
+|-------------------------------------------------------------------------------
+*/
 const initValues = {
     username: props.user?.username || null,
     first_name: props.user?.first_name || null,
@@ -62,6 +72,7 @@ const initValues = {
     email: props.user?.email || null,
     role_id: props.user?.role_id || 4,
 };
+
 const schema = object({
     username: string().required(),
     first_name: string().required(),

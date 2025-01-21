@@ -53,15 +53,15 @@
 </template>
 
 <script setup lang="ts">
-import Card from "../_Base/Card.vue";
 import AddButton from "../_Base/Buttons/AddButton.vue";
 import AddBadge from "../_Base/Badges/AddBadge.vue";
+import BaseBadge from "../_Base/Badges/BaseBadge.vue";
+import BookmarkItem from "../_Base/BookmarkItem.vue";
+import Card from "../_Base/Card.vue";
+import ClipboardCopy from "../_Base/ClipboardCopy.vue";
+import DeleteBadge from "../_Base/Badges/DeleteBadge.vue";
+import DeleteButton from "../_Base/Buttons/DeleteButton.vue";
 import EditButton from "../_Base/Buttons/EditButton.vue";
 import EditBadge from "../_Base/Badges/EditBadge.vue";
-import DeleteButton from "../_Base/Buttons/DeleteButton.vue";
-import DeleteBadge from "../_Base/Badges/DeleteBadge.vue";
-import BaseBadge from "../_Base/Badges/BaseBadge.vue";
-import ClipboardCopy from "../_Base/ClipboardCopy.vue";
 import RefreshButton from "../_Base/Buttons/RefreshButton.vue";
-import BookmarkItem from "../_Base/BookmarkItem.vue";
 </script>

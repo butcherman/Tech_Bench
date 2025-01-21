@@ -63,17 +63,17 @@
 </template>
 
 <script setup lang="ts">
-import VueForm from "@/Forms/_Base/VueForm.vue";
-import SelectInput from "@/Forms/_Base/SelectInput.vue";
+import Card from "../_Base/Card.vue";
 import MultiSelectInput from "@/Forms/_Base/MultiSelectInput.vue";
 import OtpInput from "@/Forms/_Base/OtpInput.vue";
-import SwitchInput from "@/Forms/_Base/SwitchInput.vue";
-import Card from "../_Base/Card.vue";
-import { object } from "yup";
-import { ref } from "vue";
 import RadioGroupInput from "@/Forms/_Base/RadioGroupInput.vue";
 import RangeInput from "@/Forms/_Base/RangeInput.vue";
 import SelectBoxInput from "@/Forms/_Base/PickListInput.vue";
+import SelectInput from "@/Forms/_Base/SelectInput.vue";
+import SwitchInput from "@/Forms/_Base/SwitchInput.vue";
+import VueForm from "@/Forms/_Base/VueForm.vue";
+import { object } from "yup";
+import { ref } from "vue";
 
 const normalSelect = ref([
     { label: "New York", value: "NY" },

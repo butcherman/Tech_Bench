@@ -21,13 +21,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import AddBadge from "../_Base/Badges/AddBadge.vue";
 import Card from "../_Base/Card.vue";
+import DataTable from "../_Base/DataTable/DataTable.vue";
+import DeleteBadge from "../_Base/Badges/DeleteBadge.vue";
 import ResourceList from "../_Base/ResourceList.vue";
 import TableStacked from "../_Base/TableStacked.vue";
-import DataTable from "../_Base/DataTable/DataTable.vue";
-import AddBadge from "../_Base/Badges/AddBadge.vue";
-import DeleteBadge from "../_Base/Badges/DeleteBadge.vue";
+import { ref } from "vue";
 
 const resourceListData = ref([
     {

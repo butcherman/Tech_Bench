@@ -9,10 +9,9 @@
             <div class="px-2">
                 <TextInput
                     :id="`${name}-${element.key}`"
-                    :name="`${name}[${index}]`"
                     :label="label"
+                    :name="`${name}[${index}]`"
                     :placeholder="placeholder"
-                    :datalist="datalist"
                 >
                     <template v-if="draggable" #start-text>
                         <span class="pointer" v-tooltip="'Drag to Re-Order'">
@@ -45,10 +44,9 @@ import { useFieldArray } from "vee-validate";
 
 const props = defineProps<{
     name: string;
+    draggable?: boolean;
     label?: string;
     placeholder?: string;
-    draggable?: boolean;
-    datalist?: string[];
     removeWarning?: string;
 }>();
 

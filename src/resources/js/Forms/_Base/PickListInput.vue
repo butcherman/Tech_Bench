@@ -10,9 +10,9 @@
                 </div>
                 <select
                     v-model="availableHighlighted"
+                    class="w-full border rounded-lg overflow-auto p-2"
                     :id="`${id}-available-list`"
                     :size="size ?? 10"
-                    class="w-full border rounded-lg overflow-auto p-2"
                     multiple
                     @focus="hasFocus = true"
                     @blur="hasFocus = false"

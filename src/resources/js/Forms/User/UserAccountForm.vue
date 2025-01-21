@@ -13,14 +13,19 @@
 </template>
 
 <script setup lang="ts">
-import VueForm from "@/Forms/_Base/VueForm.vue";
 import TextInput from "@/Forms/_Base/TextInput.vue";
+import VueForm from "@/Forms/_Base/VueForm.vue";
 import { object, string } from "yup";
 
 const props = defineProps<{
     user: user;
 }>();
 
+/*
+|-------------------------------------------------------------------------------
+| Validation
+|-------------------------------------------------------------------------------
+*/
 const initValues = {
     first_name: props.user.first_name,
     last_name: props.user.last_name,

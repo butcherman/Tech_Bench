@@ -46,21 +46,21 @@ import Card from '@/Components/_Base/Card.vue';
 </template>
 
 <script setup lang="ts">
-import Card from "@/Components/_Base/Card.vue";
 import BaseButton from "@/Components/_Base/Buttons/BaseButton.vue";
-import Modal from "@/Components/_Base/Modal.vue";
+import Card from "@/Components/_Base/Card.vue";
 import LogoImage from "@/Components/_Base/LogoImage.vue";
+import Modal from "@/Components/_Base/Modal.vue";
+import okModal from "@/Modules/okModal";
 import { ref } from "vue";
 import { useAppStore } from "../../Stores/AppStore";
 import { useBroadcastStore } from "../../Stores/BroadcastStore";
-import okModal from "@/Modules/okModal";
 
 const app = useAppStore();
 const broad = useBroadcastStore();
 
 const dashboardModal = ref<InstanceType<typeof Modal> | null>(null);
 const index = ref(0);
-const flashTypes = [
+const flashTypes: alertMessageType[] = [
     "danger",
     "dark",
     "error",

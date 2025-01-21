@@ -44,11 +44,11 @@ import draggable from "vuedraggable";
 import { useFieldArray } from "vee-validate";
 
 const props = defineProps<{
+    dataList: string[];
     name: string;
+    draggable?: boolean;
     label?: string;
     placeholder?: string;
-    draggable?: boolean;
-    dataList: string[];
     removeWarning?: string;
 }>();
 

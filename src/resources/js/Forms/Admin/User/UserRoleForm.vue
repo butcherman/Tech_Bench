@@ -1,10 +1,10 @@
 <template>
     <VueForm
         :initial-values="initValues"
-        :validation-schema="schema"
         :submit-route="submitRoute"
         :submit-method="submitMethod"
         :submit-text="submitText"
+        :validation-schema="schema"
     >
         <TextInput
             id="role-name"
@@ -40,9 +40,9 @@
 </template>
 
 <script setup lang="ts">
-import VueForm from "@/Forms/_Base/VueForm.vue";
-import TextInput from "@/Forms/_Base/TextInput.vue";
 import SwitchInput from "@/Forms/_Base/SwitchInput.vue";
+import TextInput from "@/Forms/_Base/TextInput.vue";
+import VueForm from "@/Forms/_Base/VueForm.vue";
 import { object, string, array } from "yup";
 import { computed } from "vue";
 
@@ -78,24 +78,31 @@ const roleInitialPermissions = () => {
     return init;
 };
 
+/*
+|-------------------------------------------------------------------------------
+| Handle Form
+|-------------------------------------------------------------------------------
+*/
 const submitRoute = computed(() =>
     props.edit
         ? route("admin.user-roles.update", props.baseRole?.role_id)
         : route("admin.user-roles.store")
 );
+
 const submitMethod = computed(() => (props.edit ? "put" : "post"));
 const submitText = computed(() => (props.edit ? "Update Role" : "Create Role"));
 
 /*
-|---------------------------------------------------------------------------
+|-------------------------------------------------------------------------------
 | Validation
-|---------------------------------------------------------------------------
+|-------------------------------------------------------------------------------
 */
 const initValues = {
     name: props.edit ? props.baseRole?.name : roleInitialName.value,
     description: props.baseRole?.description || "",
     permissions: roleInitialPermissions(),
 };
+
 const schema = object({
     name: string().required(),
     description: string().required(),

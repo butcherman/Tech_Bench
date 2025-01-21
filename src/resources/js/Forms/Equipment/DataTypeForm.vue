@@ -50,6 +50,11 @@ const props = defineProps<{
     dataFieldType?: dataTypes;
 }>();
 
+/*
+|-------------------------------------------------------------------------------
+| Handle Form
+|-------------------------------------------------------------------------------
+*/
 const submitRoute = computed(() =>
     props.dataFieldType
         ? route("equipment-data.update", props.dataFieldType.type_id)
@@ -60,6 +65,11 @@ const submitText = computed(() =>
     props.dataFieldType ? "Update Data Type" : "Create Data Type"
 );
 
+/*
+|-------------------------------------------------------------------------------
+| Validation
+|-------------------------------------------------------------------------------
+*/
 const initValues = {
     name: props.dataFieldType?.name || null,
     pattern: props.dataFieldType?.pattern || null,
@@ -69,6 +79,7 @@ const initValues = {
     allow_copy: props.dataFieldType?.allow_copy || false,
     do_not_log_value: props.dataFieldType?.do_not_log_value || false,
 };
+
 const schema = object({
     name: string().required(),
     pattern: string().nullable(),

@@ -1,10 +1,10 @@
 <template>
     <VueForm
+        submit-method="put"
         :initial-values="initValues"
-        :validation-schema="schema"
         :submit-route="submitRoute"
         :submit-text="submitText"
-        submit-method="put"
+        :validation-schema="schema"
         @success="$emit('success')"
     >
         <TextInput
@@ -57,10 +57,10 @@
 </template>
 
 <script setup lang="ts">
-import VueForm from "@/Forms/_Base/VueForm.vue";
-import TextInput from "@/Forms/_Base/TextInput.vue";
-import SwitchInput from "@/Forms/_Base/SwitchInput.vue";
 import RangeInput from "@/Forms/_Base/RangeInput.vue";
+import SwitchInput from "@/Forms/_Base/SwitchInput.vue";
+import TextInput from "@/Forms/_Base/TextInput.vue";
+import VueForm from "@/Forms/_Base/VueForm.vue";
 import { object, number, boolean } from "yup";
 import { computed } from "vue";
 
@@ -70,6 +70,11 @@ const props = defineProps<{
     init?: boolean;
 }>();
 
+/*
+|-------------------------------------------------------------------------------
+| Handle Form
+|-------------------------------------------------------------------------------
+*/
 const submitRoute = computed(() =>
     props.init
         ? route("init.step-3.submit")
@@ -80,6 +85,11 @@ const submitText = computed(() =>
     props.init ? "Save and Continue" : "Update Password Policy"
 );
 
+/*
+|-------------------------------------------------------------------------------
+| Validation
+|-------------------------------------------------------------------------------
+*/
 const initValues = {
     expire: props.policy.expire,
     min_length: props.policy.min_length,
@@ -89,6 +99,7 @@ const initValues = {
     contains_special: props.policy.contains_special,
     disable_compromised: props.policy.disable_compromised,
 };
+
 const schema = object({
     expire: number().required(),
     min_length: number().required(),

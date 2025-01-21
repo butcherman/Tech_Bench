@@ -1,10 +1,10 @@
 <template>
     <VueForm
-        :initial-values="initValues"
-        :validation-schema="schema"
-        :submit-route="submitRoute"
         submit-method="put"
+        :initial-values="initValues"
+        :submit-route="submitRoute"
         :submit-text="submitText"
+        :validation-schema="schema"
         @success="$emit('success')"
     >
         <TextInput
@@ -65,10 +65,10 @@
 </template>
 
 <script setup lang="ts">
-import VueForm from "@/Forms/_Base/VueForm.vue";
-import TextInput from "@/Forms/_Base/TextInput.vue";
 import SelectInput from "@/Forms/_Base/SelectInput.vue";
 import SwitchInput from "@/Forms/_Base/SwitchInput.vue";
+import TextInput from "@/Forms/_Base/TextInput.vue";
+import VueForm from "@/Forms/_Base/VueForm.vue";
 import { object, string, number, boolean } from "yup";
 import { computed, ref } from "vue";
 import { growShow, shrinkHide } from "@/Composables/animations.module";
@@ -92,6 +92,11 @@ const toggleAuth = () => {
     showAuth.value = !showAuth.value;
 };
 
+/*
+|-------------------------------------------------------------------------------
+| Handle Form
+|-------------------------------------------------------------------------------
+*/
 const submitRoute = computed(() =>
     props.init
         ? route("init.step-2.submit")
@@ -102,7 +107,13 @@ const submitText = computed(() =>
     props.init ? "Save and Continue" : "Update Email Settings"
 );
 
+/*
+|-------------------------------------------------------------------------------
+| Validation
+|-------------------------------------------------------------------------------
+*/
 const initValues = props.settings;
+
 const schema = object({
     from_address: string().email().required().label("From Address"),
     host: string().required(),

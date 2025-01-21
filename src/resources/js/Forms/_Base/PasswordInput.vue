@@ -4,15 +4,15 @@
             v-model="value"
             class="p-2"
             type="password"
-            :autofocus="focus"
-            :id="id"
-            :disabled="disabled"
             :autocomplete="autocomplete ?? 'off'"
+            :autofocus="focus"
             :class="borderType"
+            :disabled="disabled"
             :feedback="false"
+            :id="id"
             :variant="filled ? 'filled' : undefined"
-            toggle-mask
             fluid
+            toggle-mask
             @focus="hasFocus = true"
             @blur="hasFocus = false"
         />
@@ -41,12 +41,12 @@ const props = defineProps<{
     id: string;
     label: string;
     name: string;
-    borderBottom?: boolean;
     autocomplete?: string;
-    help?: string;
+    borderBottom?: boolean;
+    disabled?: boolean;
     filled?: boolean;
     focus?: boolean;
-    disabled?: boolean;
+    help?: string;
 }>();
 
 const hasFocus = ref(false);

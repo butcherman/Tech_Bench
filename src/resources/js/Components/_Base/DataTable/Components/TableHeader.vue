@@ -43,8 +43,8 @@
 
 <script setup lang="ts" generic="T">
 import TableHeaderFilter from "./TableHeaderFilter.vue";
-import { FlexRender } from "@tanstack/vue-table";
 import { computed, inject } from "vue";
+import { FlexRender } from "@tanstack/vue-table";
 import type { Table } from "@tanstack/vue-table";
 
 defineSlots<{
