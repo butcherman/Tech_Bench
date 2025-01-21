@@ -1,15 +1,37 @@
 <template>
     <div>
-        <Card class="text-center">Comming Soon...</Card>
+        <Card class="tb-card" title="Email Settings">
+            <EmailConfigForm :settings="settings" />
+            <div class="text-center mt-2">
+                <Link
+                    as="button"
+                    :href="$route('admin.test-email')"
+                    class="w-3/4 rounded-lg px-3 py-2 bg-violet-600 text-white"
+                    preserve-state
+                >
+                    Send Test Email (uses saved values)
+                </Link>
+            </div>
+        </Card>
     </div>
 </template>
 
 <script setup lang="ts">
 import AppLayout from "@/Layouts/App/AppLayout.vue";
 import Card from "@/Components/_Base/Card.vue";
-import { ref, reactive, onMounted } from "vue";
-// TODO - Add Page.
-const props = defineProps<{}>();
+import EmailConfigForm from "@/Forms/Admin/Config/EmailConfigForm.vue";
+
+defineProps<{
+    settings: {
+        from_address: string;
+        host: string;
+        port: number;
+        encryption: string;
+        require_auth: boolean;
+        username: string;
+        password: string;
+    };
+}>();
 </script>
 
 <script lang="ts">
