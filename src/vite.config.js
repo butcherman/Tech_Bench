@@ -39,6 +39,10 @@ export default defineConfig(({ mode }) => {
                     cert: fs.readFileSync("/app/keystore/server.crt"),
                 },
             },
+            cors: {
+                origins: wsHost,
+                credentials: true,
+            }
         },
     };
 });
