@@ -2,27 +2,70 @@
     <VueForm
         :initial-values="initValues"
         :validation-schema="schema"
-        :submit-route="submitRoute"
-        :submit-method="submitMethod"
-        :submit-text="submitText"
+        :submit-route="$route('admin.security.store')"
+        submit-method="post"
+        submit-text="Upload Certificate"
     >
-        <TextInput id="input" name="input" label="Input" focus />
+        <h6 v-if="!hasKey" class="text-center">
+            No Private Key Exists. You must either generate a CSR Request, or
+            upload a wildcard cert with key
+        </h6>
+        <SwitchInput
+            id="isWildcard"
+            name="wildcard"
+            label="Upload Wildcard Certificate"
+            :data-bs-toggle="hasKey ? 'collapse' : null"
+            data-bs-target="#needs-key"
+            :disabled="!hasKey"
+            @change="showKey = !showKey"
+        />
+        <TextAreaInput
+            id="certificate"
+            name="certificate"
+            label="Certificate"
+            :rows="9"
+        />
+        <Collapse :show="showKey">
+            <TextAreaInput id="key" name="key" label="Private Key" :rows="9" />
+        </Collapse>
+        <TextAreaInput
+            id="intermediate"
+            name="intermediate"
+            label="Intermediate"
+            :rows="9"
+        />
     </VueForm>
 </template>
 
 <script setup lang="ts">
-import TextInput from "@/Forms/_Base/TextInput.vue";
+import Collapse from "@/Components/_Base/Collapse.vue";
+import SwitchInput from "@/Forms/_Base/SwitchInput.vue";
+import TextAreaInput from "@/Forms/_Base/TextAreaInput.vue";
 import VueForm from "@/Forms/_Base/VueForm.vue";
-import { object, string } from "yup";
-import { computed } from "vue";
+import { boolean, object, string } from "yup";
+import { ref } from "vue";
 
 const props = defineProps<{
-    edit?: any;
+    hasKey: boolean;
 }>();
 
-const submitRoute = computed(() => (props.edit ? "#" : "#"));
-const submitMethod = computed(() => (props.edit ? "put" : "post"));
-const submitText = computed(() => (props.edit ? "Update" : "Submit"));
-const initValues = {};
-const schema = object({});
+const showKey = ref<boolean>(!props.hasKey);
+
+const initValues = {
+    wildcard: !props.hasKey,
+    certificate: "",
+    key: "",
+    intermediate: "",
+};
+
+const schema = object({
+    wildcard: boolean().required(),
+    certificate: string().required(),
+    key: string().when("wildcard", {
+        is: true,
+        then: (schema) => schema.required(),
+        otherwise: (schema) => schema.nullable(),
+    }),
+    intermediate: string().required(),
+});
 </script>

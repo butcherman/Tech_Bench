@@ -1,15 +1,19 @@
 <template>
     <div>
-        <Card class="text-center">Comming Soon...</Card>
+        <Card class="tb-card" title="Upload Certificate">
+            <CertificateForm :has-key="hasKey" />
+        </Card>
     </div>
 </template>
 
 <script setup lang="ts">
 import AppLayout from "@/Layouts/App/AppLayout.vue";
 import Card from "@/Components/_Base/Card.vue";
-import { ref, reactive, onMounted } from "vue";
-// TODO - Add Page.
-const props = defineProps<{}>();
+import CertificateForm from "@/Forms/Admin/Config/CertificateForm.vue";
+
+defineProps<{
+    hasKey: boolean;
+}>();
 </script>
 
 <script lang="ts">
