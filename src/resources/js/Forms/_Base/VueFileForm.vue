@@ -22,6 +22,21 @@
             <div class="grow">
                 <slot />
             </div>
+            <DropzoneInput
+                ref="dropzone-input"
+                paramName="file"
+                :accepted-files="acceptedFiles"
+                :max-files="maxFiles || 1"
+                :required="fileRequired"
+                :upload-url="submitRoute"
+                @error="handleErrors"
+                @file-added="onFileAdded"
+                @file-removed="onFileRemoved"
+                @success="$emit('success')"
+            />
+            <div>
+                <slot name="after-file" />
+            </div>
             <div class="flex-none text-center mt-4">
                 <BaseButton
                     class="w-3/4"
@@ -35,6 +50,19 @@
                     </span>
                 </BaseButton>
             </div>
+            <div class="flex-none text-center mt-4">
+                <slot name="cancel">
+                    <BaseButton
+                        v-if="isSubmitting"
+                        class="w-3/4 pointer"
+                        text="Cancel Upload"
+                        type="button"
+                        variant="danger"
+                        :disabled="!isSubmitting"
+                        @click="onCancel"
+                    />
+                </slot>
+            </div>
         </form>
     </Overlay>
 </template>
@@ -43,15 +71,28 @@
 import BaseButton from "@/Components/_Base/Buttons/BaseButton.vue";
 import Overlay from "../../Components/_Base/Loaders/Overlay.vue";
 import { Message } from "primevue";
-import { computed, ref } from "vue";
+import { computed, ref, useTemplateRef } from "vue";
 import { useForm } from "vee-validate";
 import { useForm as useInertiaForm } from "@inertiajs/vue3";
+import DropzoneInput from "./DropzoneInput.vue";
+import type { DropzoneFile } from "dropzone";
+import okModal from "@/Modules/okModal";
 
 interface formData {
     [key: string]: string;
 }
 
-const emit = defineEmits(["submitting", "success", "has-errors"]);
+const emit = defineEmits([
+    "submitting",
+    "success",
+    "has-errors",
+    "canceled",
+    "values",
+    "file-added",
+    "file-removed",
+    "queue-complete",
+]);
+
 const props = defineProps<{
     initialValues: { [key: string]: any };
     submitMethod: "post" | "put" | "delete";
@@ -61,11 +102,44 @@ const props = defineProps<{
     hideOverlay?: boolean;
     submitIcon?: string;
     submitText?: string;
+    fileRequired?: boolean;
+    maxFiles?: number;
+    acceptedFiles?: string[];
+    hideFileInput?: boolean;
+    inertiaSubmit?: boolean;
 }>();
 
 const isSubmitting = ref<boolean>(false);
 const submitText = computed<string>(() => props.submitText ?? "Submit");
 const isDirty = computed<boolean>(() => meta.value.dirty);
+
+/*
+ |-------------------------------------------------------------------------------
+ | Dropzone File Upload
+ |-------------------------------------------------------------------------------
+ */
+const dropzoneInput = useTemplateRef("dropzone-input");
+const onFileAdded = (file: DropzoneFile) => {
+    emit("file-added", file);
+};
+const onFileRemoved = (file: DropzoneFile) => {
+    emit("file-removed", file);
+};
+const onCancel = () => {
+    dropzoneInput.value?.cancelUpload();
+    okModal("Upload Canceled");
+    isSubmitting.value = false;
+    emit("canceled");
+};
+
+/**
+ * Reset Form and remove dropzone files
+ */
+const resetFileForm = () => {
+    isSubmitting.value = false;
+    resetForm();
+    dropzoneInput.value?.reset();
+};
 
 /*
 |-------------------------------------------------------------------------------
@@ -148,6 +222,7 @@ defineExpose({
     setFieldValue,
     setFieldError,
     resetForm,
+    resetFileForm,
     handleReset,
     isDirty,
     isSubmitting,

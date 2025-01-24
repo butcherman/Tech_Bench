@@ -19,6 +19,7 @@
         <div class="grid md:grid-cols-2 gap-3">
             <BasicForm id="basic-forms" />
             <AdvancedForm id="advanced-forms" />
+            <FileUploadForm id="file-upload-form" />
         </div>
     </div>
 </template>
@@ -35,6 +36,7 @@ import AdvancedForm from "@/Components/_typography/AdvancedForm.vue";
 import QuickJump from "@/Components/_Base/QuickJump.vue";
 import StepNavigation from "@/Components/_Base/StepNavigation.vue";
 import Card from "@/Components/_Base/Card.vue";
+import FileUploadForm from "@/Components/_typography/FileUploadForm.vue";
 
 const quickJumpList = [
     {
