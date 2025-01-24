@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Route;
 | /administration
 |-------------------------------------------------------------------------------
 */
+
 Route::middleware('auth.secure')->prefix('administration')->name('admin.')->group(function () {
     Route::get('/', AdministrationController::class)
         ->name('index')
@@ -73,6 +74,8 @@ Route::middleware('auth.secure')->prefix('administration')->name('admin.')->grou
             ->breadcrumb('Tech Bench Logo', 'admin.index');
         Route::post('logo', 'update')
             ->name('logo.update');
+        Route::delete('logo', 'destroy')
+            ->name('logo.destroy');
     });
 
     /*

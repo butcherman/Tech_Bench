@@ -121,6 +121,16 @@ class ApplicationSettingsService
     }
 
     /**
+     * Delete the Logo File
+     */
+    public function destroyLogo(): void
+    {
+        $this->clearSetting('app.logo');
+
+        CacheFacade::clearCache('appData');
+    }
+
+    /**
      * Save Backup Settings
      */
     public function processBackupSettings(Collection $requestData): void

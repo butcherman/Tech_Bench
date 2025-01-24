@@ -29,6 +29,7 @@
                 :max-files="maxFiles || 1"
                 :required="fileRequired"
                 :upload-url="submitRoute"
+                :upload-message="uploadMessage"
                 @error="handleErrors"
                 @file-added="onFileAdded"
                 @file-removed="onFileRemoved"
@@ -95,7 +96,6 @@ const emit = defineEmits([
 
 const props = defineProps<{
     initialValues: { [key: string]: any };
-    submitMethod: "post" | "put" | "delete";
     submitRoute: string;
     validationSchema: object;
     fullPageOverlay?: boolean;
@@ -107,6 +107,7 @@ const props = defineProps<{
     acceptedFiles?: string[];
     hideFileInput?: boolean;
     inertiaSubmit?: boolean;
+    uploadMessage?: string;
 }>();
 
 const isSubmitting = ref<boolean>(false);
@@ -164,18 +165,13 @@ const {
 | Submit the Form
 |-------------------------------------------------------------------------------
 */
-const onSubmit = handleSubmit((form) => {
-    isSubmitting.value = true;
-    uncaughtErrors.value = [];
-    emit("submitting", form);
+const onSubmit = handleSubmit((form: formData): void => {
+    if (dropzoneInput.value?.validate()) {
+        emit("submitting");
 
-    const formData = useInertiaForm(form);
-    formData.submit(props.submitMethod, props.submitRoute, {
-        preserveScroll: true,
-        onFinish: () => (isSubmitting.value = false),
-        onSuccess: () => emit("success"),
-        onError: () => handleErrors(form, formData.errors),
-    });
+        isSubmitting.value = true;
+        dropzoneInput.value.process(form);
+    }
 });
 
 /*
