@@ -18,6 +18,7 @@ class BackupIndexController extends Controller
     {
         return Inertia::render('Maint/Backup', [
             'backup-list' => fn() => $this->svc->getBackupFiles(),
+            'backup-running' => fn() => $this->svc->isBackupRunning(),
         ]);
     }
 }

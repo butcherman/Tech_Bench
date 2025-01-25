@@ -6,6 +6,7 @@ use App\Http\Controllers\Maintenance\Backup\BackupIndexController;
 use App\Http\Controllers\Maintenance\Backup\BackupSettingsController;
 use App\Http\Controllers\Maintenance\Backup\DeleteBackupController;
 use App\Http\Controllers\Maintenance\Backup\DownloadBackupController;
+use App\Http\Controllers\Maintenance\Backup\RunBackupController;
 use App\Http\Controllers\Maintenance\DownloadLogController;
 use App\Http\Controllers\Maintenance\LogSettingsController;
 use App\Http\Controllers\Maintenance\LogsIndexController;
@@ -37,8 +38,11 @@ Route::middleware('auth.secure')->prefix('maintenance')->name('maint.')->group(f
     // Route::get('logs/{channel}/{logFile}/download', DownloadLogController::class)
     //     ->name('logs.download');
 
-    /**
-     * Backup Routes
+    /*
+     |---------------------------------------------------------------------------
+     | Backup and Backup Maintenance
+     | /maintenance/backups
+     |---------------------------------------------------------------------------
      */
     Route::prefix('backups')->name('backups.')->group(function () {
         Route::controller(BackupSettingsController::class)->name('settings.')->group(function () {
@@ -50,13 +54,11 @@ Route::middleware('auth.secure')->prefix('maintenance')->name('maint.')->group(f
         });
         Route::post('upload-backup', UploadBackupController::class)
             ->name('upload');
-
         Route::get('download/{backupName}', DownloadBackupController::class)
             ->name('download');
-
+        Route::get('run-backup', RunBackupController::class)->name('run-backup');
         Route::delete('delete-backup/{backupName}', DeleteBackupController::class)
             ->name('delete');
-
         Route::get('/', BackupIndexController::class)
             ->name('index')
             ->breadcrumb('Backups');

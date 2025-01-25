@@ -5,6 +5,7 @@ namespace App\Jobs\Maintenance;
 use App\Events\Admin\AdministrationEvent;
 use App\Exceptions\Maintenance\BackupFailedException;
 use App\Service\Misc\ConsoleOutputService;
+use App\Services\Misc\ConsoleOutputService as MiscConsoleOutputService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Broadcasting\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -43,7 +44,7 @@ class RunBackupJob implements ShouldQueue, ShouldBeUnique
         Log::info('Starting Backup');
 
         $this->checkDiskSpace();
-        Artisan::call('backup:run');
+        Artisan::call('backup:run', [], new MiscConsoleOutputService);
     }
 
     /**
