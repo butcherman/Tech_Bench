@@ -2,7 +2,10 @@
 
 use App\Http\Controllers\Maintenance\Backup\UploadBackupController;
 use App\Http\Controllers\Maintenance\Backup\BackupController;
+use App\Http\Controllers\Maintenance\Backup\BackupIndexController;
 use App\Http\Controllers\Maintenance\Backup\BackupSettingsController;
+use App\Http\Controllers\Maintenance\Backup\DeleteBackupController;
+use App\Http\Controllers\Maintenance\Backup\DownloadBackupController;
 use App\Http\Controllers\Maintenance\DownloadLogController;
 use App\Http\Controllers\Maintenance\LogSettingsController;
 use App\Http\Controllers\Maintenance\LogsIndexController;
@@ -41,14 +44,21 @@ Route::middleware('auth.secure')->prefix('maintenance')->name('maint.')->group(f
         Route::controller(BackupSettingsController::class)->name('settings.')->group(function () {
             Route::get('settings', 'show')
                 ->name('show')
-                ->breadcrumb('Backup Settings', 'maint.backup.index');
+                ->breadcrumb('Backup Settings', 'maint.backups.index');
             Route::put('settings',  'update')
                 ->name('update');
         });
         Route::post('upload-backup', UploadBackupController::class)
             ->name('upload');
+
+        Route::get('download/{backupName}', DownloadBackupController::class)
+            ->name('download');
+
+        Route::delete('delete-backup/{backupName}', DeleteBackupController::class)
+            ->name('delete');
+
+        Route::get('/', BackupIndexController::class)
+            ->name('index')
+            ->breadcrumb('Backups');
     });
-    Route::resource('backup', BackupController::class)->breadcrumbs(function (ResourceBreadcrumbs $breadcrumb) {
-        $breadcrumb->index('Backups', 'admin.index');
-    })->except(['edit', 'update', 'create']);
 });
