@@ -8,7 +8,7 @@ use App\Http\Controllers\Maintenance\Backup\DeleteBackupController;
 use App\Http\Controllers\Maintenance\Backup\DownloadBackupController;
 use App\Http\Controllers\Maintenance\Backup\RunBackupController;
 use App\Http\Controllers\Maintenance\DownloadLogController;
-use App\Http\Controllers\Maintenance\LogSettingsController;
+use App\Http\Controllers\Maintenance\Logs\LogSettingsController;
 use App\Http\Controllers\Maintenance\LogsIndexController;
 use App\Http\Controllers\Maintenance\ViewLogController;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
@@ -21,6 +21,14 @@ Route::middleware('auth.secure')->prefix('maintenance')->name('maint.')->group(f
     /**
      * Logging and Log Settings
      */
+    Route::prefix('logs')->name('logs.')->group(function () {
+        Route::controller(LogSettingsController::class)->name('settings.')->group(function () {
+            Route::get('settings', 'show')
+                ->name('show')
+                ->breadcrumb('Log Settings', 'admin.index');
+            Route::put('settings', 'update')->name('update');
+        });
+    });
     // Route::get('log-settings', [LogSettingsController::class, 'show'])
     //     ->name('log-settings.show')
     //     ->breadcrumb('Log Settings', 'admin.index');
@@ -45,13 +53,15 @@ Route::middleware('auth.secure')->prefix('maintenance')->name('maint.')->group(f
      |---------------------------------------------------------------------------
      */
     Route::prefix('backups')->name('backups.')->group(function () {
-        Route::controller(BackupSettingsController::class)->name('settings.')->group(function () {
-            Route::get('settings', 'show')
-                ->name('show')
-                ->breadcrumb('Backup Settings', 'maint.backups.index');
-            Route::put('settings',  'update')
-                ->name('update');
-        });
+        Route::controller(BackupSettingsController::class)
+            ->name('settings.')
+            ->group(function () {
+                Route::get('settings', 'show')
+                    ->name('show')
+                    ->breadcrumb('Backup Settings', 'maint.backups.index');
+                Route::put('settings',  'update')
+                    ->name('update');
+            });
         Route::post('upload-backup', UploadBackupController::class)
             ->name('upload');
         Route::get('download/{backupName}', DownloadBackupController::class)

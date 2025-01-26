@@ -244,7 +244,8 @@ class BuildAdminMenu
                 [
                     'name' => 'Log Settings',
                     'icon' => 'fa-sliders',
-                    'route' => '#', // route('maint.log-settings.show'),
+                    // 'route' => '#', // route('maint.log-settings.show'),
+                    'route' => route('maint.logs.settings.show'),
                 ],
                 [
                     'name' => 'Backups',
