@@ -6,7 +6,7 @@ use App\Enums\LogLevels;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Maintenance\LogSettingsRequest;
 use App\Models\AppSettings;
-use App\Services\Maint\LogUtilitiesService;
+use App\Services\Maintenance\LogUtilitiesService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
@@ -16,7 +16,7 @@ class LogSettingsController extends Controller
     public function __construct(protected LogUtilitiesService $svc) {}
 
     /**
-     * Display the resource.
+     * Display the log settings form.
      */
     public function show()
     {
@@ -30,7 +30,7 @@ class LogSettingsController extends Controller
     }
 
     /**
-     * Update the resource in storage.
+     * Update the log settings
      */
     public function update(LogSettingsRequest $request)
     {

@@ -239,18 +239,17 @@ class BuildAdminMenu
                 [
                     'name' => 'Application Logs',
                     'icon' => 'fa-bug',
-                    'route' => '#', // route('maint.logs.index'),
+                    'route' => route('maint.logs.index'),
                 ],
                 [
                     'name' => 'Log Settings',
                     'icon' => 'fa-sliders',
-                    // 'route' => '#', // route('maint.log-settings.show'),
                     'route' => route('maint.logs.settings.show'),
                 ],
                 [
                     'name' => 'Backups',
                     'icon' => 'fa-hdd',
-                    'route' => '#', //  route('maint.backup.index'),
+                    'route' => route('maint.backups.index'),
                 ],
                 [
                     'name' => 'Backup Settings',

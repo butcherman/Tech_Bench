@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Maint;
+namespace App\Services\Maintenance;
 
 use App\Enums\LogLevels;
 use App\Traits\AppSettingsTrait;

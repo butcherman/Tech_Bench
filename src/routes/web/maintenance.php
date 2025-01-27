@@ -1,17 +1,13 @@
 <?php
 
 use App\Http\Controllers\Maintenance\Backup\UploadBackupController;
-use App\Http\Controllers\Maintenance\Backup\BackupController;
 use App\Http\Controllers\Maintenance\Backup\BackupIndexController;
 use App\Http\Controllers\Maintenance\Backup\BackupSettingsController;
 use App\Http\Controllers\Maintenance\Backup\DeleteBackupController;
 use App\Http\Controllers\Maintenance\Backup\DownloadBackupController;
 use App\Http\Controllers\Maintenance\Backup\RunBackupController;
-use App\Http\Controllers\Maintenance\DownloadLogController;
 use App\Http\Controllers\Maintenance\Logs\LogSettingsController;
-use App\Http\Controllers\Maintenance\LogsIndexController;
-use App\Http\Controllers\Maintenance\ViewLogController;
-use Glhd\Gretel\Routing\ResourceBreadcrumbs;
+use App\Http\Controllers\Maintenance\Logs\LogsIndexController;
 use Illuminate\Support\Facades\Route;
 
 /**
@@ -22,12 +18,16 @@ Route::middleware('auth.secure')->prefix('maintenance')->name('maint.')->group(f
      * Logging and Log Settings
      */
     Route::prefix('logs')->name('logs.')->group(function () {
-        Route::controller(LogSettingsController::class)->name('settings.')->group(function () {
-            Route::get('settings', 'show')
-                ->name('show')
-                ->breadcrumb('Log Settings', 'admin.index');
-            Route::put('settings', 'update')->name('update');
-        });
+        Route::controller(LogSettingsController::class)
+            ->name('settings.')
+            ->group(function () {
+                Route::get('settings', 'show')
+                    ->name('show')
+                    ->breadcrumb('Log Settings', 'maint.logs.index');
+                Route::put('settings', 'update')->name('update');
+            });
+
+        Route::get('/', LogsIndexController::class)->name('index')->breadcrumb('Logs', 'admin.index');
     });
     // Route::get('log-settings', [LogSettingsController::class, 'show'])
     //     ->name('log-settings.show')
@@ -71,6 +71,6 @@ Route::middleware('auth.secure')->prefix('maintenance')->name('maint.')->group(f
             ->name('delete');
         Route::get('/', BackupIndexController::class)
             ->name('index')
-            ->breadcrumb('Backups');
+            ->breadcrumb('Backups', 'admin.index');
     });
 });
