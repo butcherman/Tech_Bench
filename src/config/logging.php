@@ -17,7 +17,7 @@ return [
     |
     */
 
-    'default' => env('LOG_CHANNEL', 'daily'),
+    'default' => env('LOG_CHANNEL', 'app'),
 
     /*
     |--------------------------------------------------------------------------
@@ -64,7 +64,7 @@ return [
             'replace_placeholders' => true,
         ],
 
-        'daily' => [
+        'app' => [
             'driver' => 'daily',
             'path' => storage_path('logs/Application/TechBench.log'),
             'level' => env('LOG_LEVEL', 'info'),

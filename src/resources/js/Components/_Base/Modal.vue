@@ -35,7 +35,7 @@
                                         <h5 class="text-muted">{{ title }}</h5>
                                     </slot>
                                 </div>
-                                <div class="grow">
+                                <div class="grow overflow-auto">
                                     <slot />
                                 </div>
                                 <div

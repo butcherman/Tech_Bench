@@ -23,7 +23,7 @@
                 @click="onRowClicked($event, item)"
             >
                 <slot name="list-item" :item="item">
-                    {{ item[labelField] }}
+                    {{ item[labelField] ?? item }}
                 </slot>
                 <div class="float-end">
                     <slot name="actions" :item="item" />
@@ -45,7 +45,7 @@ const props = defineProps<{
     center?: boolean;
     compact?: boolean;
     emptyText?: string;
-    labelField: keyof T;
+    labelField?: keyof T;
     list: T[];
     noBorder?: boolean;
     linkFn?: (row: any) => string;

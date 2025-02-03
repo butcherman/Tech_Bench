@@ -6,17 +6,22 @@ use App\Http\Controllers\Maintenance\Backup\BackupSettingsController;
 use App\Http\Controllers\Maintenance\Backup\DeleteBackupController;
 use App\Http\Controllers\Maintenance\Backup\DownloadBackupController;
 use App\Http\Controllers\Maintenance\Backup\RunBackupController;
+use App\Http\Controllers\Maintenance\Logs\DownloadLogController;
 use App\Http\Controllers\Maintenance\Logs\LogSettingsController;
 use App\Http\Controllers\Maintenance\Logs\LogsIndexController;
+use App\Http\Controllers\Maintenance\Logs\ViewLogController;
 use Illuminate\Support\Facades\Route;
 
 /**
  * Routes for Application Maintenance
  */
 Route::middleware('auth.secure')->prefix('maintenance')->name('maint.')->group(function () {
-    /**
-     * Logging and Log Settings
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Logging and Log Settings
+    | /maintenance/logs
+    |---------------------------------------------------------------------------
+    */
     Route::prefix('logs')->name('logs.')->group(function () {
         Route::controller(LogSettingsController::class)
             ->name('settings.')
@@ -27,24 +32,15 @@ Route::middleware('auth.secure')->prefix('maintenance')->name('maint.')->group(f
                 Route::put('settings', 'update')->name('update');
             });
 
-        Route::get('/', LogsIndexController::class)->name('index')->breadcrumb('Logs', 'admin.index');
+        Route::get('{channel}/{logFile}/download', DownloadLogController::class)
+            ->name('download');
+        Route::get('{channel}/{logFile}', ViewLogController::class)
+            ->name('show')
+            ->breadcrumb('View Log', 'maint.logs.index');
+        Route::get('/{channel?}', LogsIndexController::class)
+            ->name('index')
+            ->breadcrumb('Logs', 'admin.index');
     });
-    // Route::get('log-settings', [LogSettingsController::class, 'show'])
-    //     ->name('log-settings.show')
-    //     ->breadcrumb('Log Settings', 'admin.index');
-    // Route::put('log-settings', [LogSettingsController::class, 'update'])
-    //     ->name('log-settings.update');
-    // Route::get('logs', LogsIndexController::class)
-    //     ->name('logs.index')
-    //     ->breadcrumb('Logs', 'admin.index');
-    // Route::get('logs/{channel}', LogsIndexController::class)
-    //     ->name('logs.show')
-    //     ->breadcrumb(fn (string $channel) => ucfirst($channel), 'maint.logs.index');
-    // Route::get('logs/{channel}/{logFile}', ViewLogController::class)
-    //     ->name('logs.view')
-    //     ->breadcrumb('View Log File', 'maint.logs.show');
-    // Route::get('logs/{channel}/{logFile}/download', DownloadLogController::class)
-    //     ->name('logs.download');
 
     /*
      |---------------------------------------------------------------------------
