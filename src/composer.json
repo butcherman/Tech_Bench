@@ -46,7 +46,7 @@
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.14",
         "barryvdh/laravel-ide-helper": "^3.2",
-        "butcherman/artisan-dev-commands": "^0.0",
+        "butcherman/artisan-dev-commands": "^0",
         "fakerphp/faker": "^1.23",
         "laravel/pail": "^1.1",
         "laravel/pint": "^1.13",

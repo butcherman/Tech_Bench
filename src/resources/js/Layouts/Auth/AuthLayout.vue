@@ -1,13 +1,7 @@
 <template>
-    <div id="auth-layout-wrapper">
-        <slot />
-    </div>
+    <h1>Hello World</h1>
 </template>
 
-<style>
-#auth-layout-wrapper {
-    background: linear-gradient(135deg, #1f0683 0%, #24308e 50%, #0b77ca 100%);
-    min-height: 100vh;
-    width: 100%;
-}
-</style>
+<script setup lang="ts">
+//
+</script>

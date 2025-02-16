@@ -16,7 +16,7 @@ class HandleInertiaRequests extends Middleware
      */
     protected $rootView = 'app';
 
-    public function __construct(protected BuildNavBar $navbar) {}
+    // public function __construct(protected BuildNavBar $navbar) {}
 
     /**
      * Determines the current asset version.
@@ -46,9 +46,9 @@ class HandleInertiaRequests extends Middleware
         return [
             //  Flash messages are used for success/failure messages on next page load
             'flash' => $this->getFlashData(),
-            'csrf_token' => fn () => csrf_token(),
+            'csrf_token' => fn() => csrf_token(),
             // App information that is shared and used on all pages
-            'app' => fn () => CacheFacade::appData(),
+            // 'app' => fn () => CacheFacade::appData(),
         ];
     }
 
@@ -63,10 +63,10 @@ class HandleInertiaRequests extends Middleware
 
         return [
             //  Current logged in user
-            'current_user' => fn () => $request->user()->makeVisible('user_id'),
+            'current_user' => fn() => $request->user()->makeVisible('user_id'),
 
             //  Dynamically built navigation menu
-            'navbar' => fn () => $this->navbar->handle($request->user()),
+            // 'navbar' => fn () => $this->navbar->handle($request->user()),
         ];
     }
 

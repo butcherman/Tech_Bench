@@ -4,7 +4,7 @@ import type Echo from "laravel-echo";
 declare global {
     var route: typeof routeFn;
     var Pusher: any;
-    var Echo: Echo;
+    var Echo: Echo<any>;
 }
 
 declare module "@vue/runtime-core" {
