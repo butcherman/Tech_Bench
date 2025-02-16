@@ -1,5 +1,4 @@
 import errModal from "@/Modules/errModal";
-import okModal from "@/Modules/okModal";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { ref } from "vue";
 
@@ -47,8 +46,11 @@ export async function dataPost(
         .finally(() => (isLoading.value = false));
 }
 
+/*
+|-------------------------------------------------------------------------------
+| Handle any errors
+|-------------------------------------------------------------------------------
+*/
 function handleError(err: AxiosError) {
-    console.log(err);
-    // okModal(err.message);
     errModal(err.status ?? 0, err.message);
 }

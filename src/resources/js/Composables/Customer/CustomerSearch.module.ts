@@ -1,15 +1,6 @@
 import { reactive, ref } from "vue";
 import { dataPost, isLoading } from "../axiosWrapper.module";
 
-interface paginationData {
-    currentPage: number;
-    totalPages: number;
-    listFrom: number;
-    listTo: number;
-    listTotal: number;
-    pageArr: number[];
-}
-
 interface customerSearchResults {
     data: {
         current_page: number;
@@ -27,15 +18,31 @@ interface customerSearchResults {
     };
 }
 
+interface paginationData {
+    currentPage: number;
+    totalPages: number;
+    listFrom: number;
+    listTo: number;
+    listTotal: number;
+    pageArr: number[];
+}
+
+interface searchParams {
+    // basic: boolean;
+    searchFor: string;
+    page: number;
+    perPage: number;
+}
+
 /*
 |-------------------------------------------------------------------------------
 | Search and Loading Parameters
 |-------------------------------------------------------------------------------
 */
 export { isLoading };
-export const isDirty = ref<boolean>(false);
+export const showSiteList = ref<boolean>(true);
 
-export const searchParams = reactive({
+export const searchParams = reactive<searchParams>({
     searchFor: "",
     page: 1,
     perPage: 25,
@@ -56,7 +63,7 @@ export const paginationData = reactive<paginationData>({
 | Perform Customer Search
 |-------------------------------------------------------------------------------
 */
-export const triggerSearch = () => {
+export const triggerSearch = (): void => {
     dataPost(route("customers.search"), searchParams).then((res) => {
         if (res) {
             processResults(res);
@@ -64,12 +71,11 @@ export const triggerSearch = () => {
     });
 };
 
-export const resetSearch = () => {
+export const resetSearch = (): void => {
     searchParams.searchFor = "";
-    isDirty.value = false;
 };
 
-const processResults = (res: customerSearchResults) => {
+const processResults = (res: customerSearchResults): void => {
     searchResults.value = res.data.data;
     // Build pagination footer
     paginationData.listFrom = res.data.from;
