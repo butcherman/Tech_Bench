@@ -12,6 +12,15 @@ class LoginController
      */
     public function __invoke(Request $request)
     {
-        return Inertia::render('Auth/TechLogin');
+        return Inertia::render('Auth/TechLogin', [
+            'welcome-message' => fn() => config('app.welcome_message'),
+            'home-links' => fn() => config('app.home_links'),
+            'allow-oath' => fn() => config('services.azure.allow_login'),
+            'public-link' => fn() => config('tech-tips.allow_public')
+                ? [
+                    'url' => route('publicTips.index'),
+                    'text' => config('tech-tips.public_link_text'),
+                ] : false,
+        ]);
     }
 }

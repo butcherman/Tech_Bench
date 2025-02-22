@@ -19,10 +19,10 @@ Route::middleware(['guest', 'throttle:50,120'])->group(function () {
     | Socialite Routes (Azure Login)
     |---------------------------------------------------------------------------
     */
-    // Route::controller(SocialiteController::class)->group(function () {
-    //     Route::get('auth/redirect', 'redirectAuth')->name('azure-login');
-    //     Route::get('auth/callback', 'callback')->name('azure-callback');
-    // });
+    Route::controller(SocialiteController::class)->group(function () {
+        Route::get('auth/redirect', 'redirectAuth')->name('azure-login');
+        Route::get('auth/callback', 'callback')->name('azure-callback');
+    });
 });
 
 /*
