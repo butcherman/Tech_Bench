@@ -1,7 +1,3 @@
-/* @import url("./layout/appLayout.css");
-@import url("./elements/typography.css");
-@import url("./animations/shake.css"); */
-
 @import url('./typography.css');
 
 @tailwind base;
