@@ -1,9 +1,3 @@
-<template>
-    <button v-tooltip="bookmarkTitle" @click="toggleBookmark">
-        <fa-icon :icon="bookmarkIcon" :class="bookmarkClass" />
-    </button>
-</template>
-
 <script setup lang="ts">
 import okModal from "@/Modules/okModal";
 import axios from "axios";
@@ -70,6 +64,12 @@ const toggleBookmark = (): void => {
         });
 };
 </script>
+
+<template>
+    <button v-tooltip="bookmarkTitle" @click="toggleBookmark">
+        <fa-icon :icon="bookmarkIcon" :class="bookmarkClass" />
+    </button>
+</template>
 
 <style scoped>
 .bookmark-checked {

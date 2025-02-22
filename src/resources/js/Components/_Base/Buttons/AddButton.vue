@@ -1,12 +1,3 @@
-<template>
-    <BaseButton v-bind="props" :variant="variant ?? 'info'">
-        <slot>
-            <fa-icon :icon="icon ?? 'plus'" />
-            {{ text ?? "Add" }}
-        </slot>
-    </BaseButton>
-</template>
-
 <script setup lang="ts">
 import BaseButton from "./BaseButton.vue";
 
@@ -29,3 +20,12 @@ const props = defineProps<{
         | "warning";
 }>();
 </script>
+
+<template>
+    <BaseButton v-bind="props" :variant="variant ?? 'info'">
+        <slot>
+            <fa-icon :icon="icon ?? 'plus'" />
+            {{ text ?? "Add" }}
+        </slot>
+    </BaseButton>
+</template>

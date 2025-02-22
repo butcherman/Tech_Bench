@@ -1,14 +1,3 @@
-<template>
-    <div class="vld-parent">
-        <Loading :active="loading" :is-full-page="fullPage">
-            <slot name="loader">
-                <AtomLoader />
-            </slot>
-        </Loading>
-        <slot />
-    </div>
-</template>
-
 <script setup lang="ts">
 import Loading from "vue3-loading-overlay";
 import AtomLoader from "./AtomLoader.vue";
@@ -20,6 +9,17 @@ defineProps<{
     fullPage?: boolean;
 }>();
 </script>
+
+<template>
+    <div class="vld-parent">
+        <Loading :active="loading" :is-full-page="fullPage">
+            <slot name="loader">
+                <AtomLoader />
+            </slot>
+        </Loading>
+        <slot />
+    </div>
+</template>
 
 <style scoped>
 .vld-overlay.is-active {

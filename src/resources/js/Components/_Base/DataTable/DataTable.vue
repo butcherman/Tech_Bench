@@ -1,77 +1,3 @@
-<template>
-    <div class="overflow-x-auto w-full">
-        <table class="table-auto w-full">
-            <TableHeader>
-                <template
-                    v-for="name of Object.keys($slots)"
-                    v-slot:[name]="data"
-                >
-                    <slot :name="name" v-bind="data" />
-                </template>
-            </TableHeader>
-            <TableBodyLoading v-if="isLoading" />
-            <TableBodyEmpty
-                v-else-if="!table.getRowModel().rows.length"
-                :noResultsText="noResultsText"
-            >
-                <template #no-results>
-                    <slot name="no-results" />
-                </template>
-            </TableBodyEmpty>
-            <TransitionGroup
-                v-else
-                name="data-table"
-                :css="false"
-                @beforeLeave="fadeOut"
-                @enter="fadeIn"
-            >
-                <tr
-                    v-for="(row, index) in table.getRowModel().rows"
-                    :key="row.id"
-                    class="border-b border-slate-200"
-                    :class="[pointerClass, bgClass(row.original, index)]"
-                    @click="onRowClick($event, row.original)"
-                >
-                    <td
-                        v-for="cell in row.getAllCells()"
-                        :key="cell.id"
-                        :class="[paddingClass, borderClass]"
-                    >
-                        <slot
-                            :name="`row.${cell.column.id}`"
-                            :rowData="row.original"
-                        >
-                            <div
-                                v-if="typeof cell.getValue() === 'boolean'"
-                                class="text-center"
-                            >
-                                <fa-icon
-                                    :icon="cell.getValue() ? 'check' : 'xmark'"
-                                    :class="
-                                        cell.getValue()
-                                            ? 'text-success'
-                                            : 'text-danger'
-                                    "
-                                />
-                            </div>
-                            <FlexRender
-                                v-else
-                                :render="cell.column.columnDef.cell"
-                                :props="cell.getContext()"
-                            />
-                        </slot>
-                    </td>
-                </tr>
-            </TransitionGroup>
-            <TableFooter>
-                <template #footer>
-                    <slot name="footer" />
-                </template>
-            </TableFooter>
-        </table>
-    </div>
-</template>
-
 <script setup lang="ts" generic="T">
 import TableBodyEmpty from "./Components/TableBodyEmpty.vue";
 import TableBodyLoading from "./Components/TableBodyLoading.vue";
@@ -142,17 +68,17 @@ const props = defineProps<{
 | Variables
 |-------------------------------------------------------------------------------
 */
-const paginationArray = ref([10, 25, 50, 100]);
-const perPage = ref(paginationArray.value[0]);
+const paginationArray = ref<number[]>([10, 25, 50, 100]);
+const perPage = ref<number>(paginationArray.value[0]);
 
-const tableRows = computed(() => props.rows);
+const tableRows = computed<T[]>(() => props.rows);
 
 /*
 |-------------------------------------------------------------------------------
 | Sync Loading State with Inertia JS Loading or manually control
 |-------------------------------------------------------------------------------
 */
-const isLoading = ref(false);
+const isLoading = ref<boolean>(false);
 
 router.on("start", () => {
     if (props.syncLoadingState) {
@@ -166,15 +92,19 @@ router.on("finish", () => {
     }
 });
 
-const startLoading = () => (isLoading.value = true);
-const endLoading = () => (isLoading.value = false);
+const startLoading = (): void => {
+    isLoading.value = true;
+};
+const endLoading = (): void => {
+    isLoading.value = false;
+};
 
 /*
 |-------------------------------------------------------------------------------
 | Table Events
 |-------------------------------------------------------------------------------
 */
-const onRowClick = (event: MouseEvent, row: T) => {
+const onRowClick = (event: MouseEvent, row: T): void => {
     if (pointerClass.value === "pointer") {
         emit("row-click", row);
 
@@ -192,11 +122,12 @@ const onRowClick = (event: MouseEvent, row: T) => {
 | Styling Computed Properties
 |-------------------------------------------------------------------------------
 */
-const pointerClass = computed(() =>
+const pointerClass = computed<string>(() =>
     props.allowRowClick || props.rowClickLink ? "pointer" : ""
 );
-const borderClass = computed(() => (props.gridLines ? "border" : ""));
-const paddingClass = computed(() => (props.compact ? "p-1" : "p-3"));
+const borderClass = computed<string>(() => (props.gridLines ? "border" : ""));
+const paddingClass = computed<string>(() => (props.compact ? "p-1" : "p-3"));
+
 const bgClass = (row: T, index: number): string | false => {
     let bgClass = props.rowBgFn ? props.rowBgFn(row) : false;
 
@@ -276,3 +207,77 @@ provide<Table<T>, string>("table", table);
 
 defineExpose({ startLoading, endLoading });
 </script>
+
+<template>
+    <div class="overflow-x-auto w-full">
+        <table class="table-auto w-full">
+            <TableHeader>
+                <template
+                    v-for="name of Object.keys($slots)"
+                    v-slot:[name]="data"
+                >
+                    <slot :name="name" v-bind="data" />
+                </template>
+            </TableHeader>
+            <TableBodyLoading v-if="isLoading" />
+            <TableBodyEmpty
+                v-else-if="!table.getRowModel().rows.length"
+                :noResultsText="noResultsText"
+            >
+                <template #no-results>
+                    <slot name="no-results" />
+                </template>
+            </TableBodyEmpty>
+            <TransitionGroup
+                v-else
+                name="data-table"
+                :css="false"
+                @beforeLeave="fadeOut"
+                @enter="fadeIn"
+            >
+                <tr
+                    v-for="(row, index) in table.getRowModel().rows"
+                    :key="row.id"
+                    class="border-b border-slate-200"
+                    :class="[pointerClass, bgClass(row.original, index)]"
+                    @click="onRowClick($event, row.original)"
+                >
+                    <td
+                        v-for="cell in row.getAllCells()"
+                        :key="cell.id"
+                        :class="[paddingClass, borderClass]"
+                    >
+                        <slot
+                            :name="`row.${cell.column.id}`"
+                            :rowData="row.original"
+                        >
+                            <div
+                                v-if="typeof cell.getValue() === 'boolean'"
+                                class="text-center"
+                            >
+                                <fa-icon
+                                    :icon="cell.getValue() ? 'check' : 'xmark'"
+                                    :class="
+                                        cell.getValue()
+                                            ? 'text-success'
+                                            : 'text-danger'
+                                    "
+                                />
+                            </div>
+                            <FlexRender
+                                v-else
+                                :render="cell.column.columnDef.cell"
+                                :props="cell.getContext()"
+                            />
+                        </slot>
+                    </td>
+                </tr>
+            </TransitionGroup>
+            <TableFooter>
+                <template #footer>
+                    <slot name="footer" />
+                </template>
+            </TableFooter>
+        </table>
+    </div>
+</template>

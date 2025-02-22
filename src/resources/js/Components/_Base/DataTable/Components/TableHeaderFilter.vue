@@ -1,3 +1,25 @@
+<script setup lang="ts" generic="T">
+import { ref } from "vue";
+import type { Column } from "@tanstack/vue-table";
+
+const props = defineProps<{
+    column: Column<T>;
+}>();
+
+const localValue = ref<string>("");
+const placeholder = ref<string>(
+    props.column.columnDef.meta?.filterPlaceholder ?? ""
+);
+
+const uniqueValues = Array.from(
+    props.column.getFacetedUniqueValues().keys()
+).sort();
+
+const updateFilter = (): void => {
+    props.column.setFilterValue(localValue.value);
+};
+</script>
+
 <template>
     <div class="relative">
         <template v-if="column.columnDef.meta?.filterSelect">
@@ -27,25 +49,3 @@
         </template>
     </div>
 </template>
-
-<script setup lang="ts" generic="T">
-import { ref } from "vue";
-import type { Column } from "@tanstack/vue-table";
-
-const props = defineProps<{
-    column: Column<T>;
-}>();
-
-const localValue = ref<string>("");
-const placeholder = ref<string>(
-    props.column.columnDef.meta?.filterPlaceholder ?? ""
-);
-
-const uniqueValues = Array.from(
-    props.column.getFacetedUniqueValues().keys()
-).sort();
-
-const updateFilter = (): void => {
-    props.column.setFilterValue(localValue.value);
-};
-</script>

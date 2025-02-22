@@ -1,3 +1,14 @@
+<script setup lang="ts">
+import Card from "./_Base/Card.vue";
+import { useAppStore } from "@/Stores/AppStore";
+
+defineProps<{
+    darkHeader?: boolean;
+}>();
+
+const app = useAppStore();
+</script>
+
 <template>
     <div>
         <h1
@@ -12,14 +23,3 @@
         </Card>
     </div>
 </template>
-
-<script setup lang="ts">
-import Card from "./Card.vue";
-import { useAppStore } from "@/Stores/AppStore";
-
-defineProps<{
-    darkHeader?: boolean;
-}>();
-
-const app = useAppStore();
-</script>

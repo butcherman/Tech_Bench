@@ -1,24 +1,6 @@
-<template>
-    <span v-tooltip="tipText" @click="copyToClipboard">
-        <BaseBadge icon="copy" :variant="bgVariant" />
-    </span>
-</template>
-
 <script setup lang="ts">
 import BaseBadge from "./Badges/BaseBadge.vue";
 import { ref } from "vue";
-
-type variant =
-    | "danger"
-    | "dark"
-    | "error"
-    | "help"
-    | "info"
-    | "light"
-    | "primary"
-    | "secondary"
-    | "success"
-    | "warning";
 
 const emit = defineEmits<{
     copied: [];
@@ -31,7 +13,7 @@ const props = defineProps<{
 
 const tooltipBase = "Copy to Clipboard";
 
-const bgVariant = ref<variant>("info");
+const bgVariant = ref<elementVariant>("info");
 const tipText = ref<string>(props.tooltip ?? tooltipBase);
 
 /**
@@ -50,3 +32,9 @@ const copyToClipboard = (): void => {
     }, 5000);
 };
 </script>
+
+<template>
+    <span v-tooltip="tipText" @click="copyToClipboard">
+        <BaseBadge icon="copy" :variant="bgVariant" />
+    </span>
+</template>

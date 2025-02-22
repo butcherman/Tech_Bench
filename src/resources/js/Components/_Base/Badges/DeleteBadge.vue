@@ -1,25 +1,3 @@
-<template>
-    <div class="inline-flex">
-        <BaseBadge
-            class="pointer"
-            :icon="icon ?? 'trash-alt'"
-            :variant="variant ?? 'danger'"
-            @click="handleClick"
-        />
-        <ConfirmPopup>
-            <template #icon>
-                <fa-icon icon="exclamation-circle" class="text-danger" />
-            </template>
-            <template #accepticon>
-                <fa-icon icon="check" class="text-danger" />
-            </template>
-            <template #rejecticon>
-                <fa-icon icon="xmark" />
-            </template>
-        </ConfirmPopup>
-    </div>
-</template>
-
 <script setup lang="ts">
 import BaseBadge from "./BaseBadge.vue";
 import ConfirmPopup from "primevue/confirmpopup";
@@ -59,7 +37,7 @@ const props = defineProps<{
 |-------------------------------------------------------------------------------
 */
 const confirm = useConfirm();
-const handleClick = (event: MouseEvent) => {
+const handleClick = (event: MouseEvent): void => {
     if (props.confirm) {
         confirm.require({
             acceptClass: "border px-2",
@@ -91,3 +69,25 @@ const handleClick = (event: MouseEvent) => {
     }
 };
 </script>
+
+<template>
+    <div class="inline-flex">
+        <BaseBadge
+            class="pointer"
+            :icon="icon ?? 'trash-alt'"
+            :variant="variant ?? 'danger'"
+            @click="handleClick"
+        />
+        <ConfirmPopup>
+            <template #icon>
+                <fa-icon icon="exclamation-circle" class="text-danger" />
+            </template>
+            <template #accepticon>
+                <fa-icon icon="check" class="text-danger" />
+            </template>
+            <template #rejecticon>
+                <fa-icon icon="xmark" />
+            </template>
+        </ConfirmPopup>
+    </div>
+</template>

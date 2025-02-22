@@ -1,3 +1,42 @@
+<script setup lang="ts">
+import BaseButton from "./Buttons/BaseButton.vue";
+import Card from "./Card.vue";
+import { ref } from "vue";
+import { Drawer } from "primevue";
+
+/*
+|-------------------------------------------------------------------------------
+| Local Types
+|-------------------------------------------------------------------------------
+*/
+interface navList {
+    navId: string;
+    label: string;
+}
+
+defineProps<{
+    navList: navList[];
+    title?: string;
+}>();
+
+const showNav = ref<boolean>(false);
+const currentSection = ref<string>();
+
+/**
+ * Place the selected element at the center of the screen.
+ */
+const scrollToElement = (elId: string): void => {
+    currentSection.value = elId;
+    document
+        .getElementById(elId)
+        ?.scrollIntoView({ behavior: "smooth", block: "center" });
+
+    if (showNav.value) {
+        showNav.value = false;
+    }
+};
+</script>
+
 <template>
     <Card class="duration-700 transition-all">
         <div class="flex flex-row">
@@ -40,42 +79,3 @@
         </Drawer>
     </Card>
 </template>
-
-<script setup lang="ts">
-import BaseButton from "./Buttons/BaseButton.vue";
-import Card from "./Card.vue";
-import { ref } from "vue";
-import { Drawer } from "primevue";
-
-/*
-|-------------------------------------------------------------------------------
-| Local Types
-|-------------------------------------------------------------------------------
-*/
-interface navList {
-    navId: string;
-    label: string;
-}
-
-defineProps<{
-    navList: navList[];
-    title?: string;
-}>();
-
-const showNav = ref<boolean>(false);
-const currentSection = ref<string>();
-
-/**
- * Place the selected element at the center of the screen.
- */
-const scrollToElement = (elId: string) => {
-    currentSection.value = elId;
-    document
-        .getElementById(elId)
-        ?.scrollIntoView({ behavior: "smooth", block: "center" });
-
-    if (showNav.value) {
-        showNav.value = false;
-    }
-};
-</script>

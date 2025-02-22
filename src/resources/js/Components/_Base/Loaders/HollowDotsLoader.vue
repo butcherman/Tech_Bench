@@ -1,3 +1,10 @@
+<script setup lang="ts">
+/**
+ * Note:  Hollow Dots Spinner code compliments of Epic Spinners
+ * https://epic-spinners.epicmax.co/
+ */
+</script>
+
 <template>
     <div class="hollow-dots-spinner">
         <div class="dot"></div>
@@ -5,13 +12,6 @@
         <div class="dot"></div>
     </div>
 </template>
-
-<script setup lang="ts">
-/**
- * Note:  Hollow Dots Spinner code compliments of Epic Spinners
- * https://epic-spinners.epicmax.co/
- */
-</script>
 
 <style scoped>
 .hollow-dots-spinner,

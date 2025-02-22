@@ -1,3 +1,10 @@
+<script setup lang="ts">
+/**
+ * Note:  Atom Spinner code compliments of Epic Spinners
+ * https://epic-spinners.epicmax.co/
+ */
+</script>
+
 <template>
     <div class="atom-spinner">
         <div class="spinner-inner">
@@ -8,13 +15,6 @@
         </div>
     </div>
 </template>
-
-<script setup lang="ts">
-/**
- * Note:  Atom Spinner code compliments of Epic Spinners
- * https://epic-spinners.epicmax.co/
- */
-</script>
 
 <style scoped>
 .atom-spinner,

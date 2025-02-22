@@ -1,3 +1,22 @@
+<script setup lang="ts" generic="T">
+defineProps<{
+    bordered?: boolean;
+    items: T;
+}>();
+
+/**
+ * Translate the table header from snake_case to Title Case
+ */
+const toTitleCase = (str: string): string => {
+    return str
+        .split("_")
+        .map(function (item) {
+            return item.charAt(0).toUpperCase() + item.substring(1);
+        })
+        .join(" ");
+};
+</script>
+
 <template>
     <table class="table-auto border-collapse" :class="{ border: bordered }">
         <tbody>
@@ -28,22 +47,3 @@
         </tbody>
     </table>
 </template>
-
-<script setup lang="ts" generic="T">
-defineProps<{
-    bordered?: boolean;
-    items: T;
-}>();
-
-/**
- * Translate the table header from snake_case to Title Case
- */
-const toTitleCase = (str: string): string => {
-    return str
-        .split("_")
-        .map(function (item) {
-            return item.charAt(0).toUpperCase() + item.substring(1);
-        })
-        .join(" ");
-};
-</script>

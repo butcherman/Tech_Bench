@@ -1,11 +1,3 @@
-<template>
-    <BaseBadge
-        v-bind="props"
-        :icon="icon ?? 'plus'"
-        :variant="variant ?? 'info'"
-    />
-</template>
-
 <script setup lang="ts">
 import BaseBadge from "./BaseBadge.vue";
 
@@ -26,3 +18,11 @@ const props = defineProps<{
         | "warning";
 }>();
 </script>
+
+<template>
+    <BaseBadge
+        v-bind="props"
+        :icon="icon ?? 'plus'"
+        :variant="variant ?? 'info'"
+    />
+</template>

@@ -1,3 +1,17 @@
+<script setup lang="ts">
+import { computed } from "vue";
+
+const props = defineProps<{
+    text?: string;
+    submitted?: boolean;
+    btnVariant?: elementVariant;
+}>();
+
+const variant = computed<string>(() =>
+    props.btnVariant ? `btn-${props.btnVariant}` : "btn-primary"
+);
+</script>
+
 <template>
     <button
         type="submit"
@@ -11,16 +25,3 @@
         </slot>
     </button>
 </template>
-
-<script setup lang="ts">
-import { computed } from "vue";
-const props = defineProps<{
-    text?: string;
-    submitted?: boolean;
-    btnVariant?: "primary" | "info" | "success" | "danger" | "warning";
-}>();
-
-const variant = computed(() =>
-    props.btnVariant ? `btn-${props.btnVariant}` : "btn-primary"
-);
-</script>

@@ -1,12 +1,3 @@
-<template>
-    <BaseButton v-bind="props" :variant="variant ?? 'warning'">
-        <slot>
-            <fa-icon :icon="icon ?? 'pencil'" />
-            {{ text ?? "Edit" }}
-        </slot>
-    </BaseButton>
-</template>
-
 <script setup lang="ts">
 import BaseButton from "./BaseButton.vue";
 
@@ -16,16 +7,15 @@ const props = defineProps<{
     icon?: string;
     pill?: boolean;
     text?: string;
-    variant?:
-        | "danger"
-        | "dark"
-        | "error"
-        | "help"
-        | "info"
-        | "light"
-        | "primary"
-        | "secondary"
-        | "success"
-        | "warning";
+    variant?: elementVariant;
 }>();
 </script>
+
+<template>
+    <BaseButton v-bind="props" :variant="variant ?? 'warning'">
+        <slot>
+            <fa-icon :icon="icon ?? 'pencil'" />
+            {{ text ?? "Edit" }}
+        </slot>
+    </BaseButton>
+</template>

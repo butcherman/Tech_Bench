@@ -1,58 +1,3 @@
-<template>
-    <div>
-        <Teleport to="body">
-            <Transition>
-                <div v-show="modalOpen" class="relative z-50">
-                    <div
-                        v-if="!hideBackdrop"
-                        class="fixed inset-0 bg-gray-500/75"
-                    />
-                    <div
-                        class="fixed inset-0 z-50 w-screen overflow-y-auto"
-                        @click="backdropClicked"
-                    >
-                        <div
-                            class="flex min-h-full justify-center"
-                            :class="modalPosition"
-                        >
-                            <div
-                                class="bg-white min-w-96 max-w-4xl min-h-32 rounded-lg p-5 flex flex-col relative"
-                                @click.stop
-                            >
-                                <div
-                                    v-if="!hideClose"
-                                    class="absolute top-2 right-4 text-muted pointer"
-                                >
-                                    <button @click.stop="hide">
-                                        <fa-icon icon="close" />
-                                    </button>
-                                </div>
-                                <div
-                                    v-if="$slots.header || title"
-                                    class="border-b mb-3"
-                                >
-                                    <slot name="header">
-                                        <h5 class="text-muted">{{ title }}</h5>
-                                    </slot>
-                                </div>
-                                <div class="grow overflow-auto">
-                                    <slot />
-                                </div>
-                                <div
-                                    v-if="$slots.footer"
-                                    class="border-t flex flex-row-reverse pt-2 mt-3"
-                                >
-                                    <slot name="footer"></slot>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </Transition>
-        </Teleport>
-    </div>
-</template>
-
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
 
@@ -133,6 +78,59 @@ watch(modalOpen, (newVal: boolean): void => {
 
 defineExpose({ show, hide });
 </script>
+
+<template>
+    <Teleport to="body">
+        <Transition>
+            <div v-show="modalOpen" class="relative z-50">
+                <div
+                    v-if="!hideBackdrop"
+                    class="fixed inset-0 bg-gray-500/75"
+                />
+                <div
+                    class="fixed inset-0 z-50 w-screen overflow-y-auto"
+                    @click="backdropClicked"
+                >
+                    <div
+                        class="flex min-h-full justify-center"
+                        :class="modalPosition"
+                    >
+                        <div
+                            class="bg-white min-w-96 max-w-4xl min-h-32 rounded-lg p-5 flex flex-col relative"
+                            @click.stop
+                        >
+                            <div
+                                v-if="!hideClose"
+                                class="absolute top-2 right-4 text-muted pointer"
+                            >
+                                <button @click.stop="hide">
+                                    <fa-icon icon="close" />
+                                </button>
+                            </div>
+                            <div
+                                v-if="$slots.header || title"
+                                class="border-b mb-3"
+                            >
+                                <slot name="header">
+                                    <h5 class="text-muted">{{ title }}</h5>
+                                </slot>
+                            </div>
+                            <div class="grow overflow-auto">
+                                <slot />
+                            </div>
+                            <div
+                                v-if="$slots.footer"
+                                class="border-t flex flex-row-reverse pt-2 mt-3"
+                            >
+                                <slot name="footer"></slot>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </Transition>
+    </Teleport>
+</template>
 
 <style scoped>
 .v-enter-active,

@@ -1,3 +1,59 @@
+<script setup lang="ts" generic="T">
+import { inject, ref, computed } from "vue";
+import type { Table } from "@tanstack/vue-table";
+
+const table = inject<Table<T>>("table");
+
+/*
+|-------------------------------------------------------------------------------
+| Pagination Options
+|-------------------------------------------------------------------------------
+*/
+const perPage = ref<number>(table?.options.meta?.perPage ?? 10);
+const currentPage = computed<number>(
+    () => table?.getState().pagination.pageIndex ?? 0
+);
+const showingStart = computed<number>(
+    () => currentPage.value * perPage.value + 1
+);
+const showingEnd = computed<number>(() =>
+    Math.min(table?.getRowCount() ?? 0, showingStart.value + perPage.value - 1)
+);
+
+/*
+|-------------------------------------------------------------------------------
+| Pagination Navigation
+|-------------------------------------------------------------------------------
+*/
+const goToPage = (pageIndex: number): void => {
+    table?.setPageIndex(pageIndex);
+};
+
+const goToFirstPage = (): void => {
+    if (currentPage.value !== 0) {
+        table?.firstPage();
+    }
+};
+
+const goToPreviousPage = (): void => {
+    if (table?.getCanPreviousPage()) {
+        table.previousPage();
+    }
+};
+
+const goToNextPage = (): void => {
+    if (table?.getCanNextPage()) {
+        table?.nextPage();
+    }
+};
+
+const goToLastPage = (): void => {
+    if (currentPage.value !== table?.getPageCount()) {
+        table?.lastPage();
+    }
+};
+</script>
+
 <template>
     <tfoot>
         <tr>
@@ -102,59 +158,3 @@
         </tr>
     </tfoot>
 </template>
-
-<script setup lang="ts" generic="T">
-import { inject, ref, computed } from "vue";
-import type { Table } from "@tanstack/vue-table";
-
-const table = inject<Table<T>>("table");
-
-/*
-|-------------------------------------------------------------------------------
-| Pagination Options
-|-------------------------------------------------------------------------------
-*/
-const perPage = ref(table?.options.meta?.perPage ?? 10);
-const currentPage = computed<number>(
-    () => table?.getState().pagination.pageIndex ?? 0
-);
-const showingStart = computed<number>(
-    () => currentPage.value * perPage.value + 1
-);
-const showingEnd = computed<number>(() =>
-    Math.min(table?.getRowCount() ?? 0, showingStart.value + perPage.value - 1)
-);
-
-/*
-|-------------------------------------------------------------------------------
-| Pagination Navigation
-|-------------------------------------------------------------------------------
-*/
-const goToPage = (pageIndex: number): void => {
-    table?.setPageIndex(pageIndex);
-};
-
-const goToFirstPage = (): void => {
-    if (currentPage.value !== 0) {
-        table?.firstPage();
-    }
-};
-
-const goToPreviousPage = (): void => {
-    if (table?.getCanPreviousPage()) {
-        table.previousPage();
-    }
-};
-
-const goToNextPage = (): void => {
-    if (table?.getCanNextPage()) {
-        table?.nextPage();
-    }
-};
-
-const goToLastPage = (): void => {
-    if (currentPage.value !== table?.getPageCount()) {
-        table?.lastPage();
-    }
-};
-</script>

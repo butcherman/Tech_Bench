@@ -1,3 +1,45 @@
+<script setup lang="ts">
+import { computed } from "vue";
+
+defineEmits(["prevPage", "nextPage", "goToPage"]);
+
+const props = defineProps<{
+    currentPage: number;
+    totalPages: number;
+}>();
+
+/**
+ * Build the pagination links for the bottom of the table
+ * We want a total of five pages showing, the active page should be in the
+ * middle unless it is toward the front of end of the line
+ */
+const paginationArray = computed(() => {
+    let pageArr = [];
+    let start = props.totalPages > 5 ? props.currentPage - 2 : 1;
+
+    //  If start was going to be a negative number, we change it to 1
+    if (start <= 0) {
+        start = 1;
+    }
+
+    let end = props.totalPages > 5 ? start + 4 : props.totalPages;
+    //  If end was going to be a higher number than the last page, we modify it
+    if (end > props.totalPages) {
+        end = props.totalPages;
+        //  Try to still get five links in the array
+        if (props.totalPages > 5) {
+            start = props.totalPages - 4;
+        }
+    }
+
+    for (let i = start; i <= end; i++) {
+        pageArr.push(i);
+    }
+
+    return pageArr;
+});
+</script>
+
 <template>
     <ul class="pagination pagination-sm justify-content-center">
         <li
@@ -51,44 +93,3 @@
         </li>
     </ul>
 </template>
-
-<script setup lang="ts">
-import { computed } from "vue";
-
-defineEmits(["prevPage", "nextPage", "goToPage"]);
-const props = defineProps<{
-    currentPage: number;
-    totalPages: number;
-}>();
-
-/**
- * Build the pagination links for the bottom of the table
- * We want a total of five pages showing, the active page should be in the
- * middle unless it is toward the front of end of the line
- */
-const paginationArray = computed(() => {
-    let pageArr = [];
-    let start = props.totalPages > 5 ? props.currentPage - 2 : 1;
-
-    //  If start was going to be a negative number, we change it to 1
-    if (start <= 0) {
-        start = 1;
-    }
-
-    let end = props.totalPages > 5 ? start + 4 : props.totalPages;
-    //  If end was going to be a higher number than the last page, we modify it
-    if (end > props.totalPages) {
-        end = props.totalPages;
-        //  Try to still get five links in the array
-        if (props.totalPages > 5) {
-            start = props.totalPages - 4;
-        }
-    }
-
-    for (let i = start; i <= end; i++) {
-        pageArr.push(i);
-    }
-
-    return pageArr;
-});
-</script>

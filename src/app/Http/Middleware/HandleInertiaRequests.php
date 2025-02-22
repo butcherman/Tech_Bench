@@ -47,8 +47,6 @@ class HandleInertiaRequests extends Middleware
             //  Flash messages are used for success/failure messages on next page load
             'flash' => $this->getFlashData(),
             'csrf_token' => fn() => csrf_token(),
-            // App information that is shared and used on all pages
-            // 'app' => fn () => CacheFacade::appData(),
         ];
     }
 

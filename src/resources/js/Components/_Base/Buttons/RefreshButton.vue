@@ -1,18 +1,3 @@
-<template>
-    <BaseButton
-        size="small"
-        variant="light"
-        :flat="flat"
-        :pill="pill"
-        v-tooltip="'Refresh'"
-        @click="handleClick"
-    >
-        <slot>
-            <fa-icon icon="fa-rotate" :spin="isLoading" />
-        </slot>
-    </BaseButton>
-</template>
-
 <script setup lang="ts">
 import BaseButton from "./BaseButton.vue";
 import { ref } from "vue";
@@ -27,17 +12,7 @@ const props = defineProps<{
     flat?: boolean;
     only?: string[];
     pill?: boolean;
-    variant?:
-        | "danger"
-        | "dark"
-        | "error"
-        | "help"
-        | "info"
-        | "light"
-        | "primary"
-        | "secondary"
-        | "success"
-        | "warning";
+    variant?: elementVariant;
 }>();
 
 const isLoading = ref<boolean>(false);
@@ -62,3 +37,18 @@ const handleClick = (): void => {
     });
 };
 </script>
+
+<template>
+    <BaseButton
+        size="small"
+        variant="light"
+        :flat="flat"
+        :pill="pill"
+        v-tooltip="'Refresh'"
+        @click="handleClick"
+    >
+        <slot>
+            <fa-icon icon="fa-rotate" :spin="isLoading" />
+        </slot>
+    </BaseButton>
+</template>

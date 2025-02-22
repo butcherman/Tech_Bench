@@ -1,3 +1,19 @@
+<script setup lang="ts">
+defineEmits<{
+    "navigate-to": [stepId: number];
+}>();
+
+defineProps<{
+    currentStep: number;
+    hideId?: boolean;
+    stepList: {
+        id: number;
+        name: string;
+        icon: string;
+    }[];
+}>();
+</script>
+
 <template>
     <ol class="step-indicator">
         <template v-for="step in stepList" :key="step.id">
@@ -19,22 +35,6 @@
         </template>
     </ol>
 </template>
-
-<script setup lang="ts">
-defineEmits<{
-    "navigate-to": [stepId: number];
-}>();
-
-defineProps<{
-    currentStep: number;
-    hideId?: boolean;
-    stepList: {
-        id: number;
-        name: string;
-        icon: string;
-    }[];
-}>();
-</script>
 
 <style scoped>
 .step-indicator {

@@ -1,22 +1,3 @@
-<template>
-    <component
-        :is="buttonType"
-        :href="href"
-        :class="[
-            sizeClass,
-            variantClass,
-            { '!rounded-full': pill, 'shadow-xl': !flat },
-        ]"
-        class="rounded-lg inline-block"
-        type="button"
-    >
-        <slot>
-            <fa-icon v-if="icon" :icon="icon" />
-            {{ text }}
-        </slot>
-    </component>
-</template>
-
 <script setup lang="ts">
 import { Link } from "@inertiajs/vue3";
 import { computed } from "vue";
@@ -28,17 +9,7 @@ const props = defineProps<{
     pill?: boolean;
     text?: string;
     size?: "small" | "normal" | "large";
-    variant?:
-        | "danger"
-        | "dark"
-        | "error"
-        | "help"
-        | "info"
-        | "light"
-        | "primary"
-        | "secondary"
-        | "success"
-        | "warning";
+    variant?: elementVariant;
 }>();
 
 /*
@@ -46,7 +17,9 @@ const props = defineProps<{
 | If href prop is populated, treat click as a link.
 |-------------------------------------------------------------------------------
 */
-const buttonType = computed(() => (props.href ? Link : "button"));
+const buttonType = computed<typeof Link | "button">(() =>
+    props.href ? Link : "button"
+);
 
 /*
 |-------------------------------------------------------------------------------
@@ -97,3 +70,22 @@ const variantClass = computed<string>(() => {
     }
 });
 </script>
+
+<template>
+    <component
+        :is="buttonType"
+        :href="href"
+        :class="[
+            sizeClass,
+            variantClass,
+            { '!rounded-full': pill, 'shadow-xl': !flat },
+        ]"
+        class="rounded-lg inline-block"
+        type="button"
+    >
+        <slot>
+            <fa-icon v-if="icon" :icon="icon" />
+            {{ text }}
+        </slot>
+    </component>
+</template>

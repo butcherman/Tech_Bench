@@ -1,12 +1,6 @@
 <script setup lang="ts">
-import AddButton from "@/Components/_Base/Buttons/AddButton.vue";
-import BaseButton from "@/Components/_Base/Buttons/BaseButton.vue";
 import AuthLayout from "@/Layouts/Auth/AuthLayout.vue";
-// import Card from "@/Components/_Base/Card.vue";
-import { ref, reactive, onMounted } from "vue";
-
-// TODO - Add Page.
-const props = defineProps<{}>();
+import LogoImage from "@/Components/LogoImage.vue";
 </script>
 
 <script lang="ts">
@@ -14,11 +8,62 @@ export default { layout: AuthLayout };
 </script>
 
 <template>
-    <div class="flex justify-center" style="border: 1px solid red">
-        <div class="bg-white w-3/4 text-center">
-            <h4 class="text-center">Login Page</h4>
-            <BaseButton text="blah" href="/some/route" />
-            <AddButton text="add something" href="/another/route" />
+    <div id="home-wrapper" class="h-full w-full">
+        <div
+            id="content-wrapper"
+            class="grid grid-cols-1 md:grid-cols-4 md:h-screen"
+        >
+            <div class="md:col-span-3 justify-self-center self-center m-3">
+                <LogoImage>
+                    <!-- <div v-if="hasLinks" class="mt-4">
+                        <hr class="bg-gray-500" />
+                        <h6
+                            v-if="welcomeMessage"
+                            class="text-center font-semibold"
+                        >
+                            {{ welcomeMessage }}
+                        </h6>
+                        <ul
+                            v-if="homeLinks.length || publicLink"
+                            class="text-center"
+                        >
+                            <li v-if="publicLink">
+                                <Link :href="publicLink.url">
+                                    {{ publicLink.text }}
+                                </Link>
+                            </li>
+                            <li
+                                v-for="link in homeLinks"
+                                :key="link.url"
+                                class="list-group-item"
+                            >
+                                <a :href="link.url" target="_blank">
+                                    {{ link.text }}
+                                </a>
+                            </li>
+                        </ul>
+                    </div> -->
+                </LogoImage>
+            </div>
+            <div
+                id="login-form-wrapper"
+                class="grid place-items-center bg-white md:h-full m-4 md:m-0 p-3"
+            >
+                <div class="w-full">
+                    <!-- <AuthFlash /> -->
+                    <h3 class="text-center">Tech Login:</h3>
+                    <!-- <TechLoginForm /> -->
+                    <!-- <div v-if="allowOath" class="w-full text-center">
+                        <div class="separator">or</div>
+                        <a :href="$route('azure-login')">
+                            <BaseButton
+                                class="md:w-3/4"
+                                text="Login with Office 365"
+                            />
+                        </a>
+                    </div> -->
+                </div>
+            </div>
         </div>
     </div>
 </template>

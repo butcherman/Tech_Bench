@@ -1,31 +1,3 @@
-<template>
-    <div class="inline-flex">
-        <BaseButton
-            class="w-full"
-            :flat="flat"
-            :pill="pill"
-            :variant="variant ?? 'danger'"
-            @click="handleClick"
-        >
-            <slot>
-                <fa-icon :icon="icon ?? 'trash-alt'" />
-                {{ text ?? "Delete" }}
-            </slot>
-        </BaseButton>
-        <ConfirmPopup>
-            <template #icon>
-                <fa-icon icon="exclamation-circle" class="text-danger" />
-            </template>
-            <template #accepticon>
-                <fa-icon icon="check" class="text-danger" />
-            </template>
-            <template #rejecticon>
-                <fa-icon icon="xmark" />
-            </template>
-        </ConfirmPopup>
-    </div>
-</template>
-
 <script setup lang="ts">
 import BaseButton from "./BaseButton.vue";
 import ConfirmPopup from "primevue/confirmpopup";
@@ -48,17 +20,7 @@ const props = defineProps<{
     pill?: boolean;
     rejectText?: string;
     text?: string;
-    variant?:
-        | "danger"
-        | "dark"
-        | "error"
-        | "help"
-        | "info"
-        | "light"
-        | "primary"
-        | "secondary"
-        | "success"
-        | "warning";
+    variant?: elementVariant;
 }>();
 
 /*
@@ -98,3 +60,31 @@ const handleClick = (event: MouseEvent) => {
     handleLinkClick(event, props.href, props.method ?? "delete");
 };
 </script>
+
+<template>
+    <div class="inline-flex">
+        <BaseButton
+            class="w-full"
+            :flat="flat"
+            :pill="pill"
+            :variant="variant ?? 'danger'"
+            @click="handleClick"
+        >
+            <slot>
+                <fa-icon :icon="icon ?? 'trash-alt'" />
+                {{ text ?? "Delete" }}
+            </slot>
+        </BaseButton>
+        <ConfirmPopup>
+            <template #icon>
+                <fa-icon icon="exclamation-circle" class="text-danger" />
+            </template>
+            <template #accepticon>
+                <fa-icon icon="check" class="text-danger" />
+            </template>
+            <template #rejecticon>
+                <fa-icon icon="xmark" />
+            </template>
+        </ConfirmPopup>
+    </div>
+</template>

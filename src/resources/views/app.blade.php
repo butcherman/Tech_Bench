@@ -8,6 +8,9 @@
         name="viewport"
         content="width=device-width, initial-scale=1, shrink-to-fit=no"
     >
+    <script type="text/javascript">
+        let appData = {!! json_encode(\App\Facades\CacheDataFacade::appData()) !!}
+    </script>
     @routes()
     @vite('resources/js/app.ts')
     @inertiaHead
