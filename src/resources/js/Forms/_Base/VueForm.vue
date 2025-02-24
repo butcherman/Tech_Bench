@@ -1,44 +1,3 @@
-<template>
-    <Overlay
-        :loading="isSubmitting && !hideOverlay"
-        :full-page="fullPageOverlay"
-        class="h-full"
-    >
-        <form
-            class="vld-parent h-full flex flex-col"
-            novalidate
-            v-focustrap
-            @submit.prevent="onSubmit"
-        >
-            <div v-if="uncaughtErrors.length" class="flex-none my-4">
-                <Message
-                    v-for="err in uncaughtErrors"
-                    severity="error"
-                    size="large"
-                >
-                    {{ err }}
-                </Message>
-            </div>
-            <div class="grow">
-                <slot />
-            </div>
-            <div class="flex-none text-center mt-4">
-                <BaseButton
-                    class="w-3/4"
-                    type="submit"
-                    variant="primary"
-                    :icon="submitIcon"
-                    :text="submitText"
-                >
-                    <span v-if="isSubmitting">
-                        <fa-icon icon="spinner" class="fa-spin-pulse" />
-                    </span>
-                </BaseButton>
-            </div>
-        </form>
-    </Overlay>
-</template>
-
 <script setup lang="ts">
 import BaseButton from "@/Components/_Base/Buttons/BaseButton.vue";
 import Overlay from "../../Components/_Base/Loaders/Overlay.vue";
@@ -153,3 +112,44 @@ defineExpose({
     isSubmitting,
 });
 </script>
+
+<template>
+    <Overlay
+        :loading="isSubmitting && !hideOverlay"
+        :full-page="fullPageOverlay"
+        class="h-full"
+    >
+        <form
+            class="vld-parent h-full flex flex-col"
+            novalidate
+            v-focustrap
+            @submit.prevent="onSubmit"
+        >
+            <div v-if="uncaughtErrors.length" class="flex-none my-4">
+                <Message
+                    v-for="err in uncaughtErrors"
+                    severity="error"
+                    size="large"
+                >
+                    {{ err }}
+                </Message>
+            </div>
+            <div class="grow">
+                <slot />
+            </div>
+            <div class="flex-none text-center mt-4">
+                <BaseButton
+                    class="w-3/4"
+                    type="submit"
+                    variant="primary"
+                    :icon="submitIcon"
+                    :text="submitText"
+                >
+                    <span v-if="isSubmitting">
+                        <fa-icon icon="spinner" class="fa-spin-pulse" />
+                    </span>
+                </BaseButton>
+            </div>
+        </form>
+    </Overlay>
+</template>
