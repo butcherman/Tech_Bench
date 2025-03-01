@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Facades\CacheData;
 use App\Models\AppSettings;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -23,6 +24,8 @@ class DatabaseSeeder extends Seeder
             TechTipSeeder::class,
             FileLinkSeeder::class,
         ]);
+
+        CacheData::clearCache();
     }
 
     /**
