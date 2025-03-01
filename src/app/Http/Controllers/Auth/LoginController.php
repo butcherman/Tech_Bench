@@ -4,13 +4,14 @@ namespace App\Http\Controllers\Auth;
 
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class LoginController
 {
     /**
      * Handle the incoming request.
      */
-    public function __invoke(Request $request)
+    public function __invoke(): Response
     {
         return Inertia::render('Auth/TechLogin', [
             'welcome-message' => fn() => config('app.welcome_message'),

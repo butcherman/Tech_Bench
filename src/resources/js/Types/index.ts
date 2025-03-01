@@ -9,8 +9,20 @@ type pageData = {
 
 type pageProps = {
     csrf_token: string;
-    idle_timeout: number;
     errors: { [key: string]: string }[];
+    flash: flashData[];
+    idle_timeout: number;
+};
+
+/*
+|-------------------------------------------------------------------------------
+| Page Layout Elements
+|-------------------------------------------------------------------------------
+*/
+type flashData = {
+    id: string;
+    type: elementVariant;
+    message: string;
 };
 
 /*
