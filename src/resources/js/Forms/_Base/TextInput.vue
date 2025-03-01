@@ -41,7 +41,7 @@ const {
     value,
 }: {
     errorMessage: Ref<string | undefined, string | undefined>;
-    value: Ref<string>;
+    value: Ref<string | undefined>;
 } = useField(nameRef);
 </script>
 

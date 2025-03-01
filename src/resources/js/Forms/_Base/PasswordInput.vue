@@ -38,35 +38,37 @@ const {
 </script>
 
 <template>
-    <FloatLabel variant="on" class="my-2">
-        <Password
-            v-model="value"
-            class="p-2 !shadow-none"
-            :autocomplete="autocomplete ?? 'off'"
-            :autofocus="focus"
-            :class="borderType"
-            :disabled="disabled"
-            :feedback="false"
-            :input-id="id"
-            :variant="filled ? 'filled' : undefined"
-            fluid
-            toggle-mask
-            @focus="hasFocus = true"
-            @blur="hasFocus = false"
-        />
-        <label :for="id">{{ label }}</label>
-        <Message size="small" severity="error" variant="simple">
-            {{ errorMessage }}
-        </Message>
-        <Message
-            v-if="hasFocus"
-            size="small"
-            severity="secondary"
-            variant="simple"
-        >
-            {{ help }}
-        </Message>
-    </FloatLabel>
+    <div>
+        <FloatLabel variant="on" class="my-2">
+            <Password
+                v-model="value"
+                class="p-2 rounded-md shadow-sm"
+                :autocomplete="autocomplete ?? 'off'"
+                :autofocus="focus"
+                :class="borderType"
+                :disabled="disabled"
+                :feedback="false"
+                :input-id="id"
+                :variant="filled ? 'filled' : undefined"
+                fluid
+                toggle-mask
+                @focus="hasFocus = true"
+                @blur="hasFocus = false"
+            />
+            <label :for="id">{{ label }}</label>
+            <Message size="small" severity="error" variant="simple">
+                {{ errorMessage }}
+            </Message>
+            <Message
+                v-if="hasFocus"
+                size="small"
+                severity="secondary"
+                variant="simple"
+            >
+                {{ help }}
+            </Message>
+        </FloatLabel>
+    </div>
 </template>
 
 <style>

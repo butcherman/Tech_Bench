@@ -4,7 +4,7 @@ namespace App\Providers;
 
 use App\Actions\Fortify\ResetUserPassword;
 use App\Actions\Fortify\UpdateUserPassword;
-use App\Facades\CacheFacade;
+use App\Facades\CacheData;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
@@ -42,7 +42,7 @@ class FortifyServiceProvider extends ServiceProvider
             return Inertia::render('Auth/ResetPassword', [
                 'email' => $request->get('email'),
                 'token' => $request->route('token'),
-                'rules' => CacheFacade::passwordRules(),
+                'rules' => CacheData::passwordRules(),
             ]);
         });
 

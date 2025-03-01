@@ -1,9 +1,10 @@
 <script setup lang="ts">
-//
+import FlashAlert from "../_Shared/FlashAlert.vue";
 </script>
 
 <template>
     <div id="auth-layout-wrapper">
+        <FlashAlert />
         <slot />
     </div>
 </template>

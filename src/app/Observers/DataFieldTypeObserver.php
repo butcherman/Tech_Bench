@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Facades\CacheData;
 use App\Facades\CacheFacade;
 use App\Models\DataFieldType;
 use Illuminate\Support\Facades\Log;
@@ -13,10 +14,10 @@ class DataFieldTypeObserver extends Observer
      */
     public function created(DataFieldType $dataFieldType): void
     {
-        CacheFacade::clearCache('dataFieldTypes');
+        CacheData::clearCache('dataFieldTypes');
 
         Log::info(
-            'New Data Field Type for Customer Equipment created by '.$this->user,
+            'New Data Field Type for Customer Equipment created by ' . $this->user,
             $dataFieldType->toArray()
         );
     }
@@ -26,10 +27,10 @@ class DataFieldTypeObserver extends Observer
      */
     public function updated(DataFieldType $dataFieldType): void
     {
-        CacheFacade::clearCache('dataFieldTypes');
+        CacheData::clearCache('dataFieldTypes');
 
         Log::info(
-            'Data Field Type for Customer Equipment updated by '.$this->user,
+            'Data Field Type for Customer Equipment updated by ' . $this->user,
             $dataFieldType->toArray()
         );
     }
@@ -39,10 +40,10 @@ class DataFieldTypeObserver extends Observer
      */
     public function deleted(DataFieldType $dataFieldType): void
     {
-        CacheFacade::clearCache('dataFieldTypes');
+        CacheData::clearCache('dataFieldTypes');
 
         Log::info(
-            'Data Field Type for Customer Equipment deleted by '.$this->user,
+            'Data Field Type for Customer Equipment deleted by ' . $this->user,
             $dataFieldType->toArray()
         );
     }

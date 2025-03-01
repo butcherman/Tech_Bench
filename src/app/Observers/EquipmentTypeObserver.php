@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Facades\CacheData;
 use App\Facades\CacheFacade;
 use App\Models\EquipmentType;
 use Illuminate\Support\Facades\Log;
@@ -13,12 +14,12 @@ class EquipmentTypeObserver extends Observer
      */
     public function created(EquipmentType $equipmentType): void
     {
-        CacheFacade::clearCache('equipmentTypes');
-        CacheFacade::clearCache('equipmentCategories');
-        CacheFacade::clearCache('publicEquipmentCategories');
+        CacheData::clearCache('equipmentTypes');
+        CacheData::clearCache('equipmentCategories');
+        CacheData::clearCache('publicEquipmentCategories');
 
         Log::info(
-            'New Equipment Type created by '.$this->user,
+            'New Equipment Type created by ' . $this->user,
             $equipmentType->toArray()
         );
     }
@@ -28,12 +29,12 @@ class EquipmentTypeObserver extends Observer
      */
     public function updated(EquipmentType $equipmentType): void
     {
-        CacheFacade::clearCache('equipmentTypes');
-        CacheFacade::clearCache('equipmentCategories');
-        CacheFacade::clearCache('publicEquipmentCategories');
+        CacheData::clearCache('equipmentTypes');
+        CacheData::clearCache('equipmentCategories');
+        CacheData::clearCache('publicEquipmentCategories');
 
         Log::info(
-            'Equipment Type updated by '.$this->user,
+            'Equipment Type updated by ' . $this->user,
             $equipmentType->toArray()
         );
     }
@@ -43,12 +44,12 @@ class EquipmentTypeObserver extends Observer
      */
     public function deleted(EquipmentType $equipmentType): void
     {
-        CacheFacade::clearCache('equipmentTypes');
-        CacheFacade::clearCache('equipmentCategories');
-        CacheFacade::clearCache('publicEquipmentCategories');
+        CacheData::clearCache('equipmentTypes');
+        CacheData::clearCache('equipmentCategories');
+        CacheData::clearCache('publicEquipmentCategories');
 
         Log::info(
-            'Equipment Type deleted by '.$this->user,
+            'Equipment Type deleted by ' . $this->user,
             $equipmentType->toArray()
         );
     }

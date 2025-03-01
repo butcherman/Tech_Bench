@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Facades\CacheData;
 use App\Facades\CacheFacade;
 use App\Models\CustomerFileType;
 use Illuminate\Support\Facades\Log;
@@ -13,7 +14,7 @@ class CustomerFileTypeObserver extends Observer
      */
     public function created(CustomerFileType $customerFileType): void
     {
-        CacheFacade::clearCache('fileTypes');
+        CacheData::clearCache('fileTypes');
 
         Log::info(
             'New File Upload Type created by ' . $this->user,
@@ -26,7 +27,7 @@ class CustomerFileTypeObserver extends Observer
      */
     public function updated(CustomerFileType $customerFileType): void
     {
-        CacheFacade::clearCache('fileTypes');
+        CacheData::clearCache('fileTypes');
 
         Log::info(
             'File Upload Type updated by ' . $this->user,
@@ -39,7 +40,7 @@ class CustomerFileTypeObserver extends Observer
      */
     public function deleted(CustomerFileType $customerFileType): void
     {
-        CacheFacade::clearCache('fileTypes');
+        CacheData::clearCache('fileTypes');
 
         Log::info(
             'File Upload Type deleted by ' . $this->user,
