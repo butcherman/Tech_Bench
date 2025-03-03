@@ -9,7 +9,7 @@ use Inertia\Response;
 class LoginController
 {
     /**
-     * Handle the incoming request.
+     * Show Login Screen
      */
     public function __invoke(): Response
     {

@@ -12,6 +12,8 @@ class SocialiteController
 {
     /**
      * If feature is disabled, show 404 page not found
+     *
+     * TODO - Add This Constructor
      */
     public function __construct() {}
 
