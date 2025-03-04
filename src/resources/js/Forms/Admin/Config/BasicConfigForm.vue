@@ -67,7 +67,7 @@ const schema = object({
             prepend="https://"
             focus
         >
-            <template #start-group-text>
+            <template #start-text>
                 <span>https://</span>
             </template>
         </TextInput>

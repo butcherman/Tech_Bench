@@ -60,7 +60,7 @@ const {
         <InputGroup>
             <InputGroupAddon
                 v-if="$slots['start-text']"
-                class="border border-e-0 my-2"
+                class="border border-e-0 my-2 shadow-sm"
             >
                 <slot name="start-text" />
             </InputGroupAddon>
@@ -84,7 +84,7 @@ const {
             </FloatLabel>
             <InputGroupAddon
                 v-if="$slots['end-text']"
-                class="border border-s-0 my-2"
+                class="border border-s-0 my-2 shadow-sm"
             >
                 <slot name="end-text" />
             </InputGroupAddon>

@@ -19,9 +19,6 @@ class SaveStepController extends Controller
 
     /**
      * Save the current Init step in the session and move onto the next step.
-     *
-     * TODO - Move logic to Action??
-     * TODO - Move to next step rather than going back
      */
     public function __invoke(Request $request, ?User $user = null): RedirectResponse
     {
