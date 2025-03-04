@@ -29,7 +29,6 @@ class SaveStepController extends Controller
             'basic-settings' => new BasicSettingsRequest($saveData),
             'email-settings' => new EmailSettingsRequest($saveData),
             'user-settings' => new PasswordPolicyRequest($saveData),
-            // 'admin' => new UserAdministrationRequest($saveData),
 
             default => null,
         };
@@ -38,6 +37,7 @@ class SaveStepController extends Controller
         if ($validator) {
             $validator->validate($validator->rules());
         } else {
+            // Validate the Administrator Account
             if (end($path) === 'admin') {
                 Validator::make($saveData, [
                     'username' => [
@@ -52,6 +52,7 @@ class SaveStepController extends Controller
                     'role_id' => ['required', 'exists:user_roles'],
                 ])->validateWithBag('adminUser');
             } else {
+                // Validate the Admin Password
                 Validator::make($saveData, [
                     'current_password' => [
                         'required',
