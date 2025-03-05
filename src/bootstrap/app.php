@@ -37,9 +37,9 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->web(append: [
             LogDebugVisits::class,
             HandleInertiaRequests::class,
-            CheckForInit::class,
         ])->appendToGroup('auth.secure', [
             Authenticate::class,
+            CheckForInit::class,
             CheckForTwoFactor::class,
             CheckPasswordExpiration::class,
         ])->alias([

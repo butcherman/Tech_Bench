@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Init;
 
-use App\Actions\Setup\BuildApplication;
+use App\Actions\Init\BuildApplication;
 use App\Exceptions\Maintenance\DockerNotAllowedException;
 use App\Http\Controllers\Controller;
 use App\Jobs\Maintenance\RebootTechBenchJob;
@@ -15,10 +15,9 @@ class SaveSetupController extends Controller
     /**
      * Save the current Init step in the session and move onto the next step.
      */
-    public function __invoke(Request $request)
+    public function __invoke(Request $request, BuildApplication $init)
     {
-        $init = new BuildApplication($request->session()->get('setup'));
-        $init();
+        $init($request->session()->get('setup'));
 
         try {
             new DockerControlService;
