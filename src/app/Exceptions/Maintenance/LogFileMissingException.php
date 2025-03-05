@@ -2,8 +2,8 @@
 
 namespace App\Exceptions\Maintenance;
 
-use Illuminate\Http\Request;
 use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 class LogFileMissingException extends Exception
@@ -15,8 +15,8 @@ class LogFileMissingException extends Exception
 
     public function report(Request $request): void
     {
-        Log::error('User ' . $request->user()->username .
-            ' tried to access invalid log file - ' . $this->badLogFile);
+        Log::error('User '.$request->user()->username.
+            ' tried to access invalid log file - '.$this->badLogFile);
     }
 
     public function render(): never

@@ -26,7 +26,7 @@ class DockerControlService
      */
     public function rebootContainer(ContainerList $container): bool
     {
-        $status = Process::run('docker restart ' . $container->value);
+        $status = Process::run('docker restart '.$container->value);
 
         return $status->successful();
     }

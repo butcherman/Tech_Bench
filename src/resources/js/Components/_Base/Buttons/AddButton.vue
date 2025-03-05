@@ -7,17 +7,7 @@ const props = defineProps<{
     icon?: string;
     pill?: boolean;
     text?: string;
-    variant?:
-        | "danger"
-        | "dark"
-        | "error"
-        | "help"
-        | "info"
-        | "light"
-        | "primary"
-        | "secondary"
-        | "success"
-        | "warning";
+    variant?: elementVariant;
 }>();
 </script>
 

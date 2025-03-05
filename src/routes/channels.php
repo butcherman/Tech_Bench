@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Log;
 
 Broadcast::channel('App.Models.User.{id}', function (User $user, int $id) {
     Log::debug(
-        'User ' . $user->username . ' connecting to Notification Broadcast Channel'
+        'User '.$user->username.' connecting to Notification Broadcast Channel'
     );
 
     return (int) $user->user_id === (int) $id;
@@ -28,7 +28,7 @@ Broadcast::channel('App.Models.User.{id}', function (User $user, int $id) {
 
 Broadcast::channel('administration-channel', function (User $user) {
     Log::debug(
-        'User ' . $user->username . ' connecting to Administration Broadcast Channel'
+        'User '.$user->username.' connecting to Administration Broadcast Channel'
     );
 
     return Gate::allows('admin-link', $user);

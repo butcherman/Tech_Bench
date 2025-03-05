@@ -12,14 +12,14 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Symfony\Component\HttpFoundation\Response;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
-        commands: __DIR__ . '/../routes/console.php',
-        channels: __DIR__ . '/../routes/channels.php',
+        commands: __DIR__.'/../routes/console.php',
+        channels: __DIR__.'/../routes/channels.php',
         health: '/administration/up',   // TODO - make this work
         using: function () {
             Route::middleware('web')
@@ -56,7 +56,7 @@ return Application::configure(basePath: dirname(__DIR__))
             $statusCode = $response->getStatusCode();
 
             // If we are not in production, 500 type errors should show symphony error page
-            if (!app()->environment('production') && $statusCode === 500) {
+            if (! app()->environment('production') && $statusCode === 500) {
                 return $response;
             }
 

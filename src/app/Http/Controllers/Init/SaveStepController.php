@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Config\BasicSettingsRequest;
 use App\Http\Requests\Admin\Config\EmailSettingsRequest;
 use App\Http\Requests\Admin\User\PasswordPolicyRequest;
-use App\Http\Requests\Admin\User\UserAdministrationRequest;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -70,7 +69,7 @@ class SaveStepController extends Controller
             }
         }
 
-        $request->session()->put('setup.' . end($path), $saveData);
+        $request->session()->put('setup.'.end($path), $saveData);
 
         return back();
     }

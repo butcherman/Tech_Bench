@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Init;
 
 use App\Actions\Misc\BuildTimezoneList;
-use App\Facades\TimezoneList;
 use App\Http\Controllers\Controller;
 use App\Models\AppSettings;
 use App\Services\Admin\ApplicationSettingsService;
@@ -27,8 +26,8 @@ class StepOneController extends Controller
 
         return Inertia::render('Init/StepOne', [
             'step' => 1,
-            'settings' => fn() => $settingsData,
-            'timezone-list' => fn() => BuildTimezoneList::build(),
+            'settings' => fn () => $settingsData,
+            'timezone-list' => fn () => BuildTimezoneList::build(),
         ]);
     }
 }

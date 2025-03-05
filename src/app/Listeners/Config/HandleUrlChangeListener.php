@@ -4,8 +4,6 @@ namespace App\Listeners\Config;
 
 use App\Actions\Admin\UpdateApplicationUrl;
 use App\Events\Config\UrlChangedEvent;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Log;
 
 class HandleUrlChangeListener
@@ -21,7 +19,7 @@ class HandleUrlChangeListener
     public function handle(UrlChangedEvent $event): void
     {
         Log::alert(
-            config('app.name') . ' URL has changed.  Rebuilding application files',
+            config('app.name').' URL has changed.  Rebuilding application files',
             [
                 'old-url' => $event->oldUrl,
                 'new-url' => $event->newUrl,

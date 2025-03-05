@@ -3,7 +3,6 @@
 namespace App\Observers;
 
 use App\Facades\CacheData;
-use App\Facades\CacheFacade;
 use App\Models\EquipmentType;
 use Illuminate\Support\Facades\Log;
 
@@ -19,7 +18,7 @@ class EquipmentTypeObserver extends Observer
         CacheData::clearCache('publicEquipmentCategories');
 
         Log::info(
-            'New Equipment Type created by ' . $this->user,
+            'New Equipment Type created by '.$this->user,
             $equipmentType->toArray()
         );
     }
@@ -34,7 +33,7 @@ class EquipmentTypeObserver extends Observer
         CacheData::clearCache('publicEquipmentCategories');
 
         Log::info(
-            'Equipment Type updated by ' . $this->user,
+            'Equipment Type updated by '.$this->user,
             $equipmentType->toArray()
         );
     }
@@ -49,7 +48,7 @@ class EquipmentTypeObserver extends Observer
         CacheData::clearCache('publicEquipmentCategories');
 
         Log::info(
-            'Equipment Type deleted by ' . $this->user,
+            'Equipment Type deleted by '.$this->user,
             $equipmentType->toArray()
         );
     }

@@ -3,7 +3,6 @@
 namespace App\Http\Middleware;
 
 use App\Actions\Misc\BuildNavBar;
-use App\Facades\CacheFacade;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -46,7 +45,7 @@ class HandleInertiaRequests extends Middleware
         return [
             //  Flash messages are used for success/failure messages on next page load
             'flash' => $this->getFlashData(),
-            'csrf_token' => fn() => csrf_token(),
+            'csrf_token' => fn () => csrf_token(),
         ];
     }
 
@@ -61,7 +60,7 @@ class HandleInertiaRequests extends Middleware
 
         return [
             //  Current logged in user
-            'current_user' => fn() => $request->user()->makeVisible('user_id'),
+            'current_user' => fn () => $request->user()->makeVisible('user_id'),
 
             //  Dynamically built navigation menu
             // 'navbar' => fn () => $this->navbar->handle($request->user()),

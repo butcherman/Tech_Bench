@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Init;
 
 use App\Facades\CacheData;
-use App\Facades\CacheFacade;
 use App\Http\Controllers\Controller;
 use App\Models\UserRole;
 use Illuminate\Http\Request;

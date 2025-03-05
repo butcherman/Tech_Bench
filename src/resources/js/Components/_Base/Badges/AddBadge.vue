@@ -5,17 +5,7 @@ const props = defineProps<{
     href?: string;
     icon?: string;
     text?: string;
-    variant?:
-        | "danger"
-        | "dark"
-        | "error"
-        | "help"
-        | "info"
-        | "light"
-        | "primary"
-        | "secondary"
-        | "success"
-        | "warning";
+    variant?: elementVariant;
 }>();
 </script>
 

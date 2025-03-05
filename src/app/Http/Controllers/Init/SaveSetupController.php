@@ -8,7 +8,6 @@ use App\Http\Controllers\Controller;
 use App\Jobs\Maintenance\RebootTechBenchJob;
 use App\Services\Maintenance\DockerControlService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class SaveSetupController extends Controller
 {

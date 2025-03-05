@@ -2,13 +2,11 @@
 
 namespace Tests;
 
-use App\Facades\CacheData;
 use App\Http\Middleware\CheckForInit;
 use App\Models\UserRolePermission;
 use App\Models\UserRolePermissionType;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
-use Illuminate\Support\Facades\DB;
 
 abstract class TestCase extends BaseTestCase
 {

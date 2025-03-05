@@ -81,10 +81,10 @@ class CertificateService
 
             $isValid = ! strcmp($publicKey1, $publicKey2);
 
-            Log::debug('The SSL Key is ' . $isValid ? 'valid' : 'not valid');
+            Log::debug('The SSL Key is '.$isValid ? 'valid' : 'not valid');
         } catch (TypeError $e) {
             Log::debug('The provided SSL Key is not an Open SSL Key');
-            Log::error('Error - ' . $e->getMessage());
+            Log::error('Error - '.$e->getMessage());
 
             return false;
         }
