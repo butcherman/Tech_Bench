@@ -10,6 +10,9 @@ COPY ./php.ini /opt/bitnami/php/lib/
 COPY ./startup.dev.sh /scripts/
 COPY ./setup.dev.sh /scripts/
 
+COPY ./docker /usr/local/bin/docker
+RUN chmod 775 /usr/local/bin/docker
+
 RUN chmod 775 /scripts/startup.dev.sh
 RUN chmod 775 /scripts/setup.dev.sh
 
@@ -22,8 +25,10 @@ RUN apt install php-mysql -y
 
 #  Create a group and user to run the file permissions
 RUN addgroup --gid 1024 tbgroup
+RUN addgroup --gid 999 docker
 RUN adduser --disabled-password --gecos "" --force-badname --ingroup tbgroup tbuser
 RUN usermod -a -G root tbuser
+RUN usermod -a -G docker tbuser
 RUN chmod 775 /var/log
 
 #  Set directory permissions

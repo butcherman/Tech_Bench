@@ -3,7 +3,6 @@
 namespace App\Observers;
 
 use App\Facades\CacheData;
-use App\Facades\CacheFacade;
 use App\Models\EquipmentCategory;
 use Illuminate\Support\Facades\Log;
 
@@ -18,7 +17,7 @@ class EquipmentCategoryObserver extends Observer
         CacheData::clearCache('equipmentCategories');
 
         Log::info(
-            'New Equipment Category created by ' . $this->user,
+            'New Equipment Category created by '.$this->user,
             $equipmentCategory->toArray()
         );
     }
@@ -32,7 +31,7 @@ class EquipmentCategoryObserver extends Observer
         CacheData::clearCache('equipmentCategories');
 
         Log::info(
-            'Equipment Category updated by ' . $this->user,
+            'Equipment Category updated by '.$this->user,
             $equipmentCategory->toArray()
         );
     }
@@ -46,7 +45,7 @@ class EquipmentCategoryObserver extends Observer
         CacheData::clearCache('equipmentCategories');
 
         Log::info(
-            'Equipment Category deleted by ' . $this->user,
+            'Equipment Category deleted by '.$this->user,
             $equipmentCategory->toArray()
         );
     }

@@ -33,6 +33,7 @@ services:
         volumes:
             - ../src:/app
             - ./.env:/app/.env
+            - /var/run/docker.sock:/var/run/docker.sock
             - backupData:/app/storage/backups/tech-bench
         environment:
             - SERVICE=app

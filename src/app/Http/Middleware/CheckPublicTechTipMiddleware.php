@@ -19,6 +19,7 @@ class CheckPublicTechTipMiddleware
          */
         if (! config('tech-tips.allow_public')) {
             abort('404');
+            // TODO - Throw exception
         }
 
         /**
@@ -26,6 +27,7 @@ class CheckPublicTechTipMiddleware
          */
         if ($request->tech_tip && ! $request->tech_tip->public) {
             abort('404');
+            // TODO - Throw exception
         }
 
         return $next($request);

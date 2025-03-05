@@ -4,10 +4,8 @@ namespace App\Providers;
 
 use App\Actions\Misc\BuildTimezoneList;
 use App\Actions\Misc\CheckDatabaseError;
-use App\Contracts\ReportingContract;
 use App\Policies\GatePolicy;
 use App\Services\Misc\CacheFacadeHelper;
-use App\Services\Report\UserReports;
 use App\Services\User\GetMailableUsers;
 use App\Services\User\UserPermissionsService;
 use Illuminate\Http\Resources\Json\JsonResource;

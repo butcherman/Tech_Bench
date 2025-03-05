@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import AuthLayout from "@/Layouts/Auth/AuthLayout.vue";
+import FlashAlert from "@/Layouts/_Shared/FlashAlert.vue";
 import ForgotPasswordForm from "@/Forms/Auth/ForgotPasswordForm.vue";
 import LogoImage from "@/Components/LogoImage.vue";
-import FlashAlert from "@/Layouts/_Shared/FlashAlert.vue";
 import { ref } from "vue";
 
 const success = ref(false);

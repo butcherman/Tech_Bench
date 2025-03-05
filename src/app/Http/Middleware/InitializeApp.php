@@ -19,8 +19,9 @@ class InitializeApp
     public function handle(Request $request, Closure $next): Response
     {
         if (! config('app.first_time_setup')) {
-            Log::error($request->user()->username . ' is trying to access the setup wizard when the app is already setup');
+            Log::error($request->user()->username.' is trying to access the setup wizard when the app is already setup');
             abort(403, 'The First Time Setup can only be run once');
+            // TODO - Throw exception
         }
 
         if ($request->user()->user_id !== 1) {

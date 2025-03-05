@@ -39,7 +39,7 @@ trait PasswordValidationRules
      */
     protected function tmpPasswordRules(array $passRules): array
     {
-        $basePath = 'auth.passwords.settings.';
+        $basePath = 'auth.passwords.settings';
 
         config([
             $basePath.'.disable_compromised' => $passRules['disable_compromised'],

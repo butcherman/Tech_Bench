@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Actions\Socialite\AuthorizeUser;
-use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
 use Laravel\Socialite\Facades\Socialite;
@@ -12,6 +10,8 @@ class SocialiteController
 {
     /**
      * If feature is disabled, show 404 page not found
+     *
+     * TODO - Add This Constructor
      */
     public function __construct() {}
 
