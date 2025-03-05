@@ -8,7 +8,13 @@ type pageData = {
 };
 
 type pageProps = {
+    breadcrumbs: {
+        title: string;
+        url: string;
+        is_current_page: boolean;
+    }[];
     csrf_token: string;
+    current_user: user;
     errors: { [key: string]: string }[];
     flash: flashData[];
     idle_timeout: number;
