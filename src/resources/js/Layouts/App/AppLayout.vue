@@ -6,6 +6,8 @@ import AppHeader from "./AppHeader.vue";
 import AppNotificationToast from "./AppNotificationToast.vue";
 import AppSideNav from "./AppSideNav.vue";
 import AppBreadcrumbs from "./AppBreadcrumbs.vue";
+import StaticAlert from "../_Shared/StaticAlert.vue";
+import AppFooter from "./AppFooter.vue";
 
 /**
  * Navbar Controls
@@ -37,8 +39,12 @@ const appTitle = computed<string | undefined>(
         >
             <div id="app-page-wrapper" class="grow p-5">
                 <AppBreadcrumbs class="mb-2" />
-                <slot />
+                <StaticAlert />
+                <div class="mt-4">
+                    <slot />
+                </div>
             </div>
+            <AppFooter />
         </section>
     </div>
 </template>
