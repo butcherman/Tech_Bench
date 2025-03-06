@@ -3,7 +3,6 @@ import { Avatar, Menu } from "primevue";
 import { ref } from "vue";
 import { useAuthStore } from "@/Stores/AuthStore";
 
-// const app = useAppStore();
 const auth = useAuthStore();
 const userMenu = ref<InstanceType<typeof Menu> | null>(null);
 const menuList = ref([

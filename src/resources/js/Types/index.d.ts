@@ -18,6 +18,7 @@ type pageProps = {
     errors: { [key: string]: string }[];
     flash: flashData[];
     idle_timeout: number;
+    navbar: navbarItem[];
 };
 
 /*
@@ -25,6 +26,12 @@ type pageProps = {
 | Page Layout Elements
 |-------------------------------------------------------------------------------
 */
+type navbarItem = {
+    name: string;
+    route: string;
+    icon: string;
+};
+
 type flashData = {
     id: string;
     type: elementVariant;
