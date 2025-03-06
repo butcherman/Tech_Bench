@@ -8,11 +8,7 @@ type pageData = {
 };
 
 type pageProps = {
-    breadcrumbs: {
-        title: string;
-        url: string;
-        is_current_page: boolean;
-    }[];
+    breadcrumbs: breadcrumb[];
     csrf_token: string;
     current_user: user;
     errors: { [key: string]: string }[];
@@ -30,6 +26,12 @@ type navbarItem = {
     name: string;
     route: string;
     icon: string;
+};
+
+type breadcrumb = {
+    title: string;
+    url: string;
+    is_current_page: boolean;
 };
 
 type flashData = {

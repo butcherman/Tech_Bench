@@ -16,8 +16,6 @@ class HandleInertiaRequests extends Middleware
      */
     protected $rootView = 'app';
 
-    // public function __construct(protected BuildNavBar $navbar) {}
-
     /**
      * Determines the current asset version.
      */
