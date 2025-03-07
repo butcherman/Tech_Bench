@@ -15,6 +15,7 @@ class TechTipRequest extends FormRequest
      */
     public function authorize(): bool
     {
+        // TODO - Simplify???
         if ($this->tech_tip) {
             // Update Public Tech Tip
             if ($this->public) {

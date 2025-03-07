@@ -7,6 +7,7 @@ use App\Exceptions\Maintenance\DockerNotAllowedException;
 use App\Http\Controllers\Controller;
 use App\Jobs\Maintenance\RebootTechBenchJob;
 use App\Services\Maintenance\DockerControlService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class SaveSetupController extends Controller
@@ -14,7 +15,7 @@ class SaveSetupController extends Controller
     /**
      * Save the current Init step in the session and move onto the next step.
      */
-    public function __invoke(Request $request, BuildApplication $init)
+    public function __invoke(Request $request, BuildApplication $init): JsonResponse
     {
         $init($request->session()->get('setup'));
 

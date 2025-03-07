@@ -6,12 +6,15 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+/*
+|-------------------------------------------------------------------------------
+| For Public Tech Tips pages.  If the feature is disabled, or the loaded Tech
+| Tip is not marked as public, block the request.
+|-------------------------------------------------------------------------------
+*/
+
 class CheckPublicTechTipMiddleware
 {
-    /**
-     * For Public Tech Tips pages.  If the feature is disabled, or the loaded
-     * Tech Tip is not marked as public, block the request.
-     */
     public function handle(Request $request, Closure $next): Response
     {
         /**

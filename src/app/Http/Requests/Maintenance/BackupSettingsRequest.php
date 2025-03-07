@@ -21,11 +21,11 @@ class BackupSettingsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nightly_backup' => 'required|boolean',
-            'nightly_cleanup' => 'required|boolean',
-            'encryption' => 'required|boolean',
-            'password' => 'required_if:encryption,true',
-            'mail_to' => 'required|email',
+            'nightly_backup' => ['required', 'boolean'],
+            'nightly_cleanup' => ['required', 'boolean'],
+            'encryption' => ['required', 'boolean'],
+            'password' => ['required_if:encryption,true'],
+            'mail_to' => ['required', 'email'],
         ];
     }
 }

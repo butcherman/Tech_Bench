@@ -35,7 +35,7 @@ class SslCertificateRequest extends FormRequest
     /**
      * Validate that the certificate file is an actual ssl certificate
      */
-    public function after()
+    public function after(): array
     {
         return [
             function (Validator $validator) {

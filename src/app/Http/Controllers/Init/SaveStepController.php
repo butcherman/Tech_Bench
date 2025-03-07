@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Config\BasicSettingsRequest;
 use App\Http\Requests\Admin\Config\EmailSettingsRequest;
 use App\Http\Requests\Admin\User\PasswordPolicyRequest;
-use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -19,7 +18,7 @@ class SaveStepController extends Controller
     /**
      * Save the current Init step in the session and move onto the next step.
      */
-    public function __invoke(Request $request, ?User $user = null): RedirectResponse
+    public function __invoke(Request $request): RedirectResponse
     {
         $path = explode('/', $request->path());
         $saveData = $request->all();

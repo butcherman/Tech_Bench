@@ -16,7 +16,7 @@ class FileLinkFeature
 {
     use AllowTrait;
 
-    public function resolve(User $user): mixed
+    public function resolve(User $user): bool
     {
         if (! config('file-link.feature_enabled')) {
             return false;

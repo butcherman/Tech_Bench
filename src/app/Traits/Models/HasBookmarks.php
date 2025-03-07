@@ -9,7 +9,7 @@ trait HasBookmarks
     /**
      * Determine if the user requesting the page has bookmarked customer
      */
-    public function isFav(User $user)
+    public function isFav(User $user): bool
     {
         $bookmarks = $this->Bookmarks->pluck('user_id')->toArray();
 

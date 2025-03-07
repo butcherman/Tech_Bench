@@ -5,10 +5,16 @@ namespace App\Traits;
 use App\Models\User;
 use App\Models\UserRolePermission;
 
+/*
+|-------------------------------------------------------------------------------
+| AllowTrait determines if a user can perform a task based on their Role
+|-------------------------------------------------------------------------------
+*/
+
 trait AllowTrait
 {
     /**
-     *  AllowTrait determines if a user can perform a task based on their Role
+     *  Check permission based on description field of permission type.
      */
     protected function checkPermission(User $user, $description): bool
     {

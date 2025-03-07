@@ -11,7 +11,7 @@ namespace App\Features;
 
 class PublicTechTipFeature
 {
-    public function resolve(): mixed
+    public function resolve(): bool
     {
         return config('tech-tips.allow_public');
     }

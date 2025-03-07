@@ -21,7 +21,7 @@ class BuildUserNavbar
      */
     public function __construct(protected User $user) {}
 
-    public function __invoke()
+    public function __invoke(): array
     {
         $nav = $this->getPrimaryNav();
 

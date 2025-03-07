@@ -4,7 +4,7 @@ namespace App\Services\Admin;
 
 use App\Events\Config\UrlChangedEvent;
 use App\Events\Feature\FeatureChangedEvent;
-use App\Facades\CacheFacade;
+use App\Facades\CacheData;
 use App\Traits\AppSettingsTrait;
 use Illuminate\Http\File;
 use Illuminate\Support\Collection;
@@ -101,6 +101,7 @@ class ApplicationSettingsService
         );
 
         // Forget the feature settings to re-force checking
+        // TODO - Add Event.
         event(new FeatureChangedEvent);
     }
 
@@ -115,7 +116,7 @@ class ApplicationSettingsService
 
         $this->saveSettings('app.logo', '/storage/'.$storedFile);
 
-        CacheFacade::clearCache('appData');
+        CacheData::clearCache('appData');
 
         return $storedFile;
     }
@@ -127,7 +128,7 @@ class ApplicationSettingsService
     {
         $this->clearSetting('app.logo');
 
-        CacheFacade::clearCache('appData');
+        CacheData::clearCache('appData');
     }
 
     /**

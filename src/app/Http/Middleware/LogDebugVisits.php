@@ -9,17 +9,24 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
 
+/*
+|-------------------------------------------------------------------------------
+| When Debug Logging is turned on, add a debug entry for each web page visit.
+| This includes any submitted data as well.
+|-------------------------------------------------------------------------------
+*/
+
 class LogDebugVisits
 {
     /**
-     * These items should never be logged
+     * These items should never be logged and will be skipped.
      *
      * @var array<int, string>
      */
     protected $ignore = ['_token'];
 
     /**
-     * Sensitive data is logged as received, but the values will be redacted
+     * Sensitive data is logged as received, but the values will be redacted.
      *
      * @var array<int, string>
      */
@@ -32,7 +39,7 @@ class LogDebugVisits
     ];
 
     /**
-     * These Route prefixes are not logged
+     * These Route prefixes are not logged.
      *
      * @var array<int, string>
      */
@@ -42,11 +49,9 @@ class LogDebugVisits
         'administration/telescope/*',
     ];
 
-    /*
-    |---------------------------------------------------------------------------
-    | Add Trace Data to each log entry Context
-    |---------------------------------------------------------------------------
-    */
+    /**
+     * Add Trace Data to each log entry Context
+     */
     public function handle(Request $request, Closure $next): Response
     {
         /**
@@ -67,11 +72,9 @@ class LogDebugVisits
         return $next($request);
     }
 
-    /*
-    |---------------------------------------------------------------------------
-    | If Debug Logging is turned on, add additional information about visit.
-    |---------------------------------------------------------------------------
-    */
+    /**
+     * If Debug Logging is turned on, add additional information about visit.
+     */
     protected function logDebugVisit(Request $request): void
     {
         // Determine if we need to bypass this URL
@@ -97,12 +100,10 @@ class LogDebugVisits
         }
     }
 
-    /*
-    |---------------------------------------------------------------------------
-    | Determine if we need to redact or omit any data from logging request.
-    |---------------------------------------------------------------------------
-    */
-    protected function checkRequestArray(array $requestData)
+    /**
+     * Determine if we need to redact or omit any data from logging request.
+     */
+    protected function checkRequestArray(array $requestData): array
     {
         foreach ($requestData as $key => $value) {
             // If the value is an array, process the array
