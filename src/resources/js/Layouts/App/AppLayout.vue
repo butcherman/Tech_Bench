@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { router, usePage } from "@inertiajs/vue3";
-import { computed, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import FlashAlert from "../_Shared/FlashAlert.vue";
 import AppHeader from "./AppHeader.vue";
 import AppNotificationToast from "./AppNotificationToast.vue";
@@ -8,6 +8,7 @@ import AppSideNav from "./AppSideNav.vue";
 import AppBreadcrumbs from "./AppBreadcrumbs.vue";
 import StaticAlert from "../_Shared/StaticAlert.vue";
 import AppFooter from "./AppFooter.vue";
+import { useBroadcastStore } from "@/Stores/BroadcastStore";
 
 /**
  * Navbar Controls
@@ -24,6 +25,12 @@ const appTitle = computed<string | undefined>(
             (crumb) => crumb.is_current_page == true
         )?.title
 );
+
+/**
+ * Register to Users Notification Channel
+ */
+const broadcast = useBroadcastStore();
+onMounted(() => broadcast.registerNotificationChannel());
 </script>
 
 <template>
