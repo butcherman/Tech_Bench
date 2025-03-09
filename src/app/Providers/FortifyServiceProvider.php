@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Actions\Fortify\LogoutResponse;
 use App\Actions\Fortify\ResetUserPassword;
 use App\Actions\Fortify\UpdateUserPassword;
 use App\Facades\CacheData;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
+use Laravel\Fortify\Contracts\LogoutResponse as LogoutResponseContract;
 use Laravel\Fortify\Fortify;
 
 class FortifyServiceProvider extends ServiceProvider
@@ -69,5 +71,8 @@ class FortifyServiceProvider extends ServiceProvider
 
             RateLimiter::hit($throttleKey, 600);
         });
+
+        // Deliver a logout response when logging out.
+        $this->app->instance(LogoutResponseContract::class, new LogoutResponse);
     }
 }
