@@ -7,15 +7,16 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
+/*
+|-------------------------------------------------------------------------------
+| Initialize App Middleware will make sure that the app has not already been
+| initialized (you can only do the wizard once). The built in Admin User is
+| also the only user that can run the wizard
+|-------------------------------------------------------------------------------
+*/
+
 class InitializeApp
 {
-    /*
-    |---------------------------------------------------------------------------
-    | Initialize App Middleware will make sure that the app has not already been
-    | initialized (you can only do the wizard once). The built in Admin User is
-    | also the only user that can run the wizard
-    |---------------------------------------------------------------------------
-    */
     public function handle(Request $request, Closure $next): Response
     {
         if (! config('app.first_time_setup')) {

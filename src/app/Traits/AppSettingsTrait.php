@@ -7,9 +7,12 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
 
-/**
- *  App Settings trait will set and clear configuration settings
- */
+/*
+|-------------------------------------------------------------------------------
+| App Settings trait will set and clear configuration settings
+|-------------------------------------------------------------------------------
+*/
+
 trait AppSettingsTrait
 {
     /**

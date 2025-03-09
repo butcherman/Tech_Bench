@@ -8,11 +8,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
+/*
+|-------------------------------------------------------------------------------
+| Check to see if the users password has expired
+|-------------------------------------------------------------------------------
+*/
+
 class CheckPasswordExpiration
 {
-    /**
-     * Check to see if the users password has expired
-     */
     public function handle(Request $request, Closure $next): Response
     {
         if ($request->user()->password_expires) {
@@ -20,7 +23,7 @@ class CheckPasswordExpiration
                 Log::stack(['auth', 'daily'])
                     ->notice(
                         'User '.$request->user()->full_name.
-                        ' is being force to change their expired password'
+                            ' is being force to change their expired password'
                     );
 
                 return redirect()

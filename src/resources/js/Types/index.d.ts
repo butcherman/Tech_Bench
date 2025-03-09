@@ -8,10 +8,13 @@ type pageData = {
 };
 
 type pageProps = {
+    breadcrumbs: breadcrumb[];
     csrf_token: string;
+    current_user: user;
     errors: { [key: string]: string }[];
     flash: flashData[];
     idle_timeout: number;
+    navbar: navbarItem[];
 };
 
 /*
@@ -19,6 +22,18 @@ type pageProps = {
 | Page Layout Elements
 |-------------------------------------------------------------------------------
 */
+type navbarItem = {
+    name: string;
+    route: string;
+    icon: string;
+};
+
+type breadcrumb = {
+    title: string;
+    url: string;
+    is_current_page: boolean;
+};
+
 type flashData = {
     id: string;
     type: elementVariant;

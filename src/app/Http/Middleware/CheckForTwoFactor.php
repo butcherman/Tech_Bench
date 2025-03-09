@@ -6,11 +6,14 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+/*
+|-------------------------------------------------------------------------------
+| Check to see if the user has authenticated via 2FA if enabled.
+|-------------------------------------------------------------------------------
+*/
+
 class CheckForTwoFactor
 {
-    /**
-     * Check to see if the user has authenticated via 2FA.
-     */
     public function handle(Request $request, Closure $next): Response
     {
         // If 2FA is disabled, move on.

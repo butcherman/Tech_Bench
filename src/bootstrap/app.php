@@ -13,6 +13,7 @@ use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Inertia\EncryptHistoryMiddleware;
 use Inertia\Inertia;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -42,6 +43,7 @@ return Application::configure(basePath: dirname(__DIR__))
             CheckForInit::class,
             CheckForTwoFactor::class,
             CheckPasswordExpiration::class,
+            EncryptHistoryMiddleware::class,
         ])->alias([
             'init' => InitializeApp::class,
         ]);

@@ -8,9 +8,6 @@ use Illuminate\Support\Facades\Process;
 
 class DockerControlService
 {
-    /**
-     * Create a new class instance.
-     */
     public function __construct()
     {
         // Check to see if Docker Commands are allowed
@@ -34,7 +31,7 @@ class DockerControlService
     /**
      * Reboot all Containers
      */
-    public function rebootAllContainers()
+    public function rebootAllContainers(): void
     {
         foreach (ContainerList::cases() as $container) {
             $this->rebootContainer($container);

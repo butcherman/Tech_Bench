@@ -13,16 +13,17 @@ class ReportsServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->bind(ReportingContract::class, function ($app) {
+        // TODO - Add Back In
+        // $this->app->bind(ReportingContract::class, function ($app) {
 
-            $className = Str::studly($app->request->route('report'));
-            $namespace = match ($app->request->route('group')) {
-                'users' => "App\Services\Report\User\\$className",
-                'customers' => "App\Services\Report\Customer\\$className",
-                default => abort(404),
-            };
+        //     $className = Str::studly($app->request->route('report'));
+        //     $namespace = match ($app->request->route('group')) {
+        //         'users' => "App\Services\Report\User\\$className",
+        //         'customers' => "App\Services\Report\Customer\\$className",
+        //         default => abort(404),
+        //     };
 
-            return new $namespace;
-        });
+        //     return new $namespace;
+        // });
     }
 }

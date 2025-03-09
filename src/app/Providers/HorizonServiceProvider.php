@@ -10,14 +10,6 @@ use Laravel\Horizon\HorizonApplicationServiceProvider;
 class HorizonServiceProvider extends HorizonApplicationServiceProvider
 {
     /**
-     * Bootstrap any application services.
-     */
-    public function boot(): void
-    {
-        parent::boot();
-    }
-
-    /**
      * Register the Horizon gate.
      *
      * Only Installers can register to Horizon URL in non-local environment
