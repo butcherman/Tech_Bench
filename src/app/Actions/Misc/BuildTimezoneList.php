@@ -12,6 +12,9 @@ use Jackiedo\Timezonelist\Facades\Timezonelist;
 
 class BuildTimezoneList
 {
+    /**
+     * @codeCoverageIgnore
+     */
     public static function build(): array
     {
         $tzList = [];

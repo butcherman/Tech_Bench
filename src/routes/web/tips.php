@@ -13,3 +13,7 @@ Route::get('public-tips', function () {
 Route::get('tech-tips/show', function () {
     return 'show tech tip';
 })->name('tech-tips.show');
+
+Route::get('tech-tips-index', function () {
+    return 'tech tips index';
+})->name('tech-tips.index');
