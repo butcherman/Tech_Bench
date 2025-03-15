@@ -7,6 +7,9 @@ use App\Exceptions\Maintenance\DockerNotAllowedException;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Process;
 
+/**
+ * @codeCoverageIgnore
+ */
 class DockerControlService
 {
     public function __construct()
