@@ -2,13 +2,17 @@
 import PasswordInput from "../_Base/PasswordInput.vue";
 import VueForm from "@/Forms/_Base/VueForm.vue";
 import { object, string, ref as reference } from "yup";
-import { computed } from "vue";
+import { computed, useTemplateRef } from "vue";
 
-defineEmits(["success"]);
+const emit = defineEmits<{
+    success: [];
+}>();
 
 const props = defineProps<{
     init?: boolean;
 }>();
+
+const passwordForm = useTemplateRef("password-form");
 
 /*
 |-------------------------------------------------------------------------------
@@ -18,6 +22,11 @@ const props = defineProps<{
 const submitRoute = computed(() =>
     props.init ? route("init.step-4b.submit") : route("user-password.update")
 );
+
+const onSuccess = () => {
+    emit("success");
+    passwordForm.value?.resetForm();
+};
 
 /*
 |-------------------------------------------------------------------------------
@@ -40,12 +49,13 @@ const schema = object({
 
 <template>
     <VueForm
+        ref="password-form"
         :initial-values="initValues"
         :validation-schema="schema"
         :submit-route="submitRoute"
         submit-method="put"
         submit-text="Update Password"
-        @success="$emit('success')"
+        @success="onSuccess"
     >
         <PasswordInput
             id="current-password"

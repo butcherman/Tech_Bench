@@ -44,10 +44,10 @@ onMounted(() => broadcast.registerNotificationChannel());
             id="app-content"
             class="md:ms-64 mt-14 z-0 bg-gray-200 flex flex-col grow"
         >
-            <div id="app-page-wrapper" class="grow p-5">
+            <div id="app-page-wrapper" class="flex flex-col grow p-5">
                 <AppBreadcrumbs class="mb-2" />
                 <StaticAlert />
-                <div class="mt-4">
+                <div class="flex flex-col grow">
                     <slot />
                 </div>
             </div>

@@ -14,6 +14,12 @@ type user = {
     user_role: userRole;
 };
 
+type userSettings = {
+    setting_type_id: number;
+    value: boolean;
+    name: string;
+};
+
 type userRole = {
     role_id: number;
     name: string;
@@ -29,4 +35,15 @@ type passwordPolicy = {
     contains_number: boolean;
     contains_special: boolean;
     disable_compromised: boolean;
+};
+
+type userDevice = {
+    device_id: number;
+    type: string;
+    os: string;
+    browser: string;
+    registered_ip_address: string;
+    updated_ip_address: string;
+    created_at: string;
+    updated_at: string;
 };

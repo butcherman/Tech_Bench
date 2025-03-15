@@ -12,7 +12,9 @@ export default { layout: AppLayout };
 </script>
 
 <template>
-    <Card class="tb-card">
-        <h4 class="text-center">Coming Soon</h4>
-    </Card>
+    <div class="flex justify-center">
+        <Card class="tb-card">
+            <h4 class="text-center">Coming Soon</h4>
+        </Card>
+    </div>
 </template>
