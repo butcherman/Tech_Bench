@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Actions\Socialite\AuthorizeUser;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
 use Laravel\Socialite\Facades\Socialite;
@@ -13,7 +14,7 @@ class SocialiteController
      *
      * TODO - Add This Constructor
      */
-    public function __construct() {}
+    public function __construct(protected AuthorizeUser $authObj) {}
 
     /**
      * Redirect the user to the Microsoft Login page
@@ -30,7 +31,7 @@ class SocialiteController
      */
     public function callback(): RedirectResponse
     {
-        // $this->authObj->handle();
+        $this->authObj->handle();
 
         return redirect()->intended(route('dashboard'));
     }
