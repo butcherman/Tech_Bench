@@ -56,12 +56,12 @@ class BuildUserNavbar
             ],
             [
                 'name' => 'Customers',
-                'route' => '#', // route('customers.index'),
+                'route' => route('customers.index'),
                 'icon' => 'fas fa-user-tie',
             ],
             [
                 'name' => 'Tech Tips',
-                'route' => '#', // route('tech-tips.index'),
+                'route' => route('tech-tips.index'),
                 'icon' => 'fas fa-tools',
             ],
         ];
@@ -78,7 +78,7 @@ class BuildUserNavbar
 
         return [
             'name' => 'Administration',
-            'route' => '#', // route('admin.index'),
+            'route' => route('admin.index'),
             'icon' => 'fas fa-user-shield',
         ];
     }
@@ -95,7 +95,7 @@ class BuildUserNavbar
         return [
             'name' => 'Reports',
             'icon' => 'chart-bar',
-            'route' => '#', // route('reports.index'),
+            'route' => route('reports.index'),
         ];
     }
 
@@ -111,7 +111,7 @@ class BuildUserNavbar
         return [
             'name' => 'File Links',
             'icon' => 'link',
-            'route' => '#', // route('links.index'),
+            'route' => route('links.index'),
         ];
     }
 }

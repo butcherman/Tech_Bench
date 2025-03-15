@@ -13,18 +13,20 @@ use Illuminate\Http\Request;
 class SaveSetupController extends Controller
 {
     /**
-     * Save the current Init step in the session and move onto the next step.
+     * Save the application settings and reboot the Tech Bench.
      */
     public function __invoke(Request $request, BuildApplication $init): JsonResponse
     {
         $init($request->session()->get('setup'));
 
+        // @codeCoverageIgnoreStart
         try {
             new DockerControlService;
             $canReboot = true;
         } catch (DockerNotAllowedException $e) {
             $canReboot = false;
         }
+        // @codeCoverageIgnoreEnd
 
         RebootTechBenchJob::dispatchAfterResponse();
 

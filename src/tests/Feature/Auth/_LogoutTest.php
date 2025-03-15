@@ -20,7 +20,7 @@ class _LogoutTest extends TestCase
         $response = $this->actingAs($user)
             ->post(route('logout'));
 
-        $response->assertStatus(302)->assertRedirect(route('home'));
+        $response->assertStatus(302)->assertRedirect(route('login'));
         $this->assertGuest();
 
         Event::assertDispatched(Logout::class);
@@ -37,7 +37,7 @@ class _LogoutTest extends TestCase
         $response = $this->actingAs($user)
             ->post(route('logout'), ['reason' => 'timeout']);
 
-        $response->assertStatus(302)->assertRedirect(route('home'));
+        $response->assertStatus(302)->assertRedirect(route('login'));
         $this->assertGuest();
 
         Event::assertDispatched(Logout::class);
