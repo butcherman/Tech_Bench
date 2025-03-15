@@ -32,7 +32,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind('CacheData', CacheFacadeHelper::class);
 
         // DbQueryFacade
-        // $this->app->bind('DbException', CheckDatabaseError::class);
+        $this->app->bind('DbException', CheckDatabaseError::class);
 
         // Timezone Facade
         // $this->app->bind('TimezoneList', BuildTimezoneList::class);

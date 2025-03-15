@@ -101,8 +101,7 @@ class ApplicationSettingsService
         );
 
         // Forget the feature settings to re-force checking
-        // TODO - Add Event.
-        // event(new FeatureChangedEvent);
+        event(new FeatureChangedEvent);
     }
 
     /**

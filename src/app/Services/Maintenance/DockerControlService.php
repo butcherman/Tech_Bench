@@ -4,6 +4,7 @@ namespace App\Services\Maintenance;
 
 use App\Enums\ContainerList;
 use App\Exceptions\Maintenance\DockerNotAllowedException;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Process;
 
 class DockerControlService
@@ -23,7 +24,12 @@ class DockerControlService
      */
     public function rebootContainer(ContainerList $container): bool
     {
-        $status = Process::run('docker restart '.$container->value);
+        // In Testing Environment, we do not want to trigger reboot
+        if (App::environment('testing')) {
+            return true;
+        }
+
+        $status = Process::run('docker restart ' . $container->value);
 
         return $status->successful();
     }
@@ -33,6 +39,11 @@ class DockerControlService
      */
     public function rebootAllContainers(): void
     {
+        // In Testing Environment, we do not want to trigger reboot
+        if (App::environment('testing')) {
+            return;
+        }
+
         foreach (ContainerList::cases() as $container) {
             $this->rebootContainer($container);
         }

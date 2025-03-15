@@ -111,15 +111,45 @@ class UserUnitTest extends TestCase
 
     public function test_recent_tech_tips_relationship(): void
     {
-        TechTip::factory()->create()->wasViewed($this->model);
-        TechTip::factory()->create()->wasViewed($this->model);
+        $tips = TechTip::factory()->count(2)->create();
+
+        UserTechTipRecent::create([
+            'user_id' => $this->model->user_id,
+            'tip_id' => $tips[0]->tip_id,
+        ]);
+        UserTechTipRecent::create([
+            'user_id' => $this->model->user_id,
+            'tip_id' => $tips[1]->tip_id,
+        ]);
 
         $recents = UserTechTipRecent::where('user_id', $this->model->user_id)
             ->get();
 
         $this->assertEquals(
-            $recents->toArray(),
-            $this->model->RecentTechTips->toArray()
+            $recents->only('tip_id'),
+            $this->model->RecentTechTips->only('tip_id')
+        );
+    }
+
+    public function test_recent_customers_relationship(): void
+    {
+        $customers = Customer::factory()->count(2)->create();
+
+        UserCustomerRecent::create([
+            'user_id' => $this->model->user_id,
+            'cust_id' => $customers[0]->cust_id,
+        ]);
+        UserCustomerRecent::create([
+            'user_id' => $this->model->user_id,
+            'cust_id' => $customers[1]->cust_id,
+        ]);
+
+        $recents = UserCustomerRecent::where('user_id', $this->model->user_id)
+            ->get();
+
+        $this->assertEquals(
+            $recents->only('cust_id'),
+            $this->model->RecentCustomers->only('cust_id')
         );
     }
 

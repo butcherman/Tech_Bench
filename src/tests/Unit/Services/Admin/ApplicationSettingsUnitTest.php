@@ -199,22 +199,21 @@ class ApplicationSettingsUnitTest extends TestCase
     | updateFeatureSettings()
     |---------------------------------------------------------------------------
     */
-    // TODO - Add Test Back In
-    // public function test_update_feature_settings()
-    // {
-    //     // Event::fake(FeatureChangedEvent::class);
+    public function test_update_feature_settings()
+    {
+        Event::fake(FeatureChangedEvent::class);
 
-    //     $data = [
-    //         'file_links' => true,
-    //         'public_tips' => true,
-    //         'tip_comments' => false,
-    //     ];
+        $data = [
+            'file_links' => true,
+            'public_tips' => true,
+            'tip_comments' => false,
+        ];
 
-    //     $testObj = new ApplicationSettingsService;
-    //     $testObj->updateFeatureSettings(collect($data));
+        $testObj = new ApplicationSettingsService;
+        $testObj->updateFeatureSettings(collect($data));
 
-    //     // Event::assertDispatched(FeatureChangedEvent::class);
-    // }
+        Event::assertDispatched(FeatureChangedEvent::class);
+    }
 
     /*
     |---------------------------------------------------------------------------
@@ -232,6 +231,62 @@ class ApplicationSettingsUnitTest extends TestCase
 
         $this->assertDatabaseHas('app_settings', [
             'key' => 'app.logo',
+        ]);
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | destroyLogo()
+    |---------------------------------------------------------------------------
+    */
+    public function test_destroy_logo(): void
+    {
+        $data = [
+            'file' => UploadedFile::fake()->image('testPhoto.png'),
+        ];
+
+        $testObj = new ApplicationSettingsService;
+        $testObj->updateLogo(collect($data));
+
+        $testObj->destroyLogo();
+
+        $this->assertDatabaseMissing('app_settings', [
+            'key' => 'app.logo',
+        ]);
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | processBackupSettings()
+    |---------------------------------------------------------------------------
+    */
+    public function test_process_backup_settings(): void
+    {
+        $data = [
+            'nightly_backup' => false,
+            'nightly_cleanup' => false,
+            'encryption' => false,
+            'password' => 'randomValue',
+            'mail_to' => 'randomDude@noemail.com',
+        ];
+
+        $testObj = new ApplicationSettingsService;
+        $testObj->processBackupSettings(collect($data));
+
+        $this->assertDatabaseHas('app_settings', [
+            'key' => 'backup.nightly_backup',
+        ]);
+        $this->assertDatabaseHas('app_settings', [
+            'key' => 'backup.nightly_cleanup',
+        ]);
+        $this->assertDatabaseHas('app_settings', [
+            'key' => 'backup.backup.encryption',
+        ]);
+        $this->assertDatabaseHas('app_settings', [
+            'key' => 'backup.backup.password',
+        ]);
+        $this->assertDatabaseHas('app_settings', [
+            'key' => 'backup.notifications.mail.to',
         ]);
     }
 }

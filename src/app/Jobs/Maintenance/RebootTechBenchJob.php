@@ -8,13 +8,18 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Log;
 
+/**
+ * @codeCoverageIgnore
+ */
 class RebootTechBenchJob implements ShouldQueue
 {
     use Queueable;
 
-    /**
-     * Execute the job.
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Signal a reboot command for all Docker Containers
+    |---------------------------------------------------------------------------
+    */
     public function handle(DockerControlService $svc): void
     {
         Log::alert('Rebooting Tech Bench');

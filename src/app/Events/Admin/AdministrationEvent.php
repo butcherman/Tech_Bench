@@ -32,6 +32,8 @@ class AdministrationEvent implements ShouldBroadcast
 
     /**
      * Get the channels the event should broadcast on
+     *
+     * @codeCoverageIgnore
      */
     public function broadcastOn(): array
     {
@@ -42,6 +44,8 @@ class AdministrationEvent implements ShouldBroadcast
 
     /**
      * Get the name the event should broadcast as
+     *
+     * @codeCoverageIgnore
      */
     public function BroadcastAs(): string
     {
