@@ -16,7 +16,7 @@ export default { layout: AppLayout };
 </script>
 
 <template>
-    <div class="flex justify-center align-middle">
+    <div class="flex grow justify-center items-center">
         <LogoImage class="tb-card" dark-header>
             <hr class="my-4" />
             <p class="text-center">
