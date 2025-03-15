@@ -13,3 +13,11 @@ Route::get('link-index', function () {
 Route::get('guest-link', function () {
     return 'guest link';
 })->name('guest-link.show');
+
+Route::get('admin-links', function () {
+    return 'something admin';
+})->name('admin.links.settings.edit');
+
+Route::get('admin-adfa', function () {
+    return 'something admin';
+})->name('admin.links.manage.index');
