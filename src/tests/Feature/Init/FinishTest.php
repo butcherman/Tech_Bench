@@ -14,7 +14,6 @@ class FinishTest extends TestCase
     public function test_invoke_guest()
     {
         config(['app.first_time_setup' => true]);
-        config(['app.env' => 'local']);
 
         $response = $this->get(route('init.finish'));
 

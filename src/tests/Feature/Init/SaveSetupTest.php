@@ -3,6 +3,8 @@
 namespace Tests\Feature\Init;
 
 use App\Models\User;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class SaveSetupTest extends TestCase
@@ -24,6 +26,20 @@ class SaveSetupTest extends TestCase
 
     public function test_invoke()
     {
+        // Create Fake .env file to be overwritten during test
+        Storage::fake();
+
+        $env = [
+            'APP_KEY=test',
+            'APP_URL=https://localhost',
+            'BASE_URL=localhost',
+        ];
+
+        Storage::put('envTest/.env.testing', print_r(implode("\r\n", $env), true));
+        $filePath = Storage::path('envTest');
+
+        App::useEnvironmentPath($filePath);
+
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);
         $data = [
