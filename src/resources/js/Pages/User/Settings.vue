@@ -66,7 +66,7 @@ export default { layout: AppLayout };
             <UserAccountForm :user="current_user" />
         </Card>
         <Card title="My Settings">
-            <UserSettingsForm />
+            <UserSettingsForm :user="current_user" :settings="settings" />
         </Card>
         <Card v-if="allowSaveDevice" title="My Devices" class="md:col-span-2">
             <p class="text-center">
