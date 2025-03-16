@@ -21,10 +21,10 @@ class CheckDatabaseError
         ?string $message = 'Database Record In Use'
     ): void {
         match ($e->errorInfo[1]) {
-            19, 1451 => throw new RecordInUseException($message, 0, $e),
-            1062 => throw new DuplicateDataException($message, 0, $e),
+            19, 1451 => throw new RecordInUseException($message, $e->errorInfo[1], $e),
+            1062 => throw new DuplicateDataException($message, $e->errorInfo[1], $e),
             // @codeCoverageIgnoreStart
-            default => throw new GeneralQueryException('', 0, $e)
+            default => throw new GeneralQueryException('', $e->errorInfo[1], $e)
             // @codeCoverageIgnoreEnd
         };
     }

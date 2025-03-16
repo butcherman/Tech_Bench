@@ -50,6 +50,8 @@ class LogoController extends Controller
      */
     public function destroy(): RedirectResponse
     {
+        $this->authorize('viewAny', AppSettings::class);
+
         $this->svc->destroyLogo();
 
         return back()->with('success', 'Logo Deleted');
