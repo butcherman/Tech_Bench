@@ -69,15 +69,15 @@ Route::middleware('auth.secure')->prefix('administration')->name('admin.')->grou
     | /administration/logo
     |---------------------------------------------------------------------------
     */
-    // Route::controller(LogoController::class)->group(function () {
-    //     Route::get('logo', 'edit')
-    //         ->name('logo.edit')
-    //         ->breadcrumb('Tech Bench Logo', 'admin.index');
-    //     Route::post('logo', 'update')
-    //         ->name('logo.update');
-    //     Route::delete('logo', 'destroy')
-    //         ->name('logo.destroy');
-    // });
+    Route::controller(LogoController::class)->group(function () {
+        Route::get('logo', 'edit')
+            ->name('logo.edit')
+            ->breadcrumb('Tech Bench Logo', 'admin.index');
+        Route::post('logo', 'update')
+            ->name('logo.update');
+        Route::delete('logo', 'destroy')
+            ->name('logo.destroy');
+    });
 
     /*
     |---------------------------------------------------------------------------
@@ -192,9 +192,7 @@ Route::get('phone-types', function () {
     return 'something admin';
 })->name('admin.phone-types.index');
 
-Route::get('admin-logo', function () {
-    return 'something admin';
-})->name('admin.logo.edit');
+
 
 Route::get('admin-asdfasdf', function () {
     return 'something admin';
