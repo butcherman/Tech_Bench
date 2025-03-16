@@ -99,16 +99,16 @@ Route::middleware('auth.secure')->prefix('administration')->name('admin.')->grou
     | /administration/email-settings
     |---------------------------------------------------------------------------
     */
-    // Route::controller(EmailSettingsController::class)->group(function () {
-    //     Route::get('email-settings', 'edit')
-    //         ->name('email-settings.edit')
-    //         ->breadcrumb('Email Settings', 'admin.index');
-    //     Route::put('email-settings', 'update')
-    //         ->name('email-settings.update');
-    // });
+    Route::controller(EmailSettingsController::class)->group(function () {
+        Route::get('email-settings', 'edit')
+            ->name('email-settings.edit')
+            ->breadcrumb('Email Settings', 'admin.index');
+        Route::put('email-settings', 'update')
+            ->name('email-settings.update');
+    });
 
-    // Route::get('test-email', SendTestEmailController::class)
-    //     ->name('test-email');
+    Route::get('test-email', SendTestEmailController::class)
+        ->name('test-email');
 
     /*
     |---------------------------------------------------------------------------
@@ -116,13 +116,13 @@ Route::middleware('auth.secure')->prefix('administration')->name('admin.')->grou
     | /administration/features
     |---------------------------------------------------------------------------
     */
-    // Route::controller(FeatureController::class)->group(function () {
-    //     Route::get('features', 'edit')
-    //         ->name('features.edit')
-    //         ->breadcrumb('App Features', 'admin.index');
-    //     Route::put('features', 'update')
-    //         ->name('features.update');
-    // });
+    Route::controller(FeatureController::class)->group(function () {
+        Route::get('features', 'edit')
+            ->name('features.edit')
+            ->breadcrumb('App Features', 'admin.index');
+        Route::put('features', 'update')
+            ->name('features.update');
+    });
 
     /*
     |---------------------------------------------------------------------------
@@ -130,12 +130,12 @@ Route::middleware('auth.secure')->prefix('administration')->name('admin.')->grou
     | /administration/security
     |---------------------------------------------------------------------------
     */
-    // Route::resource('security', SecurityController::class)
-    //     ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
-    //         $breadcrumbs->index('SSL Certificate', 'admin.index')
-    //             ->create('Upload New Certificate')
-    //             ->edit('Generate CSR', 'admin.security.index');
-    //     })->except(['show']);
+    Route::resource('security', SecurityController::class)
+        ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
+            $breadcrumbs->index('SSL Certificate', 'admin.index')
+                ->create('Upload New Certificate')
+                ->edit('Generate CSR', 'admin.security.index');
+        })->except(['show']);
 
     /*
     |---------------------------------------------------------------------------
@@ -191,21 +191,6 @@ Route::get('file-types', function () {
 Route::get('phone-types', function () {
     return 'something admin';
 })->name('admin.phone-types.index');
-
-
-
-Route::get('admin-asdfasdfasdf', function () {
-    return 'something admin';
-})->name('admin.email-settings.edit');
-
-Route::get('admin-asdasdffasdf', function () {
-    return 'something admin';
-})->name('admin.security.index');
-
-Route::get('admin-asdfasasdfdf', function () {
-    return 'something admin';
-})->name('admin.features.edit');
-
 
 Route::get('admin-maint', function () {
     return 'something admin';
