@@ -191,19 +191,3 @@ Route::get('file-types', function () {
 Route::get('phone-types', function () {
     return 'something admin';
 })->name('admin.phone-types.index');
-
-Route::get('admin-maint', function () {
-    return 'something admin';
-})->name('maint.logs.index');
-
-Route::get('admin-maintasdf', function () {
-    return 'something admin';
-})->name('maint.logs.settings.show');
-
-Route::get('admin-mainasdft', function () {
-    return 'something admin';
-})->name('maint.backups.index');
-
-Route::get('admin-maisdfwnasdft', function () {
-    return 'something admin';
-})->name('maint.backups.settings.show');

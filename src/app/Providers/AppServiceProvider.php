@@ -34,9 +34,6 @@ class AppServiceProvider extends ServiceProvider
         // DbQueryFacade
         $this->app->bind('DbException', CheckDatabaseError::class);
 
-        // Timezone Facade
-        // $this->app->bind('TimezoneList', BuildTimezoneList::class);
-
         // User Permission Facade
         // $this->app->bind('UserPermissions', UserPermissionsService::class);
 
@@ -48,6 +45,9 @@ class AppServiceProvider extends ServiceProvider
 
         //  Gate to determine if the Reports link should show up on the navigation menu
         Gate::define('reports-link', [GatePolicy::class, 'reportsLink']);
+
+        // Gate to determine if the user is an installer level user
+        Gate::define('is-installer', [GatePolicy::class, 'isInstaller']);
 
         // Listen to Socialite Events
         Event::listen(function (\SocialiteProviders\Manager\SocialiteWasCalled $event) {
