@@ -1,10 +1,17 @@
 <script setup lang="ts">
 import AppLayout from "@/Layouts/App/AppLayout.vue";
 import Card from "@/Components/_Base/Card.vue";
-import { ref, reactive, onMounted } from "vue";
+import BasicConfigForm from "@/Forms/Admin/Config/BasicConfigForm.vue";
 
-// TODO - Add Page.
-const props = defineProps<{}>();
+defineProps<{
+    settings: {
+        url: string;
+        company_name: string;
+        timezone: string;
+        max_filesize: number;
+    };
+    timezoneList: TimezoneList[];
+}>();
 </script>
 
 <script lang="ts">
@@ -13,8 +20,14 @@ export default { layout: AppLayout };
 
 <template>
     <div class="flex justify-center">
-        <Card class="tb-card">
-            <h4 class="text-center">Coming Soon</h4>
+        <Card class="tb-card" title="Tech Bench Settings">
+            <BasicConfigForm
+                :tz-list="timezoneList"
+                :url="settings.url"
+                :company_name="settings.company_name"
+                :timezone="settings.timezone"
+                :max-filesize="settings.max_filesize"
+            />
         </Card>
     </div>
 </template>

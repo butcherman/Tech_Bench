@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers\Admin\Config;
 
-// use App\Facades\TimezoneList;
+
+use App\Actions\Misc\BuildTimezoneList;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Config\BasicSettingsRequest;
 use App\Models\AppSettings;
@@ -11,7 +12,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Inertia\Response;
-use Timezonelist;
 
 class BasicSettingsController extends Controller
 {
@@ -26,7 +26,7 @@ class BasicSettingsController extends Controller
 
         return Inertia::render('Admin/Config/Settings', [
             'settings' => fn() => $this->svc->getBasicSettings(),
-            'timezone-list' => fn() => Timezonelist::build(),
+            'timezone-list' => fn() => BuildTimezoneList::build(),
         ]);
     }
 

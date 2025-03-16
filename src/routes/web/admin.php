@@ -85,13 +85,13 @@ Route::middleware('auth.secure')->prefix('administration')->name('admin.')->grou
     | /administration/basic-settings
     |---------------------------------------------------------------------------
     */
-    // Route::controller(BasicSettingsController::class)->group(function () {
-    //     Route::get('basic-settings', 'edit')
-    //         ->name('basic-settings.edit')
-    //         ->breadcrumb('Tech Bench Settings', 'admin.index');
-    //     Route::put('basic-settings', 'update')
-    //         ->name('basic-settings.update');
-    // });
+    Route::controller(BasicSettingsController::class)->group(function () {
+        Route::get('basic-settings', 'edit')
+            ->name('basic-settings.edit')
+            ->breadcrumb('Tech Bench Settings', 'admin.index');
+        Route::put('basic-settings', 'update')
+            ->name('basic-settings.update');
+    });
 
     /*
     |---------------------------------------------------------------------------
@@ -193,10 +193,6 @@ Route::get('phone-types', function () {
 })->name('admin.phone-types.index');
 
 
-
-Route::get('admin-asdfasdf', function () {
-    return 'something admin';
-})->name('admin.basic-settings.edit');
 
 Route::get('admin-asdfasdfasdf', function () {
     return 'something admin';
