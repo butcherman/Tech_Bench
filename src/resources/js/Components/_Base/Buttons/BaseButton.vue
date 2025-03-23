@@ -3,6 +3,7 @@ import { Link } from "@inertiajs/vue3";
 import { computed } from "vue";
 
 const props = defineProps<{
+    async?: boolean;
     flat?: boolean;
     href?: string;
     icon?: string;
@@ -74,6 +75,7 @@ const variantClass = computed<string>(() => {
 <template>
     <component
         :is="buttonType"
+        :async="async"
         :href="href"
         :class="[
             sizeClass,

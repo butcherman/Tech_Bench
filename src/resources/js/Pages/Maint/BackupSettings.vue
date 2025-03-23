@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import AppLayout from "@/Layouts/App/AppLayout.vue";
-import BackupSettingsForm from "@/Forms/BackupSettingsForm.vue";
+import BackupSettingsForm from "@/Forms/Maintenance/BackupSettingsForm.vue";
 import Card from "@/Components/_Base/Card.vue";
 
 defineProps<{
