@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Select, Message, FloatLabel } from "primevue";
-import { ref, toRef } from "vue";
+import { computed, ref, toRef } from "vue";
 import { useField } from "vee-validate";
 import type { Ref } from "vue";
 
@@ -18,6 +18,22 @@ const props = defineProps<{
 }>();
 
 const hasFocus = ref<boolean>(false);
+
+const optionLabel = computed(() => {
+    if (typeof props.list[0] === "string") {
+        return undefined;
+    }
+
+    return props.textField ?? "text";
+});
+
+const optionValue = computed(() => {
+    if (typeof props.list[0] === "string") {
+        return undefined;
+    }
+
+    return props.valueField ?? "text";
+});
 
 /*
 |-------------------------------------------------------------------------------
@@ -41,8 +57,8 @@ const {
             class="w-full border"
             :id="id"
             :options="list"
-            :option-label="textField ?? 'text'"
-            :option-value="valueField ?? 'value'"
+            :option-label="optionLabel"
+            :option-value="optionValue"
             :option-group-label="groupTextField"
             :option-group-children="groupChildrenField"
             @focus="hasFocus = true"

@@ -21,14 +21,6 @@ class LogUtilitiesService
     protected $logChannels = ['Application', 'Authentication'];
 
     /**
-     * Create a new class instance.
-     */
-    public function __construct()
-    {
-        //
-    }
-
-    /**
      * Return the possible log levels.
      */
     public function getLogLevels(): array
