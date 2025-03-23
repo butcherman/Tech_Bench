@@ -9,13 +9,11 @@ class HandleUserSettingsUpdatedListener
 {
     /**
      * Handle the event.
-     *
-     * @codeCoverageIgnore
      */
     public function handle(UserSettingsUpdatedEvent $event): void
     {
-        Log::info(
-            'User Settings for '.$event->user->username.' have been updated by '.
+        Log::stack(['daily', 'auth'])->info(
+            'User Settings for ' . $event->user->username . ' have been updated by ' .
                 request()->user()->username
         );
     }
