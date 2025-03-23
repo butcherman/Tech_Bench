@@ -11,10 +11,10 @@ use Illuminate\Support\Facades\Schedule;
 */
 
 // Schedule::command('app:collect-garbage')->daily();
-// Schedule::command('telescope:prune')->daily();
-// Schedule::command('horizon:snapshot')->everyFifteenMinutes();
-// Schedule::command('auth:clear-resets')->everyFifteenMinutes();
-// Schedule::command('auth:clear-validation-codes')->everyFifteenMinutes();
+Schedule::command('telescope:prune')->daily();
+Schedule::command('horizon:snapshot')->everyFifteenMinutes();
+Schedule::command('auth:clear-resets')->everyFifteenMinutes();
+Schedule::command('auth:clear-validation-codes')->everyFifteenMinutes();
 
 // // TODO - Create Jobs
 // Schedule::job(new CheckSslCertificateJob)->daily();
