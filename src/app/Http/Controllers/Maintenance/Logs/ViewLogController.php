@@ -26,8 +26,9 @@ class ViewLogController extends Controller
         }
 
         return Inertia::render('Maint/AppLogView', [
+            'channel' => $channel,
             'log-file' => $logFile,
-            'log-data' => $this->svc->getLogFileData($channel, $logFile),
+            'log-data' => Inertia::defer(fn() => $this->svc->getLogFileData($channel, $logFile)),
         ]);
     }
 }
