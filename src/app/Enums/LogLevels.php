@@ -19,6 +19,11 @@ enum LogLevels
     case info;
     case debug;
 
+    /**
+     * Get the icon related to the Log Level.
+     *
+     * @codeCoverageIgnore
+     */
     public function getLevelIcon(): string
     {
         return match ($this) {
@@ -33,6 +38,11 @@ enum LogLevels
         };
     }
 
+    /**
+     * Get the text color related to the Log Level.
+     *
+     * @codeCoverageIgnore
+     */
     public function getLevelTextColor(): string
     {
         return match ($this) {

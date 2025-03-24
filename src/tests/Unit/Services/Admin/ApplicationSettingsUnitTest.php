@@ -265,7 +265,7 @@ class ApplicationSettingsUnitTest extends TestCase
         $data = [
             'nightly_backup' => false,
             'nightly_cleanup' => false,
-            'encryption' => false,
+            'encryption' => true,
             'password' => 'randomValue',
             'mail_to' => 'randomDude@noemail.com',
         ];

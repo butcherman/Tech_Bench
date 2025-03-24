@@ -6,6 +6,12 @@ use App\Jobs\Maintenance\RunBackupJob;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 
+/*
+|-------------------------------------------------------------------------------
+| Manually trigger a backup from the command prompt.
+|-------------------------------------------------------------------------------
+*/
+
 class AppBackupCommand extends Command
 {
     /**
@@ -22,11 +28,6 @@ class AppBackupCommand extends Command
      */
     protected $description = 'Manual Tech Bench Backup';
 
-    /*
-    |---------------------------------------------------------------------------
-    | Manually trigger a backup from the command prompt
-    |---------------------------------------------------------------------------
-    */
     public function handle()
     {
         $this->line('Running System Backup');

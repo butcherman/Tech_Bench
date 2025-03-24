@@ -7,6 +7,12 @@ use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 
+/*
+|-------------------------------------------------------------------------------
+| Command will delete any User Authorization Codes more than 15 minutes old.
+|-------------------------------------------------------------------------------
+*/
+
 class ClearValidationCodesCommand extends Command
 {
     /**
@@ -23,11 +29,6 @@ class ClearValidationCodesCommand extends Command
      */
     protected $description = 'Remove expired Authorization Codes';
 
-    /*
-    |---------------------------------------------------------------------------
-    | Command will delete any User Authorization Codes more than 15 minutes old
-    |---------------------------------------------------------------------------
-    */
     public function handle(): void
     {
         Log::debug('Running auth:clear-validation-codes command');
