@@ -23,7 +23,7 @@ class AppLogParsingService extends LogUtilitiesService
     /**
      * Get log file stats and parse the log for viewing individual entries
      */
-    public function getLogFileData(string $channel, string $logFile)
+    public function getLogFileData(string $channel, string $logFile): array
     {
         $filePath = $this->validateLogFile($channel, $logFile);
         $logFileArray = $this->getLogFileArray($filePath);

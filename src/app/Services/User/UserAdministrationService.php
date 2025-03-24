@@ -93,7 +93,6 @@ class UserAdministrationService
     {
         if ($force) {
             try {
-
                 $user->forceDelete();
             } catch (QueryException $e) {
                 DbException::check($e, 'This User has contributions tied to them.  Unable to delete.');

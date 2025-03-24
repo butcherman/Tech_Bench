@@ -10,6 +10,8 @@ class ConsoleOutputService extends ConsoleOutput
     /**
      * Overwrite the writeln function to broadcast an event with the message
      * This can stream console output to the browser via websocket
+     *
+     * @codeCoverageIgnore
      */
     public function writeln(string|iterable $messages, int $options = self::OUTPUT_NORMAL): void
     {
