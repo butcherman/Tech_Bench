@@ -18,7 +18,6 @@ Route::get('customer-disabled', function () {
     return 'something admin';
 })->name('customers.disabled.index');
 
-
 Route::get('customer-assign', function () {
     return 'something admin';
 })->name('customers.re-assign.edit');

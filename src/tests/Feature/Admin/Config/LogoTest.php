@@ -44,7 +44,7 @@ class LogoTest extends TestCase
             ->get(route('admin.logo.edit'));
 
         $response->assertSuccessful()
-            ->assertInertia(fn(Assert $page) => $page
+            ->assertInertia(fn (Assert $page) => $page
                 ->component('Admin/Config/Logo'));
     }
 
@@ -106,7 +106,7 @@ class LogoTest extends TestCase
     {
         DB::table('app_settings')->insert([
             'key' => 'app.logo',
-            'value' => json_decode('/img/test.png')
+            'value' => json_decode('/img/test.png'),
         ]);
 
         $response = $this->delete(route('admin.logo.destroy'));
@@ -119,7 +119,7 @@ class LogoTest extends TestCase
     {
         DB::table('app_settings')->insert([
             'key' => 'app.logo',
-            'value' => json_decode('/img/test.png')
+            'value' => json_decode('/img/test.png'),
         ]);
 
         /** @var User $user */
@@ -133,7 +133,7 @@ class LogoTest extends TestCase
     {
         DB::table('app_settings')->insert([
             'key' => 'app.logo',
-            'value' => json_decode('/img/test.png')
+            'value' => json_decode('/img/test.png'),
         ]);
 
         /** @var User $user */

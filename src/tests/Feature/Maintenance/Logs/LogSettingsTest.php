@@ -3,8 +3,6 @@
 namespace Tests\Feature\Maintenance\Logs;
 
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
@@ -44,7 +42,7 @@ class LogSettingsTest extends TestCase
             ->get(route('maint.logs.settings.show'));
 
         $response->assertSuccessful()
-            ->assertInertia(fn(Assert $page) => $page
+            ->assertInertia(fn (Assert $page) => $page
                 ->component('Maint/LogSettings')
                 ->has('days')
                 ->has('log-level')

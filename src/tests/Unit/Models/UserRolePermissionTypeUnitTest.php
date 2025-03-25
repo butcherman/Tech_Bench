@@ -2,7 +2,6 @@
 
 namespace Tests\Unit\Models;
 
-use App\Models\User;
 use App\Models\UserRolePermissionCategory;
 use App\Models\UserRolePermissionType;
 use Tests\TestCase;
@@ -11,7 +10,7 @@ class UserRolePermissionTypeUnitTest extends TestCase
 {
     protected $model;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 

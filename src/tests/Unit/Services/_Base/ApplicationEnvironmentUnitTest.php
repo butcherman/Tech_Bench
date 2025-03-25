@@ -9,7 +9,7 @@ use Tests\TestCase;
 
 class ApplicationEnvironmentUnitTest extends TestCase
 {
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -36,7 +36,8 @@ class ApplicationEnvironmentUnitTest extends TestCase
     {
         $shouldBe = "test\r";
 
-        $testObj = new class extends ApplicationEnvironment {
+        $testObj = new class extends ApplicationEnvironment
+        {
             public function getTestValue($str)
             {
                 return $this->getEnvKeyValue($str);
@@ -54,7 +55,8 @@ class ApplicationEnvironmentUnitTest extends TestCase
     */
     public function test_write_new_environment_file_with(): void
     {
-        $testObj = new class extends ApplicationEnvironment {
+        $testObj = new class extends ApplicationEnvironment
+        {
             public function getTestValue($key, $str)
             {
                 return $this->writeNewEnvironmentFileWith($key, $str);
@@ -75,7 +77,8 @@ class ApplicationEnvironmentUnitTest extends TestCase
     */
     public function test_write_new_environment_file_replacing(): void
     {
-        $testObj = new class extends ApplicationEnvironment {
+        $testObj = new class extends ApplicationEnvironment
+        {
             public function getTestValue($key, $str)
             {
                 return $this->writeNewEnvironmentFileReplacing($key, $str);
@@ -91,7 +94,8 @@ class ApplicationEnvironmentUnitTest extends TestCase
 
     public function test_write_new_environment_file_replacing_fail(): void
     {
-        $testObj = new class extends ApplicationEnvironment {
+        $testObj = new class extends ApplicationEnvironment
+        {
             public function getTestValue($key, $str)
             {
                 return $this->writeNewEnvironmentFileReplacing($key, $str);

@@ -17,7 +17,7 @@ class AdminController extends Controller
         $this->authorize('admin-link');
 
         return Inertia::render('Admin/Index', [
-            'menu' => fn() => $svc($request->user()),
+            'menu' => fn () => $svc($request->user()),
         ]);
     }
 }

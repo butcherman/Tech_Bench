@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers\Maintenance\Logs;
 
-use App\Enums\LogLevels;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Maintenance\LogSettingsRequest;
 use App\Models\AppSettings;
 use App\Services\Maintenance\LogUtilitiesService;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -38,7 +36,7 @@ class LogSettingsController extends Controller
     {
         $this->svc->updateLogSettings($request->safe()->collect());
 
-        Log::info('Log settings updated by ' . $request->user()->username);
+        Log::info('Log settings updated by '.$request->user()->username);
 
         return back()->with('success', __('admin.logging.updated'));
     }

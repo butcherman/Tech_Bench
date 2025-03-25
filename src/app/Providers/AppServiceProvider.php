@@ -2,7 +2,6 @@
 
 namespace App\Providers;
 
-use App\Actions\Misc\BuildTimezoneList;
 use App\Actions\Misc\CheckDatabaseError;
 use App\Policies\GatePolicy;
 use App\Services\Misc\CacheFacadeHelper;

@@ -82,18 +82,18 @@ class LogUtilitiesServiceUnitTest extends TestCase
     public function test_validate_log_file_pass(): void
     {
         $now = Carbon::now()->format('Y-m-d');
-        $logFile = 'TechBench-' . $now;
+        $logFile = 'TechBench-'.$now;
 
         $testObj = new LogUtilitiesService;
         $res = $testObj->validateLogFile('application', $logFile);
 
-        $this->assertEquals($res, 'Application/' . $logFile . '.log');
+        $this->assertEquals($res, 'Application/'.$logFile.'.log');
     }
 
     public function test_validate_log_file_fail(): void
     {
         $now = Carbon::now()->format('Y-m-d');
-        $logFile = 'NotTechBench-' . $now;
+        $logFile = 'NotTechBench-'.$now;
 
         $testObj = new LogUtilitiesService;
         $res = $testObj->validateLogFile('application', $logFile);

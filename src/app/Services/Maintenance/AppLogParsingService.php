@@ -62,13 +62,13 @@ class AppLogParsingService extends LogUtilitiesService
         if (preg_match($this->appLogEntryPattern, $line, $data)) {
 
             return [
-                'time' => Carbon::parse($data[1] . ' ' . $data[2])
+                'time' => Carbon::parse($data[1].' '.$data[2])
                     ->setTimezone(config('app.timezone'))
                     ->format('m-d h:i A'),
                 'env' => $data[3],
                 'level' => $data[4],
                 'message' => $data[5],
-                'data' => $data[6] ? json_decode('{' . $data[6] . '}') : null,
+                'data' => $data[6] ? json_decode('{'.$data[6].'}') : null,
                 'context' => isset($data[7]) ? $data[7] : null,
             ];
         }
@@ -76,7 +76,7 @@ class AppLogParsingService extends LogUtilitiesService
         // If the entry is missing context data, return normal data as well
         if (preg_match($this->contextMissingPattern, $line, $data)) {
             return [
-                'time' => Carbon::parse($data[1] . ' ' . $data[2])
+                'time' => Carbon::parse($data[1].' '.$data[2])
                     ->setTimezone(config('app.timezone'))
                     ->format('m-d h:i A'),
                 'env' => $data[3],

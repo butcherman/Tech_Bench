@@ -24,7 +24,7 @@ class RestoreService extends BackupService
         parent::__construct();
 
         $this->restoreTmpPath = storage_path(
-            'backups' . DIRECTORY_SEPARATOR . 'restore-tmp'
+            'backups'.DIRECTORY_SEPARATOR.'restore-tmp'
         );
     }
 
@@ -58,7 +58,7 @@ class RestoreService extends BackupService
      */
     public function openBackupFile(string $fileName): void
     {
-        $path = Storage::disk('backups')->path($this->backupName . $fileName);
+        $path = Storage::disk('backups')->path($this->backupName.$fileName);
         $zip = new ZipArchive;
 
         $this->archive = $zip->open($path);
@@ -156,7 +156,7 @@ class RestoreService extends BackupService
             if (! preg_match('/.env/', $path)) {
                 $this->wipeDirectory($path);
 
-                $filesToMove = File::allFiles($this->restoreTmpPath . $path);
+                $filesToMove = File::allFiles($this->restoreTmpPath.$path);
                 foreach ($filesToMove as $moveMe) {
                     $destination = str_replace($this->restoreTmpPath, '', $moveMe);
 
@@ -205,7 +205,7 @@ class RestoreService extends BackupService
     public function restoreEnv(): bool
     {
         $env = $this->storage->get('restore-tmp/app/.env');
-        File::put(base_path() . DIRECTORY_SEPARATOR . '.env', $env);
+        File::put(base_path().DIRECTORY_SEPARATOR.'.env', $env);
 
         return true;
     }

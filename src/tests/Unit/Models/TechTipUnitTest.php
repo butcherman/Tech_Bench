@@ -119,7 +119,6 @@ class TechTipUnitTest extends TestCase
             'equip_id' => $equip2->equip_id,
         ]);
 
-
         $this->assertEquals(
             [$equip2->toArray()],
             $this->model->PublicEquipmentType->toArray()

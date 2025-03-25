@@ -5,7 +5,6 @@ namespace App\Http\Controllers\User;
 use App\Actions\Fortify\ResetUserPassword;
 use App\Events\User\UserInitializeComplete;
 use App\Facades\CacheData;
-use App\Facades\CacheFacade;
 use App\Http\Controllers\Controller;
 use App\Models\UserInitialize;
 use Illuminate\Http\RedirectResponse;
@@ -23,9 +22,9 @@ class InitializeUserController extends Controller
     public function show(UserInitialize $token): Response
     {
         return Inertia::render('User/Initialize', [
-            'token' => fn() => $token->token,
-            'user' => fn() => $token->User,
-            'rules' => fn() => CacheData::passwordRules(),
+            'token' => fn () => $token->token,
+            'user' => fn () => $token->User,
+            'rules' => fn () => CacheData::passwordRules(),
         ]);
     }
 

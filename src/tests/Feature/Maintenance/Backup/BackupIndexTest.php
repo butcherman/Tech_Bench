@@ -3,8 +3,6 @@
 namespace Tests\Feature\Maintenance\Backup;
 
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
@@ -43,7 +41,7 @@ class BackupIndexTest extends TestCase
             ->get(route('maint.backups.index'));
 
         $response->assertSuccessful()
-            ->assertInertia(fn(Assert $page) => $page
+            ->assertInertia(fn (Assert $page) => $page
                 ->component('Maint/Backup')
                 ->has('backup-list')
                 ->has('backup-running'));

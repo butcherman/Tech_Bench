@@ -27,11 +27,11 @@ class DownloadBackupController extends Controller
         }
 
         Log::info(
-            'Download file - ' . $backupName . ' downloaded by ' .
+            'Download file - '.$backupName.' downloaded by '.
                 $request->user()->username
         );
 
-        return Storage::disk('backups')->download(config('backup.backup.name') .
-            DIRECTORY_SEPARATOR . $backupName);
+        return Storage::disk('backups')->download(config('backup.backup.name').
+            DIRECTORY_SEPARATOR.$backupName);
     }
 }

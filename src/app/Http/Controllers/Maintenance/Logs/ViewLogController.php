@@ -6,7 +6,6 @@ use App\Exceptions\Maintenance\LogFileMissingException;
 use App\Http\Controllers\Controller;
 use App\Models\AppSettings;
 use App\Services\Maintenance\AppLogParsingService;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -21,14 +20,14 @@ class ViewLogController extends Controller
     {
         $this->authorize('viewAny', AppSettings::class);
 
-        if (!$this->svc->validateLogFile($channel, $logFile)) {
+        if (! $this->svc->validateLogFile($channel, $logFile)) {
             throw new LogFileMissingException($logFile);
         }
 
         return Inertia::render('Maint/AppLogView', [
             'channel' => $channel,
             'log-file' => $logFile,
-            'log-data' => Inertia::defer(fn() => $this->svc->getLogFileData($channel, $logFile)),
+            'log-data' => Inertia::defer(fn () => $this->svc->getLogFileData($channel, $logFile)),
         ]);
     }
 }

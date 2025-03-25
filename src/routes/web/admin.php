@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminController;
-use App\Http\Controllers\Admin\AdministrationController;
 use App\Http\Controllers\Admin\Config\BasicSettingsController;
 use App\Http\Controllers\Admin\Config\EmailSettingsController;
 use App\Http\Controllers\Admin\Config\FeatureController;

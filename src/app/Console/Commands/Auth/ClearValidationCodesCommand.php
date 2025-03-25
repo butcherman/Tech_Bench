@@ -43,8 +43,8 @@ class ClearValidationCodesCommand extends Command
 
         UserVerificationCode::destroy($codeList);
 
-        Log::debug('Cleared ' . $count . ' verification codes.');
+        Log::debug('Cleared '.$count.' verification codes.');
 
-        $this->line('Cleared ' . $count . ' verification codes.');
+        $this->line('Cleared '.$count.' verification codes.');
     }
 }

@@ -3,8 +3,6 @@
 namespace Tests\Feature\Maintenance\Backup;
 
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
@@ -18,8 +16,8 @@ class DeleteBackupTest extends TestCase
     public function test_invoke_guest(): void
     {
         Storage::fake('backups');
-        Storage::disk('backups')->put(config('backup.backup.name') .
-            DIRECTORY_SEPARATOR . 'backup.zip', '123456');
+        Storage::disk('backups')->put(config('backup.backup.name').
+            DIRECTORY_SEPARATOR.'backup.zip', '123456');
 
         $response = $this->delete(route('maint.backups.delete', 'backup.zip'));
         $response->assertStatus(302)
@@ -30,8 +28,8 @@ class DeleteBackupTest extends TestCase
     public function test_invoke_no_permission(): void
     {
         Storage::fake('backups');
-        Storage::disk('backups')->put(config('backup.backup.name') .
-            DIRECTORY_SEPARATOR . 'backup.zip', '123456');
+        Storage::disk('backups')->put(config('backup.backup.name').
+            DIRECTORY_SEPARATOR.'backup.zip', '123456');
 
         /** @var User $user */
         $user = User::factory()->createQuietly();
@@ -41,15 +39,15 @@ class DeleteBackupTest extends TestCase
 
         $response->assertForbidden();
 
-        Storage::disk('backups')->assertExists(config('backup.backup.name') .
-            DIRECTORY_SEPARATOR . 'backup.zip');
+        Storage::disk('backups')->assertExists(config('backup.backup.name').
+            DIRECTORY_SEPARATOR.'backup.zip');
     }
 
     public function test_invoke(): void
     {
         Storage::fake('backups');
-        Storage::disk('backups')->put(config('backup.backup.name') .
-            DIRECTORY_SEPARATOR . 'backup.zip', '123456');
+        Storage::disk('backups')->put(config('backup.backup.name').
+            DIRECTORY_SEPARATOR.'backup.zip', '123456');
 
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);
@@ -60,15 +58,15 @@ class DeleteBackupTest extends TestCase
         $response->assertStatus(302)
             ->assertSessionHas('success', __('admin.backups.deleted'));
 
-        Storage::disk('backups')->assertMissing(config('backup.backup.name') .
-            DIRECTORY_SEPARATOR . 'backup.zip');
+        Storage::disk('backups')->assertMissing(config('backup.backup.name').
+            DIRECTORY_SEPARATOR.'backup.zip');
     }
 
     public function test_invoke_missing_file(): void
     {
         Storage::fake('backups');
-        Storage::disk('backups')->put(config('backup.backup.name') .
-            DIRECTORY_SEPARATOR . 'backup.zip', '123456');
+        Storage::disk('backups')->put(config('backup.backup.name').
+            DIRECTORY_SEPARATOR.'backup.zip', '123456');
 
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);

@@ -4,8 +4,6 @@ namespace Tests\Feature\Maintenance\Logs;
 
 use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
@@ -19,7 +17,7 @@ class ViewLogTest extends TestCase
     public function test_invoke_guest(): void
     {
         $date = date('Y-m-d', strtotime(Carbon::now()));
-        $filename = 'TechBench-' . $date;
+        $filename = 'TechBench-'.$date;
 
         $response = $this->get(route('maint.logs.show', [
             'Application',
@@ -36,7 +34,7 @@ class ViewLogTest extends TestCase
         /** @var User $user */
         $user = User::factory()->createQuietly();
         $date = date('Y-m-d', strtotime(Carbon::now()));
-        $filename = 'TechBench-' . $date;
+        $filename = 'TechBench-'.$date;
 
         $response = $this->actingAs($user)
             ->get(route('maint.logs.show', ['Application', $filename]));
@@ -49,7 +47,7 @@ class ViewLogTest extends TestCase
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);
         $date = date('Y-m-d', strtotime(Carbon::now()));
-        $filename = 'TechBench-' . $date;
+        $filename = 'TechBench-'.$date;
 
         $response = $this->actingAs($user)
             ->get(route('maint.logs.show', ['YourMom', $filename]));
@@ -73,13 +71,13 @@ class ViewLogTest extends TestCase
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);
         $date = date('Y-m-d', strtotime(Carbon::now()));
-        $filename = 'TechBench-' . $date;
+        $filename = 'TechBench-'.$date;
 
         $response = $this->actingAs($user)
             ->get(route('maint.logs.show', ['Application', $filename]));
 
         $response->assertSuccessful()
-            ->assertInertia(fn(Assert $page) => $page
+            ->assertInertia(fn (Assert $page) => $page
                 ->component('Maint/AppLogView')
                 ->has('channel')
                 ->has('log-file'));

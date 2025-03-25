@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin\Config;
 
-
 use App\Actions\Misc\BuildTimezoneList;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Config\BasicSettingsRequest;
@@ -25,8 +24,8 @@ class BasicSettingsController extends Controller
         $this->authorize('viewAny', AppSettings::class);
 
         return Inertia::render('Admin/Config/Settings', [
-            'settings' => fn() => $this->svc->getBasicSettings(),
-            'timezone-list' => fn() => BuildTimezoneList::build(),
+            'settings' => fn () => $this->svc->getBasicSettings(),
+            'timezone-list' => fn () => BuildTimezoneList::build(),
         ]);
     }
 
@@ -38,7 +37,7 @@ class BasicSettingsController extends Controller
         $this->svc->updateBasicSettings($request->safe()->collect());
 
         Log::notice(
-            'Application Configuration updated by ' . $request->user()->username,
+            'Application Configuration updated by '.$request->user()->username,
             $request->toArray()
         );
 

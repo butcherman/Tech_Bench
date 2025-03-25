@@ -11,7 +11,7 @@ class AppLogParsingServiceUnitTest extends TestCase
     public function test_get_log_file_data(): void
     {
         $now = Carbon::now()->format('Y-m-d');
-        $logFile = 'TechBench-' . $now;
+        $logFile = 'TechBench-'.$now;
 
         $testObj = new AppLogParsingService;
         $res = $testObj->getLogFileData('Application', $logFile);

@@ -2,9 +2,7 @@
 
 namespace Tests\Unit\Actions\Fortify;
 
-use App\Actions\Fortify\LogoutResponse;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Tests\TestCase;
 
 class LogoutResponseUnitTest extends TestCase
@@ -31,8 +29,8 @@ class LogoutResponseUnitTest extends TestCase
 
         $response->assertSessionHas(
             'info',
-            'You have been logged out after being idle for more than ' .
-                config('auth.auto_logout_timer') . ' minutes'
+            'You have been logged out after being idle for more than '.
+                config('auth.auto_logout_timer').' minutes'
         );
     }
 }

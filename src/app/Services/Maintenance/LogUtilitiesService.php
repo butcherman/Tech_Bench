@@ -55,9 +55,9 @@ class LogUtilitiesService
     public function validateLogFile(string $channel, string $filename): string|bool
     {
         $folder = $this->validateLogChannel($channel);
-        $relativePath = $folder . DIRECTORY_SEPARATOR . $filename . '.log';
+        $relativePath = $folder.DIRECTORY_SEPARATOR.$filename.'.log';
 
-        if (!Storage::disk('logs')->exists($relativePath)) {
+        if (! Storage::disk('logs')->exists($relativePath)) {
             return false;
         }
 
@@ -71,7 +71,7 @@ class LogUtilitiesService
     {
         $folder = $this->validateLogChannel($channel);
 
-        if (!$folder) {
+        if (! $folder) {
             return [];
         }
 
@@ -111,11 +111,13 @@ class LogUtilitiesService
         $fileList = Storage::disk('logs')->files($folder);
         $logList = Arr::where($fileList, function ($value) {
             $pathInfo = pathinfo($value);
+
             return $pathInfo['extension'] === 'log';
         });
 
         return Arr::map($logList, function ($logFile) {
             $pathInfo = pathinfo($logFile);
+
             return $pathInfo['filename'];
         });
     }

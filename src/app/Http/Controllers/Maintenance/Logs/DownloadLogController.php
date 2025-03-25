@@ -25,11 +25,11 @@ class DownloadLogController extends Controller
 
         $filePath = $this->svc->validateLogFile($channel, $logFile);
 
-        if (!$filePath) {
+        if (! $filePath) {
             throw new LogFileMissingException($logFile);
         }
 
-        Log::info($request->user()->username . ' is downloading log file ' . $filePath);
+        Log::info($request->user()->username.' is downloading log file '.$filePath);
 
         return Storage::disk('logs')->download($filePath);
     }

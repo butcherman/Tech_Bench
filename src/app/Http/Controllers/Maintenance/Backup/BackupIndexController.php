@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Maintenance\Backup;
 
 use App\Http\Controllers\Controller;
 use App\Services\Maintenance\BackupService;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -20,8 +19,8 @@ class BackupIndexController extends Controller
         $this->authorize('is-installer');
 
         return Inertia::render('Maint/Backup', [
-            'backup-list' => fn() => $this->svc->getBackupFiles(),
-            'backup-running' => fn() => $this->svc->isBackupRunning(),
+            'backup-list' => fn () => $this->svc->getBackupFiles(),
+            'backup-running' => fn () => $this->svc->isBackupRunning(),
         ]);
     }
 }

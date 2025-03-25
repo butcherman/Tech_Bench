@@ -36,7 +36,7 @@ class LogoController extends Controller
         $storedFile = $this->svc->updateLogo($request->safe()->collect());
 
         Log::notice(
-            'New Tech Bench Logo uploaded by ' . $request->user()->username,
+            'New Tech Bench Logo uploaded by '.$request->user()->username,
             [
                 'file-location' => $storedFile,
             ]

@@ -20,7 +20,7 @@ class HandleUserEmailChangedListener implements ShouldQueue
             ->send(new EmailChangedMail($event->user));
 
         Log::stack(['auth', 'daily'])
-            ->info('User ' . $event->user->username . ' has change their email address.', [
+            ->info('User '.$event->user->username.' has change their email address.', [
                 'user_id' => $event->user->user_id,
                 'original_email' => $event->originalEmail,
                 'new_email' => $event->user->email,

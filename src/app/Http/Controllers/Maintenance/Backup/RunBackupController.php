@@ -8,7 +8,6 @@ use App\Models\AppSettings;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Spatie\Backup\Tasks\Backup\BackupJob;
 
 class RunBackupController extends Controller
 {
@@ -21,7 +20,7 @@ class RunBackupController extends Controller
 
         dispatch(new RunBackupJob);
 
-        Log::info('Backup Operation called by ' . $request->user()->username);
+        Log::info('Backup Operation called by '.$request->user()->username);
 
         return back();
     }

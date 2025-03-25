@@ -16,7 +16,7 @@ class BackupService
     public function __construct()
     {
         $this->storage = Storage::disk('backups');
-        $this->backupName = config('backup.backup.name') . DIRECTORY_SEPARATOR;
+        $this->backupName = config('backup.backup.name').DIRECTORY_SEPARATOR;
     }
 
     /**
@@ -33,7 +33,7 @@ class BackupService
      */
     public function doesBackupExist(string $fileName): bool
     {
-        return $this->storage->exists($this->backupName . $fileName);
+        return $this->storage->exists($this->backupName.$fileName);
     }
 
     /**
@@ -41,7 +41,7 @@ class BackupService
      */
     public function deleteBackupFile(string $fileName): void
     {
-        $this->storage->delete($this->backupName . $fileName);
+        $this->storage->delete($this->backupName.$fileName);
     }
 
     /**
