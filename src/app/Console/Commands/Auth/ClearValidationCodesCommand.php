@@ -29,6 +29,9 @@ class ClearValidationCodesCommand extends Command
      */
     protected $description = 'Remove expired Authorization Codes';
 
+    /**
+     * Execute the console Command
+     */
     public function handle(): void
     {
         Log::debug('Running auth:clear-validation-codes command');
@@ -43,8 +46,8 @@ class ClearValidationCodesCommand extends Command
 
         UserVerificationCode::destroy($codeList);
 
-        Log::debug('Cleared '.$count.' verification codes.');
+        Log::debug('Cleared ' . $count . ' verification codes.');
 
-        $this->line('Cleared '.$count.' verification codes.');
+        $this->line('Cleared ' . $count . ' verification codes.');
     }
 }

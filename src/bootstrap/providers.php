@@ -8,4 +8,5 @@ return [
     App\Providers\ReportsServiceProvider::class,
     App\Providers\TelescopeServiceProvider::class,
     SocialiteProviders\Manager\ServiceProvider::class,
+    ZanySoft\Zip\ZipServiceProvider::class,
 ];
