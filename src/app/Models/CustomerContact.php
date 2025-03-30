@@ -23,7 +23,7 @@ class CustomerContact extends Model
 {
     use BroadcastsEvents;
 
-    // use CustomerBroadcastingTrait;
+    use CustomerBroadcastingTrait;
     use HasFactory;
     use Prunable;
     use SoftDeletes;
@@ -89,7 +89,7 @@ class CustomerContact extends Model
 
         $allChannels = array_merge(
             $siteChannels,
-            [new PrivateChannel('customer.'.$this->Customer->slug)]
+            [new PrivateChannel('customer.' . $this->Customer->slug)]
         );
 
         return match ($event) {

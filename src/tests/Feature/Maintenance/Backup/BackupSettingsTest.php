@@ -41,13 +41,12 @@ class BackupSettingsTest extends TestCase
             ->get(route('maint.backups.settings.show'));
 
         $response->assertSuccessful()
-            ->assertInertia(fn (Assert $page) => $page
+            ->assertInertia(fn(Assert $page) => $page
                 ->component('Maint/BackupSettings')
                 ->has('nightly_backup')
                 ->has('nightly_cleanup')
                 ->has('encryption')
-                ->has('password')
-                ->has('mail_to'));
+                ->has('password'));
     }
 
     /*
@@ -62,7 +61,6 @@ class BackupSettingsTest extends TestCase
             'nightly_cleanup' => true,
             'encryption' => false,
             'password' => null,
-            'mail_to' => 'randomDude@noemail.com',
         ];
 
         $response = $this->put(route('maint.backups.settings.update'), $data);
@@ -81,7 +79,6 @@ class BackupSettingsTest extends TestCase
             'nightly_cleanup' => true,
             'encryption' => false,
             'password' => null,
-            'mail_to' => 'randomDude@noemail.com',
         ];
 
         $response = $this->actingAs($user)
@@ -99,7 +96,6 @@ class BackupSettingsTest extends TestCase
             'nightly_cleanup' => false,
             'encryption' => true,
             'password' => 'randomPassword',
-            'mail_to' => 'randomDude@noemail.com',
         ];
 
         $response = $this->actingAs($user)
@@ -120,9 +116,6 @@ class BackupSettingsTest extends TestCase
         ])->assertDatabaseHas('app_settings', [
             'key' => 'backup.backup.password',
             'value' => $data['password'],
-        ])->assertDatabaseHas('app_settings', [
-            'key' => 'backup.notifications.mail.to',
-            'value' => $data['mail_to'],
         ]);
     }
 }

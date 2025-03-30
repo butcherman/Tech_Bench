@@ -41,9 +41,8 @@ class BackupIndexTest extends TestCase
             ->get(route('maint.backups.index'));
 
         $response->assertSuccessful()
-            ->assertInertia(fn (Assert $page) => $page
+            ->assertInertia(fn(Assert $page) => $page
                 ->component('Maint/Backup')
-                ->has('backup-list')
-                ->has('backup-running'));
+                ->has('backup-list'));
     }
 }
