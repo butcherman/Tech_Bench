@@ -11,13 +11,12 @@ import UploadBackupForm from "@/Forms/Maintenance/UploadBackupForm.vue";
 import { onMounted, ref, useTemplateRef } from "vue";
 import { router } from "@inertiajs/vue3";
 
-const props = defineProps<{
-    backupRunning: boolean;
+defineProps<{
     backupList: any[];
 }>();
 
 const uploadModal = useTemplateRef("upload-backup-modal");
-const backupIsRunning = ref<boolean>(props.backupRunning);
+const backupIsRunning = ref<boolean>(false);
 const backupMessages = ref<string[]>([]);
 
 onMounted(() => {
@@ -84,12 +83,16 @@ export default { layout: AppLayout };
     <div class="flex justify-center">
         <Card class="tb-card" title="Backup Files">
             <div>
-                <ResourceList :list="backupList" label-field="name">
+                <ResourceList
+                    :list="backupList"
+                    label-field="name"
+                    empty-text="No Backups Found"
+                >
                     <template #list-item="{ item }">
                         {{ item.name }}
-                        <span class="text-sm"
-                            >({{ prettyBytes(item.size) }})</span
-                        >
+                        <span class="text-sm">
+                            ({{ prettyBytes(item.size) }})
+                        </span>
                     </template>
                     <template #actions="{ item }">
                         <a
@@ -114,6 +117,7 @@ export default { layout: AppLayout };
                         @click="uploadModal?.show()"
                     />
                 </div>
+                <div class="text-center text-sm">Use CLI to Restore Backup</div>
             </div>
         </Card>
         <Modal ref="upload-backup-modal" title="Upload Backup File">

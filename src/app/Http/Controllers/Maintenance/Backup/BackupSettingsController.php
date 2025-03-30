@@ -26,7 +26,6 @@ class BackupSettingsController extends Controller
             'nightly_cleanup' => (bool) config('backup.nightly_cleanup'),
             'encryption' => config('backup.backup.encryption') === 'default' ? true : false,
             'password' => config('backup.backup.password') ? __('admin.fake-password') : null,
-            'mail_to' => config('backup.notifications.mail.to'),
         ]);
     }
 

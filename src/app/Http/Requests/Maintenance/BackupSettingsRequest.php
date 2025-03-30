@@ -25,7 +25,6 @@ class BackupSettingsRequest extends FormRequest
             'nightly_cleanup' => ['required', 'boolean'],
             'encryption' => ['required', 'boolean'],
             'password' => ['required_if:encryption,true'],
-            'mail_to' => ['required', 'email'],
         ];
     }
 }

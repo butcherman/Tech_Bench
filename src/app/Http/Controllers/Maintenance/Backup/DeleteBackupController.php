@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Maintenance\Backup;
 
-use App\Exceptions\Maintenance\BackupFileMissingException;
 use App\Http\Controllers\Controller;
 use App\Models\AppSettings;
 use App\Services\Maintenance\BackupService;
@@ -21,11 +20,7 @@ class DeleteBackupController extends Controller
     {
         $this->authorize('viewAny', AppSettings::class);
 
-        // if (! $this->svc->doesBackupExist($backupName)) {
-        //     throw new BackupFileMissingException($backupName);
-        // }
-
-        // $this->svc->deleteBackupFile($backupName);
+        $this->svc->deleteBackupFile($backupName);
 
         Log::notice(
             'Backup File '.$backupName.' deleted by '.

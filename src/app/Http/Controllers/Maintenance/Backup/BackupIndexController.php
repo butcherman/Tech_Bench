@@ -19,8 +19,7 @@ class BackupIndexController extends Controller
         $this->authorize('is-installer');
 
         return Inertia::render('Maint/Backup', [
-            'backup-list' => [], //  fn () => $this->svc->getBackupFiles(),
-            'backup-running' => false, //  fn () => $this->svc->isBackupRunning(),
+            'backup-list' => fn () => $this->svc->getBackupListWithMetaData(),
         ]);
     }
 }

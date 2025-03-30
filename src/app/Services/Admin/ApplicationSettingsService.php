@@ -138,6 +138,5 @@ class ApplicationSettingsService
         $this->saveSettingsArray($requestData->only(['nightly_backup', 'nightly_cleanup'])->toArray(), 'backup');
         $this->saveSettings('backup.backup.password', $requestData->get('password'));
         $this->saveSettings('backup.backup.encryption', $requestData->get('encryption') ? 'default' : false);
-        $this->saveSettings('backup.notifications.mail.to', $requestData->get('mail_to'));
     }
 }
