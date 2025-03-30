@@ -23,7 +23,8 @@ use Illuminate\Support\Facades\Log;
 class CustomerEquipment extends Model
 {
     use BroadcastsEvents;
-    use CustomerBroadcastingTrait;
+
+    // use CustomerBroadcastingTrait;
     use HasFactory;
     use Prunable;
     use SoftDeletes;
@@ -150,7 +151,8 @@ class CustomerEquipment extends Model
     {
 
         return (new BroadcastableModelEventOccurred(
-            $this, $event
+            $this,
+            $event
         ))->dontBroadcastToCurrentUser();
     }
 

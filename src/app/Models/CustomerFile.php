@@ -24,7 +24,8 @@ use Illuminate\Support\Facades\Log;
 class CustomerFile extends Model
 {
     use BroadcastsEvents;
-    use CustomerBroadcastingTrait;
+
+    // use CustomerBroadcastingTrait;
     use HasFactory;
     use HasUser;
     use Prunable;

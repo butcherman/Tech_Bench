@@ -38,7 +38,7 @@ class StepFourTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('Init/StepFour')
                     ->has('step')
                     ->has('rules')
@@ -66,7 +66,7 @@ class StepFourTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('Init/StepFour')
             );
     }

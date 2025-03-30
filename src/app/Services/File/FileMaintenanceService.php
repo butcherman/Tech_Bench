@@ -4,7 +4,6 @@ namespace App\Services\File;
 
 use App\Traits\HandleFileTrait;
 use Illuminate\Support\Facades\Storage;
-use RecursiveDirectoryIterator;
 
 class FileMaintenanceService
 {

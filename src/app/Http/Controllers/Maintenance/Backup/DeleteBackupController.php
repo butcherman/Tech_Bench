@@ -28,7 +28,7 @@ class DeleteBackupController extends Controller
         // $this->svc->deleteBackupFile($backupName);
 
         Log::notice(
-            'Backup File ' . $backupName . ' deleted by ' .
+            'Backup File '.$backupName.' deleted by '.
                 $request->user()->username
         );
 

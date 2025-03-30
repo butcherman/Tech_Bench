@@ -22,7 +22,8 @@ use Illuminate\Support\Facades\Log;
 class CustomerContact extends Model
 {
     use BroadcastsEvents;
-    use CustomerBroadcastingTrait;
+
+    // use CustomerBroadcastingTrait;
     use HasFactory;
     use Prunable;
     use SoftDeletes;
@@ -100,7 +101,8 @@ class CustomerContact extends Model
     public function newBroadcastableModelEvent(string $event): BroadcastableModelEventOccurred
     {
         return (new BroadcastableModelEventOccurred(
-            $this, $event
+            $this,
+            $event
         ))->dontBroadcastToCurrentUser();
     }
 

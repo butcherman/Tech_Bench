@@ -3,7 +3,6 @@
 namespace App\Jobs\Maintenance;
 
 use App\Exceptions\Maintenance\BackupFailedException;
-use App\Services\File\FileMaintenanceService;
 use App\Services\Maintenance\BackupService;
 use App\Services\Misc\ConsoleOutputService;
 use Illuminate\Bus\Queueable;
@@ -15,7 +14,6 @@ use Illuminate\Queue\Middleware\WithoutOverlapping;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Process;
 use Spatie\Backup\Events\BackupHasFailed;
 
 class RunBackupJob implements ShouldBeUnique, ShouldQueue
@@ -41,13 +39,13 @@ class RunBackupJob implements ShouldBeUnique, ShouldQueue
     }
 
     /**
-     * Execute the job.
+     * Run an application backup.
      */
     public function handle(BackupService $svc): void
     {
         Log::info('Starting Backup');
 
-        if (!$svc->verifyBackupDiskSpace()) {
+        if (! $svc->verifyBackupDiskSpace()) {
             $exception = new BackupFailedException('Not enough free space to run backup');
             event(new BackupHasFailed($exception));
 

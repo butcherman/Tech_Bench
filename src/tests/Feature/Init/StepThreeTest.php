@@ -38,7 +38,7 @@ class StepThreeTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('Init/StepThree')
                     ->has('step')
                     ->has('policy')
@@ -69,7 +69,7 @@ class StepThreeTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('Init/StepThree')
                     ->has('step')
                     ->has('policy')

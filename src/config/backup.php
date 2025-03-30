@@ -1,13 +1,6 @@
 <?php
 
-use App\Notifications\Maintenance\Backup\BackupHasFailedNotification;
-use App\Notifications\Maintenance\Backup\BackupSuccessfulNotification;
-use App\Notifications\Maintenance\Backup\BackupWasSuccessfulNotification;
 use App\Notifications\Maintenance\Backup\BackupNotifiable;
-use App\Notifications\Maintenance\Backup\CleanupHasFailedNotification;
-use App\Notifications\Maintenance\Backup\CleanupWasSuccessfulNotification;
-use App\Notifications\Maintenance\Backup\HealthyBackupWasFoundNotification;
-use App\Notifications\Maintenance\Backup\UnhealthyBackupWasFoundNotification;
 
 return [
     'nightly_backup' => true,
@@ -206,18 +199,12 @@ return [
      */
     'notifications' => [
         'notifications' => [
-            // \Spatie\Backup\Notifications\Notifications\BackupHasFailedNotification::class => ['mail'],
-            // \Spatie\Backup\Notifications\Notifications\UnhealthyBackupWasFoundNotification::class => ['mail'],
-            // \Spatie\Backup\Notifications\Notifications\CleanupHasFailedNotification::class => ['mail'],
-            // \Spatie\Backup\Notifications\Notifications\BackupWasSuccessfulNotification::class => ['mail'],
-            // \Spatie\Backup\Notifications\Notifications\HealthyBackupWasFoundNotification::class => ['mail'],
-            // \Spatie\Backup\Notifications\Notifications\CleanupWasSuccessfulNotification::class => ['mail'],
-            BackupWasSuccessfulNotification::class => ['mail'],
-            BackupHasFailedNotification::class => ['mail'],
-            CleanupHasFailedNotification::class => ['mail'],
-            CleanupWasSuccessfulNotification::class => ['mail'],
-            HealthyBackupWasFoundNotification::class => ['mail'],
-            UnhealthyBackupWasFoundNotification::class => ['mail'],
+            \Spatie\Backup\Notifications\Notifications\BackupHasFailedNotification::class => ['mail'],
+            \Spatie\Backup\Notifications\Notifications\UnhealthyBackupWasFoundNotification::class => ['mail'],
+            \Spatie\Backup\Notifications\Notifications\CleanupHasFailedNotification::class => ['mail'],
+            \Spatie\Backup\Notifications\Notifications\BackupWasSuccessfulNotification::class => ['mail'],
+            \Spatie\Backup\Notifications\Notifications\HealthyBackupWasFoundNotification::class => ['mail'],
+            \Spatie\Backup\Notifications\Notifications\CleanupWasSuccessfulNotification::class => ['mail'],
         ],
 
         /*

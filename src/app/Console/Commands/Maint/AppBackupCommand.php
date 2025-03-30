@@ -3,10 +3,8 @@
 namespace App\Console\Commands\Maint;
 
 use App\Jobs\Maintenance\RunBackupJob;
-use App\Services\File\FileMaintenanceService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 
 /*
 |-------------------------------------------------------------------------------
