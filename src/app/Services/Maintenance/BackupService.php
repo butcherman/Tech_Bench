@@ -2,80 +2,31 @@
 
 namespace App\Services\Maintenance;
 
-use Illuminate\Support\Facades\Storage;
+use App\Services\File\FileMaintenanceService;
+use Illuminate\Support\Facades\Log;
 
-/**
- * @codeCoverageIgnore
- */
-class BackupService
+class BackupService extends FileMaintenanceService
 {
-    protected $storage;
-
-    protected $backupName;
-
-    public function __construct()
-    {
-        $this->storage = Storage::disk('backups');
-        $this->backupName = config('backup.backup.name').DIRECTORY_SEPARATOR;
-    }
-
     /**
-     * Determine if there is currently a backup job running
+     * Check if the backup directory has enough free space to store a system
+     * backup.
      */
-    public function isBackupRunning(): bool
+    public function verifyBackupDiskSpace(): bool
     {
-        return count($this->storage->directories('backup-temp')) > 0 ?
-            true : false;
-    }
+        $backupFreeSpace = disk_free_space(storage_path('/backups'));
+        $appStorageSize = $this->getStorageDiskSize('local');
+        $logStorageSize = $this->getStorageDiskSize('logs');
 
-    /**
-     * Verify that a backup file exists based on the filename
-     */
-    public function doesBackupExist(string $fileName): bool
-    {
-        return $this->storage->exists($this->backupName.$fileName);
-    }
+        $estimatedBackupSize = $appStorageSize + $logStorageSize;
 
-    /**
-     * Delete an existing backup file
-     */
-    public function deleteBackupFile(string $fileName): void
-    {
-        $this->storage->delete($this->backupName.$fileName);
-    }
+        $checkPassed = $backupFreeSpace > $estimatedBackupSize;
 
-    /**
-     * Get a list of all backup files along with metadata
-     */
-    public function getBackupFiles(): array
-    {
-        $fileList = array_reverse($this->getFileList());
+        Log::debug('Checking disk for available space in backup drive.', [
+            'backup_free_space' => $this->readableFileSize($backupFreeSpace),
+            'estimated_backup_size' => $this->readableFileSize($estimatedBackupSize),
+            'check_passed' => $this->readableFileSize($checkPassed) ? 'Yes' : 'No',
+        ]);
 
-        return $this->buildMetaData($fileList);
-    }
-
-    /**
-     * Get a list of just the backup files
-     */
-    protected function getFileList(): array
-    {
-        return $this->storage->files('tech-bench');
-    }
-
-    /**
-     * Get the size and modified date of the backup files
-     */
-    protected function buildMetaData($fileList): array
-    {
-        $newList = [];
-        foreach ($fileList as $fileName) {
-            $newList[] = [
-                'name' => str_replace($this->backupName, '', $fileName),
-                'size' => $this->storage->size($fileName),
-                'modified' => $this->storage->lastModified($fileName),
-            ];
-        }
-
-        return $newList;
+        return $checkPassed;
     }
 }

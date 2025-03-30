@@ -21,14 +21,14 @@ class DeleteBackupController extends Controller
     {
         $this->authorize('viewAny', AppSettings::class);
 
-        if (! $this->svc->doesBackupExist($backupName)) {
-            throw new BackupFileMissingException($backupName);
-        }
+        // if (! $this->svc->doesBackupExist($backupName)) {
+        //     throw new BackupFileMissingException($backupName);
+        // }
 
-        $this->svc->deleteBackupFile($backupName);
+        // $this->svc->deleteBackupFile($backupName);
 
         Log::notice(
-            'Backup File '.$backupName.' deleted by '.
+            'Backup File ' . $backupName . ' deleted by ' .
                 $request->user()->username
         );
 

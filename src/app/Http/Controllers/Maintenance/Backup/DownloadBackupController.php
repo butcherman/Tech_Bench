@@ -22,16 +22,16 @@ class DownloadBackupController extends Controller
     {
         $this->authorize('viewAny', AppSettings::class);
 
-        if (! $this->svc->doesBackupExist($backupName)) {
-            throw new BackupFileMissingException($backupName);
-        }
+        // if (! $this->svc->doesBackupExist($backupName)) {
+        //     throw new BackupFileMissingException($backupName);
+        // }
 
         Log::info(
-            'Download file - '.$backupName.' downloaded by '.
+            'Download file - ' . $backupName . ' downloaded by ' .
                 $request->user()->username
         );
 
-        return Storage::disk('backups')->download(config('backup.backup.name').
-            DIRECTORY_SEPARATOR.$backupName);
+        return Storage::disk('backups')->download(config('backup.backup.name') .
+            DIRECTORY_SEPARATOR . $backupName);
     }
 }
