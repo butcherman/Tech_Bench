@@ -196,6 +196,12 @@ class UserUnitTest extends TestCase
     | Additional Model Methods
     |---------------------------------------------------------------------------
     */
+    public function test_check_user_setting(): void
+    {
+        $settingName = 'Receive Email Notifications';
+        $this->assertTrue($this->model->checkUserSetting($settingName));
+    }
+
     public function test_get_new_expire_time(): void
     {
         // Test Immediate Expire

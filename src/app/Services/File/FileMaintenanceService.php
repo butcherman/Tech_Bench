@@ -12,7 +12,7 @@ class FileMaintenanceService
     /**
      * Get the size of a storage disk.
      */
-    public function getStorageDiskSize(string $disk)
+    public function getStorageDiskSize(string $disk): int
     {
         $size = 0;
 
@@ -22,5 +22,15 @@ class FileMaintenanceService
         }
 
         return $size;
+    }
+
+    /**
+     * Get the Free Space available for a storage disk.
+     */
+    public function getDiskFreeSpace(string $disk): int
+    {
+        $path = Storage::disk($disk)->path('');
+
+        return disk_free_space($path);
     }
 }
