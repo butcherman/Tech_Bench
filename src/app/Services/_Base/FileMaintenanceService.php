@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Services\File;
+namespace App\Services\_Base;
 
 use App\Traits\HandleFileTrait;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
-class FileMaintenanceService
+abstract class FileMaintenanceService
 {
     use HandleFileTrait;
 

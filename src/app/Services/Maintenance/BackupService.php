@@ -3,7 +3,7 @@
 namespace App\Services\Maintenance;
 
 use App\Exceptions\Maintenance\BackupFileMissingException;
-use App\Services\File\FileMaintenanceService;
+use App\Services\_Base\FileMaintenanceService;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
