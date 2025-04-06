@@ -2,7 +2,6 @@
 
 namespace Tests\Unit\Models;
 
-use App\Models\User;
 use App\Models\UserRolePermissionCategory;
 use App\Models\UserRolePermissionType;
 use Tests\TestCase;

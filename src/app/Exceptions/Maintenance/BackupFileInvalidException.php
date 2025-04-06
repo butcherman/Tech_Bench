@@ -11,7 +11,7 @@ class BackupFileInvalidException extends Exception
     {
         Log::alert(
             'Selected file is not a valid Tech Bench backup file - '
-                . $this->getMessage()
+                .$this->getMessage()
         );
     }
 

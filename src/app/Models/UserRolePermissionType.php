@@ -35,7 +35,7 @@ class UserRolePermissionType extends Model
     public function group(): Attribute
     {
         return Attribute::make(
-            get: fn() => $this->UserRolePermissionCategory->category ?? null,
+            get: fn () => $this->UserRolePermissionCategory->category ?? null,
         );
     }
 

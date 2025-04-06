@@ -3,10 +3,8 @@
 namespace Tests\Unit\Services\Maintenance;
 
 use App\Exceptions\Maintenance\BackupFileMissingException;
-use App\Services\File\FileMaintenanceService;
 use App\Services\Maintenance\BackupService;
 use Illuminate\Support\Facades\Storage;
-use Mockery\MockInterface;
 use Tests\TestCase;
 
 class BackupServiceUnitTest extends TestCase
@@ -18,7 +16,7 @@ class BackupServiceUnitTest extends TestCase
     */
     public function test_delete_backup_file(): void
     {
-        $backupName = config('backup.backup.name') . DIRECTORY_SEPARATOR . 'backup.zip';
+        $backupName = config('backup.backup.name').DIRECTORY_SEPARATOR.'backup.zip';
 
         Storage::fake('backups');
         Storage::disk('backups')->put($backupName, '123456');
@@ -46,7 +44,7 @@ class BackupServiceUnitTest extends TestCase
     */
     public function test_does_backup_exist_true(): void
     {
-        $backupName = config('backup.backup.name') . DIRECTORY_SEPARATOR . 'backup.zip';
+        $backupName = config('backup.backup.name').DIRECTORY_SEPARATOR.'backup.zip';
 
         Storage::fake('backups');
         Storage::disk('backups')->put($backupName, '123456');
@@ -74,9 +72,9 @@ class BackupServiceUnitTest extends TestCase
     */
     public function test_get_backup_file_list(): void
     {
-        $backup1 = config('backup.backup.name') . DIRECTORY_SEPARATOR . 'backup1.zip';
-        $backup2 = config('backup.backup.name') . DIRECTORY_SEPARATOR . 'backup2.zip';
-        $backup3 = config('backup.backup.name') . DIRECTORY_SEPARATOR . 'backup3.zip';
+        $backup1 = config('backup.backup.name').DIRECTORY_SEPARATOR.'backup1.zip';
+        $backup2 = config('backup.backup.name').DIRECTORY_SEPARATOR.'backup2.zip';
+        $backup3 = config('backup.backup.name').DIRECTORY_SEPARATOR.'backup3.zip';
 
         Storage::fake('backups');
         Storage::disk('backups')->put($backup1, '123456');
@@ -97,9 +95,9 @@ class BackupServiceUnitTest extends TestCase
     */
     public function test_get_backup_list_with_meta_data(): void
     {
-        $backup1 = config('backup.backup.name') . DIRECTORY_SEPARATOR . 'backup1.zip';
-        $backup2 = config('backup.backup.name') . DIRECTORY_SEPARATOR . 'backup2.zip';
-        $backup3 = config('backup.backup.name') . DIRECTORY_SEPARATOR . 'backup3.zip';
+        $backup1 = config('backup.backup.name').DIRECTORY_SEPARATOR.'backup1.zip';
+        $backup2 = config('backup.backup.name').DIRECTORY_SEPARATOR.'backup2.zip';
+        $backup3 = config('backup.backup.name').DIRECTORY_SEPARATOR.'backup3.zip';
 
         Storage::fake('backups');
         Storage::disk('backups')->put($backup1, '123456');

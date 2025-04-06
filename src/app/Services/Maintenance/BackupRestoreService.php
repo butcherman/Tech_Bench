@@ -2,17 +2,14 @@
 
 namespace App\Services\Maintenance;
 
-use App\Exceptions\Maintenance\BackupFailedException;
 use App\Exceptions\Maintenance\BackupFileInvalidException;
 use App\Exceptions\Maintenance\BackupFileMissingException;
 use App\Exceptions\Maintenance\RestoreFailedException;
-use Exception;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Storage;
 use PragmaRX\Version\Package\Version;
 use ZanySoft\Zip\Zip;
 
@@ -51,7 +48,7 @@ class BackupRestoreService extends BackupService
      */
     public function extractBackup(): bool
     {
-        if (!$this->archive) {
+        if (! $this->archive) {
             throw new BackupFileMissingException('Trying to extract invalid file');
         }
 
@@ -66,7 +63,7 @@ class BackupRestoreService extends BackupService
     public function restoreCert(): void
     {
         $basePath = base_path('keystore');
-        $backedUpPath = $this->storage->path($this->tmpArchive . 'app/keystore');
+        $backedUpPath = $this->storage->path($this->tmpArchive.'app/keystore');
 
         // Wipe the current filesystem.
         $this->wipeDirectory($basePath);
@@ -109,7 +106,7 @@ class BackupRestoreService extends BackupService
      */
     public function restoreEnvironmentFile(): void
     {
-        $env = $this->storage->get($this->tmpArchive . 'app/.env');
+        $env = $this->storage->get($this->tmpArchive.'app/.env');
         $envPath = App::environmentFilePath();
 
         File::put($envPath, $env);
@@ -122,7 +119,7 @@ class BackupRestoreService extends BackupService
     {
         $basePath = storage_path('logs');
         $backedUpPath = $this->storage
-            ->path($this->tmpArchive . 'app/storage/logs');
+            ->path($this->tmpArchive.'app/storage/logs');
 
         // Wipe the current filesystem.
         $this->wipeDirectory($basePath);
@@ -138,7 +135,7 @@ class BackupRestoreService extends BackupService
     {
         $basePath = storage_path('app');
         $backedUpPath = $this->storage
-            ->path($this->tmpArchive . 'app/storage/app');
+            ->path($this->tmpArchive.'app/storage/app');
 
         // Wipe the current filesystem.
         $this->wipeDirectory($basePath);
@@ -153,7 +150,7 @@ class BackupRestoreService extends BackupService
     public function validateBackupArchive(string $backupName): bool
     {
         // Backup must exist in file system.
-        if (!$this->doesBackupExist($backupName)) {
+        if (! $this->doesBackupExist($backupName)) {
             throw new BackupFileMissingException($backupName);
         }
 
@@ -178,9 +175,9 @@ class BackupRestoreService extends BackupService
     {
         $this->archive = new Zip;
 
-        $archivePath = $this->storage->path($this->backupBaseName . $backupName);
+        $archivePath = $this->storage->path($this->backupBaseName.$backupName);
 
-        if (!$this->archive->check($archivePath)) {
+        if (! $this->archive->check($archivePath)) {
             throw new BackupFileInvalidException('File Failed Archive Check');
         }
 
@@ -196,11 +193,11 @@ class BackupRestoreService extends BackupService
         $filesToRestore = $this->getFileList($backedUpPath);
 
         foreach ($filesToRestore as $sourceFile) {
-            $destination = $restoreBase . str_replace($backedUpPath, '', $sourceFile);
+            $destination = $restoreBase.str_replace($backedUpPath, '', $sourceFile);
 
             // Make sure destination directory exists
             $pathInfo = pathinfo($destination);
-            if (!File::isDirectory($pathInfo['dirname'])) {
+            if (! File::isDirectory($pathInfo['dirname'])) {
                 File::makeDirectory($pathInfo['dirname'], 0775, true);
             }
 
@@ -223,8 +220,8 @@ class BackupRestoreService extends BackupService
         ];
 
         foreach ($structureFiles as $file) {
-            if (!$this->archive->has($file)) {
-                throw new BackupFileInvalidException('Missing ' . $file);
+            if (! $this->archive->has($file)) {
+                throw new BackupFileInvalidException('Missing '.$file);
             }
         }
 
@@ -284,7 +281,7 @@ class BackupRestoreService extends BackupService
     protected function getDbFile(): array
     {
         $dbPath = $this->storage
-            ->path($this->tmpArchive . 'db-dumps/mysql-tech-bench.sql');
+            ->path($this->tmpArchive.'db-dumps/mysql-tech-bench.sql');
         $dbFile = file($dbPath);
 
         return $dbFile;

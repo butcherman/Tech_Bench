@@ -12,7 +12,7 @@ trait CustomerBroadcastingTrait
         $channelList = [];
 
         foreach ($siteSlugs as $slug) {
-            $channelList[] = new PrivateChannel('customer-site.' . $slug);
+            $channelList[] = new PrivateChannel('customer-site.'.$slug);
         }
 
         Log::debug('Customer Site Channel List created', $channelList);

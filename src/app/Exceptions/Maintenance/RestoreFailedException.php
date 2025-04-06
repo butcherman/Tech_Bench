@@ -9,10 +9,10 @@ class RestoreFailedException extends Exception
 {
     public function report(): void
     {
-        Log::critical("message");
+        Log::critical('message');
         (
             'Backup Restore Process Failed - '
-            . $this->getMessage()
+            .$this->getMessage()
         );
     }
 }

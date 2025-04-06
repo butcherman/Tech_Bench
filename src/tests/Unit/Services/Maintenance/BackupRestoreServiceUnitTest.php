@@ -6,10 +6,8 @@ use App\Exceptions\Maintenance\BackupFileInvalidException;
 use App\Exceptions\Maintenance\BackupFileMissingException;
 use App\Exceptions\Maintenance\RestoreFailedException;
 use App\Services\Maintenance\BackupRestoreService;
-use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Mockery\MockInterface;
@@ -110,7 +108,7 @@ class BackupRestoreServiceUnitTest extends TestCase
     public function test_restore_database(): void
     {
         $testQuery = 'INSERT INTO `app_settings` VALUES (99, "test.key", '
-            . json_encode("123") . ', NOW(), NOW())';
+            .json_encode('123').', NOW(), NOW())';
 
         /** @var BackupRestoreService */
         $stub = $this->partialMock(
@@ -216,7 +214,6 @@ class BackupRestoreServiceUnitTest extends TestCase
 
         Storage::fake('backups');
         Storage::disk('backups')->makeDirectory($restorePath);
-
 
         /** @var BackupRestoreService */
         $stub = $this->partialMock(
@@ -331,7 +328,7 @@ class BackupRestoreServiceUnitTest extends TestCase
             }
         };
 
-        $stub($basePath . '/to_directory', $basePath . '/from_directory');
+        $stub($basePath.'/to_directory', $basePath.'/from_directory');
 
         Storage::disk('backups')->assertExists('to_directory/test/test.txt');
     }
@@ -345,9 +342,9 @@ class BackupRestoreServiceUnitTest extends TestCase
     {
         Storage::disk('backups')->makeDirectory('tech-bench');
 
-        $zip = new Zip();
+        $zip = new Zip;
 
-        $zip->create(Storage::disk('backups')->path('tech-bench') . '/test_backup.zip');
+        $zip->create(Storage::disk('backups')->path('tech-bench').'/test_backup.zip');
         $zip->addFromString('db-dumps/mysql-tech-bench.sql', 'test sql file');
         $zip->addFromString('app/.env', 'test env file');
         $zip->addFromString('app/keystore/version', '7.0.0');

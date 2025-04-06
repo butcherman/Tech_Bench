@@ -53,14 +53,14 @@ abstract class FileMaintenanceService
 
         // Find and remove scaffolding files.
         foreach ($this->scaffoldFiles as $scFile) {
-            $scaffoldList = preg_grep('/' . $scFile . '/i', $allFiles);
+            $scaffoldList = preg_grep('/'.$scFile.'/i', $allFiles);
 
             foreach ($scaffoldList as $key => $file) {
                 unset($allFiles[$key]);
             }
         }
 
-        return $allFiles;
+        return array_values($allFiles);
     }
 
     /**
@@ -73,7 +73,7 @@ abstract class FileMaintenanceService
 
         foreach ($directoryList as $directory) {
             $fileList = File::allFiles($directory, true);
-            if (empty($fileLIst)) {
+            if (empty($fileList)) {
                 $emptyList[] = $directory;
             }
         }
@@ -94,14 +94,14 @@ abstract class FileMaintenanceService
         // Delete all the files from the disk
         foreach ($fileList as $file) {
             File::delete($file);
-            Log::notice('File Deleted - ' . $file);
+            Log::notice('File Deleted - '.$file);
         }
 
         // Delete all the empty directories from the disk
         $dirList = $this->getEmptyDirectories($dirPath);
         foreach ($dirList as $dir) {
             File::deleteDirectory($dir);
-            Log::notice('Directory Deleted - ' . $dir);
+            Log::notice('Directory Deleted - '.$dir);
         }
     }
 }

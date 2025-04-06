@@ -8,7 +8,6 @@ use App\Services\Maintenance\BackupService;
 use App\Services\Misc\ConsoleOutputService;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Notification;
-use Illuminate\Support\Facades\Queue;
 use Mockery\MockInterface;
 use Tests\TestCase;
 

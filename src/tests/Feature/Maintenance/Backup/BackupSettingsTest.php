@@ -41,7 +41,7 @@ class BackupSettingsTest extends TestCase
             ->get(route('maint.backups.settings.show'));
 
         $response->assertSuccessful()
-            ->assertInertia(fn(Assert $page) => $page
+            ->assertInertia(fn (Assert $page) => $page
                 ->component('Maint/BackupSettings')
                 ->has('nightly_backup')
                 ->has('nightly_cleanup')

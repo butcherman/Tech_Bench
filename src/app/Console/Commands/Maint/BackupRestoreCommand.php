@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands\Maint;
 
-use App\Exceptions\Maintenance\BackupFileInvalidException;
 use App\Services\Maintenance\BackupRestoreService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\App;
@@ -63,7 +62,7 @@ class BackupRestoreCommand extends Command
         */
         spin(
             message: 'Validating Backup File',
-            callback: fn() => $this->svc->validateBackupArchive($backupChoice),
+            callback: fn () => $this->svc->validateBackupArchive($backupChoice),
         );
 
         $this->info('Backup File is Valid');
@@ -89,14 +88,14 @@ class BackupRestoreCommand extends Command
         );
 
         $this->components->alert('WARNING:  All Existing Data Will Be Erased');
-        warning('Selected Backup File - ' . $backupChoice);
+        warning('Selected Backup File - '.$backupChoice);
 
         $continue = confirm(
             label: 'Continue?',
             default: false,
         );
 
-        if (!$continue) {
+        if (! $continue) {
             $this->abortRestore('Recovery Confirmation Aborted');
         }
 
@@ -115,14 +114,14 @@ class BackupRestoreCommand extends Command
 
         spin(
             message: 'Extracting Backup',
-            callback: fn() => $this->svc->extractBackup(),
+            callback: fn () => $this->svc->extractBackup(),
         );
 
         $this->components->info('Backup Extracted');
 
         spin(
             message: 'Restoring Database',
-            callback: fn() => $this->svc->restoreDatabase()
+            callback: fn () => $this->svc->restoreDatabase()
         );
 
         $this->components->info('Database Restored');
@@ -135,7 +134,7 @@ class BackupRestoreCommand extends Command
 
         spin(
             message: 'Restoring Filesystem',
-            callback: fn() => $this->svc->restoreFileSystem()
+            callback: fn () => $this->svc->restoreFileSystem()
         );
 
         $this->components->info('Filesystem Restored');
@@ -143,7 +142,7 @@ class BackupRestoreCommand extends Command
         if ($restoreEnv) {
             spin(
                 message: 'Restoring Environment File',
-                callback: fn() => $this->svc->restoreEnvironmentFile()
+                callback: fn () => $this->svc->restoreEnvironmentFile()
             );
 
             $this->components->info('Environment File Restored');
@@ -152,7 +151,7 @@ class BackupRestoreCommand extends Command
         if ($restoreLogs) {
             spin(
                 message: 'Restoring Log Files',
-                callback: fn() => $this->svc->restoreLogFiles()
+                callback: fn () => $this->svc->restoreLogFiles()
             );
 
             $this->components->info('Log Files Restored');
@@ -161,7 +160,7 @@ class BackupRestoreCommand extends Command
         if ($restoreCert) {
             spin(
                 message: 'Restoring SSL Certificate',
-                callback: fn() => $this->svc->restoreCert()
+                callback: fn () => $this->svc->restoreCert()
             );
 
             $this->components->info('SSL Certificate Restored');
@@ -178,7 +177,7 @@ class BackupRestoreCommand extends Command
      */
     private function abortRestore(string $reason): void
     {
-        Log::error('Aborting Restore Process.  Reason - ' . $reason);
+        Log::error('Aborting Restore Process.  Reason - '.$reason);
 
         $this->components->error('Backup Recovery Failed.  Aborting.');
 
@@ -194,7 +193,7 @@ class BackupRestoreCommand extends Command
     {
         $this->svc->deleteExtractedFiles();
 
-        // // Rebuild assets and cache new config
+        // @codeCoverageIgnoreStart
         if (App::environment('production')) {
             // Clear and re-cache all config data
             $this->call('optimize:clear');
@@ -204,6 +203,7 @@ class BackupRestoreCommand extends Command
             // Rebuild all JS application files
             Process::run('npm run build');
         }
+        // @codeCoverageIgnoreEnd
 
         if (App::isDownForMaintenance()) {
             $this->call('up');
