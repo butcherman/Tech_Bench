@@ -26,7 +26,7 @@ class AppRebootCommand extends Command
     /**
      * Execute the console command.
      */
-    public function handle(DockerControlService $svc)
+    public function handle(DockerControlService $svc): int
     {
         if (! $this->option('force')) {
             $continue = confirm(
@@ -45,5 +45,7 @@ class AppRebootCommand extends Command
         $this->info('You will be logged out of this session.');
 
         $svc->rebootAllContainers();
+
+        return 0;
     }
 }

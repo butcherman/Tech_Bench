@@ -2,11 +2,11 @@
 
 namespace App\Console\Commands\Maint;
 
-use App\Actions\Maintenance\GenerateReverbCredentials;
+use App\Actions\Maintenance\ValidateEnvFile;
 use Illuminate\Console\Command;
 use Illuminate\Console\ConfirmableTrait;
 
-class GenerateReverbCredentialsCommand extends Command
+class ValidateEnvFileCommand extends Command
 {
     use ConfirmableTrait;
 
@@ -15,7 +15,7 @@ class GenerateReverbCredentialsCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'reverb:generate
+    protected $signature = 'app:validate-env
                                 {--force : Force the operation to run when in production}';
 
     /**
@@ -23,23 +23,24 @@ class GenerateReverbCredentialsCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Generate new Credentials for Reverb App';
+    protected $description = 'Verify that all necessary variables are assigned in .env file';
 
     /**
      * Execute the console command.
      */
-    public function handle(GenerateReverbCredentials $svc): void
+    public function handle(ValidateEnvFile $svc): void
     {
         // @codeCoverageIgnoreStart
         if (! $this->confirmToProceed()) {
+
             return;
         }
         // @codeCoverageIgnoreEnd
 
-        $this->line('Generating New Reverb Credentials');
+        $this->line('Checking Environment File');
 
         $svc();
 
-        $this->info('Reverb Credentials Generated');
+        $this->info('Environment File is up to date');
     }
 }
