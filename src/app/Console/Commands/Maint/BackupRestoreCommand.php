@@ -52,7 +52,8 @@ class BackupRestoreCommand extends Command
         // Select Backup file to Restore
         $backupChoice = select(
             label: 'Select Backup File to Restore',
-            options: collect($this->svc->getBackupListWithMetaData())->pluck('name'),
+            options: collect($this->svc->getBackupListWithMetaData())
+                ->pluck('name'),
         );
 
         /*
@@ -62,7 +63,7 @@ class BackupRestoreCommand extends Command
         */
         spin(
             message: 'Validating Backup File',
-            callback: fn() => $this->validateSelectedBackup($backupChoice),
+            callback: fn() => $this->svc->validateBackupArchive($backupChoice),
         );
 
         $this->info('Backup File is Valid');
@@ -209,26 +210,5 @@ class BackupRestoreCommand extends Command
         }
 
         // TODO - Reboot Tech Bench
-    }
-
-    /**
-     * Open and validate the Tech Bench backup file.
-     */
-    private function validateSelectedBackup(string $selectedBackup): bool
-    {
-        try {
-            $this->svc->openBackupArchive($selectedBackup);
-            $this->svc->validateBackupFile();
-            $this->svc->validateBackupVersion();
-            $this->svc->verifyRestoreFilesystemWritable();
-        } catch (BackupFileInvalidException $e) {
-            $e->report();
-
-            $this->abortRestore(
-                'Backup File is invalid.  Check logs for additional information'
-            );
-        }
-
-        return true;
     }
 }

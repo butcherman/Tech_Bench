@@ -8,6 +8,7 @@ use App\Exceptions\Maintenance\BackupFileMissingException;
 use App\Exceptions\Maintenance\RestoreFailedException;
 use Exception;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
@@ -26,8 +27,16 @@ class BackupRestoreService extends BackupService
 
     /**
      * Temp Directory for extracted backup files
+     *
+     * @var string
      */
     protected $tmpArchive = 'restore-tmp/';
+
+    /*
+    |---------------------------------------------------------------------------
+    | Public Methods
+    |---------------------------------------------------------------------------
+    */
 
     /**
      * Delete the extracted temporary files.
@@ -40,69 +49,13 @@ class BackupRestoreService extends BackupService
     /**
      * Extract the backup file to a temporary directory.
      */
-    public function extractBackup(): void
+    public function extractBackup(): bool
     {
+        if (!$this->archive) {
+            throw new BackupFileMissingException('Trying to extract invalid file');
+        }
+
         $this->archive->extract($this->storage->path($this->tmpArchive));
-    }
-
-    /**
-     * Mount/Open a zip archive so it can be examined.
-     */
-    public function openBackupArchive(string $backupFile): void
-    {
-        if (!$this->doesBackupExist($backupFile)) {
-            throw new BackupFileMissingException;
-        }
-
-        $archivePath = $this->storage->path($this->backupBaseName . $backupFile);
-        $this->archive = new Zip;
-
-        if (!$this->archive->check($archivePath)) {
-            throw new BackupFileInvalidException('File failed Archive Check');
-        }
-
-        $this->archive->open($archivePath);
-    }
-
-    /**
-     * Wipe the existing database and restore the backed up database
-     */
-    public function restoreDatabase(): bool
-    {
-        try {
-            // Drop all Database Tables
-            DB::connection(DB::getDefaultConnection())
-                ->getSchemaBuilder()
-                ->dropAllTables();
-            DB::reconnect();
-        } catch (QueryException $e) {
-            report($e);
-            throw new RestoreFailedException('Unable to modify database');
-        }
-
-        // Get the DB File
-        $dbPath = $this->storage
-            ->path($this->tmpArchive . 'db-dumps/mysql-tech-bench.sql');
-        $dbFile = file($dbPath);
-
-        // Insert the Database file one section at a time.
-        $currentLine = '';
-        foreach ($dbFile as $line) {
-            if ($line !== "\n") {
-                $currentLine .= $line;
-            } else {
-                try {
-
-                    DB::unprepared($currentLine);
-                    $currentLine = '';
-                } catch (QueryException $e) {
-                    throw new BackupFailedException($e->getMessage());
-                }
-            }
-        }
-
-        // Run any migrations to get the DB up to date with the current version.
-        Artisan::call('migrate --force');
 
         return true;
     }
@@ -123,13 +76,43 @@ class BackupRestoreService extends BackupService
     }
 
     /**
+     * Wipe the existing database and restore the backed up database
+     */
+    public function restoreDatabase(): bool
+    {
+        $this->wipeDatabase();
+        $dbFile = $this->getDbFile();
+
+        // Insert the Database file one section at a time.
+        $currentLine = '';
+        foreach ($dbFile as $line) {
+            if ($line !== "\n") {
+                $currentLine .= $line;
+            } else {
+                try {
+                    DB::unprepared($currentLine);
+                    $currentLine = '';
+                } catch (QueryException $e) {
+                    throw new RestoreFailedException($e->getMessage());
+                }
+            }
+        }
+
+        // Run any migrations to get the DB up to date with the current version.
+        Artisan::call('migrate --force');
+
+        return true;
+    }
+
+    /**
      * Restore the .env file
      */
     public function restoreEnvironmentFile(): void
     {
         $env = $this->storage->get($this->tmpArchive . 'app/.env');
+        $envPath = App::environmentFilePath();
 
-        File::put(base_path() . DIRECTORY_SEPARATOR . '.env', $env);
+        File::put($envPath, $env);
     }
 
     /**
@@ -165,6 +148,46 @@ class BackupRestoreService extends BackupService
     }
 
     /**
+     * Mount and Validate a backup file.
+     */
+    public function validateBackupArchive(string $backupName): bool
+    {
+        // Backup must exist in file system.
+        if (!$this->doesBackupExist($backupName)) {
+            throw new BackupFileMissingException($backupName);
+        }
+
+        // Mount and verify this is a proper backup file.
+        $this->mountArchive($backupName);
+        $this->validateBackupStructure();
+        $this->validateBackupVersion();
+
+        return true;
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | Protected Methods
+    |---------------------------------------------------------------------------
+    */
+
+    /**
+     * Create a Zip Object and mount the selected backup file to it.
+     */
+    protected function mountArchive(string $backupName): void
+    {
+        $this->archive = new Zip;
+
+        $archivePath = $this->storage->path($this->backupBaseName . $backupName);
+
+        if (!$this->archive->check($archivePath)) {
+            throw new BackupFileInvalidException('File Failed Archive Check');
+        }
+
+        $this->archive->open($archivePath);
+    }
+
+    /**
      * Restore a portion of the backed up files
      */
     protected function restoreFiles(string $restoreBase, string $backedUpPath): void
@@ -189,7 +212,7 @@ class BackupRestoreService extends BackupService
      * Validate that a backup file contains all files necessary to restore
      * Tech Bench database and file structure.
      */
-    public function validateBackupFile(): bool
+    protected function validateBackupStructure(): bool
     {
         $structureFiles = [
             'app/.env',
@@ -198,10 +221,6 @@ class BackupRestoreService extends BackupService
             'app/storage/logs/.gitignore',
             'db-dumps/mysql-tech-bench.sql',
         ];
-
-        if (!$this->archive) {
-            throw new BackupFileInvalidException('No Archive Selected');
-        }
 
         foreach ($structureFiles as $file) {
             if (!$this->archive->has($file)) {
@@ -216,7 +235,7 @@ class BackupRestoreService extends BackupService
      * Validate that a backup file contains a version file equal to or less
      * than the current application version.
      */
-    public function validateBackupVersion(): bool
+    protected function validateBackupVersion(): bool
     {
         $this->archive->extract(
             $this->storage->path($this->tmpArchive),
@@ -231,7 +250,7 @@ class BackupRestoreService extends BackupService
 
         if ($isValid !== 1) {
             throw new BackupFileInvalidException(
-                'Backup Version is a Newer Version than the Tech Bench'
+                'Backup Version is a Newer Version than the Installed Tech Bench Version'
             );
         }
 
@@ -239,32 +258,35 @@ class BackupRestoreService extends BackupService
     }
 
     /**
-     * Verify that the directories to restore files are all writable
+     * Wipe the current database - drop all tables.
+     *
+     * @codeCoverageIgnore
      */
-    public function verifyRestoreFilesystemWritable(): bool
+    protected function wipeDatabase(): void
     {
-        $pathList = config('backup.backup.source.files.include');
-
-        // Make a file and directory in the base locations
-        foreach ($pathList as $path) {
-            if (File::isDirectory($path)) {
-                try {
-                    file_put_contents(
-                        $path . DIRECTORY_SEPARATOR . 'test_file',
-                        $path
-                    );
-                    File::makeDirectory(
-                        $path . DIRECTORY_SEPARATOR . 'test_directory',
-                        0775
-                    );
-                } catch (Exception $e) {
-                    report($e);
-
-                    return false;
-                }
-            }
+        try {
+            // Drop all Database Tables
+            DB::connection(DB::getDefaultConnection())
+                ->getSchemaBuilder()
+                ->dropAllTables();
+            DB::reconnect();
+        } catch (QueryException $e) {
+            report($e);
+            throw new RestoreFailedException('Unable to modify database');
         }
+    }
 
-        return true;
+    /**
+     * Get the .sql file to restore the database.
+     *
+     * @codeCoverageIgnore
+     */
+    protected function getDbFile(): array
+    {
+        $dbPath = $this->storage
+            ->path($this->tmpArchive . 'db-dumps/mysql-tech-bench.sql');
+        $dbFile = file($dbPath);
+
+        return $dbFile;
     }
 }
