@@ -40,7 +40,7 @@ class BackupRestoreCommand extends Command
     /**
      * Execute the command.
      */
-    public function handle()
+    public function handle(): void
     {
         $this->components->alert('Database Restore');
         $this->components->alert(
@@ -209,6 +209,8 @@ class BackupRestoreCommand extends Command
             $this->call('up');
         }
 
-        // TODO - Reboot Tech Bench
+        if ($reboot) {
+            $this->call('app:reboot', ['--force' => true]);
+        }
     }
 }

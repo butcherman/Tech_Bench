@@ -110,6 +110,8 @@ class BackupRestoreService extends BackupService
         $envPath = App::environmentFilePath();
 
         File::put($envPath, $env);
+
+        // TODO - Validate and update .env file
     }
 
     /**

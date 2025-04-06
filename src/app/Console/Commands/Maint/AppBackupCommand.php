@@ -31,7 +31,7 @@ class AppBackupCommand extends Command
     /**
      * Execute the command.
      */
-    public function handle()
+    public function handle(): void
     {
         $this->line('Running System Backup');
 
