@@ -5,20 +5,17 @@ namespace App\Jobs\Maintenance;
 use App\Exceptions\Maintenance\BackupFailedException;
 use App\Services\Maintenance\BackupService;
 use App\Services\Misc\ConsoleOutputService;
-use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Queue\Middleware\WithoutOverlapping;
-use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
 use Spatie\Backup\Events\BackupHasFailed;
 
-class RunBackupJob implements ShouldBeUnique, ShouldQueue
+class NightlyBackupJob implements ShouldBeUnique, ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Queueable;
 
     /**
      * Backups are only allowed on the backup queue.
@@ -39,11 +36,16 @@ class RunBackupJob implements ShouldBeUnique, ShouldQueue
     }
 
     /**
-     * Run an application backup. Triggered by manual interaction via Artisan
-     * console or Maintenance->Backups page.
+     * Run a system backup if nightly backups are enabled.
      */
     public function handle(BackupService $svc): void
     {
+        if (! config('backup.nightly_backup')) {
+            Log::info('Nightly Backup job feature disable.  Backup not run');
+
+            return;
+        }
+
         Log::info('Starting Manual Backup');
 
         if (! $svc->verifyBackupDiskSpace()) {
