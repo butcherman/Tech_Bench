@@ -2,11 +2,11 @@
 
 namespace Tests\Feature\_Console\Maint;
 
-use App\Actions\Maintenance\GenerateReverbCredentials;
+use App\Actions\Maintenance\CleanImageFolders;
 use Mockery\MockInterface;
 use Tests\TestCase;
 
-class GenerateReverbCredentialsTest extends TestCase
+class CleanImageFoldersTest extends TestCase
 {
     /*
     |---------------------------------------------------------------------------
@@ -15,12 +15,12 @@ class GenerateReverbCredentialsTest extends TestCase
     */
     public function test_handle(): void
     {
-        $this->mock(GenerateReverbCredentials::class, function (MockInterface $mock) {
+        $this->mock(CleanImageFolders::class, function (MockInterface $mock) {
             $mock->shouldAllowMockingProtectedMethods();
-            $mock->shouldReceive('__invoke')->andReturn(true);
+            $mock->shouldReceive('__invoke')->with(true)->andReturn(true);
         });
 
-        $this->artisan('reverb:generate')
+        $this->artisan('app:cleanup-image-folders', ['--fix' => true])
             ->assertExitCode(0);
     }
 }

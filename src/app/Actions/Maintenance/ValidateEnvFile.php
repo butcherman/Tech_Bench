@@ -36,7 +36,7 @@ class ValidateEnvFile extends ApplicationEnvironment
             $this->writeNewEnvironmentFileWith('BASE_URL', $url);
             $this->writeNewEnvironmentFileReplacing(
                 'APP_URL',
-                '"' . $protocol . '://${BASE_URL}"'
+                '"'.$protocol.'://${BASE_URL}"'
             );
         }
     }
