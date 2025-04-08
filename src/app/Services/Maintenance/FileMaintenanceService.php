@@ -35,6 +35,8 @@ class FileMaintenanceService
 
         $size = disk_free_space($path);
 
+        Log::debug('Get Disk Free Space - ' . $size);
+
         if ($humanReadable) {
             return $this->readableFileSize($size);
         }
@@ -51,8 +53,16 @@ class FileMaintenanceService
 
         $fileList = Storage::disk($disk)->allFiles();
         foreach ($fileList as $file) {
-            $size += Storage::disk($disk)->size($file);
+            $fileSize = Storage::disk($disk)->size($file);
+
+            Log::debug('Checking File Size for ' . $file, [
+                'size' => $fileSize
+            ]);
+
+            $size += $fileSize;
         }
+
+        Log::debug('Get Storage Disk Size - ' . $size);
 
         if ($humanReadable) {
             return $this->readableFileSize($size);
@@ -69,11 +79,17 @@ class FileMaintenanceService
     {
         $allFiles = File::allFiles($basePath, true);
 
+        Log::debug('Getting file list for path - ' . $basePath, [
+            'file_list' => $allFiles,
+        ]);
+
         // Find and remove scaffolding files.
         foreach ($this->scaffoldFiles as $scFile) {
             $scaffoldList = preg_grep('/' . $scFile . '/i', $allFiles);
 
             foreach ($scaffoldList as $key => $file) {
+                Log::debug('Removing Scaffolding File from file list - ' . $file);
+
                 unset($allFiles[$key]);
             }
         }
@@ -86,6 +102,7 @@ class FileMaintenanceService
      */
     public function getEmptyDirectories(string $basePath): array
     {
+        // TODO - Add Logging and refactor
         $directoryList = File::directories($basePath);
         $emptyList = [];
 
@@ -110,12 +127,29 @@ class FileMaintenanceService
     {
         $fileList = FileUpload::all();
 
+        Log::debug('Checking files missing from the file_uploads table', [
+            'file_list' => $fileList
+        ]);
+
         foreach ($fileList as $key => $file) {
-            $filePath = trim(rtrim($file->folder, '/'), '/') . DIRECTORY_SEPARATOR . $file->file_name;
+            $filePath = trim(
+                rtrim(
+                    $file->folder,
+                    '/'
+                ),
+                '/'
+            ) . DIRECTORY_SEPARATOR . $file->file_name;
+
             if (Storage::disk($file->disk)->exists($filePath)) {
+                Log::debug('File ' . $filePath . ' exists.  Removing from list');
+
                 unset($fileList[$key]);
             }
         }
+
+        Log::debug('Files missing from filesystem with database pointers', [
+            'file_list' => $fileList,
+        ]);
 
         return $fileList;
     }
@@ -128,11 +162,20 @@ class FileMaintenanceService
     {
         $fileList = $this->getFileList(Storage::path(''));
 
+        Log::debug('Checking for files without a database pointer', [
+            'file_list' => $fileList,
+        ]);
+
         foreach ($fileList as $key => $file) {
             $fileInfo = pathinfo($file);
 
             if (Str::contains($fileInfo['dirname'], ['public', 'private'])) {
                 unset($fileList[$key]);
+
+                Log::debug('Public or Private file found.  Skipping', [
+                    'file_name' => $file,
+                ]);
+
                 continue;
             }
 
@@ -143,11 +186,25 @@ class FileMaintenanceService
                     ->path($dbFile->folder . DIRECTORY_SEPARATOR . $dbFile->file_name);
                 $storagePath = Storage::disk('local')->path($file);
 
+                Log::debug(
+                    'Database Entry found for ' . $file . '. Validating proper location',
+                    [
+                        'database_path' => $databasePath,
+                        'storage_path' => $storagePath,
+                    ]
+                );
+
                 if ($databasePath === $storagePath) {
+                    Log::debug('File location validated.  Removing from list');
+
                     unset($fileList[$key]);
                 }
             }
         }
+
+        Log::debug('Orphaned file list', [
+            'file_list' => $fileList,
+        ]);
 
         return $fileList;
     }
@@ -182,6 +239,8 @@ class FileMaintenanceService
      */
     public function forceDeleteFileUpload(FileUpload $fileUpload): void
     {
+        Log::debug('Force deleting File Upload entry', $fileUpload->toArray());
+
         TechTipFile::whereFileId($fileUpload->file_id)->delete();
         FileLinkFile::whereFileId($fileUpload->file_id)->delete();
         CustomerFile::withTrashed()
@@ -190,8 +249,10 @@ class FileMaintenanceService
 
         try {
             $fileUpload->delete();
+            // @codeCoverageIgnoreStart
         } catch (QueryException $e) {
             DbException::check($e);
+            // @codeCoverageIgnoreEnd
         }
     }
 }

@@ -7,6 +7,7 @@ use App\Services\User\UserAdministrationService;
 use App\Services\User\UserSettingsService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 use function Laravel\Prompts\spin;
@@ -39,6 +40,8 @@ class AppMaintenanceCommand extends Command
      */
     public function handle()
     {
+        Log::notice('app:maintenance command called');
+
         $this->fix = $this->option('fix');
 
         // Extend the Max Execution time for the script
@@ -54,6 +57,8 @@ class AppMaintenanceCommand extends Command
         $this->newLine();
         $this->info('Database Check Complete');
         $this->line('If errors were found, run check again to clear additional errors');
+
+        Log::info('app:maintenance command completed');
     }
 
     /**
