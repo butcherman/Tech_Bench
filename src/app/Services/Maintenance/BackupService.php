@@ -3,7 +3,6 @@
 namespace App\Services\Maintenance;
 
 use App\Exceptions\Maintenance\BackupFileMissingException;
-use App\Services\_Base\FileMaintenanceService;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
@@ -26,7 +25,7 @@ class BackupService extends FileMaintenanceService
     public function __construct()
     {
         $this->storage = Storage::disk('backups');
-        $this->backupBaseName = config('backup.backup.name').DIRECTORY_SEPARATOR;
+        $this->backupBaseName = config('backup.backup.name') . DIRECTORY_SEPARATOR;
     }
 
     /**
@@ -38,7 +37,7 @@ class BackupService extends FileMaintenanceService
             throw new BackupFileMissingException($backupName);
         }
 
-        $this->storage->delete($this->backupBaseName.$backupName);
+        $this->storage->delete($this->backupBaseName . $backupName);
     }
 
     /**
@@ -46,7 +45,7 @@ class BackupService extends FileMaintenanceService
      */
     public function doesBackupExist(string $backupName): bool
     {
-        return $this->storage->exists($this->backupBaseName.$backupName);
+        return $this->storage->exists($this->backupBaseName . $backupName);
     }
 
     /**

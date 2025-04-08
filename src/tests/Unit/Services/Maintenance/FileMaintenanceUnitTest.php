@@ -1,8 +1,8 @@
 <?php
 
-namespace Tests\Unit\Services\_Base;
+namespace Tests\Unit\Services\Maintenance;
 
-use App\Services\_Base\FileMaintenanceService;
+use App\Services\Maintenance\FileMaintenanceService;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
@@ -61,7 +61,7 @@ class FileMaintenanceUnitTest extends TestCase
         $fileList = ['.gitignore', 'testOne.txt', 'testTwo.txt'];
 
         foreach ($fileList as $file) {
-            Storage::put($file, 'Test File For '.$file);
+            Storage::put($file, 'Test File For ' . $file);
         }
 
         $testObj = new class extends FileMaintenanceService
