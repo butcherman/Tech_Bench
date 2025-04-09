@@ -25,7 +25,7 @@ class BackupService extends FileMaintenanceService
     public function __construct()
     {
         $this->storage = Storage::disk('backups');
-        $this->backupBaseName = config('backup.backup.name') . DIRECTORY_SEPARATOR;
+        $this->backupBaseName = config('backup.backup.name').DIRECTORY_SEPARATOR;
     }
 
     /**
@@ -37,7 +37,7 @@ class BackupService extends FileMaintenanceService
             throw new BackupFileMissingException($backupName);
         }
 
-        $this->storage->delete($this->backupBaseName . $backupName);
+        $this->storage->delete($this->backupBaseName.$backupName);
     }
 
     /**
@@ -45,7 +45,7 @@ class BackupService extends FileMaintenanceService
      */
     public function doesBackupExist(string $backupName): bool
     {
-        return $this->storage->exists($this->backupBaseName . $backupName);
+        return $this->storage->exists($this->backupBaseName.$backupName);
     }
 
     /**

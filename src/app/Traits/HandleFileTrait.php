@@ -35,7 +35,7 @@ trait HandleFileTrait
     ): string {
         if (
             Storage::disk($disk)
-            ->exists($folder . DIRECTORY_SEPARATOR . $name)
+                ->exists($folder.DIRECTORY_SEPARATOR.$name)
         ) {
             // Index for appending filename
             $number = 0;
@@ -43,17 +43,17 @@ trait HandleFileTrait
             $parts = pathinfo($name);
 
             // File Extension
-            $ext = isset($parts['extension']) ? ('.' . $parts['extension']) : '';
+            $ext = isset($parts['extension']) ? ('.'.$parts['extension']) : '';
 
             // Base filename without extension or folder
             $base = preg_replace('(\(\d\))', '', $parts['filename']);
 
             // Append filename until it is unique
             do {
-                $name = $base . '(' . ++$number . ')' . $ext;
+                $name = $base.'('.++$number.')'.$ext;
             } while (
                 Storage::disk($disk)
-                ->exists($folder . DIRECTORY_SEPARATOR . $name)
+                    ->exists($folder.DIRECTORY_SEPARATOR.$name)
             );
         }
 
@@ -73,7 +73,7 @@ trait HandleFileTrait
         return sprintf(
             "%.{$decimals}f",
             $bytes / pow(1024, $factor)
-        ) . @$size[$factor];
+        ).@$size[$factor];
     }
 
     public function toReadableFileSize()

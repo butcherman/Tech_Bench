@@ -35,7 +35,7 @@ class FileMaintenanceService
 
         $size = disk_free_space($path);
 
-        Log::debug('Get Disk Free Space - ' . $size);
+        Log::debug('Get Disk Free Space - '.$size);
 
         if ($humanReadable) {
             return $this->readableFileSize($size);
@@ -55,14 +55,14 @@ class FileMaintenanceService
         foreach ($fileList as $file) {
             $fileSize = Storage::disk($disk)->size($file);
 
-            Log::debug('Checking File Size for ' . $file, [
-                'size' => $fileSize
+            Log::debug('Checking File Size for '.$file, [
+                'size' => $fileSize,
             ]);
 
             $size += $fileSize;
         }
 
-        Log::debug('Get Storage Disk Size - ' . $size);
+        Log::debug('Get Storage Disk Size - '.$size);
 
         if ($humanReadable) {
             return $this->readableFileSize($size);
@@ -79,16 +79,16 @@ class FileMaintenanceService
     {
         $allFiles = File::allFiles($basePath, true);
 
-        Log::debug('Getting file list for path - ' . $basePath, [
+        Log::debug('Getting file list for path - '.$basePath, [
             'file_list' => $allFiles,
         ]);
 
         // Find and remove scaffolding files.
         foreach ($this->scaffoldFiles as $scFile) {
-            $scaffoldList = preg_grep('/' . $scFile . '/i', $allFiles);
+            $scaffoldList = preg_grep('/'.$scFile.'/i', $allFiles);
 
             foreach ($scaffoldList as $key => $file) {
-                Log::debug('Removing Scaffolding File from file list - ' . $file);
+                Log::debug('Removing Scaffolding File from file list - '.$file);
 
                 unset($allFiles[$key]);
             }
@@ -128,7 +128,7 @@ class FileMaintenanceService
         $fileList = FileUpload::all();
 
         Log::debug('Checking files missing from the file_uploads table', [
-            'file_list' => $fileList
+            'file_list' => $fileList,
         ]);
 
         foreach ($fileList as $key => $file) {
@@ -138,16 +138,19 @@ class FileMaintenanceService
                     '/'
                 ),
                 '/'
-            ) . DIRECTORY_SEPARATOR . $file->file_name;
+            ).DIRECTORY_SEPARATOR.$file->file_name;
+
+            Log::debug('Checking for file at '.Storage::disk($file->disk)->path($filePath));
 
             if (Storage::disk($file->disk)->exists($filePath)) {
-                Log::debug('File ' . $filePath . ' exists.  Removing from list');
+                Log::debug('File '.$filePath.' exists.  Removing from list');
 
                 unset($fileList[$key]);
             }
         }
 
         Log::debug('Files missing from filesystem with database pointers', [
+            'count' => count($fileList),
             'file_list' => $fileList,
         ]);
 
@@ -169,6 +172,11 @@ class FileMaintenanceService
         foreach ($fileList as $key => $file) {
             $fileInfo = pathinfo($file);
 
+            Log::debug(
+                'Checking file '.$file,
+                $fileInfo
+            );
+
             if (Str::contains($fileInfo['dirname'], ['public', 'private'])) {
                 unset($fileList[$key]);
 
@@ -179,26 +187,33 @@ class FileMaintenanceService
                 continue;
             }
 
-            $dbFile = FileUpload::whereFileName($fileInfo['basename'])->first();
+            $dbFiles = FileUpload::whereFileName($fileInfo['basename'])->get();
 
-            if ($dbFile) {
-                $databasePath = Storage::disk($dbFile->disk)
-                    ->path($dbFile->folder . DIRECTORY_SEPARATOR . $dbFile->file_name);
-                $storagePath = Storage::disk('local')->path($file);
+            if ($dbFiles->isNotEmpty()) {
+                foreach ($dbFiles as $dbFile) {
 
-                Log::debug(
-                    'Database Entry found for ' . $file . '. Validating proper location',
-                    [
-                        'database_path' => $databasePath,
-                        'storage_path' => $storagePath,
-                    ]
-                );
+                    $databasePath = Storage::disk($dbFile->disk)
+                        ->path($dbFile->folder.DIRECTORY_SEPARATOR.$dbFile->file_name);
+                    $storagePath = $file->getRealPath();
 
-                if ($databasePath === $storagePath) {
-                    Log::debug('File location validated.  Removing from list');
+                    Log::debug(
+                        'Database Entry found for '.$file.'. Validating proper location',
+                        [
+                            'database_path' => $databasePath,
+                            'storage_path' => $storagePath,
+                        ]
+                    );
 
-                    unset($fileList[$key]);
+                    if ($databasePath === $storagePath) {
+                        Log::debug('File location validated.  Removing from list');
+
+                        unset($fileList[$key]);
+
+                        break;
+                    }
                 }
+            } else {
+                Log::debug('No database entry found for '.$file);
             }
         }
 
@@ -222,14 +237,16 @@ class FileMaintenanceService
         // Delete all the files from the disk
         foreach ($fileList as $file) {
             File::delete($file);
-            Log::notice('File Deleted - ' . $file);
+
+            Log::notice('File Deleted - '.$file);
         }
 
         // Delete all the empty directories from the disk
         $dirList = $this->getEmptyDirectories($dirPath);
         foreach ($dirList as $dir) {
             File::deleteDirectory($dir);
-            Log::notice('Directory Deleted - ' . $dir);
+
+            Log::notice('Directory Deleted - '.$dir);
         }
     }
 

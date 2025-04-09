@@ -76,7 +76,7 @@ class FileMaintenanceUnitTest extends TestCase
         $fileList = ['.gitignore', 'testOne.txt', 'testTwo.txt'];
 
         foreach ($fileList as $file) {
-            Storage::put($file, 'Test File For ' . $file);
+            Storage::put($file, 'Test File For '.$file);
         }
 
         $testObj = new class extends FileMaintenanceService
@@ -121,28 +121,29 @@ class FileMaintenanceUnitTest extends TestCase
     public function test_get_missing_files(): void
     {
         Storage::fake('local');
-        Storage::put('file_1.txt', 'test file one');
-        Storage::put('file_2.txt', 'test file one');
+        Storage::makeDirectory('test_dir');
+        Storage::put('test_dir/file_1.txt', 'test file one');
+        Storage::put('test_dir/file_2.txt', 'test file one');
 
         FileUpload::factory()->create([
             'disk' => 'local',
-            'folder' => '',
-            'file_name' => 'file_1.txt'
+            'folder' => 'test_dir',
+            'file_name' => 'file_1.txt',
         ]);
         FileUpload::factory()->create([
             'disk' => 'local',
-            'folder' => '',
-            'file_name' => 'file_2.txt'
+            'folder' => 'test_dir',
+            'file_name' => 'file_2.txt',
         ]);
         FileUpload::factory()->create([
             'disk' => 'local',
-            'folder' => '',
-            'file_name' => 'file_3.txt'
+            'folder' => 'test_dir',
+            'file_name' => 'file_3.txt',
         ]);
         FileUpload::factory()->create([
             'disk' => 'local',
-            'folder' => '',
-            'file_name' => 'file_4.txt'
+            'folder' => 'test_dir',
+            'file_name' => 'file_4.txt',
         ]);
 
         $testObj = new FileMaintenanceService;
@@ -169,13 +170,13 @@ class FileMaintenanceUnitTest extends TestCase
 
         FileUpload::factory()->create([
             'disk' => 'local',
-            'folder' => 'app/storage/framework/testing/disks/local/test',
-            'file_name' => 'file_1.txt'
+            'folder' => 'test',
+            'file_name' => 'file_1.txt',
         ]);
         FileUpload::factory()->create([
             'disk' => 'local',
-            'folder' => 'app/storage/framework/testing/disks/local/test',
-            'file_name' => 'file_2.txt'
+            'folder' => 'test',
+            'file_name' => 'file_2.txt',
         ]);
 
         $testObj = new FileMaintenanceService;

@@ -20,6 +20,9 @@ class RunBackupJobUnitTest extends TestCase
     */
     public function test_handle(): void
     {
+        // Clear any potential Atomic Locks
+        Artisan::call('cache:clear');
+
         Artisan::shouldReceive('call')
             ->once()
             ->with('backup:run', [], ConsoleOutputService::class);
@@ -29,6 +32,9 @@ class RunBackupJobUnitTest extends TestCase
 
     public function test_handle_no_disk_space(): void
     {
+        // Clear any potential Atomic Locks
+        Artisan::call('cache:clear');
+
         Notification::fake();
 
         $this->mock(BackupService::class, function (MockInterface $mock) {

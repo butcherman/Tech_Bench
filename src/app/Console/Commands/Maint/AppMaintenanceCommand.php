@@ -68,7 +68,7 @@ class AppMaintenanceCommand extends Command
      */
     protected function userCheck(): void
     {
-        $svc = new UserAdministrationService();
+        $svc = new UserAdministrationService;
 
         /**
          * List Installer and Administration Users
@@ -105,7 +105,7 @@ class AppMaintenanceCommand extends Command
         $settingsSvc = new UserSettingsService;
 
         $missingSettings = spin(
-            callback: fn() => $settingsSvc->verifyUserSettings($this->fix)
+            callback: fn () => $settingsSvc->verifyUserSettings($this->fix)
         );
         $this->newLine();
 
@@ -118,7 +118,7 @@ class AppMaintenanceCommand extends Command
             );
 
             if ($this->fix) {
-                $this->info(count($missingSettings) . ' User Profiles Fixed');
+                $this->info(count($missingSettings).' User Profiles Fixed');
             }
 
             return;
@@ -139,7 +139,7 @@ class AppMaintenanceCommand extends Command
      */
     protected function fileSystemCheck(): void
     {
-        $svc = new FileMaintenanceService();
+        $svc = new FileMaintenanceService;
 
         /**
          * Show Disk Stats
@@ -160,20 +160,20 @@ class AppMaintenanceCommand extends Command
         $this->newLine();
         $emptyDirectories = spin(
             message: 'Checking for empty directories',
-            callback: fn() => $svc->getEmptyDirectories(Storage::path(''))
+            callback: fn () => $svc->getEmptyDirectories(Storage::path(''))
         );
 
         if ($emptyDirectories) {
             $this->error('The following directories are empty and can be deleted');
             foreach ($emptyDirectories as $dir) {
-                $this->line('    ' . $dir);
+                $this->line('    '.$dir);
             }
 
             if ($this->fix) {
                 foreach ($emptyDirectories as $dir) {
                     File::deleteDirectory($dir);
                 }
-                $this->info('Deleted ' . count($emptyDirectories) . ' empty directories');
+                $this->info('Deleted '.count($emptyDirectories).' empty directories');
             }
             $this->newLine();
         }
@@ -186,11 +186,11 @@ class AppMaintenanceCommand extends Command
         $this->newLine();
         $missingFiles = spin(
             message: 'Checking for missing files',
-            callback: fn() => $svc->getMissingFiles()
+            callback: fn () => $svc->getMissingFiles()
         );
 
         if (count($missingFiles)) {
-            $this->error('Found ' . count($missingFiles) . ' files missing from filesystem.');
+            $this->error('Found '.count($missingFiles).' files missing from filesystem.');
             $this->table(
                 ['File ID', 'Disk', 'File Name'],
                 $missingFiles->makeVisible('disk')
@@ -203,7 +203,7 @@ class AppMaintenanceCommand extends Command
                     $svc->forceDeleteFileUpload($file);
                 }
 
-                $this->info('Deleted ' . count($missingFiles) . ' missing file entries');
+                $this->info('Deleted '.count($missingFiles).' missing file entries');
             }
 
             $this->newLine();
@@ -218,13 +218,13 @@ class AppMaintenanceCommand extends Command
         $this->newLine();
         $orphanedFiles = spin(
             message: 'Checking for Orphaned Files',
-            callback: fn() => $svc->getOrphanedFiles()
+            callback: fn () => $svc->getOrphanedFiles()
         );
 
         if (count($orphanedFiles)) {
-            $this->error('Found ' . count($orphanedFiles) . ' files without a database entry');
+            $this->error('Found '.count($orphanedFiles).' files without a database entry');
             foreach ($orphanedFiles as $file) {
-                $this->line('    ' . str_replace('/app/storage/app/', '', $file));
+                $this->line('    '.str_replace('/app/storage/app/', '', $file));
             }
 
             if ($this->fix) {
@@ -232,7 +232,7 @@ class AppMaintenanceCommand extends Command
                     File::delete($file);
                 }
 
-                $this->info('Deleted ' . count($orphanedFiles) . ' orphaned files.');
+                $this->info('Deleted '.count($orphanedFiles).' orphaned files.');
             }
 
             $this->newLine();
