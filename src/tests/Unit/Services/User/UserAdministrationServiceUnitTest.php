@@ -12,6 +12,7 @@ use App\Services\User\UserAdministrationService;
 use Database\Seeders\UserSeeder;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Event;
+use Mockery\MockInterface;
 use Tests\TestCase;
 
 class UserAdministrationServiceUnitTest extends TestCase
@@ -346,5 +347,22 @@ class UserAdministrationServiceUnitTest extends TestCase
             $user->fresh()->password_expires->format('m-d-y'),
             now()->subDays(5)->format('m-d-y')
         );
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | resetAllPasswordExpire()
+    |---------------------------------------------------------------------------
+    */
+    public function test_reset_all_password_expire(): void
+    {
+        User::factory()->count(5)->create();
+
+        /** @var UserAdministrationService */
+        $stub = $this->partialMock(UserAdministrationService::class, function (MockInterface $mock) {
+            $mock->shouldReceive('resetPasswordExpire')->times(6);
+        });
+
+        $stub->resetAllPasswordExpire();
     }
 }

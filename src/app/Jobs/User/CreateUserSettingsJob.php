@@ -2,6 +2,7 @@
 
 namespace App\Jobs\User;
 
+use App\Actions\User\BuildUserSettings;
 use App\Facades\CacheData;
 use App\Models\User;
 use App\Models\UserSetting;
@@ -21,18 +22,10 @@ class CreateUserSettingsJob implements ShouldQueue
     | default, all values are set to true.
     |---------------------------------------------------------------------------
     */
-    public function handle(): void
+    public function handle(BuildUserSettings $svc): void
     {
-        Log::info('Building User Settings for New User '.$this->user->full_name);
+        Log::info('Building User Settings for New User ' . $this->user->full_name);
 
-        $settings = CacheData::userSettingsType();
-
-        foreach ($settings as $setting) {
-            UserSetting::create([
-                'user_id' => $this->user->user_id,
-                'setting_type_id' => $setting->setting_type_id,
-                'value' => true,
-            ]);
-        }
+        $svc($this->user);
     }
 }
