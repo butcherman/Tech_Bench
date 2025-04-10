@@ -252,7 +252,7 @@ class SocialiteTest extends TestCase
 
         $response->assertStatus(302)
             ->assertRedirect(route('login'))
-            ->assertSessionHas('warning', 'You do not have permission to Login.  Please' .
+            ->assertSessionHas('warning', 'You do not have permission to Login.  Please'.
                 ' contact your system administrator');
 
         $this->assertDatabaseMissing('users', $user->only([

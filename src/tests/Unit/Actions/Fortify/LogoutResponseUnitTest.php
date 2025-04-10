@@ -37,8 +37,8 @@ class LogoutResponseUnitTest extends TestCase
 
         $response->assertSessionHas(
             'info',
-            'You have been logged out after being idle for more than ' .
-                config('auth.auto_logout_timer') . ' minutes'
+            'You have been logged out after being idle for more than '.
+                config('auth.auto_logout_timer').' minutes'
         );
 
         Event::assertDispatched(Logout::class);

@@ -3,7 +3,6 @@
 namespace Tests\Unit\Listeners\User;
 
 use App\Events\User\UserInitializeComplete;
-use App\Listeners\User\HandleUserInitializeCompleteListener;
 use App\Models\UserInitialize;
 use Tests\TestCase;
 
@@ -18,9 +17,7 @@ class HandleUserInitializeCompleteUnitTest extends TestCase
     {
         $token = UserInitialize::factory()->create();
 
-        $event = new UserInitializeComplete($token);
-        $testObj = new HandleUserInitializeCompleteListener;
-        $testObj->handle($event);
+        event(new UserInitializeComplete($token));
 
         $this->assertDatabaseMissing(
             'user_initializes',

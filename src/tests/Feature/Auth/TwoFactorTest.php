@@ -95,7 +95,7 @@ class TwoFactorTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('Auth/TwoFactorAuth')
                     ->has('allow-remember')
             );

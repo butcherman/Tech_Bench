@@ -9,7 +9,6 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-
 class TestEmail extends Mailable
 {
     use Queueable, SerializesModels;
@@ -25,7 +24,7 @@ class TestEmail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Test Email from ' . config('app.name'),
+            subject: 'Test Email from '.config('app.name'),
         );
     }
 

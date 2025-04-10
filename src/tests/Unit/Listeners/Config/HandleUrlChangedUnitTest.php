@@ -4,9 +4,8 @@ namespace Tests\Unit\Listeners\Config;
 
 use App\Actions\Admin\UpdateApplicationUrl;
 use App\Events\Config\UrlChangedEvent;
-use App\Listeners\Config\HandleUrlChangeListener;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
+use Mockery\MockInterface;
 use Tests\TestCase;
 
 class HandleUrlChangedUnitTest extends TestCase
@@ -18,25 +17,12 @@ class HandleUrlChangedUnitTest extends TestCase
     */
     public function test_handle(): void
     {
-        Storage::fake();
+        Log::shouldReceive('alert')->once();
 
-        $env = [
-            'APP_KEY=test',
-            'APP_URL=https://localhost',
-            'BASE_URL=localhost',
-        ];
+        $this->mock(UpdateApplicationUrl::class, function (MockInterface $mock) {
+            $mock->shouldReceive('handle')->once()->with('https://new.url');
+        });
 
-        Storage::put('envTest/.env.testing', print_r(implode("\r\n", $env), true));
-        $filePath = Storage::path('envTest');
-
-        App::useEnvironmentPath($filePath);
-
-        $testObj = new HandleUrlChangeListener(new UpdateApplicationUrl);
-        $event = new UrlChangedEvent('newUrl.com', 'oldUrl.com');
-
-        $testObj->handle($event);
-
-        $newFile = file_get_contents($filePath.'/.env.testing');
-        $this->assertStringContainsString('BASE_URL=newUrl.com', $newFile);
+        event(new UrlChangedEvent('https://new.url', 'https://old.url'));
     }
 }

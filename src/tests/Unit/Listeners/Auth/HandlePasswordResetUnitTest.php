@@ -1,15 +1,15 @@
 <?php
 
-namespace Tests\Unit\Listeners\User;
+namespace Tests\Unit\Listeners\Auth;
 
-use App\Events\User\UserEmailChangedEvent;
-use App\Mail\User\EmailChangedMail;
+use App\Mail\Auth\PasswordChangedMail;
 use App\Models\User;
+use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
-class HandleUserEmailChangedUnitTest extends TestCase
+class HandlePasswordResetUnitTest extends TestCase
 {
     /*
     |---------------------------------------------------------------------------
@@ -19,10 +19,10 @@ class HandleUserEmailChangedUnitTest extends TestCase
     public function test_handle(): void
     {
         Mail::fake();
-        Log::shouldReceive('stack->info')->once();
+        Log::shouldReceive('stack->notice')->once();
 
-        event(new UserEmailChangedEvent(User::find(1), 'oldem@noem.com'));
+        event(new PasswordReset(User::find(1)));
 
-        Mail::assertQueued(EmailChangedMail::class);
+        Mail::assertQueued(PasswordChangedMail::class);
     }
 }

@@ -1,15 +1,13 @@
 <?php
 
-namespace Tests\Unit\Listeners\User;
+namespace Tests\Unit\Listeners\Auth;
 
-use App\Events\User\UserEmailChangedEvent;
-use App\Mail\User\EmailChangedMail;
 use App\Models\User;
+use Illuminate\Auth\Events\Logout;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
-class HandleUserEmailChangedUnitTest extends TestCase
+class HandleLogoutUnitTest extends TestCase
 {
     /*
     |---------------------------------------------------------------------------
@@ -18,11 +16,8 @@ class HandleUserEmailChangedUnitTest extends TestCase
     */
     public function test_handle(): void
     {
-        Mail::fake();
         Log::shouldReceive('stack->info')->once();
 
-        event(new UserEmailChangedEvent(User::find(1), 'oldem@noem.com'));
-
-        Mail::assertQueued(EmailChangedMail::class);
+        event(new Logout('web', User::find(1)));
     }
 }

@@ -18,8 +18,8 @@ class DownloadBackupTest extends TestCase
     public function test_invoke_guest(): void
     {
         Storage::fake('backups');
-        Storage::disk('backups')->put(config('backup.backup.name') .
-            DIRECTORY_SEPARATOR . 'backup.zip', '123456');
+        Storage::disk('backups')->put(config('backup.backup.name').
+            DIRECTORY_SEPARATOR.'backup.zip', '123456');
 
         $response = $this->get(route('maint.backups.download', 'backup.zip'));
 
@@ -31,8 +31,8 @@ class DownloadBackupTest extends TestCase
     public function test_invoke_no_permission(): void
     {
         Storage::fake('backups');
-        Storage::disk('backups')->put(config('backup.backup.name') .
-            DIRECTORY_SEPARATOR . 'backup.zip', '123456');
+        Storage::disk('backups')->put(config('backup.backup.name').
+            DIRECTORY_SEPARATOR.'backup.zip', '123456');
 
         /** @var User $user */
         $user = User::factory()->createQuietly();
@@ -46,8 +46,8 @@ class DownloadBackupTest extends TestCase
     public function test_invoke(): void
     {
         Storage::fake('backups');
-        Storage::disk('backups')->put(config('backup.backup.name') .
-            DIRECTORY_SEPARATOR . 'backup.zip', '123456');
+        Storage::disk('backups')->put(config('backup.backup.name').
+            DIRECTORY_SEPARATOR.'backup.zip', '123456');
 
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);
@@ -62,8 +62,8 @@ class DownloadBackupTest extends TestCase
     {
         Exceptions::fake();
         Storage::fake('backups');
-        Storage::disk('backups')->put(config('backup.backup.name') .
-            DIRECTORY_SEPARATOR . 'backup.zip', '123456');
+        Storage::disk('backups')->put(config('backup.backup.name').
+            DIRECTORY_SEPARATOR.'backup.zip', '123456');
 
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);
