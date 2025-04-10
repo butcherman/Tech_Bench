@@ -4,6 +4,7 @@ namespace Tests\Unit\Models;
 
 use App\Models\User;
 use App\Models\UserVerificationCode;
+use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
 class UserVerificationCodeUnitTest extends TestCase
@@ -14,6 +15,8 @@ class UserVerificationCodeUnitTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+
+        Event::fake();
 
         $this->model = UserVerificationCode::create([
             'user_id' => User::factory()->create()->user_id,

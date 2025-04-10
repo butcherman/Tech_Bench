@@ -5,6 +5,7 @@ namespace Tests\Feature\Auth;
 use App\Mail\Auth\VerificationCodeMail;
 use App\Models\User;
 use App\Models\UserVerificationCode;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Mail;
 use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
@@ -18,6 +19,7 @@ class TwoFactorTest extends TestCase
     */
     public function test_middleware(): void
     {
+
         Mail::fake();
 
         config(['auth.twoFa.required' => true]);
@@ -92,9 +94,10 @@ class TwoFactorTest extends TestCase
             ->get(route('2fa.show'));
 
         $response->assertSuccessful()
-            ->assertInertia(fn (Assert $page) => $page
-                ->component('Auth/TwoFactorAuth')
-                ->has('allow-remember')
+            ->assertInertia(
+                fn(Assert $page) => $page
+                    ->component('Auth/TwoFactorAuth')
+                    ->has('allow-remember')
             );
     }
 
@@ -118,6 +121,8 @@ class TwoFactorTest extends TestCase
 
     public function test_update(): void
     {
+        Event::fake();
+
         /** @var User $user */
         $user = User::factory()->createQuietly();
         UserVerificationCode::create([
@@ -139,6 +144,8 @@ class TwoFactorTest extends TestCase
 
     public function test_update_bad_code(): void
     {
+        Event::fake();
+
         /** @var User $user */
         $user = User::factory()->createQuietly();
         UserVerificationCode::create([
@@ -159,6 +166,8 @@ class TwoFactorTest extends TestCase
 
     public function test_update_expired_code(): void
     {
+        Event::fake();
+
         /** @var User $user */
         $user = User::factory()->createQuietly();
         UserVerificationCode::create([
@@ -181,6 +190,8 @@ class TwoFactorTest extends TestCase
 
     public function test_update_with_remember_device(): void
     {
+        Event::fake();
+
         /** @var User $user */
         $user = User::factory()->createQuietly();
 

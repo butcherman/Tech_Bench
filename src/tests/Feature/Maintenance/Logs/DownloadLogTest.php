@@ -2,8 +2,10 @@
 
 namespace Tests\Feature\Maintenance\Logs;
 
+use App\Exceptions\Maintenance\LogFileMissingException;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Exceptions;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
@@ -48,6 +50,8 @@ class DownloadLogTest extends TestCase
 
     public function test_invoke_bad_file(): void
     {
+        Exceptions::fake();
+
         $file = UploadedFile::fake()->create('logFile.log', 100);
         Storage::fake('logs');
         Storage::disk('logs')->putFileAs('Application', $file, 'logFile.log');
@@ -59,6 +63,8 @@ class DownloadLogTest extends TestCase
             ->get(route('maint.logs.download', ['daily', 'wrongName']));
 
         $response->assertStatus(404);
+
+        Exceptions::assertReported(LogFileMissingException::class);
     }
 
     public function test_invoke(): void

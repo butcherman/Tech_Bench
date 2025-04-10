@@ -2,12 +2,15 @@
 
 namespace Tests\Feature\Auth;
 
+use App\Exceptions\Auth\UnableToCreateSocialiteUserException;
+use App\Exceptions\Misc\FeatureDisabledException;
 use App\Jobs\User\CreateUserSettingsJob;
 use App\Jobs\User\SendWelcomeEmailJob;
 use App\Models\User;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Exceptions;
 use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
 use Mockery\MockInterface;
@@ -22,11 +25,15 @@ class SocialiteTest extends TestCase
     */
     public function test_redirect_auth_disabled(): void
     {
+        Exceptions::fake();
+
         config(['services.azure.allow_login' => false]);
 
         $response = $this->get(route('azure-login'));
 
         $response->assertStatus(404);
+
+        Exceptions::assertReported(FeatureDisabledException::class);
     }
 
     public function test_redirect_auth(): void
@@ -45,11 +52,15 @@ class SocialiteTest extends TestCase
     */
     public function test_callback_feature_disabled(): void
     {
+        Exceptions::fake();
+
         config(['services.azure.allow_login' => false]);
 
         $response = $this->get(route('azure-callback'));
 
         $response->assertStatus(404);
+
+        Exceptions::assertReported(FeatureDisabledException::class);
     }
 
     public function test_callback_invalid_state(): void
@@ -93,7 +104,8 @@ class SocialiteTest extends TestCase
                 $mock->token = Str::uuid();
                 $mock->principalName = $user->email;
                 $mock->mail = $user->email;
-            });
+            }
+        );
 
         $provider = $this->mock(
             'Laravel\Socialite\Contracts\Provider',
@@ -101,7 +113,8 @@ class SocialiteTest extends TestCase
                 $mock
                     ->shouldReceive('user')
                     ->andReturn($abstractUser);
-            });
+            }
+        );
 
         Socialite::shouldReceive('driver')
             ->with('azure')
@@ -157,7 +170,8 @@ class SocialiteTest extends TestCase
                 $mock->token = Str::uuid();
                 $mock->principalName = $user->email;
                 $mock->mail = $user->email;
-            });
+            }
+        );
 
         $provider = $this->mock(
             'Laravel\Socialite\Contracts\Provider',
@@ -165,7 +179,8 @@ class SocialiteTest extends TestCase
                 $mock
                     ->shouldReceive('user')
                     ->andReturn($abstractUser);
-            });
+            }
+        );
 
         Socialite::shouldReceive('driver')
             ->with('azure')
@@ -189,6 +204,8 @@ class SocialiteTest extends TestCase
 
     public function test_callback_new_user_register_disabled(): void
     {
+        Exceptions::fake();
+
         config(['services.azure.allow_login' => true]);
         config(['services.azure.allow_register' => false]);
 
@@ -215,7 +232,8 @@ class SocialiteTest extends TestCase
                 $mock->token = Str::uuid();
                 $mock->principalName = $user->email;
                 $mock->mail = $user->email;
-            });
+            }
+        );
 
         $provider = $this->mock(
             'Laravel\Socialite\Contracts\Provider',
@@ -223,7 +241,8 @@ class SocialiteTest extends TestCase
                 $mock
                     ->shouldReceive('user')
                     ->andReturn($abstractUser);
-            });
+            }
+        );
 
         Socialite::shouldReceive('driver')
             ->with('azure')
@@ -233,13 +252,15 @@ class SocialiteTest extends TestCase
 
         $response->assertStatus(302)
             ->assertRedirect(route('login'))
-            ->assertSessionHas('warning', 'You do not have permission to Login.  Please'.
-                   ' contact your system administrator');
+            ->assertSessionHas('warning', 'You do not have permission to Login.  Please' .
+                ' contact your system administrator');
 
         $this->assertDatabaseMissing('users', $user->only([
             'first_name',
             'last_name',
             'email',
         ]));
+
+        Exceptions::assertReported(UnableToCreateSocialiteUserException::class);
     }
 }

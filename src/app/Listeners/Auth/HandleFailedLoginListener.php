@@ -9,8 +9,6 @@ class HandleFailedLoginListener
 {
     /**
      * Handle the event.
-     *
-     * @codeCoverageIgnore
      */
     public function handle(Failed $event): void
     {

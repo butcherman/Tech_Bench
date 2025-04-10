@@ -2,7 +2,9 @@
 
 namespace Tests\Feature\Maintenance\Backup;
 
+use App\Exceptions\Maintenance\BackupFileMissingException;
 use App\Models\User;
+use Illuminate\Support\Facades\Exceptions;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
@@ -16,8 +18,8 @@ class DownloadBackupTest extends TestCase
     public function test_invoke_guest(): void
     {
         Storage::fake('backups');
-        Storage::disk('backups')->put(config('backup.backup.name').
-            DIRECTORY_SEPARATOR.'backup.zip', '123456');
+        Storage::disk('backups')->put(config('backup.backup.name') .
+            DIRECTORY_SEPARATOR . 'backup.zip', '123456');
 
         $response = $this->get(route('maint.backups.download', 'backup.zip'));
 
@@ -29,8 +31,8 @@ class DownloadBackupTest extends TestCase
     public function test_invoke_no_permission(): void
     {
         Storage::fake('backups');
-        Storage::disk('backups')->put(config('backup.backup.name').
-            DIRECTORY_SEPARATOR.'backup.zip', '123456');
+        Storage::disk('backups')->put(config('backup.backup.name') .
+            DIRECTORY_SEPARATOR . 'backup.zip', '123456');
 
         /** @var User $user */
         $user = User::factory()->createQuietly();
@@ -44,8 +46,8 @@ class DownloadBackupTest extends TestCase
     public function test_invoke(): void
     {
         Storage::fake('backups');
-        Storage::disk('backups')->put(config('backup.backup.name').
-            DIRECTORY_SEPARATOR.'backup.zip', '123456');
+        Storage::disk('backups')->put(config('backup.backup.name') .
+            DIRECTORY_SEPARATOR . 'backup.zip', '123456');
 
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);
@@ -58,9 +60,10 @@ class DownloadBackupTest extends TestCase
 
     public function test_invoke_missing_file(): void
     {
+        Exceptions::fake();
         Storage::fake('backups');
-        Storage::disk('backups')->put(config('backup.backup.name').
-            DIRECTORY_SEPARATOR.'backup.zip', '123456');
+        Storage::disk('backups')->put(config('backup.backup.name') .
+            DIRECTORY_SEPARATOR . 'backup.zip', '123456');
 
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);
@@ -69,5 +72,7 @@ class DownloadBackupTest extends TestCase
             ->get(route('maint.backups.download', 'backup2.zip'));
 
         $response->assertStatus(404);
+
+        Exceptions::assertReported(BackupFileMissingException::class);
     }
 }

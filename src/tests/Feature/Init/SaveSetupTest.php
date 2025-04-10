@@ -2,8 +2,11 @@
 
 namespace Tests\Feature\Init;
 
+use App\Jobs\User\UpdatePasswordExpireJob;
 use App\Models\User;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
@@ -30,6 +33,8 @@ class SaveSetupTest extends TestCase
     {
         // Create Fake .env file to be overwritten during test
         Storage::fake();
+        Event::fake();
+        Queue::fake();
 
         $env = [
             'APP_KEY=test',
@@ -84,5 +89,7 @@ class SaveSetupTest extends TestCase
             ->get(route('init.save-setup'));
 
         $response->assertSuccessful();
+
+        Queue::assertPushed(UpdatePasswordExpireJob::class);
     }
 }
