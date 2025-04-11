@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Services\Admin;
 
+use App\Exceptions\Security\SslCertificateMissingException;
 use App\Services\Admin\CertificateService;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
@@ -68,6 +69,17 @@ class CertificateServiceUnitTest extends TestCase
         $res = $this->testObj->getCurrentCert();
 
         $this->assertEquals($shouldBe, $res);
+    }
+
+    public function test_get_current_cert_missing(): void
+    {
+        Storage::disk('security')->move('server.crt', 'server.old');
+
+        $this->expectException(SslCertificateMissingException::class);
+
+        $res = $this->testObj->getCurrentCert();
+
+        $this->assertNull($res);
     }
 
     /*
@@ -154,6 +166,18 @@ class CertificateServiceUnitTest extends TestCase
         $res = $this->testObj->getCertMetaData('random key for cert');
 
         $this->assertArrayHasKey('Error', $res);
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | getCertDaysLeft()
+    |---------------------------------------------------------------------------
+    */
+    public function test_get_cert_days_left(): void
+    {
+        $res = $this->testObj->getCertDaysLeft();
+
+        $this->assertEquals($res, 4);
     }
 
     /*

@@ -2,8 +2,10 @@
 
 namespace Tests\Feature\Admin\Config;
 
+use App\Exceptions\Security\SslCertificateMissingException;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Exceptions;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Testing\AssertableInertia as Assert;
 use OpenSSLAsymmetricKey;
@@ -95,13 +97,13 @@ class SecurityTest extends TestCase
             ->assertInertia(
                 fn (Assert $page) => $page
                     ->component('Admin/Security/Index')
-                    // ->has('cert') TODO - Needed???
                     ->has('data')
             );
     }
 
     public function test_index_missing_cert(): void
     {
+        Exceptions::fake();
         Storage::fake('security');
         Storage::disk('security')->makeDirectory('private');
 
@@ -115,9 +117,10 @@ class SecurityTest extends TestCase
             ->assertInertia(
                 fn (Assert $page) => $page
                     ->component('Admin/Security/Index')
-                    // ->has('cert') TODO - Needed???
                     ->has('data')
             );
+
+        Exceptions::assertReported(SslCertificateMissingException::class);
     }
 
     /*

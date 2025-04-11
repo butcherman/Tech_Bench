@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Config;
 
+use App\Exceptions\Security\SslCertificateMissingException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Config\CsrRequest;
 use App\Http\Requests\Admin\Config\SslCertificateRequest;
@@ -24,8 +25,16 @@ class SecurityController extends Controller
     {
         $this->authorize('viewAny', AppSettings::class);
 
+        try {
+            $certData = $this->svc->getCertMetaData();
+        } catch (SslCertificateMissingException $e) {
+            report($e);
+
+            $certData = null;
+        }
+
         return Inertia::render('Admin/Security/Index', [
-            'data' => fn () => $this->svc->getCertMetaData(),
+            'data' => fn () => $certData,
         ]);
     }
 

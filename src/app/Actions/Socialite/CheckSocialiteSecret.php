@@ -16,41 +16,37 @@ class CheckSocialiteSecret extends UserGlobalSettingsService
      *
      * @var array
      */
-    protected $notificationDays = [15, 30, 60, 90];
+    // protected $notificationDays = [15, 30, 60, 90];
 
-    /*
-    |---------------------------------------------------------------------------
-    | Check if the Azure Client Secret is set to expire soon.  If so, email the
-    | users with the Installer Role to notify them of the upcoming expiration
-    | date.
-    |---------------------------------------------------------------------------
-    */
-    public function __invoke(): void
+    /**
+     * Get the number of days left until the Socialite Certificate expires.
+     */
+    public function __invoke(): int
     {
         Log::info('Checking Azure Certificate expiration date');
 
-        $daysToExpire = $this->getOathCertExpiresDays();
-        $notificationGroup = User::where('role_id', 1)->get();
+        return $this->getOathCertExpiresDays();
+        // $notificationGroup = User::where('role_id', 1)->get();
 
-        // If the cert has already expired, send expired notice
-        if ($daysToExpire <= 0) {
-            Mail::to($notificationGroup)->send(new AzureCertificateExpiredMail);
-            Log::alert('Azure Certificate has expired.  SSO will no long work');
+        // // If the cert has already expired, send expired notice
+        // if ($daysToExpire <= 0) {
+        //     Mail::to($notificationGroup)->send(new AzureCertificateExpiredMail);
+        //     Log::alert('Azure Certificate has expired.  SSO will no long work');
 
-            return;
-        }
+        //     return;
+        // }
 
-        // If the cert is going to expire in <notification days> send about to expire notice
-        if (in_array($daysToExpire, $this->notificationDays)) {
-            Mail::to($notificationGroup)
-                ->send(new AzureCertificateExpiresSoonMail($daysToExpire));
-            Log::notice('Azure Certificate will expire in '.$daysToExpire.' days.');
+        // // If the cert is going to expire in <notification days> send about to expire notice
+        // if (in_array($daysToExpire, $this->notificationDays)) {
+        //     Mail::to($notificationGroup)
+        //         ->send(new AzureCertificateExpiresSoonMail($daysToExpire));
+        //     Log::notice('Azure Certificate will expire in '.$daysToExpire.' days.');
 
-            return;
-        }
+        //     return;
+        // }
 
-        Log::info(
-            'Azure Certificate is valid, no action needed'
-        );
+        // Log::info(
+        //     'Azure Certificate is valid, no action needed'
+        // );
     }
 }
