@@ -5,7 +5,6 @@ namespace Tests\Unit\Jobs\User;
 use App\Actions\User\BuildUserSettings;
 use App\Jobs\User\CreateUserSettingsJob;
 use App\Models\User;
-use App\Models\UserSettingType;
 use Illuminate\Support\Facades\DB;
 use Mockery\MockInterface;
 use Tests\TestCase;

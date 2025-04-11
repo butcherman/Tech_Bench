@@ -3,9 +3,7 @@
 namespace App\Jobs\User;
 
 use App\Actions\User\BuildUserSettings;
-use App\Facades\CacheData;
 use App\Models\User;
-use App\Models\UserSetting;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Log;
@@ -24,7 +22,7 @@ class CreateUserSettingsJob implements ShouldQueue
     */
     public function handle(BuildUserSettings $svc): void
     {
-        Log::info('Building User Settings for New User ' . $this->user->full_name);
+        Log::info('Building User Settings for New User '.$this->user->full_name);
 
         $svc($this->user);
     }

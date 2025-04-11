@@ -2,7 +2,6 @@
 
 namespace App\Jobs\User;
 
-use App\Models\User;
 use App\Services\User\UserAdministrationService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;

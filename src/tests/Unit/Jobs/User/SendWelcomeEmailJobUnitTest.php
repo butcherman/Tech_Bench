@@ -7,8 +7,8 @@ use App\Mail\User\UserWelcomeEmail;
 use App\Models\User;
 use App\Models\UserInitialize;
 use Illuminate\Support\Facades\Mail;
-use Tests\TestCase;
 use Illuminate\Support\Str;
+use Tests\TestCase;
 
 class SendWelcomeEmailJobUnitTest extends TestCase
 {
@@ -22,7 +22,6 @@ class SendWelcomeEmailJobUnitTest extends TestCase
         Mail::fake();
 
         $user = User::factory()->create();
-
 
         SendWelcomeEmailJob::dispatch($user);
 
