@@ -9,9 +9,6 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-/**
- * @codeCoverageIgnore
- */
 class TestEmail extends Mailable
 {
     use Queueable, SerializesModels;

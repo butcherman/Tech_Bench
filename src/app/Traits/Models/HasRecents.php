@@ -12,8 +12,9 @@ trait HasRecents
     public function touchRecent(User $user): void
     {
         $isRecent = $this->Recent->where('user_id', $user->user_id)->first();
+
         if ($isRecent) {
-            $isRecent->touch();
+            $isRecent->pivot->touch();
         } else {
             $this->Recent()->attach($user);
         }

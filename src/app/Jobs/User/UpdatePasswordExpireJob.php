@@ -2,7 +2,6 @@
 
 namespace App\Jobs\User;
 
-use App\Models\User;
 use App\Services\User\UserAdministrationService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
@@ -20,17 +19,9 @@ class UpdatePasswordExpireJob implements ShouldQueue
 
     /**
      * Execute the job.
-     *
-     * TODO - Add User Administration Service
      */
     public function handle(UserAdministrationService $svc): void
     {
-        // Get all active users from DB
-        $userList = User::all();
-
-        // If their password expire time is longer than the new expire days, modify
-        $userList->each(function (User $user) use ($svc) {
-            $svc->resetPasswordExpire($user);
-        });
+        $svc->resetAllPasswordExpire();
     }
 }

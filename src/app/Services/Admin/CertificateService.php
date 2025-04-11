@@ -2,6 +2,8 @@
 
 namespace App\Services\Admin;
 
+use App\Exceptions\Security\SslCertificateMissingException;
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -48,7 +50,13 @@ class CertificateService
      */
     public function getCurrentCert(): ?string
     {
-        return $this->storage->get($this->certFile);
+        $cert = $this->storage->get($this->certFile);
+
+        if (is_null($cert)) {
+            throw new SslCertificateMissingException;
+        }
+
+        return $cert;
     }
 
     /**
@@ -136,6 +144,21 @@ class CertificateService
             'signature' => $certData->getSignatureAlgorithm(),
             'organization' => $certData->getOrganization(),
         ];
+    }
+
+    /**
+     * Check how many days are left until the current SSL Certificate expires.
+     */
+    public function getCertDaysLeft(): int|false
+    {
+        $currentCert = $this->getCurrentCert();
+        $certData = $this->buildCertMetaData($currentCert);
+
+        $daysUntilExpire = floor(
+            Carbon::now()->diffInDays($certData->expirationDate())
+        );
+
+        return $daysUntilExpire;
     }
 
     /**

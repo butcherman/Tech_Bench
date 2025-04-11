@@ -183,6 +183,21 @@ class User extends Authenticatable
     */
 
     /**
+     * Check a user's Setting value based on the name field.
+     */
+    public function checkUserSetting(string $settingName): bool
+    {
+        $settingTypeId = UserSettingType::where('name', $settingName)
+            ->first()
+            ->setting_type_id;
+
+        return $this->UserSettings
+            ->where('setting_type_id', $settingTypeId)
+            ->first()
+            ->value;
+    }
+
+    /**
      * Determine the new expire date for an updated password
      */
     public function getNewExpireTime(?bool $immediate = false): ?Carbon

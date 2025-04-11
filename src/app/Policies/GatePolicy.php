@@ -28,4 +28,12 @@ class GatePolicy
 
         return false;
     }
+
+    /**
+     * Determine if the user is an Installer Level User
+     */
+    public function isInstaller(User $user): bool
+    {
+        return $user->role_id === 1;
+    }
 }

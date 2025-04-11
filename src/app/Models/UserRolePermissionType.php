@@ -25,7 +25,7 @@ class UserRolePermissionType extends Model
     protected $guarded = ['perm_type_id', 'created_at', 'updated_at'];
 
     /** @var array<int, string> */
-    protected $appends = ['group', 'feature_enabled'];
+    protected $appends = ['group'];
 
     /*
     |---------------------------------------------------------------------------
@@ -39,14 +39,15 @@ class UserRolePermissionType extends Model
         );
     }
 
-    public function featureEnabled(): Attribute
-    {
-        return Attribute::make(
-            get: fn () => $this->feature_name && Auth::check()
-                ? Auth::user()->features()->active($this->feature_name)
-                : true,
-        );
-    }
+    // TODO - Go Away???
+    // public function featureEnabled(): Attribute
+    // {
+    //     return Attribute::make(
+    //         get: fn () => $this->feature_name && Auth::check()
+    //             ? Auth::user()->features()->active($this->feature_name)
+    //             : true,
+    //     );
+    // }
 
     /*
     |---------------------------------------------------------------------------

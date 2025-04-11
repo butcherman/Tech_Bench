@@ -27,7 +27,7 @@ class CacheFacadeHelperUnitTest extends TestCase
 
         Cache::flush();
 
-        $this->helperObj = new CacheFacadeHelper();
+        $this->helperObj = new CacheFacadeHelper;
 
         $this->seed(EquipmentSeeder::class);
     }
@@ -122,7 +122,7 @@ class CacheFacadeHelperUnitTest extends TestCase
     */
     public function test_app_data(): void
     {
-        $version = new Version();
+        $version = new Version;
 
         $shouldBe = [
             'name' => config('app.name'),

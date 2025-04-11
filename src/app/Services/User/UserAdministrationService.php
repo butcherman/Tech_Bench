@@ -93,7 +93,6 @@ class UserAdministrationService
     {
         if ($force) {
             try {
-
                 $user->forceDelete();
             } catch (QueryException $e) {
                 DbException::check($e, 'This User has contributions tied to them.  Unable to delete.');
@@ -119,7 +118,7 @@ class UserAdministrationService
     public function resetPasswordExpire(User $user): void
     {
         $newExpireDate = $user->getNewExpireTime();
-        Log::debug('New Expiration Date for ' . $user->username . ' - ' . $newExpireDate);
+        Log::debug('New Expiration Date for '.$user->username.' - '.$newExpireDate);
 
         // If the new expire date is null, remove the expire date altogether
         if (is_null($newExpireDate)) {
@@ -136,6 +135,18 @@ class UserAdministrationService
         if ($newExpireDate < $user->password_expires || is_null($user->password_expires)) {
             $user->password_expires = $newExpireDate;
             $user->save();
+        }
+    }
+
+    /**
+     * Update the Password Expire date for all users
+     */
+    public function resetAllPasswordExpire(): void
+    {
+        $userList = $this->getAllUsers();
+
+        foreach ($userList as $user) {
+            $this->resetPasswordExpire($user);
         }
     }
 }

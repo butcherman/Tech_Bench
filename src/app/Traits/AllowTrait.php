@@ -4,6 +4,7 @@ namespace App\Traits;
 
 use App\Models\User;
 use App\Models\UserRolePermission;
+use Illuminate\Support\Collection;
 
 /*
 |-------------------------------------------------------------------------------
@@ -16,7 +17,7 @@ trait AllowTrait
     /**
      *  Check permission based on description field of permission type.
      */
-    protected function checkPermission(User $user, $description): bool
+    protected function checkPermission(User $user, string $description): bool
     {
         $allowed = UserRolePermission::whereRoleId($user->role_id)
             ->whereHas('UserRolePermissionType', function ($q) use ($description) {
@@ -31,6 +32,22 @@ trait AllowTrait
         // @codeCoverageIgnoreStart
         return false;
         // @codeCoverageIgnoreEnd
+    }
+
+    /**
+     * Return a list of users with permissions to the selected permission type
+     * set to true.
+     */
+    protected function getUsersWithPermission(string $description): Collection
+    {
+        $allowedRoles = UserRolePermission::whereHas(
+            'UserRolePermissionType',
+            function ($q) use ($description) {
+                $q->where('description', $description);
+            }
+        )->where('allow', true)->get()->pluck('role_id');
+
+        return User::whereIn('role_id', $allowedRoles)->get();
     }
 
     /**

@@ -4,8 +4,10 @@ namespace Tests\Unit\Actions\Init;
 
 use App\Actions\Init\BuildApplication;
 use App\Events\Admin\AdministrationEvent;
+use App\Jobs\User\UpdatePasswordExpireJob;
 use App\Models\User;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Queue;
 use Tests\TestCase;
 
 class BuildApplicationUnitTest extends TestCase
@@ -18,6 +20,7 @@ class BuildApplicationUnitTest extends TestCase
     public function test_invoke(): void
     {
         Event::fake();
+        Queue::fake();
 
         $data = [
             'basic-settings' => [
@@ -56,5 +59,6 @@ class BuildApplicationUnitTest extends TestCase
         $obj($data);
 
         Event::assertDispatchedTimes(AdministrationEvent::class, 6);
+        Queue::assertPushed(UpdatePasswordExpireJob::class);
     }
 }

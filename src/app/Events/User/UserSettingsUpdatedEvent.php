@@ -17,5 +17,6 @@ class UserSettingsUpdatedEvent
     | administrator.
     |---------------------------------------------------------------------------
     */
+    // TODO - Is this being used for anything?
     public function __construct(public User $user) {}
 }

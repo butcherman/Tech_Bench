@@ -76,6 +76,7 @@ export const useAppStore = defineStore("appStore", () => {
         copyright,
 
         flashAlerts,
+        pushFlashMsg,
         removeFlashMsg,
     };
 });

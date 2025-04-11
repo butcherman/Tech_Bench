@@ -120,7 +120,7 @@ class UserSettingsUnitTest extends TestCase
 
         $pulledTestUser = User::where('username', $testUser->username)->first();
 
-        $this->assertCount(2, $res);
+        $this->assertCount(1, $res);
 
         $this->assertDatabaseMissing('user_settings', [
             'user_id' => $pulledTestUser->user_id,
@@ -151,7 +151,7 @@ class UserSettingsUnitTest extends TestCase
 
         $pulledTestUser = User::where('username', $testUser->username)->first();
 
-        $this->assertCount(2, $res);
+        $this->assertCount(1, $res);
 
         $this->assertDatabaseHas('user_settings', [
             'user_id' => $pulledTestUser->user_id,
@@ -160,6 +160,10 @@ class UserSettingsUnitTest extends TestCase
         $this->assertDatabaseHas('user_settings', [
             'user_id' => $pulledTestUser->user_id,
             'setting_type_id' => 2,
+        ]);
+        $this->assertDatabaseHas('user_settings', [
+            'user_id' => $pulledTestUser->user_id,
+            'setting_type_id' => 3,
         ]);
     }
 }

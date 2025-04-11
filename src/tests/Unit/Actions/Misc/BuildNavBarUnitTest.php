@@ -2,7 +2,6 @@
 
 namespace Tests\Unit\Actions\Misc;
 
-use App\Actions\Misc\BuildNavBar;
 use App\Actions\User\BuildUserNavbar;
 use App\Models\User;
 use Tests\TestCase;

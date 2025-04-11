@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
-class SendWelcomeEmailUnitTest extends TestCase
+class SendWelcomeEmailJobUnitTest extends TestCase
 {
     /*
     |---------------------------------------------------------------------------
@@ -23,8 +23,7 @@ class SendWelcomeEmailUnitTest extends TestCase
 
         $user = User::factory()->create();
 
-        $job = new SendWelcomeEmailJob($user);
-        $job->handle();
+        SendWelcomeEmailJob::dispatch($user);
 
         $this->assertDatabaseHas('user_initializes', [
             'username' => $user->username,
@@ -43,8 +42,7 @@ class SendWelcomeEmailUnitTest extends TestCase
             'token' => Str::uuid(),
         ]);
 
-        $job = new SendWelcomeEmailJob($user);
-        $job->handle();
+        SendWelcomeEmailJob::dispatch($user);
 
         $this->assertDatabaseHas('user_initializes', [
             'username' => $user->username,

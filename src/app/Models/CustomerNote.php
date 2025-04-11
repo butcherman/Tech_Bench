@@ -75,7 +75,7 @@ class CustomerNote extends Model
                 ? User::withTrashed()
                     ->find($this->updated_by)
                     ->full_name
-                    ?? 'unknown'
+                ?? 'unknown'
                 : null,
         );
     }
@@ -140,7 +140,8 @@ class CustomerNote extends Model
     public function newBroadcastableModelEvent(string $event): BroadcastableModelEventOccurred
     {
         return (new BroadcastableModelEventOccurred(
-            $this, $event
+            $this,
+            $event
         ))->dontBroadcastToCurrentUser();
     }
 

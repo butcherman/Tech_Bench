@@ -265,9 +265,8 @@ class ApplicationSettingsUnitTest extends TestCase
         $data = [
             'nightly_backup' => false,
             'nightly_cleanup' => false,
-            'encryption' => false,
+            'encryption' => true,
             'password' => 'randomValue',
-            'mail_to' => 'randomDude@noemail.com',
         ];
 
         $testObj = new ApplicationSettingsService;
@@ -284,9 +283,6 @@ class ApplicationSettingsUnitTest extends TestCase
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'backup.backup.password',
-        ]);
-        $this->assertDatabaseHas('app_settings', [
-            'key' => 'backup.notifications.mail.to',
         ]);
     }
 }

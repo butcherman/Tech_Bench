@@ -6,9 +6,6 @@ use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
 
-/**
- * @codeCoverageIgnore
- */
 class BackupFailedException extends Exception
 {
     public function report(): void

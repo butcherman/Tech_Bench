@@ -16,6 +16,7 @@ use App\Models\UserTechTipRecent;
 use App\Models\UserVerificationCode;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
@@ -71,6 +72,8 @@ class UserUnitTest extends TestCase
 
     public function test_user_verification_code_relationship(): void
     {
+        Event::fake();
+
         $code = UserVerificationCode::create([
             'user_id' => $this->model->user_id,
             'code' => '1234',
@@ -196,6 +199,12 @@ class UserUnitTest extends TestCase
     | Additional Model Methods
     |---------------------------------------------------------------------------
     */
+    public function test_check_user_setting(): void
+    {
+        $settingName = 'Receive Email Notifications';
+        $this->assertTrue($this->model->checkUserSetting($settingName));
+    }
+
     public function test_get_new_expire_time(): void
     {
         // Test Immediate Expire

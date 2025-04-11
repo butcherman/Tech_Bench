@@ -11,17 +11,17 @@ trait HasBookmarks
      */
     public function isFav(User $user): bool
     {
-        $bookmarks = $this->Bookmarks->pluck('user_id')->toArray();
+        $bookmark = $this->Bookmarks->where('user_id', $user->user_id)->first();
 
-        return in_array($user->user_id, $bookmarks);
+        return $bookmark ? true : false;
     }
 
     /**
      * Attach or Detach a user's bookmark
      */
-    public function toggleBookmark(User $user, bool $value): void
+    public function toggleBookmark(User $user, bool $set): void
     {
-        if ($value) {
+        if ($set) {
             $this->Bookmarks()->attach($user);
         } else {
             $this->Bookmarks()->detach($user);

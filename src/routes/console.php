@@ -2,6 +2,9 @@
 
 use App\Jobs\Admin\CheckAzureCertificateJob;
 use App\Jobs\Admin\CheckSslCertificateJob;
+use App\Jobs\Maintenance\CleanImageFoldersJob;
+use App\Jobs\Maintenance\GarbageCollectionJob;
+use App\Jobs\Maintenance\NightlyBackupJob;
 use Illuminate\Support\Facades\Schedule;
 
 /*
@@ -11,14 +14,15 @@ use Illuminate\Support\Facades\Schedule;
 */
 
 // Schedule::command('app:collect-garbage')->daily();
-// Schedule::command('telescope:prune')->daily();
-// Schedule::command('horizon:snapshot')->everyFifteenMinutes();
-// Schedule::command('auth:clear-resets')->everyFifteenMinutes();
-// Schedule::command('auth:clear-validation-codes')->everyFifteenMinutes();
+Schedule::command('telescope:prune')->daily();
+Schedule::command('horizon:snapshot')->everyFifteenMinutes();
+Schedule::command('auth:clear-resets')->everyFifteenMinutes();
+Schedule::command('auth:clear-validation-codes')->everyFifteenMinutes();
 
 // // TODO - Create Jobs
 // Schedule::job(new CheckSslCertificateJob)->daily();
 // Schedule::job(new CheckAzureCertificateJob)->daily();
-// Schedule::job(new NightlyBackupJob)->dailyAt('03:00');
-// Schedule::job(new DailyCleanupJob)->dailyAt('06:00');
-// Schedule::job(new ImageFileCleanupJob)->monthly();
+
+Schedule::job(new NightlyBackupJob)->dailyAt('03:00');
+Schedule::job(new GarbageCollectionJob)->daily();
+Schedule::job(new CleanImageFoldersJob)->monthly();

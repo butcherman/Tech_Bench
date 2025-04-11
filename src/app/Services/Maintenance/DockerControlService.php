@@ -32,7 +32,7 @@ class DockerControlService
             return true;
         }
 
-        $status = Process::run('docker restart ' . $container->value);
+        $status = Process::run('docker restart '.$container->value);
 
         return $status->successful();
     }

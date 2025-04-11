@@ -14,6 +14,8 @@ defineProps<{
                 </span>
             </slot>
         </div>
-        <div class="grow"><slot /></div>
+        <div class="grow">
+            <slot />
+        </div>
     </div>
 </template>

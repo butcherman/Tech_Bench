@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch } from "vue";
+import { computed, ref } from "vue";
 
 const emit = defineEmits<{
     hide: [];
@@ -65,23 +65,15 @@ const hide = (): void => {
     modalOpen.value = false;
 };
 
-/**
- * Watch the modal open variable
- */
-watch(modalOpen, (newVal: boolean): void => {
-    if (newVal) {
-        emit("shown");
-    } else {
-        emit("hidden");
-    }
-});
-
 defineExpose({ show, hide });
 </script>
 
 <template>
     <Teleport to="body">
-        <Transition>
+        <Transition
+            @after-enter="$emit('shown')"
+            @after-leave="$emit('hidden')"
+        >
             <div v-show="modalOpen" class="relative z-50">
                 <div
                     v-if="!hideBackdrop"

@@ -8,10 +8,12 @@ use Tests\TestCase;
 
 class CheckForInitTest extends TestCase
 {
-    /**
-     * Test the Check for Init Middleware
-     */
-    public function test_as_guest()
+    /*
+    |---------------------------------------------------------------------------
+    | Test the Check for Init Middleware
+    |---------------------------------------------------------------------------
+    */
+    public function test_as_guest(): void
     {
         config(['app.first_time_setup' => true]);
         config(['app.env' => 'local']);
@@ -23,7 +25,7 @@ class CheckForInitTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_as_regular_user()
+    public function test_as_regular_user(): void
     {
         config(['app.first_time_setup' => true]);
         config(['app.env' => 'local']);
@@ -38,7 +40,7 @@ class CheckForInitTest extends TestCase
         $response->assertForbidden();
     }
 
-    public function test_as_installer()
+    public function test_as_installer(): void
     {
         config(['app.first_time_setup' => true]);
         config(['app.env' => 'local']);
@@ -51,7 +53,7 @@ class CheckForInitTest extends TestCase
             ->assertRedirect(route('init.welcome'));
     }
 
-    public function test_second_run()
+    public function test_second_run(): void
     {
         config(['app.first_time_setup' => false]);
         config(['app.env' => 'local']);

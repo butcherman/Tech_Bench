@@ -1,5 +1,7 @@
 <?php
 
+use App\Notifications\Maintenance\Backup\BackupNotifiable;
+
 return [
     'nightly_backup' => true,
     'nightly_cleanup' => true,
@@ -77,6 +79,19 @@ return [
              *
              * For a complete list of available customization options, see https://github.com/spatie/db-dumper
              */
+            'mysql' => [
+                'dump' => [
+                    'excludeTables' => [
+                        'failed_jobs',
+                        'jobs',
+                        'password_resets',
+                        'telescope_entries',
+                        'telescope_entries_tags',
+                        'telescope_monitoring',
+                        'user_initializes',
+                    ],
+                ],
+            ],
             'databases' => [
                 'mysql',
             ],
@@ -98,7 +113,7 @@ return [
         /*
          * If specified, the database dumped file name will contain a timestamp (e.g.: 'Y-m-d-H-i-s').
          */
-        'database_dump_file_timestamp_format' => 'Y-m-d-H-i',
+        'database_dump_file_timestamp_format' => null,
 
         /*
          * The base of the dump filename, either 'database' or 'connection'
@@ -114,7 +129,7 @@ return [
          * If not specified, the file extension will be .archive for MongoDB and .sql for all other databases
          * The file extension should be specified without a leading .
          */
-        'database_dump_file_extension' => '',
+        'database_dump_file_extension' => 'sql',
 
         'destination' => [
             /*
@@ -174,7 +189,7 @@ return [
          * When set to 'default', we'll use ZipArchive::EM_AES_256 if it is
          * available on your system.
          */
-        'encryption' => 'default',
+        'encryption' => false,
 
         /*
          * The number of attempts, in case the backup command encounters an exception
@@ -209,43 +224,43 @@ return [
          * Here you can specify the notifiable to which the notifications should be sent. The default
          * notifiable will use the variables specified in this config file.
          */
-        'notifiable' => \Spatie\Backup\Notifications\Notifiable::class,
+        'notifiable' => BackupNotifiable::class,  //  \Spatie\Backup\Notifications\Notifiable::class,
 
-        'mail' => [
-            'to' => 'your@example.com',
+        // 'mail' => [
+        //     'to' => 'your@example.com',
 
-            'from' => [
-                'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
-                'name' => env('MAIL_FROM_NAME', 'Example'),
-            ],
-        ],
+        //     'from' => [
+        //         'address' => env('MAIL_FROM_ADDRESS', 'tech-bench@noem.com'),
+        //         'name' => env('MAIL_FROM_NAME', 'Tech Bench'),
+        //     ],
+        // ],
 
-        'slack' => [
-            'webhook_url' => '',
+        // 'slack' => [
+        //     'webhook_url' => '',
 
-            /*
-             * If this is set to null the default channel of the webhook will be used.
-             */
-            'channel' => null,
+        //     /*
+        //      * If this is set to null the default channel of the webhook will be used.
+        //      */
+        //     'channel' => null,
 
-            'username' => null,
+        //     'username' => null,
 
-            'icon' => null,
-        ],
+        //     'icon' => null,
+        // ],
 
-        'discord' => [
-            'webhook_url' => '',
+        // 'discord' => [
+        //     'webhook_url' => '',
 
-            /*
-             * If this is an empty string, the name field on the webhook will be used.
-             */
-            'username' => '',
+        //     /*
+        //      * If this is an empty string, the name field on the webhook will be used.
+        //      */
+        //     'username' => '',
 
-            /*
-             * If this is an empty string, the avatar on the webhook will be used.
-             */
-            'avatar_url' => '',
-        ],
+        //     /*
+        //      * If this is an empty string, the avatar on the webhook will be used.
+        //      */
+        //     'avatar_url' => '',
+        // ],
     ],
 
     /*

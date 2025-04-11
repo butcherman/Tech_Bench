@@ -8,10 +8,12 @@ use Tests\TestCase;
 
 class StepOneTest extends TestCase
 {
-    /**
-     * Invoke Method
-     */
-    public function test_invoke_guest()
+    /*
+    |---------------------------------------------------------------------------
+    | Invoke Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_invoke_guest(): void
     {
         config(['app.first_time_setup' => true]);
         config(['app.env' => 'local']);
@@ -23,7 +25,7 @@ class StepOneTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_invoke()
+    public function test_invoke(): void
     {
         config(['app.first_time_setup' => true]);
         config(['app.env' => 'local']);
@@ -36,7 +38,7 @@ class StepOneTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('Init/StepOne')
                     ->has('step')
                     ->has('settings')
@@ -44,7 +46,7 @@ class StepOneTest extends TestCase
             );
     }
 
-    public function test_invoke_with_session_data()
+    public function test_invoke_with_session_data(): void
     {
         config(['app.first_time_setup' => true]);
         config(['app.env' => 'local']);
@@ -67,7 +69,7 @@ class StepOneTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('Init/StepOne')
                     ->has('step')
                     ->has('settings')

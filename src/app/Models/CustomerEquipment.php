@@ -150,7 +150,8 @@ class CustomerEquipment extends Model
     {
 
         return (new BroadcastableModelEventOccurred(
-            $this, $event
+            $this,
+            $event
         ))->dontBroadcastToCurrentUser();
     }
 
