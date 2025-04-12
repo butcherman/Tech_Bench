@@ -147,6 +147,8 @@ class UserGlobalSettingsUnitTest extends TestCase
     */
     public function test_get_oath_config(): void
     {
+        config(['services.azure.secret_expires' => Carbon::now()->addDays(30)]);
+
         $shouldBe = [
             'allow_login' => (bool) config('services.azure.allow_login'),
             'allow_bypass_2fa' => (bool) config('services.azure.allow_bypass_2fa'),
@@ -155,7 +157,7 @@ class UserGlobalSettingsUnitTest extends TestCase
             'tenant' => config('services.azure.tenant'),
             'client_id' => config('services.azure.client_id'),
             'client_secret' => config('services.azure.client_secret') ? __('admin.fake-password') : '',
-            'secret_expires' => config('services.azure.secret_expires'),
+            'secret_expires' => Carbon::parse(config('services.azure.secret_expires'))->format('m/d/Y'),
             'redirect' => config('services.azure.redirect') ?? 'https://'.config('app.url').'/auth/callback',
         ];
 

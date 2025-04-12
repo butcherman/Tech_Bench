@@ -50,6 +50,9 @@ class DownloadLogTest extends TestCase
 
     public function test_invoke_bad_file(): void
     {
+        $this->withoutExceptionHandling();
+        $this->expectException(LogFileMissingException::class);
+
         Exceptions::fake();
 
         $file = UploadedFile::fake()->create('logFile.log', 100);

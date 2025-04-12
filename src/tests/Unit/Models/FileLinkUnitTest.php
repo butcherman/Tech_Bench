@@ -86,6 +86,8 @@ class FileLinkUnitTest extends TestCase
 
     public function test_validate_public_link_fail(): void
     {
+        $this->withoutExceptionHandling();
+
         $this->model->expire = Carbon::yesterday();
         $this->model->save();
 

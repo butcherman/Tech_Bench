@@ -6,14 +6,15 @@ use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
 
+/*
+|-------------------------------------------------------------------------------
+| Exception notes that a customer slug or customer ID does not exist in
+| the database.  A custom customer not found page will be rendered.
+|-------------------------------------------------------------------------------
+*/
+
 class CustomerNotFoundException extends Exception
 {
-    /*
-    |---------------------------------------------------------------------------
-    | Exception notes that a customer slug or customer ID does not exist in
-    | the database.  A custom customer not found page will be rendered.
-    |---------------------------------------------------------------------------
-    */
     public function report(): void
     {
         Log::warning('Unable to find request customer page', [

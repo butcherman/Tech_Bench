@@ -5,6 +5,12 @@ namespace App\Exceptions\Maintenance;
 use Exception;
 use Illuminate\Support\Facades\Log;
 
+/*
+|-------------------------------------------------------------------------------
+| Exception is triggered when a backup restore process fails for any reason.
+|-------------------------------------------------------------------------------
+*/
+
 class RestoreFailedException extends Exception
 {
     public function report(): void

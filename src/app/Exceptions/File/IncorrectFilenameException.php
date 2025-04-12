@@ -7,8 +7,19 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
+/*
+|-------------------------------------------------------------------------------
+| When accessing a file for download, the file-id and filename must be
+| provided.  If the file name stored in the database does not match the
+| provided filename, the download will not be allowed.
+|-------------------------------------------------------------------------------
+*/
+
 class IncorrectFilenameException extends Exception
 {
+    /**
+     * @codeCoverageIgnore
+     */
     public function __construct(
         protected string $fileName,
         protected FileUpload $fileData
@@ -16,13 +27,6 @@ class IncorrectFilenameException extends Exception
         parent::__construct();
     }
 
-    /*
-    |---------------------------------------------------------------------------
-    | When accessing a file for download, the file-id and filename must be
-    | provided.  If the file name stored in the database does not match the
-    | provided filename, the download will not be allowed.
-    |---------------------------------------------------------------------------
-    */
     public function report(Request $request): void
     {
         Log::error('File download prevented.  Filename does not match file ID', [

@@ -27,6 +27,16 @@ type userRole = {
     allow_edit: boolean;
 };
 
+type userRolePermission = {
+    perm_type_id: number;
+    description: string;
+    group: string;
+    allow: boolean;
+    feature_enabled: boolean;
+};
+
+type userRolePermissionGroup = { [key: string]: userRolePermission[] };
+
 type passwordPolicy = {
     expire: number;
     min_length: number;

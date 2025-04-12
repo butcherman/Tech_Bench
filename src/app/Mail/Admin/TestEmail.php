@@ -14,7 +14,7 @@ class TestEmail extends Mailable
     use Queueable, SerializesModels;
 
     /**
-     * Create a new message instance.
+     * @codeCoverageIgnore
      */
     public function __construct(public User $user) {}
 

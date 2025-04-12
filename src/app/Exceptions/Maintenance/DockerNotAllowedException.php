@@ -5,6 +5,13 @@ namespace App\Exceptions\Maintenance;
 use Exception;
 use Illuminate\Support\Facades\Log;
 
+/*
+|-------------------------------------------------------------------------------
+| Exception is triggered if a Docker command fails from a docker container.
+| This feature can be removed by users in the docker-compose file.
+|-------------------------------------------------------------------------------
+*/
+
 class DockerNotAllowedException extends Exception
 {
     public function report(Exception $e): void

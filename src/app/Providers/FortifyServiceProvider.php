@@ -7,7 +7,6 @@ use App\Actions\Fortify\ResetUserPassword;
 use App\Actions\Fortify\UpdateUserPassword;
 use App\Facades\CacheData;
 use Illuminate\Auth\Events\Lockout;
-use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
@@ -56,7 +55,6 @@ class FortifyServiceProvider extends ServiceProvider
                 Str::lower($request->input(Fortify::username())).'|'.$request->ip()
             );
 
-            // return Limit::perMinute(5)->by($throttleKey);
             if (RateLimiter::tooManyAttempts($throttleKey, 5)) {
                 $availableIn = ceil(RateLimiter::availableIn($throttleKey) / 60);
 

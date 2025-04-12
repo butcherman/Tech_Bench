@@ -6,6 +6,12 @@ use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
 
+/*
+|-------------------------------------------------------------------------------
+| Exception notes that a Unique Value entry database error has occured.
+|-------------------------------------------------------------------------------
+*/
+
 class DuplicateDataException extends Exception
 {
     public function report(): void

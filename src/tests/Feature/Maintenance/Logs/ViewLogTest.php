@@ -48,6 +48,9 @@ class ViewLogTest extends TestCase
     {
         Exceptions::fake();
 
+        $this->withoutExceptionHandling();
+        $this->expectException(LogFileMissingException::class);
+
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);
         $date = date('Y-m-d', strtotime(Carbon::now()));
@@ -64,6 +67,9 @@ class ViewLogTest extends TestCase
     public function test_invoke_bad_file_name(): void
     {
         Exceptions::fake();
+
+        $this->withoutExceptionHandling();
+        $this->expectException(LogFileMissingException::class);
 
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);

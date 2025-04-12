@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import AppLayout from "@/Layouts/App/AppLayout.vue";
 import Card from "@/Components/_Base/Card.vue";
-import { ref, reactive, onMounted } from "vue";
 import UserPasswordForm from "@/Forms/User/UserPasswordForm.vue";
 
 defineProps<{

@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Models\UserInitialize;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -40,6 +41,9 @@ class InitializeUserController extends Controller
 
         event(new UserInitializeComplete($token));
 
-        return redirect(route('login'))->with('success', __('user.initialized'));
+        Auth::login($token->User);
+
+        return redirect(route('dashboard'))
+            ->with('success', __('user.initialized'));
     }
 }
