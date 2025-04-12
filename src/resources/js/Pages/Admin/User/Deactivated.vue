@@ -1,33 +1,23 @@
 <script setup lang="ts">
-import AddButton from "@/Components/_Base/Buttons/AddButton.vue";
 import AppLayout from "@/Layouts/App/AppLayout.vue";
 import AtomLoader from "@/Components/_Base/Loaders/AtomLoader.vue";
 import BaseBadge from "@/Components/_Base/Badges/BaseBadge.vue";
 import Card from "@/Components/_Base/Card.vue";
 import DataTable from "@/Components/_Base/DataTable/DataTable.vue";
-import okModal from "@/Modules/okModal";
 import verifyModal from "@/Modules/verifyModal";
 import { Deferred, router } from "@inertiajs/vue3";
-import { useAuthStore } from "@/Stores/AuthStore";
 
 defineProps<{
     userList?: user[];
 }>();
 
-const app = useAuthStore();
-
-const disableUser = (row: user) => {
-    if (row.username === app.user?.username) {
-        okModal("You cannot disable yourself");
-        return;
-    }
-
-    verifyModal("This User Will No Longer Be Allowed Access").then((res) => {
+/**
+ * Re-Enable a soft deleted user
+ */
+const enableUser = (user: user) => {
+    verifyModal(`${user.full_name} will be immediately enabled`).then((res) => {
         if (res) {
-            router.delete(route("admin.user.destroy", row.username), {
-                preserveScroll: true,
-                async: true,
-            });
+            router.get(route("admin.user.restore", user.username));
         }
     });
 };
@@ -37,25 +27,25 @@ const columns = [
         label: "Name",
         field: "full_name",
         sort: true,
-        filterable: true,
+        filer: true,
     },
     {
         label: "Username",
         field: "username",
         sort: true,
-        filterable: true,
+        filer: true,
     },
     {
         label: "Email",
         field: "email",
         sort: true,
-        filterable: true,
+        filer: true,
     },
     {
         label: "Role",
         field: "role_name",
         sort: true,
-        filterable: true,
+        filer: true,
         filterSelect: true,
     },
     {
@@ -100,11 +90,11 @@ export default { layout: AppLayout };
                 >
                     <template #row.actions="{ rowData }">
                         <BaseBadge
-                            icon="user-slash"
+                            icon="unlock-alt"
                             class="pointer"
-                            variant="danger"
-                            v-tooltip.left="'Disable User'"
-                            @click.stop="disableUser(rowData)"
+                            variant="warning"
+                            v-tooltip.left="'Enable User'"
+                            @click.stop="enableUser(rowData)"
                         />
                     </template>
                 </DataTable>

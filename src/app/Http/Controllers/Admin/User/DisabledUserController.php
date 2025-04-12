@@ -10,17 +10,15 @@ use Inertia\Response;
 
 class DisabledUserController extends Controller
 {
-    public function __construct(protected UserAdministrationService $svc) {}
-
     /**
      * Show a list of users that have been deactivated
      */
-    public function __invoke(): Response
+    public function __invoke(UserAdministrationService $svc): Response
     {
         $this->authorize('manage', User::class);
 
         return Inertia::render('Admin/User/Deactivated', [
-            'user-list' => fn () => $this->svc->getAllUsers(true),
+            'user-list' => Inertia::defer(fn() => $svc->getAllUsers(true)),
         ]);
     }
 }
