@@ -23,7 +23,7 @@ class UserRolesController extends Controller
         $this->authorize('viewAny', UserRole::class);
 
         return Inertia::render('Admin/Role/Index', [
-            'roles' => fn() => $this->svc->getAllRoles(),
+            'roles' => fn () => $this->svc->getAllRoles(),
         ]);
     }
 
@@ -36,10 +36,10 @@ class UserRolesController extends Controller
 
         return Inertia::render('Admin/Role/Create', [
             'permission-list' => $this->svc->getRolePermissionTypes(),
-            'base-role' => fn() => $request->role_id
+            'base-role' => fn () => $request->role_id
                 ? $this->svc->getRole($request->role_id)
                 : null,
-            'permission-values' => fn() => $request->role_id
+            'permission-values' => fn () => $request->role_id
                 ? $this->svc->getRole($request->role_id)->UserRolePermission
                 : [],
         ]);
@@ -64,9 +64,9 @@ class UserRolesController extends Controller
         $this->authorize('view', $user_role);
 
         return Inertia::render('Admin/Role/Show', [
-            'role' => fn() => $user_role->makeVisible(['allow_edit']),
-            'permission-list' => fn() => $this->svc->getRolePermissionTypes(),
-            'permission-values' => fn() => $user_role->UserRolePermission,
+            'role' => fn () => $user_role->makeVisible(['allow_edit']),
+            'permission-list' => fn () => $this->svc->getRolePermissionTypes(),
+            'permission-values' => fn () => $user_role->UserRolePermission,
         ]);
     }
 
@@ -78,9 +78,9 @@ class UserRolesController extends Controller
         $this->authorize('update', $user_role);
 
         return Inertia::render('Admin/Role/Edit', [
-            'base-role' => fn() => $user_role,
-            'permission-list' => fn() => $this->svc->getRolePermissionTypes(),
-            'permission-values' => fn() => $user_role->UserRolePermission,
+            'base-role' => fn () => $user_role,
+            'permission-list' => fn () => $this->svc->getRolePermissionTypes(),
+            'permission-values' => fn () => $user_role->UserRolePermission,
         ]);
     }
 

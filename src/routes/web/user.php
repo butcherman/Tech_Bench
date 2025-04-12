@@ -2,7 +2,6 @@
 
 use App\Exceptions\Auth\InitializeUserLinkMissingException;
 use App\Http\Controllers\Admin\User\DisabledUserController;
-use App\Http\Controllers\Admin\User\ReSendWelcomeEmailController;
 use App\Http\Controllers\Admin\User\ResetUserPasswordController;
 use App\Http\Controllers\Admin\User\UserAdministrationController;
 use App\Http\Controllers\Admin\User\UserRolesController;
@@ -97,17 +96,17 @@ Route::middleware('auth.secure')->group(function () {
         | /administration/user-roles
         |-----------------------------------------------------------------------
         */
-        // Route::post('user-roles/create', [UserRolesController::class, 'create'])
-        //     ->name('user-roles.copy')
-        //     ->breadcrumb('Build New Role', 'admin.user-roles.index');
+        Route::post('user-roles/create', [UserRolesController::class, 'create'])
+            ->name('user-roles.copy')
+            ->breadcrumb('Build New Role', 'admin.user-roles.index');
 
-        // Route::resource('user-roles', UserRolesController::class)
-        //     ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
-        //         $breadcrumbs->index('Roles and Permissions', 'admin.index')
-        //             ->create('Build New Role')
-        //             ->show('View Role')
-        //             ->edit('Modify Role');
-        //     });
+        Route::resource('user-roles', UserRolesController::class)
+            ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
+                $breadcrumbs->index('Roles and Permissions', 'admin.index')
+                    ->create('Build New Role')
+                    ->show('View Role')
+                    ->edit('Modify Role');
+            });
     });
 });
 

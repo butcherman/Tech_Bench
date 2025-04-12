@@ -159,12 +159,6 @@ Route::middleware('auth.secure')->prefix('administration')->name('admin.')->grou
     //     })->except(['edit', 'show', 'create']);
 });
 
-
-
-Route::get('user-roles', function () {
-    return 'admin user index';
-})->name('admin.user-roles.index');
-
 Route::get('file-types', function () {
     return 'something admin';
 })->name('admin.file-types.index');

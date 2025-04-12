@@ -32,20 +32,22 @@ const {
 </script>
 
 <template>
-    <div :class="{ 'justify-items-center': center }">
+    <div class="my-2" :class="{ 'justify-items-center': center }">
         <div>
-            <ToggleSwitch
-                :input-id="id"
-                v-model="value"
-                :disabled="disabled"
-                @focus="hasFocus = true"
-                @blur="hasFocus = false"
-            />
-            <label :for="id" class="align-top ms-2 text-muted">
-                <slot name="label">
-                    {{ label }}
-                </slot>
-            </label>
+            <div class="flex">
+                <ToggleSwitch
+                    :input-id="id"
+                    v-model="value"
+                    :disabled="disabled"
+                    @focus="hasFocus = true"
+                    @blur="hasFocus = false"
+                />
+                <label :for="id" class="align-top ms-2 text-muted">
+                    <slot name="label">
+                        {{ label }}
+                    </slot>
+                </label>
+            </div>
             <Message size="small" severity="error" variant="simple">
                 {{ errorMessage }}
             </Message>

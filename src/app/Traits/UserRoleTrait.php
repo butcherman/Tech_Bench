@@ -3,7 +3,6 @@
 namespace App\Traits;
 
 use App\Facades\CacheData;
-use App\Facades\CacheFacade;
 use App\Models\User;
 
 trait UserRoleTrait

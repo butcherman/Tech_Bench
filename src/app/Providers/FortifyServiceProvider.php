@@ -7,7 +7,6 @@ use App\Actions\Fortify\ResetUserPassword;
 use App\Actions\Fortify\UpdateUserPassword;
 use App\Facades\CacheData;
 use Illuminate\Auth\Events\Lockout;
-use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
@@ -28,7 +27,7 @@ class FortifyServiceProvider extends ServiceProvider
                 'welcome-message' => config('app.welcome_message'),
                 'home-links' => config('app.home_links'),
                 'allow-oath' => config('services.azure.allow_login'),
-                'public-link' => fn() => config('tech-tips.allow_public')
+                'public-link' => fn () => config('tech-tips.allow_public')
                     ? [
                         'url' => route('publicTips.index'),
                         'text' => config('tech-tips.public_link_text'),
@@ -53,7 +52,7 @@ class FortifyServiceProvider extends ServiceProvider
 
         RateLimiter::for('login', function (Request $request) {
             $throttleKey = Str::transliterate(
-                Str::lower($request->input(Fortify::username())) . '|' . $request->ip()
+                Str::lower($request->input(Fortify::username())).'|'.$request->ip()
             );
 
             if (RateLimiter::tooManyAttempts($throttleKey, 5)) {
@@ -63,8 +62,8 @@ class FortifyServiceProvider extends ServiceProvider
 
                 return back()
                     ->withErrors([
-                        'throttle' => 'Too many failed login attempts, try again in ' .
-                            $availableIn . ' minutes',
+                        'throttle' => 'Too many failed login attempts, try again in '.
+                            $availableIn.' minutes',
                     ]);
             }
 
