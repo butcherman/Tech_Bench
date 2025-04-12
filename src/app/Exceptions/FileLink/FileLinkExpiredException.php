@@ -8,14 +8,18 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
+/*
+|-------------------------------------------------------------------------------
+| Exception is triggered when someone tries to visit a public file link
+| that has expired.
+|-------------------------------------------------------------------------------
+*/
+
 class FileLinkExpiredException extends Exception
 {
-    /*
-    |---------------------------------------------------------------------------
-    | Exception is triggered when someone tries to visit a public file link
-    | that has expired.
-    |---------------------------------------------------------------------------
-    */
+    /**
+     * @codeCoverageIgnore
+     */
     public function __construct(protected FileLink $link)
     {
         parent::__construct();

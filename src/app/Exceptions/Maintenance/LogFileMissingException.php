@@ -6,8 +6,17 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
+/*
+|-------------------------------------------------------------------------------
+| Exception is triggered when trying to access a log file that does not exist
+|-------------------------------------------------------------------------------
+*/
+
 class LogFileMissingException extends Exception
 {
+    /**
+     * @codeCoverageIgnore
+     */
     public function __construct(protected string $badLogFile)
     {
         parent::__construct();

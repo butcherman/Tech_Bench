@@ -7,15 +7,19 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
 use SocialiteProviders\Azure\User;
 
+/*
+|-------------------------------------------------------------------------------
+| Exception notes that a user valid to the Azure Database tried to log in,
+| but this user does not currently have a Tech Bench account and the
+| system configuration does not allow the auto creation of accounts.
+|-------------------------------------------------------------------------------
+*/
+
 class UnableToCreateSocialiteUserException extends Exception
 {
-    /*
-    |---------------------------------------------------------------------------
-    | Exception notes that a user valid to the Azure Database tried to log in,
-    | but this user does not currently have a Tech Bench account and the
-    | system configuration does not allow the auto creation of accounts.
-    |---------------------------------------------------------------------------
-    */
+    /**
+     * @codeCoverageIgnore
+     */
     public function __construct(protected User $user)
     {
         parent::__construct();
@@ -34,6 +38,6 @@ class UnableToCreateSocialiteUserException extends Exception
     {
         return redirect(route('login'))
             ->with('warning', 'You do not have permission to Login.  Please'.
-                   ' contact your system administrator');
+                ' contact your system administrator');
     }
 }

@@ -14,7 +14,7 @@ class AzureCertificateExpiresSoonMail extends Mailable implements ShouldQueue
     use Queueable, SerializesModels;
 
     /**
-     * Create a new message instance.
+     * @codeCoverageIgnore
      */
     public function __construct(public int $daysLeft) {}
 

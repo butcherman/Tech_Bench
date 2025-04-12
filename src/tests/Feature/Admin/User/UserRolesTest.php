@@ -3,10 +3,12 @@
 namespace Tests\Feature\Admin\User;
 
 use App\Events\Feature\FeatureChangedEvent;
+use App\Exceptions\Database\RecordInUseException;
 use App\Models\User;
 use App\Models\UserRole;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Exceptions;
 use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
@@ -48,9 +50,10 @@ class UserRolesTest extends TestCase
             ->get(route('admin.user-roles.index'));
 
         $response->assertSuccessful()
-            ->assertInertia(fn (Assert $page) => $page
-                ->component('Admin/Role/Index')
-                ->has('roles')
+            ->assertInertia(
+                fn (Assert $page) => $page
+                    ->component('Admin/Role/Index')
+                    ->has('roles')
             );
     }
 
@@ -88,11 +91,12 @@ class UserRolesTest extends TestCase
             ->get(route('admin.user-roles.create'));
 
         $response->assertSuccessful()
-            ->assertInertia(fn (Assert $page) => $page
-                ->component('Admin/Role/Create')
-                ->has('permission-list')
-                ->has('base-role')
-                ->has('permission-values')
+            ->assertInertia(
+                fn (Assert $page) => $page
+                    ->component('Admin/Role/Create')
+                    ->has('permission-list')
+                    ->has('base-role')
+                    ->has('permission-values')
             );
     }
 
@@ -105,11 +109,12 @@ class UserRolesTest extends TestCase
             ->post(route('admin.user-roles.copy'), ['role_id' => 1]);
 
         $response->assertSuccessful()
-            ->assertInertia(fn (Assert $page) => $page
-                ->component('Admin/Role/Create')
-                ->has('permission-list')
-                ->has('base-role')
-                ->has('permission-values')
+            ->assertInertia(
+                fn (Assert $page) => $page
+                    ->component('Admin/Role/Create')
+                    ->has('permission-list')
+                    ->has('base-role')
+                    ->has('permission-values')
             );
     }
 
@@ -257,11 +262,12 @@ class UserRolesTest extends TestCase
             ->get(route('admin.user-roles.show', $role->role_id));
 
         $response->assertSuccessful()
-            ->assertInertia(fn (Assert $page) => $page
-                ->component('Admin/Role/Show')
-                ->has('role')
-                ->has('permission-list')
-                ->has('permission-values')
+            ->assertInertia(
+                fn (Assert $page) => $page
+                    ->component('Admin/Role/Show')
+                    ->has('role')
+                    ->has('permission-list')
+                    ->has('permission-values')
             );
     }
 
@@ -305,11 +311,12 @@ class UserRolesTest extends TestCase
             ->get(route('admin.user-roles.edit', $testRole->role_id));
 
         $response->assertSuccessful()
-            ->assertInertia(fn (Assert $page) => $page
-                ->component('Admin/Role/Edit')
-                ->has('permission-list')
-                ->has('base-role')
-                ->has('permission-values')
+            ->assertInertia(
+                fn (Assert $page) => $page
+                    ->component('Admin/Role/Edit')
+                    ->has('permission-list')
+                    ->has('base-role')
+                    ->has('permission-values')
             );
     }
 
@@ -501,6 +508,11 @@ class UserRolesTest extends TestCase
 
     public function test_destroy_in_use(): void
     {
+        Exceptions::fake();
+
+        $this->withoutExceptionHandling();
+        $this->expectException(RecordInUseException::class);
+
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);
         $testRole = UserRole::factory()->createQuietly();
@@ -513,6 +525,8 @@ class UserRolesTest extends TestCase
             ->assertSessionHasErrors([
                 'query_error' => __('admin.user-role.in-use'),
             ]);
+
+        Exceptions::assertReported(RecordInUseException::class);
     }
 
     public function test_destroy(): void

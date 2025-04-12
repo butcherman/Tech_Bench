@@ -3,12 +3,12 @@
 namespace Tests\Feature\User;
 
 use App\Events\User\UserInitializeComplete;
+use App\Exceptions\Auth\InitializeUserLinkMissingException;
 use App\Models\User;
 use App\Models\UserInitialize;
 use Illuminate\Auth\Events\Login;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Exceptions;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
@@ -42,6 +42,11 @@ class InitializeUserTest extends TestCase
 
     public function test_show_invalid_token(): void
     {
+        $this->withoutExceptionHandling();
+        $this->expectException(InitializeUserLinkMissingException::class);
+
+        Exceptions::fake();
+
         $user = User::factory()->createQuietly();
         $token = Str::uuid();
 
@@ -53,6 +58,8 @@ class InitializeUserTest extends TestCase
         $response = $this->get(route('initialize', $token));
 
         $response->assertStatus(404);
+
+        Exceptions::assertReported(InitializeUserLinkMissingException::class);
     }
 
     public function test_show(): void
@@ -99,6 +106,11 @@ class InitializeUserTest extends TestCase
 
     public function test_set_invalid_token(): void
     {
+        $this->withoutExceptionHandling();
+        $this->expectException(InitializeUserLinkMissingException::class);
+
+        Exceptions::fake();
+
         $user = User::factory()->createQuietly();
 
         UserInitialize::create([
@@ -115,6 +127,8 @@ class InitializeUserTest extends TestCase
         $response = $this->put(route('initialize.update', $token), $data);
 
         $response->assertStatus(404);
+
+        Exceptions::assertReported(InitializeUserLinkMissingException::class);
     }
 
     public function test_set(): void

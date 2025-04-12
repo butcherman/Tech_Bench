@@ -25,6 +25,9 @@ class SocialiteTest extends TestCase
     */
     public function test_redirect_auth_disabled(): void
     {
+        $this->withoutExceptionHandling();
+        $this->expectException(FeatureDisabledException::class);
+
         Exceptions::fake();
 
         config(['services.azure.allow_login' => false]);
@@ -52,6 +55,9 @@ class SocialiteTest extends TestCase
     */
     public function test_callback_feature_disabled(): void
     {
+        $this->withoutExceptionHandling();
+        $this->expectException(FeatureDisabledException::class);
+
         Exceptions::fake();
 
         config(['services.azure.allow_login' => false]);
@@ -205,6 +211,9 @@ class SocialiteTest extends TestCase
     public function test_callback_new_user_register_disabled(): void
     {
         Exceptions::fake();
+
+        $this->withoutExceptionHandling();
+        $this->expectException(UnableToCreateSocialiteUserException::class);
 
         config(['services.azure.allow_login' => true]);
         config(['services.azure.allow_register' => false]);

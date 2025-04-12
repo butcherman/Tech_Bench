@@ -6,17 +6,15 @@ use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
 
-/**
- * @codeCoverageIgnore
- */
+/*
+|-------------------------------------------------------------------------------
+| Exception notes a catch-all database query has occurred.  The original
+| exception will be logged along with this current exception.
+|-------------------------------------------------------------------------------
+*/
+
 class GeneralQueryException extends Exception
 {
-    /*
-    |---------------------------------------------------------------------------
-    | Exception notes a catch-all database query has occurred.  The original
-    | exception will be logged along with this current exception.
-    |---------------------------------------------------------------------------
-    */
     public function report(): void
     {
         Log::critical('Update of Database Record failed', [

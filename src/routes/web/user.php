@@ -122,5 +122,8 @@ Route::middleware('guest')->controller(InitializeUserController::class)->group(f
             throw new InitializeUserLinkMissingException;
         });
     Route::put('initialize-account/{token}', 'update')
-        ->name('initialize.update');
+        ->name('initialize.update')
+        ->missing(function () {
+            throw new InitializeUserLinkMissingException;
+        });
 });

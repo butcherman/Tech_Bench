@@ -65,6 +65,9 @@ class DownloadBackupTest extends TestCase
         Storage::disk('backups')->put(config('backup.backup.name').
             DIRECTORY_SEPARATOR.'backup.zip', '123456');
 
+        $this->withoutExceptionHandling();
+        $this->expectException(BackupFileMissingException::class);
+
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);
 

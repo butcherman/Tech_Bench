@@ -23,9 +23,9 @@ class InitializeUserController extends Controller
     public function show(UserInitialize $token): Response
     {
         return Inertia::render('User/Initialize', [
-            'token' => fn() => $token->token,
-            'user' => fn() => $token->User,
-            'rules' => fn() => CacheData::passwordRules(),
+            'token' => fn () => $token->token,
+            'user' => fn () => $token->User,
+            'rules' => fn () => CacheData::passwordRules(),
         ]);
     }
 
