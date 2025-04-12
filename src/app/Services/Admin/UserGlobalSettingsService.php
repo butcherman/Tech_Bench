@@ -66,9 +66,11 @@ class UserGlobalSettingsService
             'default_role_id' => (int) config('services.azure.default_role_id'),
             'tenant' => config('services.azure.tenant'),
             'client_id' => config('services.azure.client_id'),
-            'client_secret' => config('services.azure.client_secret') ? __('admin.fake-password') : '',
-            'secret_expires' => Carbon::parse(config('services.azure.secret_expires'))->format('m/d/Y'),
-            'redirect' => config('services.azure.redirect') ?? 'https://'.config('app.url').'/auth/callback',
+            'client_secret' => config('services.azure.client_secret')
+                ? __('admin.fake-password') : '',
+            'secret_expires' => config('services.azure.secret_expires')
+                ? Carbon::parse(config('services.azure.secret_expires'))->format('m/d/Y') : null,
+            'redirect' => config('services.azure.redirect') ?? 'https://' . config('app.url') . '/auth/callback',
         ];
     }
 
