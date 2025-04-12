@@ -115,12 +115,12 @@ Route::middleware('auth.secure')->group(function () {
 | Finish Setting Up User Account Routes
 |-------------------------------------------------------------------------------
 */
-// Route::middleware('guest')->controller(InitializeUserController::class)->group(function () {
-//     Route::get('initialize-account/{token}', 'show')
-//         ->name('initialize')
-//         ->missing(function () {
-//             throw new InitializeUserLinkMissingException;
-//         });
-//     Route::put('initialize-account/{token}', 'update')
-//         ->name('initialize.update');
-// });
+Route::middleware('guest')->controller(InitializeUserController::class)->group(function () {
+    Route::get('initialize-account/{token}', 'show')
+        ->name('initialize')
+        ->missing(function () {
+            throw new InitializeUserLinkMissingException;
+        });
+    Route::put('initialize-account/{token}', 'update')
+        ->name('initialize.update');
+});

@@ -2,14 +2,15 @@
 import PasswordInput from "../../_Base/PasswordInput.vue";
 import VueForm from "@/Forms/_Base/VueForm.vue";
 import { object, string, ref as reference } from "yup";
-import { useTemplateRef } from "vue";
+import { computed, useTemplateRef } from "vue";
 
 const emit = defineEmits<{
     success: [];
 }>();
 
-defineProps<{
+const props = defineProps<{
     user: user;
+    token?: string;
 }>();
 
 const passwordForm = useTemplateRef("password-form");
@@ -23,6 +24,14 @@ const onSuccess = () => {
     emit("success");
     passwordForm.value?.resetForm();
 };
+
+const submitRoute = computed(() => {
+    if (props.token) {
+        return route("initialize.update", props.token);
+    }
+
+    return route("admin.user.reset-password", props.user.username);
+});
 
 /*
 |-------------------------------------------------------------------------------
@@ -46,7 +55,7 @@ const schema = object({
         ref="password-form"
         :initial-values="initValues"
         :validation-schema="schema"
-        :submit-route="$route('admin.user.reset-password', user.username)"
+        :submit-route="submitRoute"
         submit-method="put"
         submit-text="Update Password"
         @success="onSuccess"
