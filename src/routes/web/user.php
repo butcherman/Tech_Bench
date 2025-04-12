@@ -3,6 +3,7 @@
 use App\Exceptions\Auth\InitializeUserLinkMissingException;
 use App\Http\Controllers\Admin\User\DisabledUserController;
 use App\Http\Controllers\Admin\User\ReSendWelcomeEmailController;
+use App\Http\Controllers\Admin\User\ResetUserPasswordController;
 use App\Http\Controllers\Admin\User\UserAdministrationController;
 use App\Http\Controllers\Admin\User\UserRolesController;
 use App\Http\Controllers\User\InitializeUserController;
@@ -66,29 +67,29 @@ Route::middleware('auth.secure')->group(function () {
         | /administration/users
         |-----------------------------------------------------------------------
         */
-        // Route::prefix('users')->name('user.')->group(function () {
-        //     Route::get('{user}/restore', [UserAdministrationController::class, 'restore'])
-        //         ->name('restore')
-        //         ->withTrashed();
+        Route::prefix('users')->name('user.')->group(function () {
+            Route::get('{user}/restore', [UserAdministrationController::class, 'restore'])
+                ->name('restore')
+                ->withTrashed();
 
-        //     Route::get('{user}/resend-welcome-email', ReSendWelcomeEmailController::class)
-        //         ->name('send-welcome');
+            Route::post('send-reset-password-link', [PasswordResetLinkController::class, 'store'])
+                ->name('password-link');
 
-        //     Route::post('send-reset-password-link', [PasswordResetLinkController::class, 'store'])
-        //         ->name('password-link');
+            Route::put('{user}/reset-user-password', ResetUserPasswordController::class)
+                ->name('reset-password');
 
-        //     Route::get('deactivated-users', DisabledUserController::class)
-        //         ->name('deactivated')
-        //         ->breadcrumb('Disabled Users', 'admin.user.index');
-        // });
+            Route::get('deactivated-users', DisabledUserController::class)
+                ->name('deactivated')
+                ->breadcrumb('Disabled Users', 'admin.user.index');
+        });
 
-        // Route::resource('user', UserAdministrationController::class)
-        //     ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
-        //         $breadcrumbs->index('User Administration', 'admin.index')
-        //             ->create('New User')
-        //             ->show('User Details')
-        //             ->edit('Edit User Details');
-        //     })->withTrashed();
+        Route::resource('user', UserAdministrationController::class)
+            ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
+                $breadcrumbs->index('User Administration', 'admin.index')
+                    ->create('New User')
+                    ->show('User Details')
+                    ->edit('Edit User Details');
+            })->withTrashed();
 
         /*
         |-----------------------------------------------------------------------

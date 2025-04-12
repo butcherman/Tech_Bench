@@ -39,13 +39,13 @@ Route::middleware('auth.secure')->prefix('administration')->name('admin.')->grou
         | /administration/password-policy
         |-----------------------------------------------------------------------
         */
-        // Route::controller(PasswordPolicyController::class)->group(function () {
-        //     Route::get('password-policy', 'edit')
-        //         ->name('password-policy.edit')
-        //         ->breadcrumb('Password Policy', 'admin.index');
-        //     Route::put('password-policy', 'update')
-        //         ->name('password-policy.update');
-        // });
+        Route::controller(PasswordPolicyController::class)->group(function () {
+            Route::get('password-policy', 'edit')
+                ->name('password-policy.edit')
+                ->breadcrumb('Password Policy', 'admin.index');
+            Route::put('password-policy', 'update')
+                ->name('password-policy.update');
+        });
 
         /*
         |-----------------------------------------------------------------------
@@ -53,13 +53,13 @@ Route::middleware('auth.secure')->prefix('administration')->name('admin.')->grou
         | /administration/user-settings
         |-----------------------------------------------------------------------
         */
-        // Route::controller(UserSettingsController::class)->group(function () {
-        //     Route::get('user-settings', 'edit')
-        //         ->name('user-settings.edit')
-        //         ->breadcrumb('User Settings', 'admin.index');
-        //     Route::put('user-settings', 'update')
-        //         ->name('user-settings.update');
-        // });
+        Route::controller(UserSettingsController::class)->group(function () {
+            Route::get('user-settings', 'edit')
+                ->name('user-settings.edit')
+                ->breadcrumb('User Settings', 'admin.index');
+            Route::put('user-settings', 'update')
+                ->name('user-settings.update');
+        });
     });
 
     /*
@@ -159,25 +159,7 @@ Route::middleware('auth.secure')->prefix('administration')->name('admin.')->grou
     //     })->except(['edit', 'show', 'create']);
 });
 
-Route::get('user-index', function () {
-    return 'admin user index';
-})->name('admin.user.index');
 
-Route::get('user-create', function () {
-    return 'admin user create';
-})->name('admin.user.create');
-
-Route::get('user-deactivate', function () {
-    return 'admin user deactivate';
-})->name('admin.user.deactivated');
-
-Route::get('user-pass', function () {
-    return 'admin user index';
-})->name('admin.user.password-policy.edit');
-
-Route::get('user-index-pass', function () {
-    return 'admin user index';
-})->name('admin.user.user-settings.edit');
 
 Route::get('user-roles', function () {
     return 'admin user index';
