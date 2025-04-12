@@ -23,8 +23,7 @@ class UserRolePermissionTypeUnitTest extends TestCase
     public function test_model_attributes()
     {
         $this->assertArrayHasKey('group', $this->model->toArray());
-        // TODO - Go Away???
-        // $this->assertArrayHasKey('feature_enabled', $this->model->toArray());
+        $this->assertArrayHasKey('feature_enabled', $this->model->toArray());
     }
 
     /**
