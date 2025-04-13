@@ -16,12 +16,21 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
 use Spatie\Backup\Events\BackupHasFailed;
 
+/*
+|-------------------------------------------------------------------------------
+| Run an application backup. Triggered by manual interaction via Artisan console
+| or Maintenance->Backups page.
+|-------------------------------------------------------------------------------
+*/
+
 class RunBackupJob implements ShouldBeUnique, ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
      * Backups are only allowed on the backup queue.
+     *
+     * @codeCoverageIgnore
      */
     public function __construct()
     {
@@ -39,8 +48,7 @@ class RunBackupJob implements ShouldBeUnique, ShouldQueue
     }
 
     /**
-     * Run an application backup. Triggered by manual interaction via Artisan
-     * console or Maintenance->Backups page.
+     * Execute the job.
      */
     public function handle(BackupService $svc): void
     {

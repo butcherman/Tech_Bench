@@ -21,14 +21,11 @@ Route::middleware('auth.secure')->group(function () {
     |---------------------------------------------------------------------------
     */
     Route::resource('equipment', EquipmentTypeController::class)
+        ->except(['show'])
         ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
             $breadcrumbs->index('Equipment Categories and Types', 'admin.index')
                 ->create('Create New Equipment')
-                ->edit('Edit Equipment', 'equipment.index')
-                ->show(
-                    fn(EquipmentType $equipment) => $equipment->name . ' References',
-                    'equipment.edit'
-                );
+                ->edit('Edit Equipment', 'equipment.index');
         });
 
     /*

@@ -58,18 +58,6 @@ class EquipmentTypeController extends Controller
     }
 
     /**
-     * Display an Equipment Type.
-     */
-    public function show(EquipmentType $equipment): Response
-    {
-        $this->authorize('viewAny', $equipment);
-
-        return Inertia::render('Equipment/Show', [
-            'equipment' => $equipment, // ->load(['Customer', 'TechTip']),
-        ]);
-    }
-
-    /**
      * Show the form for editing the Equipment Type.
      */
     public function edit(Request $request, EquipmentType $equipment): Response

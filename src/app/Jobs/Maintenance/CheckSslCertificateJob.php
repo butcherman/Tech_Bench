@@ -11,6 +11,13 @@ use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
+/*
+|-------------------------------------------------------------------------------
+| This job will check the expiration date of the current SSL Certificate.  If it
+| is close to expiring, a warning email will be sent to local administrators.
+|-------------------------------------------------------------------------------
+*/
+
 class CheckSslCertificateJob implements ShouldQueue
 {
     use Queueable;
@@ -41,7 +48,7 @@ class CheckSslCertificateJob implements ShouldQueue
         if (in_array($certDaysLeft, $this->notifyDays)) {
             $notificationGroup = User::where('role_id', 1)->get();
 
-            Log::alert('SSL Certificate will expire in '.$certDaysLeft.' days.');
+            Log::alert('SSL Certificate will expire in ' . $certDaysLeft . ' days.');
 
             Mail::to($notificationGroup)->send(new SslExpiresSoonMail($certDaysLeft));
         }

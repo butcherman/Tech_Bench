@@ -90,7 +90,7 @@ class EquipmentService
 
         $this->processDataFields($equipment, $requestData->get('custData'));
 
-        // UpdateCustomerDataFieldsJob::dispatch($equipment);
+        UpdateCustomerDataFieldsJob::dispatch($equipment);
 
         return $equipment;
     }
