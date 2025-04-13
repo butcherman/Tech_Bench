@@ -28,7 +28,8 @@ class EquipmentCategoryRequest extends FormRequest
         return [
             'name' => [
                 'required',
-                Rule::unique('equipment_categories')->ignore($this->category),
+                Rule::unique('equipment_categories')
+                    ->ignore($this->equipment_category),
             ],
         ];
     }

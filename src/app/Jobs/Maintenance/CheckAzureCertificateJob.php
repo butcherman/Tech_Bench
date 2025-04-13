@@ -11,6 +11,14 @@ use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
+/*
+|-------------------------------------------------------------------------------
+| If OATH feature is enabled, the Azure Secret will expire after xx days (setup
+| by system administrator).  This job will send a notification email to local
+| system administrators if the Azure Secret is getting close to expiring.
+|-------------------------------------------------------------------------------
+*/
+
 class CheckAzureCertificateJob implements ShouldQueue
 {
     use Queueable;

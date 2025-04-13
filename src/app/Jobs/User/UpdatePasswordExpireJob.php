@@ -6,15 +6,19 @@ use App\Services\User\UserAdministrationService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 
+/*
+|-------------------------------------------------------------------------------
+| Modify the password_expires field for all users with the new value.
+|-------------------------------------------------------------------------------
+*/
+
 class UpdatePasswordExpireJob implements ShouldQueue
 {
     use Queueable;
 
-    /*
-    |---------------------------------------------------------------------------
-    | Modify the password_expires field for all users with the new value.
-    |---------------------------------------------------------------------------
-    */
+    /**
+     * @codeCoverageIgnore
+     */
     public function __construct() {}
 
     /**

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, readonly, ref } from "vue";
 
 const emit = defineEmits<{
     hide: [];
@@ -65,7 +65,7 @@ const hide = (): void => {
     modalOpen.value = false;
 };
 
-defineExpose({ show, hide });
+defineExpose({ show, hide, isOpen: readonly(modalOpen) });
 </script>
 
 <template>

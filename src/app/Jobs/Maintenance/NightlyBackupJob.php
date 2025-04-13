@@ -13,12 +13,20 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
 use Spatie\Backup\Events\BackupHasFailed;
 
+/*
+|-------------------------------------------------------------------------------
+| Run a system backup if nightly backups are enabled.
+|-------------------------------------------------------------------------------
+*/
+
 class NightlyBackupJob implements ShouldBeUnique, ShouldQueue
 {
     use Queueable;
 
     /**
      * Backups are only allowed on the backup queue.
+     *
+     * @codeCoverageIgnore
      */
     public function __construct()
     {
@@ -36,7 +44,7 @@ class NightlyBackupJob implements ShouldBeUnique, ShouldQueue
     }
 
     /**
-     * Run a system backup if nightly backups are enabled.
+     * Execute the job.
      */
     public function handle(BackupService $svc): void
     {

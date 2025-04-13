@@ -8,6 +8,12 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
+/*
+|-------------------------------------------------------------------------------
+| Call daily maintenance commands.
+|-------------------------------------------------------------------------------
+*/
+
 class GarbageCollectionJob implements ShouldQueue
 {
     use Queueable;
@@ -16,6 +22,8 @@ class GarbageCollectionJob implements ShouldQueue
      * Job is placed on the backups queue which only has one process.  This is
      * done so that backups and garbage collection do not interfere with
      * each other.
+     *
+     * @codeCoverageIgnore
      */
     public function __construct()
     {
@@ -23,7 +31,7 @@ class GarbageCollectionJob implements ShouldQueue
     }
 
     /**
-     * Call daily maintenance commands.
+     * Execute the job.
      */
     public function handle(): void
     {

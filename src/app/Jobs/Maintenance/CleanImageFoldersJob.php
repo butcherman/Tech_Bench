@@ -7,13 +7,19 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Log;
 
+/*
+|-------------------------------------------------------------------------------
+| Check image folders for images no longer in use.  Automatically delete any
+| orphaned images.
+|-------------------------------------------------------------------------------
+*/
+
 class CleanImageFoldersJob implements ShouldQueue
 {
     use Queueable;
 
     /**
-     * Check image folders for images no longer in use.  Automatically
-     * delete any orphaned images.
+     * Execute the job.
      */
     public function handle(CleanImageFolders $svc): void
     {
