@@ -27,6 +27,6 @@ class CleanImageFoldersJob implements ShouldQueue
 
         $res = $svc(true);
 
-        Log::info('Image Folder Cleanup Job finished. ' . $res . ' images deleted');
+        Log::info('Image Folder Cleanup Job finished. '.$res.' images deleted');
     }
 }

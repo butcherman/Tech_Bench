@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Equipment;
 
-use App\Facades\CacheFacade;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Equipment\DataTypeRequest;
 use App\Models\DataFieldType;
@@ -24,7 +23,7 @@ class EquipmentDataTypeController extends Controller
         $this->authorize('viewAny', EquipmentType::class);
 
         return Inertia::render('Equipment/DataType/Index', [
-            'data-types' => fn() => DataFieldType::all()->append('in_use'),
+            'data-types' => fn () => DataFieldType::all()->append('in_use'),
         ]);
     }
 
@@ -57,7 +56,7 @@ class EquipmentDataTypeController extends Controller
         $this->authorize('viewAny', EquipmentType::class);
 
         return Inertia::render('Equipment/DataType/Edit', [
-            'data-field-type' => fn() => $equipment_datum,
+            'data-field-type' => fn () => $equipment_datum,
         ]);
     }
 

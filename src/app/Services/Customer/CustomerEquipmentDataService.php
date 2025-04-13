@@ -59,8 +59,6 @@ class CustomerEquipmentDataService
     //     }
     // }
 
-
-
     /**
      * Check All Customer Equipment Data Fields
      */

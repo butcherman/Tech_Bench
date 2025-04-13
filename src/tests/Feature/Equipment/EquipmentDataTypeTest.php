@@ -3,8 +3,6 @@
 namespace Tests\Feature\Equipment;
 
 use App\Exceptions\Database\RecordInUseException;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use App\Models\DataField;
 use App\Models\DataFieldType;
 use App\Models\EquipmentType;
@@ -50,7 +48,7 @@ class EquipmentDataTypeTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('Equipment/DataType/Index')
                     ->has('data-types')
             );
@@ -91,7 +89,7 @@ class EquipmentDataTypeTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('Equipment/DataType/Create')
             );
     }
@@ -202,7 +200,7 @@ class EquipmentDataTypeTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('Equipment/DataType/Edit')
                     ->has('data-field-type')
             );

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Equipment;
 
 use App\Facades\CacheData;
-use App\Facades\CacheFacade;
 use App\Features\PublicTechTipFeature;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Equipment\EquipmentTypeRequest;
@@ -26,7 +25,7 @@ class EquipmentTypeController extends Controller
         $this->authorize('viewAny', EquipmentType::class);
 
         return Inertia::render('Equipment/Index', [
-            'equipment-list' => fn() => CacheData::equipmentCategories(),
+            'equipment-list' => fn () => CacheData::equipmentCategories(),
         ]);
     }
 
@@ -38,9 +37,9 @@ class EquipmentTypeController extends Controller
         $this->authorize('create', EquipmentType::class);
 
         return Inertia::render('Equipment/Create', [
-            'category-list' => fn() => CacheData::equipmentCategories(),
-            'data-list' => fn() => CacheData::dataFieldTypes()->pluck('name'),
-            'public-tips' => fn() => $request->user()
+            'category-list' => fn () => CacheData::equipmentCategories(),
+            'data-list' => fn () => CacheData::dataFieldTypes()->pluck('name'),
+            'public-tips' => fn () => $request->user()
                 ->features()
                 ->active(PublicTechTipFeature::class),
         ]);
@@ -65,10 +64,10 @@ class EquipmentTypeController extends Controller
         $this->authorize('update', $equipment);
 
         return Inertia::render('Equipment/Edit', [
-            'equipment' => fn() => $equipment->load('DataFieldType'),
-            'category-list' => fn() => CacheData::equipmentCategories(),
-            'data-list' => fn() => CacheData::dataFieldTypes()->pluck('name'),
-            'public-tips' => fn() => $request->user()
+            'equipment' => fn () => $equipment->load('DataFieldType'),
+            'category-list' => fn () => CacheData::equipmentCategories(),
+            'data-list' => fn () => CacheData::dataFieldTypes()->pluck('name'),
+            'public-tips' => fn () => $request->user()
                 ->features()
                 ->active(PublicTechTipFeature::class),
         ]);

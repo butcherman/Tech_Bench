@@ -48,7 +48,7 @@ class CheckSslCertificateJob implements ShouldQueue
         if (in_array($certDaysLeft, $this->notifyDays)) {
             $notificationGroup = User::where('role_id', 1)->get();
 
-            Log::alert('SSL Certificate will expire in ' . $certDaysLeft . ' days.');
+            Log::alert('SSL Certificate will expire in '.$certDaysLeft.' days.');
 
             Mail::to($notificationGroup)->send(new SslExpiresSoonMail($certDaysLeft));
         }

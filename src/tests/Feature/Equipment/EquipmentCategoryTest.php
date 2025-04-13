@@ -6,8 +6,6 @@ use App\Exceptions\Database\RecordInUseException;
 use App\Models\EquipmentCategory;
 use App\Models\EquipmentType;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Exceptions;
 use Tests\TestCase;
 

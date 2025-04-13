@@ -29,7 +29,7 @@ class CreateUserSettingsJob implements ShouldQueue
      */
     public function handle(BuildUserSettings $svc): void
     {
-        Log::info('Building User Settings for New User ' . $this->user->full_name);
+        Log::info('Building User Settings for New User '.$this->user->full_name);
 
         $svc($this->user);
     }

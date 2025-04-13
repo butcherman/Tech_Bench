@@ -30,7 +30,7 @@ class EquipmentDataService
         } catch (QueryException $e) {
             DbException::check(
                 $e,
-                $field->name . ' is still in use and cannot be deleted'
+                $field->name.' is still in use and cannot be deleted'
             );
         }
     }

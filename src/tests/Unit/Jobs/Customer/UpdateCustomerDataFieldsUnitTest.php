@@ -19,7 +19,7 @@ class UpdateCustomerDataFieldsUnitTest extends TestCase
     {
         $testEquip = EquipmentType::factory()->create();
 
-        $this->mock(CustomerEquipmentDataService::class, function (MockInterface $mock) use ($testEquip) {
+        $this->mock(CustomerEquipmentDataService::class, function (MockInterface $mock) {
             $mock->shouldReceive('updateEquipmentDataFieldsForEquipment')
                 ->once()
                 ->with(EquipmentType::class);

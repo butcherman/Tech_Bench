@@ -53,7 +53,7 @@ class EquipmentTypeTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('Equipment/Index')
                     ->has('equipment-list')
             );
@@ -94,7 +94,7 @@ class EquipmentTypeTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('Equipment/Create')
                     ->has('category-list')
                     ->has('data-list')
@@ -235,7 +235,7 @@ class EquipmentTypeTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('Equipment/Edit')
                     ->has('equipment')
                     ->has('category-list')
