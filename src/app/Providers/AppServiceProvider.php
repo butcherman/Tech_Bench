@@ -34,7 +34,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind('DbException', CheckDatabaseError::class);
 
         // User Permission Facade
-        // $this->app->bind('UserPermissions', UserPermissionsService::class);
+        $this->app->bind('UserPermissions', UserPermissionsService::class);
 
         // Get Mailable Facade
         // $this->app->bind('GetMailable', GetMailableUsers::class);

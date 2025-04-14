@@ -6,15 +6,15 @@ use Illuminate\Support\Facades\Facade;
 
 /*
 |-------------------------------------------------------------------------------
-| DB Exception Facade provides quick access to check database errors and
-| throw custom exceptions as needed.
+| User Permissions Facade allows quick access of user permissions for Tech
+| Tips and Customers
 |-------------------------------------------------------------------------------
 */
 
-class DbException extends Facade
+class UserPermissions extends Facade
 {
     public static function getFacadeAccessor(): string
     {
-        return 'DbException';
+        return 'UserPermissions';
     }
 }

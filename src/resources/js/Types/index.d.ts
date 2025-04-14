@@ -57,9 +57,15 @@ type elementVariant =
     | "success"
     | "warning";
 
+type basicPermissions = {
+    create: boolean;
+    update: boolean;
+    delete: boolean;
+};
+
 /*
 |-------------------------------------------------------------------------------
-| Text
+| Misc
 |-------------------------------------------------------------------------------
 */
 type fileData = {

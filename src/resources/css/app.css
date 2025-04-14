@@ -37,6 +37,14 @@ body,
     @apply my-3 mx-3;
 }
 
+.tb-gap-x {
+    @apply mx-3;
+}
+
+.tb-gap-y {
+    @apply my-3;
+}
+
 /**
 * Separation line with text in middle
 */
