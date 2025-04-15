@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Customer;
 
 use App\Facades\UserPermissions;
 use App\Http\Controllers\Controller;
+use App\Models\Customer;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -25,7 +26,12 @@ class CustomerController extends Controller
      */
     public function create(): Response
     {
-        return Inertia::render('Customer/Create');
+        $this->authorize('create', Customer::class);
+
+        return Inertia::render('Customer/Create', [
+            'select-id' => fn() => config('customer.select_id'),
+            'default-state' => fn() => config('customer.default_state'),
+        ]);
     }
 
     /**
