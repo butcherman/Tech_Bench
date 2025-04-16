@@ -5,6 +5,7 @@ import VueForm from "@/Forms/_Base/VueForm.vue";
 import { object, string, number } from "yup";
 import { computed } from "vue";
 import { allStates } from "@/Composables/allStates.module";
+import { checkCustId } from "@/Composables/Customer/CheckCustomerId.module";
 
 const props = defineProps<{
     selectId: boolean;
@@ -51,9 +52,15 @@ const newSchema = object({
         .nullable()
         .test("uniqueCustId", async function (value) {
             let usedData = await checkCustId(value).then((res) => res);
+            console.log(usedData);
             if (usedData.in_use) {
+                if (usedData.disabled) {
+                    return this.createError({
+                        message: `This Customer ID is taken by disabled customer ${usedData.cust_name}`,
+                    });
+                }
                 return this.createError({
-                    message: `This Customer ID is taken by <a href="${usedData.route}">${usedData.cust_name}</a>`,
+                    message: `This Customer ID is taken by <a href="${usedData.route}" class="text-pink-400">${usedData.cust_name}</a>`,
                 });
             }
             return true;
@@ -115,6 +122,8 @@ const editSchema = object({
                         name="state"
                         label="State"
                         :list="allStates"
+                        text-field="text"
+                        value-field="value"
                     />
                 </div>
                 <div class="w-1/2 ms-1">

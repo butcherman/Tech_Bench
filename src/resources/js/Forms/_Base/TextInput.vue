@@ -90,7 +90,7 @@ const {
             </InputGroupAddon>
         </InputGroup>
         <Message size="small" severity="error" variant="simple">
-            {{ errorMessage }}
+            <span v-html="errorMessage" />
         </Message>
         <Message
             v-if="hasFocus"

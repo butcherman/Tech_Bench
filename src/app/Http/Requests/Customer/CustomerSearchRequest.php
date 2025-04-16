@@ -23,6 +23,7 @@ class CustomerSearchRequest extends FormRequest
             'page' => ['required_if:basic,false', 'numeric'],
             'perPage' => ['required_if:basic,false', 'numeric'],
             'searchFor' => ['nullable', 'string'],
+            'cust_id' => ['nullable', 'numeric'],
         ];
     }
 }

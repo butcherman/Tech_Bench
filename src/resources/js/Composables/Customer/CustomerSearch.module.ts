@@ -82,14 +82,16 @@ export const resetSearch = (): void => {
  *
  * TODO - Properly type this
  */
-const processResults = (res: any): void => {
-    // Assign results
-    searchResults.value = res.data.data;
+const processResults = (res: void | AxiosResponse<any, customer>): void => {
+    if (res) {
+        // Assign results
+        searchResults.value = res.data.data;
 
-    // Build pagination footer
-    paginationData.listFrom = res.data.from;
-    paginationData.listTo = res.data.to;
-    paginationData.listTotal = res.data.total;
-    paginationData.totalPages = res.data.last_page;
-    paginationData.currentPage = res.data.current_page;
+        // Build pagination footer
+        paginationData.listFrom = res.data.from;
+        paginationData.listTo = res.data.to;
+        paginationData.listTotal = res.data.total;
+        paginationData.totalPages = res.data.last_page;
+        paginationData.currentPage = res.data.current_page;
+    }
 };

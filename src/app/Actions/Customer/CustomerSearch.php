@@ -13,13 +13,14 @@ class CustomerSearch
      */
     public function __invoke(Collection $searchData): mixed
     {
+        if ($searchData->has('cust_id')) {
+            return $this->searchById($searchData->get('cust_id'));
+        }
+
         if ($searchData->get('searchFor')) {
             return $this->filteredSearch($searchData);
         }
 
-        if ($searchData->has('cust_id')) {
-            return $this->searchById($searchData->get('cust_id'));
-        }
 
         return Customer::with('CustomerSite')
             ->orderBy('name', 'asc')
@@ -38,8 +39,14 @@ class CustomerSearch
     /**
      * Check to see if a Customer ID is currently in use
      */
-    protected function searchById(int $id): ?Customer
+    protected function searchById(int $id): Customer|false
     {
-        return Customer::find($id);
+        $cust = Customer::withTrashed()->find($id);
+
+        if ($cust) {
+            return $cust->makeVisible('deleted_at');
+        }
+
+        return false;
     }
 }

@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Customer;
 
 use App\Facades\UserPermissions;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Customer\CustomerRequest;
 use App\Models\Customer;
+use App\Services\Customer\CustomerService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -37,10 +40,14 @@ class CustomerController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CustomerRequest $request, CustomerService $svc): RedirectResponse
     {
-        //
-        return 'store';
+        $newCustomer = $svc->createCustomer($request->safe()->collect());
+
+        return redirect(route('customers.show', $newCustomer->slug))
+            ->with('success', __('cust.created', [
+                'name' => $newCustomer->name,
+            ]));
     }
 
     /**
