@@ -4,7 +4,6 @@ namespace Tests\Unit\Actions\Customer;
 
 use App\Actions\Customer\CustomerSearch;
 use App\Models\Customer;
-use Mockery\MockInterface;
 use Tests\TestCase;
 
 class CustomerSearchUnitTest extends TestCase
@@ -57,6 +56,6 @@ class CustomerSearchUnitTest extends TestCase
         $testObj = new CustomerSearch;
         $res = $testObj($data);
 
-        $this->assertEquals($res->toArray(), $test->toArray());
+        $this->assertEquals($res->makeHidden('deleted_at')->toArray(), $test->toArray());
     }
 }

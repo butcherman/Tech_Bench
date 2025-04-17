@@ -10,6 +10,10 @@ import { computed, ref, toRef } from "vue";
 import { useField } from "vee-validate";
 import type { Ref } from "vue";
 
+const emit = defineEmits<{
+    focus: [];
+    blur: [];
+}>();
 const props = defineProps<{
     id: string;
     name: string;
@@ -29,6 +33,21 @@ const hasFocus = ref(false);
 const borderType = computed(() =>
     props.borderBottom ? "border-b rounded-none" : "border"
 );
+
+/*
+|-------------------------------------------------------------------------------
+| Methods to emit events and update focus.
+|-------------------------------------------------------------------------------
+*/
+const onFocus = () => {
+    hasFocus.value = true;
+    emit("focus");
+};
+
+const onBlur = () => {
+    hasFocus.value = false;
+    emit("blur");
+};
 
 /*
 |-------------------------------------------------------------------------------
@@ -77,8 +96,8 @@ const {
                     :type="type ?? 'text'"
                     :variant="filled ? 'filled' : null"
                     fluid
-                    @focus="hasFocus = true"
-                    @blur="hasFocus = false"
+                    @focus="onFocus"
+                    @blur="onBlur"
                 />
                 <label :for="id">{{ label }}</label>
             </FloatLabel>

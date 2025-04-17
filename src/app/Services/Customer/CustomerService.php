@@ -7,7 +7,6 @@ use App\Models\CustomerSite;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
-
 class CustomerService
 {
     /**
@@ -95,8 +94,12 @@ class CustomerService
     /**
      * Create a new customer site
      */
-    public function createSite(Collection $requestData, Customer $customer): CustomerSite
+    public function createSite(Collection $requestData, ?Customer $customer = null): CustomerSite
     {
+        if (is_null($customer)) {
+            $customer = Customer::find($requestData->get('cust_id'));
+        }
+
         $site = new CustomerSite($requestData->only([
             'address',
             'city',
@@ -202,9 +205,9 @@ class CustomerService
         $param = $isSite ? 'site_slug' : 'slug';
 
         while ($model::where($param, $slug)->first()) {
-            $slug = Str::slug($name) . '-' . Str::slug($city);
+            $slug = Str::slug($name).'-'.Str::slug($city);
             if ($index > 0) {
-                $slug .= '-' . $index;
+                $slug .= '-'.$index;
             }
             $index++;
         }

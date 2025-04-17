@@ -40,13 +40,8 @@ const checkToSearch = () => {
                     <span class="d-none d-md-inline"> Search </span>
                 </button>
             </InputGroupAddon>
-            <InputGroupAddon class="bg-yellow-500 text-white">
-                <button
-                    v-if="!hideReset"
-                    type="reset"
-                    class="btn btn-warning"
-                    @click="onReset"
-                >
+            <InputGroupAddon v-if="!hideReset" class="bg-yellow-500 text-white">
+                <button type="reset" class="btn btn-warning" @click="onReset">
                     <fa-icon icon="rotate" />
                     <span class="d-none d-md-inline"> Reset </span>
                 </button>

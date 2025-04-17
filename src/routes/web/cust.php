@@ -3,6 +3,7 @@
 use App\Exceptions\Customer\CustomerNotFoundException;
 use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\Customer\CustomerSearchController;
+use App\Http\Controllers\Customer\CustomerSiteController;
 use App\Models\Customer;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 use Illuminate\Support\Facades\Route;
@@ -10,10 +11,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('customers/{customer}/{site}', function () {
     return 'show customer site';
 })->name('customers.sites.show');
-
-Route::get('customer-site-create', function () {
-    return 'create customer site';
-})->name('customers.create-site');
 
 Route::get('customer-settings', function () {
     return 'something admin';
@@ -26,8 +23,6 @@ Route::get('customer-disabled', function () {
 Route::get('customer-assign', function () {
     return 'something admin';
 })->name('customers.re-assign.edit');
-
-
 
 /*
 |-------------------------------------------------------------------------------
@@ -56,12 +51,12 @@ Route::middleware('auth.secure')->group(function () {
         | /customers
         |-----------------------------------------------------------------------
         */
-        // Route::controller(CustomerSiteController::class)->group(function () {
-        //     Route::get('create-site', 'create')
-        //         ->name('create-site')
-        //         ->breadcrumb('New Customer Site', 'customers.index');
-        //     Route::post('create-site', 'store')->name('store-site');
-        // });
+        Route::controller(CustomerSiteController::class)->group(function () {
+            Route::get('create-site', 'create')
+                ->name('create-site')
+                ->breadcrumb('New Customer Site', 'customers.index');
+            Route::post('create-site', 'store')->name('store-site');
+        });
 
         /*
         |-----------------------------------------------------------------------
@@ -124,7 +119,7 @@ Route::middleware('auth.secure')->group(function () {
         ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
             $breadcrumbs->index('Customers')
                 ->show(
-                    fn(Customer|string $customer) => gettype($customer) === 'object'
+                    fn (Customer|string $customer) => gettype($customer) === 'object'
                         ? $customer->name
                         : $customer
                 )

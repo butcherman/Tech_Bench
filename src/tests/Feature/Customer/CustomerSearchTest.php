@@ -4,8 +4,6 @@ namespace Tests\Feature\Customer;
 
 use App\Actions\Customer\CustomerSearch;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Mockery\MockInterface;
 use Tests\TestCase;
 

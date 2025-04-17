@@ -21,7 +21,6 @@ class CustomerSearch
             return $this->filteredSearch($searchData);
         }
 
-
         return Customer::with('CustomerSite')
             ->orderBy('name', 'asc')
             ->paginate($searchData->get('perPage'));

@@ -32,8 +32,8 @@ class CustomerController extends Controller
         $this->authorize('create', Customer::class);
 
         return Inertia::render('Customer/Create', [
-            'select-id' => fn() => config('customer.select_id'),
-            'default-state' => fn() => config('customer.default_state'),
+            'select-id' => fn () => config('customer.select_id'),
+            'default-state' => fn () => config('customer.default_state'),
         ]);
     }
 

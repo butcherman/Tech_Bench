@@ -5,8 +5,6 @@ namespace App\Http\Controllers\Customer;
 use App\Actions\Customer\CustomerSearch;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customer\CustomerSearchRequest;
-use Illuminate\Http\Request;
-use Inertia\Inertia;
 
 class CustomerSearchController extends Controller
 {

@@ -17,23 +17,6 @@ interface paginationData {
     pageArr: number[];
 }
 
-// interface customerSearchResults {
-//     data: {
-//         current_page: number;
-//         data: customer[];
-//         first_page_url: string;
-//         from: number;
-//         last_page: number;
-//         last_page_url: string;
-//         next_page_url: string;
-//         path: string;
-//         per_page: number;
-//         prev_page_url: string;
-//         to: number;
-//         total: number;
-//     };
-// }
-
 /*
 |-------------------------------------------------------------------------------
 | Search and Loading Parameters
@@ -79,8 +62,6 @@ export const resetSearch = (): void => {
 
 /**
  * Assign the results and build out the pagination footer.
- *
- * TODO - Properly type this
  */
 const processResults = (res: void | AxiosResponse<any, customer>): void => {
     if (res) {
