@@ -5,6 +5,7 @@ use App\Http\Controllers\Customer\CustomerAdministrationController;
 use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\Customer\CustomerSearchController;
 use App\Http\Controllers\Customer\CustomerSiteController;
+use App\Http\Controllers\Customer\DisabledCustomerController;
 use App\Models\Customer;
 use App\Models\CustomerSite;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
@@ -14,14 +15,6 @@ Route::get('customers/{customer}/{site}', function () {
     return 'show customer site';
 })->name('customers.sites.show');
 
-// Route::get('customer-settings', function () {
-//     return 'something admin';
-// })->name('customers.settings.edit');
-
-Route::get('customer-disabled', function () {
-    return 'something admin';
-})->name('customers.disabled.index');
-
 Route::get('customer-assign', function () {
     return 'something admin';
 })->name('customers.re-assign.edit');
@@ -30,7 +23,6 @@ Route::get('customer-assign', function () {
 /*
 |-------------------------------------------------------------------------------
 | Customer Based Routes
-| /customers
 |-------------------------------------------------------------------------------
 */
 Route::middleware('auth.secure')->group(function () {
@@ -61,7 +53,31 @@ Route::middleware('auth.secure')->group(function () {
         //             );
         //         Route::put('re-assign-site', 'update')->name('update');
         //     });
+
+        /*
+        |-----------------------------------------------------------------------
+        | Soft Deleted Customers
+        | /administration/customers/disabled-customers
+        |-----------------------------------------------------------------------
+        */
+        Route::prefix('disabled-customers')
+            ->name('disabled.')
+            ->group(function () {
+                Route::get('/', DisabledCustomerController::class)
+                    ->name('index')
+                    ->breadcrumb('Disabled Customers', 'admin.index');
+                Route::controller(CustomerController::class)
+                    ->group(function () {
+                        Route::get('{customer}/restore', 'restore')
+                            ->withTrashed()
+                            ->name('restore');
+                        Route::delete('{customer}/force-delete', 'forceDelete')
+                            ->withTrashed()
+                            ->name('force-delete');
+                    });
+            });
     });
+
     Route::prefix('customers')->name('customers.')->group(function () {
         /*
         |-----------------------------------------------------------------------
@@ -71,8 +87,6 @@ Route::middleware('auth.secure')->group(function () {
         */
         // Route::inertia('not-found', 'Customer/NotFound')->name('not-found');
         Route::post('search', CustomerSearchController::class)->name('search');
-        // Route::get('check-id/{custId}', CustomerIdController::class)
-        //     ->name('check-id');
         // Route::post('bookmark/{customer}', CustomerBookmarkController::class)
         //     ->name('bookmark');
 
@@ -88,31 +102,6 @@ Route::middleware('auth.secure')->group(function () {
                 ->breadcrumb('New Customer Site', 'customers.index');
             Route::post('create-site', 'store')->name('store-site');
         });
-
-
-
-        /*
-        |-----------------------------------------------------------------------
-        | Soft Deleted Customers
-        | /customers/disabled-customers
-        |-----------------------------------------------------------------------
-        */
-        // Route::prefix('disabled-customers')
-        //     ->name('disabled.')
-        //     ->group(function () {
-        //         Route::get('/', DisabledCustomerController::class)
-        //             ->name('index')
-        //             ->breadcrumb('Disabled Customers', 'admin.index');
-        //         Route::controller(CustomerController::class)
-        //             ->group(function () {
-        //                 Route::get('{customer}/restore', 'restore')
-        //                     ->withTrashed()
-        //                     ->name('restore');
-        //                 Route::delete('{customer}/force-delete', 'forceDelete')
-        //                     ->withTrashed()
-        //                     ->name('force-delete');
-        //             });
-        //     });
     });
 
     /*

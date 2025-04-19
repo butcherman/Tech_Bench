@@ -81,7 +81,7 @@ class Customer extends Model
     public function siteCount(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->CustomerSite->count(),
+            get: fn() => $this->CustomerSite->count(),
         );
     }
 
@@ -93,6 +93,12 @@ class Customer extends Model
     public function CustomerSite(): HasMany
     {
         return $this->hasMany(CustomerSite::class, 'cust_id', 'cust_id');
+    }
+
+    public function CustomerSiteList(): HasMany
+    {
+        return $this->hasMany(CustomerSite::class, 'cust_id', 'cust_id')
+            ->withTrashed();
     }
 
     public function CustomerAlert(): HasMany
@@ -151,7 +157,7 @@ class Customer extends Model
         return match ($event) {
             'deleted', 'trashed', 'created' => [],
             default => [
-                new PrivateChannel('customer.'.$this->slug),
+                new PrivateChannel('customer.' . $this->slug),
             ],
         };
     }
@@ -159,7 +165,8 @@ class Customer extends Model
     public function newBroadcastableModelEvent(string $event): BroadcastableModelEventOccurred
     {
         return (new BroadcastableModelEventOccurred(
-            $this, $event
+            $this,
+            $event
         ))->dontBroadcastToCurrentUser();
     }
 }

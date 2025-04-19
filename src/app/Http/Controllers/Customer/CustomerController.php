@@ -5,10 +5,14 @@ namespace App\Http\Controllers\Customer;
 use App\Facades\UserPermissions;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customer\CustomerRequest;
+use App\Jobs\Customer\ForceDeleteCustomerJob;
 use App\Models\Customer;
+use App\Services\Customer\CustomerAdministrationService;
 use App\Services\Customer\CustomerService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -32,8 +36,8 @@ class CustomerController extends Controller
         $this->authorize('create', Customer::class);
 
         return Inertia::render('Customer/Create', [
-            'select-id' => fn () => config('customer.select_id'),
-            'default-state' => fn () => config('customer.default_state'),
+            'select-id' => fn() => config('customer.select_id'),
+            'default-state' => fn() => config('customer.default_state'),
         ]);
     }
 
@@ -84,5 +88,37 @@ class CustomerController extends Controller
     {
         //
         return 'destroy';
+    }
+
+    /**
+     * Restore a soft deleted customer.
+     */
+    public function restore(CustomerService $svc, Customer $customer): RedirectResponse
+    {
+        $this->authorize('restore', $customer);
+
+        $svc->restoreCustomer($customer);
+
+        Log::notice('Customer ' . $customer->name . ' has been restored');
+
+        return back()
+            ->with('success', __('cust.restored', ['name' => $customer->name]));
+    }
+
+    /**
+     * Force Delete a soft deleted customer.
+     */
+    public function forceDelete(CustomerAdministrationService $svc, Customer $customer): RedirectResponse
+    {
+        $this->authorize('forceDelete', $customer);
+
+        // Place customer in working-jobs cache so it is not accessible.
+        $svc->addToWorkingJobs($customer);
+
+        ForceDeleteCustomerJob::dispatch($customer);
+
+        return back()->with('danger', __('cust.force_deleted', [
+            'name' => $customer->name,
+        ]));
     }
 }

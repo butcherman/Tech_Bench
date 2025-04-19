@@ -2,9 +2,12 @@
 
 namespace App\Services\Customer;
 
+use App\Facades\DbException;
 use App\Models\Customer;
 use App\Models\CustomerSite;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class CustomerService
@@ -66,30 +69,33 @@ class CustomerService
     /**
      * Soft Delete or Force Delete a customer
      */
-    // public function destroyCustomer(
-    //     Customer $customer,
-    //     ?string $reason = null,
-    //     ?bool $force = false
-    // ): void {
-    //     if ($force) {
-    //         try {
-    //             $customer->forceDelete();
-    //         } catch (QueryException $e) {
-    //             DbException::check($e);
-    //         }
+    public function destroyCustomer(
+        Customer $customer,
+        ?string $reason = null,
+        ?bool $force = false
+    ): void {
+        if ($force) {
+            try {
+                $customer->forceDelete();
+            } catch (QueryException $e) {
+                DbException::check($e);
+            }
 
-    //         return;
-    //     }
+            return;
+        }
 
-    //     $customer->deleted_reason = $reason;
-    //     $customer->save();
-    //     $customer->delete();
-    // }
+        $customer->deleted_reason = $reason;
+        $customer->save();
+        $customer->delete();
+    }
 
-    // public function restoreCustomer(Customer $customer): void
-    // {
-    //     $customer->restore();
-    // }
+    /**
+     * Restore a customer that was soft deleted.
+     */
+    public function restoreCustomer(Customer $customer): void
+    {
+        $customer->restore();
+    }
 
     /**
      * Create a new customer site
@@ -147,23 +153,35 @@ class CustomerService
     /**
      * Destroy a customer site
      */
-    // public function destroySite(
-    //     CustomerSite $site,
-    //     string $reason,
-    //     ?bool $force = false
-    // ): void {
-    //     if ($force) {
-    //         CustomerSite::withoutBroadcasting(function () use ($site) {
-    //             $site->forceDelete();
-    //         });
+    public function destroySite(
+        CustomerSite $site,
+        string $reason,
+        ?bool $force = false
+    ): void {
+        if ($force) {
+            Log::notice('Force Deleting Customer site ' . $site->site_name, [
+                'reason' => $reason,
+                'customer_id' => $site->cust_id,
+                'site_id' => $site->cust_site_id,
+            ]);
 
-    //         return;
-    //     }
+            CustomerSite::withoutBroadcasting(function () use ($site) {
+                $site->forceDelete();
+            });
 
-    //     $site->deleted_reason = $reason;
-    //     $site->save();
-    //     $site->delete();
-    // }
+            return;
+        }
+
+        Log::notice('Deleting Customer site ' . $site->site_name, [
+            'reason' => $reason,
+            'customer_id' => $site->cust_id,
+            'site_id' => $site->cust_site_id,
+        ]);
+
+        $site->deleted_reason = $reason;
+        $site->save();
+        $site->delete();
+    }
 
     /**
      * Destroy All Customer Sites
@@ -205,9 +223,9 @@ class CustomerService
         $param = $isSite ? 'site_slug' : 'slug';
 
         while ($model::where($param, $slug)->first()) {
-            $slug = Str::slug($name.'-'.$city);
+            $slug = Str::slug($name . '-' . $city);
             if ($index > 0) {
-                $slug .= '-'.$index;
+                $slug .= '-' . $index;
             }
             $index++;
         }
