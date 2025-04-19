@@ -44,14 +44,14 @@ class FileUpload extends Model
     public function href(): Attribute
     {
         return Attribute::make(
-            get: fn () => route('download', [$this->file_id, $this->file_name]),
+            get: fn() => route('download', [$this->file_id, $this->file_name]),
         );
     }
 
     public function createdStamp(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->created_at,
+            get: fn() => $this->created_at,
         );
     }
 
@@ -67,15 +67,15 @@ class FileUpload extends Model
     public function fileExists(): bool
     {
         return Storage::disk($this->disk)
-            ->exists($this->folder.DIRECTORY_SEPARATOR.$this->file_name);
+            ->exists($this->folder . DIRECTORY_SEPARATOR . $this->file_name);
     }
 
     /**
      * Return the full path of the file
      */
-    public function getFilePath(): string
-    {
-        return Storage::disk($this->disk)
-            ->path($this->folder.DIRECTORY_SEPARATOR.$this->file_name);
-    }
+    // public function getFilePath(): string
+    // {
+    //     return Storage::disk($this->disk)
+    //         ->path($this->folder.DIRECTORY_SEPARATOR.$this->file_name);
+    // }
 }

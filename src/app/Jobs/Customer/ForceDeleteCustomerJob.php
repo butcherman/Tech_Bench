@@ -31,7 +31,8 @@ class ForceDeleteCustomerJob implements ShouldQueue
         // Get a list of customer files to be deleted after process is done
         $fileList = CustomerFile::where('cust_id', $this->customer->cust_id)
             ->get()
-            ->pluck('file_id');
+            ->pluck('file_id')
+            ->toArray();
 
         $svc->destroyCustomerSites($this->customer);
         $svc->destroyCustomer($this->customer, 'Force Deleting Customer', true);

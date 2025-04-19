@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Services\Customer;
 
+use App\Exceptions\Database\RecordInUseException;
 use App\Models\Customer;
 use App\Models\CustomerSite;
 use App\Services\Customer\CustomerService;
@@ -59,7 +60,7 @@ class CustomerServiceUnitTest extends TestCase
             'state' => $site->state,
             'zip' => $site->zip,
         ];
-        $slug = Str::slug($data['name'].'-'.$site->city);
+        $slug = Str::slug($data['name'] . '-' . $site->city);
 
         $testObj = new CustomerService;
         $res = $testObj->createCustomer(collect($data));
@@ -82,11 +83,11 @@ class CustomerServiceUnitTest extends TestCase
     {
         $cust = Customer::factory()->make();
         $existing = Customer::factory()->createQuietly();
-        $site = CustomerSite::factory()->make();
+        CustomerSite::factory()->make();
 
-        $duplicate = Customer::factory()->create([
+        Customer::factory()->create([
             'name' => $existing->name,
-            'slug' => Str::slug($existing->slug.'-'.$existing->CustomerSite[0]->city),
+            'slug' => Str::slug($existing->slug . '-' . $existing->CustomerSite[0]->city),
         ]);
 
         $data = [
@@ -97,7 +98,7 @@ class CustomerServiceUnitTest extends TestCase
             'state' => $existing->CustomerSite[0]->state,
             'zip' => $existing->CustomerSite[0]->zip,
         ];
-        $slug = Str::slug($data['name'].'-'.$existing->CustomerSite[0]->city.'-1');
+        $slug = Str::slug($data['name'] . '-' . $existing->CustomerSite[0]->city . '-1');
 
         $testObj = new CustomerService;
         $res = $testObj->createCustomer(collect($data));
@@ -114,6 +115,93 @@ class CustomerServiceUnitTest extends TestCase
             'site_name' => $data['name'],
             'address' => $data['address'],
             'city' => $data['city'],
+        ]);
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | updateCustomer()
+    |---------------------------------------------------------------------------
+    */
+
+    /*
+    |---------------------------------------------------------------------------
+    | destroyCustomer()
+    |---------------------------------------------------------------------------
+    */
+    public function test_destroy_customer_soft_delete(): void
+    {
+        $customer = Customer::factory()->create();
+        $reason = 'Unit Testing';
+
+        $testObj = new CustomerService;
+        $testObj->destroyCustomer($customer, $reason);
+
+        $this->assertSoftDeleted(
+            'customers',
+            $customer->makeHidden(['site_count', 'CustomerSite'])->toArray()
+        );
+
+        $this->assertDatabaseHas('customers', [
+            'cust_id' => $customer->cust_id,
+            'deleted_reason' => $reason,
+        ]);
+    }
+
+    public function test_destroy_customer_force_delete(): void
+    {
+        $customer = Customer::factory()->create();
+        $customer->primary_site_id = null;
+        $customer->save();
+        $customer->delete();
+
+        CustomerSite::where('cust_id', $customer->cust_id)->forceDelete();
+
+        $reason = 'Unit Testing';
+
+        $testObj = new CustomerService;
+        $testObj->destroyCustomer($customer, $reason, true);
+
+        $this->assertDatabaseMissing(
+            'customers',
+            $customer->makeHidden(['site_count', 'CustomerSite'])->toArray()
+        );
+    }
+
+    public function test_destroy_customer_force_delete_in_use(): void
+    {
+        $customer = Customer::factory()->create();
+        $customer->delete();
+
+        $reason = 'Unit Testing';
+
+        $this->expectException(RecordInUseException::class);
+
+        $testObj = new CustomerService;
+        $testObj->destroyCustomer($customer, $reason, true);
+
+        $this->assertDatabaseMissing(
+            'customers',
+            $customer->makeHidden(['site_count', 'CustomerSite'])->toArray()
+        );
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | restoreCustomer()
+    |---------------------------------------------------------------------------
+    */
+    public function test_restore_customer(): void
+    {
+        $customer = Customer::factory()->create();
+        $customer->delete();
+
+        $testObj = new CustomerService;
+        $testObj->restoreCustomer($customer);
+
+        $this->assertDatabaseHas('customers', [
+            'cust_id' => $customer->cust_id,
+            'deleted_at' => null,
         ]);
     }
 
@@ -154,5 +242,39 @@ class CustomerServiceUnitTest extends TestCase
         $this->assertEquals($site['site_name'], $res->site_name);
 
         $this->assertDatabaseHas('customer_sites', $site);
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | destroySite()
+    |---------------------------------------------------------------------------
+    */
+    public function test_destroy_site(): void
+    {
+        $site = CustomerSite::factory()->create();
+        $reason = 'Unit Testing';
+
+        $testObj = new CustomerService;
+        $testObj->destroySite($site, $reason);
+
+        $this->assertSoftDeleted(
+            'customer_sites',
+            $site->makeHidden(['is_primary'])->toArray()
+        );
+    }
+
+    public function test_destroy_site_force_delete(): void
+    {
+        $site = CustomerSite::factory()->create();
+        $site->delete();
+        $reason = 'Unit Testing';
+
+        $testObj = new CustomerService;
+        $testObj->destroySite($site, $reason, true);
+
+        $this->assertDatabaseMissing(
+            'customer_sites',
+            $site->makeHidden(['is_primary'])->toArray()
+        );
     }
 }

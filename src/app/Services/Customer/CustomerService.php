@@ -184,23 +184,6 @@ class CustomerService
     }
 
     /**
-     * Destroy All Customer Sites
-     */
-    // public function destroyAllSites(Customer $customer): void
-    // {
-    //     CustomerSite::withoutBroadcasting(function () use ($customer) {
-    //         // Remove the Primary Site ID from the customer
-    //         $customer->primary_site_id = null;
-    //         $customer->save();
-
-    //         $siteList = $customer->CustomerSite;
-    //         foreach ($siteList as $site) {
-    //             $this->destroySite($site, 'Force Deleting Customer', true);
-    //         }
-    //     });
-    // }
-
-    /**
      * Restore a Customer Site.
      */
     // public function restoreCustomerSite(CustomerSite $site): void

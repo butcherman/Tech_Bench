@@ -22,6 +22,14 @@ class CustomerUnitTest extends TestCase
         parent::setUp();
 
         $this->model = Customer::factory()->create();
+
+        $siteList = CustomerSite::factory()
+            ->count(3)
+            ->create(['cust_id' => $this->model->cust_id]);
+
+        $siteList[0]->delete();
+
+        $this->model->refresh();
     }
 
     /*
@@ -58,12 +66,24 @@ class CustomerUnitTest extends TestCase
     */
     public function test_customer_site_relationship(): void
     {
-        $data = CustomerSite::where('cust_site_id', $this->model->primary_site_id)
-            ->first();
+        $data = CustomerSite::where('cust_id', $this->model->cust_id)
+            ->get();
 
         $this->assertEquals(
             $data->toArray(),
-            $this->model->CustomerSite[0]->toArray()
+            $this->model->CustomerSite->toArray()
+        );
+    }
+
+    public function test_customer_site_list_relationship(): void
+    {
+        $data = CustomerSite::where('cust_id', $this->model->cust_id)
+            ->withTrashed()
+            ->get();
+
+        $this->assertEquals(
+            $data->toArray(),
+            $this->model->CustomerSiteList->toArray()
         );
     }
 

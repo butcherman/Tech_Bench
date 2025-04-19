@@ -6,10 +6,10 @@ import { boolean, object, string } from "yup";
 import { allStates } from "@/Composables/allStates.module";
 
 const props = defineProps<{
-    selectId: boolean;
-    updateSlug: boolean;
-    defaultState: string;
-    autoPurge: boolean;
+    select_id: boolean;
+    update_slug: boolean;
+    default_state: string;
+    auto_purge: boolean;
 }>();
 
 /*
@@ -18,10 +18,10 @@ const props = defineProps<{
 |-------------------------------------------------------------------------------
 */
 const initValues = {
-    select_id: props.selectId,
-    update_slug: props.updateSlug,
-    default_state: props.defaultState,
-    auto_purge: props.autoPurge,
+    select_id: props.select_id,
+    update_slug: props.update_slug,
+    default_state: props.default_state,
+    auto_purge: props.auto_purge,
 };
 
 const schema = object({

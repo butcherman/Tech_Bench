@@ -4,10 +4,10 @@ import Card from "@/Components/_Base/Card.vue";
 import CustomerSettingsForm from "@/Forms/Customer/CustomerSettingsForm.vue";
 
 defineProps<{
-    selectId: boolean;
-    updateSlug: boolean;
-    defaultState: string;
-    autoPurge: boolean;
+    select_id: boolean;
+    update_slug: boolean;
+    default_state: string;
+    auto_purge: boolean;
 }>();
 </script>
 
@@ -19,10 +19,10 @@ export default { layout: AppLayout };
     <div class="flex justify-center">
         <Card class="tb-card">
             <CustomerSettingsForm
-                :select-id="selectId"
-                :update-slug="updateSlug"
-                :default-state="defaultState"
-                :auto-purge="autoPurge"
+                :select_id="select_id"
+                :update_slug="update_slug"
+                :default_state="default_state"
+                :auto_purge="auto_purge"
             />
         </Card>
     </div>
