@@ -56,6 +56,21 @@ class CustomerSearchUnitTest extends TestCase
         $testObj = new CustomerSearch;
         $res = $testObj($data);
 
-        $this->assertEquals($res->makeHidden('deleted_at')->toArray(), $test->toArray());
+        $this->assertEquals(
+            $res->makeHidden('deleted_at')->toArray(),
+            $test->toArray()
+        );
+    }
+
+    public function test_search_by_id_bad_id(): void
+    {
+        $data = collect([
+            'cust_id' => 6688846993,
+        ]);
+
+        $testObj = new CustomerSearch;
+        $res = $testObj($data);
+
+        $this->assertFalse($res);
     }
 }

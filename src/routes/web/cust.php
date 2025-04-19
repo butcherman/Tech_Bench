@@ -5,6 +5,7 @@ use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\Customer\CustomerSearchController;
 use App\Http\Controllers\Customer\CustomerSiteController;
 use App\Models\Customer;
+use App\Models\CustomerSite;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 use Illuminate\Support\Facades\Route;
 
@@ -216,18 +217,18 @@ Route::middleware('auth.secure')->group(function () {
         | /customers/{customer-slug|customer-id}/sites
         |-----------------------------------------------------------------------
         */
-        // Route::resource('sites', CustomerSiteController::class)
-        //     ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
-        //         $breadcrumbs->index('Sites', 'customers.show')
-        //             ->create('New Customer Site')
-        //             ->show(
-        //                 fn (Customer $customer, CustomerSite|string $site) => gettype($site) === 'object'
-        //                 ? $site->site_name
-        //                 : $site
-        //             )->edit('Edit Site');
-        //     })->missing(function () {
-        //         throw new CustomerNotFoundException;
-        //     });
+        Route::resource('sites', CustomerSiteController::class)
+            ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
+                $breadcrumbs->index('Sites', 'customers.show')
+                    ->create('New Customer Site')
+                    ->show(
+                        fn (Customer $customer, CustomerSite|string $site) => gettype($site) === 'object'
+                            ? $site->site_name
+                            : $site
+                    )->edit('Edit Site');
+            })->missing(function () {
+                throw new CustomerNotFoundException;
+            });
 
         /*
         |-----------------------------------------------------------------------

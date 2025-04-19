@@ -2,7 +2,10 @@
 
 namespace Tests\Feature\Customer;
 
+use App\Models\Customer;
+use App\Models\CustomerSite;
 use App\Models\User;
+use Illuminate\Support\Str;
 use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
@@ -38,216 +41,134 @@ class CustomerTest extends TestCase
     /**
      * Create Method
      */
-    // public function test_create_guest(): void
-    // {
-    //     $response = $this->get(route('customers.create'));
-    //     $response->assertStatus(302)
-    //         ->assertRedirect(route('login'));
-    //     $this->assertGuest();
-    // }
+    public function test_create_guest(): void
+    {
+        $response = $this->get(route('customers.create'));
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
+        $this->assertGuest();
+    }
 
-    // public function test_create_no_permission(): void
-    // {
-    //     //  Remove the "Add Customer" permission from the Tech Role
-    //     $this->changeRolePermission(4, 'Add Customer', false);
+    public function test_create_no_permission(): void
+    {
+        //  Remove the "Add Customer" permission from the Tech Role
+        $this->changeRolePermission(4, 'Add Customer', false);
 
-    //     /** @var User $user */
-    //     $user = User::factory()->createQuietly();
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
 
-    //     $response = $this->actingAs($user)->get(route('customers.create'));
-    //     $response->assertForbidden();
-    // }
+        $response = $this->actingAs($user)->get(route('customers.create'));
+        $response->assertForbidden();
+    }
 
-    // public function test_create(): void
-    // {
-    //     /** @var User $user */
-    //     $user = User::factory()->createQuietly();
+    public function test_create(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
 
-    //     $response = $this->actingAs($user)
-    //         ->get(route('customers.create'));
+        $response = $this->actingAs($user)
+            ->get(route('customers.create'));
 
-    //     $response->assertSuccessful()
-    //         ->assertInertia(fn (Assert $page) => $page
-    //             ->component('Customer/Create')
-    //             ->has('selectId')
-    //             ->has('default-state'));
-    // }
+        $response->assertSuccessful()
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('Customer/Create')
+                ->has('select-id')
+                ->has('default-state'));
+    }
 
     /**
      * Store Method
      */
-    // public function test_store_guest(): void
-    // {
-    //     $cust = Customer::factory()->make();
-    //     $site = CustomerSite::factory()->make();
+    public function test_store_guest(): void
+    {
+        $cust = Customer::factory()->make();
+        $site = CustomerSite::factory()->make();
 
-    //     $data = [
-    //         'name' => $cust->name,
-    //         'dba_name' => $cust->dba_name,
-    //         'address' => $site->address,
-    //         'city' => $site->city,
-    //         'state' => $site->state,
-    //         'zip' => $site->zip,
-    //     ];
+        $data = [
+            'name' => $cust->name,
+            'dba_name' => $cust->dba_name,
+            'address' => $site->address,
+            'city' => $site->city,
+            'state' => $site->state,
+            'zip' => $site->zip,
+        ];
 
-    //     $response = $this->post(route('customers.store'), $data);
+        $response = $this->post(route('customers.store'), $data);
 
-    //     $response->assertStatus(302)
-    //         ->assertRedirect(route('login'));
-    //     $this->assertGuest();
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
+        $this->assertGuest();
 
-    //     $this->assertDatabaseMissing('customers', [
-    //         'name' => $data['name'],
-    //     ]);
-    // }
+        $this->assertDatabaseMissing('customers', [
+            'name' => $data['name'],
+        ]);
+    }
 
-    // public function test_store_no_permission(): void
-    // {
-    //     //  Remove the "Add Customer" permission from the Tech Role
-    //     $this->changeRolePermission(4, 'Add Customer', false);
+    public function test_store_no_permission(): void
+    {
+        //  Remove the "Add Customer" permission from the Tech Role
+        $this->changeRolePermission(4, 'Add Customer', false);
 
-    //     /** @var User $user */
-    //     $user = User::factory()->createQuietly();
-    //     $cust = Customer::factory()->make();
-    //     $site = CustomerSite::factory()->make();
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+        $cust = Customer::factory()->make();
+        $site = CustomerSite::factory()->make();
 
-    //     $data = [
-    //         'name' => $cust->name,
-    //         'dba_name' => $cust->dba_name,
-    //         'address' => $site->address,
-    //         'city' => $site->city,
-    //         'state' => $site->state,
-    //         'zip' => $site->zip,
-    //     ];
+        $data = [
+            'name' => $cust->name,
+            'dba_name' => $cust->dba_name,
+            'address' => $site->address,
+            'city' => $site->city,
+            'state' => $site->state,
+            'zip' => $site->zip,
+        ];
 
-    //     $response = $this->actingAs($user)
-    //         ->post(route('customers.store'), $data);
+        $response = $this->actingAs($user)
+            ->post(route('customers.store'), $data);
 
-    //     $response->assertForbidden();
+        $response->assertForbidden();
 
-    //     $this->assertDatabaseMissing('customers', [
-    //         'name' => $data['name'],
-    //     ]);
-    // }
+        $this->assertDatabaseMissing('customers', [
+            'name' => $data['name'],
+        ]);
+    }
 
-    // public function test_store(): void
-    // {
-    //     /** @var User $user */
-    //     $user = User::factory()->createQuietly();
-    //     $cust = Customer::factory()->make();
-    //     $site = CustomerSite::factory()->make();
+    public function test_store(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+        $cust = Customer::factory()->make();
+        $site = CustomerSite::factory()->make();
 
-    //     $data = [
-    //         'name' => $cust->name,
-    //         'dba_name' => $cust->dba_name,
-    //         'address' => $site->address,
-    //         'city' => $site->city,
-    //         'state' => $site->state,
-    //         'zip' => $site->zip,
-    //     ];
-    //     $slug = Str::slug($data['name']);
+        $data = [
+            'name' => $cust->name,
+            'dba_name' => $cust->dba_name,
+            'address' => $site->address,
+            'city' => $site->city,
+            'state' => $site->state,
+            'zip' => $site->zip,
+        ];
+        $slug = Str::slug($data['name']);
 
-    //     $response = $this->ActingAs($user)
-    //         ->post(route('customers.store'), $data);
+        $response = $this->ActingAs($user)
+            ->post(route('customers.store'), $data);
 
-    //     $response->assertStatus(302)
-    //         ->assertSessionHas('success', __('cust.created', [
-    //             'name' => $data['name'],
-    //         ]))
-    //         ->assertRedirect(route('customers.show', $slug));
+        $response->assertStatus(302)
+            ->assertSessionHas('success', __('cust.created', [
+                'name' => $data['name'],
+            ]))
+            ->assertRedirect(route('customers.show', $slug));
 
-    //     $this->assertDatabaseHas('customers', [
-    //         'name' => $data['name'],
-    //         'dba_name' => $data['dba_name'],
-    //     ]);
-    //     $this->assertDatabaseHas('customer_sites', [
-    //         'site_name' => $data['name'],
-    //         'address' => $data['address'],
-    //         'city' => $data['city'],
-    //     ]);
-    // }
-
-    // public function test_store_duplicate_slug(): void
-    // {
-    //     /** @var User $user */
-    //     $user = User::factory()->createQuietly();
-    //     $existing = Customer::factory()->createQuietly();
-    //     $cust = Customer::factory()->make();
-    //     $site = CustomerSite::factory()->make();
-
-    //     $data = [
-    //         'name' => $existing->name,
-    //         'dba_name' => $cust->dba_name,
-    //         'address' => $site->address,
-    //         'city' => $site->city,
-    //         'state' => $site->state,
-    //         'zip' => $site->zip,
-    //     ];
-    //     $slug = Str::slug($data['name'].' 1');
-
-    //     $response = $this->actingAs($user)
-    //         ->post(route('customers.store'), $data);
-
-    //     $response->assertStatus(302)
-    //         ->assertSessionHas('success', __('cust.created', [
-    //             'name' => $data['name'],
-    //         ]))
-    //         ->assertRedirect(route('customers.show', $slug));
-
-    //     $this->assertDatabaseHas('customers', [
-    //         'name' => $data['name'],
-    //         'dba_name' => $data['dba_name'],
-    //     ]);
-    //     $this->assertDatabaseHas('customer_sites', [
-    //         'site_name' => $data['name'],
-    //         'address' => $data['address'],
-    //         'city' => $data['city'],
-    //     ]);
-    // }
-
-    // public function test_store_second_duplicate_slug(): void
-    // {
-    //     /** @var User $user */
-    //     $user = User::factory()->createQuietly();
-    //     $existing1 = Customer::factory()
-    //         ->has(CustomerSite::factory())
-    //         ->createQuietly();
-    //     Customer::factory()->createQuietly([
-    //         'name' => $existing1->name,
-    //         'slug' => Str::slug($existing1->slug.'-1'),
-    //     ]);
-
-    //     $cust = Customer::factory()->make();
-
-    //     $data = [
-    //         'name' => $existing1->name,
-    //         'dba_name' => $cust->dba_name,
-    //         'address' => $existing1->CustomerSite[0]->address,
-    //         'city' => $existing1->CustomerSite[0]->city,
-    //         'state' => $existing1->CustomerSite[0]->state,
-    //         'zip' => $existing1->CustomerSite[0]->zip,
-    //     ];
-    //     $slug = Str::slug($data['name'].' 2');
-
-    //     $response = $this->actingAs($user)
-    //         ->post(route('customers.store'), $data);
-
-    //     $response->assertStatus(302)
-    //         ->assertSessionHas('success', __('cust.created', [
-    //             'name' => $data['name'],
-    //         ]))
-    //         ->assertRedirect(route('customers.show', $slug));
-
-    //     $this->assertDatabaseHas('customers', [
-    //         'name' => $data['name'],
-    //         'dba_name' => $data['dba_name'],
-    //     ]);
-    //     $this->assertDatabaseHas('customer_sites', [
-    //         'site_name' => $data['name'],
-    //         'address' => $data['address'],
-    //         'city' => $data['city'],
-    //     ]);
-    // }
+        $this->assertDatabaseHas('customers', [
+            'name' => $data['name'],
+            'dba_name' => $data['dba_name'],
+        ]);
+        $this->assertDatabaseHas('customer_sites', [
+            'site_name' => $data['name'],
+            'address' => $data['address'],
+            'city' => $data['city'],
+        ]);
+    }
 
     /**
      * Show Method

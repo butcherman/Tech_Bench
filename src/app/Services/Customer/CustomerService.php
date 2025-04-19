@@ -205,7 +205,7 @@ class CustomerService
         $param = $isSite ? 'site_slug' : 'slug';
 
         while ($model::where($param, $slug)->first()) {
-            $slug = Str::slug($name).'-'.Str::slug($city);
+            $slug = Str::slug($name.'-'.$city);
             if ($index > 0) {
                 $slug .= '-'.$index;
             }
