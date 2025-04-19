@@ -72,3 +72,8 @@ type fileData = {
     chunkSize: number;
     maxSize: number;
 };
+
+type phoneType = {
+    description: string;
+    icon_class: string;
+};

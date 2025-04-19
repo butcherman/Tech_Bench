@@ -154,12 +154,8 @@ Route::middleware('auth.secure')->prefix('administration')->name('admin.')->grou
     | /administration/phone-types
     |---------------------------------------------------------------------------
     */
-    // Route::resource('phone-types', ContactPhoneTypesController::class)
-    //     ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
-    //         $breadcrumbs->index('Contact Phone Types', 'admin.index');
-    //     })->except(['edit', 'show', 'create']);
+    Route::resource('phone-types', ContactPhoneTypesController::class)
+        ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
+            $breadcrumbs->index('Contact Phone Types', 'admin.index');
+        })->except(['edit', 'show', 'create']);
 });
-
-Route::get('phone-types', function () {
-    return 'something admin';
-})->name('admin.phone-types.index');

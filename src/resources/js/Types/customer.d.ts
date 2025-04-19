@@ -79,11 +79,6 @@ type customerSite = {
 //     phone_number_type: phoneType;
 // };
 
-// type phoneType = {
-//     description: string;
-//     icon_class: string;
-// };
-
 /*
 |-------------------------------------------------------------------------------
 | Customer Notes

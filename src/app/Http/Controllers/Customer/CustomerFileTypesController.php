@@ -11,6 +11,7 @@ use App\Services\Customer\CustomerFileTypeService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class CustomerFileTypesController extends Controller
 {
@@ -19,7 +20,7 @@ class CustomerFileTypesController extends Controller
     /**
      * Show a list of the current Customer File Types
      */
-    public function index()
+    public function index(): Response
     {
         $this->authorize('manage', Customer::class);
 
