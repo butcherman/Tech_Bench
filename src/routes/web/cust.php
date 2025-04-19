@@ -1,6 +1,7 @@
 <?php
 
 use App\Exceptions\Customer\CustomerNotFoundException;
+use App\Http\Controllers\Customer\CustomerAdministrationController;
 use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\Customer\CustomerSearchController;
 use App\Http\Controllers\Customer\CustomerSiteController;
@@ -13,9 +14,9 @@ Route::get('customers/{customer}/{site}', function () {
     return 'show customer site';
 })->name('customers.sites.show');
 
-Route::get('customer-settings', function () {
-    return 'something admin';
-})->name('customers.settings.edit');
+// Route::get('customer-settings', function () {
+//     return 'something admin';
+// })->name('customers.settings.edit');
 
 Route::get('customer-disabled', function () {
     return 'something admin';
@@ -25,6 +26,7 @@ Route::get('customer-assign', function () {
     return 'something admin';
 })->name('customers.re-assign.edit');
 
+
 /*
 |-------------------------------------------------------------------------------
 | Customer Based Routes
@@ -32,6 +34,34 @@ Route::get('customer-assign', function () {
 |-------------------------------------------------------------------------------
 */
 Route::middleware('auth.secure')->group(function () {
+    /*
+    |-----------------------------------------------------------------------
+    | Customer Administration
+    | /administration/customers
+    |-----------------------------------------------------------------------
+    */
+    Route::prefix('administration')->name('customers.')->group(function () {
+        Route::controller(CustomerAdministrationController::class)
+            ->name('settings.')
+            ->group(function () {
+                Route::get('settings', 'edit')
+                    ->name('edit')
+                    ->breadcrumb('Customer Settings', 'admin.index');
+                Route::put('settings', 'update')->name('update');
+            });
+
+        // Route::controller(ReAssignCustomerController::class)
+        //     ->name('re-assign.')
+        //     ->group(function () {
+        //         Route::get('re-assign-site', 'edit')
+        //             ->name('edit')
+        //             ->breadcrumb(
+        //                 'Re-Assign Customer Site',
+        //                 'customers.settings.edit'
+        //             );
+        //         Route::put('re-assign-site', 'update')->name('update');
+        //     });
+    });
     Route::prefix('customers')->name('customers.')->group(function () {
         /*
         |-----------------------------------------------------------------------
@@ -59,32 +89,7 @@ Route::middleware('auth.secure')->group(function () {
             Route::post('create-site', 'store')->name('store-site');
         });
 
-        /*
-        |-----------------------------------------------------------------------
-        | Customer Administration
-        | /customers
-        |-----------------------------------------------------------------------
-        */
-        // Route::controller(CustomerAdministrationController::class)
-        //     ->name('settings.')
-        //     ->group(function () {
-        //         Route::get('settings', 'edit')
-        //             ->name('edit')
-        //             ->breadcrumb('Customer Settings', 'admin.index');
-        //         Route::put('settings', 'update')->name('update');
-        //     });
 
-        // Route::controller(ReAssignCustomerController::class)
-        //     ->name('re-assign.')
-        //     ->group(function () {
-        //         Route::get('re-assign-site', 'edit')
-        //             ->name('edit')
-        //             ->breadcrumb(
-        //                 'Re-Assign Customer Site',
-        //                 'customers.settings.edit'
-        //             );
-        //         Route::put('re-assign-site', 'update')->name('update');
-        //     });
 
         /*
         |-----------------------------------------------------------------------
@@ -120,7 +125,7 @@ Route::middleware('auth.secure')->group(function () {
         ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
             $breadcrumbs->index('Customers')
                 ->show(
-                    fn (Customer|string $customer) => gettype($customer) === 'object'
+                    fn(Customer|string $customer) => gettype($customer) === 'object'
                         ? $customer->name
                         : $customer
                 )
@@ -222,7 +227,7 @@ Route::middleware('auth.secure')->group(function () {
                 $breadcrumbs->index('Sites', 'customers.show')
                     ->create('New Customer Site')
                     ->show(
-                        fn (Customer $customer, CustomerSite|string $site) => gettype($site) === 'object'
+                        fn(Customer $customer, CustomerSite|string $site) => gettype($site) === 'object'
                             ? $site->site_name
                             : $site
                     )->edit('Edit Site');
