@@ -125,10 +125,10 @@ type customerSite = {
 //     file_upload: fileUpload;
 // };
 
-// type customerFileType = {
-//     file_type_id: number;
-//     description: string;
-// };
+type customerFileType = {
+    file_type_id: number;
+    description: string;
+};
 
 /*
 |-------------------------------------------------------------------------------
