@@ -16,9 +16,14 @@ const props = defineProps<{
     list: T[];
     noBorder?: boolean;
     linkFn?: (row: any) => string;
+    hoverRow?: boolean;
 }>();
 
 const paddingClass = computed(() => (props.compact ? "p-1" : "p-3"));
+
+const hoverClass = computed(() =>
+    props.linkFn || props.hoverRow ? "pointer hover:bg-slate-200" : ""
+);
 
 const onRowClicked = (event: MouseEvent, item: T): void => {
     emit("row-clicked", event, item);
@@ -48,9 +53,9 @@ const onRowClicked = (event: MouseEvent, item: T): void => {
                     {
                         border: !noBorder,
                         'text-center': center,
-                        'pointer hover:bg-slate-200': linkFn,
                     },
                     paddingClass,
+                    hoverClass,
                 ]"
                 @click="onRowClicked($event, item)"
             >

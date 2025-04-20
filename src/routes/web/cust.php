@@ -6,24 +6,18 @@ use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\Customer\CustomerSearchController;
 use App\Http\Controllers\Customer\CustomerSiteController;
 use App\Http\Controllers\Customer\DisabledCustomerController;
+use App\Http\Controllers\Customer\ReAssignCustomerController;
 use App\Models\Customer;
 use App\Models\CustomerSite;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 use Illuminate\Support\Facades\Route;
-
-Route::get('customers/{customer}/{site}', function () {
-    return 'show customer site';
-})->name('customers.sites.show');
-
-Route::get('customer-assign', function () {
-    return 'something admin';
-})->name('customers.re-assign.edit');
 
 /*
 |-------------------------------------------------------------------------------
 | Customer Based Routes
 |-------------------------------------------------------------------------------
 */
+
 Route::middleware('auth.secure')->group(function () {
     /*
     |-----------------------------------------------------------------------
@@ -41,17 +35,17 @@ Route::middleware('auth.secure')->group(function () {
                 Route::put('settings', 'update')->name('update');
             });
 
-        // Route::controller(ReAssignCustomerController::class)
-        //     ->name('re-assign.')
-        //     ->group(function () {
-        //         Route::get('re-assign-site', 'edit')
-        //             ->name('edit')
-        //             ->breadcrumb(
-        //                 'Re-Assign Customer Site',
-        //                 'customers.settings.edit'
-        //             );
-        //         Route::put('re-assign-site', 'update')->name('update');
-        //     });
+        Route::controller(ReAssignCustomerController::class)
+            ->name('re-assign.')
+            ->group(function () {
+                Route::get('re-assign-site', 'edit')
+                    ->name('edit')
+                    ->breadcrumb(
+                        'Re-Assign Customer Site',
+                        'customers.settings.edit'
+                    );
+                Route::put('re-assign-site', 'update')->name('update');
+            });
 
         /*
         |-----------------------------------------------------------------------
@@ -113,7 +107,7 @@ Route::middleware('auth.secure')->group(function () {
         ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
             $breadcrumbs->index('Customers')
                 ->show(
-                    fn (Customer|string $customer) => gettype($customer) === 'object'
+                    fn(Customer|string $customer) => gettype($customer) === 'object'
                         ? $customer->name
                         : $customer
                 )
@@ -215,7 +209,7 @@ Route::middleware('auth.secure')->group(function () {
                 $breadcrumbs->index('Sites', 'customers.show')
                     ->create('New Customer Site')
                     ->show(
-                        fn (Customer $customer, CustomerSite|string $site) => gettype($site) === 'object'
+                        fn(Customer $customer, CustomerSite|string $site) => gettype($site) === 'object'
                             ? $site->site_name
                             : $site
                     )->edit('Edit Site');

@@ -25,11 +25,12 @@ interface paginationData {
 export { isLoading };
 export const isDirty = ref<boolean>(false);
 export const showSites = ref<boolean>(true);
+const perPageDefault = ref<number>(25);
 
 export const searchParams = reactive<searchParams>({
     searchFor: "",
     page: 1,
-    perPage: 25,
+    perPage: perPageDefault.value,
 });
 
 export const searchResults = ref<customer[]>([]);
@@ -42,10 +43,17 @@ export const paginationData = reactive<paginationData>({
     pageArr: [1],
 });
 
+export const setPerPageDefault = (perPage: number): void => {
+    perPageDefault.value = perPage;
+    searchParams.perPage = perPage;
+};
+
 /**
  * Fetch data for Customer Search
  */
 export const triggerSearch = (): void => {
+    isDirty.value = true;
+
     dataPost(route("customers.search"), searchParams).then((res) =>
         processResults(res)
     );
