@@ -9,7 +9,6 @@ use App\Models\Customer;
 use App\Models\PhoneNumberType;
 use App\Services\Misc\PhoneTypeService;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 

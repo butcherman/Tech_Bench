@@ -22,7 +22,7 @@ class FileUploadService extends FileStorageService
 
         $this->deleteDiskFile(
             $file->disk,
-            $file->folder . DIRECTORY_SEPARATOR . $file->file_name
+            $file->folder.DIRECTORY_SEPARATOR.$file->file_name
         );
 
         return true;

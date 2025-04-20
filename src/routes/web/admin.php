@@ -8,7 +8,6 @@ use App\Http\Controllers\Admin\Config\LogoController;
 use App\Http\Controllers\Admin\Config\SecurityController;
 use App\Http\Controllers\Admin\Config\SendTestEmailController;
 use App\Http\Controllers\Admin\Misc\ContactPhoneTypesController;
-use App\Http\Controllers\Admin\Misc\UploadedFileTypesController;
 use App\Http\Controllers\Admin\User\PasswordPolicyController;
 use App\Http\Controllers\Admin\User\UserSettingsController;
 use App\Http\Controllers\Customer\CustomerFileTypesController;

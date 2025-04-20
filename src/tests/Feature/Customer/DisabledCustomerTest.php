@@ -5,8 +5,6 @@ namespace Tests\Feature\Customer;
 use App\Models\Customer;
 use App\Models\User;
 use App\Services\Customer\CustomerAdministrationService;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Inertia\Testing\AssertableInertia as Assert;
 use Mockery\MockInterface;
 use Tests\TestCase;
@@ -54,7 +52,7 @@ class DisabledCustomerTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('Customer/DisabledCustomers')
                     ->has('disabled-list')
             );

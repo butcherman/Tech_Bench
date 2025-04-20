@@ -3,7 +3,6 @@
 namespace App\Services\File;
 
 use App\Exceptions\File\FileMissingException;
-use App\Models\FileUpload;
 use Illuminate\Support\Facades\Storage;
 
 class FileStorageService

@@ -21,7 +21,7 @@ class CustomerAdministrationServiceUnitTest extends TestCase
             'select_id' => config('customer.select_id'),
             'update_slug' => config('customer.update_slug'),
             'default_state' => config('customer.default_state'),
-            'auto_purge' =>  config('customer.auto_purge'),
+            'auto_purge' => config('customer.auto_purge'),
         ];
 
         $testObj = new CustomerAdministrationService;
@@ -41,7 +41,7 @@ class CustomerAdministrationServiceUnitTest extends TestCase
             'select_id' => false,
             'update_slug' => false,
             'default_state' => 'AZ',
-            'auto_purge' =>  false,
+            'auto_purge' => false,
         ];
 
         $testObj = new CustomerAdministrationService;
@@ -74,7 +74,7 @@ class CustomerAdministrationServiceUnitTest extends TestCase
 
         Cache::put('queued-customers', [
             $custList[0]->cust_id,
-            $custList[1]->cust_id
+            $custList[1]->cust_id,
         ]);
 
         $testObj = new CustomerAdministrationService;

@@ -60,7 +60,7 @@ class CustomerServiceUnitTest extends TestCase
             'state' => $site->state,
             'zip' => $site->zip,
         ];
-        $slug = Str::slug($data['name'] . '-' . $site->city);
+        $slug = Str::slug($data['name'].'-'.$site->city);
 
         $testObj = new CustomerService;
         $res = $testObj->createCustomer(collect($data));
@@ -87,7 +87,7 @@ class CustomerServiceUnitTest extends TestCase
 
         Customer::factory()->create([
             'name' => $existing->name,
-            'slug' => Str::slug($existing->slug . '-' . $existing->CustomerSite[0]->city),
+            'slug' => Str::slug($existing->slug.'-'.$existing->CustomerSite[0]->city),
         ]);
 
         $data = [
@@ -98,7 +98,7 @@ class CustomerServiceUnitTest extends TestCase
             'state' => $existing->CustomerSite[0]->state,
             'zip' => $existing->CustomerSite[0]->zip,
         ];
-        $slug = Str::slug($data['name'] . '-' . $existing->CustomerSite[0]->city . '-1');
+        $slug = Str::slug($data['name'].'-'.$existing->CustomerSite[0]->city.'-1');
 
         $testObj = new CustomerService;
         $res = $testObj->createCustomer(collect($data));

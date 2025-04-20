@@ -2,7 +2,6 @@
 
 namespace App\Exceptions\File;
 
-use App\Models\FileUpload;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -26,7 +25,7 @@ class FileMissingException extends Exception
 
     public function report(Request $request): void
     {
-        Log::error('Unable to find expected file at ' . $this->filePath);
+        Log::error('Unable to find expected file at '.$this->filePath);
     }
 
     public function render(): never

@@ -25,7 +25,7 @@ class ForceDeleteCustomerJob implements ShouldQueue
     public function handle(CustomerAdministrationService $svc, FileUploadService $fileSvc): void
     {
         Log::notice(
-            'Force Deleting Customer ' . $this->customer->name . ' and all associated data'
+            'Force Deleting Customer '.$this->customer->name.' and all associated data'
         );
 
         // Get a list of customer files to be deleted after process is done
@@ -40,7 +40,7 @@ class ForceDeleteCustomerJob implements ShouldQueue
         $fileSvc->deleteFileByID($fileList);
 
         Log::notice(
-            'Customer ' . $this->customer->name . ' and all associated data has been deleted'
+            'Customer '.$this->customer->name.' and all associated data has been deleted'
         );
     }
 }

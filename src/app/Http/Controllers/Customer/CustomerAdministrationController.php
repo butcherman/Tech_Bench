@@ -7,7 +7,6 @@ use App\Http\Requests\Customer\CustomerSettingsRequest;
 use App\Models\Customer;
 use App\Services\Customer\CustomerAdministrationService;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -15,6 +14,7 @@ use Inertia\Response;
 class CustomerAdministrationController extends Controller
 {
     public function __construct(protected CustomerAdministrationService $svc) {}
+
     /**
      * Show the form for editing the resource.
      */
@@ -36,7 +36,7 @@ class CustomerAdministrationController extends Controller
         $this->svc->updateCustomerSettings($request->safe()->collect());
 
         Log::info(
-            'Customer Settings updated by ' . $request->user()->username,
+            'Customer Settings updated by '.$request->user()->username,
             $request->toArray()
         );
 

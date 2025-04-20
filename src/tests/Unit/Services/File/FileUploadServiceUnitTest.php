@@ -27,7 +27,7 @@ class FileUploadServiceUnitTest extends TestCase
         ]);
 
         Storage::disk('local')
-            ->put($upload->folder . DIRECTORY_SEPARATOR . 'test.txt', 'This is a test file');
+            ->put($upload->folder.DIRECTORY_SEPARATOR.'test.txt', 'This is a test file');
 
         $testObj = new FileUploadService;
         $res = $testObj->deleteFileUpload($upload);
@@ -39,7 +39,7 @@ class FileUploadServiceUnitTest extends TestCase
         ]);
 
         Storage::disk('local')
-            ->assertMissing($upload->folder . DIRECTORY_SEPARATOR . 'test.txt');
+            ->assertMissing($upload->folder.DIRECTORY_SEPARATOR.'test.txt');
     }
 
     public function test_delete_file_upload_missing_file(): void
@@ -63,7 +63,7 @@ class FileUploadServiceUnitTest extends TestCase
         ]);
 
         Storage::disk('local')
-            ->assertMissing($upload->folder . DIRECTORY_SEPARATOR . 'test.txt');
+            ->assertMissing($upload->folder.DIRECTORY_SEPARATOR.'test.txt');
     }
 
     public function test_delete_file_upload_still_in_use(): void
@@ -78,7 +78,7 @@ class FileUploadServiceUnitTest extends TestCase
         TechTipFile::factory()->create(['file_id' => $upload->file_id]);
 
         Storage::disk('local')
-            ->put($upload->folder . DIRECTORY_SEPARATOR . 'test.txt', 'This is a test file');
+            ->put($upload->folder.DIRECTORY_SEPARATOR.'test.txt', 'This is a test file');
 
         $this->expectException(RecordInUseException::class);
 
@@ -92,7 +92,7 @@ class FileUploadServiceUnitTest extends TestCase
         ]);
 
         Storage::disk('local')
-            ->assertMissing($upload->folder . DIRECTORY_SEPARATOR . 'test.txt');
+            ->assertMissing($upload->folder.DIRECTORY_SEPARATOR.'test.txt');
     }
 
     /*
@@ -114,10 +114,10 @@ class FileUploadServiceUnitTest extends TestCase
         ]);
 
         Storage::disk('local')
-            ->put($upload->folder . DIRECTORY_SEPARATOR . 'test.txt', 'This is a test file');
+            ->put($upload->folder.DIRECTORY_SEPARATOR.'test.txt', 'This is a test file');
 
         Storage::disk('local')
-            ->put($upload->folder . DIRECTORY_SEPARATOR . 'test2.txt', 'This is a test file');
+            ->put($upload->folder.DIRECTORY_SEPARATOR.'test2.txt', 'This is a test file');
 
         $testObj = new FileUploadService;
         $testObj->deleteFileByID([$upload->file_id, $upload2->file_id]);
@@ -130,9 +130,9 @@ class FileUploadServiceUnitTest extends TestCase
         ]);
 
         Storage::disk('local')
-            ->assertMissing($upload->folder . DIRECTORY_SEPARATOR . 'test.txt');
+            ->assertMissing($upload->folder.DIRECTORY_SEPARATOR.'test.txt');
 
         Storage::disk('local')
-            ->assertMissing($upload->folder . DIRECTORY_SEPARATOR . 'test2.txt');
+            ->assertMissing($upload->folder.DIRECTORY_SEPARATOR.'test2.txt');
     }
 }

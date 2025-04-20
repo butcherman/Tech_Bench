@@ -88,9 +88,6 @@ class CustomerAdministrationService extends CustomerService
         }
     }
 
-
-
-
     /**
      * Verify that a customer has at least one child site
      */

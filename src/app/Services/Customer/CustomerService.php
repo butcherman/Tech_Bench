@@ -159,7 +159,7 @@ class CustomerService
         ?bool $force = false
     ): void {
         if ($force) {
-            Log::notice('Force Deleting Customer site ' . $site->site_name, [
+            Log::notice('Force Deleting Customer site '.$site->site_name, [
                 'reason' => $reason,
                 'customer_id' => $site->cust_id,
                 'site_id' => $site->cust_site_id,
@@ -172,7 +172,7 @@ class CustomerService
             return;
         }
 
-        Log::notice('Deleting Customer site ' . $site->site_name, [
+        Log::notice('Deleting Customer site '.$site->site_name, [
             'reason' => $reason,
             'customer_id' => $site->cust_id,
             'site_id' => $site->cust_site_id,
@@ -206,9 +206,9 @@ class CustomerService
         $param = $isSite ? 'site_slug' : 'slug';
 
         while ($model::where($param, $slug)->first()) {
-            $slug = Str::slug($name . '-' . $city);
+            $slug = Str::slug($name.'-'.$city);
             if ($index > 0) {
-                $slug .= '-' . $index;
+                $slug .= '-'.$index;
             }
             $index++;
         }

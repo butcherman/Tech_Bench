@@ -9,7 +9,6 @@ use App\Models\Customer;
 use App\Models\CustomerFileType;
 use App\Services\Customer\CustomerFileTypeService;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 

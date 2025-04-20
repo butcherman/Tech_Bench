@@ -11,7 +11,6 @@ use App\Models\CustomerSite;
 use App\Models\User;
 use App\Services\Customer\CustomerAdministrationService;
 use Illuminate\Support\Facades\Bus;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Inertia\Testing\AssertableInertia as Assert;
 use Mockery\MockInterface;
@@ -41,7 +40,7 @@ class CustomerTest extends TestCase
             ->get(route('customers.index'));
 
         $response->assertSuccessful()
-            ->assertInertia(fn(Assert $page) => $page
+            ->assertInertia(fn (Assert $page) => $page
                 ->component('Customer/Index')
                 ->has('permissions'));
     }
@@ -78,7 +77,7 @@ class CustomerTest extends TestCase
             ->get(route('customers.create'));
 
         $response->assertSuccessful()
-            ->assertInertia(fn(Assert $page) => $page
+            ->assertInertia(fn (Assert $page) => $page
                 ->component('Customer/Create')
                 ->has('select-id')
                 ->has('default-state'));
