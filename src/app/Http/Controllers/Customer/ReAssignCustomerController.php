@@ -6,9 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Customer\ReAssignSiteRequest;
 use App\Jobs\Customer\ReAssignSiteJob;
 use App\Models\Customer;
-use App\Models\CustomerSite;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -36,7 +34,7 @@ class ReAssignCustomerController extends Controller
         );
 
         Log::notice(
-            'Move Customer Site called by ' . $request->user()->username,
+            'Move Customer Site called by '.$request->user()->username,
             $request->toArray()
         );
 

@@ -107,7 +107,7 @@ Route::middleware('auth.secure')->group(function () {
         ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
             $breadcrumbs->index('Customers')
                 ->show(
-                    fn(Customer|string $customer) => gettype($customer) === 'object'
+                    fn (Customer|string $customer) => gettype($customer) === 'object'
                         ? $customer->name
                         : $customer
                 )
@@ -209,7 +209,7 @@ Route::middleware('auth.secure')->group(function () {
                 $breadcrumbs->index('Sites', 'customers.show')
                     ->create('New Customer Site')
                     ->show(
-                        fn(Customer $customer, CustomerSite|string $site) => gettype($site) === 'object'
+                        fn (Customer $customer, CustomerSite|string $site) => gettype($site) === 'object'
                             ? $site->site_name
                             : $site
                     )->edit('Edit Site');

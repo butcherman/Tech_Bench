@@ -61,7 +61,7 @@ return [
     'admin' => [
         'change_id' => 'Customer ID Updated',
         'settings_updated' => 'Customer Settings Updated',
-        're-assigned' => 'Customer move process has been queued.  This may take some time to complete.'
+        're-assigned' => 'Customer move process has been queued.  This may take some time to complete.',
     ],
 
     'files' => [

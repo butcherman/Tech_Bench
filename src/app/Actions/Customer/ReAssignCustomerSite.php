@@ -76,8 +76,8 @@ class ReAssignCustomerSite
             foreach ($modelList as $model) {
                 if ($model->CustomerSite->count() === 1) {
                     Log::info(
-                        'Moving data from Customer ID' . $model->cust_id .
-                            ' to Customer ID ' . $this->toCustomer->cust_id,
+                        'Moving data from Customer ID'.$model->cust_id.
+                            ' to Customer ID '.$this->toCustomer->cust_id,
                         $model->toArray()
                     );
 
@@ -111,9 +111,9 @@ class ReAssignCustomerSite
              * If not, it will be detached from the site
              */
             if ($equip->CustomerSite->count() === 1) {
-                Log::info('Moving Customer Equipment ID ' .
-                    $equip->cust_equip_id . ' from Customer ID ' . $equip->cust_id .
-                    ' to Customer ID' . $this->toCustomer->cust_id);
+                Log::info('Moving Customer Equipment ID '.
+                    $equip->cust_equip_id.' from Customer ID '.$equip->cust_id.
+                    ' to Customer ID'.$this->toCustomer->cust_id);
 
                 $this->reAssignModel($equip);
 
@@ -217,7 +217,7 @@ class ReAssignCustomerSite
 
             $customer->save();
 
-            Log::notice('Primary Site for ' . $customer->name . ' has been removed');
+            Log::notice('Primary Site for '.$customer->name.' has been removed');
         }
 
         if ($this->isSolo) {
@@ -226,7 +226,7 @@ class ReAssignCustomerSite
             $customer->delete();
 
             Log::notice(
-                'Customer ' . $customer->name . ' has been disabled due to no active sites.'
+                'Customer '.$customer->name.' has been disabled due to no active sites.'
             );
         }
 
