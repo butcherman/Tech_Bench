@@ -30,8 +30,8 @@ class CustomerSiteController extends Controller
         $this->authorize('create', CustomerSite::class);
 
         return Inertia::render('Customer/Site/Create', [
-            'default-state' => fn () => config('customer.default_state'),
-            'parent-customer' => fn () => $customer,
+            'default-state' => fn() => config('customer.default_state'),
+            'parent-customer' => fn() => $customer,
         ]);
     }
 
@@ -50,10 +50,9 @@ class CustomerSiteController extends Controller
         ]));
     }
 
-    public function show(string $id)
+    public function show(Customer $customer, CustomerSite $site): Response
     {
-        //
-        return 'show';
+        return Inertia::render('Customer/Site/Show');
     }
 
     public function edit(string $id)

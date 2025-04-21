@@ -20,17 +20,18 @@ type customerSite = {
     zip: number;
 };
 
-// type customerPageProps = {
-//     permissions: customerPermissions;
-//     customer: customer;
-//     site: customerSite;
-//     siteList: customerSite[];
-//     alerts: customerAlert[];
-//     equipmentList: customerEquipment[];
-//     contacts: customerContact[];
-//     notes: customerNote[];
-//     files: customerFile[];
-// } & pageProps;
+type customerPageProps = {
+    permissions: customerPermissions;
+    customer: customer;
+    site: customerSite;
+    siteList: customerSite[];
+    isFav: boolean;
+    // alerts: customerAlert[];
+    // equipmentList: customerEquipment[];
+    // contacts: customerContact[];
+    // notes: customerNote[];
+    // files: customerFile[];
+} & pageProps;
 
 /*
 |-------------------------------------------------------------------------------

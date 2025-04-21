@@ -2,6 +2,8 @@
 
 use App\Exceptions\Customer\CustomerNotFoundException;
 use App\Http\Controllers\Customer\CustomerAdministrationController;
+use App\Http\Controllers\Customer\CustomerAlertController;
+use App\Http\Controllers\Customer\CustomerBookmarkController;
 use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\Customer\CustomerSearchController;
 use App\Http\Controllers\Customer\CustomerSiteController;
@@ -80,8 +82,8 @@ Route::middleware('auth.secure')->group(function () {
         */
         // Route::inertia('not-found', 'Customer/NotFound')->name('not-found');
         Route::post('search', CustomerSearchController::class)->name('search');
-        // Route::post('bookmark/{customer}', CustomerBookmarkController::class)
-        //     ->name('bookmark');
+        Route::post('bookmark/{customer}', CustomerBookmarkController::class)
+            ->name('bookmark');
 
         /*
         |-----------------------------------------------------------------------
@@ -107,7 +109,7 @@ Route::middleware('auth.secure')->group(function () {
         ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
             $breadcrumbs->index('Customers')
                 ->show(
-                    fn (Customer|string $customer) => gettype($customer) === 'object'
+                    fn(Customer|string $customer) => gettype($customer) === 'object'
                         ? $customer->name
                         : $customer
                 )
@@ -130,10 +132,10 @@ Route::middleware('auth.secure')->group(function () {
         | /customers/{customer-slug|customer-id}/alerts
         |-----------------------------------------------------------------------
         */
-        // Route::resource('alerts', CustomerAlertController::class)
-        //     ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
-        //         $breadcrumbs->index('Alerts', 'customers.show');
-        //     })->only(['index', 'store', 'update', 'destroy']);
+        Route::resource('alerts', CustomerAlertController::class)
+            ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
+                $breadcrumbs->index('Alerts', 'customers.show');
+            })->only(['index', 'store', 'update', 'destroy']);
 
         /*
         |-----------------------------------------------------------------------
@@ -209,7 +211,7 @@ Route::middleware('auth.secure')->group(function () {
                 $breadcrumbs->index('Sites', 'customers.show')
                     ->create('New Customer Site')
                     ->show(
-                        fn (Customer $customer, CustomerSite|string $site) => gettype($site) === 'object'
+                        fn(Customer $customer, CustomerSite|string $site) => gettype($site) === 'object'
                             ? $site->site_name
                             : $site
                     )->edit('Edit Site');
