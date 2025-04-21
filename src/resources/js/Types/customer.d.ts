@@ -26,7 +26,7 @@ type customerPageProps = {
     site: customerSite;
     siteList: customerSite[];
     isFav: boolean;
-    // alerts: customerAlert[];
+    alerts: customerAlert[];
     // equipmentList: customerEquipment[];
     // contacts: customerContact[];
     // notes: customerNote[];
@@ -140,9 +140,9 @@ type customerPermissions = {
     files: basicPermissions;
 };
 
-// type customerAlert = {
-//     alert_id: number;
-//     cust_id: number;
-//     message: string;
-//     type: string;
-// };
+type customerAlert = {
+    alert_id: number;
+    cust_id: number;
+    message: string;
+    type: string;
+};

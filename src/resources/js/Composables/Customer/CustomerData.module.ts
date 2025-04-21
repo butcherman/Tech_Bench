@@ -19,4 +19,4 @@ export const permissions = computed<customerPermissions>(
 |-------------------------------------------------------------------------------
 */
 export const customer = computed<customer>(() => page.props.customer);
-export const currentSite = null;
+export const alerts = computed<customerAlert[]>(() => page.props.alerts);
