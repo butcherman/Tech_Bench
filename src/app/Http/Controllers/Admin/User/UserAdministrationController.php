@@ -61,7 +61,7 @@ class UserAdministrationController extends Controller
      */
     public function show(User $user): Response
     {
-        $this->authorize('manage', $user);
+        $this->authorize('view', $user);
 
         return Inertia::render('Admin/User/Show', [
             'user' => fn () => $user->getAdminLoad(),

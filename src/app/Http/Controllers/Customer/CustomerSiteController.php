@@ -30,8 +30,8 @@ class CustomerSiteController extends Controller
         $this->authorize('create', CustomerSite::class);
 
         return Inertia::render('Customer/Site/Create', [
-            'default-state' => fn() => config('customer.default_state'),
-            'parent-customer' => fn() => $customer,
+            'default-state' => fn () => config('customer.default_state'),
+            'parent-customer' => fn () => $customer,
         ]);
     }
 

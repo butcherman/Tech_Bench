@@ -8,7 +8,6 @@ use App\Models\Customer;
 use App\Models\CustomerAlert;
 use App\Services\Customer\CustomerAlertService;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -24,8 +23,8 @@ class CustomerAlertController extends Controller
         $this->authorize('viewAny', CustomerAlert::class);
 
         return Inertia::render('Customer/Alert/Index', [
-            'customer' => fn() => $customer,
-            'alerts' => fn() => $customer->CustomerAlert,
+            'customer' => fn () => $customer,
+            'alerts' => fn () => $customer->CustomerAlert,
         ]);
     }
 
@@ -52,9 +51,6 @@ class CustomerAlertController extends Controller
         return back()->with('success', __('cust.alert.updated'));
     }
 
-    /**
-     *
-     */
     public function destroy(Customer $customer, CustomerAlert $alert): RedirectResponse
     {
         $this->authorize('delete', $alert);

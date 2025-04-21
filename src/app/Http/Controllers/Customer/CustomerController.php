@@ -36,8 +36,8 @@ class CustomerController extends Controller
         $this->authorize('create', Customer::class);
 
         return Inertia::render('Customer/Create', [
-            'select-id' => fn() => config('customer.select_id'),
-            'default-state' => fn() => config('customer.default_state'),
+            'select-id' => fn () => config('customer.select_id'),
+            'default-state' => fn () => config('customer.default_state'),
         ]);
     }
 
@@ -63,9 +63,9 @@ class CustomerController extends Controller
 
         if ($customer->site_count > 1) {
             return Inertia::render('Customer/Show', [
-                'customer' => fn() => $customer,
-                'isFav' => fn() => $customer->isFav($request->user()),
-                'permissions' => fn() => UserPermissions::customerPermissions($request->user()),
+                'customer' => fn () => $customer,
+                'isFav' => fn () => $customer->isFav($request->user()),
+                'permissions' => fn () => UserPermissions::customerPermissions($request->user()),
             ]);
         }
 
@@ -108,7 +108,7 @@ class CustomerController extends Controller
 
         $svc->restoreCustomer($customer);
 
-        Log::notice('Customer ' . $customer->name . ' has been restored');
+        Log::notice('Customer '.$customer->name.' has been restored');
 
         return back()
             ->with('success', __('cust.restored', ['name' => $customer->name]));
