@@ -3,7 +3,11 @@ import AppLayout from "@/Layouts/App/AppLayout.vue";
 import BookmarkItem from "@/Components/_Base/BookmarkItem.vue";
 import CustomerDetails from "@/Components/Customer/Show/CustomerDetails.vue";
 import CustomerManagement from "@/Components/Customer/Show/CustomerManagement.vue";
-import { customer, isFav } from "@/Composables/Customer/CustomerData.module";
+import {
+    customer,
+    isFav,
+    permissions,
+} from "@/Composables/Customer/CustomerData.module";
 </script>
 
 <script lang="ts">
@@ -21,7 +25,7 @@ export default { layout: AppLayout };
             </h1>
             <CustomerDetails class="grow" />
             <div>
-                <CustomerManagement />
+                <CustomerManagement v-if="permissions.details.manage" />
             </div>
         </div>
         <div class="my-3" style="border: 1px solid red">

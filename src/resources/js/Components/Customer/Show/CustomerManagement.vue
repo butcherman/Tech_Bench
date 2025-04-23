@@ -2,7 +2,10 @@
 import Menu from "primevue/menu";
 import { computed, useTemplateRef } from "vue";
 import { concat } from "lodash";
-import { customer } from "@/Composables/Customer/CustomerData.module";
+import {
+    customer,
+    permissions,
+} from "@/Composables/Customer/CustomerData.module";
 import { router } from "@inertiajs/vue3";
 
 const menuList = useTemplateRef("customer-admin-menu");
@@ -25,36 +28,54 @@ const baseOptions = [
 /**
  * Site options will show if a specific site is being viewed
  */
-const siteOptions = [
-    {
-        label: "Edit Site",
-        command: () => console.log("edit site"),
-    },
-    {
-        label: "Disable Site",
-        command: () => console.log("disable site"),
-    },
-];
+const getSiteOptions = () => {
+    let siteOptions = [];
+
+    if (permissions.value.details.update) {
+        siteOptions.push({
+            label: "Edit Site",
+            command: () => console.log("edit site"),
+        });
+    }
+
+    if (permissions.value.details.delete) {
+        siteOptions.push({
+            label: "Disable Site",
+            command: () => console.log("disable site"),
+        });
+    }
+
+    return siteOptions;
+};
 
 /**
  * Customer options are at the end of the list and are always shown
  */
-const customerOptions = [
-    {
-        label: "Edit Customer",
-        command: () => console.log("edit customer"),
-    },
-    {
-        label: "Disable Customer",
-        command: () => console.log("disable customer"),
-    },
-];
+const getCustomerOptions = () => {
+    let siteOptions = [];
+
+    if (permissions.value.details.update) {
+        siteOptions.push({
+            label: "Edit Customer",
+            command: () => console.log("edit customer"),
+        });
+    }
+
+    if (permissions.value.details.delete) {
+        siteOptions.push({
+            label: "Disable Customer",
+            command: () => console.log("disable customer"),
+        });
+    }
+
+    return siteOptions;
+};
 
 /**
  * Determine which management options should be shown
  */
 const managementOptions = computed(() => {
-    return concat(baseOptions, customerOptions);
+    return concat(baseOptions, getCustomerOptions());
 });
 </script>
 
