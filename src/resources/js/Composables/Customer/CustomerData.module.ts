@@ -19,4 +19,35 @@ export const permissions = computed<customerPermissions>(
 |-------------------------------------------------------------------------------
 */
 export const customer = computed<customer>(() => page.props.customer);
+export const siteList = computed<customerSite[]>(() => {
+    let siteList = page.props.siteList;
+    let primary = customer.value.primary_site_id;
+
+    return sortCustSites(siteList, primary);
+});
 export const alerts = computed<customerAlert[]>(() => page.props.alerts);
+
+/*
+|-------------------------------------------------------------------------------
+| Internal Methods
+|-------------------------------------------------------------------------------
+*/
+
+/**
+ * Return the primary site belonging to this customer.
+ */
+const findPrimarySite = (customer: customer): customerSite | undefined => {
+    return customer.customer_site.find(
+        (cust) => cust.cust_id === customer.primary_site_id
+    );
+};
+
+/**
+ * Sort the list of sites by putting the primary site on the top.
+ */
+const sortCustSites = (
+    siteList: customerSite[],
+    primaryId: number
+): customerSite[] => {
+    return siteList.sort((x) => (x.cust_site_id === primaryId ? -1 : 1));
+};

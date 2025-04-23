@@ -2,6 +2,7 @@
 
 namespace App\Services\Customer;
 
+use App\Events\Customer\CustomerSlugChangedEvent;
 use App\Facades\DbException;
 use App\Models\Customer;
 use App\Models\CustomerSite;
@@ -40,31 +41,35 @@ class CustomerService
     /**
      * Update existing customer
      */
-    // public function updateCustomer(Collection $requestData, Customer $customer): Customer
-    // {
-    //     // If name has changed, generate a new slug
-    //     if (config('customer.update_slug')) {
-    //         if ($requestData->get('name') !== $customer->name) {
-    //             $oldSlug = $customer->slug;
+    public function updateCustomer(Collection $requestData, Customer $customer): Customer
+    {
+        // Update customer primary information
+        $customer->name = $requestData->get('name');
+        $customer->dba_name = $requestData->get('dba_name');
+        $customer->primary_site_id = $requestData->get('primary_site_id');
 
-    //             $slug = $this->generateSlug(
-    //                 $requestData->get('name'),
-    //                 $customer->CustomerSite[0]->city
-    //             );
-    //             $customer->slug = $slug;
 
-    //             event(new CustomerSlugChangedEvent($customer, $oldSlug, $slug));
-    //         }
-    //     }
+        // If name has changed, generate a new slug if allowed
+        if ($customer->isDirty('name')) {
+            if (config('customer.update_slug')) {
+                $slug = $this->generateSlug(
+                    $requestData->get('name'),
+                    $customer->CustomerSite[0]->city
+                );
+                $customer->slug = $slug;
 
-    //     $customer->name = $requestData->get('name');
-    //     $customer->dba_name = $requestData->get('dba_name');
-    //     $customer->primary_site_id = $requestData->get('primary_site_id');
+                CustomerSlugChangedEvent::broadcast(
+                    $customer,
+                    $customer->getOriginal('slug')
+                )
+                    ->toOthers();
+            }
+        }
 
-    //     $customer->save();
+        $customer->save();
 
-    //     return $customer;
-    // }
+        return $customer;
+    }
 
     /**
      * Soft Delete or Force Delete a customer
@@ -159,7 +164,7 @@ class CustomerService
         ?bool $force = false
     ): void {
         if ($force) {
-            Log::notice('Force Deleting Customer site '.$site->site_name, [
+            Log::notice('Force Deleting Customer site ' . $site->site_name, [
                 'reason' => $reason,
                 'customer_id' => $site->cust_id,
                 'site_id' => $site->cust_site_id,
@@ -172,7 +177,7 @@ class CustomerService
             return;
         }
 
-        Log::notice('Deleting Customer site '.$site->site_name, [
+        Log::notice('Deleting Customer site ' . $site->site_name, [
             'reason' => $reason,
             'customer_id' => $site->cust_id,
             'site_id' => $site->cust_site_id,
@@ -206,9 +211,9 @@ class CustomerService
         $param = $isSite ? 'site_slug' : 'slug';
 
         while ($model::where($param, $slug)->first()) {
-            $slug = Str::slug($name.'-'.$city);
+            $slug = Str::slug($name . '-' . $city);
             if ($index > 0) {
-                $slug .= '-'.$index;
+                $slug .= '-' . $index;
             }
             $index++;
         }

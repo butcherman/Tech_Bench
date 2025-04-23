@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Customer;
 use App\Facades\UserPermissions;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customer\CustomerRequest;
+use App\Http\Requests\Customer\DisableCustomerRequest;
 use App\Jobs\Customer\ForceDeleteCustomerJob;
 use App\Models\Customer;
 use App\Services\Customer\CustomerAdministrationService;
@@ -36,8 +37,8 @@ class CustomerController extends Controller
         $this->authorize('create', Customer::class);
 
         return Inertia::render('Customer/Create', [
-            'select-id' => fn () => config('customer.select_id'),
-            'default-state' => fn () => config('customer.default_state'),
+            'select-id' => fn() => config('customer.select_id'),
+            'default-state' => fn() => config('customer.default_state'),
         ]);
     }
 
@@ -63,9 +64,9 @@ class CustomerController extends Controller
 
         if ($customer->site_count > 1) {
             return Inertia::render('Customer/Show', [
-                'customer' => fn () => $customer,
-                'isFav' => fn () => $customer->isFav($request->user()),
-                'permissions' => fn () => UserPermissions::customerPermissions($request->user()),
+                'customer' => fn() => $customer,
+                'isFav' => fn() => $customer->isFav($request->user()),
+                'permissions' => fn() => UserPermissions::customerPermissions($request->user()),
             ]);
         }
 
@@ -75,28 +76,44 @@ class CustomerController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Customer $customer): Response
     {
-        //
-        return 'edit';
+        $this->authorize('update', $customer);
+
+        return Inertia::render('Customer/Edit', [
+            'selectId' => fn() => config('customer.select_id'),
+            'default-state' => fn() => config('customer.default_state'),
+            'customer' => fn() => $customer,
+            'siteList' => fn() => $customer->CustomerSite,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
-    {
-        //
-        return 'update';
+    public function update(
+        CustomerRequest $request,
+        CustomerService $svc,
+        Customer $customer
+    ): RedirectResponse {
+        $updated = $svc->updateCustomer($request->safe()->collect(), $customer);
+
+        return redirect(route('customers.show', $updated->slug))
+            ->with('success', __('customer.updated', ['name' => $updated->name]));
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
-    {
-        //
-        return 'destroy';
+    public function destroy(
+        DisableCustomerRequest $request,
+        CustomerService $svc,
+        Customer $customer
+    ): RedirectResponse {
+        $svc->destroyCustomer($customer, $request->get('reason'));
+
+        return redirect(route('customers.index'))
+            ->with('danger', __('cust.destroy', ['name' => $customer->name]));
     }
 
     /**
@@ -108,7 +125,7 @@ class CustomerController extends Controller
 
         $svc->restoreCustomer($customer);
 
-        Log::notice('Customer '.$customer->name.' has been restored');
+        Log::notice('Customer ' . $customer->name . ' has been restored');
 
         return back()
             ->with('success', __('cust.restored', ['name' => $customer->name]));
@@ -117,8 +134,10 @@ class CustomerController extends Controller
     /**
      * Force Delete a soft deleted customer.
      */
-    public function forceDelete(CustomerAdministrationService $svc, Customer $customer): RedirectResponse
-    {
+    public function forceDelete(
+        CustomerAdministrationService $svc,
+        Customer $customer
+    ): RedirectResponse {
         $this->authorize('forceDelete', $customer);
 
         // Place customer in working-jobs cache so it is not accessible.
