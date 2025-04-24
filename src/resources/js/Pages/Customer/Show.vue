@@ -1,9 +1,11 @@
 <script setup lang="ts">
+import AddButton from "@/Components/_Base/Buttons/AddButton.vue";
 import AppLayout from "@/Layouts/App/AppLayout.vue";
 import BookmarkItem from "@/Components/_Base/BookmarkItem.vue";
 import CustomerAlerts from "@/Components/Customer/Show/CustomerAlerts.vue";
 import CustomerDetails from "@/Components/Customer/Show/CustomerDetails.vue";
 import CustomerManagement from "@/Components/Customer/Show/CustomerManagement.vue";
+import SiteList from "@/Components/Customer/Show/SiteList.vue";
 import { customer, isFav } from "@/Composables/Customer/CustomerData.module";
 </script>
 
@@ -26,8 +28,17 @@ export default { layout: AppLayout };
             </div>
         </div>
         <CustomerAlerts />
-        <div class="my-3" style="border: 1px solid red">
-            Additional customer stuff
+        <div class="tb-card-lg mt-2">
+            <SiteList>
+                <template #append-title>
+                    <AddButton
+                        text="Add Site"
+                        size="small"
+                        :href="$route('customers.sites.create', customer.slug)"
+                        pill
+                    />
+                </template>
+            </SiteList>
         </div>
     </div>
 </template>
