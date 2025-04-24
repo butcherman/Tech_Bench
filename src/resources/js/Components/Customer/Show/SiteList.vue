@@ -13,7 +13,12 @@ const goToSite = (site: customerSite): string => {
         <template #append-title>
             <slot name="append-title" />
         </template>
-        <ResourceList :list="siteList" :link-fn="goToSite">
+        <ResourceList
+            :list="siteList"
+            :link-fn="goToSite"
+            paginate
+            :per-page="5"
+        >
             <template #list-item="{ item }">
                 {{ item.site_name }} ({{ item.city }})
                 <span
