@@ -8,8 +8,8 @@ import CustomerManagement from "@/Components/Customer/Show/CustomerManagement.vu
 import SiteList from "@/Components/Customer/Show/SiteList.vue";
 import {
     customer,
-    isFav,
     permissions,
+    isFav,
 } from "@/Composables/Customer/CustomerData.module";
 </script>
 
