@@ -64,6 +64,7 @@ class CustomerController extends Controller
 
         if ($customer->site_count > 1) {
             return Inertia::render('Customer/Show', [
+                'alerts' => fn() => $customer->CustomerAlert,
                 'customer' => fn() => $customer,
                 'isFav' => fn() => $customer->isFav($request->user()),
                 'permissions' => fn() => UserPermissions::customerPermissions($request->user()),

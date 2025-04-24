@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import AppLayout from "@/Layouts/App/AppLayout.vue";
 import BookmarkItem from "@/Components/_Base/BookmarkItem.vue";
+import CustomerAlerts from "@/Components/Customer/Show/CustomerAlerts.vue";
 import CustomerDetails from "@/Components/Customer/Show/CustomerDetails.vue";
 import CustomerManagement from "@/Components/Customer/Show/CustomerManagement.vue";
 import { customer, isFav } from "@/Composables/Customer/CustomerData.module";
@@ -24,6 +25,7 @@ export default { layout: AppLayout };
                 <CustomerManagement />
             </div>
         </div>
+        <CustomerAlerts />
         <div class="my-3" style="border: 1px solid red">
             Additional customer stuff
         </div>
