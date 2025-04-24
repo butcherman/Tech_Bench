@@ -60,7 +60,7 @@ class CustomerServiceUnitTest extends TestCase
             'state' => $site->state,
             'zip' => $site->zip,
         ];
-        $slug = Str::slug($data['name'].'-'.$site->city);
+        $slug = Str::slug($data['name'] . '-' . $site->city);
 
         $testObj = new CustomerService;
         $res = $testObj->createCustomer(collect($data));
@@ -87,7 +87,7 @@ class CustomerServiceUnitTest extends TestCase
 
         Customer::factory()->create([
             'name' => $existing->name,
-            'slug' => Str::slug($existing->slug.'-'.$existing->CustomerSite[0]->city),
+            'slug' => Str::slug($existing->slug . '-' . $existing->CustomerSite[0]->city),
         ]);
 
         $data = [
@@ -98,7 +98,7 @@ class CustomerServiceUnitTest extends TestCase
             'state' => $existing->CustomerSite[0]->state,
             'zip' => $existing->CustomerSite[0]->zip,
         ];
-        $slug = Str::slug($data['name'].'-'.$existing->CustomerSite[0]->city.'-1');
+        $slug = Str::slug($data['name'] . '-' . $existing->CustomerSite[0]->city . '-1');
 
         $testObj = new CustomerService;
         $res = $testObj->createCustomer(collect($data));
@@ -123,6 +123,92 @@ class CustomerServiceUnitTest extends TestCase
     | updateCustomer()
     |---------------------------------------------------------------------------
     */
+    public function test_update_customer(): void
+    {
+        $existing = Customer::factory()->create();
+        $cust = Customer::factory()->make();
+        $site = CustomerSite::factory()
+            ->create(['cust_id' => $existing->cust_id]);
+
+        $data = [
+            'name' => $cust->name,
+            'dba_name' => $cust->dba_name,
+            'primary_site_id' => $site->cust_site_id,
+        ];
+
+        $testObj = new CustomerService;
+        $res = $testObj->updateCustomer(collect($data), $existing);
+
+        $this->assertEquals($cust->name, $res->name);
+
+        $this->assertDatabaseHas('customers', [
+            'cust_id' => $existing->cust_id,
+            'name' => $data['name'],
+            'dba_name' => $data['dba_name'],
+            'primary_site_id' => $site->cust_site_id,
+        ]);
+    }
+
+    public function test_update_customer_duplicate_slug(): void
+    {
+        $updating = Customer::factory()->create();
+        $cust = Customer::factory()->make();
+        $existing = Customer::factory()->createQuietly();
+        $site = CustomerSite::factory()
+            ->create(['cust_id' => $updating->cust_id]);
+
+        $updating->primary_site_id = $site->cust_site_id;
+        $updating->save();
+
+        $data = [
+            'name' => $existing->name,
+            'dba_name' => $cust->dba_name,
+            'primary_site_id' => $site->cust_site_id,
+        ];
+        $slug = Str::slug($data['name'] . '-' . $updating->CustomerSite[0]->city);
+
+        $testObj = new CustomerService;
+        $res = $testObj->updateCustomer(collect($data), $updating);
+
+        $this->assertEquals($existing->name, $res->name);
+
+        $this->assertDatabaseHas('customers', [
+            'cust_id' => $updating->cust_id,
+            'name' => $data['name'],
+            'dba_name' => $data['dba_name'],
+            'slug' => $slug,
+            'primary_site_id' => $site->cust_site_id,
+        ]);
+    }
+
+    public function test_update_customer_without_modifying_slug(): void
+    {
+        config(['customer.update_slug' => false]);
+
+        $existing = Customer::factory()->create();
+        $cust = Customer::factory()->make();
+        $site = CustomerSite::factory()
+            ->create(['cust_id' => $existing->cust_id]);
+
+        $data = [
+            'name' => $cust->name,
+            'dba_name' => $cust->dba_name,
+            'primary_site_id' => $site->cust_site_id,
+        ];
+
+        $testObj = new CustomerService;
+        $res = $testObj->updateCustomer(collect($data), $existing);
+
+        $this->assertEquals($cust->name, $res->name);
+
+        $this->assertDatabaseHas('customers', [
+            'cust_id' => $existing->cust_id,
+            'name' => $data['name'],
+            'dba_name' => $data['dba_name'],
+            'primary_site_id' => $site->cust_site_id,
+            'slug' => $existing->slug,
+        ]);
+    }
 
     /*
     |---------------------------------------------------------------------------

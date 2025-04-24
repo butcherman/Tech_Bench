@@ -99,7 +99,7 @@ class CustomerController extends Controller
         $updated = $svc->updateCustomer($request->safe()->collect(), $customer);
 
         return redirect(route('customers.show', $updated->slug))
-            ->with('success', __('customer.updated', ['name' => $updated->name]));
+            ->with('success', __('cust.updated', ['name' => $updated->name]));
     }
 
     /**
