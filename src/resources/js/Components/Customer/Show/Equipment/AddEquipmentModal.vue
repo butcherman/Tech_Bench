@@ -20,12 +20,12 @@ defineExpose({ show });
         title="Add Customer Equipment"
         size="large"
     >
-        Add Equipment Form
-        <!-- <NewCustomerEquipmentForm
-            v-if="availableEquipment"
+        <NewCustomerEquipmentForm
+            v-if="modal?.isOpen"
             :available-equipment-list="availableEquipment"
             :customer="customer"
             :site-list="siteList"
-        /> -->
+            @success="modal?.hide"
+        />
     </Modal>
 </template>

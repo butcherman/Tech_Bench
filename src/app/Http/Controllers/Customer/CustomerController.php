@@ -75,13 +75,11 @@ class CustomerController extends Controller
                 $request->user()
             ),
             'siteList' => fn() => $customer->CustomerSite->makeVisible(['href']),
+            'availableEquipment' => fn() => CacheData::equipmentCategorySelectBox(),
 
             /**
              * Deferred Props
              */
-            'availableEquipment' => Inertia::defer(
-                fn() => CacheData::equipmentCategorySelectBox()
-            ),
             'equipmentList' => Inertia::defer(
                 fn() => $customer->CustomerEquipment
                     ->load('CustomerSite')

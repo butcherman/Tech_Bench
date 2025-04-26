@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup lang="ts" generic="T">
 import { Message } from "primevue";
 import { ref, toRef, computed, onMounted } from "vue";
 import { useField } from "vee-validate";
@@ -7,49 +7,72 @@ import type { Ref } from "vue";
 export interface listBox {
     label: string;
     value: string;
-    [key: string]: string;
 }
 
 const props = defineProps<{
     id: string;
-    list: listBox[];
+    list: T[];
     name: string;
     availableText?: string;
     help?: string;
     label?: string;
-    labelField?: string;
+    labelField?: keyof T;
     selectedText?: string;
     size?: number;
-    valueField?: string;
+    valueField?: keyof T;
 }>();
 
-const selectLabelKey = computed<string>(() => props.labelField ?? "label");
-const selectValueKey = computed<string>(() => props.valueField ?? "value");
+/**
+ * Key names of Label Field and Value Fields
+ */
+const selectLabelKey = computed<keyof T>(() => props.labelField ?? "label" as keyof T);
+const selectValueKey = computed<keyof T>(() => props.valueField ?? "value" as keyof T);
 
 // If the component is currently in focus
 const hasFocus = ref<boolean>(false);
 
-// Visible options in the select boxes
-const availableList = ref<listBox[]>([]);
-const selectedList = ref<listBox[]>([]);
+/**
+ * Visible options in the select boxes
+ */
+const availableList = ref<T[]>([]) as Ref<T[]>;
+const selectedList = ref<T[]>([]) as Ref<T[]>;
 
-// Highlighted items in each of the select boxes
-const availableHighlighted = ref<listBox[]>([]);
-const selectedHighlighted = ref<listBox[]>([]);
+/**
+ * Highlighted items in each of the select boxes
+ */
+const availableHighlighted = ref<T[]>([]) as Ref<T[]>;
+const selectedHighlighted = ref<T[]>([]) as Ref<T[]>;
+
+/**
+ * Get the value for the item that is being pushed to the value field
+ */
+const getOptionValue = (option: T): T | T[keyof T] => {
+    // If the item is a string, it is the value
+    if (typeof option === "string") {
+        return option;
+    }
+
+    return option[selectValueKey.value];
+};
+
+/*
+|-------------------------------------------------------------------------------
+| Add and Remove Items from the List.
+|-------------------------------------------------------------------------------
+*/
 
 /**
  * Add one or more items to the value & selected list
  */
-const addItems = (init = false): void => {
-    availableHighlighted.value.forEach((item: listBox) => {
+const addItems = (init: boolean = false): void => {
+    availableHighlighted.value.forEach((item: T) => {
         // Add to selected list, remove from available list
         selectedList.value.push(item);
         availableList.value.splice(availableList.value.indexOf(item), 1);
 
         // Add field to the value property
         if (!init) {
-            let val = item[selectValueKey.value] ?? item;
-            value.value.push(val);
+            value.value.push(getOptionValue(item));
         }
     });
 
@@ -128,7 +151,7 @@ const {
     value,
 }: {
     errorMessage: Ref<string | undefined, string | undefined>;
-    value: Ref<string[]>;
+    value: Ref<any[]>;
 } = useField(nameRef);
 </script>
 

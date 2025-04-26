@@ -3,11 +3,17 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Customer\CustomerEquipmentRequest;
+use App\Models\Customer;
+use App\Services\Customer\CustomerEquipmentService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class CustomerEquipmentController extends Controller
 {
+    public function __construct(protected CustomerEquipmentService $svc) {}
+
     /**
      *
      */
@@ -18,21 +24,16 @@ class CustomerEquipmentController extends Controller
     }
 
     /**
-     *
+     * Save a new piece of equipment to a customer.
      */
-    public function create()
+    public function store(CustomerEquipmentRequest $request, Customer $customer): RedirectResponse
     {
-        //
-        return 'create';
-    }
+        $equip = $this->svc
+            ->createEquipment($request->safe()->collect(), $customer);
 
-    /**
-     *
-     */
-    public function store(Request $request)
-    {
-        //
-        return 'store';
+        return back()->with('success', __('cust.equipment.created', [
+            'equip' => $equip->equip_name,
+        ]));
     }
 
     /**
@@ -72,8 +73,8 @@ class CustomerEquipmentController extends Controller
     }
 
     /**
-    *
-    */
+     *
+     */
     public function restore(string $id)
     {
         //
@@ -81,8 +82,8 @@ class CustomerEquipmentController extends Controller
     }
 
     /**
-    *
-    */
+     *
+     */
     public function forceDelete(string $id)
     {
         //
