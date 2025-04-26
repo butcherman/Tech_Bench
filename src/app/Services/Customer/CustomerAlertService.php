@@ -15,7 +15,7 @@ class CustomerAlertService
     {
         $newAlert = new CustomerAlert($requestData->all());
 
-        $customer->CustomerAlert()->save($newAlert);
+        $customer->Alerts()->save($newAlert);
     }
 
     /**

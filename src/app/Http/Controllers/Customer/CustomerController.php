@@ -68,7 +68,7 @@ class CustomerController extends Controller
         }
 
         return Inertia::render('Customer/Show', [
-            'alerts' => fn() => $customer->CustomerAlert,
+            'alerts' => fn() => $customer->Alerts,
             'customer' => fn() => $customer,
             'isFav' => fn() => $customer->isFav($request->user()),
             'permissions' => fn() => UserPermissions::customerPermissions(

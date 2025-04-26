@@ -135,10 +135,11 @@ Route::middleware('auth.secure')->group(function () {
         | /customers/{customer-slug|customer-id}/alerts
         |-----------------------------------------------------------------------
         */
-        Route::resource('alerts', CustomerAlertController::class)
+        Route::apiResource('alerts', CustomerAlertController::class)
+            ->scoped(['alerts' => 'cust_id'])
             ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
                 $breadcrumbs->index('Alerts', 'customers.show');
-            })->only(['index', 'store', 'update', 'destroy']);
+            });
 
         /*
         |-----------------------------------------------------------------------

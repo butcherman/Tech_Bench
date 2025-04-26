@@ -23,8 +23,8 @@ class CustomerAlertController extends Controller
         $this->authorize('viewAny', CustomerAlert::class);
 
         return Inertia::render('Customer/Alert/Index', [
-            'customer' => fn () => $customer,
-            'alerts' => fn () => $customer->CustomerAlert,
+            'customer' => fn() => $customer,
+            'alerts' => fn() => $customer->Alerts,
         ]);
     }
 
