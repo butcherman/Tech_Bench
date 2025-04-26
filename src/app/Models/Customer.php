@@ -86,7 +86,7 @@ class Customer extends Model
     public function siteCount(): Attribute
     {
         return Attribute::make(
-            get: fn() => $this->CustomerSite->count(),
+            get: fn() => $this->Sites->count(),
         );
     }
 
@@ -95,10 +95,16 @@ class Customer extends Model
     | Model Relationships
     |---------------------------------------------------------------------------
     */
-    public function CustomerSite(): HasMany
+    public function Sites(): HasMany
     {
         return $this->hasMany(CustomerSite::class, 'cust_id', 'cust_id');
     }
+
+    // TODO - Go Away???
+    // public function CustomerSite(): HasMany
+    // {
+    //     return $this->hasMany(CustomerSite::class, 'cust_id', 'cust_id');
+    // }
 
     public function CustomerSiteList(): HasMany
     {

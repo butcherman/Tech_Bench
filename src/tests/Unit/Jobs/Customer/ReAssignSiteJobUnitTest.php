@@ -27,7 +27,7 @@ class ReAssignSiteJobUnitTest extends TestCase
         });
 
         ReAssignSiteJob::dispatch(
-            $fromCustomer->CustomerSite[0]->cust_site_id,
+            $fromCustomer->Sites[0]->cust_site_id,
             $toCustomer->cust_id
         );
     }

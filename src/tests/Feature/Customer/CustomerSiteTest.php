@@ -90,7 +90,7 @@ class CustomerSiteTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn (Assert $page) => $page
+                fn(Assert $page) => $page
                     ->component('Customer/Site/Create')
                     ->has('default-state')
                     ->has('parent-customer')
@@ -107,7 +107,7 @@ class CustomerSiteTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn (Assert $page) => $page
+                fn(Assert $page) => $page
                     ->component('Customer/Site/Create')
                     ->has('default-state')
                     ->has('parent-customer')
@@ -203,7 +203,7 @@ class CustomerSiteTest extends TestCase
 
         $site->cust_name = $customer->name;
         $site->cust_id = $customer->cust_id;
-        $site->site_name = $customer->CustomerSite[0]->site_name;
+        $site->site_name = $customer->Sites[0]->site_name;
 
         $response = $this->actingAs($user)
             ->post(

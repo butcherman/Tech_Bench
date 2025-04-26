@@ -111,10 +111,9 @@ class CustomerAdministrationServiceUnitTest extends TestCase
     */
     public function test_destroy_customer_sites(): void
     {
-        $cust = Customer::factory()->create();
-        CustomerSite::factory()
-            ->count(5)
-            ->create(['cust_id' => $cust->cust_id]);
+        $cust = Customer::factory()
+            ->has(CustomerSite::factory()->count(5), 'sites')
+            ->create();
 
         $testObj = new CustomerAdministrationService;
         $testObj->destroyCustomerSites($cust);

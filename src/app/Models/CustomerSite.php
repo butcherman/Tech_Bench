@@ -66,6 +66,11 @@ class CustomerSite extends Model
             ->firstOrFail();
     }
 
+    public function getRouteKeyName(): string
+    {
+        return 'site_slug';
+    }
+
     /*
     |---------------------------------------------------------------------------
     | Model Attributes
@@ -74,7 +79,7 @@ class CustomerSite extends Model
     public function isPrimary(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->Customer
+            get: fn() => $this->Customer
                 && $this->Customer->primary_site_id === $this->cust_site_id,
         );
     }
@@ -82,7 +87,7 @@ class CustomerSite extends Model
     public function href(): Attribute
     {
         return Attribute::make(
-            get: fn () => route('customers.sites.show', [
+            get: fn() => route('customers.sites.show', [
                 $this->Customer->slug,
                 $this->site_slug,
             ])
@@ -152,11 +157,11 @@ class CustomerSite extends Model
     {
         return match ($event) {
             'deleted', 'trashed', 'created' => [
-                new PrivateChannel('customer.'.$this->Customer->slug),
+                new PrivateChannel('customer.' . $this->Customer->slug),
             ],
             default => [
-                new PrivateChannel('customer.'.$this->Customer->slug),
-                new PrivateChannel('customer.'.$this->site_slug),
+                new PrivateChannel('customer.' . $this->Customer->slug),
+                new PrivateChannel('customer.' . $this->site_slug),
             ],
         };
     }
@@ -164,7 +169,8 @@ class CustomerSite extends Model
     public function newBroadcastableModelEvent(string $event): BroadcastableModelEventOccurred
     {
         return (new BroadcastableModelEventOccurred(
-            $this, $event
+            $this,
+            $event
         ))->dontBroadcastToCurrentUser();
     }
 

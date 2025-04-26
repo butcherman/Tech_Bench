@@ -59,7 +59,7 @@ export default { layout: AppLayout };
         </div>
         <CustomerAlerts />
         <QuickJump :nav-list="quickJumpList" class="tb-gap-y" />
-        <!-- <div class="tb-card-lg tb-gap-y">
+        <div class="tb-card-lg tb-gap-y">
             <SiteList>
                 <template #append-title>
                     <AddButton
@@ -71,7 +71,7 @@ export default { layout: AppLayout };
                     />
                 </template>
             </SiteList>
-        </div> -->
+        </div>
         <!-- <div class="grid grid-cols-2 tb-gap-y gap-3">
             <CustomerEquipment />
             <CustomerContact />

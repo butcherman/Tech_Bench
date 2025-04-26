@@ -53,7 +53,7 @@ class CustomerAdministrationService extends CustomerService
     {
         $disabledList = Customer::onlyTrashed()
             ->get()
-            ->makeHidden(['CustomerSite'])
+            ->makeHidden(['Sites'])
             ->makeVisible(['deleted_at', 'deleted_reason']);
 
         $workingJobs = Cache::get('queued-customers', []);
@@ -83,7 +83,7 @@ class CustomerAdministrationService extends CustomerService
         $customer->primary_site_id = null;
         $customer->save();
 
-        foreach ($customer->CustomerSiteList as $site) {
+        foreach ($customer->Sites as $site) {
             $this->destroySite($site, 'Force Deleting Customer', true);
         }
     }

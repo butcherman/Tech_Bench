@@ -28,7 +28,7 @@ class ReAssignCustomerSiteUnitTest extends TestCase
             ->createQuietly();
         $toCust = Customer::factory()->create();
 
-        $fromSite = $fromCust->CustomerSite[0];
+        $fromSite = $fromCust->Sites[0];
 
         $fromCust->CustomerEquipment[0]
             ->CustomerSite()
@@ -73,7 +73,7 @@ class ReAssignCustomerSiteUnitTest extends TestCase
     public function test_invoke_with_equipment(): void
     {
         $fromCust = Customer::factory()
-            ->has(CustomerSite::factory()->count(4))
+            ->has(CustomerSite::factory()->count(4), 'sites')
             ->createQuietly();
         $movingSite = CustomerSite::factory()
             ->create(['cust_id' => $fromCust->cust_id]);
@@ -81,7 +81,7 @@ class ReAssignCustomerSiteUnitTest extends TestCase
 
         $siteArray = CustomerSite::where('cust_id', $fromCust->cust_id)
             ->get()
-            ->map(fn ($site) => $site->cust_site_id);
+            ->map(fn($site) => $site->cust_site_id);
 
         // Create two Equipment Types
         $equip = CustomerEquipment::factory()
@@ -158,7 +158,7 @@ class ReAssignCustomerSiteUnitTest extends TestCase
     public function test_invoke_with_contacts(): void
     {
         $fromCust = Customer::factory()
-            ->has(CustomerSite::factory()->count(4))
+            ->has(CustomerSite::factory()->count(4), 'sites')
             ->has(CustomerContact::factory()->count(3))
             ->createQuietly();
         $movingSite = CustomerSite::factory()
@@ -167,7 +167,7 @@ class ReAssignCustomerSiteUnitTest extends TestCase
 
         $siteArray = CustomerSite::where('cust_id', $fromCust->cust_id)
             ->get()
-            ->map(fn ($site) => $site->cust_site_id);
+            ->map(fn($site) => $site->cust_site_id);
 
         // Assign the contacts to sites
         $fromCust->CustomerContact[0]
@@ -214,7 +214,7 @@ class ReAssignCustomerSiteUnitTest extends TestCase
     public function test_invoke_with_notes(): void
     {
         $fromCust = Customer::factory()
-            ->has(CustomerSite::factory()->count(4))
+            ->has(CustomerSite::factory()->count(4), 'sites')
             ->has(CustomerNote::factory()->count(3))
             ->createQuietly();
         $movingSite = CustomerSite::factory()
@@ -223,7 +223,7 @@ class ReAssignCustomerSiteUnitTest extends TestCase
 
         $siteArray = CustomerSite::where('cust_id', $fromCust->cust_id)
             ->get()
-            ->map(fn ($site) => $site->cust_site_id);
+            ->map(fn($site) => $site->cust_site_id);
 
         // Assign the contacts to sites
         $fromCust->CustomerNote[0]
@@ -264,7 +264,7 @@ class ReAssignCustomerSiteUnitTest extends TestCase
     public function test_invoke_with_files(): void
     {
         $fromCust = Customer::factory()
-            ->has(CustomerSite::factory()->count(4))
+            ->has(CustomerSite::factory()->count(4), 'sites')
             ->has(CustomerFile::factory()->count(3))
             ->createQuietly();
         $movingSite = CustomerSite::factory()
@@ -273,7 +273,7 @@ class ReAssignCustomerSiteUnitTest extends TestCase
 
         $siteArray = CustomerSite::where('cust_id', $fromCust->cust_id)
             ->get()
-            ->map(fn ($site) => $site->cust_site_id);
+            ->map(fn($site) => $site->cust_site_id);
 
         // Assign the contacts to sites
         $fromCust->CustomerFile[0]

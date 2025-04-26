@@ -74,7 +74,7 @@ class CustomerController extends Controller
             'permissions' => fn() => UserPermissions::customerPermissions(
                 $request->user()
             ),
-            'siteList' => fn() => $customer->CustomerSite->makeVisible(['href']),
+            'siteList' => fn() => $customer->Sites->makeVisible(['href']),
             'availableEquipment' => fn() => CacheData::equipmentCategorySelectBox(),
 
             /**
@@ -99,7 +99,7 @@ class CustomerController extends Controller
             'selectId' => fn() => config('customer.select_id'),
             'default-state' => fn() => config('customer.default_state'),
             'customer' => fn() => $customer,
-            'siteList' => fn() => $customer->CustomerSite,
+            'siteList' => fn() => $customer->Sites,
         ]);
     }
 

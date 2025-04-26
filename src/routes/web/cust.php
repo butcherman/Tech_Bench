@@ -211,6 +211,7 @@ Route::middleware('auth.secure')->group(function () {
         |-----------------------------------------------------------------------
         */
         Route::resource('sites', CustomerSiteController::class)
+            ->scoped(['sites' => 'cust_id'])
             ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
                 $breadcrumbs->index('Sites', 'customers.show')
                     ->create('New Customer Site')

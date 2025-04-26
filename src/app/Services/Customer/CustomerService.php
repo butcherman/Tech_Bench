@@ -54,7 +54,7 @@ class CustomerService
             if (config('customer.update_slug')) {
                 $slug = $this->generateSlug(
                     $requestData->get('name'),
-                    $customer->CustomerSite[0]->city
+                    $customer->Sites[0]->city
                 );
                 $customer->slug = $slug;
 
@@ -128,7 +128,7 @@ class CustomerService
             ?: $requestData->get('name');
         $site->site_slug = $slug;
 
-        $customer->CustomerSite()->save($site);
+        $customer->Sites()->save($site);
 
         return $site;
     }

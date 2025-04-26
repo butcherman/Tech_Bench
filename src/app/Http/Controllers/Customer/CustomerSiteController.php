@@ -20,10 +20,11 @@ class CustomerSiteController extends Controller
     public function index(Request $request, Customer $customer): Response
     {
         return Inertia::render('Customer/Site/Index', [
-            'alerts' => fn() => $customer->CustomerAlert,
+            'alerts' => fn() => $customer->Alerts,
             'customer' => fn() => $customer,
             'permissions' => fn() => UserPermissions::customerPermissions($request->user()),
-            'siteList' => fn() => $customer->CustomerSite->makeVisible(['href']),
+            'siteList' => fn() => $customer->Sites->makeVisible(['href']),
+            'isFav' => fn() => $customer->isFav($request->user()),
         ]);
     }
 
