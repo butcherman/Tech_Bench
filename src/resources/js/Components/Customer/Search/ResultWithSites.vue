@@ -18,7 +18,7 @@ import { showSites } from "@/Composables/Customer/CustomerSearch.module";
     <td v-if="showSites">
         <table>
             <tbody>
-                <tr v-for="site in cust.customer_site">
+                <tr v-for="site in cust.sites">
                     <td>
                         <Link
                             :href="
@@ -39,7 +39,7 @@ import { showSites } from "@/Composables/Customer/CustomerSearch.module";
     <td class="border-s">
         <table v-if="showSites">
             <tbody>
-                <tr v-for="site in cust.customer_site">
+                <tr v-for="site in cust.sites">
                     <td>
                         <Link
                             :href="

@@ -5,7 +5,7 @@ type customer = {
     dba_name: string | null;
     slug: string;
     site_count: number;
-    customer_site: customerSite[];
+    sites: customerSite[];
 };
 
 type customerSite = {

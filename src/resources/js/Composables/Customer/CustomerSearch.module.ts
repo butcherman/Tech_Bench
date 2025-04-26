@@ -73,6 +73,7 @@ export const resetSearch = (): void => {
  */
 const processResults = (res: void | AxiosResponse<any, customer>): void => {
     if (res) {
+        console.log(res.data);
         // Assign results
         searchResults.value = res.data.data;
 

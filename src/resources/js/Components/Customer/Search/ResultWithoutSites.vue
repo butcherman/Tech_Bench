@@ -18,7 +18,7 @@ defineProps<{
             :href="$route('customers.show', cust.slug)"
             class="m-0 p-2 block hover:font-normal"
         >
-            {{ cust.customer_site[0].city }}
+            {{ cust.sites[0].city }}
         </Link>
     </td>
 </template>
