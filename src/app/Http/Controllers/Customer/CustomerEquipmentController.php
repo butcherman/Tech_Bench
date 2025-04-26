@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Customer;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customer\CustomerEquipmentRequest;
 use App\Models\Customer;
+use App\Models\CustomerEquipment;
 use App\Services\Customer\CustomerEquipmentService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class CustomerEquipmentController extends Controller
 {
@@ -17,10 +19,11 @@ class CustomerEquipmentController extends Controller
     /**
      *
      */
-    public function index()
+    public function index(Customer $customer): Response
     {
         //
-        return 'index';
+        // return 'index';
+        return Inertia::render('Customer/Equipment/Index');
     }
 
     /**
@@ -39,10 +42,11 @@ class CustomerEquipmentController extends Controller
     /**
      *
      */
-    public function show(string $id)
+    public function show(Customer $customer, CustomerEquipment $equipment): Response
     {
         //
-        return 'show';
+        // return 'show';
+        return Inertia::render('Customer/Equipment/Show');
     }
 
     /**
