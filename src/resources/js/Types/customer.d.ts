@@ -27,7 +27,7 @@ type customerPageProps = {
     siteList: customerSite[];
     isFav: boolean;
     alerts: customerAlert[];
-    // equipmentList: customerEquipment[];
+    equipmentList: { [key: string]: customerEquipment[] };
     // contacts: customerContact[];
     // notes: customerNote[];
     // files: customerFile[];
@@ -38,12 +38,13 @@ type customerPageProps = {
 | Customer Equipment
 |-------------------------------------------------------------------------------
 */
-// type customerEquipment = {
-//     cust_id: number;
-//     equip_id: number;
-//     cust_equip_id: number;
-//     equip_name: string;
-// };
+type customerEquipment = {
+    cust_id: number;
+    equip_id: number;
+    cust_equip_id: number;
+    equip_name: string;
+    customer_site?: customerSite[];
+};
 
 // type customerEquipmentData = {
 //     id: number;

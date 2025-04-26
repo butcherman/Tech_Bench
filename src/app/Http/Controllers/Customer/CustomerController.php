@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Customer;
 
+use App\Facades\CacheData;
 use App\Facades\UserPermissions;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customer\CustomerRequest;
@@ -70,8 +71,22 @@ class CustomerController extends Controller
             'alerts' => fn() => $customer->CustomerAlert,
             'customer' => fn() => $customer,
             'isFav' => fn() => $customer->isFav($request->user()),
-            'permissions' => fn() => UserPermissions::customerPermissions($request->user()),
+            'permissions' => fn() => UserPermissions::customerPermissions(
+                $request->user()
+            ),
             'siteList' => fn() => $customer->CustomerSite->makeVisible(['href']),
+
+            /**
+             * Deferred Props
+             */
+            'availableEquipment' => Inertia::defer(
+                fn() => CacheData::equipmentCategorySelectBox()
+            ),
+            'equipmentList' => Inertia::defer(
+                fn() => $customer->CustomerEquipment
+                    ->load('CustomerSite')
+                    ->groupBy('equip_name')
+            ),
         ]);
     }
 

@@ -1,8 +1,8 @@
 <script setup lang="ts" generic="T">
+import Pagination from "./Pagination.vue";
 import { computed, ref } from "vue";
 import { handleLinkClick } from "../../Composables/links.module";
 import { paginated } from "../../Composables/paginateArray.module";
-import Pagination from "./Pagination.vue";
 
 const emit = defineEmits<{
     "row-clicked": [event: MouseEvent, item: T];
@@ -100,7 +100,7 @@ const onRowClicked = (event: MouseEvent, item: T): void => {
                 ]"
                 @click="onRowClicked($event, item)"
             >
-                <slot name="list-item" :item="item">
+                <slot name="list-item" :item="item" :index="index">
                     {{ labelField ? item[labelField] : item }}
                 </slot>
                 <div class="float-end">

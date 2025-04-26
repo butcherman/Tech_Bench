@@ -6,11 +6,13 @@ use App\Http\Controllers\Customer\CustomerAlertController;
 use App\Http\Controllers\Customer\CustomerBookmarkController;
 use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\Customer\CustomerDeletedItemsController;
+use App\Http\Controllers\Customer\CustomerEquipmentController;
 use App\Http\Controllers\Customer\CustomerSearchController;
 use App\Http\Controllers\Customer\CustomerSiteController;
 use App\Http\Controllers\Customer\DisabledCustomerController;
 use App\Http\Controllers\Customer\ReAssignCustomerController;
 use App\Models\Customer;
+use App\Models\CustomerEquipment;
 use App\Models\CustomerSite;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 use Illuminate\Support\Facades\Route;
@@ -231,13 +233,13 @@ Route::middleware('auth.secure')->group(function () {
         //     [CustomerNoteController::class, 'createEquipmentNote']
         // )->name('equipment.note.create');
 
-        // Route::resource('equipment', CustomerEquipmentController::class)
-        //     ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
-        //         $breadcrumbs->index('Equipment', 'customers.show')
-        //             ->show(
-        //                 fn (Customer $customer, CustomerEquipment $equipment) => $equipment->equip_name
-        //             );
-        //     })->except(['create', 'edit']);
+        Route::resource('equipment', CustomerEquipmentController::class)
+            ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
+                $breadcrumbs->index('Equipment', 'customers.show')
+                    ->show(
+                        fn(Customer $customer, CustomerEquipment $equipment) => $equipment->equip_name
+                    );
+            })->except(['create', 'edit']);
 
         // Route::put('equipment-data', CustomerEquipmentDataController::class)
         //     ->name('update-equipment-data');

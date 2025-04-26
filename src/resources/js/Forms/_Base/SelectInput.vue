@@ -79,3 +79,9 @@ const {
         </Message>
     </FloatLabel>
 </template>
+
+<style>
+.p-select-option-label {
+    @apply ms-4;
+}
+</style>

@@ -15,6 +15,7 @@ const props = defineProps<{
     position?: "top" | "center" | "bottom";
     preventOutsideClick?: boolean;
     title?: string;
+    size?: "large" | "x-large";
 }>();
 
 /**
@@ -35,6 +36,20 @@ const modalPosition = computed<string>(() => {
             return "items-end";
         default:
             return "items-center";
+    }
+});
+
+/**
+ * Size of the Modal (large, x-large)
+ */
+const modalSize = computed(() => {
+    switch (props.size) {
+        case "large":
+            return "w-3/4";
+        case "x-large":
+            return "w-full";
+        default:
+            return "";
     }
 });
 
@@ -89,6 +104,7 @@ defineExpose({ show, hide, isOpen: readonly(modalOpen) });
                     >
                         <div
                             class="bg-white min-w-96 max-w-4xl min-h-32 rounded-lg p-5 flex flex-col relative"
+                            :class="modalSize"
                             @click.stop
                         >
                             <div

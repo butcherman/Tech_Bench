@@ -5,12 +5,38 @@ import BookmarkItem from "@/Components/_Base/BookmarkItem.vue";
 import CustomerAlerts from "@/Components/Customer/Show/CustomerAlerts.vue";
 import CustomerDetails from "@/Components/Customer/Show/CustomerDetails.vue";
 import CustomerManagement from "@/Components/Customer/Show/CustomerManagement.vue";
+import QuickJump from "@/Components/_Base/QuickJump.vue";
 import SiteList from "@/Components/Customer/Show/SiteList.vue";
 import {
     customer,
     isFav,
     permissions,
 } from "@/Composables/Customer/CustomerData.module";
+import CustomerEquipment from "@/Components/Customer/Show/Equipment/CustomerEquipment.vue";
+import CustomerContact from "@/Components/Customer/Show/CustomerContact.vue";
+
+const quickJumpList = [
+    {
+        navId: "site-list",
+        label: "Sites",
+    },
+    {
+        navId: "equipment",
+        label: "Equipment",
+    },
+    {
+        navId: "contacts",
+        label: "Contacts",
+    },
+    {
+        navId: "notes",
+        label: "Notes",
+    },
+    {
+        navId: "files",
+        label: "Files",
+    },
+];
 </script>
 
 <script lang="ts">
@@ -32,7 +58,8 @@ export default { layout: AppLayout };
             </div>
         </div>
         <CustomerAlerts />
-        <div class="tb-card-lg mt-2">
+        <QuickJump :nav-list="quickJumpList" class="tb-gap-y" />
+        <div class="tb-card-lg tb-gap-y">
             <SiteList>
                 <template #append-title>
                     <AddButton
@@ -44,6 +71,10 @@ export default { layout: AppLayout };
                     />
                 </template>
             </SiteList>
+        </div>
+        <div class="grid grid-cols-2 tb-gap-y gap-3">
+            <CustomerEquipment />
+            <CustomerContact />
         </div>
     </div>
 </template>

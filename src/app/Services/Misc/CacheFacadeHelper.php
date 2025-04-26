@@ -38,8 +38,8 @@ class CacheFacadeHelper
     {
         return Cache::rememberForever('password_rules', function () {
             $passwordRules = [
-                'Password must be at least '.
-                    config('auth.passwords.settings.min_length').
+                'Password must be at least ' .
+                    config('auth.passwords.settings.min_length') .
                     ' characters',
             ];
 
@@ -127,6 +127,37 @@ class CacheFacadeHelper
     {
         return Cache::rememberForever('equipmentCategories', function () {
             return EquipmentCategory::equipment()->get();
+        });
+    }
+
+    /**
+     * Get a list of all equipment categories prepped for a select box.
+     *
+     * @return \Illuminate\Cache\TCacheValue
+     */
+    public function equipmentCategorySelectBox()
+    {
+        return Cache::rememberForever('equipmentSelectBox', function () {
+            $catBase = $this->equipmentCategories();
+            $sorted = [];
+
+            foreach ($catBase as $key => $value) {
+                $groupList = [];
+
+                foreach ($value->EquipmentType as $equip) {
+                    $groupList[] = [
+                        'label' => $equip->name,
+                        'value' => $equip->equip_id,
+                    ];
+                }
+
+                $sorted[] = [
+                    'label' => $value->name,
+                    'items' => $groupList,
+                ];
+            }
+
+            return $sorted;
         });
     }
 
