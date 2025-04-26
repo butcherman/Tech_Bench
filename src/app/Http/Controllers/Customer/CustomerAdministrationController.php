@@ -23,7 +23,7 @@ class CustomerAdministrationController extends Controller
         $this->authorize('manage', Customer::class);
 
         return Inertia::render(
-            'Customer/Administration',
+            'Customer/Admin/Administration',
             $this->svc->getCustomerSettings()
         );
     }
@@ -36,7 +36,7 @@ class CustomerAdministrationController extends Controller
         $this->svc->updateCustomerSettings($request->safe()->collect());
 
         Log::info(
-            'Customer Settings updated by '.$request->user()->username,
+            'Customer Settings updated by ' . $request->user()->username,
             $request->toArray()
         );
 

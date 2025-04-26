@@ -46,8 +46,8 @@ class ReAssignCustomerTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn (Assert $page) => $page
-                    ->component('Customer/ReAssignSite')
+                fn(Assert $page) => $page
+                    ->component('Customer/Admin/ReAssignSite')
             );
     }
 

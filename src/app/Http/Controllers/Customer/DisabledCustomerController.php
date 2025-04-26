@@ -17,7 +17,7 @@ class DisabledCustomerController extends Controller
     {
         $this->authorize('manage', Customer::class);
 
-        return Inertia::render('Customer/DisabledCustomers', [
+        return Inertia::render('Customer/Admin/DisabledCustomers', [
             'disabled-list' => $svc->getDisabledCustomers(),
         ]);
     }

@@ -4,6 +4,7 @@ namespace Tests\Feature\Customer;
 
 use App\Models\User;
 use Tests\TestCase;
+use Inertia\Testing\AssertableInertia as Assert;
 
 class CustomerAdministrationTest extends TestCase
 {
@@ -40,7 +41,14 @@ class CustomerAdministrationTest extends TestCase
         $response = $this->actingAs($user)
             ->get(route('customers.settings.edit'));
 
-        $response->assertSuccessful();
+        $response->assertSuccessful()->assertInertia(
+            fn(Assert $page) => $page
+                ->component('Customer/Admin/Administration')
+                ->has('select_id')
+                ->has('update_slug')
+                ->has('default_state')
+                ->has('auto_purge')
+        );
     }
 
     /*

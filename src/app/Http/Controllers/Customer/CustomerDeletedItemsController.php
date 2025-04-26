@@ -17,7 +17,7 @@ class CustomerDeletedItemsController extends Controller
     {
         $this->authorize('manage', $customer);
 
-        return Inertia::render('Customer/DeletedItems', [
+        return Inertia::render('Customer/Admin/DeletedItems', [
             'customer' => fn() => $customer,
             'deleted-items' => [
                 'equipment' => $customer->CustomerEquipment()->onlyTrashed()->get(),

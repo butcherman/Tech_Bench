@@ -20,7 +20,7 @@ class ReAssignCustomerController extends Controller
     {
         $this->authorize('manage', Customer::class);
 
-        return Inertia::render('Customer/ReAssignSite');
+        return Inertia::render('Customer/Admin/ReAssignSite');
     }
 
     /**
@@ -34,7 +34,7 @@ class ReAssignCustomerController extends Controller
         );
 
         Log::notice(
-            'Move Customer Site called by '.$request->user()->username,
+            'Move Customer Site called by ' . $request->user()->username,
             $request->toArray()
         );
 
