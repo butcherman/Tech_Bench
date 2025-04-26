@@ -174,6 +174,28 @@ class CustomerAlertTest extends TestCase
         $this->assertDatabaseHas('customer_alerts', $data);
     }
 
+    public function test_update_scope_bindings(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
+        $alert = CustomerAlert::factory()
+            ->createQuietly();
+        $data = [
+            'message' => 'updated message',
+            'type' => 'success',
+        ];
+
+        $response = $this->actingAs($user)
+            ->put(route('customers.alerts.update', [
+                $this->customer->slug,
+                $alert->alert_id,
+            ]), $data);
+
+        $response->assertStatus(404);
+
+        $this->assertDatabaseMissing('customer_alerts', $data);
+    }
+
     /*
     |---------------------------------------------------------------------------
     | Destroy Method
