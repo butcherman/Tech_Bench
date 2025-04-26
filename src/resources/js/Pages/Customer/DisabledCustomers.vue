@@ -18,9 +18,7 @@ const restoreCustomer = (customer: customer): void => {
     verifyModal("This customer will be restored and accessible again").then(
         (res) => {
             if (res) {
-                router.get(
-                    route("customers.disabled.restore", customer.cust_id)
-                );
+                router.get(route("customers.disabled.restore", customer.slug));
             }
         }
     );
@@ -35,7 +33,7 @@ const forceDeleteCustomer = (customer: customer): void => {
     ).then((res) => {
         if (res) {
             router.delete(
-                route("customers.disabled.force-delete", customer.cust_id)
+                route("customers.disabled.force-delete", customer.slug)
             );
         }
     });

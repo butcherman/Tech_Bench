@@ -452,7 +452,7 @@ class CustomerTest extends TestCase
         $cust->delete();
 
         $response = $this->get(
-            route('customers.disabled.restore', $cust->cust_id)
+            route('customers.disabled.restore', $cust->slug)
         );
 
         $response->assertStatus(302)
@@ -468,7 +468,7 @@ class CustomerTest extends TestCase
         $cust->delete();
 
         $response = $this->actingAs($user)
-            ->get(route('customers.disabled.restore', $cust->cust_id));
+            ->get(route('customers.disabled.restore', $cust->slug));
 
         $response->assertForbidden();
     }
@@ -481,7 +481,7 @@ class CustomerTest extends TestCase
         $cust->delete();
 
         $response = $this->actingAs($user)
-            ->get(route('customers.disabled.restore', $cust->cust_id));
+            ->get(route('customers.disabled.restore', $cust->slug));
 
         $response->assertStatus(302)
             ->assertSessionHas('success', __('cust.restored', [
@@ -504,7 +504,7 @@ class CustomerTest extends TestCase
         $cust->delete();
 
         $response = $this->delete(
-            route('customers.disabled.force-delete', $cust->cust_id)
+            route('customers.disabled.force-delete', $cust->slug)
         );
 
         $response->assertStatus(302)
@@ -520,7 +520,7 @@ class CustomerTest extends TestCase
         $cust->delete();
 
         $response = $this->actingAs($user)
-            ->delete(route('customers.disabled.force-delete', $cust->cust_id));
+            ->delete(route('customers.disabled.force-delete', $cust->slug));
 
         $response->assertForbidden();
     }
@@ -543,7 +543,7 @@ class CustomerTest extends TestCase
         });
 
         $response = $this->actingAs($user)
-            ->delete(route('customers.disabled.force-delete', $cust->cust_id));
+            ->delete(route('customers.disabled.force-delete', $cust->slug));
 
         $response->assertStatus(302)
             ->assertSessionHas('danger', __('cust.force_deleted', [

@@ -49,6 +49,11 @@ class CustomerUnitTest extends TestCase
         );
     }
 
+    public function test_get_route_key_name(): void
+    {
+        $this->assertEquals('slug', $this->model->getRouteKeyName());
+    }
+
     /*
     |---------------------------------------------------------------------------
     | Model Attributes
@@ -94,7 +99,7 @@ class CustomerUnitTest extends TestCase
 
         $this->assertEquals(
             $data->makeHidden('Customer')->toArray(),
-            $this->model->CustomerAlert[0]->toArray()
+            $this->model->Alerts[0]->toArray()
         );
     }
 
