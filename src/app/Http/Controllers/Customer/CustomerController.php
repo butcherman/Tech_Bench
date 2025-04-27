@@ -81,7 +81,7 @@ class CustomerController extends Controller
              * Deferred Props
              */
             'equipmentList' => Inertia::defer(
-                fn() => $customer->CustomerEquipment
+                fn() => $customer->Equipment
                     ->load('CustomerSite')
                     ->groupBy('equip_name')
                     ->chunk(5)

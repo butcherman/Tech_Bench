@@ -45,6 +45,11 @@ class CustomerEquipment extends Model
     /** @var array<int, string> */
     protected $appends = ['equip_name'];
 
+    public function getRouteKeyName(): string
+    {
+        return 'cust_equip_id';
+    }
+
     /*
     |---------------------------------------------------------------------------
     | Model Casting
@@ -65,7 +70,7 @@ class CustomerEquipment extends Model
     public function equipName(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->EquipmentType->name
+            get: fn() => $this->EquipmentType->name
         );
     }
 
@@ -135,8 +140,8 @@ class CustomerEquipment extends Model
         $allChannels = array_merge(
             $siteChannels,
             [
-                new PrivateChannel('customer.'.$this->Customer->slug),
-                new PrivateChannel('customer-equipment.'.$this->cust_equip_id),
+                new PrivateChannel('customer.' . $this->Customer->slug),
+                new PrivateChannel('customer-equipment.' . $this->cust_equip_id),
             ]
         );
 

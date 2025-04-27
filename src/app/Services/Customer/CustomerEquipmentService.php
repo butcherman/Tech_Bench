@@ -21,7 +21,7 @@ class CustomerEquipmentService
             'equip_id' => $requestData->get('equip_id')
         ]);
 
-        $customer->CustomerEquipment()->save($newEquip);
+        $customer->Equipment()->save($newEquip);
 
         $this->updateEquipmentSites($requestData, $newEquip);
 

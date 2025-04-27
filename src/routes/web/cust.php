@@ -235,13 +235,14 @@ Route::middleware('auth.secure')->group(function () {
         //     [CustomerNoteController::class, 'createEquipmentNote']
         // )->name('equipment.note.create');
 
-        Route::resource('equipment', CustomerEquipmentController::class)
+        Route::apiResource('equipment', CustomerEquipmentController::class)
+            ->scoped(['equipment' => 'cust_equip_id'])
             ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
                 $breadcrumbs->index('Equipment', 'customers.show')
                     ->show(
                         fn(Customer $customer, CustomerEquipment $equipment) => $equipment->equip_name
                     );
-            })->except(['create', 'edit']);
+            });
 
         // Route::put('equipment-data', CustomerEquipmentDataController::class)
         //     ->name('update-equipment-data');
