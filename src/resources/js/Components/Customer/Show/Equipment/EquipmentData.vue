@@ -9,7 +9,10 @@ import RefreshButton from "@/Components/_Base/Buttons/RefreshButton.vue";
 import TableStacked from "@/Components/_Base/TableStacked.vue";
 import { ref } from "vue";
 import { useForm } from "@inertiajs/vue3";
-import { customer } from "@/Composables/Customer/CustomerData.module";
+import {
+    customer,
+    permissions,
+} from "@/Composables/Customer/CustomerData.module";
 
 type equipmentFormData = {
     fieldId: number;
@@ -168,7 +171,7 @@ const triggerSave = (saveData: equipmentFormData[]) => {
             </TableStacked>
             <div class="flex flex-row-reverse mt-2">
                 <EditButton
-                    v-if="!editFields.length"
+                    v-if="!editFields.length && permissions.equipment.update"
                     text="Edit All"
                     size="small"
                     pill

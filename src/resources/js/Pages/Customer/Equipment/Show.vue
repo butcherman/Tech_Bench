@@ -25,6 +25,6 @@ export default { layout: AppLayout };
             />
         </div>
         <EquipmentData :equipment="equipment" :equipment-data="equipmentData" />
-        {{ equipmentData }}
+        {{ equipmentData[3] }}
     </div>
 </template>
