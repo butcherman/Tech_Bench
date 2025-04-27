@@ -19,7 +19,7 @@ class CustomerEquipmentController extends Controller
     public function __construct(protected CustomerEquipmentService $svc) {}
 
     /**
-     *
+     * Show a list of all Equipment assigned to the customer.
      */
     public function index(Request $request, Customer $customer): Response
     {
@@ -58,11 +58,15 @@ class CustomerEquipmentController extends Controller
     /**
      *
      */
-    public function show(Customer $customer, CustomerEquipment $equipment): Response
+    public function show(Request $request, Customer $customer, CustomerEquipment $equipment): Response
     {
-        //
-        // return 'show';
-        return Inertia::render('Customer/Equipment/Show');
+        return Inertia::render('Customer/Equipment/Show', [
+            'permissions' => fn() =>  UserPermissions::customerPermissions($request->user()),
+            'customer' => fn() => $customer,
+            'equipment' => fn() => $equipment,
+            'siteList' => fn() => $customer->Sites->makeVisible(['href']),
+            'equipment-data' => fn() => $equipment->CustomerEquipmentData,
+        ]);
     }
 
     /**
@@ -84,12 +88,20 @@ class CustomerEquipmentController extends Controller
     }
 
     /**
-     *
+     * Soft Delete Customer Equipment
      */
-    public function destroy(string $id)
+    public function destroy(Customer $customer, CustomerEquipment $equipment): RedirectResponse
     {
-        //
-        return 'destroy';
+        $this->authorize('delete', $equipment);
+
+        $name = $equipment->name;
+
+        $this->svc->destroyEquipment($equipment);
+
+        return redirect(route('customers.equipment.index', $customer->slug))
+            ->with('warning', __('cust.equipment.deleted', [
+                'equip' => $name,
+            ]));
     }
 
     /**

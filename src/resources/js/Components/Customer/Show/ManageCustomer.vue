@@ -1,13 +1,13 @@
 <script setup lang="ts">
+import DisableCustomerForm from "@/Forms/Customer/DisableCustomerForm.vue";
 import Menu from "primevue/menu";
+import Modal from "@/Components/_Base/Modal.vue";
 import { ref, computed, useTemplateRef, shallowRef } from "vue";
+import { router } from "@inertiajs/vue3";
 import {
     customer,
     permissions,
 } from "@/Composables/Customer/CustomerData.module";
-import { router } from "@inertiajs/vue3";
-import Modal from "@/Components/_Base/Modal.vue";
-import DisableCustomerForm from "@/Forms/Customer/DisableCustomerForm.vue";
 
 const menuList = useTemplateRef("customer-admin-menu");
 const modal = useTemplateRef("disable-confirmation-modal");

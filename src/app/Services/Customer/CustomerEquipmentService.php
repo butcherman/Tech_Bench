@@ -43,16 +43,16 @@ class CustomerEquipmentService
     /**
      * Delete a piece of equipment
      */
-    // public function destroyEquipment(CustomerEquipment $equipment, ?bool $force = false): void
-    // {
-    //     if ($force) {
-    //         $equipment->forceDelete();
+    public function destroyEquipment(CustomerEquipment $equipment, ?bool $force = false): void
+    {
+        if ($force) {
+            $equipment->forceDelete();
 
-    //         return;
-    //     }
+            return;
+        }
 
-    //     $equipment->delete();
-    // }
+        $equipment->delete();
+    }
 
     /**
      * Restore equipment

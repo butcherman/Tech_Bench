@@ -4,7 +4,7 @@ import AppLayout from "@/Layouts/App/AppLayout.vue";
 import BookmarkItem from "@/Components/_Base/BookmarkItem.vue";
 import CustomerAlerts from "@/Components/Customer/Show/CustomerAlerts.vue";
 import CustomerDetails from "@/Components/Customer/Show/CustomerDetails.vue";
-import CustomerManagement from "@/Components/Customer/Show/CustomerManagement.vue";
+import CustomerManagement from "@/Components/Customer/Show/ManageCustomer.vue";
 import SiteList from "@/Components/Customer/Show/SiteList.vue";
 import {
     customer,

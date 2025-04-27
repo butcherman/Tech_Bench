@@ -4,7 +4,7 @@ import AppLayout from "@/Layouts/App/AppLayout.vue";
 import BookmarkItem from "@/Components/_Base/BookmarkItem.vue";
 import CustomerAlerts from "@/Components/Customer/Show/CustomerAlerts.vue";
 import CustomerDetails from "@/Components/Customer/Show/CustomerDetails.vue";
-import CustomerManagement from "@/Components/Customer/Show/CustomerManagement.vue";
+import CustomerManagement from "@/Components/Customer/Show/ManageCustomer.vue";
 import QuickJump from "@/Components/_Base/QuickJump.vue";
 import SiteList from "@/Components/Customer/Show/SiteList.vue";
 import {
@@ -45,7 +45,7 @@ export default { layout: AppLayout };
 
 <template>
     <div>
-        <div class="flex gap-2 border-b border-slate-400">
+        <div class="flex gap-2 pb-2 border-b border-slate-400">
             <h1>
                 <BookmarkItem
                     :is-bookmark="isFav"
