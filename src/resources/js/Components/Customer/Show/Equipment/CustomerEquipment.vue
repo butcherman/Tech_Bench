@@ -4,10 +4,11 @@ import AddEquipmentModal from "./AddEquipmentModal.vue";
 import AtomLoader from "@/Components/_Base/Loaders/AtomLoader.vue";
 import BaseButton from "@/Components/_Base/Buttons/BaseButton.vue";
 import Card from "@/Components/_Base/Card.vue";
+import Pagination from "@/Components/_Base/Pagination.vue";
 import SelectEquipmentModal from "./SelectEquipmentModal.vue";
 import { Deferred } from "@inertiajs/vue3";
 import { handleLinkClick } from "@/Composables/links.module";
-import { useTemplateRef } from "vue";
+import { computed, ref, useTemplateRef } from "vue";
 import {
     customer,
     equipmentList,
@@ -15,6 +16,19 @@ import {
 
 const selectModal = useTemplateRef("select-equipment-modal");
 const addModal = useTemplateRef("add-equipment-modal");
+
+/*
+|-------------------------------------------------------------------------------
+| Pagination Data
+|-------------------------------------------------------------------------------
+*/
+const currentPage = ref(0);
+const displayPage = computed(() => currentPage.value + 1);
+const currentChunk = computed(() => equipmentList.value[currentPage.value]);
+
+const goToPage = (page: number): void => {
+    currentPage.value = page - 1;
+};
 
 /**
  * If the selected equipment exists more than once for the customer, give user
@@ -58,7 +72,7 @@ const onClickAction = (
             </template>
             <div>
                 <ul class="border rounded-lg border-collapse">
-                    <li v-for="(equip, index) in equipmentList" class="p-1">
+                    <li v-for="(equip, index) in currentChunk" class="p-1">
                         <BaseButton
                             class="w-full"
                             @click="onClickAction($event, equip)"
@@ -70,6 +84,16 @@ const onClickAction = (
                         </BaseButton>
                     </li>
                 </ul>
+                <div class="flex justify-center mt-2">
+                    <Pagination
+                        v-if="equipmentList.length > 1"
+                        :current-page="displayPage"
+                        :total-pages="equipmentList.length"
+                        @go-to-page="goToPage"
+                        @next-page="currentPage++"
+                        @prev-page="currentPage--"
+                    />
+                </div>
             </div>
         </Deferred>
         <SelectEquipmentModal ref="select-equipment-modal" />

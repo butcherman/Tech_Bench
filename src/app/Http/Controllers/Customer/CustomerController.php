@@ -84,6 +84,7 @@ class CustomerController extends Controller
                 fn() => $customer->CustomerEquipment
                     ->load('CustomerSite')
                     ->groupBy('equip_name')
+                    ->chunk(5)
             ),
         ]);
     }

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Customer;
 
+use App\Facades\CacheData;
+use App\Facades\UserPermissions;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customer\CustomerEquipmentRequest;
 use App\Models\Customer;
@@ -19,11 +21,25 @@ class CustomerEquipmentController extends Controller
     /**
      *
      */
-    public function index(Customer $customer): Response
+    public function index(Request $request, Customer $customer): Response
     {
-        //
-        // return 'index';
-        return Inertia::render('Customer/Equipment/Index');
+        return Inertia::render('Customer/Equipment/Index', [
+            'alerts' => fn() => $customer->Alerts,
+            'availableEquipment' => fn() => CacheData::equipmentCategorySelectBox(),
+            'customer' => fn() => $customer,
+            'permissions' => fn() => UserPermissions::customerPermissions($request->user()),
+            'siteList' => fn() => $customer->Sites->makeVisible(['href']),
+
+            /**
+             * Deferred Props
+             */
+            'equipmentList' => Inertia::defer(
+                fn() => $customer->CustomerEquipment
+                    ->load('CustomerSite')
+                    ->groupBy('equip_name')
+                    ->chunk(25)
+            ),
+        ]);
     }
 
     /**
