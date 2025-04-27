@@ -56,7 +56,7 @@ class CustomerEquipmentController extends Controller
     }
 
     /**
-     *
+     * Show the selected equipment and all relevant data.
      */
     public function show(Request $request, Customer $customer, CustomerEquipment $equipment): Response
     {
@@ -64,27 +64,22 @@ class CustomerEquipmentController extends Controller
             'permissions' => fn() =>  UserPermissions::customerPermissions($request->user()),
             'customer' => fn() => $customer,
             'equipment' => fn() => $equipment,
-            'siteList' => fn() => $customer->Sites->makeVisible(['href']),
+            'siteList' => fn() => $equipment->CustomerSite->makeVisible(['href']),
             'equipment-data' => fn() => $equipment->CustomerEquipmentData,
         ]);
     }
 
     /**
-     *
+     * Update the list of sites that a piece of equipment belong to.
      */
-    public function edit(string $id)
-    {
-        //
-        return 'edit';
-    }
+    public function update(
+        CustomerEquipmentRequest $request,
+        Customer $customer,
+        CustomerEquipment $equipment
+    ): RedirectResponse {
+        $this->svc->updateEquipmentSites($request->safe()->collect(), $equipment);
 
-    /**
-     *
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-        return 'update';
+        return back()->with('success', __('cust.equipment.site-updated'));
     }
 
     /**

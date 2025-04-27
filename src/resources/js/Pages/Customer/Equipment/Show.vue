@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import AppLayout from "@/Layouts/App/AppLayout.vue";
 import CustomerDetails from "@/Components/Customer/Show/CustomerDetails.vue";
-import ManageEquipment from "@/Components/Customer/Show/Equipment/ManageEquipment.vue";
 import EquipmentData from "@/Components/Customer/Show/Equipment/EquipmentData.vue";
+import EquipmentSites from "@/Components/Customer/Show/Equipment/EquipmentSites.vue";
+import ManageEquipment from "@/Components/Customer/Show/Equipment/ManageEquipment.vue";
 import { permissions } from "@/Composables/Customer/CustomerData.module";
 
 const props = defineProps<{
@@ -24,7 +25,12 @@ export default { layout: AppLayout };
                 :equipment="equipment"
             />
         </div>
-        <EquipmentData :equipment="equipment" :equipment-data="equipmentData" />
-        {{ equipmentData[3] }}
+        <EquipmentData
+            class="my-3"
+            :equipment="equipment"
+            :equipment-data="equipmentData"
+        />
+        <EquipmentSites class="my-3" :equipment="equipment" />
+        {{ equipment }}
     </div>
 </template>

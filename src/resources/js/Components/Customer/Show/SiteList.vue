@@ -3,13 +3,17 @@ import Card from "@/Components/_Base/Card.vue";
 import ResourceList from "@/Components/_Base/ResourceList.vue";
 import { customer, siteList } from "@/Composables/Customer/CustomerData.module";
 
+defineProps<{
+    title?: string;
+}>();
+
 const goToSite = (site: customerSite): string => {
     return route("customers.sites.show", [customer.value.slug, site.site_slug]);
 };
 </script>
 
 <template>
-    <Card title="Sites">
+    <Card :title="title ?? 'Sites'">
         <template #append-title>
             <slot name="append-title" />
         </template>
