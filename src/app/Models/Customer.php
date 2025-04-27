@@ -100,12 +100,6 @@ class Customer extends Model
         return $this->hasMany(CustomerSite::class, 'cust_id', 'cust_id');
     }
 
-    // TODO - Go Away???
-    // public function CustomerSite(): HasMany
-    // {
-    //     return $this->hasMany(CustomerSite::class, 'cust_id', 'cust_id');
-    // }
-
     public function CustomerSiteList(): HasMany
     {
         return $this->hasMany(CustomerSite::class, 'cust_id', 'cust_id')
@@ -117,7 +111,7 @@ class Customer extends Model
         return $this->hasMany(CustomerAlert::class, 'cust_id', 'cust_id');
     }
 
-    public function CustomerEquipment(): HasMany
+    public function Equipment(): HasMany
     {
         return $this->hasMany(CustomerEquipment::class, 'cust_id', 'cust_id');
     }

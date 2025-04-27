@@ -72,6 +72,9 @@ const onClickAction = (
             </template>
             <div>
                 <ul class="border rounded-lg border-collapse">
+                    <li v-if="!equipmentList.length" class="p-1">
+                        <h6 class="text-center">No Equipment</h6>
+                    </li>
                     <li v-for="(equip, index) in currentChunk" class="p-1">
                         <BaseButton
                             class="w-full"
