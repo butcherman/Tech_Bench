@@ -46,13 +46,13 @@ type customerEquipment = {
     customer_site?: customerSite[];
 };
 
-// type customerEquipmentData = {
-//     id: number;
-//     order: number;
-//     field_name: string;
-//     value: string;
-//     data_field_type: dataTypes;
-// };
+type customerEquipmentData = {
+    id: number;
+    order: number;
+    field_name: string;
+    value: string;
+    data_field_type: dataTypes;
+};
 
 /*
 |-------------------------------------------------------------------------------

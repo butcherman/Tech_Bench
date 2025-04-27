@@ -55,7 +55,8 @@ type elementVariant =
     | "primary"
     | "secondary"
     | "success"
-    | "warning";
+    | "warning"
+    | "none";
 
 type basicPermissions = {
     create: boolean;

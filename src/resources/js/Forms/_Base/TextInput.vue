@@ -64,16 +64,6 @@ const {
 } = useField(nameRef);
 </script>
 
-<style>
-.p-inputtext::placeholder {
-    color: transparent;
-}
-
-.p-inputtext:focus::placeholder {
-    @apply text-muted-color;
-}
-</style>
-
 <template>
     <div>
         <InputGroup>
@@ -121,3 +111,13 @@ const {
         </Message>
     </div>
 </template>
+
+<style lang="postcss">
+.p-inputtext::placeholder {
+    color: transparent;
+}
+
+.p-inputtext:focus::placeholder {
+    @apply text-muted-color;
+}
+</style>

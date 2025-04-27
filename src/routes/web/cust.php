@@ -7,6 +7,7 @@ use App\Http\Controllers\Customer\CustomerBookmarkController;
 use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\Customer\CustomerDeletedItemsController;
 use App\Http\Controllers\Customer\CustomerEquipmentController;
+use App\Http\Controllers\Customer\CustomerEquipmentDataController;
 use App\Http\Controllers\Customer\CustomerSearchController;
 use App\Http\Controllers\Customer\CustomerSiteController;
 use App\Http\Controllers\Customer\DisabledCustomerController;
@@ -244,8 +245,9 @@ Route::middleware('auth.secure')->group(function () {
                     );
             });
 
-        // Route::put('equipment-data', CustomerEquipmentDataController::class)
-        //     ->name('update-equipment-data');
+        Route::put('{equipment}/equipment-data', CustomerEquipmentDataController::class)
+            ->scopeBindings()
+            ->name('update-equipment-data');
 
         /*
         |-----------------------------------------------------------------------
