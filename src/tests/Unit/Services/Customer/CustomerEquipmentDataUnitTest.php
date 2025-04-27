@@ -101,7 +101,7 @@ class CustomerEquipmentDataUnitTest extends TestCase
             ->toArray();
 
         $this->assertDatabaseMissing('customer_equipment_data', [
-            'cust_equip_id' => $custList[0]->CustomerEquipment[0]->cust_equip_id,
+            'cust_equip_id' => $custList[0]->Equipment[0]->cust_equip_id,
             'field_id' => $dataFieldIds[2],
         ]);
 
@@ -109,7 +109,7 @@ class CustomerEquipmentDataUnitTest extends TestCase
         $testObj->updateEquipmentDataFieldsForEquipment($equip);
 
         $this->assertDatabaseHas('customer_equipment_data', [
-            'cust_equip_id' => $custList[0]->CustomerEquipment[0]->cust_equip_id,
+            'cust_equip_id' => $custList[0]->Equipment[0]->cust_equip_id,
             'field_id' => $dataFieldIds[2],
         ]);
     }

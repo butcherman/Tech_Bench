@@ -21,7 +21,7 @@ class ReAssignCustomerSiteUnitTest extends TestCase
     public function test_invoke_solo_customer(): void
     {
         $fromCust = Customer::factory()
-            ->has(CustomerEquipment::factory())
+            ->has(CustomerEquipment::factory(), 'equipment')
             ->has(CustomerNote::factory())
             ->has(CustomerContact::factory())
             ->has(CustomerFile::factory())
@@ -30,7 +30,7 @@ class ReAssignCustomerSiteUnitTest extends TestCase
 
         $fromSite = $fromCust->Sites[0];
 
-        $fromCust->CustomerEquipment[0]
+        $fromCust->Equipment[0]
             ->CustomerSite()
             ->attach($fromCust->primary_site_id);
         $fromCust->CustomerContact[0]
@@ -53,7 +53,7 @@ class ReAssignCustomerSiteUnitTest extends TestCase
             'cust_site_id' => $fromSite->cust_site_id,
         ]);
         $this->assertDatabaseHas('customer_equipment', [
-            'cust_equip_id' => $fromCust->CustomerEquipment[0]->cust_equip_id,
+            'cust_equip_id' => $fromCust->Equipment[0]->cust_equip_id,
             'cust_id' => $toCust->cust_id,
         ]);
         $this->assertDatabaseHas('customer_contacts', [
