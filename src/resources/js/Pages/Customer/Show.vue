@@ -3,17 +3,25 @@ import AddButton from "@/Components/_Base/Buttons/AddButton.vue";
 import AppLayout from "@/Layouts/App/AppLayout.vue";
 import BookmarkItem from "@/Components/_Base/BookmarkItem.vue";
 import CustomerAlerts from "@/Components/Customer/Show/CustomerAlerts.vue";
+import CustomerContact from "@/Components/Customer/Show/Contacts/CustomerContact.vue";
 import CustomerDetails from "@/Components/Customer/Show/CustomerDetails.vue";
+import CustomerEquipment from "@/Components/Customer/Show/Equipment/CustomerEquipment.vue";
 import CustomerManagement from "@/Components/Customer/Show/ManageCustomer.vue";
 import QuickJump from "@/Components/_Base/QuickJump.vue";
 import SiteList from "@/Components/Customer/Show/SiteList.vue";
+import { onMounted, onUnmounted } from "vue";
+import {
+    registerCustomerChannel,
+    leaveCustomerChannel,
+} from "@/Composables/Customer/CustomerBroadcasting.module";
 import {
     customer,
     isFav,
     permissions,
 } from "@/Composables/Customer/CustomerData.module";
-import CustomerEquipment from "@/Components/Customer/Show/Equipment/CustomerEquipment.vue";
-import CustomerContact from "@/Components/Customer/Show/CustomerContact.vue";
+
+onMounted(() => registerCustomerChannel(customer.value.slug));
+onUnmounted(() => leaveCustomerChannel(customer.value.slug));
 
 const quickJumpList = [
     {
