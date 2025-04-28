@@ -34,7 +34,7 @@ class ReAssignCustomerController extends Controller
         );
 
         Log::notice(
-            'Move Customer Site called by ' . $request->user()->username,
+            'Move Customer Site called by '.$request->user()->username,
             $request->toArray()
         );
 

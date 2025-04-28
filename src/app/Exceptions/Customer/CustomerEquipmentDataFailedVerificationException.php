@@ -3,7 +3,6 @@
 namespace App\Exceptions\Customer;
 
 use Exception;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
 
 class CustomerEquipmentDataFailedVerificationException extends Exception

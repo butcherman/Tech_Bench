@@ -20,11 +20,11 @@ class CustomerSiteController extends Controller
     public function index(Request $request, Customer $customer): Response
     {
         return Inertia::render('Customer/Site/Index', [
-            'alerts' => fn() => $customer->Alerts,
-            'customer' => fn() => $customer,
-            'permissions' => fn() => UserPermissions::customerPermissions($request->user()),
-            'siteList' => fn() => $customer->Sites->makeVisible(['href']),
-            'isFav' => fn() => $customer->isFav($request->user()),
+            'alerts' => fn () => $customer->Alerts,
+            'customer' => fn () => $customer,
+            'permissions' => fn () => UserPermissions::customerPermissions($request->user()),
+            'siteList' => fn () => $customer->Sites->makeVisible(['href']),
+            'isFav' => fn () => $customer->isFav($request->user()),
         ]);
     }
 
@@ -36,8 +36,8 @@ class CustomerSiteController extends Controller
         $this->authorize('create', CustomerSite::class);
 
         return Inertia::render('Customer/Site/Create', [
-            'default-state' => fn() => config('customer.default_state'),
-            'parent-customer' => fn() => $customer,
+            'default-state' => fn () => config('customer.default_state'),
+            'parent-customer' => fn () => $customer,
         ]);
     }
 

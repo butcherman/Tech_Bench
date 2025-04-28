@@ -36,7 +36,7 @@ class CustomerAdministrationController extends Controller
         $this->svc->updateCustomerSettings($request->safe()->collect());
 
         Log::info(
-            'Customer Settings updated by ' . $request->user()->username,
+            'Customer Settings updated by '.$request->user()->username,
             $request->toArray()
         );
 

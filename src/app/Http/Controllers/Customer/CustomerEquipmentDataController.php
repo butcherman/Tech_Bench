@@ -9,7 +9,6 @@ use App\Models\CustomerEquipment;
 use App\Services\Customer\CustomerEquipmentDataService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
 
 class CustomerEquipmentDataController extends Controller
 {

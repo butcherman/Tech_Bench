@@ -56,6 +56,8 @@ class CustomerEquipmentDataService
         foreach ($requestData->get('saveData') as $data) {
             $newData = CustomerEquipmentData::find($data['fieldId']);
 
+            // dd($newData);
+
             // Verify the equipment data id belongs to the selected equipment.
             if ($newData->cust_equip_id !== $equipment->cust_equip_id) {
                 throw new CustomerEquipmentDataFailedVerificationException(

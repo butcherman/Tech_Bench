@@ -38,8 +38,8 @@ class CacheFacadeHelper
     {
         return Cache::rememberForever('password_rules', function () {
             $passwordRules = [
-                'Password must be at least ' .
-                    config('auth.passwords.settings.min_length') .
+                'Password must be at least '.
+                    config('auth.passwords.settings.min_length').
                     ' characters',
             ];
 

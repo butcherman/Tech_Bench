@@ -3,9 +3,7 @@
 namespace App\Events\Customer;
 
 use App\Models\Customer;
-use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
@@ -28,7 +26,7 @@ class CustomerSlugChangedEvent implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('customer.' . $this->oldSlug),
+            new PrivateChannel('customer.'.$this->oldSlug),
         ];
     }
 

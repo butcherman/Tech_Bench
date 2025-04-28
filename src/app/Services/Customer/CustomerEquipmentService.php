@@ -6,7 +6,6 @@ use App\Jobs\Customer\CreateCustomerDataFieldsJob;
 use App\Models\Customer;
 use App\Models\CustomerEquipment;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Log;
 
 class CustomerEquipmentService
 {
@@ -18,7 +17,7 @@ class CustomerEquipmentService
         Customer $customer
     ): CustomerEquipment {
         $newEquip = new CustomerEquipment([
-            'equip_id' => $requestData->get('equip_id')
+            'equip_id' => $requestData->get('equip_id'),
         ]);
 
         $customer->Equipment()->save($newEquip);

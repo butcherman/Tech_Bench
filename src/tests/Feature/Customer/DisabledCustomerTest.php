@@ -52,7 +52,7 @@ class DisabledCustomerTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('Customer/Admin/DisabledCustomers')
                     ->has('disabled-list')
             );

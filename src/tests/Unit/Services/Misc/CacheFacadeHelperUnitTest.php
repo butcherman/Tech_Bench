@@ -192,6 +192,32 @@ class CacheFacadeHelperUnitTest extends TestCase
         $this->assertEquals($shouldBe->toArray(), $equip->toArray());
     }
 
+    public function test_equipment_category_select_box(): void
+    {
+        Cache::flush();
+
+        $shouldBe = [];
+        foreach (EquipmentCategory::with('EquipmentType')->get() as $key => $value) {
+            $groupList = [];
+
+            foreach ($value->EquipmentType as $equip) {
+                $groupList[] = [
+                    'label' => $equip->name,
+                    'value' => $equip->equip_id,
+                ];
+            }
+
+            $shouldBe[] = [
+                'label' => $value->name,
+                'items' => $groupList,
+            ];
+        }
+
+        $equip = $this->helperObj->equipmentCategorySelectBox();
+
+        $this->assertEquals($shouldBe, $equip);
+    }
+
     public function test_public_equipment_categories(): void
     {
         $shouldBe = EquipmentCategory::publicEquipment()->get();

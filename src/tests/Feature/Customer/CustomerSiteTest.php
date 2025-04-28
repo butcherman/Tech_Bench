@@ -90,7 +90,7 @@ class CustomerSiteTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('Customer/Site/Create')
                     ->has('default-state')
                     ->has('parent-customer')
@@ -107,7 +107,7 @@ class CustomerSiteTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('Customer/Site/Create')
                     ->has('default-state')
                     ->has('parent-customer')
@@ -358,6 +358,8 @@ class CustomerSiteTest extends TestCase
     //             ->has('site')
     //         );
     // }
+
+    // TODO - Test Scope Bindings
 
     /*
     |---------------------------------------------------------------------------
