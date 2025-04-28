@@ -74,7 +74,7 @@ class ReAssignCustomerSite
     {
         if ($modelList) {
             foreach ($modelList as $model) {
-                if ($model->CustomerSite->count() === 1) {
+                if ($model->Sites->count() === 1) {
                     Log::info(
                         'Moving data from Customer ID'.$model->cust_id.
                             ' to Customer ID '.$this->toCustomer->cust_id,
@@ -83,7 +83,7 @@ class ReAssignCustomerSite
 
                     $this->reAssignModel($model);
                 } else {
-                    $model->CustomerSite()
+                    $model->Sites()
                         ->detach($this->movingSite->cust_site_id);
                 }
             }
@@ -110,7 +110,7 @@ class ReAssignCustomerSite
              * If the equipment only belongs to this site, it will be moved
              * If not, it will be detached from the site
              */
-            if ($equip->CustomerSite->count() === 1) {
+            if ($equip->Sites->count() === 1) {
                 Log::info('Moving Customer Equipment ID '.
                     $equip->cust_equip_id.' from Customer ID '.$equip->cust_id.
                     ' to Customer ID'.$this->toCustomer->cust_id);
@@ -140,7 +140,7 @@ class ReAssignCustomerSite
                 }
             } else {
                 // Equipment belongs to multiple sites, detach it from this site.
-                $equip->CustomerSite()->detach($this->movingSite->cust_site_id);
+                $equip->Sites()->detach($this->movingSite->cust_site_id);
             }
         }
     }

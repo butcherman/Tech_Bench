@@ -67,7 +67,7 @@ class CustomerEquipmentServiceUnitTest extends TestCase
             ->count(4)
             ->create(['cust_id' => $customer->cust_id]);
 
-        $equipment->CustomerSite()
+        $equipment->Sites()
             ->sync([$siteList[0]->cust_site_id, $siteList[2]->cust_site_id]);
 
         $data = [

@@ -123,7 +123,7 @@ class CustomerUnitTest extends TestCase
             $data->makeHidden('Customer')->toArray(),
             $this->model
                 ->CustomerContact[0]
-                ->makeHidden(['CustomerContactPhone', 'CustomerSites'])
+                ->makeHidden(['CustomerContactPhone', 'Sites'])
                 ->toArray()
         );
     }
@@ -153,7 +153,7 @@ class CustomerUnitTest extends TestCase
             $data->makeHidden('Customer')->toArray(),
             $this->model
                 ->CustomerFile[0]
-                ->makeHidden(['CustomerSite'])
+                ->makeHidden(['Sites'])
                 ->toArray()
         );
     }

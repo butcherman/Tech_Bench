@@ -56,7 +56,7 @@ class CustomerFile extends Model
     ];
 
     /** @var array<int, string> */
-    protected $with = ['CustomerSite'];
+    protected $with = ['Sites'];
 
     /*
     |---------------------------------------------------------------------------
@@ -127,7 +127,7 @@ class CustomerFile extends Model
         return $this->belongsTo(FileUpload::class, 'file_id', 'file_id');
     }
 
-    public function CustomerSite(): BelongsToMany
+    public function Sites(): BelongsToMany
     {
         return $this->belongsToMany(
             CustomerSite::class,
@@ -172,7 +172,7 @@ class CustomerFile extends Model
     public function broadcastOn(string $event): array
     {
         $siteChannels = $this->getSiteChannels(
-            $this->CustomerSite->pluck('site_slug')->toArray()
+            $this->Sites->pluck('site_slug')->toArray()
         );
 
         if ($this->cust_equip_id) {

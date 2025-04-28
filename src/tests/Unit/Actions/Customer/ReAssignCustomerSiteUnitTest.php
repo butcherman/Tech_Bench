@@ -31,10 +31,10 @@ class ReAssignCustomerSiteUnitTest extends TestCase
         $fromSite = $fromCust->Sites[0];
 
         $fromCust->Equipment[0]
-            ->CustomerSite()
+            ->Sites()
             ->attach($fromCust->primary_site_id);
         $fromCust->CustomerContact[0]
-            ->CustomerSite()
+            ->Sites()
             ->attach($fromCust->primary_site_id);
 
         $noteId = $fromCust->CustomerNote[0]->note_id;
@@ -87,8 +87,8 @@ class ReAssignCustomerSiteUnitTest extends TestCase
         $equip = CustomerEquipment::factory()
             ->count(2)
             ->createQuietly(['cust_id' => $fromCust->cust_id]);
-        $equip[0]->CustomerSite()->sync($siteArray);
-        $equip[1]->CustomerSite()->attach($movingSite->cust_site_id);
+        $equip[0]->Sites()->sync($siteArray);
+        $equip[1]->Sites()->attach($movingSite->cust_site_id);
 
         // Add Some Customer Notes to the equipment
         $notes = [
@@ -171,16 +171,16 @@ class ReAssignCustomerSiteUnitTest extends TestCase
 
         // Assign the contacts to sites
         $fromCust->CustomerContact[0]
-            ->CustomerSite()
+            ->Sites()
             ->sync($siteArray);
         $fromCust->CustomerContact[1]
-            ->CustomerSite()
+            ->Sites()
             ->attach($movingSite->cust_site_id);
         $fromCust->CustomerContact[2]
-            ->CustomerSite()
+            ->Sites()
             ->sync($siteArray);
         $fromCust->CustomerContact[2]
-            ->CustomerSite()
+            ->Sites()
             ->detach($movingSite->cust_site_id);
 
         $contIdList = [
@@ -227,10 +227,10 @@ class ReAssignCustomerSiteUnitTest extends TestCase
 
         // Assign the contacts to sites
         $fromCust->CustomerNote[0]
-            ->CustomerSite()
+            ->Sites()
             ->sync($siteArray);
         $fromCust->CustomerNote[1]
-            ->CustomerSite()
+            ->Sites()
             ->attach($movingSite->cust_site_id);
 
         $noteIdList = [
@@ -277,10 +277,10 @@ class ReAssignCustomerSiteUnitTest extends TestCase
 
         // Assign the contacts to sites
         $fromCust->CustomerFile[0]
-            ->CustomerSite()
+            ->Sites()
             ->sync($siteArray);
         $fromCust->CustomerFile[1]
-            ->CustomerSite()
+            ->Sites()
             ->attach($movingSite->cust_site_id);
 
         $fileIdList = [

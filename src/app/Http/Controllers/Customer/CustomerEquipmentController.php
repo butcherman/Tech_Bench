@@ -35,7 +35,7 @@ class CustomerEquipmentController extends Controller
              */
             'equipmentList' => Inertia::defer(
                 fn () => $customer->Equipment
-                    ->load('CustomerSite')
+                    ->load('Sites')
                     ->groupBy('equip_name')
                     ->chunk(25)
             ),
@@ -64,7 +64,7 @@ class CustomerEquipmentController extends Controller
             'permissions' => fn () => UserPermissions::customerPermissions($request->user()),
             'customer' => fn () => $customer,
             'equipment' => fn () => $equipment,
-            'siteList' => fn () => $equipment->CustomerSite->makeVisible(['href']),
+            'siteList' => fn () => $equipment->Sites->makeVisible(['href']),
             'equipment-data' => fn () => $equipment->CustomerEquipmentData,
         ]);
     }

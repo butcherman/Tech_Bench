@@ -26,7 +26,7 @@ class CustomerNoteUnitTest extends TestCase
                 'cust_id' => $this->customer->cust_id,
                 'updated_by' => User::factory(),
             ]);
-        $this->model->CustomerSite()->sync([$this->customer->primary_site_id]);
+        $this->model->Sites()->sync([$this->customer->primary_site_id]);
     }
 
     /**
@@ -47,7 +47,7 @@ class CustomerNoteUnitTest extends TestCase
 
         $this->assertEquals(
             $data->toArray(),
-            $this->model->CustomerSite->toArray()
+            $this->model->Sites->toArray()
         );
     }
 

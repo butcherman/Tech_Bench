@@ -82,7 +82,7 @@ class CustomerController extends Controller
              */
             'equipmentList' => Inertia::defer(
                 fn () => $customer->Equipment
-                    ->load('CustomerSite')
+                    ->load('Sites')
                     ->groupBy('equip_name')
                     ->chunk(5)
             ),

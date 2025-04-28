@@ -27,7 +27,7 @@ class CustomerFileUnitTest extends TestCase
         $this->model = CustomerFile::factory()
             ->create(['cust_id' => $this->customer->cust_id])
             ->append('href');
-        $this->model->CustomerSite()->sync([$this->customer->primary_site_id]);
+        $this->model->Sites()->sync([$this->customer->primary_site_id]);
     }
 
     /**
@@ -61,7 +61,7 @@ class CustomerFileUnitTest extends TestCase
 
         $this->assertEquals(
             $data->toArray(),
-            $this->model->CustomerSite->toArray()
+            $this->model->Sites->toArray()
         );
     }
 

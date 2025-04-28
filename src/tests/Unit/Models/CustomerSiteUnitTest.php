@@ -79,7 +79,7 @@ class CustomerSiteUnitTest extends TestCase
     {
         $data = CustomerEquipment::factory()
             ->createQuietly(['cust_id' => $this->model->cust_id]);
-        $data->CustomerSite()->sync([$this->model->cust_site_id]);
+        $data->Sites()->sync([$this->model->cust_site_id]);
 
         $this->assertEquals(
             $data->toArray(),
@@ -91,13 +91,13 @@ class CustomerSiteUnitTest extends TestCase
     {
         $data = CustomerContact::factory()
             ->createQuietly(['cust_id' => $this->model->cust_id]);
-        $data->CustomerSite()->sync([$this->model->cust_site_id]);
+        $data->Sites()->sync([$this->model->cust_site_id]);
 
         $this->assertEquals(
             $data->toArray(),
             $this->model
                 ->SiteContact[0]
-                ->makeHidden(['CustomerContactPhone', 'CustomerSite', 'pivot'])
+                ->makeHidden(['CustomerContactPhone', 'Sites', 'pivot'])
                 ->toArray()
         );
     }
@@ -106,7 +106,7 @@ class CustomerSiteUnitTest extends TestCase
     {
         $data = CustomerNote::factory()
             ->createQuietly(['cust_id' => $this->model->cust_id]);
-        $data->CustomerSite()->sync([$this->model->cust_site_id]);
+        $data->Sites()->sync([$this->model->cust_site_id]);
 
         $this->assertEquals(
             $data->toArray(),
@@ -125,13 +125,13 @@ class CustomerSiteUnitTest extends TestCase
     {
         $data = CustomerFile::factory()
             ->createQuietly(['cust_id' => $this->model->cust_id]);
-        $data->CustomerSite()->sync([$this->model->cust_site_id]);
+        $data->Sites()->sync([$this->model->cust_site_id]);
 
         $this->assertEquals(
             $data->toArray(),
             $this->model
                 ->SiteFile[0]
-                ->makeHidden(['CustomerSite', 'pivot'])
+                ->makeHidden(['Sites', 'pivot'])
                 ->toArray()
         );
     }
@@ -140,7 +140,7 @@ class CustomerSiteUnitTest extends TestCase
     {
         $equip = CustomerEquipment::factory()
             ->createQuietly(['cust_id' => $this->model->cust_id]);
-        $equip->CustomerSite()->sync([$this->model->cust_site_id]);
+        $equip->Sites()->sync([$this->model->cust_site_id]);
 
         $data = CustomerNote::factory()->create([
             'cust_id' => $this->model->cust_id,
@@ -160,7 +160,7 @@ class CustomerSiteUnitTest extends TestCase
     {
         $equip = CustomerEquipment::factory()
             ->createQuietly(['cust_id' => $this->model->cust_id]);
-        $equip->CustomerSite()->sync([$this->model->cust_site_id]);
+        $equip->Sites()->sync([$this->model->cust_site_id]);
 
         $data = CustomerFile::factory()->create([
             'cust_id' => $this->model->cust_id,
@@ -171,7 +171,7 @@ class CustomerSiteUnitTest extends TestCase
             $data->makeHidden('Customer')->toArray(),
             $this->model
                 ->EquipmentFile()[0]
-                ->makeHidden(['CustomerEquipment', 'CustomerSite', 'deleted_at'])
+                ->makeHidden(['CustomerEquipment', 'Sites', 'deleted_at'])
                 ->toArray()
         );
     }
@@ -201,7 +201,7 @@ class CustomerSiteUnitTest extends TestCase
             $data->makeHidden('Customer')->toArray(),
             $this->model
                 ->GeneralFile()[0]
-                ->makeHidden(['CustomerEquipment', 'CustomerSite', 'deleted_at'])
+                ->makeHidden(['CustomerEquipment', 'Sites', 'deleted_at'])
                 ->toArray()
         );
     }
@@ -216,7 +216,7 @@ class CustomerSiteUnitTest extends TestCase
             ->create(['cust_id' => $this->model->cust_id]);
         CustomerNote::factory()
             ->create(['cust_id' => $this->model->cust_id])
-            ->CustomerSite()
+            ->Sites()
             ->sync([$this->model->cust_site_id]);
 
         $this->assertEquals($this->model->getNotes()->count(), 3);
@@ -229,7 +229,7 @@ class CustomerSiteUnitTest extends TestCase
             ->create(['cust_id' => $this->model->cust_id]);
         CustomerFile::factory()
             ->create(['cust_id' => $this->model->cust_id])
-            ->CustomerSite()
+            ->Sites()
             ->sync([$this->model->cust_site_id]);
 
         $this->assertEquals($this->model->getFiles()->count(), 3);

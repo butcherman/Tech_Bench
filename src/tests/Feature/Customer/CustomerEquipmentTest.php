@@ -170,7 +170,7 @@ class CustomerEquipmentTest extends TestCase
             'cust_id' => $this->customer->cust_id,
             'equip_id' => $equip->equip_id,
         ]);
-        $custEquipment->CustomerSite()->sync($siteList);
+        $custEquipment->Sites()->sync($siteList);
 
         $data = [
             'equip_id' => $equip->equip_id,

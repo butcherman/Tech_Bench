@@ -36,7 +36,7 @@ class CustomerEquipmentService
         Collection $requestData,
         CustomerEquipment $equipment
     ): void {
-        $equipment->CustomerSite()->sync($requestData->get('site_list'));
+        $equipment->Sites()->sync($requestData->get('site_list'));
     }
 
     /**

@@ -199,7 +199,7 @@ class CustomerSite extends Model
     {
         return CustomerNote::where('cust_id', $this->Customer->cust_id)
             ->whereNull('cust_equip_id')
-            ->doesntHave('CustomerSite')
+            ->doesntHave('Sites')
             ->get();
     }
 
@@ -207,7 +207,7 @@ class CustomerSite extends Model
     {
         return CustomerFile::where('cust_id', $this->Customer->cust_id)
             ->whereNull('cust_equip_id')
-            ->doesntHave('CustomerSite')
+            ->doesntHave('Sites')
             ->get();
     }
 
