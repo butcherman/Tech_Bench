@@ -1,4 +1,6 @@
 import customerAlertModal from "@/Modules/customerAlertModal";
+import { customer } from "./CustomerData.module";
+import { router } from "@inertiajs/vue3";
 
 interface slugData {
     customer: customer;
@@ -15,7 +17,10 @@ export const registerCustomerChannel = (slug: string): void => {
 
     Echo.private(`customer.${slug}`)
         .listen(".CustomerSlugChanged", (data: slugData) => onSlugChanged(data))
-        .listenToAll((event) => console.log(event));
+        .listen(".CustomerUpdated", (data: { model: customer }) =>
+            onCustomerUpdated(data)
+        )
+        .listenToAll((event, data) => console.log(event, data));
 };
 
 export const leaveCustomerChannel = (slug: string): void => {
@@ -28,4 +33,17 @@ export const leaveCustomerChannel = (slug: string): void => {
  */
 const onSlugChanged = (data: slugData) => {
     customerAlertModal(route("customers.show", data.customer.slug));
+};
+
+/**
+ * When the Customers Main Information has changed, reload that portion of the
+ * page to refresh the data.
+ */
+const onCustomerUpdated = (data: { model: customer }) => {
+    if (data.model.primary_site_id !== customer.value.primary_site_id) {
+        console.log("primary site changed");
+        router.reload({ only: ["siteList"] });
+    } else {
+        router.reload({ only: ["customer"] });
+    }
 };
