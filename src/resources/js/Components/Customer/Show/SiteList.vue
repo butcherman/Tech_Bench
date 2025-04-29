@@ -16,28 +16,30 @@ defineProps<{
 }>();
 
 /**
- * Loading State of Site List.
- */
-const isLoading = ref(false);
-
-/**
  * Navigate to the selected site.
  */
 const goToSite = (site: customerSite): string => {
     return route("customers.sites.show", [customer.value.slug, site.site_slug]);
 };
 
+/*
+|-------------------------------------------------------------------------------
+| Loading State
+|-------------------------------------------------------------------------------
+*/
+const isLoading = ref<boolean>(false);
+
 /**
  * Start the loading process when the refresh button clicked.
  */
-const onRefreshStart = () => {
+const onRefreshStart = (): void => {
     isLoading.value = true;
 };
 
 /**
  * End the loading process and clear the alert icon.
  */
-const onRefreshEnd = () => {
+const onRefreshEnd = (): void => {
     isLoading.value = false;
     clearNotification("site");
 };

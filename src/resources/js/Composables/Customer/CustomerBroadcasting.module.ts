@@ -8,7 +8,7 @@ interface slugData {
     oldSlug: string;
 }
 
-type alertKey = "site";
+type alertKey = "site" | "equipment";
 
 /*
 |-------------------------------------------------------------------------------
@@ -17,6 +17,7 @@ type alertKey = "site";
 */
 export const notificationStatus = reactive({
     site: false,
+    equipment: false,
 });
 
 const triggerNotification = (key: alertKey): void => {
@@ -43,6 +44,15 @@ export const registerCustomerChannel = (slug: string): void => {
         .listen(".CustomerSiteCreated", () => triggerNotification("site"))
         .listen(".CustomerSiteUpdated", () => triggerNotification("site"))
         .listen(".customerSiteDeleted", () => triggerNotification("site"))
+        .listen(".CustomerEquipmentCreated", () =>
+            triggerNotification("equipment")
+        )
+        .listen(".CustomerEquipmentUpdated", () =>
+            triggerNotification("equipment")
+        )
+        .listen(".CustomerEquipmentDeleted", () =>
+            triggerNotification("equipment")
+        )
         .listenToAll((event, data) => console.log(event, data));
 };
 

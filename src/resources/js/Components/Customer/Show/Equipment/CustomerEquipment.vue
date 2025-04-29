@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import AddButton from "@/Components/_Base/Buttons/AddButton.vue";
 import AddEquipmentModal from "./AddEquipmentModal.vue";
+import AlertButton from "@/Components/_Base/Buttons/AlertButton.vue";
 import AtomLoader from "@/Components/_Base/Loaders/AtomLoader.vue";
 import BaseButton from "@/Components/_Base/Buttons/BaseButton.vue";
 import Card from "@/Components/_Base/Card.vue";
+import Overlay from "@/Components/_Base/Loaders/Overlay.vue";
 import Pagination from "@/Components/_Base/Pagination.vue";
+import RefreshButton from "@/Components/_Base/Buttons/RefreshButton.vue";
 import SelectEquipmentModal from "./SelectEquipmentModal.vue";
 import { Deferred } from "@inertiajs/vue3";
 import { handleLinkClick } from "@/Composables/links.module";
@@ -13,6 +16,10 @@ import {
     customer,
     equipmentList,
 } from "@/Composables/Customer/CustomerData.module";
+import {
+    clearNotification,
+    notificationStatus,
+} from "@/Composables/Customer/CustomerBroadcasting.module";
 
 const selectModal = useTemplateRef("select-equipment-modal");
 const addModal = useTemplateRef("add-equipment-modal");
@@ -22,13 +29,43 @@ const addModal = useTemplateRef("add-equipment-modal");
 | Pagination Data
 |-------------------------------------------------------------------------------
 */
-const currentPage = ref(0);
-const displayPage = computed(() => currentPage.value + 1);
-const currentChunk = computed(() => equipmentList.value[currentPage.value]);
+const currentPage = ref<number>(0);
+const displayPage = computed<number>(() => currentPage.value + 1);
+const currentChunk = computed<{ [key: string]: customerEquipment[] }>(
+    () => equipmentList.value[currentPage.value]
+);
 
 const goToPage = (page: number): void => {
     currentPage.value = page - 1;
 };
+
+/*
+|-------------------------------------------------------------------------------
+| Loading State
+|-------------------------------------------------------------------------------
+*/
+const isLoading = ref<boolean>(false);
+
+/**
+ * Start the loading process when the refresh button clicked.
+ */
+const onRefreshStart = (): void => {
+    isLoading.value = true;
+};
+
+/**
+ * End the loading process and clear the alert icon.
+ */
+const onRefreshEnd = (): void => {
+    isLoading.value = false;
+    clearNotification("equipment");
+};
+
+/*
+|-------------------------------------------------------------------------------
+| Additional Methods
+|-------------------------------------------------------------------------------
+*/
 
 /**
  * If the selected equipment exists more than once for the customer, give user
@@ -55,9 +92,21 @@ const onClickAction = (
 </script>
 
 <template>
-    <Card title="Equipment">
-        <template #append-title>
+    <Card>
+        <template #title>
+            <AlertButton
+                v-if="notificationStatus.equipment"
+                tooltip="New Data Available"
+            />
+            <RefreshButton
+                :only="['equipmentList']"
+                flat
+                @loading-start="onRefreshStart"
+                @loading-complete="onRefreshEnd"
+            />
+            Equipment
             <AddButton
+                class="float-end"
                 text="Add Equipment"
                 size="small"
                 pill
@@ -70,7 +119,7 @@ const onClickAction = (
                     <AtomLoader />
                 </div>
             </template>
-            <div>
+            <Overlay :loading="isLoading">
                 <ul class="border rounded-lg border-collapse">
                     <li v-if="!equipmentList.length" class="p-1">
                         <h6 class="text-center">No Equipment</h6>
@@ -97,7 +146,7 @@ const onClickAction = (
                         @prev-page="currentPage--"
                     />
                 </div>
-            </div>
+            </Overlay>
         </Deferred>
         <SelectEquipmentModal ref="select-equipment-modal" />
         <AddEquipmentModal ref="add-equipment-modal" />
