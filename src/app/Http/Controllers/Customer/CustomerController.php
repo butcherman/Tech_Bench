@@ -38,8 +38,8 @@ class CustomerController extends Controller
         $this->authorize('create', Customer::class);
 
         return Inertia::render('Customer/Create', [
-            'select-id' => fn () => config('customer.select_id'),
-            'default-state' => fn () => config('customer.default_state'),
+            'select-id' => fn() => config('customer.select_id'),
+            'default-state' => fn() => config('customer.default_state'),
         ]);
     }
 
@@ -68,20 +68,22 @@ class CustomerController extends Controller
         }
 
         return Inertia::render('Customer/Show', [
-            'alerts' => fn () => $customer->Alerts,
-            'customer' => fn () => $customer,
-            'isFav' => fn () => $customer->isFav($request->user()),
-            'permissions' => fn () => UserPermissions::customerPermissions(
+            'alerts' => fn() => $customer->Alerts,
+            'availableEquipment' => fn() => CacheData::equipmentCategorySelectBox(),
+            'customer' => fn() => $customer,
+            'isFav' => fn() => $customer->isFav($request->user()),
+            'permissions' => fn() => UserPermissions::customerPermissions(
                 $request->user()
             ),
-            'siteList' => fn () => $customer->Sites->makeVisible(['href']),
-            'availableEquipment' => fn () => CacheData::equipmentCategorySelectBox(),
+            'phoneTypes' => fn() => CacheData::phoneTypes(),
+            'siteList' => fn() => $customer->Sites->makeVisible(['href']),
 
             /**
              * Deferred Props
              */
+            'contactList' => Inertia::defer(fn() => $customer->CustomerContact),
             'equipmentList' => Inertia::defer(
-                fn () => $customer->Equipment
+                fn() => $customer->Equipment
                     ->load('Sites')
                     ->groupBy('equip_name')
                     ->chunk(5)
@@ -97,10 +99,10 @@ class CustomerController extends Controller
         $this->authorize('update', $customer);
 
         return Inertia::render('Customer/Edit', [
-            'selectId' => fn () => config('customer.select_id'),
-            'default-state' => fn () => config('customer.default_state'),
-            'customer' => fn () => $customer,
-            'siteList' => fn () => $customer->Sites,
+            'selectId' => fn() => config('customer.select_id'),
+            'default-state' => fn() => config('customer.default_state'),
+            'customer' => fn() => $customer,
+            'siteList' => fn() => $customer->Sites,
         ]);
     }
 
@@ -141,7 +143,7 @@ class CustomerController extends Controller
 
         $svc->restoreCustomer($customer);
 
-        Log::notice('Customer '.$customer->name.' has been restored');
+        Log::notice('Customer ' . $customer->name . ' has been restored');
 
         return back()
             ->with('success', __('cust.restored', ['name' => $customer->name]));

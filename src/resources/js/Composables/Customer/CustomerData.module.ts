@@ -38,6 +38,16 @@ export const equipmentList = computed<{ [key: string]: customerEquipment[] }[]>(
 
 /*
 |-------------------------------------------------------------------------------
+| Customer Contacts
+|-------------------------------------------------------------------------------
+*/
+export const phoneTypes = computed<phoneType[]>(() => page.props.phoneTypes);
+export const contactList = computed<customerContact[]>(
+    () => page.props.contactList
+);
+
+/*
+|-------------------------------------------------------------------------------
 | Internal Methods
 |-------------------------------------------------------------------------------
 */
@@ -45,11 +55,11 @@ export const equipmentList = computed<{ [key: string]: customerEquipment[] }[]>(
 /**
  * Return the primary site belonging to this customer.
  */
-const findPrimarySite = (customer: customer): customerSite | undefined => {
-    return customer.customer_site.find(
-        (cust) => cust.cust_id === customer.primary_site_id
-    );
-};
+// const findPrimarySite = (customer: customer): customerSite | undefined => {
+//     return customer.customer_site.find(
+//         (cust) => cust.cust_id === customer.primary_site_id
+//     );
+// };
 
 /**
  * Sort the list of sites by putting the primary site on the top.

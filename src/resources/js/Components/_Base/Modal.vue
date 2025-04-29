@@ -15,7 +15,7 @@ const props = defineProps<{
     position?: "top" | "center" | "bottom";
     preventOutsideClick?: boolean;
     title?: string;
-    size?: "large" | "x-large";
+    size?: "medium" | "large" | "x-large";
 }>();
 
 /**
@@ -44,6 +44,8 @@ const modalPosition = computed<string>(() => {
  */
 const modalSize = computed(() => {
     switch (props.size) {
+        case "medium":
+            return "w-1/2";
         case "large":
             return "w-3/4";
         case "x-large":

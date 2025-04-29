@@ -8,7 +8,7 @@ interface slugData {
     oldSlug: string;
 }
 
-type alertKey = "site" | "equipment";
+type alertKey = "site" | "equipment" | "contacts";
 
 /*
 |-------------------------------------------------------------------------------
@@ -18,6 +18,7 @@ type alertKey = "site" | "equipment";
 export const notificationStatus = reactive({
     site: false,
     equipment: false,
+    contacts: false,
 });
 
 const triggerNotification = (key: alertKey): void => {

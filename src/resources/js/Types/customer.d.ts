@@ -1,11 +1,11 @@
 type customer = {
     cust_id: number;
-    primary_site_id: number;
-    name: string;
     dba_name: string | null;
-    slug: string;
+    name: string;
+    primary_site_id: number;
     site_count: number;
     sites: customerSite[];
+    slug: string;
 };
 
 type customerSite = {
@@ -28,9 +28,10 @@ type customerPageProps = {
     isFav: boolean;
     alerts: customerAlert[];
     equipmentList: { [key: string]: customerEquipment[] }[];
-    // contacts: customerContact[];
+    contactList: customerContact[];
     // notes: customerNote[];
     // files: customerFile[];
+    phoneTypes: phoneType[];
 } & pageProps;
 
 /*
@@ -59,27 +60,27 @@ type customerEquipmentData = {
 | Customer Contacts
 |-------------------------------------------------------------------------------
 */
-// type customerContact = {
-//     cont_id: number;
-//     cust_id: number;
-//     local: boolean;
-//     decision_maker: boolean;
-//     name: string;
-//     email: string | null;
-//     title: string | null;
-//     note: string | null;
-//     customer_contact_phone: contactPhone[];
-//     customer_site: customerSite[];
-// };
+type customerContact = {
+    cont_id: number;
+    cust_id: number;
+    local: boolean;
+    decision_maker: boolean;
+    name: string;
+    email: string | null;
+    title: string | null;
+    note: string | null;
+    customer_contact_phone: contactPhone[];
+    customer_site: customerSite[];
+};
 
-// type contactPhone = {
-//     cont_id: number;
-//     extension: string | null;
-//     formatted: string;
-//     id: number;
-//     phone_number: number;
-//     phone_number_type: phoneType;
-// };
+type contactPhone = {
+    cont_id: number;
+    extension: string | null;
+    formatted: string;
+    id: number;
+    phone_number: number;
+    phone_number_type: phoneType;
+};
 
 /*
 |-------------------------------------------------------------------------------

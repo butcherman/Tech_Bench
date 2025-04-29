@@ -5,7 +5,7 @@
             class="w-full border p-2"
             :disabled="disabled"
             :id="id"
-            :placeholder="placeholder"
+            :placeholder="inputPlaceholder"
             :rows="rows ?? 3"
             @focus="hasFocus = true"
             @blur="hasFocus = false"
@@ -28,7 +28,7 @@
 <script setup lang="ts">
 import Textarea from "primevue/textarea";
 import { FloatLabel, Message } from "primevue";
-import { toRef, ref } from "vue";
+import { toRef, ref, computed } from "vue";
 import { useField } from "vee-validate";
 import type { Ref } from "vue";
 
@@ -45,6 +45,9 @@ const props = defineProps<{
 }>();
 
 const hasFocus = ref(false);
+const inputPlaceholder = computed(() =>
+    hasFocus.value ? props.placeholder : ""
+);
 
 const nameRef = toRef(props, "name");
 const {
