@@ -36,6 +36,10 @@ h6 {
     @apply text-green-500;
 }
 
+.text-warning {
+    @apply text-yellow-500
+}
+
 .text-muted {
     @apply text-slate-500;
 }

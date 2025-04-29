@@ -20,8 +20,9 @@ import {
     permissions,
 } from "@/Composables/Customer/CustomerData.module";
 
-onMounted(() => registerCustomerChannel(customer.value.slug));
-onUnmounted(() => leaveCustomerChannel(customer.value.slug));
+const channelName = customer.value.slug;
+onMounted(() => registerCustomerChannel(channelName));
+onUnmounted(() => leaveCustomerChannel(channelName));
 
 const quickJumpList = [
     {

@@ -1,11 +1,31 @@
 import customerAlertModal from "@/Modules/customerAlertModal";
 import { customer } from "./CustomerData.module";
 import { router } from "@inertiajs/vue3";
+import { reactive } from "vue";
 
 interface slugData {
     customer: customer;
     oldSlug: string;
 }
+
+type alertKey = "site";
+
+/*
+|-------------------------------------------------------------------------------
+| Alert Button State
+|-------------------------------------------------------------------------------
+*/
+export const notificationStatus = reactive({
+    site: false,
+});
+
+const triggerNotification = (key: alertKey): void => {
+    notificationStatus[key] = true;
+};
+
+export const clearNotification = (key: alertKey): void => {
+    notificationStatus[key] = false;
+};
 
 /*
 |-------------------------------------------------------------------------------
@@ -20,6 +40,9 @@ export const registerCustomerChannel = (slug: string): void => {
         .listen(".CustomerUpdated", (data: { model: customer }) =>
             onCustomerUpdated(data)
         )
+        .listen(".CustomerSiteCreated", () => triggerNotification("site"))
+        .listen(".CustomerSiteUpdated", () => triggerNotification("site"))
+        .listen(".customerSiteDeleted", () => triggerNotification("site"))
         .listenToAll((event, data) => console.log(event, data));
 };
 
