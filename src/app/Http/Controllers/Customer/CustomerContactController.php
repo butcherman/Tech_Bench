@@ -3,36 +3,28 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Customer\CustomerContactRequest;
+use App\Models\Customer;
+use App\Services\Customer\CustomerContactService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class CustomerContactController extends Controller
 {
-    /**
-     *
-     */
-    public function index()
-    {
-        //
-        return 'index';
-    }
+    public function __construct(protected CustomerContactService $svc) {}
 
     /**
-     *
+     * Create a new Customer Contact
      */
-    public function create()
+    public function store(CustomerContactRequest $request, Customer $customer): RedirectResponse
     {
-        //
-        return 'create';
-    }
+        $newContact = $this->svc
+            ->createCustomerContact($request->safe()->collect(), $customer);
 
-    /**
-     *
-     */
-    public function store(Request $request)
-    {
-        //
-        return 'store';
+        return back()->with('success', __('cust.contact.created', [
+            'cont' => $newContact->name,
+        ]));
     }
 
     /**
@@ -72,8 +64,8 @@ class CustomerContactController extends Controller
     }
 
     /**
-    *
-    */
+     *
+     */
     public function restore(string $id)
     {
         //
@@ -81,8 +73,8 @@ class CustomerContactController extends Controller
     }
 
     /**
-    *
-    */
+     *
+     */
     public function forceDelete(string $id)
     {
         //

@@ -1,14 +1,12 @@
 <script setup lang="ts">
 import CustomerContactForm from "@/Forms/Customer/CustomerContactForm.vue";
 import Modal from "@/Components/_Base/Modal.vue";
-import { computed, onMounted, ref, useTemplateRef } from "vue";
+import { computed, ref, useTemplateRef } from "vue";
 import {
     customer,
     siteList,
     phoneTypes,
 } from "@/Composables/Customer/CustomerData.module";
-
-onMounted(() => modal.value?.show());
 
 const modal = useTemplateRef("form-modal");
 const activeContact = ref();
@@ -34,6 +32,7 @@ defineExpose({ show });
             :site-list="siteList"
             :phone-types="phoneTypes"
             :contact="activeContact"
+            @success="modal?.hide()"
         />
     </Modal>
 </template>
