@@ -44,7 +44,7 @@ const onBlur = (): void => {
 <template>
     <div>
         <fieldset :id="id" class="flex">
-            <legend class="font-bold text-muted bock">{{ label }}</legend>
+            <legend class="font-bold text-muted block">{{ label }}</legend>
             <SelectInput
                 class="basis-36"
                 label="Phone Type"
@@ -54,7 +54,7 @@ const onBlur = (): void => {
                 :disabled="disabled"
                 :id="`${id}-type`"
                 :list="phoneTypes"
-                :name="`${name}-type`"
+                :name="`${name}.type`"
                 @focus="onFocus"
                 @blur="onBlur"
             />
@@ -66,7 +66,7 @@ const onBlur = (): void => {
                 :border-bottom="borderBottom"
                 :disabled="disabled"
                 :id="`${id}-number`"
-                :name="`${name}-number`"
+                :name="`${name}.number`"
                 :placeholder="placeholder"
                 @focus="onFocus"
                 @blur="onBlur"
@@ -77,7 +77,7 @@ const onBlur = (): void => {
                 :border-bottom="borderBottom"
                 :disabled="disabled"
                 :id="`${id}-ext`"
-                :name="`${name}-ext`"
+                :name="`${name}.ext`"
                 @focus="onFocus"
                 @blur="onBlur"
             />

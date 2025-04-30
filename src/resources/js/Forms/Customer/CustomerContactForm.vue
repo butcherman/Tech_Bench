@@ -7,6 +7,7 @@ import PickListInput from "../_Base/PickListInput.vue";
 import SwitchInput from "../_Base/SwitchInput.vue";
 import TextAreaInput from "../_Base/TextAreaInput.vue";
 import PhoneFieldInput from "../_Base/PhoneFieldInput.vue";
+import PhoneFieldInputArray from "../_Base/PhoneFieldInputArray.vue";
 
 const props = defineProps<{
     customer: customer;
@@ -48,6 +49,18 @@ const initValues = {
     local: props.contact?.local || false,
     decision_maker: props.contact?.decision_maker || false,
     note: props.contact?.note || null,
+    phones: [
+        {
+            phone: "",
+            type: "Mobile",
+            ext: "",
+        },
+        {
+            phone: "",
+            type: "Mobile",
+            ext: "",
+        },
+    ],
     // phones: props.contact
     //     ? buildPhoneInitialValues()
     //     : [
@@ -135,13 +148,19 @@ const schema = object({
             placeholder="Enter any necessary notes about this contact"
         /> -->
         <fieldset class="mb-2">
-            <PhoneFieldInput
+            <!-- <PhoneFieldInput
                 id="test"
                 label="Phone Number"
                 name="phones"
                 drag
                 :phone-types="phoneTypes"
                 help="This is help"
+            /> -->
+            <PhoneFieldInputArray
+                id="phone-list"
+                name="phones"
+                :phone-types="phoneTypes"
+                remove-warning="This may be a bad idea"
             />
         </fieldset>
     </VueForm>
