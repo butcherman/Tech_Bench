@@ -25,8 +25,12 @@ const props = defineProps<{
 /**
  * Key names of Label Field and Value Fields
  */
-const selectLabelKey = computed<keyof T>(() => props.labelField ?? "label" as keyof T);
-const selectValueKey = computed<keyof T>(() => props.valueField ?? "value" as keyof T);
+const selectLabelKey = computed<keyof T>(
+    () => props.labelField ?? ("label" as keyof T)
+);
+const selectValueKey = computed<keyof T>(
+    () => props.valueField ?? ("value" as keyof T)
+);
 
 // If the component is currently in focus
 const hasFocus = ref<boolean>(false);
@@ -145,6 +149,11 @@ onMounted(() => {
     }
 });
 
+/*
+|-------------------------------------------------------------------------------
+| Vee Validate
+|-------------------------------------------------------------------------------
+*/
 const nameRef = toRef(props, "name");
 const {
     errorMessage,

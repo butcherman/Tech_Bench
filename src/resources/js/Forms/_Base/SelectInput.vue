@@ -4,10 +4,16 @@ import { computed, ref, toRef } from "vue";
 import { useField } from "vee-validate";
 import type { Ref } from "vue";
 
+const emit = defineEmits<{
+    focus: [];
+    blur: [];
+}>();
+
 const props = defineProps<{
     id: string;
     list: any[];
     name: string;
+    borderBottom?: boolean;
     disabled?: boolean;
     groupChildrenField?: string;
     groupTextField?: string;
@@ -17,9 +23,33 @@ const props = defineProps<{
     valueField?: string;
 }>();
 
+/*
+|-------------------------------------------------------------------------------
+| Styling Data
+|-------------------------------------------------------------------------------
+*/
+const borderType = computed<string>(() =>
+    props.borderBottom ? "border-b rounded-none" : "border"
+);
+
+/*
+|-------------------------------------------------------------------------------
+| Input Focus State
+|-------------------------------------------------------------------------------
+*/
 const hasFocus = ref<boolean>(false);
 
-const optionLabel = computed(() => {
+const onFocus = (): void => {
+    hasFocus.value = true;
+    emit("focus");
+};
+
+const onBlur = (): void => {
+    hasFocus.value = false;
+    emit("blur");
+};
+
+const optionLabel = computed<string | undefined>(() => {
     if (typeof props.list[0] === "string") {
         return undefined;
     }
@@ -27,7 +57,7 @@ const optionLabel = computed(() => {
     return props.textField ?? "text";
 });
 
-const optionValue = computed(() => {
+const optionValue = computed<string | undefined>(() => {
     if (typeof props.list[0] === "string") {
         return undefined;
     }
@@ -54,15 +84,17 @@ const {
     <FloatLabel variant="on" class="w-full my-2">
         <Select
             v-model="value"
-            class="w-full border"
+            class="w-full"
+            :class="borderType"
+            :disabled="disabled"
             :id="id"
             :options="list"
             :option-label="optionLabel"
             :option-value="optionValue"
             :option-group-label="groupTextField"
             :option-group-children="groupChildrenField"
-            @focus="hasFocus = true"
-            @blur="hasFocus = false"
+            @focus="onFocus"
+            @blur="onBlur"
         >
         </Select>
         <label :for="id" class="text-muted">{{ label }}</label>
@@ -80,7 +112,7 @@ const {
     </FloatLabel>
 </template>
 
-<style>
+<style lang="postcss">
 .p-select-option-label {
     @apply ms-4;
 }
