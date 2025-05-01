@@ -44,7 +44,7 @@ type customerEquipment = {
     equip_id: number;
     cust_equip_id: number;
     equip_name: string;
-    customer_site?: customerSite[];
+    sites?: customerSite[];
 };
 
 type customerEquipmentData = {
@@ -70,7 +70,7 @@ type customerContact = {
     title: string | null;
     note: string | null;
     customer_contact_phone: contactPhone[];
-    customer_site: customerSite[];
+    sites: customerSite[];
 };
 
 type contactPhone = {

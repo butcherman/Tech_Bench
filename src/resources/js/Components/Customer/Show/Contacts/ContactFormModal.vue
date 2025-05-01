@@ -26,8 +26,14 @@ defineExpose({ show });
 </script>
 
 <template>
-    <Modal ref="form-modal" size="medium" :title="modalTitle">
+    <Modal
+        ref="form-modal"
+        size="medium"
+        :title="modalTitle"
+        @hidden="activeContact = undefined"
+    >
         <CustomerContactForm
+            v-if="modal?.isOpen || activeContact"
             :customer="customer"
             :site-list="siteList"
             :phone-types="phoneTypes"

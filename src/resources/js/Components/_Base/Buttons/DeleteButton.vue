@@ -19,6 +19,7 @@ const props = defineProps<{
     method?: "delete" | "get" | "post" | "put";
     pill?: boolean;
     rejectText?: string;
+    size?: "small" | "normal" | "large";
     text?: string;
     variant?: elementVariant;
 }>();

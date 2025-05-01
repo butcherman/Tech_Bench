@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Customer;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customer\CustomerContactRequest;
 use App\Models\Customer;
+use App\Models\CustomerContact;
 use App\Services\Customer\CustomerContactService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -30,37 +31,31 @@ class CustomerContactController extends Controller
     /**
      *
      */
-    public function show(string $id)
-    {
-        //
-        return 'show';
+    public function update(
+        CustomerContactRequest $request,
+        Customer $customer,
+        CustomerContact $contact
+    ): RedirectResponse {
+        $updatedContact = $this->svc
+            ->updateCustomerContact($request->safe()->collect(), $contact);
+
+        return back()->with('success', __('cust.contact.updated', [
+            'cont' => $updatedContact->name,
+        ]));
     }
 
     /**
-     *
+     * Soft delete a Customer Contact
      */
-    public function edit(string $id)
+    public function destroy(Customer $customer, CustomerContact $contact): RedirectResponse
     {
-        //
-        return 'edit';
-    }
+        $this->authorize('delete', $contact);
 
-    /**
-     *
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-        return 'update';
-    }
+        $this->svc->destroyContact($contact);
 
-    /**
-     *
-     */
-    public function destroy(string $id)
-    {
-        //
-        return 'destroy';
+        return back()->with('warning', __('cust.contact.deleted', [
+            'cont' => $contact->name,
+        ]));
     }
 
     /**

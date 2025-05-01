@@ -44,6 +44,20 @@ class CustomerContactService
     }
 
     /**
+     * Delete a Customer Contact
+     */
+    public function destroyContact(CustomerContact $contact, bool $force = false): void
+    {
+        if ($force) {
+            $contact->forceDelete();
+
+            return;
+        }
+
+        $contact->delete();
+    }
+
+    /**
      * Add/Remove any phone numbers for the selected contact
      */
     protected function syncContactPhones(CustomerContact $contact, array $phoneList): void

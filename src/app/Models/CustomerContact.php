@@ -36,6 +36,9 @@ class CustomerContact extends Model
     /** @var array<int, string> */
     protected $hidden = ['created_at', 'updated_at', 'deleted_at'];
 
+    /** @var array<int, string> */
+    protected $with = ['CustomerContactPhone', 'Sites'];
+
     /*
     |---------------------------------------------------------------------------
     | Model Casting
@@ -88,7 +91,7 @@ class CustomerContact extends Model
 
         $allChannels = array_merge(
             $siteChannels,
-            [new PrivateChannel('customer.'.$this->Customer->slug)]
+            [new PrivateChannel('customer.' . $this->Customer->slug)]
         );
 
         return match ($event) {
