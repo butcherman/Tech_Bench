@@ -8,8 +8,6 @@ use App\Models\Customer;
 use App\Models\CustomerContact;
 use App\Services\Customer\CustomerContactService;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Inertia\Inertia;
 
 class CustomerContactController extends Controller
 {
@@ -28,9 +26,6 @@ class CustomerContactController extends Controller
         ]));
     }
 
-    /**
-     *
-     */
     public function update(
         CustomerContactRequest $request,
         Customer $customer,
@@ -58,18 +53,12 @@ class CustomerContactController extends Controller
         ]));
     }
 
-    /**
-     *
-     */
     public function restore(string $id)
     {
         //
         return 'restore';
     }
 
-    /**
-     *
-     */
     public function forceDelete(string $id)
     {
         //

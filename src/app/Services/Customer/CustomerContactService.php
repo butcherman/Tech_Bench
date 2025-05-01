@@ -20,7 +20,7 @@ class CustomerContactService
         $contact = new CustomerContact(
             $requestData->except(['phones', 'site_list'])->toArray()
         );
-        $customer->CustomerContact()->save($contact);
+        $customer->Contacts()->save($contact);
 
         $contact->Sites()->sync($requestData->get('site_list'));
 

@@ -19,8 +19,8 @@ class CustomerDeletedItemsController extends Controller
         return Inertia::render('Customer/Admin/DeletedItems', [
             'customer' => fn () => $customer,
             'deleted-items' => [
-                'equipment' => $customer->CustomerEquipment()->onlyTrashed()->get(),
-                'contacts' => $customer->CustomerContact()->onlyTrashed()->get(),
+                'equipment' => $customer->Equipment()->onlyTrashed()->get(),
+                'contacts' => $customer->Contacts()->onlyTrashed()->get(),
                 'notes' => $customer->CustomerNote()->onlyTrashed()->get(),
                 'files' => $customer->CustomerFile()->onlyTrashed()->get(),
             ],

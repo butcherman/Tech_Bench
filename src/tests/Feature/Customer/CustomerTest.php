@@ -238,10 +238,10 @@ class CustomerTest extends TestCase
                 ->component('Customer/Show')
                 ->has('permissions')
                 ->has('customer')
-                // ->has('siteList')
-                // ->has('alerts')
+                ->has('siteList')
+                ->has('alerts')
                 // ->has('equipmentList')
-                // ->has('contacts')
+                // ->has('contactList')
                 // ->has('notes')
                 // ->has('files')
                 ->has('isFav'));
@@ -534,7 +534,7 @@ class CustomerTest extends TestCase
         $cust = Customer::factory()
             ->has(CustomerFile::factory())
             ->has(CustomerNote::factory())
-            ->has(CustomerContact::factory())
+            ->has(CustomerContact::factory(), 'contacts')
             ->createQuietly();
         $cust->delete();
 

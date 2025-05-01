@@ -23,7 +23,7 @@ class ReAssignCustomerSiteUnitTest extends TestCase
         $fromCust = Customer::factory()
             ->has(CustomerEquipment::factory(), 'equipment')
             ->has(CustomerNote::factory())
-            ->has(CustomerContact::factory())
+            ->has(CustomerContact::factory(), 'contacts')
             ->has(CustomerFile::factory())
             ->createQuietly();
         $toCust = Customer::factory()->create();
@@ -33,7 +33,7 @@ class ReAssignCustomerSiteUnitTest extends TestCase
         $fromCust->Equipment[0]
             ->Sites()
             ->attach($fromCust->primary_site_id);
-        $fromCust->CustomerContact[0]
+        $fromCust->Contacts[0]
             ->Sites()
             ->attach($fromCust->primary_site_id);
 
@@ -57,7 +57,7 @@ class ReAssignCustomerSiteUnitTest extends TestCase
             'cust_id' => $toCust->cust_id,
         ]);
         $this->assertDatabaseHas('customer_contacts', [
-            'cont_id' => $fromCust->CustomerContact[0]->cont_id,
+            'cont_id' => $fromCust->Contacts[0]->cont_id,
             'cust_id' => $toCust->cust_id,
         ]);
         $this->assertDatabaseHas('customer_notes', [
@@ -159,7 +159,7 @@ class ReAssignCustomerSiteUnitTest extends TestCase
     {
         $fromCust = Customer::factory()
             ->has(CustomerSite::factory()->count(4), 'sites')
-            ->has(CustomerContact::factory()->count(3))
+            ->has(CustomerContact::factory()->count(3), 'contacts')
             ->createQuietly();
         $movingSite = CustomerSite::factory()
             ->createQuietly(['cust_id' => $fromCust->cust_id]);
@@ -170,23 +170,23 @@ class ReAssignCustomerSiteUnitTest extends TestCase
             ->map(fn ($site) => $site->cust_site_id);
 
         // Assign the contacts to sites
-        $fromCust->CustomerContact[0]
+        $fromCust->Contacts[0]
             ->Sites()
             ->sync($siteArray);
-        $fromCust->CustomerContact[1]
+        $fromCust->Contacts[1]
             ->Sites()
             ->attach($movingSite->cust_site_id);
-        $fromCust->CustomerContact[2]
+        $fromCust->Contacts[2]
             ->Sites()
             ->sync($siteArray);
-        $fromCust->CustomerContact[2]
+        $fromCust->Contacts[2]
             ->Sites()
             ->detach($movingSite->cust_site_id);
 
         $contIdList = [
-            $fromCust->CustomerContact[0]->cont_id,
-            $fromCust->CustomerContact[1]->cont_id,
-            $fromCust->CustomerContact[2]->cont_id,
+            $fromCust->Contacts[0]->cont_id,
+            $fromCust->Contacts[1]->cont_id,
+            $fromCust->Contacts[2]->cont_id,
         ];
 
         $testObj = new ReAssignCustomerSite;

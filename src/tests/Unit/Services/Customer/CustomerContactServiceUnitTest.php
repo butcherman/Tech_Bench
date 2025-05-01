@@ -135,7 +135,6 @@ class CustomerContactServiceUnitTest extends TestCase
             'decision_maker' => false,
         ]);
 
-
         $this->assertDatabaseHas('customer_site_contacts', [
             'cont_id' => $res->cont_id,
             'cust_site_id' => $site[1]->cust_site_id,
@@ -166,5 +165,34 @@ class CustomerContactServiceUnitTest extends TestCase
                 'extension'
             )
         );
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | destroyContact()
+    |---------------------------------------------------------------------------
+    */
+    public function test_destroy_contact(): void
+    {
+        $contact = CustomerContact::factory()->create();
+
+        $testObj = new CustomerContactService;
+        $testObj->destroyContact($contact);
+
+        $this->assertSoftDeleted('customer_contacts', [
+            'cont_id' => $contact->cont_id,
+        ]);
+    }
+
+    public function test_destroy_contact_force(): void
+    {
+        $contact = CustomerContact::factory()->create();
+
+        $testObj = new CustomerContactService;
+        $testObj->destroyContact($contact, true);
+
+        $this->assertDatabaseMissing('customer_contacts', [
+            'cont_id' => $contact->cont_id,
+        ]);
     }
 }

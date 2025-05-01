@@ -4,8 +4,8 @@ import Card from "@/Components/_Base/Card.vue";
 import { ref, reactive, onMounted } from "vue";
 
 interface deletedItems {
-    // equipment: customerEquipment[];
-    // contacts: customerContact[];
+    equipment: customerEquipment[];
+    contacts: customerContact[];
     // notes: customerNote[];
     // files: customerFile[];
 }
