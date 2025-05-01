@@ -58,6 +58,14 @@ class CustomerContactService
     }
 
     /**
+     * Restore a soft deleted contact
+     */
+    public function restoreContact(CustomerContact $contact): void
+    {
+        $contact->restore();
+    }
+
+    /**
      * Add/Remove any phone numbers for the selected contact
      */
     protected function syncContactPhones(CustomerContact $contact, array $phoneList): void

@@ -195,4 +195,23 @@ class CustomerContactServiceUnitTest extends TestCase
             'cont_id' => $contact->cont_id,
         ]);
     }
+
+    /*
+    |---------------------------------------------------------------------------
+    | restoreContact()
+    |---------------------------------------------------------------------------
+    */
+    public function test_restore_contact(): void
+    {
+        $contact = CustomerContact::factory()->create();
+        $contact->delete();
+
+        $testObj = new CustomerContactService;
+        $testObj->restoreContact($contact);
+
+        $this->assertDatabaseHas('customer_contacts', [
+            'cont_id' => $contact->cont_id,
+            'deleted_at' => null,
+        ]);
+    }
 }

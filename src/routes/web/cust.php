@@ -160,51 +160,51 @@ Route::middleware('auth.secure')->group(function () {
             | /customers/{customer-slug|customer-id}/deleted-items/restore
             |-------------------------------------------------------------------
             */
-            // Route::prefix('restore')->name('restore.')->group(function () {
-            //     Route::get(
-            //         'equipment/{equipment}',
-            //         [CustomerEquipmentController::class, 'restore']
-            //     )->withTrashed()->name('equipment');
-            //     Route::get(
-            //         'contacts/{contact}',
-            //         [CustomerContactController::class, 'restore']
-            //     )->withTrashed()->name('contacts');
-            //     Route::get(
-            //         'notes/{note}',
-            //         [CustomerNoteController::class, 'restore']
-            //     )->withTrashed()->name('notes');
-            //     Route::get(
-            //         'files/{file}',
-            //         [CustomerFileController::class, 'restore']
-            //     )->withTrashed()->name('files');
-        });
+            Route::prefix('restore')->name('restore.')->group(function () {
+                Route::get(
+                    'equipment/{equipment}',
+                    [CustomerEquipmentController::class, 'restore']
+                )->withTrashed()->scopeBindings()->name('equipment');
+                Route::get(
+                    'contacts/{contact}',
+                    [CustomerContactController::class, 'restore']
+                )->withTrashed()->scopeBindings()->name('contacts');
+                // Route::get(
+                //     'notes/{note}',
+                //     [CustomerNoteController::class, 'restore']
+                // )->withTrashed()->name('notes');
+                // Route::get(
+                //     'files/{file}',
+                //     [CustomerFileController::class, 'restore']
+                // )->withTrashed()->name('files');
+            });
 
-        /*
+            /*
             |-------------------------------------------------------------------
             | Force Delete a Customer Item
             | /customers/{customer-slug|customer-id}/deleted-items/force-delete
             |-------------------------------------------------------------------
             */
-        // Route::prefix('force-delete')->name('force-delete.')
-        //     ->group(function () {
-        //         Route::delete(
-        //             'equipment/{equipment}',
-        //             [CustomerEquipmentController::class, 'forceDelete']
-        //         )->withTrashed()->name('equipment');
-        //         Route::delete(
-        //             'contacts/{contact}',
-        //             [CustomerContactController::class, 'forceDelete']
-        //         )->withTrashed()->name('contacts');
-        //         Route::delete(
-        //             'notes/{note}',
-        //             [CustomerNoteController::class, 'forceDelete']
-        //         )->withTrashed()->name('notes');
-        //         Route::delete(
-        //             'files/{file}',
-        //             [CustomerFileController::class, 'forceDelete']
-        //         )->withTrashed()->name('files');
-        //     });
-        // });
+            Route::prefix('force-delete')->name('force-delete.')
+                ->group(function () {
+                    Route::delete(
+                        'equipment/{equipment}',
+                        [CustomerEquipmentController::class, 'forceDelete']
+                    )->withTrashed()->scopeBindings()->name('equipment');
+                    Route::delete(
+                        'contacts/{contact}',
+                        [CustomerContactController::class, 'forceDelete']
+                    )->withTrashed()->scopeBindings()->name('contacts');
+                    // Route::delete(
+                    //     'notes/{note}',
+                    //     [CustomerNoteController::class, 'forceDelete']
+                    // )->withTrashed()->name('notes');
+                    // Route::delete(
+                    //     'files/{file}',
+                    //     [CustomerFileController::class, 'forceDelete']
+                    // )->withTrashed()->name('files');
+                });
+        });
 
         /*
         |-----------------------------------------------------------------------

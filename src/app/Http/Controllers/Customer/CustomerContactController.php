@@ -53,15 +53,32 @@ class CustomerContactController extends Controller
         ]));
     }
 
-    public function restore(string $id)
+    /**
+     * Restore a soft deleted contact
+     */
+    public function restore(Customer $customer, CustomerContact $contact): RedirectResponse
     {
-        //
-        return 'restore';
+        $this->authorize('restore', $contact);
+
+        $this->svc->restoreContact($contact);
+
+        return back()->with('success', __('cust.contact.restored', [
+            'cont' => $contact->name,
+        ]));
     }
 
-    public function forceDelete(string $id)
+    /**
+     * Trash a soft deleted contact
+     */
+    public function forceDelete(Customer $customer, CustomerContact $contact): RedirectResponse
     {
-        //
-        return 'force delete';
+        $this->authorize('force-delete', $contact);
+
+        $this->svc->destroyContact($contact, true);
+
+        return back()
+            ->with('warning', __('cust.contact.force_deleted', [
+                'cont' => $contact->name,
+            ]));
     }
 }

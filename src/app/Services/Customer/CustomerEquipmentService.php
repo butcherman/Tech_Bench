@@ -56,8 +56,8 @@ class CustomerEquipmentService
     /**
      * Restore equipment
      */
-    // public function restoreEquipment(CustomerEquipment $equipment): void
-    // {
-    //     $equipment->restore();
-    // }
+    public function restoreEquipment(CustomerEquipment $equipment): void
+    {
+        $equipment->restore();
+    }
 }

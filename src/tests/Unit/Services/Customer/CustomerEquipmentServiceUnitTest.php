@@ -122,4 +122,23 @@ class CustomerEquipmentServiceUnitTest extends TestCase
             'cust_equip_id' => $equipment->cust_equip_id,
         ]);
     }
+
+    /*
+    |---------------------------------------------------------------------------
+    | restoreEquipment()
+    |---------------------------------------------------------------------------
+    */
+    public function test_restore_equipment(): void
+    {
+        $equipment = CustomerEquipment::factory()->create();
+        $equipment->delete();
+
+        $testObj = new CustomerEquipmentService;
+        $testObj->restoreEquipment($equipment);
+
+        $this->assertDatabaseHas('customer_equipment', [
+            'cust_equip_id' => $equipment->cust_equip_id,
+            'deleted_at' => null,
+        ]);
+    }
 }

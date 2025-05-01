@@ -97,15 +97,33 @@ class CustomerEquipmentController extends Controller
             ->with('warning', 'Equipment Deleted');
     }
 
-    public function restore(string $id)
+    /**
+     * Restore Soft deleted equipment
+     */
+    public function restore(Customer $customer, CustomerEquipment $equipment): RedirectResponse
     {
-        //
-        return 'restore';
+        $this->authorize('restore', $equipment);
+
+        $this->svc->restoreEquipment($equipment);
+
+        return back()
+            ->with('success', __('cust.equipment.restored', [
+                'equip' => $equipment->equip_name,
+            ]));
     }
 
-    public function forceDelete(string $id)
+    /**
+     * Force delete a soft deleted equipment
+     */
+    public function forceDelete(Customer $customer, CustomerEquipment $equipment): RedirectResponse
     {
-        //
-        return 'force delete';
+        $this->authorize('forceDelete', $equipment);
+
+        $this->svc->destroyEquipment($equipment, true);
+
+        return back()
+            ->with('warning', __('cust.equipment.force_deleted', [
+                'equip' => $equipment->equip_name,
+            ]));
     }
 }
