@@ -25,6 +25,7 @@ export const siteList = computed<customerSite[]>(() => {
 
     return sortCustSites(siteList, primary);
 });
+export const currentSite = null;
 export const alerts = computed<customerAlert[]>(() => page.props.alerts);
 
 /*

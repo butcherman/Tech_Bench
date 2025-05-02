@@ -29,7 +29,7 @@ type customerPageProps = {
     alerts: customerAlert[];
     equipmentList: { [key: string]: customerEquipment[] }[];
     contactList: customerContact[];
-    // notes: customerNote[];
+    noteList: customerNote[];
     // files: customerFile[];
     phoneTypes: phoneType[];
 } & pageProps;
@@ -87,20 +87,20 @@ type contactPhone = {
 | Customer Notes
 |-------------------------------------------------------------------------------
 */
-// type customerNote = {
-//     note_id: number;
-//     subject: string;
-//     urgent: boolean;
-//     site_list: customerSite[];
-//     cust_equip_id: number;
-//     details: string;
-//     author: string;
-//     updated_author: string;
-//     updated_at: string;
-//     created_at: string;
-//     customer_equipment: customerEquipment;
-//     customer_site: customerSite[];
-// };
+type customerNote = {
+    note_id: number;
+    subject: string;
+    urgent: boolean;
+    site_list: customerSite[];
+    cust_equip_id: number;
+    details: string;
+    author: string;
+    updated_author: string;
+    updated_at: string;
+    created_at: string;
+    customer_equipment: customerEquipment;
+    customer_site: customerSite[];
+};
 
 /*
 |-------------------------------------------------------------------------------

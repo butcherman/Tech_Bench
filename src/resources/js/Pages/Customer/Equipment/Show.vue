@@ -6,7 +6,7 @@ import EquipmentSites from "@/Components/Customer/Show/Equipment/EquipmentSites.
 import ManageEquipment from "@/Components/Customer/Show/Equipment/ManageEquipment.vue";
 import { permissions } from "@/Composables/Customer/CustomerData.module";
 
-const props = defineProps<{
+defineProps<{
     equipment: customerEquipment;
     equipmentData: customerEquipmentData[];
 }>();

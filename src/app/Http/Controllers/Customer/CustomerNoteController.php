@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers\Customer;
 
+use App\Facades\UserPermissions;
 use App\Http\Controllers\Controller;
+use App\Models\Customer;
+use App\Models\CustomerNote;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class CustomerNoteController extends Controller
 {
@@ -20,10 +24,16 @@ class CustomerNoteController extends Controller
     /**
      *
      */
-    public function create()
+    public function create(Request $request, Customer $customer): Response
     {
-        //
-        return 'create';
+        $this->authorize('create', CustomerNote::class);
+
+        return Inertia::render('Customer/Note/Create', [
+            'permissions' => fn() => UserPermissions::customerPermissions($request->user()),
+            'customer' => fn() => $customer,
+            'siteList' => fn() => $customer->Sites->makeVisible(['href']),
+            'equipmentList' => fn() => $customer->Equipment,
+        ]);
     }
 
     /**
@@ -72,8 +82,8 @@ class CustomerNoteController extends Controller
     }
 
     /**
-    *
-    */
+     *
+     */
     public function restore(string $id)
     {
         //
@@ -81,8 +91,8 @@ class CustomerNoteController extends Controller
     }
 
     /**
-    *
-    */
+     *
+     */
     public function forceDelete(string $id)
     {
         //

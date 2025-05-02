@@ -43,6 +43,7 @@ const { errorMessage, value } = useField(nameRef);
                 class="mb-1"
                 @focus="hasFocus = true"
                 @blur="hasFocus = false"
+                @change="$emit('change', value)"
             />
             <label :for="`radio-group-${name}-${index}`" class="ms-1">
                 <slot name="item-label" :item="item">
