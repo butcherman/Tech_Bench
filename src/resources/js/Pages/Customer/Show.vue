@@ -7,6 +7,7 @@ import CustomerContact from "@/Components/Customer/Show/Contacts/CustomerContact
 import CustomerDetails from "@/Components/Customer/Show/CustomerDetails.vue";
 import CustomerEquipment from "@/Components/Customer/Show/Equipment/CustomerEquipment.vue";
 import CustomerManagement from "@/Components/Customer/Show/ManageCustomer.vue";
+import CustomerNotes from "@/Components/Customer/Show/Notes/CustomerNotes.vue";
 import QuickJump from "@/Components/_Base/QuickJump.vue";
 import SiteList from "@/Components/Customer/Show/SiteList.vue";
 import { onMounted, onUnmounted } from "vue";
@@ -85,5 +86,6 @@ export default { layout: AppLayout };
             <CustomerEquipment />
             <CustomerContact />
         </div>
+        <CustomerNotes />
     </div>
 </template>

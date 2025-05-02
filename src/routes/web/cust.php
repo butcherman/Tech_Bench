@@ -9,6 +9,7 @@ use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\Customer\CustomerDeletedItemsController;
 use App\Http\Controllers\Customer\CustomerEquipmentController;
 use App\Http\Controllers\Customer\CustomerEquipmentDataController;
+use App\Http\Controllers\Customer\CustomerNoteController;
 use App\Http\Controllers\Customer\CustomerSearchController;
 use App\Http\Controllers\Customer\CustomerSiteController;
 use App\Http\Controllers\Customer\DisabledCustomerController;
@@ -114,7 +115,7 @@ Route::middleware('auth.secure')->group(function () {
         ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
             $breadcrumbs->index('Customers')
                 ->show(
-                    fn (Customer|string $customer) => gettype($customer) === 'object'
+                    fn(Customer|string $customer) => gettype($customer) === 'object'
                         ? $customer->name
                         : $customer
                 )
@@ -218,7 +219,7 @@ Route::middleware('auth.secure')->group(function () {
                 $breadcrumbs->index('Sites', 'customers.show')
                     ->create('New Customer Site')
                     ->show(
-                        fn (Customer $customer, CustomerSite|string $site) => gettype($site) === 'object'
+                        fn(Customer $customer, CustomerSite|string $site) => gettype($site) === 'object'
                             ? $site->site_name
                             : $site
                     )->edit('Edit Site');
@@ -242,7 +243,7 @@ Route::middleware('auth.secure')->group(function () {
             ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
                 $breadcrumbs->index('Equipment', 'customers.show')
                     ->show(
-                        fn (Customer $customer, CustomerEquipment $equipment) => $equipment->equip_name
+                        fn(Customer $customer, CustomerEquipment $equipment) => $equipment->equip_name
                     );
             });
 
@@ -269,13 +270,14 @@ Route::middleware('auth.secure')->group(function () {
         // Route::get('notes/{note}/download', DownloadNoteController::class)
         //     ->name('notes.download');
 
-        // Route::resource('notes', CustomerNoteController::class)
-        //     ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
-        //         $breadcrumbs->index('Customer Notes', 'customers.show')
-        //             ->create('New Note')
-        //             ->show('Note Details')
-        //             ->edit('Edit Note');
-        //     });
+        Route::resource('notes', CustomerNoteController::class)
+            ->scoped(['notes' => 'cust_id'])
+            ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
+                $breadcrumbs->index('Customer Notes', 'customers.show')
+                    ->create('New Note')
+                    ->show('Note Details')
+                    ->edit('Edit Note');
+            });
 
         /*
         |-----------------------------------------------------------------------

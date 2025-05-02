@@ -69,30 +69,26 @@ const onRefreshEnd = (): void => {
                 </div>
             </template>
             <Overlay :loading="isLoading" class="h-full">
-                <Overlay :loading="isLoading" class="h-full">
-                    <ResourceList
-                        empty-text="No Contacts"
-                        :list="contactList"
-                        label-field="name"
-                        compact
-                        paginate
-                        :per-page="5"
-                    >
-                        <template #list-item="{ item }">
-                            <BaseButton
-                                class="w-full text-start"
-                                variant="none"
-                                @click="detailsModal?.show(item)"
-                            >
-                                <fa-icon icon="user-tie" class="me-4" />
-                                {{ item.name }}
-                                <span v-if="item.title">
-                                    ({{ item.title }})
-                                </span>
-                            </BaseButton>
-                        </template>
-                    </ResourceList>
-                </Overlay>
+                <ResourceList
+                    empty-text="No Contacts"
+                    :list="contactList"
+                    label-field="name"
+                    compact
+                    paginate
+                    :per-page="5"
+                >
+                    <template #list-item="{ item }">
+                        <BaseButton
+                            class="w-full text-start"
+                            variant="none"
+                            @click="detailsModal?.show(item)"
+                        >
+                            <fa-icon icon="user-tie" class="me-4" />
+                            {{ item.name }}
+                            <span v-if="item.title"> ({{ item.title }}) </span>
+                        </BaseButton>
+                    </template>
+                </ResourceList>
             </Overlay>
         </Deferred>
         <ContactFormModal ref="contact-form-modal" />
