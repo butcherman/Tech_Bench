@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import Editor from "../_Base/Editor.vue";
 import PickListInput from "../_Base/PickListInput.vue";
 import RadioGroupInput from "../_Base/RadioGroupInput.vue";
 import SelectInput from "../_Base/SelectInput.vue";
@@ -190,5 +191,11 @@ const schema = object({
                 value-field="cust_equip_id"
             />
         </TransitionGroup>
+        <Editor
+            id="note"
+            name="details"
+            label="Note Details"
+            image-folder="customer_notes"
+        />
     </VueForm>
 </template>

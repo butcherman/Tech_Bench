@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import AppLayout from "@/Layouts/App/AppLayout.vue";
 import Card from "@/Components/_Base/Card.vue";
-import { ref, reactive, onMounted } from "vue";
 import CustomerDetails from "@/Components/Customer/Show/CustomerDetails.vue";
 import CustomerNoteForm from "@/Forms/Customer/CustomerNoteForm.vue";
 import {
@@ -9,9 +8,6 @@ import {
     customer,
     siteList,
 } from "@/Composables/Customer/CustomerData.module";
-
-// TODO - Add Page.
-const props = defineProps<{}>();
 </script>
 
 <script lang="ts">

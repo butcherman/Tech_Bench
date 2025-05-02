@@ -4,14 +4,19 @@ namespace App\Http\Controllers\Customer;
 
 use App\Facades\UserPermissions;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Customer\CustomerNoteRequest;
 use App\Models\Customer;
 use App\Models\CustomerNote;
+use App\Services\Customer\CustomerNoteService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class CustomerNoteController extends Controller
 {
+    public function __construct(protected CustomerNoteService $svc) {}
+
     /**
      *
      */
@@ -22,7 +27,7 @@ class CustomerNoteController extends Controller
     }
 
     /**
-     *
+     * Show form to create a new Customer Note.
      */
     public function create(Request $request, Customer $customer): Response
     {
@@ -37,12 +42,18 @@ class CustomerNoteController extends Controller
     }
 
     /**
-     *
+     * Save a new Customer Note.
      */
-    public function store(Request $request)
+    public function store(CustomerNoteRequest $request, Customer $customer): RedirectResponse
     {
-        //
-        return 'store';
+        $this->svc->createCustomerNote(
+            $request->safe()->collect(),
+            $customer,
+            $request->user()
+        );
+
+        return redirect(route('customers.show', $customer->slug))
+            ->with('success', __('cust.note.created'));
     }
 
     /**

@@ -22,10 +22,9 @@ Route::middleware('auth.secure')->group(function () {
         ->name('about')
         ->breadcrumb('About', 'dashboard');
 
-    // Route::post('upload-image/{folder?}', UploadImageController::class)
-    //     ->name('upload-image')
-    //     ->withoutMiddleware(ValidateCsrfToken::class);
-
+    Route::post('upload-image/{folder?}', UploadImageController::class)
+        ->name('upload-image')
+        ->withoutMiddleware(ValidateCsrfToken::class);
 });
 
 /*
