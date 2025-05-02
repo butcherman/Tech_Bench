@@ -54,6 +54,15 @@ export const registerCustomerChannel = (slug: string): void => {
         .listen(".CustomerEquipmentDeleted", () =>
             triggerNotification("equipment")
         )
+        .listen(".CustomerContactCreated", () =>
+            triggerNotification("contacts")
+        )
+        .listen(".CustomerContactUpdated", () =>
+            triggerNotification("contacts")
+        )
+        .listen(".CustomerContactDeleted", () =>
+            triggerNotification("contacts")
+        )
         .listenToAll((event, data) => console.log(event, data));
 };
 

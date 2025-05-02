@@ -74,8 +74,8 @@ const initValues = {
     site_list: props.contact
         ? props.contact.sites.map((site) => site.cust_site_id)
         : [],
-    local: props.contact?.local,
-    decision_maker: props.contact?.decision_maker,
+    local: props.contact?.local ?? false,
+    decision_maker: props.contact?.decision_maker ?? false,
     note: props.contact?.note,
     phones: props.contact
         ? buildPhoneInitialValues()
