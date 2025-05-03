@@ -38,7 +38,7 @@ defineExpose({ show });
                     >
                         <h5>{{ equip.equip_name }}</h5>
                         <ul>
-                            <li v-for="site in equip.customer_site">
+                            <li v-for="site in equip.sites">
                                 {{ site.site_name }},
                                 {{ site.city }}
                             </li>

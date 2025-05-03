@@ -70,7 +70,7 @@ export default { layout: AppLayout };
         <CustomerAlerts />
         <QuickJump :nav-list="quickJumpList" class="tb-gap-y" />
         <div class="tb-card-lg tb-gap-y">
-            <SiteList>
+            <SiteList id="sites">
                 <template #append-title>
                     <AddButton
                         v-if="permissions.details.create"
@@ -83,9 +83,9 @@ export default { layout: AppLayout };
             </SiteList>
         </div>
         <div class="grid lg:grid-cols-2 tb-gap-y gap-3">
-            <CustomerEquipment />
-            <CustomerContact />
+            <CustomerEquipment id="equipment" />
+            <CustomerContact id="contacts" />
         </div>
-        <CustomerNotes />
+        <CustomerNotes id="notes" />
     </div>
 </template>

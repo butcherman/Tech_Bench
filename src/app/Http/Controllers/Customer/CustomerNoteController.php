@@ -42,7 +42,7 @@ class CustomerNoteController extends Controller
             'permissions' => fn() => UserPermissions::customerPermissions($request->user()),
             'customer' => fn() => $customer,
             'siteList' => fn() => $customer->Sites->makeVisible(['href']),
-            'equipmentList' => fn() => $customer->Equipment,
+            'equipmentList' => fn() => $customer->Equipment->load('Sites'),
         ]);
     }
 
@@ -90,7 +90,7 @@ class CustomerNoteController extends Controller
             'customer' => fn() => $customer,
             'note' => fn() => $note,
             'siteList' => fn() => $customer->Sites->makeVisible(['href']),
-            'equipmentList' => fn() => $customer->Equipment,
+            'equipmentList' => fn() => $customer->Equipment->load('Sites'),
         ]);
     }
 

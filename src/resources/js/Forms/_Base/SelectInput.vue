@@ -96,6 +96,9 @@ const {
             @focus="onFocus"
             @blur="onBlur"
         >
+            <template #option="slotProps">
+                <slot name="option" v-bind="slotProps" />
+            </template>
         </Select>
         <label :for="id" class="text-muted">{{ label }}</label>
         <Message size="small" severity="error" variant="simple">

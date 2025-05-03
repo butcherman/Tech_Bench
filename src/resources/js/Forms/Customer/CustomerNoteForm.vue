@@ -9,6 +9,7 @@ import VueForm from "@/Forms/_Base/VueForm.vue";
 import { computed, ref } from "vue";
 import { object, string, boolean, array } from "yup";
 import { shrinkHide, growShow } from "@/Composables/animations.module";
+import { equipmentList } from "../../Composables/Customer/CustomerData.module";
 
 type noteType = "general" | "site" | "equipment";
 
@@ -52,14 +53,18 @@ const noteTypes: { label: string; value: noteType }[] = [
         label: "General Note",
         value: "general",
     },
-];
-
-if (props.currentSite) {
-    noteTypes.push({
+    {
         label: "Equipment Note",
         value: "equipment",
-    });
-}
+    },
+];
+
+// if (props.currentSite) {
+//     noteTypes.push({
+//         label: "Equipment Note",
+//         value: "equipment",
+//     });
+// }
 
 if (props.siteList.length > 1) {
     noteTypes.push({
@@ -160,10 +165,17 @@ const schema = object({
                 id="cust_equip-id"
                 name="cust_equip_id"
                 label="Select which Equipment this note is relevant to"
-                :list="[]"
+                :list="equipmentList"
                 text-field="equip_name"
                 value-field="cust_equip_id"
-            />
+            >
+                <template #option="{ option }">
+                    {{ option.equip_name }}
+                    <span v-if="!currentSite">
+                        &nbsp; ({{ option.sites[0].site_name }})
+                    </span>
+                </template>
+            </SelectInput>
         </TransitionGroup>
         <Editor
             id="note"
