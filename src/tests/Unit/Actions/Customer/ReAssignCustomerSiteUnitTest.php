@@ -22,7 +22,7 @@ class ReAssignCustomerSiteUnitTest extends TestCase
     {
         $fromCust = Customer::factory()
             ->has(CustomerEquipment::factory(), 'equipment')
-            ->has(CustomerNote::factory())
+            ->has(CustomerNote::factory(), 'notes')
             ->has(CustomerContact::factory(), 'contacts')
             ->has(CustomerFile::factory())
             ->createQuietly();
@@ -37,7 +37,7 @@ class ReAssignCustomerSiteUnitTest extends TestCase
             ->Sites()
             ->attach($fromCust->primary_site_id);
 
-        $noteId = $fromCust->CustomerNote[0]->note_id;
+        $noteId = $fromCust->Notes[0]->note_id;
         $fileId = $fromCust->CustomerFile[0]->cust_file_id;
 
         $testObj = new ReAssignCustomerSite;
@@ -81,7 +81,7 @@ class ReAssignCustomerSiteUnitTest extends TestCase
 
         $siteArray = CustomerSite::where('cust_id', $fromCust->cust_id)
             ->get()
-            ->map(fn ($site) => $site->cust_site_id);
+            ->map(fn($site) => $site->cust_site_id);
 
         // Create two Equipment Types
         $equip = CustomerEquipment::factory()
@@ -167,7 +167,7 @@ class ReAssignCustomerSiteUnitTest extends TestCase
 
         $siteArray = CustomerSite::where('cust_id', $fromCust->cust_id)
             ->get()
-            ->map(fn ($site) => $site->cust_site_id);
+            ->map(fn($site) => $site->cust_site_id);
 
         // Assign the contacts to sites
         $fromCust->Contacts[0]
@@ -215,7 +215,7 @@ class ReAssignCustomerSiteUnitTest extends TestCase
     {
         $fromCust = Customer::factory()
             ->has(CustomerSite::factory()->count(4), 'sites')
-            ->has(CustomerNote::factory()->count(3))
+            ->has(CustomerNote::factory()->count(3), 'notes')
             ->createQuietly();
         $movingSite = CustomerSite::factory()
             ->createQuietly(['cust_id' => $fromCust->cust_id]);
@@ -223,20 +223,20 @@ class ReAssignCustomerSiteUnitTest extends TestCase
 
         $siteArray = CustomerSite::where('cust_id', $fromCust->cust_id)
             ->get()
-            ->map(fn ($site) => $site->cust_site_id);
+            ->map(fn($site) => $site->cust_site_id);
 
         // Assign the contacts to sites
-        $fromCust->CustomerNote[0]
+        $fromCust->Notes[0]
             ->Sites()
             ->sync($siteArray);
-        $fromCust->CustomerNote[1]
+        $fromCust->Notes[1]
             ->Sites()
             ->attach($movingSite->cust_site_id);
 
         $noteIdList = [
-            $fromCust->CustomerNote[0]->note_id,
-            $fromCust->CustomerNote[1]->note_id,
-            $fromCust->CustomerNote[2]->note_id,
+            $fromCust->Notes[0]->note_id,
+            $fromCust->Notes[1]->note_id,
+            $fromCust->Notes[2]->note_id,
         ];
 
         $testObj = new ReAssignCustomerSite;
@@ -273,7 +273,7 @@ class ReAssignCustomerSiteUnitTest extends TestCase
 
         $siteArray = CustomerSite::where('cust_id', $fromCust->cust_id)
             ->get()
-            ->map(fn ($site) => $site->cust_site_id);
+            ->map(fn($site) => $site->cust_site_id);
 
         // Assign the contacts to sites
         $fromCust->CustomerFile[0]

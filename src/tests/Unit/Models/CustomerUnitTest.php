@@ -136,7 +136,7 @@ class CustomerUnitTest extends TestCase
         $this->assertEquals(
             $data->makeHidden('Customer')->toArray(),
             $this->model
-                ->CustomerNote[0]
+                ->Notes[0]
                 ->makeHidden([
                     'cust_equip_id',
                     'deleted_at',
