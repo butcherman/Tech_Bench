@@ -18,7 +18,7 @@ class CustomerNoteController extends Controller
     public function __construct(protected CustomerNoteService $svc) {}
 
     /**
-     *
+     * Show a listing of notes belonging to the customer.
      */
     public function index(Request $request, Customer $customer): Response
     {
@@ -60,12 +60,16 @@ class CustomerNoteController extends Controller
     }
 
     /**
-     *
+     * Show the information for a specific Customer Note
      */
-    public function show(string $id)
+    public function show(Request $request, Customer $customer, CustomerNote $note): Response
     {
-        //
-        return 'show';
+        return Inertia::render('Customer/Note/Show', [
+            'permissions' => fn() => UserPermissions::customerPermissions($request->user()),
+            'customer' => fn() => $customer,
+            'note' => fn() => $note,
+            'siteList' => fn() => $note->Sites->makeVisible('href'),
+        ]);
     }
 
     /**

@@ -100,6 +100,7 @@ type customerNote = {
     created_at: string;
     customer_equipment: customerEquipment;
     customer_site: customerSite[];
+    note_type: "Site" | "equipment" | "general";
 };
 
 /*

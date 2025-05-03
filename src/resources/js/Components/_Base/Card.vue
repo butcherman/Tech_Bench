@@ -17,5 +17,8 @@ defineProps<{
         <div class="grow">
             <slot />
         </div>
+        <div v-if="$slots.footer" class="border-t mt-5 pt-1">
+            <slot name="footer" />
+        </div>
     </div>
 </template>

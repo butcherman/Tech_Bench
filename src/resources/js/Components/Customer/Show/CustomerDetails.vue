@@ -8,6 +8,9 @@ import { customer } from "@/Composables/Customer/CustomerData.module";
         <h5 v-if="customer.dba_name" class="text-muted">
             {{ customer.dba_name }}
         </h5>
-        <p class="text-muted">Customer ID: {{ customer.cust_id }}</p>
+        <div class="text-muted text-sm">
+            <span class="font-semibold"> Customer ID: </span>
+            {{ customer.cust_id }}
+        </div>
     </div>
 </template>

@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import BaseButton from "./BaseButton.vue";
 import ConfirmPopup from "primevue/confirmpopup";
-import { useConfirm } from "primevue";
+import { computed } from "vue";
 import { handleLinkClick } from "@/Composables/links.module";
+import { useConfirm } from "primevue";
 
 const emit = defineEmits<{
     accepted: [];
@@ -63,13 +64,14 @@ const handleClick = (event: MouseEvent) => {
 </script>
 
 <template>
-    <div class="inline-flex">
+    <div class="inline-flex p-0 m-0">
         <BaseButton
             class="w-full"
             :flat="flat"
             :pill="pill"
+            :size="size"
             :variant="variant ?? 'danger'"
-            @click="handleClick"
+            @click.prevent="handleClick"
         >
             <slot>
                 <fa-icon :icon="icon ?? 'trash-alt'" />
