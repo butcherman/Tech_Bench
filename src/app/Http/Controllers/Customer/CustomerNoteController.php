@@ -36,6 +36,8 @@ class CustomerNoteController extends Controller
     {
         $this->authorize('create', CustomerNote::class);
 
+        session()->flash('referer', $request->header('referer'));
+
         return Inertia::render('Customer/Note/Create', [
             'permissions' => fn() => UserPermissions::customerPermissions($request->user()),
             'customer' => fn() => $customer,
@@ -49,14 +51,16 @@ class CustomerNoteController extends Controller
      */
     public function store(CustomerNoteRequest $request, Customer $customer): RedirectResponse
     {
+        $redirect = $request->session()->get('referer')
+            ?? route('customers.show', $customer->slug);
+
         $this->svc->createCustomerNote(
             $request->safe()->collect(),
             $customer,
             $request->user()
         );
 
-        return redirect(route('customers.show', $customer->slug))
-            ->with('success', __('cust.note.created'));
+        return redirect($redirect)->with('success', __('cust.note.created'));
     }
 
     /**
@@ -73,30 +77,47 @@ class CustomerNoteController extends Controller
     }
 
     /**
-     *
+     * Show the form to edit a customer note.
      */
-    public function edit(string $id)
+    public function edit(Request $request, Customer $customer, CustomerNote $note): Response
     {
-        //
-        return 'edit';
+        $this->authorize('update', $note);
+
+        session()->flash('referer', $request->header('referer'));
+
+        return Inertia::render('Customer/Note/Edit', [
+            'permissions' => fn() => UserPermissions::customerPermissions($request->user()),
+            'customer' => fn() => $customer,
+            'note' => fn() => $note,
+            'siteList' => fn() => $customer->Sites->makeVisible(['href']),
+            'equipmentList' => fn() => $customer->Equipment,
+        ]);
     }
 
     /**
-     *
+     * Update the details for an existing Customer Note.
      */
-    public function update(Request $request, string $id)
+    public function update(CustomerNoteRequest $request, Customer $customer, CustomerNote $note): RedirectResponse
     {
-        //
-        return 'update';
+        $redirect = $request->session()->get('referer')
+            ?? route('customers.show', $customer->slug);
+
+        $this->svc->updateCustomerNote($request->safe()->collect(), $note, $request->user());
+
+        return redirect($redirect)->with('success', __('cust.note.updated'));
     }
 
     /**
-     *
+     * Soft Delete a customer note.
      */
-    public function destroy(string $id)
+    public function destroy(Customer $customer, CustomerNote $note): RedirectResponse
     {
-        //
-        return 'destroy';
+        $this->authorize('delete', $note);
+
+        $this->svc->destroyCustomerNote($note);
+
+        return redirect(route('customers.show', $customer->slug))
+            ->with('warning', __('cust.note.deleted'));
     }
 
     /**

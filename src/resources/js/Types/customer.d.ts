@@ -91,7 +91,7 @@ type customerNote = {
     note_id: number;
     subject: string;
     urgent: boolean;
-    site_list: customerSite[];
+    // site_list: customerSite[];
     cust_equip_id: number;
     details: string;
     author: string;
@@ -99,7 +99,7 @@ type customerNote = {
     updated_at: string;
     created_at: string;
     customer_equipment: customerEquipment;
-    customer_site: customerSite[];
+    sites: customerSite[];
     note_type: "Site" | "equipment" | "general";
 };
 

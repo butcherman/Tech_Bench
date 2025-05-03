@@ -31,7 +31,7 @@ const getInitNoteType = (): noteType => {
     }
 
     if (
-        (props.note && props.note.customer_site.length > 0) ||
+        (props.note && props.note.sites.length > 0) ||
         (props.currentSite && props.siteList.length > 1)
     ) {
         return "site";
@@ -74,32 +74,6 @@ if (props.siteList.length > 1) {
 |-------------------------------------------------------------------------------
 */
 const submitRoute = computed(() => {
-    // if (props.equipment) {
-    //     return props.note
-    //         ? route("customers.equipment.notes.update", [
-    //               props.customer.slug,
-    //               props.equipment.cust_equip_id,
-    //               props.note.note_id,
-    //           ])
-    //         : route("customers.equipment.notes.store", [
-    //               props.customer.slug,
-    //               props.equipment.cust_equip_id,
-    //           ]);
-    // }
-
-    // if (props.currentSite) {
-    //     return props.note
-    //         ? route("customers.site.notes.update", [
-    //               props.customer.slug,
-    //               props.currentSite.site_slug,
-    //               props.note.note_id,
-    //           ])
-    //         : route("customers.site.notes.store", [
-    //               props.customer.slug,
-    //               props.currentSite.site_slug,
-    //           ]);
-    // }
-
     return props.note
         ? route("customers.notes.update", [
               props.customer.slug,
@@ -120,11 +94,11 @@ const initValues = {
     note_type: noteType.value,
     urgent: props.note?.urgent || false,
     site_list:
-        // props.note?.customer_site.map((site) => site.cust_site_id) || [
-        //     props.currentSite?.cust_site_id,
-        // ] ||
+        props.note?.sites.map((site) => site.cust_site_id) || [
+            props.currentSite?.cust_site_id,
+        ] ||
         [],
-    // cust_equip_id: props.note?.cust_equip_id || props.equipment?.cust_equip_id,
+    cust_equip_id: props.note?.cust_equip_id || props.equipment?.cust_equip_id,
     details: props.note?.details,
 };
 const schema = object({
