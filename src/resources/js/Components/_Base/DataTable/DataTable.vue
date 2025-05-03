@@ -26,7 +26,7 @@ import type { AccessorFn, ColumnDef, Table } from "@tanstack/vue-table";
 | Internal Types
 |-------------------------------------------------------------------------------
 */
-interface tableColumnProp {
+export interface tableColumnProp {
     label?: string;
     field: string;
     icon?: string;
@@ -46,7 +46,7 @@ defineSlots<{
 }>();
 
 const emit = defineEmits<{
-    "row-click": [row: T];
+    "row-click": T;
 }>();
 
 const props = defineProps<{
@@ -238,7 +238,7 @@ defineExpose({ startLoading, endLoading });
                 <tr
                     v-for="(row, index) in table.getRowModel().rows"
                     :key="row.id"
-                    class="border-b border-slate-200"
+                    class="border-b border-slate-200 hover:bg-slate-300"
                     :class="[pointerClass, bgClass(row.original, index)]"
                     @click="onRowClick($event, row.original)"
                 >

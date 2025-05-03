@@ -36,7 +36,7 @@ class CustomerNote extends Model
     /** @var array<int, string> */
     protected $with = ['CustomerEquipment'];
 
-    protected $appends = ['author', 'updated_author'];
+    protected $appends = ['author', 'updated_author', 'note_type'];
 
     /*
     |---------------------------------------------------------------------------
@@ -61,7 +61,7 @@ class CustomerNote extends Model
     public function author(): Attribute
     {
         return Attribute::make(
-            get: fn () => User::withTrashed()
+            get: fn() => User::withTrashed()
                 ->find($this->created_by)
                 ->full_name
                 ?? 'unknown'
@@ -71,12 +71,29 @@ class CustomerNote extends Model
     public function updatedAuthor(): ?Attribute
     {
         return Attribute::make(
-            get: fn () => $this->updated_by
+            get: fn() => $this->updated_by
                 ? User::withTrashed()
-                    ->find($this->updated_by)
-                    ->full_name
+                ->find($this->updated_by)
+                ->full_name
                 ?? 'unknown'
                 : null,
+        );
+    }
+
+    public function noteType(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                if ($this->cust_equip_id) {
+                    return 'Equipment';
+                }
+
+                if (count($this->Sites) > 0) {
+                    return 'Site';
+                }
+
+                return 'General';
+            }
         );
     }
 
@@ -122,13 +139,13 @@ class CustomerNote extends Model
 
         if ($this->cust_equip_id) {
             $siteChannels[] = new PrivateChannel(
-                'customer-equipment.'.$this->cust_equip_id
+                'customer-equipment.' . $this->cust_equip_id
             );
         }
 
         $allChannels = array_merge(
             $siteChannels,
-            [new PrivateChannel('customer.'.$this->Customer->slug)]
+            [new PrivateChannel('customer.' . $this->Customer->slug)]
         );
 
         return match ($event) {

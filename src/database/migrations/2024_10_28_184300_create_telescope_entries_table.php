@@ -19,6 +19,10 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (Schema::hasTable('telescope_entries')) {
+            return;
+        }
+
         $schema = Schema::connection($this->getConnection());
 
         $schema->create('telescope_entries', function (Blueprint $table) {

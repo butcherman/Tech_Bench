@@ -82,7 +82,7 @@ export default { layout: AppLayout };
                 </template>
             </SiteList>
         </div>
-        <div class="grid grid-cols-2 tb-gap-y gap-3">
+        <div class="grid lg:grid-cols-2 tb-gap-y gap-3">
             <CustomerEquipment />
             <CustomerContact />
         </div>

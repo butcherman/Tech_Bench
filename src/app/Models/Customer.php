@@ -123,7 +123,8 @@ class Customer extends Model
 
     public function Notes(): HasMany
     {
-        return $this->hasMany(CustomerNote::class, 'cust_id', 'cust_id');
+        return $this->hasMany(CustomerNote::class, 'cust_id', 'cust_id')
+            ->orderBy('urgent', 'desc');
     }
 
     public function CustomerFile(): HasMany

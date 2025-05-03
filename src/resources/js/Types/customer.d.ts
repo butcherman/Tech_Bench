@@ -29,7 +29,7 @@ type customerPageProps = {
     alerts: customerAlert[];
     equipmentList: { [key: string]: customerEquipment[] }[];
     contactList: customerContact[];
-    noteList: customerNote[];
+    noteList: customerNote[][];
     // files: customerFile[];
     phoneTypes: phoneType[];
 } & pageProps;

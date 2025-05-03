@@ -20,10 +20,13 @@ class CustomerNoteController extends Controller
     /**
      *
      */
-    public function index()
+    public function index(Request $request, Customer $customer): Response
     {
-        //
-        return 'index';
+        return Inertia::render('Customer/Note/Index', [
+            'permissions' => fn() => UserPermissions::customerPermissions($request->user()),
+            'customer' => fn() => $customer,
+            'noteList' => Inertia::defer(fn() => $customer->Notes),
+        ]);
     }
 
     /**
