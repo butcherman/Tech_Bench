@@ -8,7 +8,7 @@ interface slugData {
     oldSlug: string;
 }
 
-type alertKey = "site" | "equipment" | "contacts" | "notes";
+type alertKey = "site" | "equipment" | "contacts" | "notes" | "data";
 
 /*
 |-------------------------------------------------------------------------------
@@ -20,6 +20,7 @@ export const notificationStatus = reactive({
     equipment: false,
     contacts: false,
     notes: false,
+    data: false,
 });
 
 const triggerNotification = (key: alertKey): void => {
@@ -64,11 +65,36 @@ export const registerCustomerChannel = (slug: string): void => {
         .listen(".CustomerContactDeleted", () =>
             triggerNotification("contacts")
         )
+        .listen(".CustomerNoteCreated", () => triggerNotification("notes"))
+        .listen(".CustomerNoteUpdated", () => triggerNotification("notes"))
+        .listen(".customerNoteDeleted", () => triggerNotification("notes"))
         .listenToAll((event, data) => console.log(event, data));
 };
 
 export const leaveCustomerChannel = (slug: string): void => {
     Echo.leave(`customer.${slug}`);
+};
+
+/*
+|-------------------------------------------------------------------------------
+| Register to an Equipment Channel
+|-------------------------------------------------------------------------------
+*/
+export const registerEquipmentChannel = (custEquipId: number): void => {
+    console.log("register to " + custEquipId);
+
+    Echo.private(`customer.equipment.${custEquipId}`)
+        .listen(".CustomerEquipmentDataUpdated", () =>
+            triggerNotification("data")
+        )
+        .listen(".CustomerNoteCreated", () => triggerNotification("notes"))
+        .listen(".CustomerNoteUpdated", () => triggerNotification("notes"))
+        .listen(".customerNoteDeleted", () => triggerNotification("notes"))
+        .listenToAll((event, data) => console.log(event, data));
+};
+
+export const leaveEquipmentChannel = (custEquipId: number): void => {
+    Echo.leave(`customer.equipment.${custEquipId}`);
 };
 
 /**

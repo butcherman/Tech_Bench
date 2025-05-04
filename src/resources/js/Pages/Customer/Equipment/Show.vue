@@ -6,11 +6,25 @@ import EquipmentData from "@/Components/Customer/Show/Equipment/EquipmentData.vu
 import EquipmentSites from "@/Components/Customer/Show/Equipment/EquipmentSites.vue";
 import ManageEquipment from "@/Components/Customer/Show/Equipment/ManageEquipment.vue";
 import { permissions } from "@/Composables/Customer/CustomerData.module";
+import { onMounted, onUnmounted } from "vue";
+import {
+    leaveEquipmentChannel,
+    registerEquipmentChannel,
+} from "@/Composables/Customer/CustomerBroadcasting.module";
 
-defineProps<{
+const props = defineProps<{
     equipment: customerEquipment;
     equipmentData: customerEquipmentData[];
 }>();
+
+/*
+|-------------------------------------------------------------------------------
+| Broadcasting Data
+|-------------------------------------------------------------------------------
+*/
+const channelName = props.equipment.cust_equip_id;
+onMounted(() => registerEquipmentChannel(channelName));
+onUnmounted(() => leaveEquipmentChannel(channelName));
 </script>
 
 <script lang="ts">

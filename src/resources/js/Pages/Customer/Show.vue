@@ -21,6 +21,11 @@ import {
     permissions,
 } from "@/Composables/Customer/CustomerData.module";
 
+/*
+|-------------------------------------------------------------------------------
+| Broadcasting Data
+|-------------------------------------------------------------------------------
+*/
 const channelName = customer.value.slug;
 onMounted(() => registerCustomerChannel(channelName));
 onUnmounted(() => leaveCustomerChannel(channelName));

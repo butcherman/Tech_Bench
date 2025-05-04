@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AlertButton from "@/Components/_Base/Buttons/AlertButton.vue";
 import BaseButton from "@/Components/_Base/Buttons/BaseButton.vue";
 import Card from "@/Components/_Base/Card.vue";
 import EditButton from "@/Components/_Base/Buttons/EditButton.vue";
@@ -13,6 +14,10 @@ import {
     customer,
     permissions,
 } from "@/Composables/Customer/CustomerData.module";
+import {
+    clearNotification,
+    notificationStatus,
+} from "@/Composables/Customer/CustomerBroadcasting.module";
 
 type equipmentFormData = {
     fieldId: number;
@@ -24,10 +29,33 @@ const props = defineProps<{
     equipmentData: customerEquipmentData[];
 }>();
 
-/**
- * Loading state of component.
- */
+/*
+|-------------------------------------------------------------------------------
+| Loading State
+|-------------------------------------------------------------------------------
+*/
 const isLoading = ref<boolean>(false);
+
+/**
+ * Start the loading process when the refresh button clicked.
+ */
+const onRefreshStart = (): void => {
+    isLoading.value = true;
+};
+
+/**
+ * End the loading process and clear the alert icon.
+ */
+const onRefreshEnd = (): void => {
+    isLoading.value = false;
+    clearNotification("data");
+};
+
+/*
+|-------------------------------------------------------------------------------
+| Equipment Data
+|-------------------------------------------------------------------------------
+*/
 
 /**
  * List of fields that are currently being edited.
@@ -132,10 +160,11 @@ const triggerSave = (saveData: equipmentFormData[]) => {
         <template #title>
             <div class="grid grid-cols-3">
                 <div class="flex">
+                    <AlertButton v-if="notificationStatus.data" />
                     <RefreshButton
                         :only="['equipment-data']"
-                        @loading-start="isLoading = true"
-                        @loading-complete="isLoading = false"
+                        @loading-start="onRefreshStart"
+                        @loading-complete="onRefreshEnd"
                     />
                 </div>
                 <h3 class="text-center grow">{{ equipment.equip_name }}</h3>

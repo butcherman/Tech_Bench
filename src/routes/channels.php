@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Log;
 
 Broadcast::channel('App.Models.User.{id}', function (User $user, int $id) {
     Log::debug(
-        'User '.$user->username.' connecting to Notification Broadcast Channel'
+        'User ' . $user->username . ' connecting to Notification Broadcast Channel'
     );
 
     return (int) $user->user_id === (int) $id;
@@ -28,7 +28,7 @@ Broadcast::channel('App.Models.User.{id}', function (User $user, int $id) {
 
 Broadcast::channel('administration-channel', function (User $user) {
     Log::debug(
-        'User '.$user->username.' connecting to Administration Broadcast Channel'
+        'User ' . $user->username . ' connecting to Administration Broadcast Channel'
     );
 
     return Gate::allows('admin-link', $user);
@@ -42,7 +42,7 @@ Broadcast::channel('administration-channel', function (User $user) {
 
 Broadcast::channel('customer.{slug}', function (User $user, string $slug) {
     Log::debug(
-        'User '.$user->username.' registering to Customer Channel - '.$slug
+        'User ' . $user->username . ' registering to Customer Channel - ' . $slug
     );
 
     return $user ? true : false;
@@ -60,17 +60,17 @@ Broadcast::channel('customer.{slug}', function (User $user, string $slug) {
 //     }
 // );
 
-// Broadcast::channel(
-//     'customer-equipment.{custEquipId}',
-//     function (User $user, int $custEquipId) {
-//         Log::debug(
-//             'User ' . $user->username . ' registering to Customer Equipment Channel - ' .
-//                 $custEquipId
-//         );
+Broadcast::channel(
+    'customer.equipment.{custEquipId}',
+    function (User $user, int $custEquipId) {
+        Log::debug(
+            'User ' . $user->username . ' registering to Customer Equipment Channel - ' .
+                $custEquipId
+        );
 
-//         return $user ? true : false;
-//     }
-// );
+        return $user ? true : false;
+    }
+);
 
 /*
 |------------------------------------------------------------------------------
