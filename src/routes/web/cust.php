@@ -236,6 +236,7 @@ Route::middleware('auth.secure')->group(function () {
         */
         Route::prefix('equipment/{equipment}')->name('equipment.')->group(function () {
             Route::resource('notes', CustomerEquipmentNoteController::class)
+                ->scoped(['equipment' => 'cust_equip_id'])
                 ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
                     $breadcrumbs->index('Notes', 'customers.equipment.show')
                         ->create('Create Note')

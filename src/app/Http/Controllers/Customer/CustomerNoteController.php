@@ -68,6 +68,8 @@ class CustomerNoteController extends Controller
      */
     public function show(Request $request, Customer $customer, CustomerNote $note): Response
     {
+        session()->flash('referer', $request->header('referer'));
+
         return Inertia::render('Customer/Note/Show', [
             'permissions' => fn() => UserPermissions::customerPermissions($request->user()),
             'customer' => fn() => $customer,
@@ -110,14 +112,16 @@ class CustomerNoteController extends Controller
     /**
      * Soft Delete a customer note.
      */
-    public function destroy(Customer $customer, CustomerNote $note): RedirectResponse
+    public function destroy(Request $request, Customer $customer, CustomerNote $note): RedirectResponse
     {
         $this->authorize('delete', $note);
 
+        $redirect = $request->session()->get('referer')
+            ?? route('customers.show', $customer->slug);
+
         $this->svc->destroyCustomerNote($note);
 
-        return redirect(route('customers.show', $customer->slug))
-            ->with('warning', __('cust.note.deleted'));
+        return redirect($redirect)->with('warning', __('cust.note.deleted'));
     }
 
     /**

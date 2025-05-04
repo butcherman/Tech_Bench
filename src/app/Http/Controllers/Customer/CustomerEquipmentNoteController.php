@@ -49,6 +49,8 @@ class CustomerEquipmentNoteController extends Controller
      */
     public function show(Request $request, Customer $customer, CustomerEquipment $equipment, CustomerNote $note)
     {
+        session()->flash('referer', $request->header('referer'));
+
         return Inertia::render('Customer/Note/Show', [
             'permissions' => fn() => UserPermissions::customerPermissions($request->user()),
             'customer' => fn() => $customer,
