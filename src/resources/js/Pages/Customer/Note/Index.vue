@@ -2,10 +2,25 @@
 import AppLayout from "@/Layouts/App/AppLayout.vue";
 import CustomerDetails from "@/Components/Customer/Show/CustomerDetails.vue";
 import CustomerNotes from "@/Components/Customer/Show/Notes/CustomerNotes.vue";
+import { customer } from "@/Composables/Customer/CustomerData.module";
+import { onMounted, onUnmounted } from "vue";
+import {
+    leaveCustomerChannel,
+    registerCustomerChannel,
+} from "@/Composables/Customer/CustomerBroadcasting.module";
 
 defineProps<{
     equipment?: customerEquipment;
 }>();
+
+/*
+|-------------------------------------------------------------------------------
+| Broadcasting Data
+|-------------------------------------------------------------------------------
+*/
+const channelName = customer.value.slug;
+onMounted(() => registerCustomerChannel(channelName));
+onUnmounted(() => leaveCustomerChannel(channelName));
 </script>
 
 <script lang="ts">
