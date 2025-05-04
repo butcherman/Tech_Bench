@@ -125,20 +125,29 @@ class CustomerNoteController extends Controller
     }
 
     /**
-     *
+     * Restore a soft deleted note
      */
-    public function restore(string $id)
+    public function restore(Customer $customer, CustomerNote $note): RedirectResponse
     {
-        //
-        return 'restore';
+        $this->authorize('restore', $note);
+
+        $this->svc->restoreCustomerNote($note);
+
+        return back()->with('success', __('cust.note.restored'));
     }
 
     /**
-     *
+     * Force Delete a soft deleted note
      */
-    public function forceDelete(string $id)
+    public function forceDelete(Customer $customer, CustomerNote $note): RedirectResponse
     {
-        //
-        return 'force delete';
+        $this->authorize('force-delete', $note);
+
+        $this->svc->destroyCustomerNote($note, true);
+
+        return back()
+            ->with('warning', __('cust.note.force_deleted', [
+                'cont' => $note->name,
+            ]));
     }
 }

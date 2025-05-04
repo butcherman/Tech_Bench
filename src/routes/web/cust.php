@@ -172,10 +172,10 @@ Route::middleware('auth.secure')->group(function () {
                     'contacts/{contact}',
                     [CustomerContactController::class, 'restore']
                 )->withTrashed()->scopeBindings()->name('contacts');
-                // Route::get(
-                //     'notes/{note}',
-                //     [CustomerNoteController::class, 'restore']
-                // )->withTrashed()->name('notes');
+                Route::get(
+                    'notes/{note}',
+                    [CustomerNoteController::class, 'restore']
+                )->withTrashed()->name('notes');
                 // Route::get(
                 //     'files/{file}',
                 //     [CustomerFileController::class, 'restore']
@@ -198,10 +198,10 @@ Route::middleware('auth.secure')->group(function () {
                         'contacts/{contact}',
                         [CustomerContactController::class, 'forceDelete']
                     )->withTrashed()->scopeBindings()->name('contacts');
-                    // Route::delete(
-                    //     'notes/{note}',
-                    //     [CustomerNoteController::class, 'forceDelete']
-                    // )->withTrashed()->name('notes');
+                    Route::delete(
+                        'notes/{note}',
+                        [CustomerNoteController::class, 'forceDelete']
+                    )->withTrashed()->name('notes');
                     // Route::delete(
                     //     'files/{file}',
                     //     [CustomerFileController::class, 'forceDelete']

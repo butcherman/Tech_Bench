@@ -12,7 +12,7 @@ import { router } from "@inertiajs/vue3";
 interface deletedItems {
     equipment: customerEquipment[];
     contacts: customerContact[];
-    // notes: customerNote[];
+    notes: customerNote[];
     // files: customerFile[];
 }
 
@@ -111,6 +111,26 @@ export default { layout: AppLayout };
                         <DeleteBadge
                             v-tooltip.left="'Destroy Contact'"
                             @click="destroyItem('contacts', item.cont_id)"
+                        />
+                    </template>
+                </ResourceList>
+            </Card>
+            <Card title="Deleted Notes">
+                <ResourceList
+                    :list="deletedItems.notes"
+                    label-field="subject"
+                    empty-text="No Deleted Notes"
+                >
+                    <template #actions="{ item }">
+                        <BaseBadge
+                            icon="trash-restore"
+                            class="me-1"
+                            v-tooltip.left="'Restore Note'"
+                            @click="restoreItem('notes', item.note_id)"
+                        />
+                        <DeleteBadge
+                            v-tooltip.left="'Destroy Contact'"
+                            @click="destroyItem('notes', item.note_id)"
                         />
                     </template>
                 </ResourceList>
