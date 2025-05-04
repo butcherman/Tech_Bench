@@ -61,7 +61,7 @@ class CustomerNote extends Model
     public function author(): Attribute
     {
         return Attribute::make(
-            get: fn() => User::withTrashed()
+            get: fn () => User::withTrashed()
                 ->find($this->created_by)
                 ->full_name
                 ?? 'unknown'
@@ -71,10 +71,10 @@ class CustomerNote extends Model
     public function updatedAuthor(): ?Attribute
     {
         return Attribute::make(
-            get: fn() => $this->updated_by
+            get: fn () => $this->updated_by
                 ? User::withTrashed()
-                ->find($this->updated_by)
-                ->full_name
+                    ->find($this->updated_by)
+                    ->full_name
                 ?? 'unknown'
                 : null,
         );
@@ -139,13 +139,13 @@ class CustomerNote extends Model
 
         if ($this->cust_equip_id) {
             $siteChannels[] = new PrivateChannel(
-                'customer-equipment.' . $this->cust_equip_id
+                'customer-equipment.'.$this->cust_equip_id
             );
         }
 
         $allChannels = array_merge(
             $siteChannels,
-            [new PrivateChannel('customer.' . $this->Customer->slug)]
+            [new PrivateChannel('customer.'.$this->Customer->slug)]
         );
 
         return match ($event) {

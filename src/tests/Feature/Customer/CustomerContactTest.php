@@ -40,6 +40,7 @@ class CustomerContactTest extends TestCase
             route('customers.contacts.store', $cust->slug),
             $data
         );
+
         $response->assertStatus(302)
             ->assertRedirect(route('login'));
         $this->assertGuest();

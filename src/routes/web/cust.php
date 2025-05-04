@@ -117,7 +117,7 @@ Route::middleware('auth.secure')->group(function () {
         ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
             $breadcrumbs->index('Customers')
                 ->show(
-                    fn(Customer|string $customer) => gettype($customer) === 'object'
+                    fn (Customer|string $customer) => gettype($customer) === 'object'
                         ? $customer->name
                         : $customer
                 )
@@ -175,7 +175,7 @@ Route::middleware('auth.secure')->group(function () {
                 Route::get(
                     'notes/{note}',
                     [CustomerNoteController::class, 'restore']
-                )->withTrashed()->name('notes');
+                )->withTrashed()->scopeBindings()->name('notes');
                 // Route::get(
                 //     'files/{file}',
                 //     [CustomerFileController::class, 'restore']
@@ -201,7 +201,7 @@ Route::middleware('auth.secure')->group(function () {
                     Route::delete(
                         'notes/{note}',
                         [CustomerNoteController::class, 'forceDelete']
-                    )->withTrashed()->name('notes');
+                    )->withTrashed()->scopeBindings()->name('notes');
                     // Route::delete(
                     //     'files/{file}',
                     //     [CustomerFileController::class, 'forceDelete']
@@ -221,7 +221,7 @@ Route::middleware('auth.secure')->group(function () {
                 $breadcrumbs->index('Sites', 'customers.show')
                     ->create('New Customer Site')
                     ->show(
-                        fn(Customer $customer, CustomerSite|string $site) => gettype($site) === 'object'
+                        fn (Customer $customer, CustomerSite|string $site) => gettype($site) === 'object'
                             ? $site->site_name
                             : $site
                     )->edit('Edit Site');
@@ -251,7 +251,7 @@ Route::middleware('auth.secure')->group(function () {
             ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
                 $breadcrumbs->index('Equipment', 'customers.show')
                     ->show(
-                        fn(Customer $customer, CustomerEquipment $equipment) => $equipment->equip_name
+                        fn (Customer $customer, CustomerEquipment $equipment) => $equipment->equip_name
                     );
             });
 

@@ -23,9 +23,9 @@ class CustomerNoteController extends Controller
     public function index(Request $request, Customer $customer): Response
     {
         return Inertia::render('Customer/Note/Index', [
-            'permissions' => fn() => UserPermissions::customerPermissions($request->user()),
-            'customer' => fn() => $customer,
-            'noteList' => Inertia::defer(fn() => $customer->Notes),
+            'permissions' => fn () => UserPermissions::customerPermissions($request->user()),
+            'customer' => fn () => $customer,
+            'noteList' => Inertia::defer(fn () => $customer->Notes),
         ]);
     }
 
@@ -39,10 +39,10 @@ class CustomerNoteController extends Controller
         session()->flash('referer', $request->header('referer'));
 
         return Inertia::render('Customer/Note/Create', [
-            'permissions' => fn() => UserPermissions::customerPermissions($request->user()),
-            'customer' => fn() => $customer,
-            'siteList' => fn() => $customer->Sites->makeVisible(['href']),
-            'equipmentList' => fn() => $customer->Equipment->load('Sites'),
+            'permissions' => fn () => UserPermissions::customerPermissions($request->user()),
+            'customer' => fn () => $customer,
+            'siteList' => fn () => $customer->Sites->makeVisible(['href']),
+            'equipmentList' => fn () => $customer->Equipment->load('Sites'),
         ]);
     }
 
@@ -71,10 +71,10 @@ class CustomerNoteController extends Controller
         session()->flash('referer', $request->header('referer'));
 
         return Inertia::render('Customer/Note/Show', [
-            'permissions' => fn() => UserPermissions::customerPermissions($request->user()),
-            'customer' => fn() => $customer,
-            'note' => fn() => $note,
-            'siteList' => fn() => $note->Sites->makeVisible('href'),
+            'permissions' => fn () => UserPermissions::customerPermissions($request->user()),
+            'customer' => fn () => $customer,
+            'note' => fn () => $note,
+            'siteList' => fn () => $note->Sites->makeVisible('href'),
         ]);
     }
 
@@ -88,11 +88,11 @@ class CustomerNoteController extends Controller
         session()->flash('referer', $request->header('referer'));
 
         return Inertia::render('Customer/Note/Edit', [
-            'permissions' => fn() => UserPermissions::customerPermissions($request->user()),
-            'customer' => fn() => $customer,
-            'note' => fn() => $note,
-            'siteList' => fn() => $customer->Sites->makeVisible(['href']),
-            'equipmentList' => fn() => $customer->Equipment->load('Sites'),
+            'permissions' => fn () => UserPermissions::customerPermissions($request->user()),
+            'customer' => fn () => $customer,
+            'note' => fn () => $note,
+            'siteList' => fn () => $customer->Sites->makeVisible(['href']),
+            'equipmentList' => fn () => $customer->Equipment->load('Sites'),
         ]);
     }
 

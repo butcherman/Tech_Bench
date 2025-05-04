@@ -42,7 +42,7 @@ class CustomerTest extends TestCase
             ->get(route('customers.index'));
 
         $response->assertSuccessful()
-            ->assertInertia(fn(Assert $page) => $page
+            ->assertInertia(fn (Assert $page) => $page
                 ->component('Customer/Index')
                 ->has('permissions'));
     }
@@ -81,7 +81,7 @@ class CustomerTest extends TestCase
             ->get(route('customers.create'));
 
         $response->assertSuccessful()
-            ->assertInertia(fn(Assert $page) => $page
+            ->assertInertia(fn (Assert $page) => $page
                 ->component('Customer/Create')
                 ->has('select-id')
                 ->has('default-state'));
@@ -234,7 +234,7 @@ class CustomerTest extends TestCase
             ->get(route('customers.show', $cust->slug));
 
         $response->assertSuccessful()
-            ->assertInertia(fn(Assert $page) => $page
+            ->assertInertia(fn (Assert $page) => $page
                 ->component('Customer/Show')
                 ->has('permissions')
                 ->has('customer')
@@ -299,7 +299,7 @@ class CustomerTest extends TestCase
             ->get(route('customers.edit', $customer->slug));
 
         $response->assertSuccessful()
-            ->assertInertia(fn(Assert $page) => $page
+            ->assertInertia(fn (Assert $page) => $page
                 ->component('Customer/Edit')
                 ->has('selectId')
                 ->has('default-state')
