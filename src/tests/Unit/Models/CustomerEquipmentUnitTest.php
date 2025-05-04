@@ -74,7 +74,7 @@ class CustomerEquipmentUnitTest extends TestCase
         $this->assertEquals(
             $data->makeHidden('Customer')->toArray(),
             $this->model
-                ->CustomerNote[0]
+                ->Notes[0]
                 ->makeHidden(['CustomerEquipment', 'deleted_at'])
                 ->toArray()
         );

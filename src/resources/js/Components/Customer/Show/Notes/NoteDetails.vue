@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import BaseBadge from "@/Components/_Base/Badges/BaseBadge.vue";
 import Card from "@/Components/_Base/Card.vue";
 import DeleteButton from "@/Components/_Base/Buttons/DeleteButton.vue";
 import EditButton from "@/Components/_Base/Buttons/EditButton.vue";
@@ -33,6 +34,19 @@ const editRoute = computed(() => {
         <template #title>
             <div class="text-center font-black">
                 {{ note.subject }}
+                <a
+                    :href="
+                        $route('customers.notes.download', [
+                            customer.slug,
+                            note.note_id,
+                        ])
+                    "
+                    class="float-end"
+                    target="_blank"
+                    v-tooltip.left="'Download Note'"
+                >
+                    <BaseBadge icon="download" />
+                </a>
             </div>
         </template>
         <div v-html="note.details" />

@@ -14,6 +14,7 @@ use App\Http\Controllers\Customer\CustomerNoteController;
 use App\Http\Controllers\Customer\CustomerSearchController;
 use App\Http\Controllers\Customer\CustomerSiteController;
 use App\Http\Controllers\Customer\DisabledCustomerController;
+use App\Http\Controllers\Customer\DownloadNoteController;
 use App\Http\Controllers\Customer\ReAssignCustomerController;
 use App\Models\Customer;
 use App\Models\CustomerEquipment;
@@ -274,8 +275,9 @@ Route::middleware('auth.secure')->group(function () {
         | /customers/{customer-slug|customer-id}/notes
         |-----------------------------------------------------------------------
         */
-        // Route::get('notes/{note}/download', DownloadNoteController::class)
-        //     ->name('notes.download');
+        Route::get('notes/{note}/download', DownloadNoteController::class)
+            ->scopeBindings()
+            ->name('notes.download');
 
         Route::resource('notes', CustomerNoteController::class)
             ->scoped(['notes' => 'cust_id'])
