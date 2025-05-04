@@ -30,7 +30,7 @@ type customerPageProps = {
     equipmentList: { [key: string]: customerEquipment[] }[];
     contactList: customerContact[];
     noteList: customerNote[][];
-    // files: customerFile[];
+    fileList: customerFile[];
     phoneTypes: phoneType[];
 } & pageProps;
 
@@ -91,7 +91,6 @@ type customerNote = {
     note_id: number;
     subject: string;
     urgent: boolean;
-    // site_list: customerSite[];
     cust_equip_id: number;
     details: string;
     author: string;
@@ -108,21 +107,21 @@ type customerNote = {
 | Customer Files
 |-------------------------------------------------------------------------------
 */
-// type customerFile = {
-//     cust_file_id: number;
-//     file_id: number;
-//     name: string;
-//     created_at: string;
-//     created_stamp: string;
-//     file_type: string;
-//     file_type_id: number;
-//     uploaded_by: string;
-//     href: string;
-//     equip_name: string;
-//     cust_equip_id: number;
-//     customer_site: customerSite[];
-//     file_upload: fileUpload;
-// };
+type customerFile = {
+    cust_file_id: number;
+    file_id: number;
+    name: string;
+    created_at: string;
+    created_stamp: string;
+    file_type: string;
+    file_type_id: number;
+    uploaded_by: string;
+    href: string;
+    equip_name: string;
+    cust_equip_id: number;
+    sites: customerSite[];
+    // file_upload: fileUpload;
+};
 
 type customerFileType = {
     file_type_id: number;

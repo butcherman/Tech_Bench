@@ -6,6 +6,7 @@ import CustomerAlerts from "@/Components/Customer/Show/CustomerAlerts.vue";
 import CustomerContact from "@/Components/Customer/Show/Contacts/CustomerContact.vue";
 import CustomerDetails from "@/Components/Customer/Show/CustomerDetails.vue";
 import CustomerEquipment from "@/Components/Customer/Show/Equipment/CustomerEquipment.vue";
+import CustomerFiles from "@/Components/Customer/Show/Files/CustomerFiles.vue";
 import CustomerManagement from "@/Components/Customer/Show/ManageCustomer.vue";
 import CustomerNotes from "@/Components/Customer/Show/Notes/CustomerNotes.vue";
 import QuickJump from "@/Components/_Base/QuickJump.vue";
@@ -91,6 +92,7 @@ export default { layout: AppLayout };
             <CustomerEquipment id="equipment" />
             <CustomerContact id="contacts" />
         </div>
-        <CustomerNotes id="notes" />
+        <CustomerNotes id="notes" class="tb-gap-y" />
+        <CustomerFiles id="files" class="tb-gap-y" />
     </div>
 </template>
