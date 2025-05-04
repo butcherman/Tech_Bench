@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import AppLayout from "@/Layouts/App/AppLayout.vue";
 import CustomerDetails from "@/Components/Customer/Show/CustomerDetails.vue";
+import CustomerNotes from "@/Components/Customer/Show/Notes/CustomerNotes.vue";
 import EquipmentData from "@/Components/Customer/Show/Equipment/EquipmentData.vue";
 import EquipmentSites from "@/Components/Customer/Show/Equipment/EquipmentSites.vue";
 import ManageEquipment from "@/Components/Customer/Show/Equipment/ManageEquipment.vue";
@@ -31,6 +32,6 @@ export default { layout: AppLayout };
             :equipment-data="equipmentData"
         />
         <EquipmentSites class="my-3" :equipment="equipment" />
-        {{ equipment }}
+        <CustomerNotes :equipment="equipment" />
     </div>
 </template>

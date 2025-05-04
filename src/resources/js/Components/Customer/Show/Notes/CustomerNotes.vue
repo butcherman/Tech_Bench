@@ -6,7 +6,11 @@ import Card from "@/Components/_Base/Card.vue";
 import DataTable from "@/Components/_Base/DataTable/DataTable.vue";
 import Overlay from "@/Components/_Base/Loaders/Overlay.vue";
 import RefreshButton from "@/Components/_Base/Buttons/RefreshButton.vue";
-import { customer, noteList } from "@/Composables/Customer/CustomerData.module";
+import {
+    customer,
+    equipmentList,
+    noteList,
+} from "@/Composables/Customer/CustomerData.module";
 import { computed, ref } from "vue";
 import { Deferred, router } from "@inertiajs/vue3";
 import {
@@ -68,16 +72,17 @@ const columns: tableColumnProp[] = [
 ];
 
 const onRowClick = (row: customerNote): void => {
-    console.log(row);
+    let url = route("customers.notes.show", [customer.value.slug, row.note_id]);
 
     if (props.equipment) {
-        console.log("equipment note");
-        return;
+        url = route("customers.equipment.notes.show", [
+            customer.value.slug,
+            props.equipment.cust_equip_id,
+            row.note_id,
+        ]);
     }
 
-    router.get(
-        route("customers.notes.show", [customer.value.slug, row.note_id])
-    );
+    router.get(url);
 };
 
 /*
@@ -92,12 +97,10 @@ const onRowClick = (row: customerNote): void => {
  */
 const addRoute = computed(() => {
     if (props.equipment) {
-        console.log("equipment note");
-        return "";
-        //     return route("customers.equipment.notes.create", [
-        //         customer.value.slug,
-        //         props.equipment.cust_equip_id,
-        //     ]);
+        return route("customers.equipment.notes.create", [
+            customer.value.slug,
+            props.equipment.cust_equip_id,
+        ]);
     }
 
     // if (currentSite.value) {

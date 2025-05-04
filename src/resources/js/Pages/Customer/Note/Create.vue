@@ -8,6 +8,10 @@ import {
     customer,
     siteList,
 } from "@/Composables/Customer/CustomerData.module";
+
+defineProps<{
+    activeEquipment?: customerEquipment;
+}>();
 </script>
 
 <script lang="ts">
@@ -24,6 +28,7 @@ export default { layout: AppLayout };
                 :customer="customer"
                 :site-list="siteList"
                 :current-site="currentSite"
+                :equipment="activeEquipment"
             />
         </Card>
     </div>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
+import Card from "@/Components/_Base/Card.vue";
 import DeleteButton from "@/Components/_Base/Buttons/DeleteButton.vue";
 import EditButton from "@/Components/_Base/Buttons/EditButton.vue";
-import Card from "@/Components/_Base/Card.vue";
 import { computed } from "vue";
 import {
     customer,
@@ -13,6 +13,14 @@ const props = defineProps<{
 }>();
 
 const editRoute = computed(() => {
+    if (props.note.cust_equip_id) {
+        return route("customers.equipment.notes.edit", [
+            customer.value.slug,
+            props.note.cust_equip_id,
+            props.note.note_id,
+        ]);
+    }
+
     return route("customers.notes.edit", [
         customer.value.slug,
         props.note.note_id,

@@ -9,6 +9,7 @@ use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\Customer\CustomerDeletedItemsController;
 use App\Http\Controllers\Customer\CustomerEquipmentController;
 use App\Http\Controllers\Customer\CustomerEquipmentDataController;
+use App\Http\Controllers\Customer\CustomerEquipmentNoteController;
 use App\Http\Controllers\Customer\CustomerNoteController;
 use App\Http\Controllers\Customer\CustomerSearchController;
 use App\Http\Controllers\Customer\CustomerSiteController;
@@ -233,10 +234,15 @@ Route::middleware('auth.secure')->group(function () {
         | /customers/{customer-slug|customer-id}/equipment
         |-----------------------------------------------------------------------
         */
-        // Route::get(
-        //     'equipment/{equipment}/note/create',
-        //     [CustomerNoteController::class, 'createEquipmentNote']
-        // )->name('equipment.note.create');
+        Route::prefix('equipment/{equipment}')->name('equipment.')->group(function () {
+            Route::resource('notes', CustomerEquipmentNoteController::class)
+                ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
+                    $breadcrumbs->index('Notes', 'customers.equipment.show')
+                        ->create('Create Note')
+                        ->show('Note Details')
+                        ->edit('Edit Note');
+                });
+        });
 
         Route::apiResource('equipment', CustomerEquipmentController::class)
             ->scoped(['equipment' => 'cust_equip_id'])

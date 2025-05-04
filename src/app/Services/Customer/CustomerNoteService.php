@@ -6,6 +6,7 @@ use App\Models\Customer;
 use App\Models\CustomerNote;
 use App\Models\User;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 
 class CustomerNoteService
 {

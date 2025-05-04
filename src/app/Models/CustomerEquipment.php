@@ -70,7 +70,7 @@ class CustomerEquipment extends Model
     public function equipName(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->EquipmentType->name
+            get: fn() => $this->EquipmentType->name
         );
     }
 
@@ -99,7 +99,7 @@ class CustomerEquipment extends Model
         );
     }
 
-    public function CustomerNote(): HasMany
+    public function Notes(): HasMany
     {
         return $this->hasMany(
             CustomerNote::class,
@@ -140,8 +140,8 @@ class CustomerEquipment extends Model
         $allChannels = array_merge(
             $siteChannels,
             [
-                new PrivateChannel('customer.'.$this->Customer->slug),
-                new PrivateChannel('customer-equipment.'.$this->cust_equip_id),
+                new PrivateChannel('customer.' . $this->Customer->slug),
+                new PrivateChannel('customer-equipment.' . $this->cust_equip_id),
             ]
         );
 
@@ -174,5 +174,25 @@ class CustomerEquipment extends Model
         }
 
         return static::whereCustEquipId(0);
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | Additional Methods
+    |---------------------------------------------------------------------------
+    */
+
+    /**
+     * Combine all of the equipment notes, and General Notes for the customer.
+     */
+    public function getNotes(): array
+    {
+        $equipNotes = $this->Notes;
+        $otherNotes = CustomerNote::where('cust_id', $this->cust_id)
+            ->where('cust_equip_id', null)
+            ->doesntHave('Sites')
+            ->get();
+
+        return array_merge($equipNotes->toArray(), $otherNotes->toArray());
     }
 }

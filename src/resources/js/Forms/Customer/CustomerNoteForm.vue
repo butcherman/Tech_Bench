@@ -9,7 +9,10 @@ import VueForm from "@/Forms/_Base/VueForm.vue";
 import { computed, ref } from "vue";
 import { object, string, boolean, array } from "yup";
 import { shrinkHide, growShow } from "@/Composables/animations.module";
-import { equipmentList } from "../../Composables/Customer/CustomerData.module";
+import {
+    equipmentList,
+    siteList,
+} from "../../Composables/Customer/CustomerData.module";
 
 type noteType = "general" | "site" | "equipment";
 
@@ -59,13 +62,6 @@ const noteTypes: { label: string; value: noteType }[] = [
     },
 ];
 
-// if (props.currentSite) {
-//     noteTypes.push({
-//         label: "Equipment Note",
-//         value: "equipment",
-//     });
-// }
-
 if (props.siteList.length > 1) {
     noteTypes.push({
         label: "Site Note",
@@ -94,15 +90,23 @@ const submitText = computed(() => (props.note ? "Edit Note" : "Create Note"));
 | Vee Validate
 |-------------------------------------------------------------------------------
 */
+const getInitSiteList = () => {
+    if (props.note && props.note.sites) {
+        return props.note.sites.map((site) => site.cust_site_id);
+    }
+
+    if (props.currentSite) {
+        return [props.currentSite.cust_site_id];
+    }
+
+    return [];
+};
+
 const initValues = {
     subject: props.note?.subject,
     note_type: noteType.value,
     urgent: props.note?.urgent || false,
-    site_list:
-        props.note?.sites.map((site) => site.cust_site_id) || [
-            props.currentSite?.cust_site_id,
-        ] ||
-        [],
+    site_list: getInitSiteList(),
     cust_equip_id: props.note?.cust_equip_id || props.equipment?.cust_equip_id,
     details: props.note?.details,
 };
