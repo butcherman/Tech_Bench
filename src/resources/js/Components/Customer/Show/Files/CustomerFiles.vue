@@ -85,7 +85,7 @@ const tableColumns: tableColumnProp[] = [
                 </div>
             </template>
             <Overlay :loading="isLoading">
-                <DataTable
+                <!-- <DataTable
                     :columns="tableColumns"
                     :rows="fileList"
                     no-results-text="No Files"
@@ -100,7 +100,8 @@ const tableColumns: tableColumnProp[] = [
                             <DeleteBadge class="me-1" />
                         </div>
                     </template>
-                </DataTable>
+                </DataTable> -->
+                {{ fileList }}
             </Overlay>
         </Deferred>
     </Card>
