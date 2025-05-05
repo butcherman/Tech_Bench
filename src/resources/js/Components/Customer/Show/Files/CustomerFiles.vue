@@ -76,7 +76,7 @@ const tableColumns: tableColumnProp[] = [
                 @loading-complete="onRefreshEnd"
             />
             Files
-            <AddButton class="float-end" size="small" text="Add Note" pill />
+            <AddButton class="float-end" size="small" text="Add File" pill />
         </template>
         <Deferred data="fileList">
             <template #fallback>

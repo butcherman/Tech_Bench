@@ -27,7 +27,8 @@ type customerPageProps = {
     siteList: customerSite[];
     isFav: boolean;
     alerts: customerAlert[];
-    equipmentList: { [key: string]: customerEquipment[] }[];
+    equipmentList: customerEquipment[];
+    groupedEquipmentList: { [key: string]: customerEquipment[] }[];
     contactList: customerContact[];
     noteList: customerNote[][];
     fileList: customerFile[];

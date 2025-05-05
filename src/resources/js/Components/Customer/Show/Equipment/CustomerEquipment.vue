@@ -14,7 +14,7 @@ import { handleLinkClick } from "@/Composables/links.module";
 import { computed, ref, useTemplateRef } from "vue";
 import {
     customer,
-    equipmentList,
+    groupedEquipmentList,
 } from "@/Composables/Customer/CustomerData.module";
 import {
     clearNotification,
@@ -32,7 +32,7 @@ const addModal = useTemplateRef("add-equipment-modal");
 const currentPage = ref<number>(0);
 const displayPage = computed<number>(() => currentPage.value + 1);
 const currentChunk = computed<{ [key: string]: customerEquipment[] }>(
-    () => equipmentList.value[currentPage.value]
+    () => groupedEquipmentList.value[currentPage.value]
 );
 
 const goToPage = (page: number): void => {
@@ -113,7 +113,7 @@ const onClickAction = (
                 @click="addModal?.show"
             />
         </template>
-        <Deferred data="equipmentList">
+        <Deferred data="groupedEquipmentList">
             <template #fallback>
                 <div class="flex justify-center">
                     <AtomLoader />
@@ -121,7 +121,7 @@ const onClickAction = (
             </template>
             <Overlay :loading="isLoading" class="h-full">
                 <ul class="border rounded-lg border-collapse">
-                    <li v-if="!equipmentList.length" class="p-1">
+                    <li v-if="!groupedEquipmentList.length" class="p-1">
                         <h6 class="text-center">No Equipment</h6>
                     </li>
                     <li v-for="(equip, index) in currentChunk" class="p-1">
@@ -138,9 +138,9 @@ const onClickAction = (
                 </ul>
                 <div class="flex justify-center mt-2">
                     <Pagination
-                        v-if="equipmentList.length > 1"
+                        v-if="groupedEquipmentList.length > 1"
                         :current-page="displayPage"
-                        :total-pages="equipmentList.length"
+                        :total-pages="groupedEquipmentList.length"
                         @go-to-page="goToPage"
                         @next-page="currentPage++"
                         @prev-page="currentPage--"

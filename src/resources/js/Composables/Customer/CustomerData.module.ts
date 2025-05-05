@@ -33,7 +33,10 @@ export const alerts = computed<customerAlert[]>(() => page.props.alerts);
 | Customer Equipment
 |-------------------------------------------------------------------------------
 */
-export const equipmentList = computed<{ [key: string]: customerEquipment[] }[]>(
+export const groupedEquipmentList = computed<
+    { [key: string]: customerEquipment[] }[]
+>(() => page.props.groupedEquipmentList);
+export const equipmentList = computed<customerEquipment[]>(
     () => page.props.equipmentList
 );
 

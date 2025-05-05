@@ -82,12 +82,13 @@ class CustomerController extends Controller
              * Deferred Props
              */
             'contactList' => Inertia::defer(fn() => $customer->Contacts),
-            'equipmentList' => Inertia::defer(
+            'groupedEquipmentList' => Inertia::defer(
                 fn() => $customer->Equipment
                     ->load('Sites')
                     ->groupBy('equip_name')
                     ->chunk(5)
             ),
+            'equipmentList' => Inertia::defer(fn() => $customer->Equipment->load('Sites')),
             'noteList' => Inertia::defer(fn() => $customer->Notes),
             'fileList' => Inertia::defer(fn() => $customer->Files),
         ]);
