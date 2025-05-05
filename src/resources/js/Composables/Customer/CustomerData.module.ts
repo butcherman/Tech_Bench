@@ -55,14 +55,17 @@ export const contactList = computed<customerContact[]>(
 | Customer Notes
 |-------------------------------------------------------------------------------
 */
-export const noteList = computed(() => page.props.noteList);
+export const noteList = computed<customerNote[][]>(() => page.props.noteList);
 
 /*
 |-------------------------------------------------------------------------------
 | Customer Files
 |-------------------------------------------------------------------------------
 */
-export const fileList = computed(() => page.props.fileList);
+export const fileTypes = computed<customerFileType[]>(
+    () => page.props.fileTypes
+);
+export const fileList = computed<customerFile[]>(() => page.props.fileList);
 
 /*
 |-------------------------------------------------------------------------------

@@ -149,7 +149,6 @@ const schema = object({
                 id="note-type"
                 name="note_type"
                 :list="noteTypes"
-                class="text-center"
                 inline
                 @change="updateNoteType"
             />

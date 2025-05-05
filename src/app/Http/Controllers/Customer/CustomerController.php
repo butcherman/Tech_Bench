@@ -76,6 +76,7 @@ class CustomerController extends Controller
                 $request->user()
             ),
             'phoneTypes' => fn() => CacheData::phoneTypes(),
+            'fileTypes' => fn() => CacheData::fileTypes(),
             'siteList' => fn() => $customer->Sites->makeVisible(['href']),
 
             /**

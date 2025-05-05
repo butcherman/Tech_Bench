@@ -33,6 +33,7 @@ type customerPageProps = {
     noteList: customerNote[][];
     fileList: customerFile[];
     phoneTypes: phoneType[];
+    fileTypes: customerFileType[];
 } & pageProps;
 
 /*

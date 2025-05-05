@@ -8,15 +8,18 @@ import DataTable from "@/Components/_Base/DataTable/DataTable.vue";
 import DeleteBadge from "@/Components/_Base/Badges/DeleteBadge.vue";
 import EditBadge from "@/Components/_Base/Badges/EditBadge.vue";
 import Overlay from "@/Components/_Base/Loaders/Overlay.vue";
+import NewFileModal from "./NewFileModal.vue";
 import RefreshButton from "@/Components/_Base/Buttons/RefreshButton.vue";
 import { Deferred } from "@inertiajs/vue3";
 import { fileList } from "@/Composables/Customer/CustomerData.module";
-import { ref } from "vue";
+import { ref, useTemplateRef } from "vue";
 import {
     clearNotification,
     notificationStatus,
 } from "@/Composables/Customer/CustomerBroadcasting.module";
 import type { tableColumnProp } from "@/Components/_Base/DataTable/DataTable.vue";
+
+const addModal = useTemplateRef("new-file-modal");
 
 /*
 |-------------------------------------------------------------------------------
@@ -76,7 +79,13 @@ const tableColumns: tableColumnProp[] = [
                 @loading-complete="onRefreshEnd"
             />
             Files
-            <AddButton class="float-end" size="small" text="Add File" pill />
+            <AddButton
+                class="float-end"
+                size="small"
+                text="Add File"
+                pill
+                @click="addModal?.show()"
+            />
         </template>
         <Deferred data="fileList">
             <template #fallback>
@@ -104,5 +113,10 @@ const tableColumns: tableColumnProp[] = [
                 {{ fileList }}
             </Overlay>
         </Deferred>
+        <NewFileModal
+            ref="new-file-modal"
+            @refresh-start="onRefreshStart"
+            @refresh-end="onRefreshEnd"
+        />
     </Card>
 </template>
