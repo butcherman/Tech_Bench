@@ -7,6 +7,7 @@ import Card from "@/Components/_Base/Card.vue";
 import DataTable from "@/Components/_Base/DataTable/DataTable.vue";
 import DeleteBadge from "@/Components/_Base/Badges/DeleteBadge.vue";
 import EditBadge from "@/Components/_Base/Badges/EditBadge.vue";
+import FileDetailsModal from "./FileDetailsModal.vue";
 import Overlay from "@/Components/_Base/Loaders/Overlay.vue";
 import NewFileModal from "./NewFileModal.vue";
 import RefreshButton from "@/Components/_Base/Buttons/RefreshButton.vue";
@@ -20,6 +21,7 @@ import {
 import type { tableColumnProp } from "@/Components/_Base/DataTable/DataTable.vue";
 
 const addModal = useTemplateRef("new-file-modal");
+const detailsModal = useTemplateRef("file-details-modal");
 
 /**
  * When a row is clicked, the file will be downloaded.
@@ -119,7 +121,12 @@ const tableColumns: tableColumnProp[] = [
                 >
                     <template #row.actions="{ rowData }">
                         <div class="size-fit float-end">
-                            <BaseBadge icon="circle-info" class="me-1" />
+                            <BaseBadge
+                                icon="circle-info"
+                                class="me-1"
+                                v-tooltip="'File Details'"
+                                @click.stop="detailsModal?.show(rowData)"
+                            />
                             <EditBadge class="me-1" />
                             <DeleteBadge class="me-1" />
                         </div>
@@ -132,5 +139,6 @@ const tableColumns: tableColumnProp[] = [
             @refresh-start="onRefreshStart"
             @refresh-end="onRefreshEnd"
         />
+        <FileDetailsModal ref="file-details-modal" />
     </Card>
 </template>

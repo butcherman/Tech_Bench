@@ -122,7 +122,8 @@ type customerFile = {
     equip_name: string;
     cust_equip_id: number;
     sites: customerSite[];
-    // file_upload: fileUpload;
+    file_upload: fileUpload;
+    file_category: "General" | "Site" | "Equipment";
 };
 
 type customerFileType = {
