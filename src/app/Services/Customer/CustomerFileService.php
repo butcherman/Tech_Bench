@@ -37,6 +37,44 @@ class CustomerFileService
         return $custFile;
     }
 
+    /**
+     * Update the data for an existing Customer File.
+     */
+    public function updateCustomerFile(Collection $requestData, CustomerFile $custFile): CustomerFile
+    {
+        $custFile->update(
+            $requestData
+                ->only(['name', 'file_type_id'])
+                ->toArray()
+        );
+
+        $this->processAssociations($requestData, $custFile);
+
+        return $custFile->fresh();
+    }
+
+    /**
+     * Soft Delete or Force Delete a Customer File.
+     */
+    public function destroyCustomerFile(CustomerFile $customerFile, ?bool $force = false): void
+    {
+        if ($force) {
+            $customerFile->forceDelete();
+
+            return;
+        }
+
+        $customerFile->delete();
+    }
+
+    /**
+     * Restore a Soft Deleted Customer File
+     */
+    public function restoreCustomerFile(CustomerFile $customerFile): void
+    {
+        $customerFile->restore();
+    }
+
     /*
     |---------------------------------------------------------------------------
     | Add or Remove Sites/Equipment to the Customer File

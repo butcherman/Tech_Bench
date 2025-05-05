@@ -30,7 +30,7 @@ const computedFileData = computed(() => {
 /**
  * Open Modal to show the file details.
  */
-const show = (showFile: customerFile) => {
+const show = (showFile: customerFile): void => {
     activeFile.value = showFile;
     detailsModal.value?.show();
 };

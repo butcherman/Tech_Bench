@@ -20,6 +20,7 @@ const props = defineProps<{
     hideOverlay?: boolean;
     submitIcon?: string;
     submitText?: string;
+    only?: string[];
 }>();
 
 const isSubmitting = ref<boolean>(false);
@@ -57,6 +58,7 @@ const onSubmit = handleSubmit((form) => {
     const formData = useInertiaForm(form);
     formData.submit(props.submitMethod, props.submitRoute, {
         preserveScroll: true,
+        only: props.only ?? [],
         onFinish: () => (isSubmitting.value = false),
         onSuccess: () => emit("success"),
         onError: () => handleErrors(form, formData.errors),

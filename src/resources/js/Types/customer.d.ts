@@ -123,7 +123,7 @@ type customerFile = {
     cust_equip_id: number;
     sites: customerSite[];
     file_upload: fileUpload;
-    file_category: "General" | "Site" | "Equipment";
+    file_category: "general" | "site" | "equipment";
 };
 
 type customerFileType = {
