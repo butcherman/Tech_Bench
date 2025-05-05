@@ -53,6 +53,7 @@ class CustomerFile extends Model
         'file_type',
         'equip_name',
         'created_stamp',
+        'file_category'
     ];
 
     /** @var array<int, string> */
@@ -80,21 +81,21 @@ class CustomerFile extends Model
     public function fileType(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->CustomerFileType->description
+            get: fn() => $this->CustomerFileType->description
         );
     }
 
     public function createdStamp(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->created_at
+            get: fn() => $this->created_at
         );
     }
 
     public function href(): Attribute
     {
         return Attribute::make(
-            get: fn () => route(
+            get: fn() => route(
                 'download',
                 [$this->file_id, $this->FileUpload->file_name]
             )
@@ -104,16 +105,33 @@ class CustomerFile extends Model
     public function uploadedBy(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->user->full_name
+            get: fn() => $this->user->full_name
         );
     }
 
     public function equipName(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->CustomerEquipment
+            get: fn() => $this->CustomerEquipment
                 ? $this->CustomerEquipment->equip_name
                 : null
+        );
+    }
+
+    public function fileCategory(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                if ($this->cust_equip_id) {
+                    return 'Equipment';
+                }
+
+                if (count($this->Sites) > 0) {
+                    return 'Site';
+                }
+
+                return 'General';
+            }
         );
     }
 
@@ -176,12 +194,12 @@ class CustomerFile extends Model
         );
 
         if ($this->cust_equip_id) {
-            $siteChannels[] = new PrivateChannel('customer-equipment.'.$this->cust_equip_id);
+            $siteChannels[] = new PrivateChannel('customer-equipment.' . $this->cust_equip_id);
         }
 
         $allChannels = array_merge(
             $siteChannels,
-            [new PrivateChannel('customer.'.$this->Customer->slug)]
+            [new PrivateChannel('customer.' . $this->Customer->slug)]
         );
 
         return match ($event) {

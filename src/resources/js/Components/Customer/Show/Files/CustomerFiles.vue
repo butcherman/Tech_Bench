@@ -21,6 +21,13 @@ import type { tableColumnProp } from "@/Components/_Base/DataTable/DataTable.vue
 
 const addModal = useTemplateRef("new-file-modal");
 
+/**
+ * When a row is clicked, the file will be downloaded.
+ */
+const onRowClick = (row: customerFile) => {
+    window.open(row.href);
+};
+
 /*
 |-------------------------------------------------------------------------------
 | Loading State
@@ -49,6 +56,13 @@ const tableColumns: tableColumnProp[] = [
         field: "name",
         sort: true,
         filterable: true,
+    },
+    {
+        label: "File For",
+        field: "file_category",
+        sort: true,
+        filterable: true,
+        filterSelect: true,
     },
     {
         label: "Type",
@@ -94,13 +108,14 @@ const tableColumns: tableColumnProp[] = [
                 </div>
             </template>
             <Overlay :loading="isLoading">
-                <!-- <DataTable
+                <DataTable
                     :columns="tableColumns"
                     :rows="fileList"
                     no-results-text="No Files"
                     paginate
                     allow-row-click
                     striped
+                    @row-click="onRowClick"
                 >
                     <template #row.actions="{ rowData }">
                         <div class="size-fit float-end">
@@ -109,8 +124,7 @@ const tableColumns: tableColumnProp[] = [
                             <DeleteBadge class="me-1" />
                         </div>
                     </template>
-                </DataTable> -->
-                {{ fileList }}
+                </DataTable>
             </Overlay>
         </Deferred>
         <NewFileModal

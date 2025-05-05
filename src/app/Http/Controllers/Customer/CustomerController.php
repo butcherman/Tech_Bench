@@ -91,7 +91,7 @@ class CustomerController extends Controller
             ),
             'equipmentList' => Inertia::defer(fn() => $customer->Equipment->load('Sites')),
             'noteList' => Inertia::defer(fn() => $customer->Notes),
-            'fileList' => Inertia::defer(fn() => $customer->Files),
+            'fileList' => Inertia::defer(fn() => $customer->Files->append('href')),
         ]);
     }
 
