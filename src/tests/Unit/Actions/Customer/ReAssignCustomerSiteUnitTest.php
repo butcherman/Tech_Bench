@@ -24,7 +24,7 @@ class ReAssignCustomerSiteUnitTest extends TestCase
             ->has(CustomerEquipment::factory(), 'equipment')
             ->has(CustomerNote::factory(), 'notes')
             ->has(CustomerContact::factory(), 'contacts')
-            ->has(CustomerFile::factory())
+            ->has(CustomerFile::factory(), 'files')
             ->createQuietly();
         $toCust = Customer::factory()->create();
 
@@ -38,7 +38,7 @@ class ReAssignCustomerSiteUnitTest extends TestCase
             ->attach($fromCust->primary_site_id);
 
         $noteId = $fromCust->Notes[0]->note_id;
-        $fileId = $fromCust->CustomerFile[0]->cust_file_id;
+        $fileId = $fromCust->Files[0]->cust_file_id;
 
         $testObj = new ReAssignCustomerSite;
         $testObj($fromSite, $toCust);
@@ -265,7 +265,7 @@ class ReAssignCustomerSiteUnitTest extends TestCase
     {
         $fromCust = Customer::factory()
             ->has(CustomerSite::factory()->count(4), 'sites')
-            ->has(CustomerFile::factory()->count(3))
+            ->has(CustomerFile::factory()->count(3), 'files')
             ->createQuietly();
         $movingSite = CustomerSite::factory()
             ->createQuietly(['cust_id' => $fromCust->cust_id]);
@@ -276,17 +276,17 @@ class ReAssignCustomerSiteUnitTest extends TestCase
             ->map(fn ($site) => $site->cust_site_id);
 
         // Assign the contacts to sites
-        $fromCust->CustomerFile[0]
+        $fromCust->Files[0]
             ->Sites()
             ->sync($siteArray);
-        $fromCust->CustomerFile[1]
+        $fromCust->Files[1]
             ->Sites()
             ->attach($movingSite->cust_site_id);
 
         $fileIdList = [
-            $fromCust->CustomerFile[0]->cust_file_id,
-            $fromCust->CustomerFile[1]->cust_file_id,
-            $fromCust->CustomerFile[2]->cust_file_id,
+            $fromCust->Files[0]->cust_file_id,
+            $fromCust->Files[1]->cust_file_id,
+            $fromCust->Files[2]->cust_file_id,
         ];
 
         $testObj = new ReAssignCustomerSite;
@@ -301,10 +301,12 @@ class ReAssignCustomerSiteUnitTest extends TestCase
             'cust_file_id' => $fileIdList[0],
             'cust_site_id' => $movingSite->cust_site_id,
         ]);
+
         $this->assertDatabaseHas('customer_site_files', [
             'cust_file_id' => $fileIdList[1],
             'cust_site_id' => $movingSite->cust_site_id,
         ]);
+
         $this->assertDatabaseMissing('customer_site_files', [
             'cust_file_id' => $fileIdList[2],
             'cust_site_id' => $movingSite->cust_site_id,

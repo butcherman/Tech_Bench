@@ -118,7 +118,7 @@ Route::middleware('auth.secure')->group(function () {
         ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
             $breadcrumbs->index('Customers')
                 ->show(
-                    fn(Customer|string $customer) => gettype($customer) === 'object'
+                    fn (Customer|string $customer) => gettype($customer) === 'object'
                         ? $customer->name
                         : $customer
                 )
@@ -177,10 +177,10 @@ Route::middleware('auth.secure')->group(function () {
                     'notes/{note}',
                     [CustomerNoteController::class, 'restore']
                 )->withTrashed()->scopeBindings()->name('notes');
-                // Route::get(
-                //     'files/{file}',
-                //     [CustomerFileController::class, 'restore']
-                // )->withTrashed()->name('files');
+                Route::get(
+                    'files/{file}',
+                    [CustomerFileController::class, 'restore']
+                )->withTrashed()->scopeBindings()->name('files');
             });
 
             /*
@@ -203,10 +203,10 @@ Route::middleware('auth.secure')->group(function () {
                         'notes/{note}',
                         [CustomerNoteController::class, 'forceDelete']
                     )->withTrashed()->scopeBindings()->name('notes');
-                    // Route::delete(
-                    //     'files/{file}',
-                    //     [CustomerFileController::class, 'forceDelete']
-                    // )->withTrashed()->name('files');
+                    Route::delete(
+                        'files/{file}',
+                        [CustomerFileController::class, 'forceDelete']
+                    )->withTrashed()->scopeBindings()->name('files');
                 });
         });
 
@@ -222,7 +222,7 @@ Route::middleware('auth.secure')->group(function () {
                 $breadcrumbs->index('Sites', 'customers.show')
                     ->create('New Customer Site')
                     ->show(
-                        fn(Customer $customer, CustomerSite|string $site) => gettype($site) === 'object'
+                        fn (Customer $customer, CustomerSite|string $site) => gettype($site) === 'object'
                             ? $site->site_name
                             : $site
                     )->edit('Edit Site');
@@ -252,7 +252,7 @@ Route::middleware('auth.secure')->group(function () {
             ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
                 $breadcrumbs->index('Equipment', 'customers.show')
                     ->show(
-                        fn(Customer $customer, CustomerEquipment $equipment) => $equipment->equip_name
+                        fn (Customer $customer, CustomerEquipment $equipment) => $equipment->equip_name
                     );
             });
 
@@ -327,6 +327,7 @@ Route::middleware('auth.secure')->group(function () {
         | /customers/{customer-slug|customer-id}/files
         |-----------------------------------------------------------------------
         */
-        Route::apiResource('files', CustomerFileController::class);
+        Route::apiResource('files', CustomerFileController::class)
+            ->scoped(['files' => 'cust_id']);
     });
 });

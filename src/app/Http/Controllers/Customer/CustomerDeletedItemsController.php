@@ -22,7 +22,7 @@ class CustomerDeletedItemsController extends Controller
                 'equipment' => $customer->Equipment()->onlyTrashed()->get(),
                 'contacts' => $customer->Contacts()->onlyTrashed()->get(),
                 'notes' => $customer->Notes()->onlyTrashed()->get(),
-                'files' => $customer->CustomerFile()->onlyTrashed()->get(),
+                'files' => $customer->Files()->onlyTrashed()->get(),
             ],
         ]);
     }

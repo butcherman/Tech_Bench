@@ -3,16 +3,13 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Enums\DiskEnum;
-use App\Http\Controllers\Controller;
 use App\Http\Controllers\FileUploadController;
 use App\Http\Requests\Customer\CustomerFileRequest;
 use App\Models\Customer;
 use App\Models\CustomerFile;
 use App\Services\Customer\CustomerFileService;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Inertia\Inertia;
 
 class CustomerFileController extends FileUploadController
 {

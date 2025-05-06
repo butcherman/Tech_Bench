@@ -86,7 +86,7 @@ class Customer extends Model
     public function siteCount(): Attribute
     {
         return Attribute::make(
-            get: fn() => $this->Sites->count(),
+            get: fn () => $this->Sites->count(),
         );
     }
 
@@ -163,7 +163,7 @@ class Customer extends Model
         return match ($event) {
             'deleted', 'trashed', 'created' => [],
             default => [
-                new PrivateChannel('customer.' . $this->slug),
+                new PrivateChannel('customer.'.$this->slug),
             ],
         };
     }

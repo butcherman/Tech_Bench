@@ -128,7 +128,7 @@ class CustomerSiteUnitTest extends TestCase
         $data->Sites()->sync([$this->model->cust_site_id]);
 
         $this->assertEquals(
-            $data->toArray(),
+            $data->makeHidden(['Sites'])->toArray(),
             $this->model
                 ->SiteFile[0]
                 ->makeHidden(['Sites', 'pivot'])
@@ -198,7 +198,7 @@ class CustomerSiteUnitTest extends TestCase
         ]);
 
         $this->assertEquals(
-            $data->makeHidden('Customer')->toArray(),
+            $data->makeHidden(['Customer', 'Sites'])->toArray(),
             $this->model
                 ->GeneralFile()[0]
                 ->makeHidden(['CustomerEquipment', 'Sites', 'deleted_at'])

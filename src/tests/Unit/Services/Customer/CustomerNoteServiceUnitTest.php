@@ -68,14 +68,17 @@ class CustomerNoteServiceUnitTest extends TestCase
 
         $this->assertDatabaseHas('customer_site_notes', [
             'cust_site_id' => $customer->Sites[0]->cust_site_id,
+            'note_id' => $res->note_id,
         ]);
 
         $this->assertDatabaseHas('customer_site_notes', [
             'cust_site_id' => $customer->Sites[1]->cust_site_id,
+            'note_id' => $res->note_id,
         ]);
 
         $this->assertDatabaseHas('customer_site_notes', [
             'cust_site_id' => $customer->Sites[2]->cust_site_id,
+            'note_id' => $res->note_id,
         ]);
     }
 

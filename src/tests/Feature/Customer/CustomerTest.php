@@ -532,7 +532,7 @@ class CustomerTest extends TestCase
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);
         $cust = Customer::factory()
-            ->has(CustomerFile::factory())
+            ->has(CustomerFile::factory(), 'files')
             ->has(CustomerNote::factory(), 'notes')
             ->has(CustomerContact::factory(), 'contacts')
             ->createQuietly();

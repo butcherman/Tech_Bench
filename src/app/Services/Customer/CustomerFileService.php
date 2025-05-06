@@ -21,7 +21,7 @@ class CustomerFileService
     ): CustomerFile {
         $custFile = new CustomerFile([
             'name' => $requestData->get('name'),
-            'file_type_id' => $requestData->get('file_type_id')
+            'file_type_id' => $requestData->get('file_type_id'),
         ]);
 
         // Attach Relationships
@@ -109,7 +109,6 @@ class CustomerFileService
 
         $customerFile->Sites()->sync([]);
     }
-
 
     /**
      * Associate a list of sites with the file and remove all other associations

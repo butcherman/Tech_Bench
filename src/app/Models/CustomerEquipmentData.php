@@ -41,7 +41,7 @@ class CustomerEquipmentData extends Model
     {
         // The name of the field this value data belongs to
         return Attribute::make(
-            get: fn() => $this->DataFieldType->name
+            get: fn () => $this->DataFieldType->name
         );
     }
 
@@ -49,7 +49,7 @@ class CustomerEquipmentData extends Model
     {
         // The order that the data field should be in
         return Attribute::make(
-            get: fn() => $this->DataField->order
+            get: fn () => $this->DataField->order
         );
     }
 
@@ -82,12 +82,9 @@ class CustomerEquipmentData extends Model
     */
     public function broadcastOn(string $event): array
     {
-        return match ($event) {
-            'trashed', 'deleted' => [],
-            default => [
-                new PrivateChannel('customer.equipment.' . $this->cust_equip_id),
-            ],
-        };
+        return [
+            new PrivateChannel('customer.equipment.'.$this->cust_equip_id),
+        ];
     }
 
     public function newBroadcastableModelEvent(string $event): BroadcastableModelEventOccurred
