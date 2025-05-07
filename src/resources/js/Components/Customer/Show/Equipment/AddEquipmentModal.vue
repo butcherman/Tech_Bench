@@ -24,7 +24,7 @@ defineExpose({ show });
             v-if="modal?.isOpen"
             :available-equipment-list="availableEquipment"
             :customer="customer"
-            :site-list="siteList"
+            :site-list="siteList ?? []"
             @success="modal?.hide"
         />
     </Modal>

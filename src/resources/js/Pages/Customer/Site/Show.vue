@@ -1,10 +1,53 @@
 <script setup lang="ts">
 import AppLayout from "@/Layouts/App/AppLayout.vue";
 import Card from "@/Components/_Base/Card.vue";
-import { ref, reactive, onMounted } from "vue";
+import { ref, reactive, onMounted, onUnmounted } from "vue";
+import {
+    customer,
+    isFav,
+    permissions,
+} from "@/Composables/Customer/CustomerData.module";
+import {
+    leaveCustomerChannel,
+    registerCustomerChannel,
+} from "@/Composables/Customer/CustomerBroadcasting.module";
+import BookmarkItem from "@/Components/_Base/BookmarkItem.vue";
+import CustomerDetails from "@/Components/Customer/Show/CustomerDetails.vue";
+import CustomerManagement from "@/Components/Customer/Show/ManageCustomer.vue";
+import CustomerAlerts from "@/Components/Customer/Show/CustomerAlerts.vue";
+import QuickJump from "@/Components/_Base/QuickJump.vue";
+import CustomerEquipment from "@/Components/Customer/Show/Equipment/CustomerEquipment.vue";
+import CustomerContact from "@/Components/Customer/Show/Contacts/CustomerContact.vue";
+import CustomerNotes from "@/Components/Customer/Show/Notes/CustomerNotes.vue";
+import CustomerFiles from "@/Components/Customer/Show/Files/CustomerFiles.vue";
 
-// TODO - Add Page.
-const props = defineProps<{}>();
+/*
+|-------------------------------------------------------------------------------
+| Broadcasting Data
+|-------------------------------------------------------------------------------
+*/
+const channelName = customer.value.slug;
+onMounted(() => registerCustomerChannel(channelName));
+onUnmounted(() => leaveCustomerChannel(channelName));
+
+const quickJumpList = [
+    {
+        navId: "equipment",
+        label: "Equipment",
+    },
+    {
+        navId: "contacts",
+        label: "Contacts",
+    },
+    {
+        navId: "notes",
+        label: "Notes",
+    },
+    {
+        navId: "files",
+        label: "Files",
+    },
+];
 </script>
 
 <script lang="ts">
@@ -12,9 +55,26 @@ export default { layout: AppLayout };
 </script>
 
 <template>
-    <div class="flex justify-center">
-        <Card class="tb-card">
-            <h4 class="text-center">Show Site</h4>
-        </Card>
+    <div>
+        <div class="flex gap-2 pb-2 border-b border-slate-400">
+            <h1>
+                <BookmarkItem
+                    :is-bookmark="isFav"
+                    :toggle-route="$route('customers.bookmark', customer.slug)"
+                />
+            </h1>
+            <CustomerDetails class="grow" />
+            <div>
+                <CustomerManagement />
+            </div>
+        </div>
+        <CustomerAlerts />
+        <QuickJump :nav-list="quickJumpList" class="tb-gap-y" />
+        <div class="grid lg:grid-cols-2 tb-gap-y gap-3">
+            <CustomerEquipment id="equipment" />
+            <!-- <CustomerContact id="contacts" /> -->
+        </div>
+        <!-- <CustomerNotes id="notes" class="tb-gap-y" /> -->
+        <!-- <CustomerFiles id="files" class="tb-gap-y" /> -->
     </div>
 </template>

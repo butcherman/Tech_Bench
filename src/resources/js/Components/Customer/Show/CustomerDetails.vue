@@ -1,5 +1,9 @@
 <script setup lang="ts">
-import { customer } from "@/Composables/Customer/CustomerData.module";
+import CustomerSiteDetails from "./CustomerSiteDetails.vue";
+import {
+    currentSite,
+    customer,
+} from "@/Composables/Customer/CustomerData.module";
 </script>
 
 <template>
@@ -12,5 +16,6 @@ import { customer } from "@/Composables/Customer/CustomerData.module";
             <span class="font-semibold"> Customer ID: </span>
             {{ customer.cust_id }}
         </div>
+        <CustomerSiteDetails v-if="currentSite" />
     </div>
 </template>

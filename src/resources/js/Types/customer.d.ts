@@ -23,7 +23,7 @@ type customerSite = {
 type customerPageProps = {
     permissions: customerPermissions;
     customer: customer;
-    site: customerSite;
+    currentSite: customerSite;
     siteList: customerSite[];
     isFav: boolean;
     alerts: customerAlert[];

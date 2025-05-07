@@ -5,8 +5,11 @@ import CustomerNotes from "@/Components/Customer/Show/Notes/CustomerNotes.vue";
 import EquipmentData from "@/Components/Customer/Show/Equipment/EquipmentData.vue";
 import EquipmentSites from "@/Components/Customer/Show/Equipment/EquipmentSites.vue";
 import ManageEquipment from "@/Components/Customer/Show/Equipment/ManageEquipment.vue";
-import { permissions } from "@/Composables/Customer/CustomerData.module";
 import { onMounted, onUnmounted } from "vue";
+import {
+    permissions,
+    siteList,
+} from "@/Composables/Customer/CustomerData.module";
 import {
     leaveEquipmentChannel,
     registerEquipmentChannel,
@@ -45,7 +48,11 @@ export default { layout: AppLayout };
             :equipment="equipment"
             :equipment-data="equipmentData"
         />
-        <EquipmentSites class="my-3" :equipment="equipment" />
+        <EquipmentSites
+            v-if="siteList && siteList.length > 1"
+            class="my-3"
+            :equipment="equipment"
+        />
         <CustomerNotes :equipment="equipment" />
     </div>
 </template>

@@ -27,8 +27,9 @@ const props = defineProps<{
 */
 const initValues = {
     equip_id: null,
-    site_list:
-        props.siteList.length === 1 ? [props.siteList[0].cust_site_id] : [],
+    site_list: !props.siteList.length
+        ? [props.customer.sites[0].cust_site_id]
+        : [],
 };
 const schema = object({
     equip_id: number().required().label("Equipment Type"),
@@ -56,6 +57,7 @@ const schema = object({
             value-field="value"
         />
         <PickListInput
+            v-if="siteList.length"
             id="equipment-site-list"
             label="Select Which Sites this Equipment Belongs To"
             name="site_list"

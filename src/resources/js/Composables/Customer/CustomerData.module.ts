@@ -19,13 +19,17 @@ export const permissions = computed<customerPermissions>(
 |-------------------------------------------------------------------------------
 */
 export const customer = computed<customer>(() => page.props.customer);
-export const siteList = computed<customerSite[]>(() => {
+export const siteList = computed<customerSite[] | undefined>(() => {
     let siteList = page.props.siteList;
     let primary = customer.value.primary_site_id;
 
+    if (!siteList) {
+        return undefined;
+    }
+
     return sortCustSites(siteList, primary);
 });
-export const currentSite = null;
+export const currentSite = computed<customerSite>(() => page.props.currentSite);
 export const alerts = computed<customerAlert[]>(() => page.props.alerts);
 
 /*
