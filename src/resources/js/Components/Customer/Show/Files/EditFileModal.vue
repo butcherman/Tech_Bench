@@ -37,7 +37,7 @@ defineExpose({ show });
             v-if="activeFile"
             :customer="customer"
             :customer-file="activeFile"
-            :site-list="siteList"
+            :site-list="siteList ?? []"
             :equip-list="equipmentList"
             :file-types="fileTypes"
             @success="hide"

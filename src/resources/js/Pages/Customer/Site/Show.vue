@@ -72,9 +72,9 @@ export default { layout: AppLayout };
         <QuickJump :nav-list="quickJumpList" class="tb-gap-y" />
         <div class="grid lg:grid-cols-2 tb-gap-y gap-3">
             <CustomerEquipment id="equipment" />
-            <!-- <CustomerContact id="contacts" /> -->
+            <CustomerContact id="contacts" />
         </div>
-        <!-- <CustomerNotes id="notes" class="tb-gap-y" /> -->
-        <!-- <CustomerFiles id="files" class="tb-gap-y" /> -->
+        <CustomerNotes id="notes" class="tb-gap-y" />
+        <CustomerFiles id="files" class="tb-gap-y" />
     </div>
 </template>

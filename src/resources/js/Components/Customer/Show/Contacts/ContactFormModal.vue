@@ -35,7 +35,7 @@ defineExpose({ show });
         <CustomerContactForm
             v-if="modal?.isOpen || activeContact"
             :customer="customer"
-            :site-list="siteList"
+            :site-list="siteList ?? []"
             :phone-types="phoneTypes"
             :contact="activeContact"
             @success="modal?.hide()"

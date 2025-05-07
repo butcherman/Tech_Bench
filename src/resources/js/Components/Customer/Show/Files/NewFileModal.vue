@@ -40,7 +40,7 @@ defineExpose({ show });
         <CustomerFileAddForm
             v-if="equipmentList && modal?.isOpen"
             :customer="customer"
-            :site-list="siteList"
+            :site-list="siteList ?? []"
             :equip-list="equipmentList"
             :file-types="fileTypes"
             @success="onUploadSuccess"
