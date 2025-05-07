@@ -7,6 +7,7 @@ import EquipmentSites from "@/Components/Customer/Show/Equipment/EquipmentSites.
 import ManageEquipment from "@/Components/Customer/Show/Equipment/ManageEquipment.vue";
 import { onMounted, onUnmounted } from "vue";
 import {
+    customer,
     permissions,
     siteList,
 } from "@/Composables/Customer/CustomerData.module";
@@ -49,7 +50,7 @@ export default { layout: AppLayout };
             :equipment-data="equipmentData"
         />
         <EquipmentSites
-            v-if="siteList && siteList.length > 1"
+            v-if="customer.site_count > 1"
             class="my-3"
             :equipment="equipment"
         />
