@@ -11,15 +11,11 @@ import CustomerNotes from "@/Components/Customer/Show/Notes/CustomerNotes.vue";
 import QuickJump from "@/Components/_Base/QuickJump.vue";
 import SiteList from "@/Components/Customer/Show/SiteList.vue";
 import { onMounted, onUnmounted } from "vue";
+import { customer, isFav } from "@/Composables/Customer/CustomerData.module";
 import {
     registerCustomerChannel,
     leaveCustomerChannel,
 } from "@/Composables/Customer/CustomerBroadcasting.module";
-import {
-    customer,
-    isFav,
-    permissions,
-} from "@/Composables/Customer/CustomerData.module";
 
 /*
 |-------------------------------------------------------------------------------

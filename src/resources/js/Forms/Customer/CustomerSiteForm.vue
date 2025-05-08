@@ -39,8 +39,7 @@ const submitRoute = computed(() => {
     }
 
     if (props.parentCustomer) {
-        console.log("customers.sites.store");
-        // return route("customers.sites.store", [props.parentCustomer?.slug]);
+        return route("customers.sites.store", [props.parentCustomer?.slug]);
     }
 
     return route("customers.store-site");
