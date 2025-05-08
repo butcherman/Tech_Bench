@@ -5,9 +5,11 @@ import Modal from "@/Components/_Base/Modal.vue";
 import { ref, computed, useTemplateRef, shallowRef } from "vue";
 import { router } from "@inertiajs/vue3";
 import {
+    currentSite,
     customer,
     permissions,
 } from "@/Composables/Customer/CustomerData.module";
+import DisableSiteForm from "@/Forms/Customer/DisableSiteForm.vue";
 
 const menuList = useTemplateRef("customer-admin-menu");
 const modal = useTemplateRef("disable-confirmation-modal");
@@ -18,7 +20,6 @@ const formComponent = shallowRef();
  * Determine which management options should be shown
  */
 const managementOptions = computed(() => {
-    // return concat(baseOptions, getCustomerOptions());
     const options = [];
 
     if (permissions.value.details.update) {
@@ -41,7 +42,39 @@ const managementOptions = computed(() => {
         });
     }
 
-    // TODO - Add Site Option Stuff
+    if (permissions.value.details.create) {
+        options.push({
+            label: "Add Site",
+            command: () =>
+                router.get(
+                    route("customers.sites.create", [
+                        customer.value.slug,
+                        currentSite.value.site_slug,
+                    ])
+                ),
+        });
+    }
+
+    if (currentSite.value && permissions.value.details.update) {
+        options.push({
+            label: "Edit Site",
+            command: () =>
+                router.get(
+                    route("customers.sites.edit", [
+                        customer.value.slug,
+                        currentSite.value.site_slug,
+                    ])
+                ),
+        });
+    }
+
+    // TODO - Cannot disable if only site
+    if (currentSite.value && permissions.value.details.delete) {
+        options.push({
+            label: "Disable Site",
+            command: () => showDisableSite(),
+        });
+    }
 
     if (permissions.value.details.update) {
         options.push({
@@ -60,6 +93,16 @@ const managementOptions = computed(() => {
 
     return options;
 });
+
+/**
+ * Show the Disable Site Confirmation prompt and have customer verify response
+ */
+const showDisableSite = () => {
+    formComponent.value = DisableSiteForm;
+    warningMessage.value =
+        "Disabling this site means that it will no longer be accessible";
+    modal.value?.show();
+};
 
 /**
  * Show the Disable Customer Confirmation prompt and have customer verify response
@@ -86,7 +129,13 @@ const showDisableCustomer = () => {
         <Menu ref="customer-admin-menu" :model="managementOptions" popup />
         <Modal ref="disable-confirmation-modal">
             <p class="text-center mt-2">{{ warningMessage }}</p>
-            <component :is="formComponent" :customer="customer" class="mt-4" />
+            <component
+                :is="formComponent"
+                :customer="customer"
+                :site="currentSite"
+                class="mt-4"
+                @success="modal?.hide()"
+            />
         </Modal>
     </div>
 </template>

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import AddButton from "@/Components/_Base/Buttons/AddButton.vue";
 import AppLayout from "@/Layouts/App/AppLayout.vue";
 import BookmarkItem from "@/Components/_Base/BookmarkItem.vue";
 import CustomerAlerts from "@/Components/Customer/Show/CustomerAlerts.vue";
@@ -76,17 +75,7 @@ export default { layout: AppLayout };
         <CustomerAlerts />
         <QuickJump :nav-list="quickJumpList" class="tb-gap-y" />
         <div class="tb-card-lg tb-gap-y">
-            <SiteList id="sites">
-                <template #append-title>
-                    <AddButton
-                        v-if="permissions.details.create"
-                        text="Add Site"
-                        size="small"
-                        :href="$route('customers.sites.create', customer.slug)"
-                        pill
-                    />
-                </template>
-            </SiteList>
+            <SiteList id="sites" />
         </div>
         <div class="grid lg:grid-cols-2 tb-gap-y gap-3">
             <CustomerEquipment id="equipment" />

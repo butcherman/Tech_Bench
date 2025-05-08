@@ -32,11 +32,10 @@ const onCustomerSelected = (customer: customer) => {
 */
 const submitRoute = computed(() => {
     if (props.parentCustomer && props.customerSite) {
-        console.log("customers.sites.update");
-        // return route("customers.sites.update", [
-        //     props.parentCustomer?.slug,
-        //     props.customerSite.site_slug,
-        // ]);
+        return route("customers.sites.update", [
+            props.parentCustomer?.slug,
+            props.customerSite.site_slug,
+        ]);
     }
 
     if (props.parentCustomer) {

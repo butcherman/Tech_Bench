@@ -46,7 +46,7 @@ const onRefreshEnd = (): void => {
 </script>
 
 <template>
-    <Card>
+    <Card v-if="siteList">
         <template #title>
             <span v-if="notificationStatus.site">
                 <AlertButton tooltip="New Data Available.  Refresh to view" />

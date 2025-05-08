@@ -6,6 +6,7 @@ use App\Facades\CacheData;
 use App\Facades\UserPermissions;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customer\CustomerSiteRequest;
+use App\Http\Requests\Customer\DisableCustomerRequest;
 use App\Models\Customer;
 use App\Models\CustomerSite;
 use App\Services\Customer\CustomerService;
@@ -87,22 +88,34 @@ class CustomerSiteController extends Controller
         ]);
     }
 
-    public function edit(string $id)
+    public function edit(Customer $customer, CustomerSite $site): Response
     {
-        //
-        return 'edit';
+        $this->authorize('update', $site);
+
+        return Inertia::render('Customer/Site/Edit', [
+            'default-state' => fn() => config('customer.default_state'),
+            'parent-customer' => fn() => $customer,
+            'site' => fn() => $site,
+        ]);
     }
 
-    public function update(Request $request, string $id)
+    public function update(CustomerSiteRequest $request, Customer $customer, CustomerSite $site): RedirectResponse
     {
-        //
-        return 'update';
+        $this->svc->updateSite($request->safe()->collect(), $site);
+
+        return redirect(route('customers.sites.show', [
+            $customer->slug,
+            $site->site_slug,
+        ]))->with('success', __('cust.site.updated', [
+            'name' => $site->site_name,
+        ]));
     }
 
-    public function destroy(string $id)
+    public function destroy(DisableCustomerRequest $request, Customer $customer, CustomerSite $site): RedirectResponse
     {
-        //
-        return 'destroy';
+        $this->svc->destroySite($site, $request->get('reason'));
+
+        return redirect(route('customers.show', $customer->slug));
     }
 
     public function restore(string $id)

@@ -9,7 +9,6 @@ import { onMounted, onUnmounted } from "vue";
 import {
     customer,
     permissions,
-    siteList,
 } from "@/Composables/Customer/CustomerData.module";
 import {
     leaveEquipmentChannel,

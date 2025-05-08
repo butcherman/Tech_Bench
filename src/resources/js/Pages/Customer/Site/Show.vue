@@ -1,25 +1,20 @@
 <script setup lang="ts">
 import AppLayout from "@/Layouts/App/AppLayout.vue";
-import Card from "@/Components/_Base/Card.vue";
-import { ref, reactive, onMounted, onUnmounted } from "vue";
-import {
-    customer,
-    isFav,
-    permissions,
-} from "@/Composables/Customer/CustomerData.module";
+import BookmarkItem from "@/Components/_Base/BookmarkItem.vue";
+import CustomerAlerts from "@/Components/Customer/Show/CustomerAlerts.vue";
+import CustomerContact from "@/Components/Customer/Show/Contacts/CustomerContact.vue";
+import CustomerDetails from "@/Components/Customer/Show/CustomerDetails.vue";
+import CustomerEquipment from "@/Components/Customer/Show/Equipment/CustomerEquipment.vue";
+import CustomerFiles from "@/Components/Customer/Show/Files/CustomerFiles.vue";
+import CustomerManagement from "@/Components/Customer/Show/ManageCustomer.vue";
+import CustomerNotes from "@/Components/Customer/Show/Notes/CustomerNotes.vue";
+import QuickJump from "@/Components/_Base/QuickJump.vue";
+import { onMounted, onUnmounted } from "vue";
+import { customer, isFav } from "@/Composables/Customer/CustomerData.module";
 import {
     leaveCustomerChannel,
     registerCustomerChannel,
 } from "@/Composables/Customer/CustomerBroadcasting.module";
-import BookmarkItem from "@/Components/_Base/BookmarkItem.vue";
-import CustomerDetails from "@/Components/Customer/Show/CustomerDetails.vue";
-import CustomerManagement from "@/Components/Customer/Show/ManageCustomer.vue";
-import CustomerAlerts from "@/Components/Customer/Show/CustomerAlerts.vue";
-import QuickJump from "@/Components/_Base/QuickJump.vue";
-import CustomerEquipment from "@/Components/Customer/Show/Equipment/CustomerEquipment.vue";
-import CustomerContact from "@/Components/Customer/Show/Contacts/CustomerContact.vue";
-import CustomerNotes from "@/Components/Customer/Show/Notes/CustomerNotes.vue";
-import CustomerFiles from "@/Components/Customer/Show/Files/CustomerFiles.vue";
 
 /*
 |-------------------------------------------------------------------------------

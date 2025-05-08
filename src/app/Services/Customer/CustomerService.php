@@ -135,24 +135,31 @@ class CustomerService
     /**
      * Update an existing customer site
      */
-    // public function updateSite(Collection $requestData, CustomerSite $site): CustomerSite
-    // {
-    //     // If name has changed, generate a new slug
-    //     if (config('customer.update_slug')) {
-    //         if ($requestData->get('site_name') !== $site->site_name) {
-    //             $slug = $this->generateSlug(
-    //                 $requestData->get('site_name'),
-    //                 $requestData->get('city'),
-    //                 true
-    //             );
-    //             $requestData->merge(['site-slug' => $slug]);
-    //         }
-    //     }
+    public function updateSite(Collection $requestData, CustomerSite $site): CustomerSite
+    {
+        // If name has changed, generate a new slug if allowed
+        $site->site_name = $requestData->get('site_name');
+        $site->address = $requestData->get('address');
+        $site->city = $requestData->get('city');
+        $site->state = $requestData->get('state');
+        $site->zip = $requestData->get('zip');
 
-    //     $site->update($requestData->except(['cust_name'])->toArray());
+        if ($site->isDirty('site_name')) {
+            if (config('customer.update_slug')) {
+                $slug = $this->generateSlug(
+                    $requestData->get('site_name'),
+                    $requestData->get('city'),
+                    true
+                );
 
-    //     return $site;
-    // }
+                $site->site_slug = $slug;
+            }
+        }
+
+        $site->save();
+
+        return $site;
+    }
 
     /**
      * Destroy a customer site
@@ -163,7 +170,7 @@ class CustomerService
         ?bool $force = false
     ): void {
         if ($force) {
-            Log::notice('Force Deleting Customer site '.$site->site_name, [
+            Log::notice('Force Deleting Customer site ' . $site->site_name, [
                 'reason' => $reason,
                 'customer_id' => $site->cust_id,
                 'site_id' => $site->cust_site_id,
@@ -176,7 +183,7 @@ class CustomerService
             return;
         }
 
-        Log::notice('Deleting Customer site '.$site->site_name, [
+        Log::notice('Deleting Customer site ' . $site->site_name, [
             'reason' => $reason,
             'customer_id' => $site->cust_id,
             'site_id' => $site->cust_site_id,
@@ -210,9 +217,9 @@ class CustomerService
         $param = $isSite ? 'site_slug' : 'slug';
 
         while ($model::where($param, $slug)->first()) {
-            $slug = Str::slug($name.'-'.$city);
+            $slug = Str::slug($name . '-' . $city);
             if ($index > 0) {
-                $slug .= '-'.$index;
+                $slug .= '-' . $index;
             }
             $index++;
         }

@@ -23,6 +23,7 @@ class DisableCustomerRequest extends FormRequest
      */
     public function rules(): array
     {
+        // TODO - Cannot disable if it is the only site
         return [
             'reason' => ['required', 'string'],
         ];
