@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import DisableCustomerForm from "@/Forms/Customer/DisableCustomerForm.vue";
+import DisableSiteForm from "@/Forms/Customer/DisableSiteForm.vue";
 import Menu from "primevue/menu";
 import Modal from "@/Components/_Base/Modal.vue";
+import okModal from "@/Modules/okModal";
 import { ref, computed, useTemplateRef, shallowRef } from "vue";
 import { router } from "@inertiajs/vue3";
 import {
@@ -9,12 +11,26 @@ import {
     customer,
     permissions,
 } from "@/Composables/Customer/CustomerData.module";
-import DisableSiteForm from "@/Forms/Customer/DisableSiteForm.vue";
 
 const menuList = useTemplateRef("customer-admin-menu");
 const modal = useTemplateRef("disable-confirmation-modal");
 const warningMessage = ref<string>();
 const formComponent = shallowRef();
+
+/**
+ * Determine if the "Disable Site" option is allowed.
+ */
+const isDisableSiteAllowed = (): boolean => {
+    if (customer.value.site_count === 1) {
+        return false;
+    }
+
+    if (!currentSite.value) {
+        return false;
+    }
+
+    return true;
+};
 
 /**
  * Determine which management options should be shown
@@ -68,8 +84,7 @@ const managementOptions = computed(() => {
         });
     }
 
-    // TODO - Cannot disable if only site
-    if (currentSite.value && permissions.value.details.delete) {
+    if (isDisableSiteAllowed() && permissions.value.details.delete) {
         options.push({
             label: "Disable Site",
             command: () => showDisableSite(),
@@ -98,6 +113,14 @@ const managementOptions = computed(() => {
  * Show the Disable Site Confirmation prompt and have customer verify response
  */
 const showDisableSite = () => {
+    if (customer.value.primary_site_id === currentSite.value.cust_site_id) {
+        okModal(
+            "You cannot disable the primary site.  Please assign another site as primary before disabling this site"
+        );
+
+        return;
+    }
+
     formComponent.value = DisableSiteForm;
     warningMessage.value =
         "Disabling this site means that it will no longer be accessible";

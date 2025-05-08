@@ -3,7 +3,6 @@ import { computed } from "vue";
 import {
     currentSite,
     customer,
-    siteList,
 } from "@/Composables/Customer/CustomerData.module";
 
 /**
@@ -19,7 +18,7 @@ const mapUrl = computed<string>(() => {
 
 <template>
     <div>
-        <h5 v-if="siteList">
+        <h3 v-if="customer.site_count > 1">
             <span
                 v-if="currentSite.cust_site_id === customer.primary_site_id"
                 class="text-success"
@@ -28,7 +27,7 @@ const mapUrl = computed<string>(() => {
                 <fa-icon icon="paper-plane" />
             </span>
             {{ currentSite.site_name }}
-        </h5>
+        </h3>
         <address>
             <div class="float-start me-1 h-100 text-muted">
                 <fa-icon icon="fa-map-marked" />
