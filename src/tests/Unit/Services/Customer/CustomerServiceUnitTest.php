@@ -60,7 +60,7 @@ class CustomerServiceUnitTest extends TestCase
             'state' => $site->state,
             'zip' => $site->zip,
         ];
-        $slug = Str::slug($data['name'].'-'.$site->city);
+        $slug = Str::slug($data['name'] . '-' . $site->city);
 
         $testObj = new CustomerService;
         $res = $testObj->createCustomer(collect($data));
@@ -87,7 +87,7 @@ class CustomerServiceUnitTest extends TestCase
 
         Customer::factory()->create([
             'name' => $existing->name,
-            'slug' => Str::slug($existing->slug.'-'.$existing->Sites[0]->city),
+            'slug' => Str::slug($existing->slug . '-' . $existing->Sites[0]->city),
         ]);
 
         $data = [
@@ -98,7 +98,7 @@ class CustomerServiceUnitTest extends TestCase
             'state' => $existing->Sites[0]->state,
             'zip' => $existing->Sites[0]->zip,
         ];
-        $slug = Str::slug($data['name'].'-'.$existing->Sites[0]->city.'-1');
+        $slug = Str::slug($data['name'] . '-' . $existing->Sites[0]->city . '-1');
 
         $testObj = new CustomerService;
         $res = $testObj->createCustomer(collect($data));
@@ -165,7 +165,7 @@ class CustomerServiceUnitTest extends TestCase
             'dba_name' => $cust->dba_name,
             'primary_site_id' => $site->cust_site_id,
         ];
-        $slug = Str::slug($data['name'].'-'.$updating->Sites[0]->city);
+        $slug = Str::slug($data['name'] . '-' . $updating->Sites[0]->city);
 
         $testObj = new CustomerService;
         $res = $testObj->updateCustomer(collect($data), $updating);
@@ -328,6 +328,30 @@ class CustomerServiceUnitTest extends TestCase
         $this->assertEquals($site['site_name'], $res->site_name);
 
         $this->assertDatabaseHas('customer_sites', $site);
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | updateSite()
+    |---------------------------------------------------------------------------
+    */
+    public function test_update_site(): void
+    {
+        $site = CustomerSite::factory()->create();
+        $data = CustomerSite::factory()
+            ->make()
+            ->makeHidden(['cust_id', 'is_primary'])
+            ->toArray();
+
+        $testObj = new CustomerService;
+        $res = $testObj->updateSite(collect($data), $site);
+
+        $this->assertEquals($data['site_name'], $res->site_name);
+
+        $this->assertDatabaseHas('customer_sites', [
+            'cust_site_id' => $site->cust_site_id,
+            'site_name' => $data['site_name'],
+        ]);
     }
 
     /*

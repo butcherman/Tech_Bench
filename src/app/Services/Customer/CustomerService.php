@@ -158,7 +158,7 @@ class CustomerService
 
         $site->save();
 
-        return $site;
+        return $site->refresh();
     }
 
     /**

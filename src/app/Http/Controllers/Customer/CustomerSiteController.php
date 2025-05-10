@@ -115,7 +115,8 @@ class CustomerSiteController extends Controller
     {
         $this->svc->destroySite($site, $request->get('reason'));
 
-        return redirect(route('customers.show', $customer->slug));
+        return redirect(route('customers.show', $customer->slug))
+            ->with('danger', __('cust.destroy', ['name' => $site->site_name]));
     }
 
     public function restore(string $id)

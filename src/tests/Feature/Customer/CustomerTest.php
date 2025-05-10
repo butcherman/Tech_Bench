@@ -42,7 +42,7 @@ class CustomerTest extends TestCase
             ->get(route('customers.index'));
 
         $response->assertSuccessful()
-            ->assertInertia(fn (Assert $page) => $page
+            ->assertInertia(fn(Assert $page) => $page
                 ->component('Customer/Index')
                 ->has('permissions'));
     }
@@ -81,7 +81,7 @@ class CustomerTest extends TestCase
             ->get(route('customers.create'));
 
         $response->assertSuccessful()
-            ->assertInertia(fn (Assert $page) => $page
+            ->assertInertia(fn(Assert $page) => $page
                 ->component('Customer/Create')
                 ->has('select-id')
                 ->has('default-state'));
@@ -199,29 +199,24 @@ class CustomerTest extends TestCase
         $this->assertGuest();
     }
 
-    // public function test_show_single_site(): void
-    // {
-    //     /** @var User $user */
-    //     $user = User::factory()->createQuietly();
-    //     $cust = Customer::factory()->createQuietly();
+    public function test_show_single_site(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+        $cust = Customer::factory()->createQuietly();
 
-    //     $response = $this->actingAs($user)
-    //         ->get(route('customers.show', $cust->slug));
+        $response = $this->actingAs($user)
+            ->get(route('customers.show', $cust->slug));
 
-    //     $response->assertSuccessful()
-    //         ->assertInertia(fn (Assert $page) => $page
-    //             ->component('Customer/Site/Show')
-    //             ->has('permissions')
-    //             ->has('customer')
-    //             ->has('site')
-    //             ->has('siteList')
-    //             ->has('alerts')
-    //             ->has('equipmentList')
-    //             ->has('contacts')
-    //             ->has('notes')
-    //             ->has('files')
-    //             ->has('is-fav'));
-    // }
+        $response->assertSuccessful()
+            ->assertInertia(fn(Assert $page) => $page
+                ->component('Customer/Site/Show')
+                ->has('permissions')
+                ->has('customer')
+                ->has('currentSite')
+                ->has('alerts')
+                ->has('isFav'));
+    }
 
     public function test_show_multiple_sites(): void
     {
@@ -234,30 +229,25 @@ class CustomerTest extends TestCase
             ->get(route('customers.show', $cust->slug));
 
         $response->assertSuccessful()
-            ->assertInertia(fn (Assert $page) => $page
+            ->assertInertia(fn(Assert $page) => $page
                 ->component('Customer/Show')
                 ->has('permissions')
                 ->has('customer')
                 ->has('siteList')
                 ->has('alerts')
-                // ->has('equipmentList')
-                // ->has('contactList')
-                // ->has('notes')
-                // ->has('files')
                 ->has('isFav'));
     }
 
-    // public function test_show_invalid_customer(): void
-    // {
-    //     /** @var User $user */
-    //     $user = User::factory()->createQuietly();
-    //     $response = $this->actingAs($user)
-    //         ->get(route('customers.show', 'someRandomCustomerSlug'));
+    public function test_show_invalid_customer(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+        $response = $this->actingAs($user)
+            ->get(route('customers.show', 'someRandomCustomerSlug'));
 
-    //     $response->assertSuccessful()
-    //         ->assertInertia(fn (Assert $page) => $page
-    //             ->component('Customer/NotFound'));
-    // }
+        $response->assertStatus(302)
+            ->assertRedirect(route('customers.not-found'));
+    }
 
     /*
     |---------------------------------------------------------------------------
@@ -299,7 +289,7 @@ class CustomerTest extends TestCase
             ->get(route('customers.edit', $customer->slug));
 
         $response->assertSuccessful()
-            ->assertInertia(fn (Assert $page) => $page
+            ->assertInertia(fn(Assert $page) => $page
                 ->component('Customer/Edit')
                 ->has('selectId')
                 ->has('default-state')
