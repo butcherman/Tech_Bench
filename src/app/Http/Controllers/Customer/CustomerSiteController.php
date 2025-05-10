@@ -22,11 +22,11 @@ class CustomerSiteController extends Controller
     public function index(Request $request, Customer $customer): Response
     {
         return Inertia::render('Customer/Site/Index', [
-            'alerts' => fn() => $customer->Alerts,
-            'customer' => fn() => $customer,
-            'permissions' => fn() => UserPermissions::customerPermissions($request->user()),
-            'siteList' => fn() => $customer->Sites->makeVisible(['href']),
-            'isFav' => fn() => $customer->isFav($request->user()),
+            'alerts' => fn () => $customer->Alerts,
+            'customer' => fn () => $customer,
+            'permissions' => fn () => UserPermissions::customerPermissions($request->user()),
+            'siteList' => fn () => $customer->Sites->makeVisible(['href']),
+            'isFav' => fn () => $customer->isFav($request->user()),
         ]);
     }
 
@@ -38,8 +38,8 @@ class CustomerSiteController extends Controller
         $this->authorize('create', CustomerSite::class);
 
         return Inertia::render('Customer/Site/Create', [
-            'default-state' => fn() => config('customer.default_state'),
-            'parent-customer' => fn() => $customer,
+            'default-state' => fn () => config('customer.default_state'),
+            'parent-customer' => fn () => $customer,
         ]);
     }
 
@@ -61,30 +61,30 @@ class CustomerSiteController extends Controller
     public function show(Request $request, Customer $customer, CustomerSite $site): Response
     {
         return Inertia::render('Customer/Site/Show', [
-            'alerts' => fn() => $customer->Alerts,
-            'availableEquipment' => fn() => CacheData::equipmentCategorySelectBox(),
-            'customer' => fn() => $customer,
-            'currentSite' => fn() => $site,
-            'isFav' => fn() => $customer->isFav($request->user()),
-            'permissions' => fn() => UserPermissions::customerPermissions(
+            'alerts' => fn () => $customer->Alerts,
+            'availableEquipment' => fn () => CacheData::equipmentCategorySelectBox(),
+            'customer' => fn () => $customer,
+            'currentSite' => fn () => $site,
+            'isFav' => fn () => $customer->isFav($request->user()),
+            'permissions' => fn () => UserPermissions::customerPermissions(
                 $request->user()
             ),
-            'phoneTypes' => fn() => CacheData::phoneTypes(),
-            'fileTypes' => fn() => CacheData::fileTypes(),
+            'phoneTypes' => fn () => CacheData::phoneTypes(),
+            'fileTypes' => fn () => CacheData::fileTypes(),
 
             /**
              * Deferred Props
              */
-            'contactList' => Inertia::defer(fn() => $site->SiteContact),
+            'contactList' => Inertia::defer(fn () => $site->SiteContact),
             'groupedEquipmentList' => Inertia::defer(
-                fn() => $site->SiteEquipment
+                fn () => $site->SiteEquipment
                     ->load('Sites')
                     ->groupBy('equip_name')
                     ->chunk(5)
             ),
-            'equipmentList' => Inertia::defer(fn() => $site->SiteEquipment->load('Sites')),
-            'noteList' => Inertia::defer(fn() => $site->SiteNote),
-            'fileList' => Inertia::defer(fn() => $site->SiteFile->append('href')),
+            'equipmentList' => Inertia::defer(fn () => $site->SiteEquipment->load('Sites')),
+            'noteList' => Inertia::defer(fn () => $site->SiteNote),
+            'fileList' => Inertia::defer(fn () => $site->SiteFile->append('href')),
         ]);
     }
 
@@ -93,9 +93,9 @@ class CustomerSiteController extends Controller
         $this->authorize('update', $site);
 
         return Inertia::render('Customer/Site/Edit', [
-            'default-state' => fn() => config('customer.default_state'),
-            'parent-customer' => fn() => $customer,
-            'site' => fn() => $site,
+            'default-state' => fn () => config('customer.default_state'),
+            'parent-customer' => fn () => $customer,
+            'site' => fn () => $site,
         ]);
     }
 
@@ -119,15 +119,21 @@ class CustomerSiteController extends Controller
             ->with('danger', __('cust.destroy', ['name' => $site->site_name]));
     }
 
-    public function restore(string $id)
+    public function restore(Customer $customer, CustomerSite $site): RedirectResponse
     {
-        //
-        return 'restore';
+        $this->authorize('restore', $customer);
+
+        $this->svc->restoreSite($site);
+
+        return back()->with('success', 'Customer Site Restored');
     }
 
-    public function forceDelete(string $id)
+    public function forceDelete(Customer $customer, CustomerSite $site): RedirectResponse
     {
-        //
-        return 'force delete';
+        $this->authorize('forceDelete', $customer);
+
+        $this->svc->destroySite($site, 'Deleting Site', true);
+
+        return back()->with('danger', 'Customer Site Deleted');
     }
 }

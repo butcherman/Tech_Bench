@@ -24,17 +24,17 @@ class CustomerEquipmentController extends Controller
     public function index(Request $request, Customer $customer): Response
     {
         return Inertia::render('Customer/Equipment/Index', [
-            'alerts' => fn() => $customer->Alerts,
-            'availableEquipment' => fn() => CacheData::equipmentCategorySelectBox(),
-            'customer' => fn() => $customer,
-            'permissions' => fn() => UserPermissions::customerPermissions($request->user()),
-            'siteList' => fn() => $customer->Sites->makeVisible(['href']),
+            'alerts' => fn () => $customer->Alerts,
+            'availableEquipment' => fn () => CacheData::equipmentCategorySelectBox(),
+            'customer' => fn () => $customer,
+            'permissions' => fn () => UserPermissions::customerPermissions($request->user()),
+            'siteList' => fn () => $customer->Sites->makeVisible(['href']),
 
             /**
              * Deferred Props
              */
             'groupedEquipmentList' => Inertia::defer(
-                fn() => $customer->Equipment
+                fn () => $customer->Equipment
                     ->load('Sites')
                     ->groupBy('equip_name')
                     ->chunk(25)
@@ -61,12 +61,12 @@ class CustomerEquipmentController extends Controller
     public function show(Request $request, Customer $customer, CustomerEquipment $equipment): Response
     {
         return Inertia::render('Customer/Equipment/Show', [
-            'permissions' => fn() => UserPermissions::customerPermissions($request->user()),
-            'customer' => fn() => $customer,
-            'equipment' => fn() => $equipment,
-            'siteList' => fn() => $equipment->Sites->makeVisible(['href']),
-            'equipment-data' => fn() => $equipment->CustomerEquipmentData,
-            'noteList' => fn() => $equipment->getNotes(),
+            'permissions' => fn () => UserPermissions::customerPermissions($request->user()),
+            'customer' => fn () => $customer,
+            'equipment' => fn () => $equipment,
+            'siteList' => fn () => $equipment->Sites->makeVisible(['href']),
+            'equipment-data' => fn () => $equipment->CustomerEquipmentData,
+            'noteList' => fn () => $equipment->getNotes(),
         ]);
     }
 

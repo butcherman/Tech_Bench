@@ -118,7 +118,7 @@ Route::middleware('auth.secure')->group(function () {
         ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
             $breadcrumbs->index('Customers')
                 ->show(
-                    fn(Customer|string $customer) => gettype($customer) === 'object'
+                    fn (Customer|string $customer) => gettype($customer) === 'object'
                         ? $customer->name
                         : $customer
                 )
@@ -216,13 +216,26 @@ Route::middleware('auth.secure')->group(function () {
         | /customers/{customer-slug|customer-id}/sites
         |-----------------------------------------------------------------------
         */
+        Route::prefix('sites/{site:cust_site_id}')->controller(CustomerSiteController::class)->group(function () {
+            Route::get('restore', 'restore')
+                ->scopeBindings()
+                ->withTrashed()
+                ->name('sites.restore');
+            Route::delete('force-delete', 'forceDelete')
+                ->scopeBindings()
+                ->withTrashed()
+                ->name('sites.forceDelete');
+        })->missing(function () {
+            throw new CustomerNotFoundException;
+        });
+
         Route::resource('sites', CustomerSiteController::class)
             ->scoped(['sites' => 'cust_id'])
             ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
                 $breadcrumbs->index('Sites', 'customers.show')
                     ->create('New Customer Site')
                     ->show(
-                        fn(Customer $customer, CustomerSite|string $site) => gettype($site) === 'object'
+                        fn (Customer $customer, CustomerSite|string $site) => gettype($site) === 'object'
                             ? $site->site_name
                             : $site
                     )->edit('Edit Site');
@@ -252,7 +265,7 @@ Route::middleware('auth.secure')->group(function () {
             ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
                 $breadcrumbs->index('Equipment', 'customers.show')
                     ->show(
-                        fn(Customer $customer, CustomerEquipment $equipment) => $equipment->equip_name
+                        fn (Customer $customer, CustomerEquipment $equipment) => $equipment->equip_name
                     );
             });
 

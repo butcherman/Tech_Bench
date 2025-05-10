@@ -35,7 +35,7 @@ class DisableCustomerRequest extends FormRequest
      */
     public function after(): array
     {
-        if (!$this->site) {
+        if (! $this->site) {
             return [];
         }
 
@@ -50,7 +50,7 @@ class DisableCustomerRequest extends FormRequest
                     $validator->errors()
                         ->add('reason', 'Cannot disable the Primary Site');
                 }
-            }
+            },
         ];
     }
 }

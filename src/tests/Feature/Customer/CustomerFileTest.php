@@ -105,7 +105,7 @@ class CustomerFileTest extends TestCase
 
         Storage::disk('customers')
             ->assertExists(
-                $customer->cust_id . DIRECTORY_SEPARATOR . 'randomImage.png'
+                $customer->cust_id.DIRECTORY_SEPARATOR.'randomImage.png'
             );
     }
 
@@ -148,7 +148,7 @@ class CustomerFileTest extends TestCase
 
         Storage::disk('customers')
             ->assertExists(
-                $customer->cust_id . DIRECTORY_SEPARATOR . 'randomImage.png'
+                $customer->cust_id.DIRECTORY_SEPARATOR.'randomImage.png'
             );
     }
 
@@ -201,7 +201,7 @@ class CustomerFileTest extends TestCase
         ]);
 
         Storage::disk('customers')
-            ->assertExists($customer->cust_id . DIRECTORY_SEPARATOR . 'randomImage.png');
+            ->assertExists($customer->cust_id.DIRECTORY_SEPARATOR.'randomImage.png');
     }
 
     public function test_store_chunked_file(): void
@@ -213,61 +213,61 @@ class CustomerFileTest extends TestCase
         $customer = Customer::factory()->create();
         $chunks = [
             [
-                "dzuuid" => "a1ae8f25-be4c-4a75-9e3d-c5f4abe7cba0",
-                "dzchunkindex" => "0",
-                "dztotalfilesize" => "16711880",
-                "dzchunksize" => "5000000",
-                "dztotalchunkcount" => "4",
-                "dzchunkbyteoffset" => "0",
-                "name" => "test_file.png",
-                "file_type" => "general",
-                "site_list" => [],
-                "cust_equip_id" => "null",
-                "file_type_id" => "2",
-                "file" => UploadedFile::fake()->image('test_file.png'),
+                'dzuuid' => 'a1ae8f25-be4c-4a75-9e3d-c5f4abe7cba0',
+                'dzchunkindex' => '0',
+                'dztotalfilesize' => '16711880',
+                'dzchunksize' => '5000000',
+                'dztotalchunkcount' => '4',
+                'dzchunkbyteoffset' => '0',
+                'name' => 'test_file.png',
+                'file_type' => 'general',
+                'site_list' => [],
+                'cust_equip_id' => 'null',
+                'file_type_id' => '2',
+                'file' => UploadedFile::fake()->image('test_file.png'),
             ],
             [
-                "dzuuid" => "a1ae8f25-be4c-4a75-9e3d-c5f4abe7cba0",
-                "dzchunkindex" => "1",
-                "dztotalfilesize" => "16711880",
-                "dzchunksize" => "5000000",
-                "dztotalchunkcount" => "4",
-                "dzchunkbyteoffset" => "5000000",
-                "name" => "test_file.png",
-                "file_type" => "general",
-                "site_list" => [],
-                "cust_equip_id" => "null",
-                "file_type_id" => "2",
-                "file" => UploadedFile::fake()->image('test_file.png'),
+                'dzuuid' => 'a1ae8f25-be4c-4a75-9e3d-c5f4abe7cba0',
+                'dzchunkindex' => '1',
+                'dztotalfilesize' => '16711880',
+                'dzchunksize' => '5000000',
+                'dztotalchunkcount' => '4',
+                'dzchunkbyteoffset' => '5000000',
+                'name' => 'test_file.png',
+                'file_type' => 'general',
+                'site_list' => [],
+                'cust_equip_id' => 'null',
+                'file_type_id' => '2',
+                'file' => UploadedFile::fake()->image('test_file.png'),
             ],
             [
-                "dzuuid" => "a1ae8f25-be4c-4a75-9e3d-c5f4abe7cba0",
-                "dzchunkindex" => "2",
-                "dztotalfilesize" => "16711880",
-                "dzchunksize" => "5000000",
-                "dztotalchunkcount" => "4",
-                "dzchunkbyteoffset" => "10000000",
-                "name" => "test_file.png",
-                "file_type" => "general",
-                "site_list" => [],
-                "cust_equip_id" => "null",
-                "file_type_id" => "2",
-                "file" => UploadedFile::fake()->image('test_file.png'),
+                'dzuuid' => 'a1ae8f25-be4c-4a75-9e3d-c5f4abe7cba0',
+                'dzchunkindex' => '2',
+                'dztotalfilesize' => '16711880',
+                'dzchunksize' => '5000000',
+                'dztotalchunkcount' => '4',
+                'dzchunkbyteoffset' => '10000000',
+                'name' => 'test_file.png',
+                'file_type' => 'general',
+                'site_list' => [],
+                'cust_equip_id' => 'null',
+                'file_type_id' => '2',
+                'file' => UploadedFile::fake()->image('test_file.png'),
             ],
             [
-                "dzuuid" => "a1ae8f25-be4c-4a75-9e3d-c5f4abe7cba0",
-                "dzchunkindex" => "3",
-                "dztotalfilesize" => "16711880",
-                "dzchunksize" => "5000000",
-                "dztotalchunkcount" => "4",
-                "dzchunkbyteoffset" => "15000000",
-                "name" => "test_file.png",
-                "file_type" => "general",
-                "site_list" => [],
-                "cust_equip_id" => "null",
-                "file_type_id" => "2",
-                "file" => UploadedFile::fake()->image('test_file.png'),
-            ]
+                'dzuuid' => 'a1ae8f25-be4c-4a75-9e3d-c5f4abe7cba0',
+                'dzchunkindex' => '3',
+                'dztotalfilesize' => '16711880',
+                'dzchunksize' => '5000000',
+                'dztotalchunkcount' => '4',
+                'dzchunkbyteoffset' => '15000000',
+                'name' => 'test_file.png',
+                'file_type' => 'general',
+                'site_list' => [],
+                'cust_equip_id' => 'null',
+                'file_type_id' => '2',
+                'file' => UploadedFile::fake()->image('test_file.png'),
+            ],
         ];
 
         $response = $this->actingAs($user)

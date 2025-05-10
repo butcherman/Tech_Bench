@@ -23,6 +23,10 @@ class CustomerDeletedItemsController extends Controller
                 'contacts' => $customer->Contacts()->onlyTrashed()->get(),
                 'notes' => $customer->Notes()->onlyTrashed()->get(),
                 'files' => $customer->Files()->onlyTrashed()->get(),
+                'sites' => $customer->Sites()
+                    ->onlyTrashed()
+                    ->get()
+                    ->makeVisible(['deleted_at', 'deleted_reason']),
             ],
         ]);
     }

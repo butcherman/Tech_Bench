@@ -6,7 +6,9 @@ use App\Exceptions\Customer\CustomerNotFoundException;
 use App\Models\Customer;
 use App\Models\CustomerSite;
 use App\Models\User;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Exceptions;
+use Illuminate\Validation\ValidationException;
 use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
@@ -39,7 +41,7 @@ class CustomerSiteTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('Customer/Site/Index')
                     ->has('permissions')
                     ->has('customer')
@@ -93,7 +95,7 @@ class CustomerSiteTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('Customer/Site/Create')
                     ->has('default-state')
                     ->has('parent-customer')
@@ -110,7 +112,7 @@ class CustomerSiteTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('Customer/Site/Create')
                     ->has('default-state')
                     ->has('parent-customer')
@@ -290,7 +292,7 @@ class CustomerSiteTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('Customer/Site/Show')
                     ->has('alerts')
                     ->has('availableEquipment')
@@ -378,7 +380,7 @@ class CustomerSiteTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('Customer/Site/Edit')
                     ->has('default-state')
                     ->has('parent-customer')
@@ -608,5 +610,218 @@ class CustomerSiteTest extends TestCase
             ->assertRedirect(route('customers.not-found'));
 
         Exceptions::assertReported(CustomerNotFoundException::class);
+    }
+
+    public function test_destroy_only_site(): void
+    {
+        Exceptions::fake();
+
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
+        $customer = Customer::factory()->create();
+        $data = ['reason' => 'For testing purposes'];
+
+        $this->expectException(ValidationException::class);
+
+        $response = $this->withoutExceptionHandling()
+            ->actingAs($user)
+            ->delete(route('customers.sites.destroy', [
+                $customer->slug,
+                $customer->Sites[0]->site_slug,
+            ]), $data);
+
+        $response->assertInvalid(['reason']);
+
+        Exceptions::assertReported(ValidationException::class);
+    }
+
+    public function test_destroy_primary_site(): void
+    {
+        Exceptions::fake();
+
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
+        $customer = Customer::factory()->create();
+        $site = CustomerSite::factory()
+            ->count(3)
+            ->create(['cust_id' => $customer->cust_id]);
+        $data = ['reason' => 'For testing purposes'];
+
+        $customer->primary_site_id = $site[0]->cust_site_id;
+        $customer->save();
+
+        $this->expectException(ValidationException::class);
+
+        $response = $this->withoutExceptionHandling()
+            ->actingAs($user)
+            ->delete(route('customers.sites.destroy', [
+                $customer->slug,
+                $site[0]->site_slug,
+            ]), $data);
+
+        $response->assertInvalid(['reason']);
+
+        Exceptions::assertReported(ValidationException::class);
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | Restore Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_restore_guest(): void
+    {
+        $site = CustomerSite::factory()->create();
+        $site->delete();
+
+        $response = $this->get(route('customers.sites.restore', [
+            $site->Customer->slug,
+            $site->cust_site_id,
+        ]));
+
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
+        $this->assertGuest();
+    }
+
+    public function test_restore_no_permission(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->create();
+        $site = CustomerSite::factory()->create();
+        $site->delete();
+
+        $response = $this->actingAs($user)
+            ->get(route('customers.sites.restore', [
+                $site->Customer->slug,
+                $site->cust_site_id,
+            ]));
+
+        $response->assertForbidden();
+    }
+
+    public function test_restore(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->create(['role_id' => 1]);
+        $site = CustomerSite::factory()->create();
+        $site->delete();
+
+        $response = $this->actingAs($user)
+            ->get(route('customers.sites.restore', [
+                $site->Customer->slug,
+                $site->cust_site_id,
+            ]));
+
+        $response->status(302);
+
+        $this->assertDatabaseHas('customer_sites', [
+            'cust_site_id' => $site->cust_site_id,
+            'deleted_at' => null,
+        ]);
+    }
+
+    public function test_restore_scope_bindings(): void
+    {
+        Exceptions::fake();
+
+        /** @var User $user */
+        $user = User::factory()->create(['role_id' => 1]);
+        $site = CustomerSite::factory()->create();
+        $site->delete();
+        $invalid = Customer::factory()->create();
+
+        $this->expectException(ModelNotFoundException::class);
+
+        $response = $this->withoutExceptionHandling()
+            ->actingAs($user)
+            ->get(route('customers.sites.restore', [
+                $invalid->slug,
+                $site->cust_site_id,
+            ]));
+
+        $response->status(302)->assertRedirect(route('customers.not-found'));
+
+        Exceptions::assertReported(ModelNotFoundException::class);
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | Force Delete Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_force_delete_guest(): void
+    {
+        $site = CustomerSite::factory()->create();
+        $site->delete();
+
+        $response = $this->delete(route('customers.sites.forceDelete', [
+            $site->Customer->slug,
+            $site->cust_site_id,
+        ]));
+
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
+        $this->assertGuest();
+    }
+
+    public function test_force_delete_no_permission(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->create();
+        $site = CustomerSite::factory()->create();
+        $site->delete();
+
+        $response = $this->actingAs($user)
+            ->delete(route('customers.sites.forceDelete', [
+                $site->Customer->slug,
+                $site->cust_site_id,
+            ]));
+
+        $response->assertForbidden();
+    }
+
+    public function test_force_delete(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->create(['role_id' => 1]);
+        $site = CustomerSite::factory()->create();
+        $site->delete();
+
+        $response = $this->actingAs($user)
+            ->delete(route('customers.sites.forceDelete', [
+                $site->Customer->slug,
+                $site->cust_site_id,
+            ]));
+
+        $response->status(302);
+
+        $this->assertDatabaseMissing('customer_sites', [
+            'cust_site_id' => $site->cust_site_id,
+        ]);
+    }
+
+    public function test_force_delete_scope_bindings(): void
+    {
+        Exceptions::fake();
+
+        /** @var User $user */
+        $user = User::factory()->create(['role_id' => 1]);
+        $site = CustomerSite::factory()->create();
+        $site->delete();
+        $invalid = Customer::factory()->create();
+
+        $this->expectException(ModelNotFoundException::class);
+
+        $response = $this->withoutExceptionHandling()
+            ->actingAs($user)
+            ->delete(route('customers.sites.forceDelete', [
+                $invalid->slug,
+                $site->cust_site_id,
+            ]));
+
+        $response->status(302)->assertRedirect(route('customers.not-found'));
+
+        Exceptions::assertReported(ModelNotFoundException::class);
     }
 }
