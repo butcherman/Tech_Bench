@@ -1,6 +1,8 @@
 <?php
 
-use App\Http\Controllers\Report\ReportController;
+use App\Http\Controllers\Reports\ReportController;
+use App\Http\Controllers\Reports\ReportParametersController;
+use App\Http\Controllers\Reports\RunReportController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -9,14 +11,26 @@ use Illuminate\Support\Facades\Route;
 |-------------------------------------------------------------------------------
 */
 
-Route::middleware('auth.secure')->group(function () {
+Route::middleware('auth.secure')->prefix('reports')->name('reports.')->group(function () {
     /*
     |---------------------------------------------------------------------------
     | Report Landing page
     | /reports
     |---------------------------------------------------------------------------
     */
-    Route::get('reports', ReportController::class)
-        ->name('reports.index')
+    Route::get('/', ReportController::class)
+        ->name('index')
         ->breadcrumb('Reports');
+
+    /*
+    |---------------------------------------------------------------------------
+    | Report Data Pages
+    | /reports/{group}/{report-name}
+    |---------------------------------------------------------------------------
+    */
+    Route::get('{group}/{report}', ReportParametersController::class)
+        ->name('params')
+        ->breadcrumb(fn(string $group, string $report) => Str::headline($report), 'reports.index');
+
+    Route::put('{group}/{report}', RunReportController::class)->name('run');
 });

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Report;
+namespace App\Http\Controllers\Reports;
 
 use App\Actions\Misc\BuildReportsMenu;
 use App\Http\Controllers\Controller;
