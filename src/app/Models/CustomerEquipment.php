@@ -45,6 +45,11 @@ class CustomerEquipment extends Model
     /** @var array<int, string> */
     protected $appends = ['equip_name'];
 
+    public function getRouteKeyName(): string
+    {
+        return 'cust_equip_id';
+    }
+
     /*
     |---------------------------------------------------------------------------
     | Model Casting
@@ -84,7 +89,7 @@ class CustomerEquipment extends Model
         return $this->belongsTo(Customer::class, 'cust_id', 'cust_id');
     }
 
-    public function CustomerSite(): BelongsToMany
+    public function Sites(): BelongsToMany
     {
         return $this->belongsToMany(
             CustomerSite::class,
@@ -94,7 +99,7 @@ class CustomerEquipment extends Model
         );
     }
 
-    public function CustomerNote(): HasMany
+    public function Notes(): HasMany
     {
         return $this->hasMany(
             CustomerNote::class,
@@ -129,7 +134,7 @@ class CustomerEquipment extends Model
     public function broadcastOn(string $event): array
     {
         $siteChannels = $this->getSiteChannels(
-            $this->CustomerSite->pluck('site_slug')->toArray()
+            $this->Sites->pluck('site_slug')->toArray()
         );
 
         $allChannels = array_merge(
@@ -169,5 +174,25 @@ class CustomerEquipment extends Model
         }
 
         return static::whereCustEquipId(0);
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | Additional Methods
+    |---------------------------------------------------------------------------
+    */
+
+    /**
+     * Combine all of the equipment notes, and General Notes for the customer.
+     */
+    public function getNotes(): array
+    {
+        $equipNotes = $this->Notes;
+        $otherNotes = CustomerNote::where('cust_id', $this->cust_id)
+            ->where('cust_equip_id', null)
+            ->doesntHave('Sites')
+            ->get();
+
+        return array_merge($equipNotes->toArray(), $otherNotes->toArray());
     }
 }

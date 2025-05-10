@@ -66,6 +66,11 @@ class CustomerSite extends Model
             ->firstOrFail();
     }
 
+    public function getRouteKeyName(): string
+    {
+        return 'site_slug';
+    }
+
     /*
     |---------------------------------------------------------------------------
     | Model Attributes
@@ -164,7 +169,8 @@ class CustomerSite extends Model
     public function newBroadcastableModelEvent(string $event): BroadcastableModelEventOccurred
     {
         return (new BroadcastableModelEventOccurred(
-            $this, $event
+            $this,
+            $event
         ))->dontBroadcastToCurrentUser();
     }
 
@@ -193,7 +199,7 @@ class CustomerSite extends Model
     {
         return CustomerNote::where('cust_id', $this->Customer->cust_id)
             ->whereNull('cust_equip_id')
-            ->doesntHave('CustomerSite')
+            ->doesntHave('Sites')
             ->get();
     }
 
@@ -201,7 +207,7 @@ class CustomerSite extends Model
     {
         return CustomerFile::where('cust_id', $this->Customer->cust_id)
             ->whereNull('cust_equip_id')
-            ->doesntHave('CustomerSite')
+            ->doesntHave('Sites')
             ->get();
     }
 

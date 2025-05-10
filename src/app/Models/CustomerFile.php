@@ -53,10 +53,11 @@ class CustomerFile extends Model
         'file_type',
         'equip_name',
         'created_stamp',
+        'file_category',
     ];
 
     /** @var array<int, string> */
-    protected $with = ['CustomerSite'];
+    protected $with = ['Sites'];
 
     /*
     |---------------------------------------------------------------------------
@@ -117,6 +118,23 @@ class CustomerFile extends Model
         );
     }
 
+    public function fileCategory(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                if ($this->cust_equip_id) {
+                    return 'Equipment';
+                }
+
+                if (count($this->Sites) > 0) {
+                    return 'Site';
+                }
+
+                return 'General';
+            }
+        );
+    }
+
     /*
     |---------------------------------------------------------------------------
     | Model Relationships
@@ -127,7 +145,7 @@ class CustomerFile extends Model
         return $this->belongsTo(FileUpload::class, 'file_id', 'file_id');
     }
 
-    public function CustomerSite(): BelongsToMany
+    public function Sites(): BelongsToMany
     {
         return $this->belongsToMany(
             CustomerSite::class,
@@ -172,7 +190,7 @@ class CustomerFile extends Model
     public function broadcastOn(string $event): array
     {
         $siteChannels = $this->getSiteChannels(
-            $this->CustomerSite->pluck('site_slug')->toArray()
+            $this->Sites->pluck('site_slug')->toArray()
         );
 
         if ($this->cust_equip_id) {

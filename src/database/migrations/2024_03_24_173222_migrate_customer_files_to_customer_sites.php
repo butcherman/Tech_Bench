@@ -47,7 +47,7 @@ return new class extends Migration
                     ->get()
                     ->pluck('cust_site_id')
                     ->toArray();
-                $file->CustomerSite()->sync($siteList);
+                $file->Sites()->sync($siteList);
             }
         }
     }

@@ -1,14 +1,20 @@
 <script setup lang="ts">
-import {
-    InputText,
-    FloatLabel,
-    Message,
-    InputGroup,
-    InputGroupAddon,
-} from "primevue";
 import { computed, ref, toRef } from "vue";
 import { useField } from "vee-validate";
+import {
+    FloatLabel,
+    InputGroup,
+    InputGroupAddon,
+    InputText,
+    Message,
+} from "primevue";
+
 import type { Ref } from "vue";
+
+const emit = defineEmits<{
+    focus: [];
+    blur: [];
+}>();
 
 const props = defineProps<{
     id: string;
@@ -24,11 +30,26 @@ const props = defineProps<{
     type?: string;
 }>();
 
-const hasFocus = ref(false);
-
-const borderType = computed(() =>
+const borderType = computed<string>(() =>
     props.borderBottom ? "border-b rounded-none" : "border"
 );
+
+/*
+|-------------------------------------------------------------------------------
+| Input Focus State
+|-------------------------------------------------------------------------------
+*/
+const hasFocus = ref<boolean>(false);
+
+const onFocus = (): void => {
+    hasFocus.value = true;
+    emit("focus");
+};
+
+const onBlur = (): void => {
+    hasFocus.value = false;
+    emit("blur");
+};
 
 /*
 |-------------------------------------------------------------------------------
@@ -44,16 +65,6 @@ const {
     value: Ref<string | undefined>;
 } = useField(nameRef);
 </script>
-
-<style>
-.p-inputtext::placeholder {
-    color: transparent;
-}
-
-.p-inputtext:focus::placeholder {
-    @apply text-muted-color;
-}
-</style>
 
 <template>
     <div>
@@ -77,8 +88,8 @@ const {
                     :type="type ?? 'text'"
                     :variant="filled ? 'filled' : null"
                     fluid
-                    @focus="hasFocus = true"
-                    @blur="hasFocus = false"
+                    @focus="onFocus"
+                    @blur="onBlur"
                 />
                 <label :for="id">{{ label }}</label>
             </FloatLabel>
@@ -90,7 +101,7 @@ const {
             </InputGroupAddon>
         </InputGroup>
         <Message size="small" severity="error" variant="simple">
-            {{ errorMessage }}
+            <span v-html="errorMessage" />
         </Message>
         <Message
             v-if="hasFocus"
@@ -102,3 +113,13 @@ const {
         </Message>
     </div>
 </template>
+
+<style lang="postcss">
+.p-inputtext::placeholder {
+    color: transparent;
+}
+
+.p-inputtext:focus::placeholder {
+    @apply text-muted-color;
+}
+</style>

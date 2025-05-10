@@ -55,14 +55,34 @@ type elementVariant =
     | "primary"
     | "secondary"
     | "success"
-    | "warning";
+    | "warning"
+    | "none";
+
+type basicPermissions = {
+    create: boolean;
+    update: boolean;
+    delete: boolean;
+};
 
 /*
 |-------------------------------------------------------------------------------
-| Text
+| Misc
 |-------------------------------------------------------------------------------
 */
 type fileData = {
     chunkSize: number;
     maxSize: number;
+};
+
+type fileUpload = {
+    file_id: number;
+    file_name: string;
+    file_size: number;
+    href: string;
+    created_stamp: string;
+};
+
+type phoneType = {
+    description: string;
+    icon_class: string;
 };

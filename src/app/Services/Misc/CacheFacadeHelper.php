@@ -131,6 +131,37 @@ class CacheFacadeHelper
     }
 
     /**
+     * Get a list of all equipment categories prepped for a select box.
+     *
+     * @return \Illuminate\Cache\TCacheValue
+     */
+    public function equipmentCategorySelectBox()
+    {
+        return Cache::rememberForever('equipmentSelectBox', function () {
+            $catBase = $this->equipmentCategories();
+            $sorted = [];
+
+            foreach ($catBase as $key => $value) {
+                $groupList = [];
+
+                foreach ($value->EquipmentType as $equip) {
+                    $groupList[] = [
+                        'label' => $equip->name,
+                        'value' => $equip->equip_id,
+                    ];
+                }
+
+                $sorted[] = [
+                    'label' => $value->name,
+                    'items' => $groupList,
+                ];
+            }
+
+            return $sorted;
+        });
+    }
+
+    /**
      * Get a list of all Equipment Categories with their Equipment Types that
      * are allowed to have Public Tech Tips tied to them.
      *

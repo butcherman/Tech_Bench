@@ -40,13 +40,13 @@ Broadcast::channel('administration-channel', function (User $user) {
 |------------------------------------------------------------------------------
 */
 
-// Broadcast::channel('customer.{slug}', function (User $user, string $slug) {
-//     Log::debug(
-//         'User ' . $user->username . ' registering to Customer Channel - ' . $slug
-//     );
+Broadcast::channel('customer.{slug}', function (User $user, string $slug) {
+    Log::debug(
+        'User '.$user->username.' registering to Customer Channel - '.$slug
+    );
 
-//     return $user ? true : false;
-// });
+    return $user ? true : false;
+});
 
 // Broadcast::channel(
 //     'customer-site.{siteSlug}',
@@ -60,17 +60,17 @@ Broadcast::channel('administration-channel', function (User $user) {
 //     }
 // );
 
-// Broadcast::channel(
-//     'customer-equipment.{custEquipId}',
-//     function (User $user, int $custEquipId) {
-//         Log::debug(
-//             'User ' . $user->username . ' registering to Customer Equipment Channel - ' .
-//                 $custEquipId
-//         );
+Broadcast::channel(
+    'customer.equipment.{custEquipId}',
+    function (User $user, int $custEquipId) {
+        Log::debug(
+            'User '.$user->username.' registering to Customer Equipment Channel - '.
+                $custEquipId
+        );
 
-//         return $user ? true : false;
-//     }
-// );
+        return $user ? true : false;
+    }
+);
 
 /*
 |------------------------------------------------------------------------------

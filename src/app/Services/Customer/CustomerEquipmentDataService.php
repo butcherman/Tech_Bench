@@ -2,6 +2,7 @@
 
 namespace App\Services\Customer;
 
+use App\Exceptions\Customer\CustomerEquipmentDataFailedVerificationException;
 use App\Models\CustomerEquipment;
 use App\Models\CustomerEquipmentData;
 use App\Models\DataField;
@@ -50,14 +51,25 @@ class CustomerEquipmentDataService
     /**
      * Update the value for a specific data field.
      */
-    // public function updateDataFieldValue(Collection $requestData): void
-    // {
-    //     foreach ($requestData->get('saveData') as $data) {
-    //         $newData = CustomerEquipmentData::find($data['fieldId']);
-    //         $newData->value = $data['value'];
-    //         $newData->save();
-    //     }
-    // }
+    public function updateDataFieldValue(Collection $requestData, CustomerEquipment $equipment): void
+    {
+        foreach ($requestData->get('saveData') as $data) {
+            $newData = CustomerEquipmentData::find($data['fieldId']);
+
+            // dd($newData);
+
+            // Verify the equipment data id belongs to the selected equipment.
+            if ($newData->cust_equip_id !== $equipment->cust_equip_id) {
+                throw new CustomerEquipmentDataFailedVerificationException(
+                    $newData->cust_equip_id,
+                    $equipment->cust_equip_id
+                );
+            }
+
+            $newData->value = $data['value'];
+            $newData->save();
+        }
+    }
 
     /**
      * Check All Customer Equipment Data Fields

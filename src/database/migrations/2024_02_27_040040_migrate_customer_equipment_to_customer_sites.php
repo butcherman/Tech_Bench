@@ -27,7 +27,7 @@ return new class extends Migration
             ->get();
 
         foreach ($customerEquipment as $equip) {
-            $equip->CustomerSite()->attach($equip->cust_id);
+            $equip->Sites()->attach($equip->cust_id);
 
             // Verify the equipment is applied to the primary Customer ID
             $cust = Customer::withTrashed()->find($equip->cust_id);
@@ -42,7 +42,7 @@ return new class extends Migration
                 $siteList = CustomerSite::where('cust_id', $equip->cust_id)
                     ->get()
                     ->pluck('cust_site_id');
-                $equip->CustomerSite()->sync($siteList);
+                $equip->Sites()->sync($siteList);
             }
         }
     }

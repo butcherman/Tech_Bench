@@ -22,6 +22,14 @@ class CustomerUnitTest extends TestCase
         parent::setUp();
 
         $this->model = Customer::factory()->create();
+
+        $siteList = CustomerSite::factory()
+            ->count(3)
+            ->create(['cust_id' => $this->model->cust_id]);
+
+        $siteList[0]->delete();
+
+        $this->model->refresh();
     }
 
     /*
@@ -41,6 +49,11 @@ class CustomerUnitTest extends TestCase
         );
     }
 
+    public function test_get_route_key_name(): void
+    {
+        $this->assertEquals('slug', $this->model->getRouteKeyName());
+    }
+
     /*
     |---------------------------------------------------------------------------
     | Model Attributes
@@ -58,12 +71,24 @@ class CustomerUnitTest extends TestCase
     */
     public function test_customer_site_relationship(): void
     {
-        $data = CustomerSite::where('cust_site_id', $this->model->primary_site_id)
-            ->first();
+        $data = CustomerSite::where('cust_id', $this->model->cust_id)
+            ->get();
 
         $this->assertEquals(
             $data->toArray(),
-            $this->model->CustomerSite[0]->toArray()
+            $this->model->Sites->toArray()
+        );
+    }
+
+    public function test_customer_site_list_relationship(): void
+    {
+        $data = CustomerSite::where('cust_id', $this->model->cust_id)
+            ->withTrashed()
+            ->get();
+
+        $this->assertEquals(
+            $data->toArray(),
+            $this->model->CustomerSiteList->toArray()
         );
     }
 
@@ -74,7 +99,7 @@ class CustomerUnitTest extends TestCase
 
         $this->assertEquals(
             $data->makeHidden('Customer')->toArray(),
-            $this->model->CustomerAlert[0]->toArray()
+            $this->model->Alerts[0]->toArray()
         );
     }
 
@@ -85,7 +110,7 @@ class CustomerUnitTest extends TestCase
 
         $this->assertEquals(
             $data->makeHidden('Customer')->toArray(),
-            $this->model->CustomerEquipment[0]->toArray()
+            $this->model->Equipment[0]->toArray()
         );
     }
 
@@ -97,8 +122,8 @@ class CustomerUnitTest extends TestCase
         $this->assertEquals(
             $data->makeHidden('Customer')->toArray(),
             $this->model
-                ->CustomerContact[0]
-                ->makeHidden(['CustomerContactPhone', 'CustomerSite'])
+                ->Contacts[0]
+                ->makeHidden(['CustomerContactPhone', 'Sites'])
                 ->toArray()
         );
     }
@@ -111,7 +136,7 @@ class CustomerUnitTest extends TestCase
         $this->assertEquals(
             $data->makeHidden('Customer')->toArray(),
             $this->model
-                ->CustomerNote[0]
+                ->Notes[0]
                 ->makeHidden([
                     'cust_equip_id',
                     'deleted_at',
@@ -125,10 +150,10 @@ class CustomerUnitTest extends TestCase
         $data = CustomerFile::factory()
             ->create(['cust_id' => $this->model->cust_id]);
         $this->assertEquals(
-            $data->makeHidden('Customer')->toArray(),
+            $data->makeHidden(['Customer', 'Sites'])->toArray(),
             $this->model
-                ->CustomerFile[0]
-                ->makeHidden(['CustomerSite'])
+                ->Files[0]
+                ->makeHidden(['Sites'])
                 ->toArray()
         );
     }

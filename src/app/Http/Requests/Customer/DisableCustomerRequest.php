@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Customer;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Validator;
 
 class DisableCustomerRequest extends FormRequest
 {
@@ -25,6 +26,31 @@ class DisableCustomerRequest extends FormRequest
     {
         return [
             'reason' => ['required', 'string'],
+        ];
+    }
+
+    /**
+     * If this is a site, and marked as the primary site or the only site,
+     * validation will fail.
+     */
+    public function after(): array
+    {
+        if (! $this->site) {
+            return [];
+        }
+
+        return [
+            function (Validator $validator) {
+                if ($this->site->Customer->site_count === 1) {
+                    $validator->errors()
+                        ->add('reason', 'Cannot disable the only Customer Site');
+                }
+
+                if ($this->site->is_primary) {
+                    $validator->errors()
+                        ->add('reason', 'Cannot disable the Primary Site');
+                }
+            },
         ];
     }
 }

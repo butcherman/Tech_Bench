@@ -66,6 +66,8 @@ const variantClass = computed<string>(() => {
             return "bg-green-500 text-white";
         case "warning":
             return "bg-yellow-400";
+        case "none":
+            return "";
         default:
             return "bg-blue-500 text-white";
     }

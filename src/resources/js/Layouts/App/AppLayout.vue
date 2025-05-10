@@ -1,24 +1,28 @@
 <script setup lang="ts">
-import { router, usePage } from "@inertiajs/vue3";
-import { computed, onMounted, ref } from "vue";
-import FlashAlert from "../_Shared/FlashAlert.vue";
+import AppBreadcrumbs from "./AppBreadcrumbs.vue";
+import AppFooter from "./AppFooter.vue";
 import AppHeader from "./AppHeader.vue";
 import AppNotificationToast from "./AppNotificationToast.vue";
 import AppSideNav from "./AppSideNav.vue";
-import AppBreadcrumbs from "./AppBreadcrumbs.vue";
+import FlashAlert from "../_Shared/FlashAlert.vue";
 import StaticAlert from "../_Shared/StaticAlert.vue";
-import AppFooter from "./AppFooter.vue";
+import { computed, onMounted, ref } from "vue";
+import { router, usePage } from "@inertiajs/vue3";
 import { useBroadcastStore } from "@/Stores/BroadcastStore";
 
-/**
- * Navbar Controls
- */
+/*
+|-------------------------------------------------------------------------------
+| Navbar Controls
+|-------------------------------------------------------------------------------
+*/
 const navbarHidden = ref<boolean>(true);
 router.on("navigate", () => (navbarHidden.value = true));
 
-/**
- * Dynamically set Page Title based on breadcrumbs.
- */
+/*
+|-------------------------------------------------------------------------------
+| Dynamically set Page Title based on breadcrumbs.
+|-------------------------------------------------------------------------------
+*/
 const appTitle = computed<string | undefined>(
     () =>
         usePage<pageProps>().props.breadcrumbs.find(
@@ -26,11 +30,16 @@ const appTitle = computed<string | undefined>(
         )?.title
 );
 
-/**
- * Register to Users Notification Channel
- */
+/*
+|-------------------------------------------------------------------------------
+| Register to Users Notification Channel
+|-------------------------------------------------------------------------------
+*/
 const broadcast = useBroadcastStore();
 onMounted(() => broadcast.registerNotificationChannel());
+router.on("before", (e) => {
+    e.detail.visit.headers["X-Socket-ID"] = Echo.socketId();
+});
 </script>
 
 <template>

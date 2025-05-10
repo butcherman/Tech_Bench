@@ -2,7 +2,6 @@
 
 namespace App\Exceptions\File;
 
-use App\Models\FileUpload;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -19,18 +18,14 @@ class FileMissingException extends Exception
     /**
      * @codeCoverageIgnore
      */
-    public function __construct(protected FileUpload $fileData)
+    public function __construct(protected string $filePath)
     {
         parent::__construct();
     }
 
     public function report(Request $request): void
     {
-        Log::error('File Missing Exception found', [
-            'file' => $this->fileData->toArray(),
-            'user' => $request->user() ? $request->user()->toArray() : null,
-            'ip_address' => $request->ip(),
-        ]);
+        Log::error('Unable to find expected file at '.$this->filePath);
     }
 
     public function render(): never

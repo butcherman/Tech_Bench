@@ -49,7 +49,7 @@ return new class extends Migration
             if ($note->shared) {
                 $siteList = CustomerSite::where('cust_id', $note->cust_id)
                     ->get()->pluck('cust_site_id')->toArray();
-                $note->CustomerSite()->sync($siteList);
+                $note->Sites()->sync($siteList);
             }
         }
     }

@@ -36,7 +36,7 @@ class CustomerNote extends Model
     /** @var array<int, string> */
     protected $with = ['CustomerEquipment'];
 
-    protected $appends = ['author', 'updated_author'];
+    protected $appends = ['author', 'updated_author', 'note_type'];
 
     /*
     |---------------------------------------------------------------------------
@@ -80,6 +80,23 @@ class CustomerNote extends Model
         );
     }
 
+    public function noteType(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                if ($this->cust_equip_id) {
+                    return 'Equipment';
+                }
+
+                if (count($this->Sites) > 0) {
+                    return 'Site';
+                }
+
+                return 'General';
+            }
+        );
+    }
+
     /*
     |---------------------------------------------------------------------------
     | Model Relationships
@@ -90,7 +107,7 @@ class CustomerNote extends Model
         return $this->belongsTo(Customer::class, 'cust_id', 'cust_id');
     }
 
-    public function CustomerSite(): BelongsToMany
+    public function Sites(): BelongsToMany
     {
         return $this->belongsToMany(
             CustomerSite::class,
@@ -117,12 +134,12 @@ class CustomerNote extends Model
     public function broadcastOn(string $event): array
     {
         $siteChannels = $this->getSiteChannels(
-            $this->CustomerSite->pluck('site_slug')->toArray()
+            $this->Sites->pluck('site_slug')->toArray()
         );
 
-        if ($this->cust_equip_id) {
+        if ($this->cust_equip_id || count($this->Sites) === 0) {
             $siteChannels[] = new PrivateChannel(
-                'customer-equipment.'.$this->cust_equip_id
+                'customer.equipment.'.$this->cust_equip_id
             );
         }
 

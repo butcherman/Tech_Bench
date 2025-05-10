@@ -8,9 +8,9 @@ use App\Http\Controllers\Admin\Config\LogoController;
 use App\Http\Controllers\Admin\Config\SecurityController;
 use App\Http\Controllers\Admin\Config\SendTestEmailController;
 use App\Http\Controllers\Admin\Misc\ContactPhoneTypesController;
-use App\Http\Controllers\Admin\Misc\UploadedFileTypesController;
 use App\Http\Controllers\Admin\User\PasswordPolicyController;
 use App\Http\Controllers\Admin\User\UserSettingsController;
+use App\Http\Controllers\Customer\CustomerFileTypesController;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 use Illuminate\Support\Facades\Route;
 
@@ -142,10 +142,10 @@ Route::middleware('auth.secure')->prefix('administration')->name('admin.')->grou
     | /administration/file-types
     |---------------------------------------------------------------------------
     */
-    // Route::resource('file-types', UploadedFileTypesController::class)
-    //     ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
-    //         $breadcrumbs->index('Uploaded File Types', 'admin.index');
-    //     })->except(['edit', 'show']);
+    Route::resource('file-types', CustomerFileTypesController::class)
+        ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
+            $breadcrumbs->index('Uploaded File Types', 'admin.index');
+        })->except(['edit', 'show']);
 
     /*
     |---------------------------------------------------------------------------
@@ -153,16 +153,8 @@ Route::middleware('auth.secure')->prefix('administration')->name('admin.')->grou
     | /administration/phone-types
     |---------------------------------------------------------------------------
     */
-    // Route::resource('phone-types', ContactPhoneTypesController::class)
-    //     ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
-    //         $breadcrumbs->index('Contact Phone Types', 'admin.index');
-    //     })->except(['edit', 'show', 'create']);
+    Route::resource('phone-types', ContactPhoneTypesController::class)
+        ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
+            $breadcrumbs->index('Contact Phone Types', 'admin.index');
+        })->except(['edit', 'show', 'create']);
 });
-
-Route::get('file-types', function () {
-    return 'something admin';
-})->name('admin.file-types.index');
-
-Route::get('phone-types', function () {
-    return 'something admin';
-})->name('admin.phone-types.index');

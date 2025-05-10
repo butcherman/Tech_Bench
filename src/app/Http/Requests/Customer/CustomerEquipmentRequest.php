@@ -30,6 +30,8 @@ class CustomerEquipmentRequest extends FormRequest
                 'site_list' => [
                     'nullable',
                     'array',
+                    // TODO - Perform this check
+                    // new CheckForDuplicateSiteEquipment,
                 ],
             ];
         }

@@ -36,6 +36,9 @@ class CustomerContact extends Model
     /** @var array<int, string> */
     protected $hidden = ['created_at', 'updated_at', 'deleted_at'];
 
+    /** @var array<int, string> */
+    protected $with = ['CustomerContactPhone', 'Sites'];
+
     /*
     |---------------------------------------------------------------------------
     | Model Casting
@@ -60,7 +63,7 @@ class CustomerContact extends Model
         return $this->belongsTo(Customer::class, 'cust_id', 'cust_id');
     }
 
-    public function CustomerSite(): BelongsToMany
+    public function Sites(): BelongsToMany
     {
         return $this->belongsToMany(
             CustomerSite::class,
@@ -83,7 +86,7 @@ class CustomerContact extends Model
     public function broadcastOn(string $event): array
     {
         $siteChannels = $this->getSiteChannels(
-            $this->CustomerSite->pluck('site_slug')->toArray()
+            $this->Sites->pluck('site_slug')->toArray()
         );
 
         $allChannels = array_merge(

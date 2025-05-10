@@ -2,7 +2,7 @@
 
 namespace App\Observers;
 
-use App\Events\File\FileUploadDeletedEvent;
+use App\Events\File\FileDataDeletedEvent;
 use App\Models\CustomerFile;
 use Illuminate\Support\Facades\Log;
 
@@ -61,7 +61,7 @@ class CustomerFileObserver extends Observer
      */
     public function forceDeleted(CustomerFile $customerFile): void
     {
-        event(new FileUploadDeletedEvent($customerFile->FileUpload->file_id));
+        FileDataDeletedEvent::dispatch($customerFile->file_id);
 
         Log::info(
             'Customer File trashed by '.$this->user,

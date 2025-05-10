@@ -73,6 +73,11 @@ class Customer extends Model
             ->firstOrFail();
     }
 
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
+    }
+
     /*
     |---------------------------------------------------------------------------
     | Model Attributes
@@ -81,7 +86,7 @@ class Customer extends Model
     public function siteCount(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->CustomerSite->count(),
+            get: fn () => $this->Sites->count(),
         );
     }
 
@@ -90,32 +95,39 @@ class Customer extends Model
     | Model Relationships
     |---------------------------------------------------------------------------
     */
-    public function CustomerSite(): HasMany
+    public function Sites(): HasMany
     {
         return $this->hasMany(CustomerSite::class, 'cust_id', 'cust_id');
     }
 
-    public function CustomerAlert(): HasMany
+    public function CustomerSiteList(): HasMany
+    {
+        return $this->hasMany(CustomerSite::class, 'cust_id', 'cust_id')
+            ->withTrashed();
+    }
+
+    public function Alerts(): HasMany
     {
         return $this->hasMany(CustomerAlert::class, 'cust_id', 'cust_id');
     }
 
-    public function CustomerEquipment(): HasMany
+    public function Equipment(): HasMany
     {
         return $this->hasMany(CustomerEquipment::class, 'cust_id', 'cust_id');
     }
 
-    public function CustomerContact(): HasMany
+    public function Contacts(): HasMany
     {
         return $this->hasMany(CustomerContact::class, 'cust_id', 'cust_id');
     }
 
-    public function CustomerNote(): HasMany
+    public function Notes(): HasMany
     {
-        return $this->hasMany(CustomerNote::class, 'cust_id', 'cust_id');
+        return $this->hasMany(CustomerNote::class, 'cust_id', 'cust_id')
+            ->orderBy('urgent', 'desc');
     }
 
-    public function CustomerFile(): HasMany
+    public function Files(): HasMany
     {
         return $this->hasMany(CustomerFile::class, 'cust_id', 'cust_id');
     }
@@ -159,7 +171,8 @@ class Customer extends Model
     public function newBroadcastableModelEvent(string $event): BroadcastableModelEventOccurred
     {
         return (new BroadcastableModelEventOccurred(
-            $this, $event
+            $this,
+            $event
         ))->dontBroadcastToCurrentUser();
     }
 }

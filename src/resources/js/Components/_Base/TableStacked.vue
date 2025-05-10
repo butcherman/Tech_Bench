@@ -18,11 +18,11 @@ const toTitleCase = (str: string): string => {
 </script>
 
 <template>
-    <table class="table-auto border-collapse" :class="{ border: bordered }">
+    <table class="table-fixed border-collapse" :class="{ border: bordered }">
         <tbody>
             <tr v-for="(value, index) in items" class="border-b">
                 <slot name="row" :row-data="{ value, index }">
-                    <th class="text-end p-2">
+                    <th class="text-end p-2 max-w-1/2 w-1/3">
                         <slot name="index" :row-data="{ value, index }">
                             {{ toTitleCase(index.toString()) }}:
                         </slot>

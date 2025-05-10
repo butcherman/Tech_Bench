@@ -63,7 +63,10 @@ const goToLastPage = (): void => {
             >
                 <slot name="footer">
                     <div
-                        v-if="table?.options.meta?.paginate"
+                        v-if="
+                            table?.options.meta?.paginate &&
+                            table.getPageCount() > 1
+                        "
                         class="flex flex-row justify-between w-full"
                     >
                         <div>

@@ -22,7 +22,7 @@ class CustomerContactUnitTest extends TestCase
         $this->customer = Customer::factory()->createQuietly();
         $this->model = CustomerContact::factory()
             ->createQuietly(['cust_id' => $this->customer->cust_id]);
-        $this->model->CustomerSite()->sync([$this->customer->primary_site_id]);
+        $this->model->Sites()->sync([$this->customer->primary_site_id]);
     }
 
     /**
@@ -34,7 +34,7 @@ class CustomerContactUnitTest extends TestCase
 
         $this->assertEquals(
             $data->toArray(),
-            $this->model->CustomerSite->toArray()
+            $this->model->Sites->toArray()
         );
     }
 

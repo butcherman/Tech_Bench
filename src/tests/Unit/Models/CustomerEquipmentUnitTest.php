@@ -25,7 +25,7 @@ class CustomerEquipmentUnitTest extends TestCase
         $this->customer = Customer::factory()->create();
         $this->model = CustomerEquipment::factory()
             ->create(['cust_id' => $this->customer->cust_id]);
-        $this->model->CustomerSite()->sync([$this->customer->primary_site_id]);
+        $this->model->Sites()->sync([$this->customer->primary_site_id]);
     }
 
     /**
@@ -59,7 +59,7 @@ class CustomerEquipmentUnitTest extends TestCase
 
         $this->assertEquals(
             $data->toArray(),
-            $this->model->CustomerSite->toArray()
+            $this->model->Sites->toArray()
         );
     }
 
@@ -74,7 +74,7 @@ class CustomerEquipmentUnitTest extends TestCase
         $this->assertEquals(
             $data->makeHidden('Customer')->toArray(),
             $this->model
-                ->CustomerNote[0]
+                ->Notes[0]
                 ->makeHidden(['CustomerEquipment', 'deleted_at'])
                 ->toArray()
         );
@@ -92,7 +92,7 @@ class CustomerEquipmentUnitTest extends TestCase
             $data->makeHidden('Customer')->toArray(),
             $this->model
                 ->CustomerFile[0]
-                ->makeHidden(['CustomerSite'])
+                ->makeHidden(['Sites'])
                 ->toArray()
         );
     }

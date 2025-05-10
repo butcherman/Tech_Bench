@@ -41,7 +41,7 @@ const handleClick = (): void => {
 <template>
     <BaseButton
         size="small"
-        variant="light"
+        variant="none"
         :flat="flat"
         :pill="pill"
         v-tooltip="'Refresh'"

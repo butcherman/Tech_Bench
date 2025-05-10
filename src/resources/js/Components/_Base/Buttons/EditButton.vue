@@ -6,6 +6,7 @@ const props = defineProps<{
     href?: string;
     icon?: string;
     pill?: boolean;
+    size?: "small" | "normal" | "large";
     text?: string;
     variant?: elementVariant;
 }>();
