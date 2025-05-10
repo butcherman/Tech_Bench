@@ -3,6 +3,7 @@
 namespace Tests\Feature\Customer;
 
 use App\Events\Customer\CustomerSlugChangedEvent;
+use App\Exceptions\Customer\CustomerNotFoundException;
 use App\Jobs\Customer\ForceDeleteCustomerJob;
 use App\Models\Customer;
 use App\Models\CustomerContact;
@@ -13,6 +14,7 @@ use App\Models\User;
 use App\Services\Customer\CustomerAdministrationService;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Exceptions;
 use Illuminate\Support\Str;
 use Inertia\Testing\AssertableInertia as Assert;
 use Mockery\MockInterface;
@@ -240,13 +242,21 @@ class CustomerTest extends TestCase
 
     public function test_show_invalid_customer(): void
     {
+        Exceptions::fake();
+
         /** @var User $user */
         $user = User::factory()->createQuietly();
-        $response = $this->actingAs($user)
+
+        $this->expectException(CustomerNotFoundException::class);
+
+        $response = $this->withoutExceptionHandling()
+            ->actingAs($user)
             ->get(route('customers.show', 'someRandomCustomerSlug'));
 
         $response->assertStatus(302)
             ->assertRedirect(route('customers.not-found'));
+
+        Exceptions::assertReported(CustomerNotFoundException::class);
     }
 
     /*

@@ -2,9 +2,11 @@
 
 namespace Tests\Feature\Customer;
 
+use App\Exceptions\Customer\CustomerNotFoundException;
 use App\Models\Customer;
 use App\Models\CustomerSite;
 use App\Models\User;
+use Illuminate\Support\Facades\Exceptions;
 use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
@@ -303,12 +305,17 @@ class CustomerSiteTest extends TestCase
 
     public function test_show_scope_bindings(): void
     {
+        Exceptions::fake();
+
         /** @var User $user */
         $user = User::factory()->createQuietly();
         $site = CustomerSite::factory()->create();
         $invalid = Customer::factory()->create();
 
-        $response = $this->actingAs($user)
+        $this->expectException(CustomerNotFoundException::class);
+
+        $response = $this->withoutExceptionHandling()
+            ->actingAs($user)
             ->get(route('customers.sites.show', [
                 $invalid->slug,
                 $site->site_slug,
@@ -316,6 +323,8 @@ class CustomerSiteTest extends TestCase
 
         $response->assertStatus(302)
             ->assertRedirect(route('customers.not-found'));
+
+        Exceptions::assertReported(CustomerNotFoundException::class);
     }
 
     /*
@@ -379,12 +388,17 @@ class CustomerSiteTest extends TestCase
 
     public function test_edit_scope_bindings(): void
     {
+        Exceptions::fake();
+
         /** @var User $user */
         $user = User::factory()->createQuietly();
         $site = CustomerSite::factory()->create();
         $invalid = Customer::factory()->create();
 
-        $response = $this->actingAs($user)
+        $this->expectException(CustomerNotFoundException::class);
+
+        $response = $this->withoutExceptionHandling()
+            ->actingAs($user)
             ->get(route('customers.sites.edit', [
                 $invalid->slug,
                 $site->site_slug,
@@ -392,6 +406,8 @@ class CustomerSiteTest extends TestCase
 
         $response->assertStatus(302)
             ->assertRedirect(route('customers.not-found'));
+
+        Exceptions::assertReported(CustomerNotFoundException::class);
     }
 
     /*
@@ -477,6 +493,8 @@ class CustomerSiteTest extends TestCase
 
     public function test_update_scope_bindings(): void
     {
+        Exceptions::fake();
+
         /** @var User $user */
         $user = User::factory()->createQuietly();
         $site = CustomerSite::factory()->create();
@@ -486,7 +504,10 @@ class CustomerSiteTest extends TestCase
         $data->cust_name = $site->Customer->name;
         $data->cust_id = $site->Customer->cust_id;
 
-        $response = $this->actingAs($user)
+        $this->expectException(CustomerNotFoundException::class);
+
+        $response = $this->withoutExceptionHandling()
+            ->actingAs($user)
             ->put(
                 route('customers.sites.update', [
                     $invalid->slug,
@@ -497,6 +518,8 @@ class CustomerSiteTest extends TestCase
 
         $response->assertStatus(302)
             ->assertRedirect(route('customers.not-found'));
+
+        Exceptions::assertReported(CustomerNotFoundException::class);
     }
 
     /*
@@ -564,13 +587,18 @@ class CustomerSiteTest extends TestCase
 
     public function test_destroy_scope_bindings(): void
     {
+        Exceptions::fake();
+
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);
         $site = CustomerSite::factory()->create();
         $data = ['reason' => 'For testing purposes'];
         $invalid = Customer::factory()->create();
 
-        $response = $this->actingAs($user)
+        $this->expectException(CustomerNotFoundException::class);
+
+        $response = $this->withoutExceptionHandling()
+            ->actingAs($user)
             ->delete(route('customers.sites.destroy', [
                 $invalid->slug,
                 $site->site_slug,
@@ -578,5 +606,7 @@ class CustomerSiteTest extends TestCase
 
         $response->assertStatus(302)
             ->assertRedirect(route('customers.not-found'));
+
+        Exceptions::assertReported(CustomerNotFoundException::class);
     }
 }

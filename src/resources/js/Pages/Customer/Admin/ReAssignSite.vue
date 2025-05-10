@@ -37,7 +37,7 @@ const onCustomerSelected = (event: MouseEvent, customer: customer): void => {
                 console.log("select site");
                 siteModal.value?.show();
             } else {
-                selectedSite.value = customer.customer_site[0];
+                selectedSite.value = customer.sites[0];
             }
         } else {
             toCustomer.value = customer;
@@ -185,7 +185,7 @@ export default { layout: AppLayout };
             <ResourceList
                 v-if="fromCustomer"
                 label-field="site_name"
-                :list="fromCustomer?.customer_site"
+                :list="fromCustomer?.sites"
                 compact
                 hover-row
                 @row-clicked="onSiteSelected"

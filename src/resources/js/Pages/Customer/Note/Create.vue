@@ -26,7 +26,7 @@ export default { layout: AppLayout };
         <Card>
             <CustomerNoteForm
                 :customer="customer"
-                :site-list="siteList"
+                :site-list="siteList ?? []"
                 :current-site="currentSite"
                 :equipment="activeEquipment"
             />
