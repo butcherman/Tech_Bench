@@ -6,6 +6,7 @@ use App\Contracts\ReportContract;
 use App\Models\Customer;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Arr;
 
 abstract class CustomerReportBase implements ReportContract
 {
@@ -74,13 +75,17 @@ abstract class CustomerReportBase implements ReportContract
         return $this->reportDataPage;
     }
 
-    // /**
-    //  * Get the Customers that are part of the report
-    //  */
-    // protected function getCustomerList(Collection $reportParams): EloquentCollection
-    // {
-    //     return Customer::when($reportParams->get('disabledCustomers'), function ($q) {
-    //         return $q->withTrashed();
-    //     })->get();
-    // }
+    /**
+     * Get the Customers that are having the report run on them.
+     */
+    protected function getCustomerList(bool $allCustomers, array $custList): EloquentCollection
+    {
+        if ($allCustomers) {
+            return Customer::all();
+        }
+
+        $custIdList = Arr::pluck($custList, 'cust_id');
+
+        return Customer::whereIn('cust_id', $custIdList)->get();
+    }
 }

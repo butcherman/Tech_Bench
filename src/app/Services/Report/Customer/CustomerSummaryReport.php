@@ -48,9 +48,9 @@ class CustomerSummaryReport extends CustomerReportBase
         foreach ($custList as $customer) {
             $data[] = [
                 'name' => $customer->name,
-                'customer_id' => $customer->cust_id,
+                'cust_id' => $customer->cust_id,
                 'sites' => $customer->site_count,
-                'equipment_assigned' => $customer->Equipment->count(),
+                'equipment' => $customer->Equipment->count(),
                 'notes' => $customer->Notes->count(),
                 'contacts' => $customer->Contacts->count(),
                 'files' => $customer->Files->count(),
@@ -58,27 +58,5 @@ class CustomerSummaryReport extends CustomerReportBase
         }
 
         return $data;
-    }
-
-    /*
-    |---------------------------------------------------------------------------
-    | Internal Methods
-    |---------------------------------------------------------------------------
-    */
-
-    /**
-     * Get the Customers that are having the report run on them.
-     */
-    // protected function getCustomerList(bool $allCustomers, array $custList): EloquentCollection
-    protected function getCustomerList(): EloquentCollection
-    {
-        return Customer::whereIn('cust_id', [1, 9, 17, 26, 335, 37])->get();
-        // if ($allCustomers) {
-        //     return Customer::all();
-        // }
-
-        // $custIdList = Arr::pluck($custList, 'cust_id');
-
-        // return Customer::whereIn('cust_id', $custIdList)->get();
     }
 }
