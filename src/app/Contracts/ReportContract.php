@@ -2,7 +2,6 @@
 
 namespace App\Contracts;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
 interface ReportContract
@@ -30,7 +29,7 @@ interface ReportContract
     /**
      * Validate the Report Parameters Form.
      */
-    public function validateReportParams(Request $request): Collection;
+    public function getValidationParams(): array;
 
     /**
      * Generate the requested Report.

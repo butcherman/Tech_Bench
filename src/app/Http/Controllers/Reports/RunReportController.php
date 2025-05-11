@@ -3,13 +3,12 @@
 namespace App\Http\Controllers\Reports;
 
 use App\Contracts\ReportContract;
-use App\Contracts\ReportingContract;
 use App\Exceptions\Misc\ReportDataExpiredException;
 use App\Http\Controllers\Controller;
 use App\Policies\GatePolicy;
-use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -22,10 +21,14 @@ class RunReportController extends Controller
     {
         $this->authorize('reports-link', GatePolicy::class);
 
-        $view = $contract->getReportGroup() . '.' . $contract->getReportDataPage();
+        $view = $contract->getReportGroup().'.'.$contract->getReportDataPage();
 
         if ($request->getMethod() === 'PUT') {
-            $reportParams = $contract->validateReportParams($request);
+            $reportParams = Validator::make(
+                $request->all(),
+                $contract->getValidationParams()
+            )->safe()->collect();
+
             session()->flash('params', $reportParams);
         } else {
             if (session()->missing('params')) {
@@ -38,8 +41,8 @@ class RunReportController extends Controller
         }
 
         return Inertia::render('Report/Run', [
-            'template' => Inertia::defer(fn() => Blade::render(
-                'report.' . $view,
+            'template' => Inertia::defer(fn () => Blade::render(
+                'report.'.$view,
                 [
                     'data' => $data,
                 ]

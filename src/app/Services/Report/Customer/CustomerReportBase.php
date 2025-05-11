@@ -5,7 +5,6 @@ namespace App\Services\Report\Customer;
 use App\Contracts\ReportContract;
 use App\Models\Customer;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Arr;
 
 abstract class CustomerReportBase implements ReportContract

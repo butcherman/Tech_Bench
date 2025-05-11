@@ -28,7 +28,7 @@ class BuildReportsMenu
             [
                 'name' => 'Customer Equipment Report',
                 'url' => '#',
-            ]
+            ],
         ];
     }
 }

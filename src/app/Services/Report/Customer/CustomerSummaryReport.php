@@ -2,13 +2,8 @@
 
 namespace App\Services\Report\Customer;
 
-use App\Http\Resources\Reports\Customers\CustomerSummaryResource;
-use App\Models\Customer;
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Arr;
 
 class CustomerSummaryReport extends CustomerReportBase
 {
@@ -25,12 +20,12 @@ class CustomerSummaryReport extends CustomerReportBase
     /**
      * Validate the request to run the report.
      */
-    public function validateReportParams(Request $request): Collection
+    public function getValidationParams(): array
     {
-        return Validator::make($request->all(), [
+        return [
             'all_customers' => ['required', 'boolean'],
             'customer_list' => ['nullable', 'array'],
-        ])->safe()->collect();
+        ];
     }
 
     /**
