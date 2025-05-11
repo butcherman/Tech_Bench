@@ -5,6 +5,7 @@ return [
     App\Providers\AppSettingsServiceProvider::class,
     App\Providers\FortifyServiceProvider::class,
     App\Providers\HorizonServiceProvider::class,
+    App\Providers\ReportServiceProvider::class,
     App\Providers\ReportsServiceProvider::class,
     App\Providers\TelescopeServiceProvider::class,
     SocialiteProviders\Manager\ServiceProvider::class,

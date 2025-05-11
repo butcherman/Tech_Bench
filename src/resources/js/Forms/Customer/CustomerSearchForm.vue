@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { InputGroup, InputGroupAddon, InputText } from "primevue";
-import { ref } from "vue";
+import { onUnmounted, ref } from "vue";
 import {
     searchParams,
     triggerSearch,
@@ -10,6 +10,8 @@ import {
 defineProps<{
     hideReset?: boolean;
 }>();
+
+onUnmounted(() => resetSearch());
 
 const onReset = () => {
     resetSearch();
