@@ -2,7 +2,6 @@
 
 namespace App\Services\Report\Customer;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
 class CustomerSummaryReport extends CustomerReportBase

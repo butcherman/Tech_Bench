@@ -7,7 +7,7 @@ import { defineAsyncComponent } from "vue";
 const props = defineProps<{
     group: string;
     form: string;
-    props: any[];
+    props: any | any[];
 }>();
 
 const FormComponent = defineAsyncComponent({
@@ -24,7 +24,7 @@ export default { layout: AppLayout };
 <template>
     <div class="flex justify-center">
         <Card class="tb-card">
-            <FormComponent :customer-list="[]" />
+            <FormComponent v-bind="props.props" />
         </Card>
     </div>
 </template>

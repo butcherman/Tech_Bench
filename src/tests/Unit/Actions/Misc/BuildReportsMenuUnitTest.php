@@ -25,7 +25,10 @@ class BuildReportsMenuUnitTest extends TestCase
                 ],
                 [
                     'name' => 'Customer Files Report',
-                    'url' => '#', // route('reports.customer.files'),
+                    'url' => route('reports.params', [
+                        'customers',
+                        'customer-files-report'
+                    ]),
                 ],
                 [
                     'name' => 'Customer Equipment Report',

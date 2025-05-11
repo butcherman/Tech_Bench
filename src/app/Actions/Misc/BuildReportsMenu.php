@@ -19,11 +19,17 @@ class BuildReportsMenu
         return [
             [
                 'name' => 'Customer Summary Report',
-                'url' => route('reports.params', ['customers', 'customer-summary-report']),
+                'url' => route('reports.params', [
+                    'customers',
+                    'customer-summary-report'
+                ]),
             ],
             [
                 'name' => 'Customer Files Report',
-                'url' => '#', // route('reports.customer.files'),
+                'url' => route('reports.params', [
+                    'customers',
+                    'customer-files-report'
+                ]),
             ],
             [
                 'name' => 'Customer Equipment Report',

@@ -21,7 +21,7 @@ class RunReportController extends Controller
     {
         $this->authorize('reports-link', GatePolicy::class);
 
-        $view = $contract->getReportGroup().'.'.$contract->getReportDataPage();
+        $view = $contract->getReportGroup() . '.' . $contract->getReportDataPage();
 
         if ($request->getMethod() === 'PUT') {
             $reportParams = Validator::make(
@@ -35,16 +35,16 @@ class RunReportController extends Controller
                 throw new ReportDataExpiredException;
             }
 
-            $data = $contract->generateReportData(
-                session()->get('params', collect(['data']))
-            );
+            $reportParams = session()->get('params', collect(['data']));
+            $data = $contract->generateReportData($reportParams);
         }
 
         return Inertia::render('Report/Run', [
-            'template' => Inertia::defer(fn () => Blade::render(
-                'report.'.$view,
+            'template' => Inertia::defer(fn() => Blade::render(
+                'report.' . $view,
                 [
                     'data' => $data,
+                    'params' => $reportParams,
                 ]
             )),
         ]);
