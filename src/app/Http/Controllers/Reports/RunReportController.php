@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Reports;
 
 use App\Contracts\ReportContract;
 use App\Contracts\ReportingContract;
+use App\Exceptions\Misc\ReportDataExpiredException;
 use App\Http\Controllers\Controller;
 use App\Policies\GatePolicy;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Blade;
 use Inertia\Inertia;
@@ -26,6 +28,10 @@ class RunReportController extends Controller
             $reportParams = $contract->validateReportParams($request);
             session()->flash('params', $reportParams);
         } else {
+            if (session()->missing('params')) {
+                throw new ReportDataExpiredException;
+            }
+
             $data = $contract->generateReportData(
                 session()->get('params', collect(['data']))
             );
