@@ -14,7 +14,7 @@ abstract class CustomerReportBase implements ReportContract
      *
      * @var string
      */
-    protected $reportParamPage;
+    protected $reportParamForm;
 
     /**
      * Props to be included with the Inertia page.
@@ -37,15 +37,23 @@ abstract class CustomerReportBase implements ReportContract
     */
 
     /**
-     * Get the Inertia Page for the User Report parameters.
+     * Return that this report belongs to the Customer group
      */
-    public function getReportParamPage(): string
+    public function getReportGroup(): string
     {
-        return $this->reportParamPage;
+        return 'Customer';
     }
 
     /**
-     * Get the props that are included with the Inertia page
+     * Get the Inertia Form for the Customer Report parameters.
+     */
+    public function getReportParamForm(): string
+    {
+        return $this->reportParamForm;
+    }
+
+    /**
+     * Get the props that are included with the Inertia form
      */
     public function getReportParamProps(): array
     {
@@ -61,18 +69,18 @@ abstract class CustomerReportBase implements ReportContract
     /**
      * Get the Inertia Page for the User Report Data
      */
-    public function getReportDataPage(): string
-    {
-        return $this->reportDataPage;
-    }
+    // public function getReportDataPage(): string
+    // {
+    //     return $this->reportDataPage;
+    // }
 
-    /**
-     * Get the Customers that are part of the report
-     */
-    protected function getCustomerList(Collection $reportParams): EloquentCollection
-    {
-        return Customer::when($reportParams->get('disabledCustomers'), function ($q) {
-            return $q->withTrashed();
-        })->get();
-    }
+    // /**
+    //  * Get the Customers that are part of the report
+    //  */
+    // protected function getCustomerList(Collection $reportParams): EloquentCollection
+    // {
+    //     return Customer::when($reportParams->get('disabledCustomers'), function ($q) {
+    //         return $q->withTrashed();
+    //     })->get();
+    // }
 }

@@ -8,9 +8,14 @@ use Illuminate\Support\Collection;
 interface ReportContract
 {
     /**
-     * Inertia page that will render the form to gather Report Parameters.
+     * Return the group that this form belongs to.
      */
-    public function getReportParamPage(): string;
+    public function getReportGroup(): string;
+
+    /**
+     * Inertia form that will gather Report Parameters.
+     */
+    public function getReportParamForm(): string;
 
     /**
      * Props that are included with the Inertia page.
@@ -20,15 +25,15 @@ interface ReportContract
     /**
      * Inertia page that will render the Report Data.
      */
-    public function getReportDataPage(): string;
+    // public function getReportDataPage(): string;
 
     /**
      * Validate the Report Parameters Form.
      */
-    public function validateReportParams(Request $request): Collection;
+    // public function validateReportParams(Request $request): Collection;
 
     /**
      * Generate the requested Report.
      */
-    public function generateReportData(Collection $reportParams): mixed;
+    // public function generateReportData(Collection $reportParams): mixed;
 }

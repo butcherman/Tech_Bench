@@ -19,8 +19,12 @@ class ReportParametersController extends Controller
         $this->authorize('reports-link', GatePolicy::class);
 
         return Inertia::render(
-            $contract->getReportParamPage(),
-            $contract->getReportParamProps()
+            'Report/Get',
+            [
+                'group' => $contract->getReportGroup(),
+                'form' => $contract->getReportParamForm(),
+                'props' => $contract->getReportParamProps(),
+            ]
         );
     }
 }

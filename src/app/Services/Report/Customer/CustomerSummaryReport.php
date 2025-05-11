@@ -14,9 +14,9 @@ class CustomerSummaryReport extends CustomerReportBase
      */
     public function __construct()
     {
-        $this->reportParamPage = 'Report/Customer/Summary/Index';
-        $this->reportDataPage = 'Report/Customer/Summary/Show';
+        $this->reportParamForm = 'CustomerSummaryReportForm';
         $this->reportParamProps = [];
+        // $this->reportDataPage = 'Report/Customer/Summary/Show';
     }
 
     /**
@@ -35,11 +35,13 @@ class CustomerSummaryReport extends CustomerReportBase
      */
     public function generateReportData(Collection $reportParams): mixed
     {
-        $customerList = $this->getCustomerList($reportParams);
+        // $customerList = $this->getCustomerList($reportParams);
+
+        return $reportParams;
 
         return [
-            'total_customers' => $customerList->count(),
-            'data' => $customerList, //  CustomerSummaryResource::collection($customerList)
+            'total_customers' => 53, //  $customerList->count(),
+            'data' => [], // $customerList, //  CustomerSummaryResource::collection($customerList)
         ];
     }
 }
