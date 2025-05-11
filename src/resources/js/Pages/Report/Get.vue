@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import AppLayout from "@/Layouts/App/AppLayout.vue";
-import AtomLoader from "@/Components/_Base/Loaders/AtomLoader.vue";
 import Card from "@/Components/_Base/Card.vue";
+import ReportLoader from "@/Components/Report/ReportLoader.vue";
 import { defineAsyncComponent } from "vue";
 
 const props = defineProps<{
@@ -12,7 +12,8 @@ const props = defineProps<{
 
 const FormComponent = defineAsyncComponent({
     loader: () => import(`../../Forms/Report/${props.group}/${props.form}.vue`),
-    loadingComponent: AtomLoader,
+    loadingComponent: ReportLoader,
+    delay: 200,
 });
 </script>
 
