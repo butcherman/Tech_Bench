@@ -1,15 +1,15 @@
 <?php
 
-namespace Tests\Unit\Services\Report;
+namespace Tests\Unit\Services\Report\Customer;
 
 use App\Facades\CacheData;
 use App\Models\Customer;
-use App\Models\CustomerFile;
-use App\Models\CustomerFileType;
-use App\Services\Report\Customer\CustomerFilesReport;
+use App\Models\CustomerEquipment;
+use App\Models\EquipmentType;
+use App\Services\Report\Customer\CustomerEquipmentReport;
 use Tests\TestCase;
 
-class CustomerFilesReportUnitTest extends TestCase
+class CustomerEquipmentReportUnitTest extends TestCase
 {
     protected $testObj;
 
@@ -17,7 +17,7 @@ class CustomerFilesReportUnitTest extends TestCase
     {
         parent::setUp();
 
-        $this->testObj = new CustomerFilesReport;
+        $this->testObj = new CustomerEquipmentReport;
     }
 
     /*
@@ -41,7 +41,7 @@ class CustomerFilesReportUnitTest extends TestCase
     */
     public function test_get_report_param_form(): void
     {
-        $shouldBe = 'CustomerFilesReportForm';
+        $shouldBe = 'CustomerEquipmentReportForm';
 
         $res = $this->testObj->getReportParamForm();
 
@@ -56,7 +56,7 @@ class CustomerFilesReportUnitTest extends TestCase
     public function test_get_report_param_props(): void
     {
         $shouldBe = [
-            'file-types' => CacheData::fileTypes(),
+            'equipment-types' => CacheData::equipmentCategorySelectBox(),
         ];
 
         $res = $this->testObj->getReportParamProps();
@@ -71,7 +71,7 @@ class CustomerFilesReportUnitTest extends TestCase
     */
     public function test_get_report_data_page(): void
     {
-        $shouldBe = 'CustomerFilesReport';
+        $shouldBe = 'CustomerEquipmentReport';
 
         $res = $this->testObj->getReportDataPage();
 
@@ -86,8 +86,7 @@ class CustomerFilesReportUnitTest extends TestCase
     public function test_get_validation_params(): void
     {
         $shouldBe = [
-            'hasInput' => 'required|string',
-            'file_types' => 'required|array',
+            'equip_id' => ['required', 'numeric']
         ];
 
         $res = $this->testObj->getValidationParams();
@@ -100,51 +99,27 @@ class CustomerFilesReportUnitTest extends TestCase
     | generateReportData()
     |---------------------------------------------------------------------------
     */
-    public function test_generate_report_data_has_file_type(): void
+    public function test_generate_report_data(): void
     {
         Customer::factory()->count(20)->create();
 
         $custList = Customer::inRandomOrder()->limit(5)->get();
-        $fileType = CustomerFileType::find(1);
+        $equipment = EquipmentType::factory()->create();
 
         foreach ($custList as $cust) {
-            CustomerFile::factory()->create([
+            CustomerEquipment::factory()->create([
                 'cust_id' => $cust->cust_id,
-                'file_type_id' => 1
+                'equip_id' => $equipment->equip_id,
             ]);
         }
 
         $data = [
-            'hasInput' => 'have',
-            'file_types' => [1],
+            'equip_id' => $equipment->equip_id
         ];
 
         $res = $this->testObj->generateReportData(collect($data));
 
-        $this->assertCount(5, $res[$fileType->description]);
-    }
-
-    public function test_generate_report_data_missing_file_type(): void
-    {
-        Customer::factory()->count(20)->create();
-
-        $custList = Customer::inRandomOrder()->limit(5)->get();
-        $fileType = CustomerFileType::find(1);
-
-        foreach ($custList as $cust) {
-            CustomerFile::factory()->create([
-                'cust_id' => $cust->cust_id,
-                'file_type_id' => 1
-            ]);
-        }
-
-        $data = [
-            'hasInput' => 'is missing',
-            'file_types' => [1],
-        ];
-
-        $res = $this->testObj->generateReportData(collect($data));
-
-        $this->assertCount(15, $res[$fileType->description]);
+        $this->assertCount(5, $res['custList']);
+        $this->assertEquals($equipment->name, $res['equipName']);
     }
 }

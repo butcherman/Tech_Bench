@@ -33,7 +33,10 @@ class BuildReportsMenu
             ],
             [
                 'name' => 'Customer Equipment Report',
-                'url' => '#',
+                'url' => route('reports.params', [
+                    'customers',
+                    'customer-equipment-report'
+                ]),
             ],
         ];
     }
