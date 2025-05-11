@@ -10,7 +10,42 @@ class BuildReportsMenu
     public function __invoke(): array
     {
         return [
+            'User Reports' => $this->userReports(),
             'Customer Reports' => $this->customerReports(),
+        ];
+    }
+
+    protected function userReports(): array
+    {
+        return [
+            [
+                'name' => 'User Summary Report',
+                'url' => route('reports.params', [
+                    'users',
+                    'user-summary-report'
+                ]),
+            ],
+            [
+                'name' => 'User Login Activity Report',
+                'url' => route('reports.params', [
+                    'users',
+                    'user-login-activity-report'
+                ]),
+            ],
+            [
+                'name' => 'User Contributions Report',
+                'url' => route('reports.params', [
+                    'users',
+                    'user-contributions-report'
+                ]),
+            ],
+            [
+                'name' => 'User Permissions Report',
+                'url' => route('reports.params', [
+                    'users',
+                    'user-permissions-report'
+                ]),
+            ],
         ];
     }
 

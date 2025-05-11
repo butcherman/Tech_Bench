@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Services\Report\Customer;
+namespace App\Services\Report\Users;
 
 use App\Contracts\ReportContract;
-use App\Models\Customer;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
-use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 
-abstract class CustomerReportBase implements ReportContract
+abstract class UserReportBase implements ReportContract
 {
     /**
-     * Inertia Page for the Customer Report Parameters
+     * Inertia Page for the User Report Parameters
      *
      * @var string
      */
@@ -24,7 +24,7 @@ abstract class CustomerReportBase implements ReportContract
     protected $reportParamProps;
 
     /**
-     * Inertia Page for the Customer Report Data.
+     * Inertia Page for the User Report Data.
      *
      * @var string
      */
@@ -37,15 +37,15 @@ abstract class CustomerReportBase implements ReportContract
     */
 
     /**
-     * Return that this report belongs to the Customer group
+     * Return that this report belongs to the Users group
      */
     public function getReportGroup(): string
     {
-        return 'Customer';
+        return 'Users';
     }
 
     /**
-     * Get the Inertia Form for the Customer Report parameters.
+     * Get the Inertia Form for the User Report parameters.
      */
     public function getReportParamForm(): string
     {
@@ -74,17 +74,14 @@ abstract class CustomerReportBase implements ReportContract
         return $this->reportDataPage;
     }
 
-    /**
-     * Get the Customers that are having the report run on them.
-     */
-    protected function getCustomerList(bool $allCustomers, array $custList): EloquentCollection
+    protected function getUserList(Collection $reportParams): EloquentCollection
     {
-        if ($allCustomers) {
-            return Customer::all();
+        if ($reportParams->get('all_users')) {
+            return User::when($reportParams->get('disabled_users'), function ($q) {
+                return $q->withTrashed();
+            })->get();
         }
 
-        $custIdList = Arr::pluck($custList, 'cust_id');
-
-        return Customer::whereIn('cust_id', $custIdList)->get();
+        return User::whereIn('username', $reportParams->get('user_list'))->get();
     }
 }

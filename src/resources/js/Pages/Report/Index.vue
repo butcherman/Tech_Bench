@@ -30,7 +30,7 @@ export default { layout: AppLayout };
     <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
         <Card
             v-for="(reportList, category) in reports"
-            class="tb-card"
+            class="w-full"
             :title="category.toString()"
         >
             <ResourceList
