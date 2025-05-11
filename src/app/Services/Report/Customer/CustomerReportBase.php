@@ -69,10 +69,10 @@ abstract class CustomerReportBase implements ReportContract
     /**
      * Get the Inertia Page for the User Report Data
      */
-    // public function getReportDataPage(): string
-    // {
-    //     return $this->reportDataPage;
-    // }
+    public function getReportDataPage(): string
+    {
+        return $this->reportDataPage;
+    }
 
     // /**
     //  * Get the Customers that are part of the report

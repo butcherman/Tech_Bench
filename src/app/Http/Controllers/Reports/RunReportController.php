@@ -16,18 +16,28 @@ class RunReportController extends Controller
     /**
      * Run the requested Report
      */
-    public function __invoke(Request $request, ReportContract $contract) //: Response
+    public function __invoke(Request $request, ReportContract $contract): Response
     {
         $this->authorize('reports-link', GatePolicy::class);
 
-        return 'run report';
+        $view = $contract->getReportGroup() . '.' . $contract->getReportDataPage();
 
-        // $reportParams = $contract->validateReportParams($request);
+        if ($request->getMethod() === 'PUT') {
+            $reportParams = $contract->validateReportParams($request);
+            session()->flash('params', $reportParams);
+        } else {
+            $data = $contract->generateReportData(
+                session()->get('params', collect(['data']))
+            );
+        }
 
-        // return Inertia::render($contract->getReportDataPage(), [
-        //     'report-params' => $reportParams,
-        //     'report-data' => $contract->generateReportData($reportParams),
-        //     'report-view' => Blade::render('report.customer.CustomerSummaryReport'),
-        // ]);
+        return Inertia::render('Report/Run', [
+            'template' => Inertia::defer(fn() => Blade::render(
+                'report.' . $view,
+                [
+                    'data' => $data,
+                ]
+            )),
+        ]);
     }
 }

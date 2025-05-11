@@ -32,5 +32,7 @@ Route::middleware('auth.secure')->prefix('reports')->name('reports.')->group(fun
         ->name('params')
         ->breadcrumb(fn(string $group, string $report) => Str::headline($report), 'reports.index');
 
-    Route::match(['get', 'put'], '{group}/{report}/run', RunReportController::class)->name('run');
+    Route::match(['get', 'put'], '{group}/{report}/run', RunReportController::class)
+        ->name('run')
+        ->breadcrumb('Report Data', 'reports.params');
 });

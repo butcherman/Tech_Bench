@@ -23,17 +23,17 @@ interface ReportContract
     public function getReportParamProps(): array;
 
     /**
-     * Inertia page that will render the Report Data.
+     * Blade Template that will render the Report Data.
      */
-    // public function getReportDataPage(): string;
+    public function getReportDataPage(): string;
 
     /**
      * Validate the Report Parameters Form.
      */
-    // public function validateReportParams(Request $request): Collection;
+    public function validateReportParams(Request $request): Collection;
 
     /**
      * Generate the requested Report.
      */
-    // public function generateReportData(Collection $reportParams): mixed;
+    public function generateReportData(Collection $reportParams): mixed;
 }
