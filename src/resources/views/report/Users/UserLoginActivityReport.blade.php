@@ -7,6 +7,12 @@
             <h1 class="text-center mb-2">
                 User Login Activity Report
             </h1>
+            <h3 class="text-center">
+                From
+                {{ \Carbon\Carbon::parse($params['start_date'])->format('M d, Y') }}
+                To
+                {{ \Carbon\Carbon::parse($params['end_date'])->format('M d, Y') }}
+            </h3>
         </div>
     </div>
 </div>
