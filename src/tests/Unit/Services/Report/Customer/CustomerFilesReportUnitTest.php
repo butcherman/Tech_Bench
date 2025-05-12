@@ -110,7 +110,7 @@ class CustomerFilesReportUnitTest extends TestCase
         foreach ($custList as $cust) {
             CustomerFile::factory()->create([
                 'cust_id' => $cust->cust_id,
-                'file_type_id' => 1
+                'file_type_id' => 1,
             ]);
         }
 
@@ -134,7 +134,7 @@ class CustomerFilesReportUnitTest extends TestCase
         foreach ($custList as $cust) {
             CustomerFile::factory()->create([
                 'cust_id' => $cust->cust_id,
-                'file_type_id' => 1
+                'file_type_id' => 1,
             ]);
         }
 

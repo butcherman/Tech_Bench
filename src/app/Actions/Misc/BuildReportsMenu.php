@@ -10,7 +10,35 @@ class BuildReportsMenu
     public function __invoke(): array
     {
         return [
+            'User Reports' => $this->userReports(),
             'Customer Reports' => $this->customerReports(),
+        ];
+    }
+
+    protected function userReports(): array
+    {
+        return [
+            [
+                'name' => 'User Summary Report',
+                'url' => route('reports.params', [
+                    'users',
+                    'user-summary-report',
+                ]),
+            ],
+            [
+                'name' => 'User Login Activity Report',
+                'url' => route('reports.params', [
+                    'users',
+                    'user-login-activity-report',
+                ]),
+            ],
+            [
+                'name' => 'User Contributions Report',
+                'url' => route('reports.params', [
+                    'users',
+                    'user-contributions-report',
+                ]),
+            ],
         ];
     }
 
@@ -21,21 +49,21 @@ class BuildReportsMenu
                 'name' => 'Customer Summary Report',
                 'url' => route('reports.params', [
                     'customers',
-                    'customer-summary-report'
+                    'customer-summary-report',
                 ]),
             ],
             [
                 'name' => 'Customer Files Report',
                 'url' => route('reports.params', [
                     'customers',
-                    'customer-files-report'
+                    'customer-files-report',
                 ]),
             ],
             [
                 'name' => 'Customer Equipment Report',
                 'url' => route('reports.params', [
                     'customers',
-                    'customer-equipment-report'
+                    'customer-equipment-report',
                 ]),
             ],
         ];

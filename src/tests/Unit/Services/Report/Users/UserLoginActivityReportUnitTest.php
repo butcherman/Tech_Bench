@@ -1,15 +1,13 @@
 <?php
 
-namespace Tests\Unit\Services\Report\Customer;
+namespace Tests\Unit\Services\Report\Users;
 
-use App\Facades\CacheData;
-use App\Models\Customer;
-use App\Models\CustomerEquipment;
-use App\Models\EquipmentType;
-use App\Services\Report\Customer\CustomerEquipmentReport;
+use App\Models\User;
+use App\Services\Report\Users\UserLoginActivityReport;
+use Carbon\Carbon;
 use Tests\TestCase;
 
-class CustomerEquipmentReportUnitTest extends TestCase
+class UserLoginActivityReportUnitTest extends TestCase
 {
     protected $testObj;
 
@@ -17,7 +15,7 @@ class CustomerEquipmentReportUnitTest extends TestCase
     {
         parent::setUp();
 
-        $this->testObj = new CustomerEquipmentReport;
+        $this->testObj = new UserLoginActivityReport;
     }
 
     /*
@@ -27,7 +25,7 @@ class CustomerEquipmentReportUnitTest extends TestCase
     */
     public function test_get_report_group(): void
     {
-        $shouldBe = 'Customer';
+        $shouldBe = 'Users';
 
         $res = $this->testObj->getReportGroup();
 
@@ -41,7 +39,7 @@ class CustomerEquipmentReportUnitTest extends TestCase
     */
     public function test_get_report_param_form(): void
     {
-        $shouldBe = 'CustomerEquipmentReportForm';
+        $shouldBe = 'UserLoginActivityReportForm';
 
         $res = $this->testObj->getReportParamForm();
 
@@ -56,7 +54,7 @@ class CustomerEquipmentReportUnitTest extends TestCase
     public function test_get_report_param_props(): void
     {
         $shouldBe = [
-            'equipment-types' => CacheData::equipmentCategorySelectBox(),
+            'user-list' => User::all(),
         ];
 
         $res = $this->testObj->getReportParamProps();
@@ -71,7 +69,7 @@ class CustomerEquipmentReportUnitTest extends TestCase
     */
     public function test_get_report_data_page(): void
     {
-        $shouldBe = 'CustomerEquipmentReport';
+        $shouldBe = 'UserLoginActivityReport';
 
         $res = $this->testObj->getReportDataPage();
 
@@ -86,7 +84,9 @@ class CustomerEquipmentReportUnitTest extends TestCase
     public function test_get_validation_params(): void
     {
         $shouldBe = [
-            'equip_id' => ['required', 'numeric'],
+            'start_date' => ['required', 'string'],
+            'end_date' => ['required', 'string'],
+            'user_list' => ['required', 'array'],
         ];
 
         $res = $this->testObj->getValidationParams();
@@ -101,25 +101,18 @@ class CustomerEquipmentReportUnitTest extends TestCase
     */
     public function test_generate_report_data(): void
     {
-        Customer::factory()->count(20)->create();
-
-        $custList = Customer::inRandomOrder()->limit(5)->get();
-        $equipment = EquipmentType::factory()->create();
-
-        foreach ($custList as $cust) {
-            CustomerEquipment::factory()->create([
-                'cust_id' => $cust->cust_id,
-                'equip_id' => $equipment->equip_id,
-            ]);
-        }
+        User::factory()->count(19)->createQuietly();
 
         $data = [
-            'equip_id' => $equipment->equip_id,
+            'start_date' => Carbon::today()->subDays(30)->format('Y-m-d'),
+            'end_date' => Carbon::today()->format('Y-m-d'),
+            'user_list' => User::all()
+                ->map(fn ($user) => $user->username)
+                ->toArray(),
         ];
 
         $res = $this->testObj->generateReportData(collect($data));
 
-        $this->assertCount(5, $res['custList']);
-        $this->assertEquals($equipment->name, $res['equipName']);
+        $this->assertCount(20, $res);
     }
 }

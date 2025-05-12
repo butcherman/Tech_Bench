@@ -28,7 +28,7 @@ class CustomerEquipmentReport extends CustomerReportBase
     public function getValidationParams(): array
     {
         return [
-            'equip_id' => ['required', 'numeric']
+            'equip_id' => ['required', 'numeric'],
         ];
     }
 
@@ -41,8 +41,8 @@ class CustomerEquipmentReport extends CustomerReportBase
             'equipName' => EquipmentType::find($reportParams->get('equip_id'))->name,
             'custList' => Customer::whereHas(
                 'Equipment',
-                fn(Builder $query) => $query->where('equip_id', $reportParams->get('equip_id'))
-            )->get()
+                fn (Builder $query) => $query->where('equip_id', $reportParams->get('equip_id'))
+            )->get(),
         ];
 
         return $data;

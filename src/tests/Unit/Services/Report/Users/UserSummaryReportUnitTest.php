@@ -1,15 +1,12 @@
 <?php
 
-namespace Tests\Unit\Services\Report\Customer;
+namespace Tests\Unit\Services\Report\Users;
 
-use App\Facades\CacheData;
-use App\Models\Customer;
-use App\Models\CustomerEquipment;
-use App\Models\EquipmentType;
-use App\Services\Report\Customer\CustomerEquipmentReport;
+use App\Models\User;
+use App\Services\Report\Users\UserSummaryReport;
 use Tests\TestCase;
 
-class CustomerEquipmentReportUnitTest extends TestCase
+class UserSummaryReportUnitTest extends TestCase
 {
     protected $testObj;
 
@@ -17,7 +14,7 @@ class CustomerEquipmentReportUnitTest extends TestCase
     {
         parent::setUp();
 
-        $this->testObj = new CustomerEquipmentReport;
+        $this->testObj = new UserSummaryReport;
     }
 
     /*
@@ -27,7 +24,7 @@ class CustomerEquipmentReportUnitTest extends TestCase
     */
     public function test_get_report_group(): void
     {
-        $shouldBe = 'Customer';
+        $shouldBe = 'Users';
 
         $res = $this->testObj->getReportGroup();
 
@@ -41,7 +38,7 @@ class CustomerEquipmentReportUnitTest extends TestCase
     */
     public function test_get_report_param_form(): void
     {
-        $shouldBe = 'CustomerEquipmentReportForm';
+        $shouldBe = 'UserSummaryReportForm';
 
         $res = $this->testObj->getReportParamForm();
 
@@ -56,7 +53,7 @@ class CustomerEquipmentReportUnitTest extends TestCase
     public function test_get_report_param_props(): void
     {
         $shouldBe = [
-            'equipment-types' => CacheData::equipmentCategorySelectBox(),
+            'user-list' => User::all(),
         ];
 
         $res = $this->testObj->getReportParamProps();
@@ -71,7 +68,7 @@ class CustomerEquipmentReportUnitTest extends TestCase
     */
     public function test_get_report_data_page(): void
     {
-        $shouldBe = 'CustomerEquipmentReport';
+        $shouldBe = 'UserSummaryReport';
 
         $res = $this->testObj->getReportDataPage();
 
@@ -86,7 +83,9 @@ class CustomerEquipmentReportUnitTest extends TestCase
     public function test_get_validation_params(): void
     {
         $shouldBe = [
-            'equip_id' => ['required', 'numeric'],
+            'all_users' => ['required', 'boolean'],
+            'disabled_users' => ['required', 'boolean'],
+            'user_list' => ['array'],
         ];
 
         $res = $this->testObj->getValidationParams();
@@ -101,25 +100,55 @@ class CustomerEquipmentReportUnitTest extends TestCase
     */
     public function test_generate_report_data(): void
     {
-        Customer::factory()->count(20)->create();
-
-        $custList = Customer::inRandomOrder()->limit(5)->get();
-        $equipment = EquipmentType::factory()->create();
-
-        foreach ($custList as $cust) {
-            CustomerEquipment::factory()->create([
-                'cust_id' => $cust->cust_id,
-                'equip_id' => $equipment->equip_id,
-            ]);
-        }
+        User::factory()->count(19)->createQuietly();
 
         $data = [
-            'equip_id' => $equipment->equip_id,
+            'all_users' => true,
+            'disabled_users' => true,
+            'user_list' => [],
         ];
 
         $res = $this->testObj->generateReportData(collect($data));
 
-        $this->assertCount(5, $res['custList']);
-        $this->assertEquals($equipment->name, $res['equipName']);
+        $this->assertCount(20, $res);
+        $this->assertArrayHasKey('user_id', $res[0]);
+        $this->assertArrayHasKey('username', $res[0]);
+        $this->assertArrayHasKey('full_name', $res[0]);
+        $this->assertArrayHasKey('email', $res[0]);
+        $this->assertArrayHasKey('role', $res[0]);
+        $this->assertArrayHasKey('created_at', $res[0]);
+        $this->assertArrayHasKey('updated_at', $res[0]);
+        $this->assertArrayHasKey('deleted_at', $res[0]);
+        $this->assertArrayHasKey('password_expires', $res[0]);
+        $this->assertArrayHasKey('last_login', $res[0]);
+    }
+
+    public function test_generate_report_data_some_users(): void
+    {
+        User::factory()->count(19)->createQuietly();
+
+        $data = [
+            'all_users' => false,
+            'disabled_users' => false,
+            'user_list' => User::inRandomOrder()
+                ->limit(10)
+                ->get()
+                ->pluck('username')
+                ->toArray(),
+        ];
+
+        $res = $this->testObj->generateReportData(collect($data));
+
+        $this->assertCount(10, $res);
+        $this->assertArrayHasKey('user_id', $res[0]);
+        $this->assertArrayHasKey('username', $res[0]);
+        $this->assertArrayHasKey('full_name', $res[0]);
+        $this->assertArrayHasKey('email', $res[0]);
+        $this->assertArrayHasKey('role', $res[0]);
+        $this->assertArrayHasKey('created_at', $res[0]);
+        $this->assertArrayHasKey('updated_at', $res[0]);
+        $this->assertArrayHasKey('deleted_at', $res[0]);
+        $this->assertArrayHasKey('password_expires', $res[0]);
+        $this->assertArrayHasKey('last_login', $res[0]);
     }
 }

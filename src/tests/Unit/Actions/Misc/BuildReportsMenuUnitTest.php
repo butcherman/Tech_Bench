@@ -15,6 +15,29 @@ class BuildReportsMenuUnitTest extends TestCase
     public function test_invoke(): void
     {
         $shouldBe = [
+            'User Reports' => [
+                [
+                    'name' => 'User Summary Report',
+                    'url' => route('reports.params', [
+                        'users',
+                        'user-summary-report',
+                    ]),
+                ],
+                [
+                    'name' => 'User Login Activity Report',
+                    'url' => route('reports.params', [
+                        'users',
+                        'user-login-activity-report',
+                    ]),
+                ],
+                [
+                    'name' => 'User Contributions Report',
+                    'url' => route('reports.params', [
+                        'users',
+                        'user-contributions-report',
+                    ]),
+                ],
+            ],
             'Customer Reports' => [
                 [
                     'name' => 'Customer Summary Report',
@@ -27,14 +50,14 @@ class BuildReportsMenuUnitTest extends TestCase
                     'name' => 'Customer Files Report',
                     'url' => route('reports.params', [
                         'customers',
-                        'customer-files-report'
+                        'customer-files-report',
                     ]),
                 ],
                 [
                     'name' => 'Customer Equipment Report',
                     'url' => route('reports.params', [
                         'customers',
-                        'customer-equipment-report'
+                        'customer-equipment-report',
                     ]),
                 ],
             ],
