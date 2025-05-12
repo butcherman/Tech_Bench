@@ -38,7 +38,7 @@ class ReportParametersTest extends TestCase
         $response->assertForbidden();
     }
 
-    public function test_invoke(): void
+    public function test_invoke_customer_report(): void
     {
         /** @var User $user */
         $user = User::factory()->create(['role_id' => 2]);
@@ -50,7 +50,27 @@ class ReportParametersTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn (Assert $page) => $page
+                fn(Assert $page) => $page
+                    ->component('Report/Get')
+                    ->has('group')
+                    ->has('form')
+                    ->has('props')
+            );
+    }
+
+    public function test_invoke_user_report(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->create(['role_id' => 2]);
+
+        $response = $this->actingAs($user)->get(route('reports.params', [
+            'users',
+            'user-summary-report',
+        ]));
+
+        $response->assertSuccessful()
+            ->assertInertia(
+                fn(Assert $page) => $page
                     ->component('Report/Get')
                     ->has('group')
                     ->has('form')
