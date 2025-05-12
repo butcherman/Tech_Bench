@@ -54,7 +54,7 @@ class UserLoginActivityReportUnitTest extends TestCase
     public function test_get_report_param_props(): void
     {
         $shouldBe = [
-            'user-list' => User::all()
+            'user-list' => User::all(),
         ];
 
         $res = $this->testObj->getReportParamProps();
@@ -107,7 +107,7 @@ class UserLoginActivityReportUnitTest extends TestCase
             'start_date' => Carbon::today()->subDays(30)->format('Y-m-d'),
             'end_date' => Carbon::today()->format('Y-m-d'),
             'user_list' => User::all()
-                ->map(fn($user) => $user->username)
+                ->map(fn ($user) => $user->username)
                 ->toArray(),
         ];
 

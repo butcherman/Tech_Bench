@@ -71,12 +71,12 @@ class UserContributionsReport extends UserReportBase
     protected function getModelContributions(User $user, string $model, string $start, string $end)
     {
         [$modelName, $fieldName] = explode('@', $model);
-        $namespace = 'App\Models\\' . $modelName;
+        $namespace = 'App\Models\\'.$modelName;
 
         return $namespace::where($fieldName, $user->user_id)
             ->whereBetween('created_at', [
                 $start,
-                $end
+                $end,
             ])->count();
     }
 }

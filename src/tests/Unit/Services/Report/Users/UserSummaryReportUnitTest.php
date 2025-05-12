@@ -53,7 +53,7 @@ class UserSummaryReportUnitTest extends TestCase
     public function test_get_report_param_props(): void
     {
         $shouldBe = [
-            'user-list' => User::all()
+            'user-list' => User::all(),
         ];
 
         $res = $this->testObj->getReportParamProps();
@@ -101,7 +101,6 @@ class UserSummaryReportUnitTest extends TestCase
     public function test_generate_report_data(): void
     {
         User::factory()->count(19)->createQuietly();
-
 
         $data = [
             'all_users' => true,

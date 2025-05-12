@@ -50,7 +50,7 @@ class ReportParametersTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('Report/Get')
                     ->has('group')
                     ->has('form')
@@ -70,7 +70,7 @@ class ReportParametersTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('Report/Get')
                     ->has('group')
                     ->has('form')

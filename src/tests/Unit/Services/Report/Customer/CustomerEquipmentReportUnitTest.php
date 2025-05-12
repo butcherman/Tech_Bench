@@ -86,7 +86,7 @@ class CustomerEquipmentReportUnitTest extends TestCase
     public function test_get_validation_params(): void
     {
         $shouldBe = [
-            'equip_id' => ['required', 'numeric']
+            'equip_id' => ['required', 'numeric'],
         ];
 
         $res = $this->testObj->getValidationParams();
@@ -114,7 +114,7 @@ class CustomerEquipmentReportUnitTest extends TestCase
         }
 
         $data = [
-            'equip_id' => $equipment->equip_id
+            'equip_id' => $equipment->equip_id,
         ];
 
         $res = $this->testObj->generateReportData(collect($data));

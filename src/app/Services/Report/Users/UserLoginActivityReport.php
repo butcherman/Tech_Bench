@@ -43,7 +43,7 @@ class UserLoginActivityReport extends UserReportBase
 
             $loginData = $user->UserLogins()->whereBetween('created_at', [
                 $start,
-                $end
+                $end,
             ])->get();
 
             $data[$user->full_name] = $loginData->toArray();

@@ -14,7 +14,7 @@ class UserSummaryReport extends UserReportBase
     {
         $this->reportParamForm = 'UserSummaryReportForm';
         $this->reportDataPage = 'UserSummaryReport';
-        $this->reportParamProps = ['user-list' => User::all(),];
+        $this->reportParamProps = ['user-list' => User::all()];
     }
 
     /**
