@@ -37,13 +37,6 @@ class BuildReportsMenuUnitTest extends TestCase
                         'user-contributions-report'
                     ]),
                 ],
-                [
-                    'name' => 'User Permissions Report',
-                    'url' => route('reports.params', [
-                        'users',
-                        'user-permissions-report'
-                    ]),
-                ],
             ],
             'Customer Reports' => [
                 [

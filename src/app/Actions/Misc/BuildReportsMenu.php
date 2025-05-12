@@ -39,13 +39,6 @@ class BuildReportsMenu
                     'user-contributions-report'
                 ]),
             ],
-            [
-                'name' => 'User Permissions Report',
-                'url' => route('reports.params', [
-                    'users',
-                    'user-permissions-report'
-                ]),
-            ],
         ];
     }
 
