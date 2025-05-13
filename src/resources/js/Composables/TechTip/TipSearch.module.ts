@@ -4,6 +4,8 @@ import type { AxiosResponse } from "axios";
 
 interface searchParams {
     searchFor: string;
+    typeList: number[];
+    equipList: number[];
     page: number;
     perPage: number;
 }
@@ -29,11 +31,13 @@ const perPageDefault = ref<number>(25);
 
 export const searchParams = reactive<searchParams>({
     searchFor: "",
+    typeList: [],
+    equipList: [],
     page: 1,
     perPage: perPageDefault.value,
 });
 
-export const searchResults = ref<customer[]>([]);
+export const searchResults = ref<techTip[]>([]);
 export const paginationData = reactive<paginationData>({
     currentPage: 1,
     totalPages: 1,
@@ -43,45 +47,26 @@ export const paginationData = reactive<paginationData>({
     pageArr: [1],
 });
 
-export const setPerPageDefault = (perPage: number): void => {
-    perPageDefault.value = perPage;
-    searchParams.perPage = perPage;
-};
-
 /**
- * Fetch data for Customer Search
+ * Fetch data for Tech Tip Search.
  */
 export const triggerSearch = (): void => {
+    console.log("trigger search");
+
     isDirty.value = true;
 
-    dataPost(route("customers.search"), searchParams).then((res) =>
-        processResults(res)
+    dataPost(route("tech-tips.search"), searchParams).then((res) =>
+        console.log(res)
     );
 };
 
 /**
- * Set all search parameters back to their default values.
+ * Reset the Search Parameters back to default values.
  */
 export const resetSearch = (): void => {
     searchParams.searchFor = "";
+    searchParams.typeList = [];
+    searchParams.equipList = [];
     searchParams.page = 1;
     isDirty.value = false;
-};
-
-/**
- * Assign the results and build out the pagination footer.
- */
-const processResults = (res: void | AxiosResponse<any, customer>): void => {
-    if (res) {
-        console.log(res.data);
-        // Assign results
-        searchResults.value = res.data.data;
-
-        // Build pagination footer
-        paginationData.listFrom = res.data.from;
-        paginationData.listTo = res.data.to;
-        paginationData.listTotal = res.data.total;
-        paginationData.totalPages = res.data.last_page;
-        paginationData.currentPage = res.data.current_page;
-    }
 };

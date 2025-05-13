@@ -1,22 +1,48 @@
 <?php
 
+use App\Http\Controllers\TechTip\SearchTipsController;
+use App\Http\Controllers\TechTip\TechTipController;
+use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 use Illuminate\Support\Facades\Route;
 
-Route::get('tech-tips', function () {
-    return 'tech tips';
+/*
+|-------------------------------------------------------------------------------
+| Tech Tip Based routes
+|-------------------------------------------------------------------------------
+*/
+
+Route::middleware('auth.secure')->group(function () {
+
+    Route::prefix('tech-tips')->name('tech-tips.')->group(function () {
+
+        /*
+        |-----------------------------------------------------------------------
+        | Tech Tip Searching and Verification
+        | /tech-tips
+        |-----------------------------------------------------------------------
+        */
+        Route::post('search', SearchTipsController::class)->name('search');
+    });
+
+    /*
+    |---------------------------------------------------------------------------
+    | Tech Tip Resource Routes
+    | /tech-tips
+    |---------------------------------------------------------------------------
+    */
+    Route::resource('tech-tips', TechTipController::class)
+        ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
+            $breadcrumbs->index('Tech Tips');
+        });
+});
+
+Route::get('public-tips', function () {
+    return 'public tips';
 })->name('publicTips.index');
 
 Route::get('public-tips', function () {
     return ' show public tip';
 })->name('publicTips.show');
-
-Route::get('tech-tips/show', function () {
-    return 'show tech tip';
-})->name('tech-tips.show');
-
-Route::get('tech-tips-index', function () {
-    return 'tech tips index';
-})->name('tech-tips.index');
 
 Route::get('admin-tips', function () {
     return 'something admin';
