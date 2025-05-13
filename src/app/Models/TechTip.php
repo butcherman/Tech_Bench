@@ -36,7 +36,7 @@ class TechTip extends Model
     protected $hidden = ['deleted_at', 'tip_type_id', 'Bookmarks'];
 
     /** @var array<int, string> */
-    protected $appends = ['href', 'public_href', 'equipList', 'fileList', 'equip_list', 'file_list'];
+    protected $appends = ['href', 'public_href', 'equip_list', 'file_list'];
 
     /*
     |---------------------------------------------------------------------------
@@ -90,17 +90,17 @@ class TechTip extends Model
     protected function equipList(): Attribute
     {
         return Attribute::make(
-            get: fn() => $this->EquipmentType->pluck('equip_id')->toArray(),
+            get: fn() => $this->Equipment->pluck('equip_id')->toArray(),
         );
     }
 
     /**
      * @depreciated
      */
-    protected function getEquipListAttribute(): array
-    {
-        return $this->EquipmentType->pluck('equip_id')->toArray();
-    }
+    // protected function getEquipListAttribute(): array
+    // {
+    //     return $this->EquipmentType->pluck('equip_id')->toArray();
+    // }
 
     protected function fileList(): Attribute
     {
@@ -147,15 +147,15 @@ class TechTip extends Model
     /**
      * @depreciated
      */
-    public function EquipmentType(): BelongsToMany
-    {
-        return $this->belongsToMany(
-            EquipmentType::class,
-            TechTipEquipment::class,
-            'tip_id',
-            'equip_id'
-        )->withTimestamps();
-    }
+    // public function EquipmentType(): BelongsToMany
+    // {
+    //     return $this->belongsToMany(
+    //         EquipmentType::class,
+    //         TechTipEquipment::class,
+    //         'tip_id',
+    //         'equip_id'
+    //     )->withTimestamps();
+    // }
 
     public function PublicEquipment(): BelongsToMany
     {

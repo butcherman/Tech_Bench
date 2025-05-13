@@ -1,24 +1,25 @@
 type techTip = {
+    allow_comments: boolean;
+    created_at: string;
+    // created_by: user;
+    details: string;
+    equip_list: number[];
+    equipment: equipment[];
+    slug: string;
+    sticky: boolean;
+    subject: string;
     tip_id: number;
-    user_id: number;
+    tip_type_id: number;
     updated_id: number;
-    //     tip_type_id: number;
-    //     sticky: boolean;
+    user_id: number;
     //     public: boolean;
-    //     allow_comments: boolean;
-    //     subject: string;
-    //     slug: string;
-    //     details: string;
     //     views: number;
     //     deleted_at: string;
-    //     created_at: string;
     //     updated_at: string;
-    //     created_by: user;
     //     updated_by: user;
     //     equipList?: number[];
     //     fileList?: number[];
     //     file_upload?: fileUpload[];
-    //     equipment_type: equipment[];
     //     tech_tip_type: tipType;
     //     tech_tip_view: {
     //         tip_id: number;

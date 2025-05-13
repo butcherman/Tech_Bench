@@ -5,8 +5,9 @@ import BaseButton from "@/Components/_Base/Buttons/BaseButton.vue";
 import Card from "@/Components/_Base/Card.vue";
 import SearchFilters from "@/Components/TechTips/Search/SearchFilters.vue";
 import SearchTipsForm from "@/Forms/TechTip/SearchTipsForm.vue";
-import { ref } from "vue";
-import { searchResults } from "@/Composables/TechTip/TipSearch.module";
+import TipsSearchTable from "@/Components/TechTips/Search/TipsSearchTable.vue";
+import { onMounted, ref } from "vue";
+import { triggerSearch } from "@/Composables/TechTip/TipSearch.module";
 
 defineProps<{
     permissions: techTipPermissions;
@@ -17,6 +18,8 @@ defineProps<{
 }>();
 
 const filterHidden = ref<boolean>(true);
+
+onMounted(() => triggerSearch());
 </script>
 
 <script lang="ts">
@@ -55,10 +58,7 @@ export default { layout: AppLayout };
                 />
             </Card>
             <Card class="grow">
-                {{ searchResults.length }} Results
-                <div>
-                    {{ searchResults }}
-                </div>
+                <TipsSearchTable />
             </Card>
         </div>
     </div>
