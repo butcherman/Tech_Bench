@@ -17,6 +17,16 @@ class TechTipSearch
         $equipList = $searchData->get('equipList');
         $typeList = $searchData->get('typeList');
 
+        // If no params, return sticky and most recent Tips.
+        if (empty($searchFor) && empty($equipList) && empty($typeList)) {
+            return TechTip::when($onlyPublic, function ($q) {
+                $q->where('public', true);
+            })
+                ->orderBy('sticky', 'desc')
+                ->orderBy('created_at', 'desc')
+                ->paginate($searchData->get('perPage'));
+        }
+
         return TechTip::search($searchFor)
             ->when(!empty($typeList), function ($q) use ($typeList) {
                 // Filter by Tech Tip Type
