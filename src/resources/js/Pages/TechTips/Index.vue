@@ -6,6 +6,7 @@ import Card from "@/Components/_Base/Card.vue";
 import SearchFilters from "@/Components/TechTips/Search/SearchFilters.vue";
 import SearchTipsForm from "@/Forms/TechTip/SearchTipsForm.vue";
 import { ref } from "vue";
+import { searchResults } from "@/Composables/TechTip/TipSearch.module";
 
 defineProps<{
     permissions: techTipPermissions;
@@ -53,7 +54,12 @@ export default { layout: AppLayout };
                     class="filter"
                 />
             </Card>
-            <Card class="grow"> Results </Card>
+            <Card class="grow">
+                {{ searchResults.length }} Results
+                <div>
+                    {{ searchResults }}
+                </div>
+            </Card>
         </div>
     </div>
 </template>

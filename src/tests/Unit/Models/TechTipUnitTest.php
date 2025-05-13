@@ -91,7 +91,7 @@ class TechTipUnitTest extends TestCase
         );
     }
 
-    public function test_equipment_type_relationship(): void
+    public function test_equipment_relationship(): void
     {
         $equip = EquipmentType::factory()->create();
         TechTipEquipment::create([
@@ -101,11 +101,11 @@ class TechTipUnitTest extends TestCase
 
         $this->assertEquals(
             $equip->toArray(),
-            $this->model->EquipmentType[0]->toArray()
+            $this->model->Equipment[0]->toArray()
         );
     }
 
-    public function test_public_equipment_type_relationship(): void
+    public function test_public_equipment_relationship(): void
     {
         $equip1 = EquipmentType::factory()->create(['allow_public_tip' => false]);
         $equip2 = EquipmentType::factory()->create(['allow_public_tip' => true]);
@@ -121,7 +121,7 @@ class TechTipUnitTest extends TestCase
 
         $this->assertEquals(
             [$equip2->toArray()],
-            $this->model->PublicEquipmentType->toArray()
+            $this->model->PublicEquipment->toArray()
         );
     }
 

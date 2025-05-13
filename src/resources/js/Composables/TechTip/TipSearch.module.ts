@@ -56,7 +56,7 @@ export const triggerSearch = (): void => {
     isDirty.value = true;
 
     dataPost(route("tech-tips.search"), searchParams).then((res) =>
-        console.log(res)
+        processResults(res)
     );
 };
 
@@ -69,4 +69,22 @@ export const resetSearch = (): void => {
     searchParams.equipList = [];
     searchParams.page = 1;
     isDirty.value = false;
+};
+
+/**
+ * Assign the results and build out the pagination footer.
+ */
+const processResults = (res: void | AxiosResponse<any, techTip>): void => {
+    if (res) {
+        console.log(res.data);
+        // Assign results
+        searchResults.value = res.data.data;
+
+        // Build pagination footer
+        paginationData.listFrom = res.data.from;
+        paginationData.listTo = res.data.to;
+        paginationData.listTotal = res.data.total;
+        paginationData.totalPages = res.data.last_page;
+        paginationData.currentPage = res.data.current_page;
+    }
 };

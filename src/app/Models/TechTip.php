@@ -74,24 +74,23 @@ class TechTip extends Model
     public function href(): Attribute
     {
         return Attribute::make(
-            get: fn () => route('tech-tips.show', $this->slug),
+            get: fn() => route('tech-tips.show', $this->slug),
         );
     }
 
     public function publicHref(): ?Attribute
     {
         return Attribute::make(
-            get: fn () => $this->public
+            get: fn() => $this->public
                 ? route('publicTips.show', $this->slug)
                 : null,
         );
-
     }
 
     protected function equipList(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->EquipmentType->pluck('equip_id')->toArray(),
+            get: fn() => $this->EquipmentType->pluck('equip_id')->toArray(),
         );
     }
 
@@ -106,7 +105,7 @@ class TechTip extends Model
     protected function fileList(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->FileUpload->pluck('file_id')->toArray(),
+            get: fn() => $this->FileUpload->pluck('file_id')->toArray(),
         );
     }
 
@@ -135,6 +134,19 @@ class TechTip extends Model
             ->withTrashed();
     }
 
+    public function Equipment(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            EquipmentType::class,
+            TechTipEquipment::class,
+            'tip_id',
+            'equip_id'
+        )->withTimestamps();
+    }
+
+    /**
+     * @depreciated
+     */
     public function EquipmentType(): BelongsToMany
     {
         return $this->belongsToMany(
@@ -145,6 +157,19 @@ class TechTip extends Model
         )->withTimestamps();
     }
 
+    public function PublicEquipment(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            EquipmentType::class,
+            TechTipEquipment::class,
+            'tip_id',
+            'equip_id'
+        )->public()->withTimestamps();
+    }
+
+    /**
+     * @depreciated
+     */
     public function PublicEquipmentType(): BelongsToMany
     {
         return $this->belongsToMany(
@@ -233,7 +258,7 @@ class TechTip extends Model
             'details' => $this->details,
             'public' => $this->public,
             'tip_type_id' => $this->tip_type_id,
-            'EquipmentType' => $this->EquipmentType,
+            'Equipment' => $this->Equipment,
         ];
     }
 
@@ -244,6 +269,6 @@ class TechTip extends Model
      */
     protected function makeAllSearchableUsing(Builder $query)
     {
-        return $query->with('EquipmentType');
+        return $query->with('Equipment');
     }
 }
