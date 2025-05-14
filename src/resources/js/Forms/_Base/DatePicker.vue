@@ -1,12 +1,5 @@
 <script setup lang="ts">
-import {
-    DatePicker,
-    InputText,
-    FloatLabel,
-    Message,
-    InputGroup,
-    InputGroupAddon,
-} from "primevue";
+import { DatePicker, FloatLabel, Message, InputGroupAddon } from "primevue";
 import { computed, ref, toRef } from "vue";
 import { useField } from "vee-validate";
 import type { Ref } from "vue";
@@ -24,9 +17,9 @@ const props = defineProps<{
     placeholder?: string;
 }>();
 
-const hasFocus = ref(false);
+const hasFocus = ref<boolean>(false);
 
-const borderType = computed(() =>
+const borderType = computed<string>(() =>
     props.borderBottom ? "border-b rounded-none" : "border"
 );
 
@@ -44,16 +37,6 @@ const {
     value: Ref<Date | undefined>;
 } = useField(nameRef);
 </script>
-
-<style>
-.p-inputtext::placeholder {
-    color: transparent;
-}
-
-.p-inputtext:focus::placeholder {
-    @apply text-muted-color;
-}
-</style>
 
 <template>
     <div>
@@ -93,3 +76,13 @@ const {
         </Message>
     </div>
 </template>
+
+<style lang="postcss">
+.p-inputtext::placeholder {
+    color: transparent;
+}
+
+.p-inputtext:focus::placeholder {
+    @apply text-muted-color;
+}
+</style>

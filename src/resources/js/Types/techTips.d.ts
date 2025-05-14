@@ -12,7 +12,7 @@ type techTip = {
     tip_type_id: number;
     updated_id: number;
     user_id: number;
-    //     public: boolean;
+    public: boolean;
     //     views: number;
     //     deleted_at: string;
     //     updated_at: string;

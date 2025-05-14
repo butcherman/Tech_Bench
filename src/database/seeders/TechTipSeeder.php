@@ -41,7 +41,7 @@ class TechTipSeeder extends Seeder
             // Add a file to every third tech tip
             if ($i % 3 === 0) {
                 $newFile = FileUpload::factory()->create();
-                $newTip->FileUpload()->attach($newFile);
+                $newTip->Files()->attach($newFile);
             }
 
             // Add comments to every 7th file
@@ -52,7 +52,7 @@ class TechTipSeeder extends Seeder
                     ->create(['tip_id' => $newTip->tip_id]);
             }
 
-            $newTip->EquipmentType()->sync($equipToLink);
+            $newTip->Equipment()->sync($equipToLink);
         }
 
         /**
@@ -67,16 +67,17 @@ class TechTipSeeder extends Seeder
         /**
          * Give the Administrator five bookmarks and five recent visits
          */
-        $admin = User::find(1);
+        // TODO - Add Back
+        // $admin = User::find(1);
 
-        $tipList1 = TechTip::inRandomOrder()->limit(5)->get();
-        $tipList1->each(function ($tip) use ($admin) {
-            $tip->toggleBookmark($admin, true);
-        });
+        // $tipList1 = TechTip::inRandomOrder()->limit(5)->get();
+        // $tipList1->each(function ($tip) use ($admin) {
+        //     $tip->toggleBookmark($admin, true);
+        // });
 
-        $tipList2 = TechTip::inRandomOrder()->limit(5)->get();
-        $tipList2->each(function ($tip) use ($admin) {
-            $tip->touchRecent($admin);
-        });
+        // $tipList2 = TechTip::inRandomOrder()->limit(5)->get();
+        // $tipList2->each(function ($tip) use ($admin) {
+        //     $tip->touchRecent($admin);
+        // });
     }
 }

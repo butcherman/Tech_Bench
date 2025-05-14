@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\TechTip\SearchTipsController;
 use App\Http\Controllers\TechTip\TechTipController;
+use App\Http\Controllers\TechTip\UploadTipFileController;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 use Illuminate\Support\Facades\Route;
 
@@ -22,6 +23,15 @@ Route::middleware('auth.secure')->group(function () {
         |-----------------------------------------------------------------------
         */
         Route::post('search', SearchTipsController::class)->name('search');
+
+        /*
+        |-----------------------------------------------------------------------
+        | Tech Tip Service Routes
+        | /tech-tips
+        |-----------------------------------------------------------------------
+        */
+        Route::post('upload-file/{techTip?}', UploadTipFileController::class)
+            ->name('upload-file');
     });
 
     /*
@@ -32,7 +42,10 @@ Route::middleware('auth.secure')->group(function () {
     */
     Route::resource('tech-tips', TechTipController::class)
         ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
-            $breadcrumbs->index('Tech Tips');
+            $breadcrumbs->index('Tech Tips')
+                ->create('New Tech Tip')
+                ->show('Tip Details')
+                ->edit('Edit Tech Tip');
         });
 });
 

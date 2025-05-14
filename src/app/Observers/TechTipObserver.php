@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Events\File\FileDataDeletedEvent;
 use App\Events\File\FileUploadDeletedEvent;
 use App\Models\TechTip;
 use App\Models\TechTipView;
@@ -15,9 +16,9 @@ class TechTipObserver extends Observer
     public function created(TechTip $techTip): void
     {
         // Create the Views Table Entry
-        $techTip->TechTipView()->save(new TechTipView);
+        $techTip->Views()->save(new TechTipView);
 
-        Log::info('New Tech Tip created by '.$this->user, $techTip->toArray());
+        Log::info('New Tech Tip created by ' . $this->user, $techTip->toArray());
     }
 
     /**
@@ -25,7 +26,7 @@ class TechTipObserver extends Observer
      */
     public function updated(TechTip $techTip): void
     {
-        Log::info('Tech Tip updated by '.$this->user, $techTip->toArray());
+        Log::info('Tech Tip updated by ' . $this->user, $techTip->toArray());
     }
 
     /**
@@ -33,7 +34,7 @@ class TechTipObserver extends Observer
      */
     public function deleted(TechTip $techTip): void
     {
-        Log::info('Tech Tip deleted by '.$this->user, $techTip->toArray());
+        Log::info('Tech Tip deleted by ' . $this->user, $techTip->toArray());
     }
 
     /**
@@ -41,7 +42,7 @@ class TechTipObserver extends Observer
      */
     public function restored(TechTip $techTip): void
     {
-        Log::info('Tech Tip restored by '.$this->user, $techTip->toArray());
+        Log::info('Tech Tip restored by ' . $this->user, $techTip->toArray());
     }
 
     /**
@@ -49,11 +50,12 @@ class TechTipObserver extends Observer
      */
     public function forceDeleting(TechTip $techTip): void
     {
-        $fileList = $techTip->FileUpload->pluck('file_id')->toArray();
+        $fileList = $techTip->Files->pluck('file_id')->toArray();
 
-        if (count($fileList)) {
-            event(new FileUploadDeletedEvent($fileList));
-        }
+        // TODO - Delete Files
+        // if (count($fileList)) {
+        //     event(new FileDataDeletedEvent($fileList));
+        // }
     }
 
     /**
@@ -61,6 +63,6 @@ class TechTipObserver extends Observer
      */
     public function forceDeleted(TechTip $techTip): void
     {
-        Log::info('Tech Tip trashed by '.$this->user, $techTip->toArray());
+        Log::info('Tech Tip trashed by ' . $this->user, $techTip->toArray());
     }
 }

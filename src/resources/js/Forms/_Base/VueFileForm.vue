@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import BaseButton from "@/Components/_Base/Buttons/BaseButton.vue";
+import Collapse from "@/Components/_Base/Collapse.vue";
 import DropzoneInput from "./DropzoneInput.vue";
 import okModal from "@/Modules/okModal";
 import Overlay from "../../Components/_Base/Loaders/Overlay.vue";
@@ -43,19 +44,21 @@ const isSubmitting = ref<boolean>(false);
 const submitText = computed<string>(() => props.submitText ?? "Submit");
 const isDirty = computed<boolean>(() => meta.value.dirty);
 
+const showInput = computed<boolean>(() => !props.hideFileInput);
+
 /*
 |-------------------------------------------------------------------------------
 | Dropzone File Upload
 |-------------------------------------------------------------------------------
 */
 const dropzoneInput = useTemplateRef("dropzone-input");
-const onFileAdded = (file: DropzoneFile) => {
+const onFileAdded = (file: DropzoneFile): void => {
     emit("file-added", file);
 };
-const onFileRemoved = (file: DropzoneFile) => {
+const onFileRemoved = (file: DropzoneFile): void => {
     emit("file-removed", file);
 };
-const onCancel = () => {
+const onCancel = (): void => {
     dropzoneInput.value?.cancelUpload();
     okModal("Upload Canceled");
     isSubmitting.value = false;
@@ -65,7 +68,7 @@ const onCancel = () => {
 /**
  * Reset Form and remove dropzone files
  */
-const resetFileForm = () => {
+const resetFileForm = (): void => {
     isSubmitting.value = false;
     resetForm();
     dropzoneInput.value?.reset();
@@ -151,6 +154,7 @@ defineExpose({
     handleReset,
     isDirty,
     isSubmitting,
+    values,
 });
 </script>
 
@@ -177,19 +181,21 @@ defineExpose({
             </div>
             <div class="grow">
                 <slot />
-                <DropzoneInput
-                    ref="dropzone-input"
-                    paramName="file"
-                    :accepted-files="acceptedFiles"
-                    :max-files="maxFiles || 1"
-                    :required="fileRequired"
-                    :upload-url="submitRoute"
-                    :upload-message="uploadMessage"
-                    @error="handleErrors"
-                    @file-added="onFileAdded"
-                    @file-removed="onFileRemoved"
-                    @success="$emit('success')"
-                />
+                <Collapse :show="showInput">
+                    <DropzoneInput
+                        ref="dropzone-input"
+                        paramName="file"
+                        :accepted-files="acceptedFiles"
+                        :max-files="maxFiles || 1"
+                        :required="fileRequired"
+                        :upload-url="submitRoute"
+                        :upload-message="uploadMessage"
+                        @error="handleErrors"
+                        @file-added="onFileAdded"
+                        @file-removed="onFileRemoved"
+                        @success="$emit('success')"
+                    />
+                </Collapse>
                 <div>
                     <slot name="after-file" />
                 </div>

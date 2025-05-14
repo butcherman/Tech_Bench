@@ -105,17 +105,17 @@ class TechTip extends Model
     protected function fileList(): Attribute
     {
         return Attribute::make(
-            get: fn() => $this->FileUpload->pluck('file_id')->toArray(),
+            get: fn() => $this->Files->pluck('file_id')->toArray(),
         );
     }
 
     /**
      * @depreciated
      */
-    protected function getFileListAttribute(): array
-    {
-        return $this->FileUpload->pluck('file_id')->toArray();
-    }
+    // protected function getFileListAttribute(): array
+    // {
+    //     return $this->FileUpload->pluck('file_id')->toArray();
+    // }
 
     /*
     |---------------------------------------------------------------------------
@@ -170,17 +170,17 @@ class TechTip extends Model
     /**
      * @depreciated
      */
-    public function PublicEquipmentType(): BelongsToMany
-    {
-        return $this->belongsToMany(
-            EquipmentType::class,
-            TechTipEquipment::class,
-            'tip_id',
-            'equip_id'
-        )->public()->withTimestamps();
-    }
+    // public function PublicEquipmentType(): BelongsToMany
+    // {
+    //     return $this->belongsToMany(
+    //         EquipmentType::class,
+    //         TechTipEquipment::class,
+    //         'tip_id',
+    //         'equip_id'
+    //     )->public()->withTimestamps();
+    // }
 
-    public function FileUpload(): BelongsToMany
+    public function Files(): BelongsToMany
     {
         return $this->belongsToMany(
             FileUpload::class,
@@ -190,37 +190,37 @@ class TechTip extends Model
         );
     }
 
-    public function TechTipType(): HasOne
+    public function Type(): HasOne
     {
         return $this->hasOne(TechTipType::class, 'tip_type_id', 'tip_type_id');
     }
 
-    public function TechTipComment(): HasMany
+    public function Comments(): HasMany
     {
         return $this->hasMany(TechTipComment::class, 'tip_id', 'tip_id');
     }
 
-    public function Bookmarks(): BelongsToMany
-    {
-        return $this->belongsToMany(
-            User::class,
-            'user_tech_tip_bookmarks',
-            'tip_id',
-            'user_id',
-        )->withTimestamps();
-    }
+    // public function Bookmarks(): BelongsToMany
+    // {
+    //     return $this->belongsToMany(
+    //         User::class,
+    //         'user_tech_tip_bookmarks',
+    //         'tip_id',
+    //         'user_id',
+    //     )->withTimestamps();
+    // }
 
-    public function Recent(): BelongsToMany
-    {
-        return $this->belongsToMany(
-            User::class,
-            'user_tech_tip_recents',
-            'tip_id',
-            'user_id'
-        )->withTimestamps();
-    }
+    // public function Recent(): BelongsToMany
+    // {
+    //     return $this->belongsToMany(
+    //         User::class,
+    //         'user_tech_tip_recents',
+    //         'tip_id',
+    //         'user_id'
+    //     )->withTimestamps();
+    // }
 
-    public function TechTipView(): HasOne
+    public function Views(): HasOne
     {
         return $this->hasOne(TechTipView::class, 'tip_id', 'tip_id');
     }
