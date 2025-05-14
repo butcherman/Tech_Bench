@@ -60,10 +60,6 @@ class TechTipUnitTest extends TestCase
         $this->assertArrayHasKey('public_href', $this->model->toArray());
         $this->assertArrayHasKey('equip_list', $this->model->toArray());
         $this->assertArrayHasKey('file_list', $this->model->toArray());
-
-        // Depreciated Attributes - To Be Removed
-        $this->assertArrayHasKey('equipList', $this->model->toArray());
-        $this->assertArrayHasKey('fileList', $this->model->toArray());
     }
 
     /*
@@ -135,7 +131,7 @@ class TechTipUnitTest extends TestCase
 
         $this->assertEquals(
             $file->toArray(),
-            $this->model->FileUpload[0]->makeHidden('pivot')->toArray()
+            $this->model->Files[0]->makeHidden('pivot')->toArray()
         );
     }
 
@@ -145,7 +141,7 @@ class TechTipUnitTest extends TestCase
 
         $this->assertEquals(
             $type->toArray(),
-            $this->model->TechTipType->toArray()
+            $this->model->Type->toArray()
         );
     }
 
@@ -156,7 +152,7 @@ class TechTipUnitTest extends TestCase
 
         $this->assertEquals(
             $comment->toArray(),
-            $this->model->TechTipComment[0]->toArray()
+            $this->model->Comments[0]->toArray()
         );
     }
 
@@ -200,7 +196,7 @@ class TechTipUnitTest extends TestCase
 
     public function test_tech_tip_view_relationship(): void
     {
-        $this->assertEquals(0, $this->model->TechTipView->views);
+        $this->assertEquals(0, $this->model->Views->views);
     }
 
     /*
@@ -212,6 +208,6 @@ class TechTipUnitTest extends TestCase
     {
         $this->model->wasViewed();
 
-        $this->assertEquals(1, $this->model->TechTipView->views);
+        $this->assertEquals(1, $this->model->Views->views);
     }
 }

@@ -7,6 +7,9 @@ import {
     resetSearch,
 } from "@/Composables/TechTip/TipSearch.module";
 
+/**
+ * Clear all Search Parameters and set back to default
+ */
 const onReset = (): void => {
     resetSearch();
     triggerSearch();
