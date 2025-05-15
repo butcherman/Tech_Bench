@@ -2,6 +2,9 @@
 
 namespace App\Services\TechTip;
 
+use App\Enums\CrudAction;
+use App\Events\TechTip\NotifiableTechTipEvent;
+use App\Jobs\TechTip\ProcessTipFilesJob;
 use App\Models\TechTip;
 use App\Models\User;
 use Illuminate\Support\Collection;
@@ -23,19 +26,18 @@ class TechTipService
         $newTip->slug = $this->generateSlug($requestData->get('subject'));
         $newTip->save();
 
-        // Attach Equipment and Files
+        // Attach Equipment
         $newTip->Equipment()->sync($requestData->get('equipList'));
 
+        // Attach Files
         if (count($fileList)) {
             $newTip->Files()->attach($fileList);
-            // MoveTmpFilesJob::dispatch($fileList, $newTip->tip_id);
+            ProcessTipFilesJob::dispatch($newTip);
         }
 
         // Send out notifications if needed
         if (! $requestData->get('suppress')) {
-            // event(
-            //     new NotifiableTechTipEvent($newTip, $user, CrudAction::Create)
-            // );
+            NotifiableTechTipEvent::dispatch($newTip, $user, CrudAction::Create);
         }
 
         return $newTip;

@@ -79,21 +79,21 @@ class User extends Authenticatable
     public function fullName(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->first_name.' '.$this->last_name,
+            get: fn() => $this->first_name . ' ' . $this->last_name,
         );
     }
 
     public function initials(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->first_name[0].$this->last_name[0],
+            get: fn() => $this->first_name[0] . $this->last_name[0],
         );
     }
 
     public function roleName(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->UserRole->name,
+            get: fn() => $this->UserRole->name,
         );
     }
 
@@ -191,10 +191,15 @@ class User extends Authenticatable
             ->first()
             ->setting_type_id;
 
-        return $this->UserSettings
+        $setting = $this->UserSettings
             ->where('setting_type_id', $settingTypeId)
-            ->first()
-            ->value;
+            ->first();
+
+        if (is_null($setting)) {
+            return false;
+        }
+
+        return $setting->value;
     }
 
     /**

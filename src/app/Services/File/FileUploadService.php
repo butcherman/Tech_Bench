@@ -2,12 +2,31 @@
 
 namespace App\Services\File;
 
+use App\Enums\DiskEnum;
 use App\Facades\DbException;
 use App\Models\FileUpload;
 use Illuminate\Database\QueryException;
 
 class FileUploadService extends FileStorageService
 {
+    /**
+     * Move a file from one folder to another, and update the new folder in the
+     * database.
+     */
+    public function moveUploadedFile(FileUpload $file, string $newFolder, ?string $newDisk = null): void
+    {
+        $currentPath = $file->folder . DIRECTORY_SEPARATOR . $file->file_name;
+        $newPath = $newFolder . DIRECTORY_SEPARATOR . $file->file_name;
+
+        $this->moveDiskFile($file->disk, $currentPath, $newPath, $newDisk);
+
+        $file->folder = $newFolder;
+        if ($newDisk) {
+            $file->disk = $newDisk;
+        }
+        $file->save();
+    }
+
     /**
      * Try to delete a file upload.  This process will fail if the upload is
      * currently a foreign key somewhere else in the database.
@@ -22,7 +41,7 @@ class FileUploadService extends FileStorageService
 
         $this->deleteDiskFile(
             $file->disk,
-            $file->folder.DIRECTORY_SEPARATOR.$file->file_name
+            $file->folder . DIRECTORY_SEPARATOR . $file->file_name
         );
 
         return true;
