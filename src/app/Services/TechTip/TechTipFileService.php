@@ -15,7 +15,7 @@ class TechTipFileService extends FileUploadService
         $fileList = $techTip->Files;
 
         foreach ($fileList as $file) {
-            if ($file->FileUpload->folder !== $techTip->tip_id) {
+            if ($file->folder != $techTip->tip_id) {
                 $this->moveUploadedFile($file, $techTip->tip_id);
             }
         }

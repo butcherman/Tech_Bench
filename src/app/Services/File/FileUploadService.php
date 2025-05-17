@@ -2,7 +2,6 @@
 
 namespace App\Services\File;
 
-use App\Enums\DiskEnum;
 use App\Facades\DbException;
 use App\Models\FileUpload;
 use Illuminate\Database\QueryException;
@@ -15,8 +14,8 @@ class FileUploadService extends FileStorageService
      */
     public function moveUploadedFile(FileUpload $file, string $newFolder, ?string $newDisk = null): void
     {
-        $currentPath = $file->folder . DIRECTORY_SEPARATOR . $file->file_name;
-        $newPath = $newFolder . DIRECTORY_SEPARATOR . $file->file_name;
+        $currentPath = $file->folder.DIRECTORY_SEPARATOR.$file->file_name;
+        $newPath = $newFolder.DIRECTORY_SEPARATOR.$file->file_name;
 
         $this->moveDiskFile($file->disk, $currentPath, $newPath, $newDisk);
 
@@ -41,7 +40,7 @@ class FileUploadService extends FileStorageService
 
         $this->deleteDiskFile(
             $file->disk,
-            $file->folder . DIRECTORY_SEPARATOR . $file->file_name
+            $file->folder.DIRECTORY_SEPARATOR.$file->file_name
         );
 
         return true;

@@ -11,8 +11,8 @@ use App\Models\User;
 use App\Services\TechTip\TechTipService;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Event;
-use Tests\TestCase;
 use Illuminate\Support\Str;
+use Tests\TestCase;
 
 class TechTipServiceUnitTest extends TestCase
 {
@@ -97,7 +97,7 @@ class TechTipServiceUnitTest extends TestCase
 
         TechTip::factory()->create([
             'subject' => $data['subject'],
-            'slug' => Str::slug($data['subject'])
+            'slug' => Str::slug($data['subject']),
         ]);
 
         $testObj = new TechTipService;

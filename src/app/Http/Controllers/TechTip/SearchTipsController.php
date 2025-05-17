@@ -5,8 +5,6 @@ namespace App\Http\Controllers\TechTip;
 use App\Actions\TechTip\TechTipSearch;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TechTip\SearchTipsRequest;
-use Illuminate\Http\Request;
-use Inertia\Inertia;
 
 class SearchTipsController extends Controller
 {

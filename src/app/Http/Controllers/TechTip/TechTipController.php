@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers\TechTip;
 
-use App\Enums\DiskEnum;
 use App\Facades\CacheData;
 use App\Facades\UserPermissions;
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\FileUploadController;
 use App\Http\Requests\TechTip\TechTipRequest;
 use App\Models\TechTip;
 use App\Services\TechTip\TechTipService;
@@ -62,9 +60,6 @@ class TechTipController extends Controller
             ->with('success', __('tips.created'));
     }
 
-    /**
-     *
-     */
     public function show(string $id)
     {
         //
@@ -72,9 +67,6 @@ class TechTipController extends Controller
         return Inertia::render('TechTip/Show');
     }
 
-    /**
-     *
-     */
     public function edit(string $id)
     {
         //
@@ -82,36 +74,24 @@ class TechTipController extends Controller
         return Inertia::render('TechTip/Edit');
     }
 
-    /**
-     *
-     */
     public function update(Request $request, string $id)
     {
         //
         return 'update';
     }
 
-    /**
-     *
-     */
     public function destroy(string $id)
     {
         //
         return 'destroy';
     }
 
-    /**
-     *
-     */
     public function restore(string $id)
     {
         //
         return 'restore';
     }
 
-    /**
-     *
-     */
     public function forceDelete(string $id)
     {
         //

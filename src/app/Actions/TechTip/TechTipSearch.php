@@ -4,7 +4,6 @@ namespace App\Actions\TechTip;
 
 use App\Models\TechTip;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Log;
 
 class TechTipSearch
 {
@@ -28,13 +27,13 @@ class TechTipSearch
         }
 
         return TechTip::search($searchFor)
-            ->when(!empty($typeList), function ($q) use ($typeList) {
+            ->when(! empty($typeList), function ($q) use ($typeList) {
                 // Filter by Tech Tip Type
                 $q->whereIn(
                     'tip_type_id',
                     $typeList
                 );
-            })->when(!empty($equipList), function ($q) use ($equipList) {
+            })->when(! empty($equipList), function ($q) use ($equipList) {
                 // Filter by Equipment Type
                 $q->whereIn(
                     'Equipment.equip_id',

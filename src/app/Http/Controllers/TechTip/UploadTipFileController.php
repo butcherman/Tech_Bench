@@ -3,12 +3,9 @@
 namespace App\Http\Controllers\TechTip;
 
 use App\Enums\DiskEnum;
-use App\Http\Controllers\Controller;
 use App\Http\Controllers\FileUploadController;
 use App\Http\Requests\TechTip\TechTipRequest;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Inertia\Inertia;
 
 class UploadTipFileController extends FileUploadController
 {

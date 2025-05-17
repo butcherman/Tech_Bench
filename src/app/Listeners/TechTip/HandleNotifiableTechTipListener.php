@@ -7,14 +7,13 @@ use App\Events\TechTip\NotifiableTechTipEvent;
 use App\Models\User;
 use App\Notifications\TechTip\NewTechTipNotification;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 
-class HandleNotifiableTechTipEvent implements ShouldQueue
+class HandleNotifiableTechTipListener implements ShouldQueue
 {
     /**
-     * Handle the event.
+     * Send Notifications to all users about the Tech Tip Event.
      */
     public function handle(NotifiableTechTipEvent $event): void
     {
@@ -26,13 +25,15 @@ class HandleNotifiableTechTipEvent implements ShouldQueue
         $userList = User::whereNot('user_id', $event->ignoreUser->user_id)
             ->get();
 
-        Log::critical($userList->toArray());
+        if ($event->action === CrudAction::Create) {
+            Notification::send(
+                $userList,
+                new NewTechTipNotification($event->techTip)
+            );
+        }
 
-        // if ($event->action === CrudAction::Create) {
-        Notification::send(
-            $userList,
-            new NewTechTipNotification($event->techTip)
-        );
-        // }
+        if ($event->action === CrudAction::Update) {
+            // TODO - Handle Update Action
+        }
     }
 }

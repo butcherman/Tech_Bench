@@ -5,14 +5,11 @@ namespace Tests\Unit\Actions\TechTip;
 use App\Actions\TechTip\TechTipSearch;
 use App\Models\EquipmentType;
 use App\Models\TechTip;
-use Laravel\Scout\Builder;
-use Mockery;
-use Mockery\MockInterface;
 use Tests\TestCase;
 
 class TechTipSearchUnitTest extends TestCase
 {
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setup();
 
@@ -24,6 +21,7 @@ class TechTipSearchUnitTest extends TestCase
                 'sticky' => false,
                 'subject' => 'First Tech Tip',
                 'details' => 'This is the very first test Tech Tip',
+                'public' => false,
             ],
             [
                 'tip_id' => 2,
@@ -32,6 +30,7 @@ class TechTipSearchUnitTest extends TestCase
                 'sticky' => false,
                 'subject' => 'Second Tech Tip',
                 'details' => 'Maecenas nec odio et ante',
+                'public' => false,
             ],
             [
                 'tip_id' => 3,
@@ -40,6 +39,7 @@ class TechTipSearchUnitTest extends TestCase
                 'sticky' => false,
                 'subject' => 'Third Something Type of Randomness',
                 'details' => 'Vivamus in erat ut urna',
+                'public' => true,
             ],
             [
                 'tip_id' => 4,
@@ -48,6 +48,7 @@ class TechTipSearchUnitTest extends TestCase
                 'sticky' => false,
                 'subject' => 'Fourth blah blah blah',
                 'details' => 'Donec quam felis ultricies nec',
+                'public' => true,
             ],
             [
                 'tip_id' => 5,
@@ -56,6 +57,7 @@ class TechTipSearchUnitTest extends TestCase
                 'sticky' => false,
                 'subject' => 'Fifth something or other',
                 'details' => 'Wu-Tang Forever!!!',
+                'public' => false,
             ],
         ];
 
@@ -84,7 +86,7 @@ class TechTipSearchUnitTest extends TestCase
     | __invoke()
     |---------------------------------------------------------------------------
     */
-    public function test_invoke_all_tips(): void
+    public function test_invoke_some_tips(): void
     {
         $data = [
             'searchFor' => '',
@@ -99,5 +101,37 @@ class TechTipSearchUnitTest extends TestCase
 
         // Null Driver returns zero results
         $this->assertCount(0, $res->toArray()['data']);
+    }
+
+    public function test_invoke_all_tips(): void
+    {
+        $data = [
+            'searchFor' => '',
+            'typeList' => [],
+            'equipList' => [],
+            'page' => 1,
+            'perPage' => 25,
+        ];
+
+        $testObj = new TechTipSearch;
+        $res = $testObj(collect($data));
+
+        $this->assertCount(5, $res->toArray()['data']);
+    }
+
+    public function test_invoke_all_public_tips(): void
+    {
+        $data = [
+            'searchFor' => '',
+            'typeList' => [],
+            'equipList' => [],
+            'page' => 1,
+            'perPage' => 25,
+        ];
+
+        $testObj = new TechTipSearch;
+        $res = $testObj(collect($data), true);
+
+        $this->assertCount(2, $res->toArray()['data']);
     }
 }

@@ -74,14 +74,14 @@ class TechTip extends Model
     public function href(): Attribute
     {
         return Attribute::make(
-            get: fn() => route('tech-tips.show', $this->slug),
+            get: fn () => route('tech-tips.show', $this->slug),
         );
     }
 
     public function publicHref(): ?Attribute
     {
         return Attribute::make(
-            get: fn() => $this->public
+            get: fn () => $this->public
                 ? route('publicTips.show', $this->slug)
                 : null,
         );
@@ -90,14 +90,14 @@ class TechTip extends Model
     protected function equipList(): Attribute
     {
         return Attribute::make(
-            get: fn() => $this->Equipment->pluck('equip_id')->toArray(),
+            get: fn () => $this->Equipment->pluck('equip_id')->toArray(),
         );
     }
 
     protected function fileList(): Attribute
     {
         return Attribute::make(
-            get: fn() => $this->Files->pluck('file_id')->toArray(),
+            get: fn () => $this->Files->pluck('file_id')->toArray(),
         );
     }
 

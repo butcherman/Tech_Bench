@@ -2,8 +2,8 @@
 
 namespace App\Services\File;
 
-use App\Enums\DiskEnum;
 use App\Exceptions\File\FileMissingException;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
 class FileStorageService
@@ -20,10 +20,12 @@ class FileStorageService
         $this->checkForDiskFile($disk, $currentPath);
 
         if ($newDisk) {
-            $newFullPath = $newDisk . DIRECTORY_SEPARATOR . $newPath;
-            $currentFullPath = $disk . DIRECTORY_SEPARATOR . $currentPath;
+            $currentFullPath = Storage::disk($disk)->path($currentPath);
+            $newFullPath = Storage::disk($newDisk)->path($newPath);
+            $newDirPath = pathinfo($newFullPath)['dirname'];
 
-            Storage::move($currentFullPath, $newFullPath);
+            File::ensureDirectoryExists($newDirPath);
+            File::move($currentFullPath, $newFullPath);
 
             return;
         }
