@@ -19,6 +19,7 @@ class FileStorageService
     ): void {
         $this->checkForDiskFile($disk, $currentPath);
 
+        // TODO - Check for duplicate file
         if ($newDisk) {
             $currentFullPath = Storage::disk($disk)->path($currentPath);
             $newFullPath = Storage::disk($newDisk)->path($newPath);

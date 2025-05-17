@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             EquipmentSeeder::class,
             CustomerSeeder::class,
-            // TechTipSeeder::class,
+            TechTipSeeder::class,
             // FileLinkSeeder::class,
         ]);
 

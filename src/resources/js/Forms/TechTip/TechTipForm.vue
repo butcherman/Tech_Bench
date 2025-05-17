@@ -144,6 +144,7 @@ const schema = object({
                         label="Make Sticky Tip"
                     />
                     <SwitchInput
+                        v-if="allowPublic"
                         id="public"
                         name="public"
                         label="Make Tip Public"

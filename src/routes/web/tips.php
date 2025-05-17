@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\TechTip\SearchTipsController;
+use App\Http\Controllers\TechTip\TechTipBookmarkController;
 use App\Http\Controllers\TechTip\TechTipController;
 use App\Http\Controllers\TechTip\UploadTipFileController;
+use App\Models\TechTip;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 use Illuminate\Support\Facades\Route;
 
@@ -23,6 +25,8 @@ Route::middleware('auth.secure')->group(function () {
         |-----------------------------------------------------------------------
         */
         Route::post('search', SearchTipsController::class)->name('search');
+        Route::post('bookmark/{tech_tip}', TechTipBookmarkController::class)
+            ->name('bookmark');
 
         /*
         |-----------------------------------------------------------------------
@@ -44,7 +48,7 @@ Route::middleware('auth.secure')->group(function () {
         ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
             $breadcrumbs->index('Tech Tips')
                 ->create('New Tech Tip')
-                ->show('Tip Details')
+                ->show(fn(TechTip $tech_tip) => $tech_tip->subject)
                 ->edit('Edit Tech Tip');
         });
 });

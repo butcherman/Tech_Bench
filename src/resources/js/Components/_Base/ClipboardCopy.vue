@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import BaseBadge from "./Badges/BaseBadge.vue";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 
 const emit = defineEmits<{
     copied: [];
 }>();
 
 const props = defineProps<{
+    icon?: string;
     tooltip?: string;
     value: any | any[];
 }>();
@@ -15,6 +16,8 @@ const tooltipBase = "Copy to Clipboard";
 
 const bgVariant = ref<elementVariant>("info");
 const tipText = ref<string>(props.tooltip ?? tooltipBase);
+
+const copyIcon = computed(() => props.icon ?? "copy");
 
 /**
  * Copy the value to clipboard.  Change background of button temporarily.
@@ -35,6 +38,6 @@ const copyToClipboard = (): void => {
 
 <template>
     <span v-tooltip="tipText" @click="copyToClipboard">
-        <BaseBadge icon="copy" :variant="bgVariant" />
+        <BaseBadge :icon="copyIcon" :variant="bgVariant" />
     </span>
 </template>

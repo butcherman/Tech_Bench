@@ -33,10 +33,24 @@ class TechTip extends Model
     protected $guarded = ['tip_id', 'updated_at', 'created_at'];
 
     /** @var array<int, string> */
-    protected $hidden = ['deleted_at', 'tip_type_id', 'Bookmarks'];
+    protected $hidden = [
+        'Bookmarks',
+        'deleted_at',
+        'Recent',
+        'TechTipType',
+        'TechTipViews',
+        'tip_type_id',
+    ];
 
     /** @var array<int, string> */
-    protected $appends = ['href', 'public_href', 'equip_list', 'file_list'];
+    protected $appends = [
+        'href',
+        'public_href',
+        'type',
+        'views'
+        // 'equip_list',
+        // 'file_list',
+    ];
 
     /*
     |---------------------------------------------------------------------------
@@ -51,6 +65,7 @@ class TechTip extends Model
             'deleted_at' => 'datetime:M d, Y',
             'sticky' => 'boolean',
             'public' => 'boolean',
+            'allow_comments' => 'boolean',
         ];
     }
 
@@ -71,35 +86,49 @@ class TechTip extends Model
     | Model Attributes
     |---------------------------------------------------------------------------
     */
+    public function views(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => $this->TechTipViews->views,
+        );
+    }
+
     public function href(): Attribute
     {
         return Attribute::make(
-            get: fn () => route('tech-tips.show', $this->slug),
+            get: fn() => route('tech-tips.show', $this->slug),
         );
     }
 
     public function publicHref(): ?Attribute
     {
         return Attribute::make(
-            get: fn () => $this->public
+            get: fn() => $this->public
                 ? route('publicTips.show', $this->slug)
                 : null,
         );
     }
 
-    protected function equipList(): Attribute
+    public function type(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->Equipment->pluck('equip_id')->toArray(),
+            get: fn() => $this->TechTipType->description,
         );
     }
 
-    protected function fileList(): Attribute
-    {
-        return Attribute::make(
-            get: fn () => $this->Files->pluck('file_id')->toArray(),
-        );
-    }
+    // protected function equipList(): Attribute
+    // {
+    //     return Attribute::make(
+    //         get: fn () => $this->Equipment->pluck('equip_id')->toArray(),
+    //     );
+    // }
+
+    // protected function fileList(): Attribute
+    // {
+    //     return Attribute::make(
+    //         get: fn () => $this->Files->pluck('file_id')->toArray(),
+    //     );
+    // }
 
     /*
     |---------------------------------------------------------------------------
@@ -148,7 +177,7 @@ class TechTip extends Model
         );
     }
 
-    public function Type(): HasOne
+    public function TechTipType(): HasOne
     {
         return $this->hasOne(TechTipType::class, 'tip_type_id', 'tip_type_id');
     }
@@ -178,7 +207,7 @@ class TechTip extends Model
         )->withTimestamps();
     }
 
-    public function Views(): HasOne
+    public function TechTipViews(): HasOne
     {
         return $this->hasOne(TechTipView::class, 'tip_id', 'tip_id');
     }
@@ -194,7 +223,7 @@ class TechTip extends Model
      */
     public function wasViewed(): void
     {
-        $this->Views->increment('views');
+        $this->TechTipViews->increment('views');
     }
 
     /*

@@ -1,21 +1,26 @@
 type techTip = {
     allow_comments: boolean;
     created_at: string;
-    // created_by: user;
     details: string;
-    equip_list: number[];
-    equipment: equipment[];
+    href: string;
+    public: boolean;
+    public_href: string;
     slug: string;
     sticky: boolean;
     subject: string;
     tip_id: number;
-    tip_type_id: number;
+    updated_at: string;
     updated_id: number;
     user_id: number;
-    public: boolean;
+    views: number;
+    created_by?: user;
+    updated_by?: user;
+    type: string;
+    // equip_list: number[];
+    // equipment: equipment[];
+    // tip_type_id: number;
     //     views: number;
     //     deleted_at: string;
-    //     updated_at: string;
     //     updated_by: user;
     //     equipList?: number[];
     //     fileList?: number[];
@@ -32,22 +37,22 @@ type tipType = {
     description: string;
 };
 
-// type tipComment = {
-//     comment_id: number;
-//     tip_id: number;
-//     user_id: number;
-//     author: string;
-//     comment: string;
-//     is_flagged: boolean;
-//     created_at: string;
-//     updated_at: string;
-//     tech_tip?: techTip;
-//     flags?: {
-//         comment_id: number;
-//         created_at: string;
-//         flagged_by: string;
-//     }[];
-// };
+type techTipComment = {
+    comment_id: number;
+    tip_id: number;
+    user_id: number;
+    author: string;
+    comment: string;
+    is_flagged: boolean;
+    created_at: string;
+    updated_at: string;
+    // tech_tip?: techTip;
+    // flags?: {
+    //     comment_id: number;
+    //     created_at: string;
+    //     flagged_by: string;
+    // }[];
+};
 
 type techTipPermissions = {
     comment: boolean;

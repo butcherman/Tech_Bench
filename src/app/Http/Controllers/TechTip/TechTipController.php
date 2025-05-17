@@ -60,14 +60,26 @@ class TechTipController extends Controller
             ->with('success', __('tips.created'));
     }
 
-    public function show(string $id)
+    public function show(Request $request, TechTip $tech_tip): Response
     {
-        //
-        // return 'show';
-        return Inertia::render('TechTip/Show');
+        $tech_tip->wasViewed();
+        $tech_tip->touchRecent($request->user());
+
+        return Inertia::render('TechTip/Show', [
+            'permissions' => fn() => UserPermissions::techTipPermissions($request->user()),
+            'tech-tip' => fn() => $tech_tip->load(['CreatedBy', 'UpdatedBy']),
+            'equipment' => fn() => $tech_tip->Equipment,
+            'files' => fn() => $tech_tip->Files,
+            'is-fav' => fn() => $tech_tip->isFav($request->user()),
+
+            /**
+             * Deferred Data
+             */
+            'comments' => Inertia::defer(fn() => $tech_tip->Comments)
+        ]);
     }
 
-    public function edit(string $id)
+    public function edit(TechTip $tech_tip)
     {
         //
         // return 'edit';
