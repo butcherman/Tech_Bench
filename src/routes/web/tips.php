@@ -1,5 +1,6 @@
 <?php
 
+use App\Exceptions\TechTip\TechTipNotFoundException;
 use App\Http\Controllers\TechTip\DownloadTipController;
 use App\Http\Controllers\TechTip\FlagTipController;
 use App\Http\Controllers\TechTip\SearchTipsController;
@@ -37,6 +38,7 @@ Route::middleware('auth.secure')->group(function () {
         | /tech-tips
         |-----------------------------------------------------------------------
         */
+        Route::inertia('not-found', 'TechTip/NotFound')->name('not-found');
         Route::post('upload-file/{techTip?}', UploadTipFileController::class)
             ->name('upload-file');
         Route::get('download/{tech_tip}', DownloadTipController::class)
@@ -69,6 +71,8 @@ Route::middleware('auth.secure')->group(function () {
                 ->create('New Tech Tip')
                 ->show(fn(TechTip $tech_tip) => $tech_tip->subject)
                 ->edit('Edit Tech Tip');
+        })->missing(function () {
+            throw new TechTipNotFoundException;
         });
 });
 

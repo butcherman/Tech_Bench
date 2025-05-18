@@ -2,11 +2,13 @@
 
 namespace Tests\Feature\TechTip;
 
+use App\Exceptions\TechTip\TechTipNotFoundException;
 use App\Models\EquipmentType;
 use App\Models\FileUpload;
 use App\Models\TechTip;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Exceptions;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Testing\AssertableInertia as Assert;
@@ -140,7 +142,7 @@ class TechTipTest extends TestCase
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);
         $data = TechTip::factory()
-            ->make()
+            ->make(['public' => false])
             ->makeVisible(['tip_type_id'])
             ->makeHidden('views');
         $dataArr = $data->toArray();
@@ -231,43 +233,84 @@ class TechTipTest extends TestCase
         ]);
     }
 
-    /**
-     * Show Method
-     */
-    // public function test_show_guest(): void
-    // {
-    //     $tip = TechTip::factory()->create();
+    /*
+    |---------------------------------------------------------------------------
+    | Show Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_show_guest(): void
+    {
+        $tip = TechTip::factory()->create();
 
-    //     $response = $this->get(route('tech-tips.show', $tip->slug));
-    //     $response->assertStatus(302);
-    //     $response->assertRedirect(route('login'));
-    //     $this->assertGuest();
-    // }
+        $response = $this->get(route('tech-tips.show', $tip->slug));
+        $response->assertStatus(302);
+        $response->assertRedirect(route('login'));
+        $this->assertGuest();
+    }
 
-    // public function test_show_by_slug(): void
-    // {
-    //     $tip = TechTip::factory()->create();
+    public function test_show_by_slug(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+        $tip = TechTip::factory()->create();
 
-    //     $response = $this->actingAs(User::factory()->createQuietly())
-    //         ->get(route('tech-tips.show', $tip->slug));
-    //     $response->assertSuccessful();
-    // }
+        $response = $this->actingAs($user)
+            ->get(route('tech-tips.show', $tip->slug));
 
-    // public function test_show_by_id(): void
-    // {
-    //     $tip = TechTip::factory()->create();
+        $response->assertSuccessful()
+            ->assertInertia(
+                fn(Assert $page) => $page
+                    ->component('TechTip/Show')
+                    ->has('allow-comments')
+                    ->has('equipment')
+                    ->has('files')
+                    ->has('is-fav')
+                    ->has('permissions')
+                    ->has('tech-tip')
+            );
+    }
 
-    //     $response = $this->actingAs(User::factory()->createQuietly())
-    //         ->get(route('tech-tips.show', $tip->tip_id));
-    //     $response->assertSuccessful();
-    // }
+    public function test_show_by_id(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+        $tip = TechTip::factory()->create();
 
-    // public function test_show_missing_tip(): void
-    // {
-    //     $response = $this->actingAs(User::factory()->createQuietly())
-    //         ->get(route('tech-tips.show', 'random-tip'));
-    //     $response->assertSuccessful();
-    // }
+        $response = $this->actingAs($user)
+            ->get(route('tech-tips.show', $tip->tip_id));
+
+        $response->assertSuccessful()
+            ->assertInertia(
+                fn(Assert $page) => $page
+                    ->component('TechTip/Show')
+                    ->has('allow-comments')
+                    ->has('equipment')
+                    ->has('files')
+                    ->has('is-fav')
+                    ->has('permissions')
+                    ->has('tech-tip')
+            );
+    }
+
+    public function test_show_missing_tip(): void
+    {
+        Exceptions::fake();
+
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+
+        // $this->expectException(TechTipNotFoundException::class);
+        $this->expectException(TechTipNotFoundException::class);
+
+        $response = $this->withoutExceptionHandling()
+            ->actingAs($user)
+            ->get(route('tech-tips.show', 'random-tip'));
+
+        $response->assertStatus(302)
+            ->assertRedirect(route('tech-tips.not-found'));
+
+        Exceptions::assertReported(TechTipNotFoundException::class);
+    }
 
     /**
      * Edit Method
