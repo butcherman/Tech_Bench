@@ -2,6 +2,7 @@
 
 return [
     'allow_comments' => true,
+    'allow_download' => true,
     'allow_public' => false,
     'public_link_text' => env(
         'PUBLIC_LINK_TEXT',

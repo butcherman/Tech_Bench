@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\TechTip\SearchTipsController;
 use App\Http\Controllers\TechTip\TechTipBookmarkController;
+use App\Http\Controllers\TechTip\TechTipCommentController;
 use App\Http\Controllers\TechTip\TechTipController;
 use App\Http\Controllers\TechTip\UploadTipFileController;
 use App\Models\TechTip;
@@ -36,6 +37,16 @@ Route::middleware('auth.secure')->group(function () {
         */
         Route::post('upload-file/{techTip?}', UploadTipFileController::class)
             ->name('upload-file');
+
+        /*
+        |-----------------------------------------------------------------------
+        | Tech Tip Comments
+        |-----------------------------------------------------------------------
+        */
+        Route::prefix('{tech_tip}')->group(function () {
+            Route::apiResource('comments', TechTipCommentController::class)
+                ->except(['show']);
+        });
     });
 
     /*

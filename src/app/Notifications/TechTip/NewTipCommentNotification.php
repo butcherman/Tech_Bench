@@ -2,26 +2,25 @@
 
 namespace App\Notifications\TechTip;
 
-use App\Models\TechTip;
-use App\Models\User;
+use App\Models\TechTipComment;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class NewTechTipNotification extends Notification implements ShouldQueue
+class NewTipCommentNotification extends Notification
 {
     use Queueable;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct(public TechTip $techTip) {}
+    public function __construct(public TechTipComment $comment) {}
 
     /**
-     * Get the notification's delivery channels.
+     * Get the notification's delivery channels
      */
-    public function via(User $notifiable): array
+    public function via(object $notifiable): array
     {
         if ($notifiable->checkUserSetting('Receive Email Notifications')) {
             return ['mail', 'broadcast'];
@@ -35,9 +34,9 @@ class NewTechTipNotification extends Notification implements ShouldQueue
      */
     public function toMail(object $notifiable): MailMessage
     {
-        return (new MailMessage)->markdown('mail.tips.newTip', [
+        return (new MailMessage)->markdown('mail.tips.newComment', [
             'user' => $notifiable,
-            'techTip' => $this->techTip,
+            'comment' => $this->comment->load('TechTip')
         ]);
     }
 
