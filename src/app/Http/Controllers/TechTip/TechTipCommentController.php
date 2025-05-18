@@ -58,7 +58,7 @@ class TechTipCommentController extends Controller
     {
         $this->authorize('delete', $comment);
 
-        $this->svc->deleteComment($comment);
+        $this->svc->destroyComment($comment);
 
         return back()->with('warning', 'Comment Deleted');
     }

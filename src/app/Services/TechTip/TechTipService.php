@@ -90,16 +90,16 @@ class TechTipService
     /**
      * Delete a Tech Tip
      */
-    // public function destroyTechTip(TechTip $techTip, ?bool $force = false): void
-    // {
-    //     if ($force) {
-    //         $techTip->forceDelete();
+    public function destroyTechTip(TechTip $techTip, ?bool $force = false): void
+    {
+        if ($force) {
+            $techTip->forceDelete();
 
-    //         return;
-    //     }
+            return;
+        }
 
-    //     $techTip->delete();
-    // }
+        $techTip->delete();
+    }
 
     /**
      * Restore a Tech Tip.
@@ -118,7 +118,7 @@ class TechTipService
         $slug = Str::slug($subject);
 
         while (TechTip::where('slug', $slug)->first()) {
-            $slug = Str::slug($subject).'-'.$index;
+            $slug = Str::slug($subject) . '-' . $index;
             $index++;
         }
 

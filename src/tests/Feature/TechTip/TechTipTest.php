@@ -38,7 +38,7 @@ class TechTipTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn (Assert $page) => $page
+                fn(Assert $page) => $page
                     ->component('TechTip/Index')
                     ->has('permissions')
                     ->has('filter-data')
@@ -79,7 +79,7 @@ class TechTipTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn (Assert $page) => $page
+                fn(Assert $page) => $page
                     ->component('TechTip/Create')
                     ->has('permissions')
                     ->has('tip-types')
@@ -94,7 +94,10 @@ class TechTipTest extends TestCase
     */
     public function test_store_guest(): void
     {
-        $data = TechTip::factory()->make()->makeVisible(['tip_type_id']);
+        $data = TechTip::factory()
+            ->make()
+            ->makeVisible(['tip_type_id'])
+            ->makeHidden('views');
         $dataArr = $data->toArray();
         $equipList = EquipmentType::factory()->count(2)->create();
 
@@ -114,7 +117,10 @@ class TechTipTest extends TestCase
 
         /** @var User $user */
         $user = User::factory()->createQuietly();
-        $data = TechTip::factory()->make()->makeVisible(['tip_type_id']);
+        $data = TechTip::factory()
+            ->make()
+            ->makeVisible(['tip_type_id'])
+            ->makeHidden('views');
         $dataArr = $data->toArray();
         $equipList = EquipmentType::factory()->count(2)->create();
 
@@ -133,7 +139,10 @@ class TechTipTest extends TestCase
 
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);
-        $data = TechTip::factory()->make()->makeVisible(['tip_type_id']);
+        $data = TechTip::factory()
+            ->make()
+            ->makeVisible(['tip_type_id'])
+            ->makeHidden('views');
         $dataArr = $data->toArray();
         $equipList = EquipmentType::factory()->count(2)->create();
 
@@ -160,7 +169,10 @@ class TechTipTest extends TestCase
 
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 3]);
-        $data = TechTip::factory()->make()->makeVisible(['tip_type_id']);
+        $data = TechTip::factory()
+            ->make()
+            ->makeVisible(['tip_type_id'])
+            ->makeHidden('views');
         $dataArr = $data->toArray();
         $equipList = EquipmentType::factory()->count(2)->create();
 
@@ -191,7 +203,10 @@ class TechTipTest extends TestCase
 
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);
-        $data = TechTip::factory()->make()->makeVisible(['tip_type_id']);
+        $data = TechTip::factory()
+            ->make()
+            ->makeVisible(['tip_type_id'])
+            ->makeHidden('views');
         $dataArr = $data->toArray();
         $equipList = EquipmentType::factory()->count(2)->create();
         $dataArr['suppress'] = false;

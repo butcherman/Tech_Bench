@@ -3,6 +3,7 @@
 namespace App\Services\TechTip;
 
 use App\Events\TechTip\NotifiableTipCommentEvent;
+use App\Events\TechTip\TechTipCommentFlaggedEvent;
 use App\Facades\DbException;
 use App\Models\TechTip;
 use App\Models\TechTipComment;
@@ -42,7 +43,7 @@ class TechTipCommentService
     /**
      * Delete a Tech Tip Comment
      */
-    public function deleteComment(TechTipComment $comment): void
+    public function destroyComment(TechTipComment $comment): void
     {
         $comment->delete();
     }
@@ -54,6 +55,8 @@ class TechTipCommentService
     {
         try {
             $comment->flagComment($flaggedBy);
+
+            TechTipCommentFlaggedEvent::dispatch($comment, $flaggedBy);
         } catch (DbException $e) {
             DbException::check($e);
         }

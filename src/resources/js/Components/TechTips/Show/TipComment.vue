@@ -66,10 +66,13 @@ const canEdit = computed(() => props.comment.user_id === auth.user.user_id);
                     </Link>
                 </div>
             </template>
-            <div v-if="comment.is_flagged" class="text-danger text-center">
-                <fa-icon icon="triangle-exclamation" />
+            <div
+                v-if="comment.is_flagged"
+                class="text-danger flex justify-center text-center"
+            >
+                <fa-icon icon="triangle-exclamation" class="mt-1 mx-2 block" />
                 This comment has been flagged for review
-                <fa-icon icon="triangle-exclamation" />
+                <fa-icon icon="triangle-exclamation" class="mt-1 mx-2 block" />
             </div>
             <div v-else>
                 {{ comment.comment }}

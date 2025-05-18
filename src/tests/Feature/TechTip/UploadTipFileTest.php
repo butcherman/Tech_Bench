@@ -20,7 +20,10 @@ class UploadTipFileTest extends TestCase
     {
         Storage::fake('tips');
 
-        $data = TechTip::factory()->make()->makeVisible(['tip_type_id']);
+        $data = TechTip::factory()
+            ->make()
+            ->makeVisible(['tip_type_id'])
+            ->makeHidden('views');
         $dataArr = $data->toArray();
         $equipList = EquipmentType::factory()->count(2)->create();
         $dataArr['suppress'] = false;
@@ -42,7 +45,10 @@ class UploadTipFileTest extends TestCase
 
         /** @var User $user */
         $user = User::factory()->createQuietly();
-        $data = TechTip::factory()->make()->makeVisible(['tip_type_id']);
+        $data = TechTip::factory()
+            ->make()
+            ->makeVisible(['tip_type_id'])
+            ->makeHidden('views');
         $dataArr = $data->toArray();
         $equipList = EquipmentType::factory()->count(2)->create();
         $dataArr['suppress'] = false;
@@ -61,7 +67,10 @@ class UploadTipFileTest extends TestCase
 
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);
-        $data = TechTip::factory()->make()->makeVisible(['tip_type_id']);
+        $data = TechTip::factory()
+            ->make()
+            ->makeVisible(['tip_type_id'])
+            ->makeHidden('views');
         $dataArr = $data->toArray();
         $equipList = EquipmentType::factory()->count(2)->create();
         $dataArr['suppress'] = false;
@@ -79,6 +88,6 @@ class UploadTipFileTest extends TestCase
         ]);
 
         Storage::disk('tips')
-            ->assertExists('tmp'.DIRECTORY_SEPARATOR.'testPhoto.png');
+            ->assertExists('tmp' . DIRECTORY_SEPARATOR . 'testPhoto.png');
     }
 }

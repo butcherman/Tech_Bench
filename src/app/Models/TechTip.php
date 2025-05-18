@@ -48,8 +48,6 @@ class TechTip extends Model
         'public_href',
         'type',
         'views'
-        // 'equip_list',
-        // 'file_list',
     ];
 
     /*
@@ -115,20 +113,6 @@ class TechTip extends Model
             get: fn() => $this->TechTipType->description,
         );
     }
-
-    // protected function equipList(): Attribute
-    // {
-    //     return Attribute::make(
-    //         get: fn () => $this->Equipment->pluck('equip_id')->toArray(),
-    //     );
-    // }
-
-    // protected function fileList(): Attribute
-    // {
-    //     return Attribute::make(
-    //         get: fn () => $this->Files->pluck('file_id')->toArray(),
-    //     );
-    // }
 
     /*
     |---------------------------------------------------------------------------

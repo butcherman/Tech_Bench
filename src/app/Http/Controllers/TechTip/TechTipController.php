@@ -60,6 +60,9 @@ class TechTipController extends Controller
             ->with('success', __('tips.created'));
     }
 
+    /**
+     * Show a Tech Tip
+     */
     public function show(Request $request, TechTip $tech_tip): Response
     {
         $tech_tip->wasViewed();
@@ -80,6 +83,9 @@ class TechTipController extends Controller
         ]);
     }
 
+    /**
+     * Show form to Edit an existing Tech Tip
+     */
     public function edit(TechTip $tech_tip)
     {
         //
@@ -87,16 +93,26 @@ class TechTipController extends Controller
         return Inertia::render('TechTip/Edit');
     }
 
+    /**
+     * Save updates to a Tech Tip
+     */
     public function update(Request $request, string $id)
     {
         //
         return 'update';
     }
 
-    public function destroy(string $id)
+    /**
+     * Soft Delete an existing Tech Tip
+     */
+    public function destroy(TechTip $tech_tip): RedirectResponse
     {
-        //
-        return 'destroy';
+        $this->authorize('delete', $tech_tip);
+
+        $this->svc->destroyTechTip($tech_tip);
+
+        return redirect(route('tech-tips.index'))
+            ->with('danger', 'Tech Tip Disabled');
     }
 
     public function restore(string $id)
