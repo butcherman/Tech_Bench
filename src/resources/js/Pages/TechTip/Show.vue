@@ -48,7 +48,7 @@ export default { layout: AppLayout };
         <div class="my-4">
             <Card><div v-html="techTip.details" class="overflow-auto" /></Card>
         </div>
-        <div class="flex justify-center">
+        <div v-if="files.length" class="flex justify-center">
             <TipFiles :files="files" />
         </div>
         <div v-if="allowComments" class="flex justify-center">

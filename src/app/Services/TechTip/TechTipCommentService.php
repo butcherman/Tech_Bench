@@ -3,6 +3,7 @@
 namespace App\Services\TechTip;
 
 use App\Events\TechTip\NotifiableTipCommentEvent;
+use App\Facades\DbException;
 use App\Models\TechTip;
 use App\Models\TechTipComment;
 use App\Models\User;
@@ -25,5 +26,36 @@ class TechTipCommentService
         NotifiableTipCommentEvent::dispatch($newComment);
 
         return $newComment;
+    }
+
+    /**
+     * Update an existing Tech Tip Comment.
+     */
+    public function updateComment(Collection $requestData, TechTipComment $comment): TechTipComment
+    {
+        $comment->comment = $requestData->get('comment_data');
+        $comment->save();
+
+        return $comment->refresh();
+    }
+
+    /**
+     * Delete a Tech Tip Comment
+     */
+    public function deleteComment(TechTipComment $comment): void
+    {
+        $comment->delete();
+    }
+
+    /**
+     * Flag a comment for review
+     */
+    public function flagComment(TechTipComment $comment, User $flaggedBy): void
+    {
+        try {
+            $comment->flagComment($flaggedBy);
+        } catch (DbException $e) {
+            DbException::check($e);
+        }
     }
 }

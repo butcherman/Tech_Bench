@@ -5,12 +5,21 @@ import { computed } from "vue";
 import { object, string } from "yup";
 
 const props = defineProps<{
-    comment?: any;
+    comment?: techTipComment;
     techTip: techTip;
 }>();
 
+const commentLabel = computed(() =>
+    props.comment ? "Edit Comment" : "Join the Discussion"
+);
+
 const submitRoute = computed(() =>
-    props.comment ? "#" : route("tech-tips.comments.store", props.techTip.slug)
+    props.comment
+        ? route("tech-tips.comments.update", [
+              props.techTip.slug,
+              props.comment.comment_id,
+          ])
+        : route("tech-tips.comments.store", props.techTip.slug)
 );
 const submitMethod = computed(() => (props.comment ? "put" : "post"));
 const submitText = computed(() =>
@@ -38,10 +47,6 @@ const schema = object({
         :submit-text="submitText"
         :validation-schema="schema"
     >
-        <TextAreaInput
-            id="comment"
-            name="comment_data"
-            label="Join the Discussion"
-        />
+        <TextAreaInput id="comment" name="comment_data" :label="commentLabel" />
     </VueForm>
 </template>

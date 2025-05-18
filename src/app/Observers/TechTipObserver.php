@@ -15,9 +15,9 @@ class TechTipObserver extends Observer
     public function created(TechTip $techTip): void
     {
         // Create the Views Table Entry
-        $techTip->Views()->save(new TechTipView);
+        $techTip->TechTipViews()->save(new TechTipView);
 
-        Log::info('New Tech Tip created by '.$this->user, $techTip->toArray());
+        Log::info('New Tech Tip created by ' . $this->user, $techTip->toArray());
     }
 
     /**
@@ -25,7 +25,7 @@ class TechTipObserver extends Observer
      */
     public function updated(TechTip $techTip): void
     {
-        Log::info('Tech Tip updated by '.$this->user, $techTip->toArray());
+        Log::info('Tech Tip updated by ' . $this->user, $techTip->toArray());
     }
 
     /**
@@ -33,7 +33,7 @@ class TechTipObserver extends Observer
      */
     public function deleted(TechTip $techTip): void
     {
-        Log::info('Tech Tip deleted by '.$this->user, $techTip->toArray());
+        Log::info('Tech Tip deleted by ' . $this->user, $techTip->toArray());
     }
 
     /**
@@ -41,7 +41,7 @@ class TechTipObserver extends Observer
      */
     public function restored(TechTip $techTip): void
     {
-        Log::info('Tech Tip restored by '.$this->user, $techTip->toArray());
+        Log::info('Tech Tip restored by ' . $this->user, $techTip->toArray());
     }
 
     /**
@@ -62,6 +62,6 @@ class TechTipObserver extends Observer
      */
     public function forceDeleted(TechTip $techTip): void
     {
-        Log::info('Tech Tip trashed by '.$this->user, $techTip->toArray());
+        Log::info('Tech Tip trashed by ' . $this->user, $techTip->toArray());
     }
 }

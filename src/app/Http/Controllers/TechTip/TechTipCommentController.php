@@ -5,6 +5,7 @@ namespace App\Http\Controllers\TechTip;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TechTip\TechTipCommentRequest;
 use App\Models\TechTip;
+use App\Models\TechTipComment;
 use App\Services\TechTip\TechTipCommentService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -38,38 +39,27 @@ class TechTipCommentController extends Controller
     }
 
     /**
-     *
+     * Update an existing Tech Tip Comment
      */
-    public function update(Request $request, string $id)
-    {
-        //
-        return 'update';
+    public function update(
+        TechTipCommentRequest $request,
+        TechTip $tech_tip,
+        TechTipComment $comment
+    ): RedirectResponse {
+        $this->svc->updateComment($request->safe()->collect(), $comment);
+
+        return back()->with('success', 'Comment Updated');
     }
 
     /**
-     *
+     * Delete a Tech Tip Comment
      */
-    public function destroy(string $id)
+    public function destroy(TechTip $tech_tip, TechTipComment $comment): RedirectResponse
     {
-        //
-        return 'destroy';
-    }
+        $this->authorize('delete', $comment);
 
-    /**
-     *
-     */
-    public function restore(string $id)
-    {
-        //
-        return 'restore';
-    }
+        $this->svc->deleteComment($comment);
 
-    /**
-     *
-     */
-    public function forceDelete(string $id)
-    {
-        //
-        return 'force delete';
+        return back()->with('warning', 'Comment Deleted');
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\TechTip\FlagTipController;
 use App\Http\Controllers\TechTip\SearchTipsController;
 use App\Http\Controllers\TechTip\TechTipBookmarkController;
 use App\Http\Controllers\TechTip\TechTipCommentController;
@@ -44,6 +45,8 @@ Route::middleware('auth.secure')->group(function () {
         |-----------------------------------------------------------------------
         */
         Route::prefix('{tech_tip}')->group(function () {
+            Route::get('flag/{comment}', FlagTipController::class)
+                ->name('comments.flag');
             Route::apiResource('comments', TechTipCommentController::class)
                 ->except(['show']);
         });
