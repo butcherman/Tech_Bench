@@ -18,8 +18,8 @@ class HandlePasswordResetListener implements ShouldQueue
     {
         Mail::to($event->user)->send(new PasswordChangedMail($event->user));
 
-        Log::stack(['daily', 'auth'])
-            ->notice('User '.$event->user->full_name.' has reset their forgotten password', [
+        Log::stack(['app', 'auth'])
+            ->notice('User ' . $event->user->full_name . ' has reset their forgotten password', [
                 'User ID' => $event->user->user_id,
                 'Username' => $event->user->username,
                 'IP Address' => request()->ip(),
