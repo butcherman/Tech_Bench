@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import BaseButton from "@/Components/_Base/Buttons/BaseButton.vue";
 import Collapse from "@/Components/_Base/Collapse.vue";
+import DeleteBadge from "@/Components/_Base/Badges/DeleteBadge.vue";
 import Editor from "../_Base/Editor.vue";
 import MultiSelectInput from "../_Base/MultiSelectInput.vue";
+import ResourceList from "@/Components/_Base/ResourceList.vue";
 import SelectInput from "../_Base/SelectInput.vue";
 import SwitchInput from "../_Base/SwitchInput.vue";
 import TextInput from "@/Forms/_Base/TextInput.vue";
@@ -12,15 +14,26 @@ import { object, string, array, boolean } from "yup";
 import { useForm } from "@inertiajs/vue3";
 
 const props = defineProps<{
-    techTip?: techTip;
     allowPublic: boolean;
     tipTypes: tipType[];
     equipTypes: { [key: string]: customerEquipment[] }[];
+    equipList?: number[];
+    fileList?: fileUpload[];
+    techTip?: techTip;
 }>();
 
 const tipForm = useTemplateRef("tech-tip-form");
 const showAdvanced = ref<boolean>(false);
 const showFile = ref<boolean>(false);
+
+const removedFiles = ref<number[]>([]);
+const toggleRemovedFile = (fileId: number): void => {
+    if (removedFiles.value.includes(fileId)) {
+        removedFiles.value.splice(removedFiles.value.indexOf(fileId), 1);
+    } else {
+        removedFiles.value.push(fileId);
+    }
+};
 
 /*
 |-------------------------------------------------------------------------------
@@ -43,7 +56,13 @@ const onSuccessfulUpload = () => {
     const formData = useForm(tipForm.value?.values);
 
     if (props.techTip) {
-        console.log("edit tip");
+        formData.transform((data) => ({
+            ...data,
+            removedFiles: removedFiles.value,
+        }));
+
+        formData.put(route("tech-tips.update", props.techTip.slug));
+
         return;
     }
 
@@ -58,7 +77,7 @@ const onSuccessfulUpload = () => {
 const initValues = {
     subject: props.techTip?.subject || "",
     tip_type_id: props.techTip?.tip_type_id || null,
-    equipList: props.techTip?.equip_list || [],
+    equipList: props.equipList || [],
     details: props.techTip?.details || "",
     suppress: props.techTip ? true : false,
     sticky: props.techTip?.sticky || false,
@@ -116,6 +135,52 @@ const schema = object({
             label="Tip Details"
             image-folder="tech_tips"
         />
+        <div v-if="fileList" class="my-2 flex justify-center">
+            <div class="tb-card">
+                <h5>Attached Files:</h5>
+                <ResourceList :list="fileList">
+                    <template #list-item="{ item }">
+                        <div
+                            class="w-full p-1"
+                            :class="{
+                                'bg-red-300': removedFiles.includes(
+                                    item.file_id
+                                ),
+                            }"
+                        >
+                            {{ item.file_name }}
+                        </div>
+                    </template>
+                    <template #actions="{ item }">
+                        <a
+                            :href="
+                                $route('download', [
+                                    item.file_id,
+                                    item.file_name,
+                                ])
+                            "
+                            class="text-blue-400 me-1"
+                            v-tooltip.left="'Download File'"
+                        >
+                            <fa-icon icon="download" />
+                        </a>
+                        <DeleteBadge
+                            v-if="!removedFiles.includes(item.file_id)"
+                            v-tooltip.left="'Remove File'"
+                            @click="toggleRemovedFile(item.file_id)"
+                        />
+                        <span
+                            v-else
+                            class="pointer text-blue-500"
+                            v-tooltip.left="'Restore File'"
+                            @click="toggleRemovedFile(item.file_id)"
+                        >
+                            <fa-icon icon="rotate" />
+                        </span>
+                    </template>
+                </ResourceList>
+            </div>
+        </div>
         <div class="flex justify-center">
             <BaseButton
                 text="Add File"

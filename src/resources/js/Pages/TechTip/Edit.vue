@@ -1,10 +1,16 @@
 <script setup lang="ts">
 import AppLayout from "@/Layouts/App/AppLayout.vue";
 import Card from "@/Components/_Base/Card.vue";
-import { ref, reactive, onMounted } from "vue";
+import TechTipForm from "@/Forms/TechTip/TechTipForm.vue";
 
-// TODO - Add Page.
-const props = defineProps<{}>();
+defineProps<{
+    permissions: techTipPermissions;
+    tipTypes: tipType[];
+    equipTypes: { [key: string]: customerEquipment[] }[];
+    techTip: techTip;
+    equipList: number[];
+    fileList: fileUpload[];
+}>();
 </script>
 
 <script lang="ts">
@@ -12,9 +18,14 @@ export default { layout: AppLayout };
 </script>
 
 <template>
-    <div class="flex justify-center">
-        <Card class="tb-card">
-            <h4 class="text-center">Coming Soon</h4>
-        </Card>
-    </div>
+    <Card>
+        <TechTipForm
+            :tip-types="tipTypes"
+            :equip-types="equipTypes"
+            :allow-public="permissions.public"
+            :tech-tip="techTip"
+            :equip-list="equipList"
+            :file-list="fileList"
+        />
+    </Card>
 </template>

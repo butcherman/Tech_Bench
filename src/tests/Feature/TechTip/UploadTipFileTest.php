@@ -90,4 +90,40 @@ class UploadTipFileTest extends TestCase
         Storage::disk('tips')
             ->assertExists('tmp' . DIRECTORY_SEPARATOR . 'testPhoto.png');
     }
+
+    public function test_invoke_duplicate_file()
+    {
+        Storage::fake('tips');
+        Storage::disk('tips')
+            ->putFileAs(
+                'tmp/testPhoto.png',
+                UploadedFile::fake()->image('testPhoto.png'),
+                'testPhoto.png'
+            );
+
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
+        $data = TechTip::factory()
+            ->make(['public' => false])
+            ->makeVisible(['tip_type_id'])
+            ->makeHidden('views');
+        $dataArr = $data->toArray();
+        $equipList = EquipmentType::factory()->count(2)->create();
+        $dataArr['suppress'] = false;
+        $dataArr['equipList'] = $equipList->pluck('equip_id')->toArray();
+        $dataArr['file'] = UploadedFile::fake()->image('testPhoto.png');
+
+        $response = $this->actingAs($user)
+            ->post(route('tech-tips.upload-file'), $dataArr);
+
+        $response->assertSuccessful();
+
+        $this->assertDatabaseHas('file_uploads', [
+            'folder' => 'tmp',
+            'file_name' => 'testPhoto(1).png',
+        ]);
+
+        Storage::disk('tips')
+            ->assertExists('tmp' . DIRECTORY_SEPARATOR . 'testPhoto(1).png');
+    }
 }

@@ -46,46 +46,46 @@ class TechTipService
     /**
      * Update an existing Tech Tip and attach all Equipment and Files.
      */
-    // public function updateTechTip(
-    //     Collection $requestData,
-    //     TechTip $techTip,
-    //     User $user,
-    //     array $fileList): TechTip
-    // {
-    //     $techTip->update(
-    //         $requestData->except(['equipList', 'suppress', 'removedFiles'])
-    //             ->toArray()
-    //     );
+    public function updateTechTip(
+        Collection $requestData,
+        TechTip $techTip,
+        User $user,
+        array $fileList
+    ): TechTip {
+        $techTip->update(
+            $requestData->except(['equipList', 'suppress', 'removedFiles'])
+                ->toArray()
+        );
 
-    //     // Note the user that updated the tip
-    //     $techTip->updated_id = $user->user_id;
+        // Note the user that updated the tip
+        $techTip->updated_id = $user->user_id;
 
-    //     // If the Subject has changed, we need to update the Slug for the URL.
-    //     $techTip->slug = $this->generateSlug($requestData->get('subject'));
+        // If the Subject has changed, we need to update the Slug for the URL.
+        $techTip->slug = $this->generateSlug($requestData->get('subject'));
 
-    //     $techTip->save();
+        $techTip->save();
 
-    //     // Attach Equipment and Files
-    //     $techTip->EquipmentType()->sync($requestData->get('equipList'));
-    //     $techTip->FileUpload()->attach($fileList);
-    //     $techTip->FileUpload()->detach($requestData->get('removedFiles'));
+        // Attach Equipment and Files
+        $techTip->Equipment()->sync($requestData->get('equipList'));
+        $techTip->Files()->attach($fileList);
+        $techTip->Files()->detach($requestData->get('removedFiles'));
 
-    //     if (count($fileList)) {
-    //         MoveTmpFilesJob::dispatch($fileList, $techTip->tip_id);
-    //     }
+        if (count($fileList)) {
+            ProcessTipFilesJob::dispatch($techTip);
+        }
 
-    //     // Refresh Model
-    //     $techTip->fresh();
+        // Refresh Model
+        $techTip->fresh();
 
-    //     // Send out notifications if needed
-    //     if (! $requestData->get('suppress')) {
-    //         event(
-    //             new NotifiableTechTipEvent($techTip, $user, CrudAction::Update)
-    //         );
-    //     }
+        // Send out notifications if needed
+        if (! $requestData->get('suppress')) {
+            event(
+                new NotifiableTechTipEvent($techTip, $user, CrudAction::Update)
+            );
+        }
 
-    //     return $techTip;
-    // }
+        return $techTip;
+    }
 
     /**
      * Delete a Tech Tip

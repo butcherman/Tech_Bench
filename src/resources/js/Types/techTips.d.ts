@@ -16,6 +16,7 @@ type techTip = {
     created_by?: user;
     updated_by?: user;
     type: string;
+    tip_type_id?: number;
     // equip_list: number[];
     // equipment: equipment[];
     // tip_type_id: number;

@@ -86,20 +86,37 @@ class TechTipController extends Controller
     /**
      * Show form to Edit an existing Tech Tip
      */
-    public function edit(TechTip $tech_tip)
+    public function edit(Request $request, TechTip $tech_tip): Response
     {
-        //
-        // return 'edit';
-        return Inertia::render('TechTip/Edit');
+        $this->authorize('update', $tech_tip);
+
+        return Inertia::render('TechTip/Edit', [
+            'tech-tip' => $tech_tip
+                ->makeVisible('tip_type_id'),
+            'equip-list' => $tech_tip->Equipment()
+                ->pluck('equipment_types.equip_id')
+                ->toArray(),
+            'file-list' => $tech_tip->Files,
+            'permissions' => UserPermissions::techTipPermissions($request->user()),
+            'tip-types' => CacheData::techTipTypes(),
+            'equip-types' => CacheData::equipmentCategorySelectBox(),
+        ]);
     }
 
     /**
      * Save updates to a Tech Tip
      */
-    public function update(Request $request, string $id)
+    public function update(TechTipRequest $request, TechTip $tech_tip): RedirectResponse
     {
-        //
-        return 'update';
+        $updatedTip = $this->svc->updateTechTip(
+            $request->safe()->collect(),
+            $tech_tip,
+            $request->user(),
+            session()->pull('tip-file', [])
+        );
+
+        return redirect(route('tech-tips.show', $updatedTip->slug))
+            ->with('success', __('tips.updated'));
     }
 
     /**
