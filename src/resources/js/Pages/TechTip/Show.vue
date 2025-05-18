@@ -40,6 +40,13 @@ export default { layout: AppLayout };
             </div>
             <div class="flex gap-2">
                 <TipData :tech-tip="techTip" class="grow" />
+                <a
+                    :href="$route('tech-tips.download', techTip.slug)"
+                    class="text-blue-400"
+                    v-tooltip="'Download as PDF'"
+                >
+                    <fa-icon icon="download" />
+                </a>
             </div>
         </div>
         <div class="pb-2 border-b border-slate-400">

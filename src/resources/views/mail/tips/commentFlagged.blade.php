@@ -7,7 +7,7 @@ Tech Tip Subject - {{ $comment->TechTip->subject }}.
 
 Comment - {{ $comment->comment }}
 
-<x-mail::button :url="route('tech-tips.comments.index', $comment->TechTip->slug)">
+<x-mail::button :url="route('admin.tech-tips.flagged-comments.index')">
 Click to View the Comment
 </x-mail::button>
 

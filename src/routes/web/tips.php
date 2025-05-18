@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\TechTip\DownloadTipController;
 use App\Http\Controllers\TechTip\FlagTipController;
 use App\Http\Controllers\TechTip\SearchTipsController;
 use App\Http\Controllers\TechTip\TechTipBookmarkController;
@@ -38,6 +39,8 @@ Route::middleware('auth.secure')->group(function () {
         */
         Route::post('upload-file/{techTip?}', UploadTipFileController::class)
             ->name('upload-file');
+        Route::get('download/{tech_tip}', DownloadTipController::class)
+            ->name('download');
 
         /*
         |-----------------------------------------------------------------------
@@ -88,3 +91,7 @@ Route::get('admin-tips-tip-type-index', function () {
 Route::get('admin-deleted-tips', function () {
     return 'something admin';
 })->name('admin.tech-tips.deleted-tips');
+
+Route::get('admin-flagged-comments', function () {
+    return 'admin flagged comments';
+})->name('admin.tech-tips.flagged-comments.index');
