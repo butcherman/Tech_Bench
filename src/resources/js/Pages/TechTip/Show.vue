@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import AppLayout from "@/Layouts/App/AppLayout.vue";
 import BookmarkItem from "@/Components/_Base/BookmarkItem.vue";
+import Card from "@/Components/_Base/Card.vue";
 import ManageTip from "@/Components/TechTips/Show/ManageTip.vue";
 import TipData from "@/Components/TechTips/Show/TipData.vue";
 import TipEquipment from "@/Components/TechTips/Show/TipEquipment.vue";
+import TipFiles from "@/Components/TechTips/Show/TipFiles.vue";
 
-const props = defineProps<{
+defineProps<{
     permissions: techTipPermissions;
     techTip: techTip;
     equipment: equipment[];
@@ -40,6 +42,12 @@ export default { layout: AppLayout };
         </div>
         <div class="pb-2 border-b border-slate-400">
             <TipEquipment :equipment-list="equipment" />
+        </div>
+        <div class="my-4">
+            <Card><div v-html="techTip.details" /></Card>
+        </div>
+        <div class="flex justify-center">
+            <TipFiles :files="files" />
         </div>
     </div>
 </template>
