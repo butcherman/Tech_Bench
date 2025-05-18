@@ -44,7 +44,7 @@ export default { layout: AppLayout };
             <TipEquipment :equipment-list="equipment" />
         </div>
         <div class="my-4">
-            <Card><div v-html="techTip.details" /></Card>
+            <Card><div v-html="techTip.details" class="overflow-auto" /></Card>
         </div>
         <div class="flex justify-center">
             <TipFiles :files="files" />

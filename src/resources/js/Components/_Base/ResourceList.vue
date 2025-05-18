@@ -89,7 +89,7 @@ const onRowClicked = (event: MouseEvent, item: T): void => {
             <li
                 v-for="(item, index) in currentChunk"
                 :key="index"
-                class="border-collapse"
+                class="border-collapse overflow-auto"
                 :class="[
                     {
                         border: !noBorder,
