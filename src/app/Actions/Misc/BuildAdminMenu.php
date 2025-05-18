@@ -179,7 +179,7 @@ class BuildAdminMenu
                 $techTipMenu[] = [
                     'name' => 'View Flagged Comments',
                     'icon' => 'flag',
-                    'route' => route('tech-tips.comments.index'),
+                    'route' => '#', // route('tech-tips.comments.index'),
                 ];
             }
         }

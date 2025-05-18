@@ -15,11 +15,15 @@ class NewTechTipNotification extends Notification implements ShouldQueue
 
     /**
      * Create a new notification instance.
+     *
+     * @codeCoverageIgnore
      */
     public function __construct(public TechTip $techTip) {}
 
     /**
      * Get the notification's delivery channels.
+     *
+     * @codeCoverageIgnore
      */
     public function via(User $notifiable): array
     {

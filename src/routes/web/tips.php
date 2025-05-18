@@ -46,9 +46,11 @@ Route::middleware('auth.secure')->group(function () {
         */
         Route::prefix('{tech_tip}')->group(function () {
             Route::get('flag/{comment}', FlagTipController::class)
+                ->scopeBindings()
                 ->name('comments.flag');
             Route::apiResource('comments', TechTipCommentController::class)
-                ->except(['show']);
+                ->scoped(['comments' => 'tip_id'])
+                ->except(['index', 'show']);
         });
     });
 
@@ -86,7 +88,3 @@ Route::get('admin-tips-tip-type-index', function () {
 Route::get('admin-deleted-tips', function () {
     return 'something admin';
 })->name('admin.tech-tips.deleted-tips');
-
-Route::get('admin-comments-show', function () {
-    return 'something admin';
-})->name('tech-tips.comments.index');

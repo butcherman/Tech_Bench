@@ -68,7 +68,7 @@ class UploadTipFileTest extends TestCase
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);
         $data = TechTip::factory()
-            ->make()
+            ->make(['public' => false])
             ->makeVisible(['tip_type_id'])
             ->makeHidden('views');
         $dataArr = $data->toArray();

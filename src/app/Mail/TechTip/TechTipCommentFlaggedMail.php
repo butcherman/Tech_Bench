@@ -11,12 +11,14 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class TechTipCommentFlaggedMail extends Mailable
+class TechTipCommentFlaggedMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
     /**
      * Create a new message instance.
+     *
+     * @codeCoverageIgnore
      */
     public function __construct(public User $user, public TechTipComment $comment) {}
 

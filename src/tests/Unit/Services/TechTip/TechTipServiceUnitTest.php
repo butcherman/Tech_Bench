@@ -118,4 +118,36 @@ class TechTipServiceUnitTest extends TestCase
         Bus::assertNotDispatched(ProcessTipFilesJob::class);
         Event::assertNotDispatched(NotifiableTechTipEvent::class);
     }
+
+    /*
+    |---------------------------------------------------------------------------
+    | destroyTechTip()
+    |---------------------------------------------------------------------------
+    */
+    public function test_destroy_tech_tip(): void
+    {
+        $techTip = TechTip::factory()->create();
+
+        $testObj = new TechTipService;
+        $testObj->destroyTechTip($techTip);
+
+        $this->assertSoftDeleted('tech_tips', [
+            'tip_id' => $techTip->tip_id,
+        ]);
+    }
+
+    public function test_destroy_tech_tip_force(): void
+    {
+        $techTip = TechTip::factory()->create();
+        $techTip->delete();
+
+        $testObj = new TechTipService;
+        $testObj->destroyTechTip($techTip, true);
+
+        $this->assertDatabaseMissing('tech_tips', [
+            'tip_id' => $techTip->tip_id,
+        ]);
+
+        // TODO - Assert Files queued for deletion
+    }
 }

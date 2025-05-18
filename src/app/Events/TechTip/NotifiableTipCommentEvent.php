@@ -23,6 +23,8 @@ class NotifiableTipCommentEvent
 
     /**
      * Get the channels the event should broadcast on
+     *
+     * @codeCoverageIgnore
      */
     public function broadcastOn(): array
     {

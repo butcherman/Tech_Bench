@@ -95,7 +95,7 @@ class TechTipTest extends TestCase
     public function test_store_guest(): void
     {
         $data = TechTip::factory()
-            ->make()
+            ->make(['public' => false])
             ->makeVisible(['tip_type_id'])
             ->makeHidden('views');
         $dataArr = $data->toArray();
@@ -204,7 +204,7 @@ class TechTipTest extends TestCase
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);
         $data = TechTip::factory()
-            ->make()
+            ->make(['public' => false])
             ->makeVisible(['tip_type_id'])
             ->makeHidden('views');
         $dataArr = $data->toArray();

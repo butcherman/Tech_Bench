@@ -16,15 +16,6 @@ class TechTipCommentController extends Controller
     public function __construct(protected TechTipCommentService $svc) {}
 
     /**
-     *
-     */
-    public function index()
-    {
-        //
-        return 'index';
-    }
-
-    /**
      * Save a new Tech Tip Comment
      */
     public function store(TechTipCommentRequest $request, TechTip $tech_tip): RedirectResponse

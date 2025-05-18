@@ -21,6 +21,6 @@ class FlagTipController extends Controller
     {
         $this->svc->flagComment($comment, $request->user());
 
-        return back()->with('success', 'Comment Flagged for Review');
+        return back()->with('warning', __('tips.comment.flagged'));
     }
 }

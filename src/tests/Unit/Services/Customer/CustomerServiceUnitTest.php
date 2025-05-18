@@ -2,10 +2,12 @@
 
 namespace Tests\Unit\Services\Customer;
 
+use App\Events\Customer\CustomerSlugChangedEvent;
 use App\Exceptions\Database\RecordInUseException;
 use App\Models\Customer;
 use App\Models\CustomerSite;
 use App\Services\Customer\CustomerService;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
@@ -60,7 +62,7 @@ class CustomerServiceUnitTest extends TestCase
             'state' => $site->state,
             'zip' => $site->zip,
         ];
-        $slug = Str::slug($data['name'].'-'.$site->city);
+        $slug = Str::slug($data['name'] . '-' . $site->city);
 
         $testObj = new CustomerService;
         $res = $testObj->createCustomer(collect($data));
@@ -87,7 +89,7 @@ class CustomerServiceUnitTest extends TestCase
 
         Customer::factory()->create([
             'name' => $existing->name,
-            'slug' => Str::slug($existing->slug.'-'.$existing->Sites[0]->city),
+            'slug' => Str::slug($existing->slug . '-' . $existing->Sites[0]->city),
         ]);
 
         $data = [
@@ -98,7 +100,7 @@ class CustomerServiceUnitTest extends TestCase
             'state' => $existing->Sites[0]->state,
             'zip' => $existing->Sites[0]->zip,
         ];
-        $slug = Str::slug($data['name'].'-'.$existing->Sites[0]->city.'-1');
+        $slug = Str::slug($data['name'] . '-' . $existing->Sites[0]->city . '-1');
 
         $testObj = new CustomerService;
         $res = $testObj->createCustomer(collect($data));
@@ -125,6 +127,8 @@ class CustomerServiceUnitTest extends TestCase
     */
     public function test_update_customer(): void
     {
+        Event::fake();
+
         $existing = Customer::factory()->create();
         $cust = Customer::factory()->make();
         $site = CustomerSite::factory()
@@ -147,10 +151,14 @@ class CustomerServiceUnitTest extends TestCase
             'dba_name' => $data['dba_name'],
             'primary_site_id' => $site->cust_site_id,
         ]);
+
+        Event::assertDispatched(CustomerSlugChangedEvent::class);
     }
 
     public function test_update_customer_duplicate_slug(): void
     {
+        Event::fake();
+
         $updating = Customer::factory()->create();
         $cust = Customer::factory()->make();
         $existing = Customer::factory()->createQuietly();
@@ -165,7 +173,7 @@ class CustomerServiceUnitTest extends TestCase
             'dba_name' => $cust->dba_name,
             'primary_site_id' => $site->cust_site_id,
         ];
-        $slug = Str::slug($data['name'].'-'.$updating->Sites[0]->city);
+        $slug = Str::slug($data['name'] . '-' . $updating->Sites[0]->city);
 
         $testObj = new CustomerService;
         $res = $testObj->updateCustomer(collect($data), $updating);
@@ -179,6 +187,8 @@ class CustomerServiceUnitTest extends TestCase
             'slug' => $slug,
             'primary_site_id' => $site->cust_site_id,
         ]);
+
+        Event::assertDispatched(CustomerSlugChangedEvent::class);
     }
 
     public function test_update_customer_without_modifying_slug(): void

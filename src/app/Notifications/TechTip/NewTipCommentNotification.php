@@ -14,11 +14,15 @@ class NewTipCommentNotification extends Notification
 
     /**
      * Create a new notification instance.
+     *
+     * @codeCoverageIgnore
      */
     public function __construct(public TechTipComment $comment) {}
 
     /**
      * Get the notification's delivery channels
+     *
+     * @codeCoverageIgnore
      */
     public function via(object $notifiable): array
     {

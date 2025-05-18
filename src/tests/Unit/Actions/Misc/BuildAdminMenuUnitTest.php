@@ -213,7 +213,7 @@ class BuildAdminMenuUnitTest extends TestCase
                 [
                     'name' => 'View Flagged Comments',
                     'icon' => 'flag',
-                    'route' => route('tech-tips.comments.index'),
+                    'route' => '#', //  route('tech-tips.comments.index'),
                 ],
             ],
             'Settings' => [
