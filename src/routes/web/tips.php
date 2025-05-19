@@ -7,6 +7,7 @@ use App\Http\Controllers\TechTip\SearchTipsController;
 use App\Http\Controllers\TechTip\TechTipBookmarkController;
 use App\Http\Controllers\TechTip\TechTipCommentController;
 use App\Http\Controllers\TechTip\TechTipController;
+use App\Http\Controllers\TechTip\TechTipSettingsController;
 use App\Http\Controllers\TechTip\UploadTipFileController;
 use App\Models\TechTip;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
@@ -19,6 +20,20 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('auth.secure')->group(function () {
+    /*
+    |---------------------------------------------------------------------------
+    | Tech Tip Administration
+    | /administration/tech-tips
+    |---------------------------------------------------------------------------
+    */
+    Route::prefix('administration/tech-tips')->name('admin.tech-tips.')->group(function () {
+        Route::controller(TechTipSettingsController::class)->name('settings.')->group(function () {
+            Route::get('settings', 'edit')
+                ->name('edit')
+                ->breadcrumb('Tech Tip Settings', 'admin.index');
+            Route::put('settings', 'update')->name('update');
+        });
+    });
 
     Route::prefix('tech-tips')->name('tech-tips.')->group(function () {
 
@@ -84,9 +99,9 @@ Route::get('public-tips-show', function () {
     return ' show public tip';
 })->name('publicTips.show');
 
-Route::get('admin-tips', function () {
-    return 'something admin';
-})->name('admin.tech-tips.settings.edit');
+// Route::get('admin-tips', function () {
+//     return 'something admin';
+// })->name('admin.tech-tips.settings.edit');
 
 Route::get('admin-tips-tip-type-index', function () {
     return 'something admin';
