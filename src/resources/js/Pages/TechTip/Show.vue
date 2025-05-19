@@ -10,6 +10,7 @@ import TipFiles from "@/Components/TechTips/Show/TipFiles.vue";
 
 defineProps<{
     allowComments: boolean;
+    allowDownload: boolean;
     equipment: equipment[];
     isFav: boolean;
     files: fileUpload[];
@@ -41,6 +42,7 @@ export default { layout: AppLayout };
             <div class="flex gap-2">
                 <TipData :tech-tip="techTip" class="grow" />
                 <a
+                    v-if="allowDownload"
                     :href="$route('tech-tips.download', techTip.slug)"
                     class="text-blue-400"
                     v-tooltip="'Download as PDF'"

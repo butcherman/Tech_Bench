@@ -6,6 +6,7 @@ use App\Enums\CrudAction;
 use App\Events\TechTip\NotifiableTechTipEvent;
 use App\Models\User;
 use App\Notifications\TechTip\NewTechTipNotification;
+use App\Notifications\TechTip\UpdatedTechTipNotification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
@@ -33,7 +34,10 @@ class HandleNotifiableTechTipListener implements ShouldQueue
         }
 
         if ($event->action === CrudAction::Update) {
-            // TODO - Handle Update Action
+            Notification::send(
+                $userList,
+                new UpdatedTechTipNotification($event->techTip)
+            );
         }
     }
 }

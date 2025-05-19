@@ -77,7 +77,22 @@ class TechTipCommentTest extends TestCase
         Event::assertDispatched(NotifiableTipCommentEvent::class);
     }
 
-    // TODO - Test store with feature turned off
+    public function test_store_feature_disabled(): void
+    {
+        config(['tech-tips.allow_comments' => false]);
+
+        /** @var User $user */
+        $user = User::factory()->create();
+        $techTip = TechTip::factory()->create();
+        $data = [
+            'comment_data' => 'this is a comment.',
+        ];
+
+        $response = $this->actingAs($user)
+            ->post(route('tech-tips.comments.store', $techTip->slug), $data);
+
+        $response->assertForbidden();
+    }
 
     /*
     |---------------------------------------------------------------------------
@@ -198,6 +213,29 @@ class TechTipCommentTest extends TestCase
         ]);
     }
 
+    public function test_update_feature_disabled(): void
+    {
+        config(['tech-tips.allow_comments' => false]);
+
+        /** @var User $user */
+        $user = User::factory()->create();
+        $comment = TechTipComment::factory()
+            ->create(['user_id' => $user->user_id]);
+        $data = [
+            'comment_data' => 'this is a comment.',
+        ];
+
+        $response = $this->actingAs($user)->put(
+            route('tech-tips.comments.update', [
+                $comment->TechTip->slug,
+                $comment->comment_id
+            ]),
+            $data
+        );
+
+        $response->assertForbidden();
+    }
+
     /*
     |---------------------------------------------------------------------------
     | Destroy Method
@@ -285,5 +323,23 @@ class TechTipCommentTest extends TestCase
         $this->assertDatabaseMissing('tech_tip_comments', [
             'comment_id' => $comment->comment_id,
         ]);
+    }
+
+    public function test_destroy_feature_disabled(): void
+    {
+        config(['tech-tips.allow_comments' => false]);
+
+        /** @var User $user */
+        $user = User::factory()->create();
+        $comment = TechTipComment::factory()
+            ->create(['user_id' => $user->user_id]);
+
+        $response = $this->actingAs($user)
+            ->delete(route('tech-tips.comments.destroy', [
+                $comment->TechTip->slug,
+                $comment->comment_id
+            ]));
+
+        $response->assertForbidden();
     }
 }

@@ -38,4 +38,18 @@ class DownloadTipTest extends TestCase
 
         $response->assertSuccessful();
     }
+
+    public function test_invoke_feature_disabled(): void
+    {
+        config(['tech-tips.allow_download' => false]);
+
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+        $tip = TechTip::factory()->create();
+
+        $response = $this->actingAs($user)
+            ->get(route('tech-tips.download', $tip->slug));
+
+        $response->assertStatus(404);
+    }
 }

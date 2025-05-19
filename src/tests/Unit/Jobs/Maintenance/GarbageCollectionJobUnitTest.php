@@ -18,10 +18,10 @@ class GarbageCollectionJobUnitTest extends TestCase
     {
         config(['backup.nightly_cleanup' => true]);
 
-        Artisan::shouldReceive('call')
-            ->once()
-            ->with('backup:cleanup')
-            ->andReturn(null);
+        // Artisan::shouldReceive('call')
+        //     ->once()
+        //     ->with('backup:cleanup')
+        //     ->andReturn(null);
         Artisan::shouldReceive('call')
             ->once()
             ->with('queue:prune-failed')

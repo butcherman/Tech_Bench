@@ -2,12 +2,14 @@
 
 namespace Tests\Feature\TechTip;
 
+use App\Events\TechTip\NotifiableTechTipEvent;
 use App\Exceptions\TechTip\TechTipNotFoundException;
 use App\Models\EquipmentType;
 use App\Models\FileUpload;
 use App\Models\TechTip;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Exceptions;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
@@ -137,7 +139,7 @@ class TechTipTest extends TestCase
 
     public function test_store(): void
     {
-        Notification::fake();
+        Event::fake();
 
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);
@@ -163,6 +165,8 @@ class TechTipTest extends TestCase
             'details',
             'sticky',
         ]));
+
+        Event::assertDispatched(NotifiableTechTipEvent::class);
     }
 
     public function test_store_no_public_permission(): void
@@ -215,6 +219,8 @@ class TechTipTest extends TestCase
 
     public function test_store_public_feature_enabled(): void
     {
+        Event::fake();
+
         config(['tech-tips.allow_public' => true]);
 
         $this->changeRolePermission(3, 'Add Public Tech Tip', true);
@@ -244,11 +250,13 @@ class TechTipTest extends TestCase
             'sticky',
             'public'
         ]));
+
+        Event::assertDispatched(NotifiableTechTipEvent::class);
     }
 
     public function test_store_with_files(): void
     {
-        Notification::fake();
+        Event::fake();
         Storage::fake('tips');
         Storage::disk('tips')->put(
             'tmp/tmp.png',
@@ -289,6 +297,8 @@ class TechTipTest extends TestCase
         $this->assertDatabaseHas('tech_tip_files', [
             'file_id' => $fileList->file_id,
         ]);
+
+        Event::assertDispatched(NotifiableTechTipEvent::class);
     }
 
     /*
@@ -474,6 +484,8 @@ class TechTipTest extends TestCase
 
     public function test_update(): void
     {
+        Event::fake();
+
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);
         $tip = TechTip::factory()->create();
@@ -498,6 +510,8 @@ class TechTipTest extends TestCase
             'tip_id' => $tip->tip_id,
             'subject' => $data->subject,
         ]);
+
+        Event::assertDispatched(NotifiableTechTipEvent::class);
     }
 
     public function test_update_no_public_permission(): void
@@ -554,6 +568,8 @@ class TechTipTest extends TestCase
 
     public function test_update_public_feature_enabled(): void
     {
+        Event::fake();
+
         config(['tech-tips.allow_public' => true]);
 
         $this->changeRolePermission(2, 'Add Public Tech Tip', true);
@@ -583,6 +599,8 @@ class TechTipTest extends TestCase
             'tip_id' => $tip->tip_id,
             'subject' => $data->subject,
         ]);
+
+        Event::assertDispatched(NotifiableTechTipEvent::class);
     }
 
     /*

@@ -17,6 +17,9 @@ class DownloadTipController extends Controller
      */
     public function __invoke(Request $request, TechTip $tech_tip): Response
     {
+        // If feature is disabled, abort
+        abort_if(!config('tech-tips.allow_download'), 404);
+
         Log::info('Tech Tip ID ' . $tech_tip->tip_id . ' is being downloaded by ' .
             $request->user()->username);
 

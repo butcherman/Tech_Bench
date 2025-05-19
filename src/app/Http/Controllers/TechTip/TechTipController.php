@@ -70,6 +70,7 @@ class TechTipController extends Controller
 
         return Inertia::render('TechTip/Show', [
             'allow-comments' => fn() => config('tech-tips.allow_comments'),
+            'allow-download' => fn() => config('tech-tips.allow_download'),
             'equipment' => fn() => $tech_tip->Equipment,
             'files' => fn() => $tech_tip->Files,
             'is-fav' => fn() => $tech_tip->isFav($request->user()),
