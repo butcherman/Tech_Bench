@@ -2,7 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Models\TechTip;
 use App\Models\TechTipType;
+use App\Models\TechTipView;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;

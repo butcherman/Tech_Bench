@@ -188,6 +188,64 @@ class TechTipTest extends TestCase
         $response->assertForbidden();
     }
 
+    public function test_store_public_feature_disabled(): void
+    {
+        config(['tech-tips.allow_public' => false]);
+
+        $this->changeRolePermission(3, 'Add Public Tech Tip', true);
+
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 3]);
+        $data = TechTip::factory()
+            ->make()
+            ->makeVisible(['tip_type_id'])
+            ->makeHidden('views');
+        $dataArr = $data->toArray();
+        $equipList = EquipmentType::factory()->count(2)->create();
+
+        $dataArr['public'] = true;
+        $dataArr['suppress'] = false;
+        $dataArr['equipList'] = $equipList->pluck('equip_id')->toArray();
+
+        $response = $this->actingAs($user)
+            ->post(route('tech-tips.store'), $dataArr);
+
+        $response->assertForbidden();
+    }
+
+    public function test_store_public_feature_enabled(): void
+    {
+        config(['tech-tips.allow_public' => true]);
+
+        $this->changeRolePermission(3, 'Add Public Tech Tip', true);
+
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 3]);
+        $data = TechTip::factory()
+            ->make(['public' => true])
+            ->makeVisible(['tip_type_id'])
+            ->makeHidden('views');
+        $dataArr = $data->toArray();
+        $equipList = EquipmentType::factory()->count(2)->create();
+
+        $dataArr['suppress'] = false;
+        $dataArr['equipList'] = $equipList->pluck('equip_id')->toArray();
+
+        $response = $this->actingAs($user)
+            ->post(route('tech-tips.store'), $dataArr);
+
+        $response->assertStatus(302)
+            ->assertSessionHas('success', __('tips.created'));
+
+        $this->assertDatabaseHas('tech_tips', $data->only([
+            'subject',
+            'tip_type_id',
+            'details',
+            'sticky',
+            'public'
+        ]));
+    }
+
     public function test_store_with_files(): void
     {
         Notification::fake();
@@ -299,7 +357,6 @@ class TechTipTest extends TestCase
         /** @var User $user */
         $user = User::factory()->createQuietly();
 
-        // $this->expectException(TechTipNotFoundException::class);
         $this->expectException(TechTipNotFoundException::class);
 
         $response = $this->withoutExceptionHandling()
@@ -312,207 +369,264 @@ class TechTipTest extends TestCase
         Exceptions::assertReported(TechTipNotFoundException::class);
     }
 
-    /**
-     * Edit Method
-     */
-    // public function test_edit_guest(): void
-    // {
-    //     $tip = TechTip::factory()->create();
+    /*
+    |---------------------------------------------------------------------------
+    | Edit Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_edit_guest(): void
+    {
+        $tip = TechTip::factory()->create();
 
-    //     $response = $this->get(route('tech-tips.edit', $tip->slug));
-    //     $response->assertStatus(302);
-    //     $response->assertRedirect(route('login'));
-    //     $this->assertGuest();
-    // }
+        $response = $this->get(route('tech-tips.edit', $tip->slug));
 
-    // public function test_edit_no_permission(): void
-    // {
-    //     $permId = UserRolePermissionType::where('description', 'Edit Tech Tip')
-    //         ->first()->perm_type_id;
-    //     UserRolePermission::where('role_id', 4)
-    //         ->where('perm_type_id', $permId)
-    //         ->update([
-    //             'allow' => false,
-    //         ]);
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
+        $this->assertGuest();
+    }
 
-    //     $tip = TechTip::factory()->create();
+    public function test_edit_no_permission(): void
+    {
+        $this->changeRolePermission(4, 'Edit Tech Tip');
 
-    //     $response = $this->actingAs(User::factory()->createQuietly())
-    //         ->get(route('tech-tips.edit', $tip->slug));
-    //     $response->assertForbidden();
-    // }
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+        $tip = TechTip::factory()->create();
 
-    // public function test_edit(): void
-    // {
-    //     $tip = TechTip::factory()->create();
+        $response = $this->actingAs($user)
+            ->get(route('tech-tips.edit', $tip->slug));
 
-    //     $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
-    //         ->get(route('tech-tips.edit', $tip->slug));
-    //     $response->assertSuccessful();
-    // }
+        $response->assertForbidden();
+    }
+
+    public function test_edit(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
+        $tip = TechTip::factory()->create();
+
+        $response = $this->actingAs($user)
+            ->get(route('tech-tips.edit', $tip->slug));
+
+        $response->assertSuccessful()
+            ->assertInertia(
+                fn(Assert $page) => $page
+                    ->component('TechTip/Edit')
+                    ->has('tech-tip')
+                    ->has('equip-list')
+                    ->has('file-list')
+                    ->has('permissions')
+                    ->has('tip-types')
+                    ->has('equip-types')
+            );
+    }
 
     /*
     |---------------------------------------------------------------------------
     | Update Method
     |---------------------------------------------------------------------------
     */
-    // public function test_update_guest(): void
-    // {
-    //     $tip = TechTip::factory()->create();
-    //     $data = TechTip::factory()->create()->makeVisible(['tip_type_id']);
-    //     $dataArr = $data->toArray();
-    //     $equipList = EquipmentType::factory()->count(2)->create();
-    //     $dataArr['suppress'] = false;
-    //     $dataArr['equipList'] = $equipList->pluck('equip_id')->toArray();
-    //     $dataArr['removedFiles'] = [];
+    public function test_update_guest(): void
+    {
+        $tip = TechTip::factory()->create();
+        $data = TechTip::factory()
+            ->make(['public' => false])
+            ->makeHidden('views')
+            ->makeVisible(['tip_type_id']);
+        $dataArr = $data->toArray();
+        $equipList = EquipmentType::factory()->count(2)->create();
 
-    //     $response = $this->put(route('tech-tips.update', $tip->tip_id), $dataArr);
-    //     $response->assertStatus(302);
-    //     $response->assertRedirect(route('login'));
-    //     $this->assertGuest();
-    // }
+        $dataArr['suppress'] = false;
+        $dataArr['equipList'] = $equipList->pluck('equip_id')->toArray();
+        $dataArr['removedFiles'] = [];
 
-    // public function test_update_no_permission(): void
-    // {
-    //     $tip = TechTip::factory()->create();
-    //     $data = TechTip::factory()->create()->makeVisible(['tip_type_id']);
-    //     $dataArr = $data->toArray();
-    //     $equipList = EquipmentType::factory()->count(2)->create();
-    //     $dataArr['suppress'] = false;
-    //     $dataArr['equipList'] = $equipList->pluck('equip_id')->toArray();
-    //     $dataArr['removedFiles'] = [];
+        $response = $this->put(
+            route('tech-tips.update', $tip->tip_id),
+            $dataArr
+        );
 
-    //     $response = $this->actingAs(User::factory()->createQuietly())
-    //         ->put(route('tech-tips.update', $tip->tip_id), $dataArr);
-    //     $response->assertForbidden();
-    // }
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
+        $this->assertGuest();
+    }
 
-    // public function test_update(): void
-    // {
-    //     $tip = TechTip::factory()->create();
-    //     $data = TechTip::factory()->create()->makeVisible(['tip_type_id']);
-    //     $dataArr = $data->toArray();
-    //     $equipList = EquipmentType::factory()->count(2)->create();
-    //     $dataArr['suppress'] = false;
-    //     $dataArr['equipList'] = $equipList->pluck('equip_id')->toArray();
-    //     $dataArr['removedFiles'] = [];
+    public function test_update_no_permission(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+        $tip = TechTip::factory()->create();
+        $data = TechTip::factory()
+            ->make(['public' => false])
+            ->makeHidden('views')
+            ->makeVisible(['tip_type_id']);
+        $dataArr = $data->toArray();
+        $equipList = EquipmentType::factory()->count(2)->create();
 
-    //     $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
-    //         ->put(route('tech-tips.update', $tip->tip_id), $dataArr);
-    //     $response->assertStatus(302);
-    //     $response->assertSessionHas('success', __('tips.updated'));
+        $dataArr['suppress'] = false;
+        $dataArr['equipList'] = $equipList->pluck('equip_id')->toArray();
+        $dataArr['removedFiles'] = [];
 
-    //     $this->assertDatabaseHas('tech_tips', [
-    //         'tip_id' => $tip->tip_id,
-    //         'subject' => $data->subject,
-    //     ]);
-    // }
+        $response = $this->actingAs($user)
+            ->put(route('tech-tips.update', $tip->tip_id), $dataArr);
 
-    // public function test_update_no_public_permission(): void
-    // {
-    //     $permId = UserRolePermissionType::where('description', 'Add Public Tech Tip')
-    //         ->first()->perm_type_id;
-    //     UserRolePermission::where('role_id', 2)
-    //         ->where('perm_type_id', $permId)
-    //         ->update([
-    //             'allow' => false,
-    //         ]);
+        $response->assertForbidden();
+    }
 
-    //     $tip = TechTip::factory()->create();
-    //     $data = TechTip::factory()->create()->makeVisible(['tip_type_id']);
-    //     $dataArr = $data->toArray();
-    //     $equipList = EquipmentType::factory()->count(2)->create();
-    //     $dataArr['suppress'] = false;
-    //     $dataArr['equipList'] = $equipList->pluck('equip_id')->toArray();
-    //     $dataArr['removedFiles'] = [];
-    //     $dataArr['public'] = true;
+    public function test_update(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
+        $tip = TechTip::factory()->create();
+        $data = TechTip::factory()
+            ->make(['public' => false])
+            ->makeHidden('views')
+            ->makeVisible(['tip_type_id']);
+        $dataArr = $data->toArray();
+        $equipList = EquipmentType::factory()->count(2)->create();
 
-    //     $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 2]))
-    //         ->put(route('tech-tips.update', $tip->tip_id), $dataArr);
-    //     $response->assertForbidden();
-    // }
+        $dataArr['suppress'] = false;
+        $dataArr['equipList'] = $equipList->pluck('equip_id')->toArray();
+        $dataArr['removedFiles'] = [];
 
-    // public function test_update_with_files(): void
-    // {
-    //     Storage::fake('tips');
-    //     $tip = TechTip::factory()->create();
-    //     Storage::disk('tips')->putFileAs($tip->tip_id, UploadedFile::fake()->image('add.png'), '/add.png');
-    //     Storage::disk('tips')->putFileAs($tip->tip_id, UploadedFile::fake()->image('remove.png'), '/remove.png');
-    //     $file1 = FileUpload::factory()->create([
-    //         'disk' => 'tips',
-    //         'folder' => $tip->tip_id,
-    //         'file_name' => 'add.png',
-    //     ]);
-    //     $file2 = FileUpload::factory()->create([
-    //         'disk' => 'tips',
-    //         'folder' => $tip->tip_id,
-    //         'file_name' => 'remove.png',
-    //     ]);
-    //     $tip->FileUpload()->sync([$file2->file_id]);
+        $response = $this->actingAs($user)
+            ->put(route('tech-tips.update', $tip->tip_id), $dataArr);
 
-    //     $data = TechTip::factory()->create()->makeVisible(['tip_type_id']);
-    //     $dataArr = $data->toArray();
-    //     $equipList = EquipmentType::factory()->count(2)->create();
-    //     $dataArr['suppress'] = false;
-    //     $dataArr['equipList'] = $equipList->pluck('equip_id')->toArray();
-    //     $dataArr['removedFiles'] = [$file2->file_id];
+        $response->assertStatus(302)
+            ->assertSessionHas('success', __('tips.updated'));
 
-    //     $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
-    //         ->withSession(['tip-file' => [$file1->file_id]])
-    //         ->put(route('tech-tips.update', $tip->tip_id), $dataArr);
-    //     $response->assertStatus(302);
-    //     $response->assertSessionHas('success', __('tips.updated'));
+        $this->assertDatabaseHas('tech_tips', [
+            'tip_id' => $tip->tip_id,
+            'subject' => $data->subject,
+        ]);
+    }
 
-    //     $this->assertDatabaseHas('tech_tips', [
-    //         'tip_id' => $tip->tip_id,
-    //         'subject' => $data->subject,
-    //     ]);
-    //     $this->assertDatabaseHas('tech_tip_files', [
-    //         'tip_id' => $tip->tip_id,
-    //         'file_id' => $file1->file_id,
-    //     ]);
-    //     $this->assertDatabaseMissing('tech_tip_files', [
-    //         'tip_id' => $tip->tip_id,
-    //         'file_id' => $file2->file_id,
-    //     ]);
+    public function test_update_no_public_permission(): void
+    {
+        $this->changeRolePermission(2, 'Add Public Tech Tip');
 
-    //     Storage::disk('tips')->assertExists($tip->tip_id.'/add.png');
-    //     Storage::disk('tips')->assertMissing($tip->tip_id.'/remove.png');
-    // }
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 2]);
+        $tip = TechTip::factory()->create();
+        $data = TechTip::factory()
+            ->make()
+            ->makeHidden('views')
+            ->makeVisible(['tip_type_id']);
+        $dataArr = $data->toArray();
+        $equipList = EquipmentType::factory()->count(2)->create();
 
-    /**
-     * Destroy Method
-     */
-    // public function test_destroy_guest(): void
-    // {
-    //     $tip = TechTip::factory()->create();
+        $dataArr['suppress'] = false;
+        $dataArr['equipList'] = $equipList->pluck('equip_id')->toArray();
+        $dataArr['removedFiles'] = [];
+        $dataArr['public'] = true;
 
-    //     $response = $this->delete(route('tech-tips.destroy', $tip->slug));
-    //     $response->assertStatus(302);
-    //     $response->assertRedirect(route('login'));
-    //     $this->assertGuest();
-    // }
+        $response = $this->actingAs($user)
+            ->put(route('tech-tips.update', $tip->tip_id), $dataArr);
 
-    // public function test_destroy_no_permission(): void
-    // {
-    //     $tip = TechTip::factory()->create();
+        $response->assertForbidden();
+    }
 
-    //     $response = $this->actingAs(User::factory()->createQuietly())
-    //         ->delete(route('tech-tips.destroy', $tip->slug));
-    //     $response->assertForbidden();
-    // }
+    public function test_update_public_feature_disabled(): void
+    {
+        config(['tech-tips.allow_public' => false]);
 
-    // public function test_destroy(): void
-    // {
-    //     $tip = TechTip::factory()->create();
+        $this->changeRolePermission(2, 'Add Public Tech Tip', true);
 
-    //     $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
-    //         ->delete(route('tech-tips.destroy', $tip->slug));
-    //     $response->assertStatus(302);
-    //     $response->assertSessionHas('warning', __('tips.deleted'));
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 2]);
+        $tip = TechTip::factory()->create();
+        $data = TechTip::factory()
+            ->make()
+            ->makeHidden('views')
+            ->makeVisible(['tip_type_id']);
+        $dataArr = $data->toArray();
+        $equipList = EquipmentType::factory()->count(2)->create();
 
-    //     $this->assertSoftDeleted('tech_tips', $tip->only(['tip_id']));
-    // }
+        $dataArr['suppress'] = false;
+        $dataArr['equipList'] = $equipList->pluck('equip_id')->toArray();
+        $dataArr['removedFiles'] = [];
+        $dataArr['public'] = true;
+
+        $response = $this->actingAs($user)
+            ->put(route('tech-tips.update', $tip->tip_id), $dataArr);
+
+        $response->assertForbidden();
+    }
+
+    public function test_update_public_feature_enabled(): void
+    {
+        config(['tech-tips.allow_public' => true]);
+
+        $this->changeRolePermission(2, 'Add Public Tech Tip', true);
+
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 2]);
+        $tip = TechTip::factory()->create();
+        $data = TechTip::factory()
+            ->make()
+            ->makeHidden('views')
+            ->makeVisible(['tip_type_id']);
+        $dataArr = $data->toArray();
+        $equipList = EquipmentType::factory()->count(2)->create();
+
+        $dataArr['suppress'] = false;
+        $dataArr['equipList'] = $equipList->pluck('equip_id')->toArray();
+        $dataArr['removedFiles'] = [];
+        $dataArr['public'] = true;
+
+        $response = $this->actingAs($user)
+            ->put(route('tech-tips.update', $tip->tip_id), $dataArr);
+
+        $response->assertStatus(302)
+            ->assertSessionHas('success', __('tips.updated'));
+
+        $this->assertDatabaseHas('tech_tips', [
+            'tip_id' => $tip->tip_id,
+            'subject' => $data->subject,
+        ]);
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | Destroy Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_destroy_guest(): void
+    {
+        $tip = TechTip::factory()->create();
+
+        $response = $this->delete(route('tech-tips.destroy', $tip->slug));
+
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
+        $this->assertGuest();
+    }
+
+    public function test_destroy_no_permission(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+        $tip = TechTip::factory()->create();
+
+        $response = $this->actingAs($user)
+            ->delete(route('tech-tips.destroy', $tip->slug));
+
+        $response->assertForbidden();
+    }
+
+    public function test_destroy(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
+        $tip = TechTip::factory()->create();
+
+        $response = $this->actingAs($user)
+            ->delete(route('tech-tips.destroy', $tip->slug));
+
+        $response->assertStatus(302)
+            ->assertSessionHas('danger', __('tips.deleted'));
+
+        $this->assertSoftDeleted('tech_tips', $tip->only(['tip_id']));
+    }
 
     /**
      * Restore Method

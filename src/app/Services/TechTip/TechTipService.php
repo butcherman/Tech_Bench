@@ -67,11 +67,14 @@ class TechTipService
 
         // Attach Equipment and Files
         $techTip->Equipment()->sync($requestData->get('equipList'));
-        $techTip->Files()->attach($fileList);
-        $techTip->Files()->detach($requestData->get('removedFiles'));
 
         if (count($fileList)) {
+            $techTip->Files()->attach($fileList);
             ProcessTipFilesJob::dispatch($techTip);
+        }
+
+        if (count($requestData->get('removedFiles'))) {
+            $techTip->Files()->detach($requestData->get('removedFiles'));
         }
 
         // Refresh Model

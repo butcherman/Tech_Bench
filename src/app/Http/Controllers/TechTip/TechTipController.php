@@ -129,7 +129,7 @@ class TechTipController extends Controller
         $this->svc->destroyTechTip($tech_tip);
 
         return redirect(route('tech-tips.index'))
-            ->with('danger', 'Tech Tip Disabled');
+            ->with('danger', __('tips.deleted'));
     }
 
     public function restore(string $id)
