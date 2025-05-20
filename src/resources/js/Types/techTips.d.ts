@@ -9,28 +9,14 @@ type techTip = {
     sticky: boolean;
     subject: string;
     tip_id: number;
+    type: string;
     updated_at: string;
     updated_id: number;
     user_id: number;
     views: number;
     created_by?: user;
     updated_by?: user;
-    type: string;
     tip_type_id?: number;
-    // equip_list: number[];
-    // equipment: equipment[];
-    // tip_type_id: number;
-    //     views: number;
-    //     deleted_at: string;
-    //     updated_by: user;
-    //     equipList?: number[];
-    //     fileList?: number[];
-    //     file_upload?: fileUpload[];
-    //     tech_tip_type: tipType;
-    //     tech_tip_view: {
-    //         tip_id: number;
-    //         views: number;
-    //     };
 };
 
 type tipType = {
@@ -47,12 +33,6 @@ type techTipComment = {
     is_flagged: boolean;
     created_at: string;
     updated_at: string;
-    // tech_tip?: techTip;
-    // flags?: {
-    //     comment_id: number;
-    //     created_at: string;
-    //     flagged_by: string;
-    // }[];
 };
 
 type techTipPermissions = {
