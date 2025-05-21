@@ -7,6 +7,7 @@ use App\Exceptions\TechTip\TechTipNotFoundException;
 use App\Models\EquipmentType;
 use App\Models\FileUpload;
 use App\Models\TechTip;
+use App\Models\TechTipFile;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Event;
@@ -646,80 +647,100 @@ class TechTipTest extends TestCase
         $this->assertSoftDeleted('tech_tips', $tip->only(['tip_id']));
     }
 
-    /**
-     * Restore Method
-     */
-    // public function test_restore_guest(): void
-    // {
-    //     $tip = TechTip::factory()->create();
+    /*
+    |---------------------------------------------------------------------------
+    | Restore Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_restore_guest(): void
+    {
+        $tip = TechTip::factory()->create();
 
-    //     $response = $this->get(route('admin.tech-tips.restore', $tip->tip_id));
-    //     $response->assertStatus(302);
-    //     $response->assertRedirect(route('login'));
-    //     $this->assertGuest();
-    // }
+        $response = $this->get(route('admin.tech-tips.restore', $tip->tip_id));
 
-    // public function test_restore_no_permission(): void
-    // {
-    //     $tip = TechTip::factory()->create();
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
+        $this->assertGuest();
+    }
 
-    //     $response = $this->actingAs(User::factory()->createQuietly())
-    //         ->get(route('admin.tech-tips.restore', $tip->tip_id));
-    //     $response->assertForbidden();
-    // }
+    public function test_restore_no_permission(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+        $tip = TechTip::factory()->create();
 
-    // public function test_restore(): void
-    // {
-    //     $tip = TechTip::factory()->create();
+        $response = $this->actingAs($user)
+            ->get(route('admin.tech-tips.restore', $tip->tip_id));
 
-    //     $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
-    //         ->get(route('admin.tech-tips.restore', $tip->tip_id));
-    //     $response->assertStatus(302);
-    //     $response->assertSessionHas('success', __('tips.restored'));
+        $response->assertForbidden();
+    }
 
-    //     $this->assertDatabaseHas('tech_tips', [
-    //         'tip_id' => $tip->tip_id,
-    //         'deleted_at' => null,
-    //     ]);
-    // }
+    public function test_restore(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
+        $tip = TechTip::factory()->create();
 
-    /**
-     * Force Delete Method
-     */
-    // public function test_force_delete_guest(): void
-    // {
-    //     $tip = TechTip::factory()->create();
+        $response = $this->actingAs($user)
+            ->get(route('admin.tech-tips.restore', $tip->tip_id));
 
-    //     $response = $this->delete(route('admin.tech-tips.force-delete', $tip->tip_id));
-    //     $response->assertStatus(302);
-    //     $response->assertRedirect(route('login'));
-    //     $this->assertGuest();
-    // }
+        $response->assertStatus(302)
+            ->assertSessionHas('success', __('tips.restored'));
 
-    // public function test_force_delete_no_permission(): void
-    // {
-    //     $tip = TechTip::factory()->create();
+        $this->assertDatabaseHas('tech_tips', [
+            'tip_id' => $tip->tip_id,
+            'deleted_at' => null,
+        ]);
+    }
 
-    //     $response = $this->actingAs(User::factory()->createQuietly())
-    //         ->delete(route('admin.tech-tips.force-delete', $tip->tip_id));
-    //     $response->assertForbidden();
-    // }
+    /*
+    |---------------------------------------------------------------------------
+    | Force Delete Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_force_delete_guest(): void
+    {
+        $tip = TechTip::factory()->create();
 
-    // public function test_force_delete(): void
-    // {
-    //     Storage::fake('tips');
-    //     Event::fake();
+        $response = $this->delete(
+            route('admin.tech-tips.force-delete', $tip->tip_id)
+        );
 
-    //     $tip = TechTip::factory()->create();
-    //     TechTipFile::factory()->count(5)->create(['tip_id' => $tip->tip_id]);
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
+        $this->assertGuest();
+    }
 
-    //     $response = $this->actingAs(User::factory()->createQuietly(['role_id' => 1]))
-    //         ->delete(route('admin.tech-tips.force-delete', $tip->tip_id));
-    //     $response->assertStatus(302);
-    //     $response->assertSessionHas('warning', __('tips.deleted'));
+    public function test_force_delete_no_permission(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+        $tip = TechTip::factory()->create();
 
-    //     $this->assertDatabaseMissing('tech_tips', [
-    //         'tip_id' => $tip->tip_id,
-    //     ]);
-    // }
+        $response = $this->actingAs($user)
+            ->delete(route('admin.tech-tips.force-delete', $tip->tip_id));
+
+        $response->assertForbidden();
+    }
+
+    public function test_force_delete(): void
+    {
+        Storage::fake('tips');
+        Event::fake();
+
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
+        $tip = TechTip::factory()->create();
+        TechTipFile::factory()->count(5)->create(['tip_id' => $tip->tip_id]);
+
+        $response = $this->actingAs($user)
+            ->delete(route('admin.tech-tips.force-delete', $tip->tip_id));
+
+        $response->assertStatus(302)
+            ->assertSessionHas('warning', __('tips.deleted'));
+
+        $this->assertDatabaseMissing('tech_tips', [
+            'tip_id' => $tip->tip_id,
+        ]);
+    }
 }
