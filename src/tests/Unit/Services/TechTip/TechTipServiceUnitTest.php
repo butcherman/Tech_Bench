@@ -209,6 +209,25 @@ class TechTipServiceUnitTest extends TestCase
 
     /*
     |---------------------------------------------------------------------------
+    | restoreTechTip()
+    |---------------------------------------------------------------------------
+    */
+    public function test_restore_tech_tip(): void
+    {
+        $techTip = TechTip::factory()->create();
+        $techTip->delete();
+
+        $testObj = new TechTipService;
+        $testObj->restoreTechTip($techTip);
+
+        $this->assertDatabaseHas('tech_tips', [
+            'tip_id' => $techTip->tip_id,
+            'deleted_at' => null,
+        ]);
+    }
+
+    /*
+    |---------------------------------------------------------------------------
     | destroyTechTip()
     |---------------------------------------------------------------------------
     */

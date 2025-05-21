@@ -107,10 +107,10 @@ class TechTipService
     /**
      * Restore a Tech Tip.
      */
-    // public function restoreTechTip(TechTip $techTip): void
-    // {
-    //     $techTip->restore();
-    // }
+    public function restoreTechTip(TechTip $techTip): void
+    {
+        $techTip->restore();
+    }
 
     /**
      * Generate a unique slug to reference in the Tech Tip URL

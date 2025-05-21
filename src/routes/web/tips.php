@@ -1,6 +1,8 @@
 <?php
 
 use App\Exceptions\TechTip\TechTipNotFoundException;
+use App\Http\Controllers\TechTip\DisabledTipViewController;
+use App\Http\Controllers\TechTip\DisabledTipController;
 use App\Http\Controllers\TechTip\DownloadTipController;
 use App\Http\Controllers\TechTip\FlagTipController;
 use App\Http\Controllers\TechTip\SearchTipsController;
@@ -34,6 +36,28 @@ Route::middleware('auth.secure')->group(function () {
                 ->breadcrumb('Tech Tip Settings', 'admin.index');
             Route::put('settings', 'update')->name('update');
         });
+        Route::prefix('disabled-tips')->group(function () {
+            Route::get('/', DisabledTipController::class)
+                ->name('deleted-tips')
+                ->breadcrumb('Deleted Tech Tips', 'admin.index');
+            Route::get('{tech_tip}', DisabledTipViewController::class)
+                ->withTrashed()
+                ->name('deleted-tips.show')
+                ->breadcrumb(
+                    fn(TechTip $tech_tip) => $tech_tip->subject,
+                    'admin.tech-tips.deleted-tips'
+                );
+
+            Route::controller(TechTipController::class)->group(function () {
+                Route::get('restore-tip/{tech_tip}', 'restore')
+                    ->name('restore')
+                    ->withTrashed();
+                Route::delete('force-delete/{tech_tip}', 'forceDelete')
+                    ->name('force-delete')
+                    ->withTrashed();
+            });
+        });
+
         Route::apiResource('tip-types', TechTipTypeController::class)
             ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
                 $breadcrumbs->index('Tech Tip Types', 'admin.index');
@@ -104,13 +128,10 @@ Route::get('public-tips-show', function () {
     return ' show public tip';
 })->name('publicTips.show');
 
-// Route::get('admin-tips-tip-type-index', function () {
-//     return 'Tech Tip Types';
-// })->name('admin.tech-tips.tip-types.index');
 
-Route::get('admin-deleted-tips', function () {
-    return 'Deleted Tips';
-})->name('admin.tech-tips.deleted-tips');
+// Route::get('admin-deleted-tips', function () {
+//     return 'Deleted Tips';
+// })->name('admin.tech-tips.deleted-tips');
 
 Route::get('admin-flagged-comments', function () {
     return 'admin flagged comments';

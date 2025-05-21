@@ -133,15 +133,29 @@ class TechTipController extends Controller
             ->with('danger', __('tips.deleted'));
     }
 
-    public function restore(string $id)
+    /**
+     * Restore a Soft Deleted Tech Tip
+     */
+    public function restore(TechTip $tech_tip): RedirectResponse
     {
-        //
-        return 'restore';
+        $this->authorize('manage', $tech_tip);
+
+        $this->svc->restoreTechTip($tech_tip);
+
+        return redirect(route('tech-tips.show', $tech_tip->slug))
+            ->with('success', __('tips.restored'));
     }
 
-    public function forceDelete(string $id)
+    /**
+     * Destroy Tech Tip and all associated data
+     */
+    public function forceDelete(TechTip $tech_tip): RedirectResponse
     {
-        //
-        return 'force delete';
+        $this->authorize('manage', $tech_tip);
+
+        $this->svc->destroyTechTip($tech_tip, true);
+
+        return redirect(route('admin.tech-tips.deleted-tips'))
+            ->with('warning', __('tips.deleted'));
     }
 }

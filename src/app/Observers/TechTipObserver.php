@@ -51,10 +51,11 @@ class TechTipObserver extends Observer
     {
         $fileList = $techTip->Files->pluck('file_id')->toArray();
 
-        // TODO - Delete Files
-        // if (count($fileList)) {
-        //     event(new FileDataDeletedEvent($fileList));
-        // }
+        if (count($fileList)) {
+            foreach ($fileList as $fileId) {
+                FileDataDeletedEvent::dispatch($fileId);
+            }
+        }
     }
 
     /**
