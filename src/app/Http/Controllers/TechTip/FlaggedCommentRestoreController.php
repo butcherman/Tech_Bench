@@ -5,15 +5,16 @@ namespace App\Http\Controllers\TechTip;
 use App\Http\Controllers\Controller;
 use App\Models\TechTipComment;
 use App\Services\TechTip\TechTipCommentService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class FlaggedCommentRestoreController extends Controller
 {
     /**
-     * Handle the incoming request.
+     * Remove any set flags for a Tech Tip Comment
      */
-    public function __invoke(TechTipCommentService $svc, TechTipComment $comment)
+    public function __invoke(TechTipCommentService $svc, TechTipComment $comment): RedirectResponse
     {
         $this->authorize('manage', $comment);
 

@@ -126,4 +126,23 @@ class TechTipCommentServiceUnitTest extends TestCase
         Exceptions::assertReported(UniqueConstraintViolationException::class);
         Event::assertNotDispatched(TechTipCommentFlaggedEvent::class);
     }
+
+    /*
+    |---------------------------------------------------------------------------
+    | releaseComment()
+    |---------------------------------------------------------------------------
+    */
+    public function test_release_comment(): void
+    {
+        $comment = TechTipComment::factory()->create();
+        $user = User::factory()->create();
+        $comment->flagComment($user);
+
+        $testObj = new TechTipCommentService;
+        $testObj->releaseComment($comment);
+
+        $this->assertDatabaseMissing('tech_tip_comment_flags', [
+            'comment_id' => $comment->comment_id
+        ]);
+    }
 }

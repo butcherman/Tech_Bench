@@ -74,6 +74,8 @@ class TechTipCommentService
      */
     public function releaseComment(TechTipComment $comment): void
     {
-        $comment->Flags()->delete();
+        foreach ($comment->Flags as $flag) {
+            $flag->delete();
+        }
     }
 }

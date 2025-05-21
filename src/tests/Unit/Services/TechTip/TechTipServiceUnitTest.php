@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Services\TechTip;
 
+use App\Events\File\FileDataDeletedEvent;
 use App\Events\TechTip\NotifiableTechTipEvent;
 use App\Jobs\TechTip\ProcessTipFilesJob;
 use App\Models\EquipmentType;
@@ -245,7 +246,11 @@ class TechTipServiceUnitTest extends TestCase
 
     public function test_destroy_tech_tip_force(): void
     {
-        $techTip = TechTip::factory()->create();
+        Event::fake(FileDataDeletedEvent::class);
+
+        $techTip = TechTip::factory()
+            ->has(FileUpload::factory()->count(5), 'Files')
+            ->create();
         $techTip->delete();
 
         $testObj = new TechTipService;
@@ -255,6 +260,6 @@ class TechTipServiceUnitTest extends TestCase
             'tip_id' => $techTip->tip_id,
         ]);
 
-        // TODO - Assert Files queued for deletion
+        Event::assertDispatchedTimes(FileDataDeletedEvent::class, 5);
     }
 }

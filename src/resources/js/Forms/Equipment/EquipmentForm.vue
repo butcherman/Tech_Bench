@@ -82,7 +82,7 @@ const schema = object({
             <SwitchInput
                 id="allow-public"
                 name="allow_public_tip"
-                label="Allow Public Tech Tips for this Equipment"
+                label="Allow Public Tech Tip Searches for this Equipment"
                 inline
             />
         </div>
