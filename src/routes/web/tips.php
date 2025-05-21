@@ -4,6 +4,8 @@ use App\Exceptions\TechTip\TechTipNotFoundException;
 use App\Http\Controllers\TechTip\DisabledTipViewController;
 use App\Http\Controllers\TechTip\DisabledTipController;
 use App\Http\Controllers\TechTip\DownloadTipController;
+use App\Http\Controllers\TechTip\FlaggedCommentRestoreController;
+use App\Http\Controllers\TechTip\FlaggedCommentsController;
 use App\Http\Controllers\TechTip\FlagTipController;
 use App\Http\Controllers\TechTip\SearchTipsController;
 use App\Http\Controllers\TechTip\TechTipBookmarkController;
@@ -40,13 +42,6 @@ Route::middleware('auth.secure')->group(function () {
             Route::get('/', DisabledTipController::class)
                 ->name('deleted-tips')
                 ->breadcrumb('Deleted Tech Tips', 'admin.index');
-            Route::get('{tech_tip}', DisabledTipViewController::class)
-                ->withTrashed()
-                ->name('deleted-tips.show')
-                ->breadcrumb(
-                    fn(TechTip $tech_tip) => $tech_tip->subject,
-                    'admin.tech-tips.deleted-tips'
-                );
 
             Route::controller(TechTipController::class)->group(function () {
                 Route::get('restore-tip/{tech_tip}', 'restore')
@@ -56,6 +51,21 @@ Route::middleware('auth.secure')->group(function () {
                     ->name('force-delete')
                     ->withTrashed();
             });
+
+            Route::get('flagged-comments', FlaggedCommentsController::class)
+                ->name('flagged-comments.index')
+                ->breadcrumb('Flagged Tech Tip Comments', 'admin.index');
+
+            Route::get('flagged-comments/restore/{comment}', FlaggedCommentRestoreController::class)
+                ->name('flagged-comments.restore');
+
+            Route::get('{tech_tip}', DisabledTipViewController::class)
+                ->withTrashed()
+                ->name('deleted-tips.show')
+                ->breadcrumb(
+                    fn(TechTip $tech_tip) => $tech_tip->subject,
+                    'admin.tech-tips.deleted-tips'
+                );
         });
 
         Route::apiResource('tip-types', TechTipTypeController::class)
@@ -133,6 +143,6 @@ Route::get('public-tips-show', function () {
 //     return 'Deleted Tips';
 // })->name('admin.tech-tips.deleted-tips');
 
-Route::get('admin-flagged-comments', function () {
-    return 'admin flagged comments';
-})->name('admin.tech-tips.flagged-comments.index');
+// Route::get('admin-flagged-comments', function () {
+//     return 'admin flagged comments';
+// })->name('admin.tech-tips.flagged-comments.index');

@@ -58,7 +58,11 @@ const handleClick = (event: MouseEvent): void => {
     }
 
     if (props.href) {
-        handleLinkClick(event, props.href);
+        handleLinkClick(
+            event,
+            props.href,
+            props.deleteMethod ? "delete" : "get"
+        );
     }
 };
 </script>

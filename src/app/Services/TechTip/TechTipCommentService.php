@@ -68,4 +68,12 @@ class TechTipCommentService
             );
         }
     }
+
+    /**
+     * Release a flagged comment.
+     */
+    public function releaseComment(TechTipComment $comment): void
+    {
+        $comment->Flags()->delete();
+    }
 }

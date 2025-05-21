@@ -33,6 +33,14 @@ type techTipComment = {
     is_flagged: boolean;
     created_at: string;
     updated_at: string;
+    flags?: flaggedComment[];
+};
+
+type flaggedComment = {
+    comment_id: number;
+    created_at: string;
+    flagged_by: string;
+    id: number;
 };
 
 type techTipPermissions = {
