@@ -7,8 +7,18 @@ import {
     isLoading,
 } from "@/Composables/TechTip/TipSearch.module";
 
+const props = defineProps<{
+    isPublic?: boolean;
+}>();
+
 const onRowClick = (event: MouseEvent, row: techTip): void => {
-    handleLinkClick(event, route("tech-tips.show", row.slug));
+    let url = route("tech-tips.show", row.slug);
+
+    if (props.isPublic) {
+        url = route("publicTips.show", row.slug);
+    }
+
+    handleLinkClick(event, url);
 };
 
 const getRowBgClass = (rowIndex: number): string => {

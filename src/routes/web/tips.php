@@ -7,6 +7,8 @@ use App\Http\Controllers\TechTip\DownloadTipController;
 use App\Http\Controllers\TechTip\FlaggedCommentRestoreController;
 use App\Http\Controllers\TechTip\FlaggedCommentsController;
 use App\Http\Controllers\TechTip\FlagTipController;
+use App\Http\Controllers\TechTip\Public\PublicTipController;
+use App\Http\Controllers\TechTip\Public\SearchPublicTipController;
 use App\Http\Controllers\TechTip\SearchTipsController;
 use App\Http\Controllers\TechTip\TechTipBookmarkController;
 use App\Http\Controllers\TechTip\TechTipCommentController;
@@ -14,6 +16,7 @@ use App\Http\Controllers\TechTip\TechTipController;
 use App\Http\Controllers\TechTip\TechTipSettingsController;
 use App\Http\Controllers\TechTip\TechTipTypeController;
 use App\Http\Controllers\TechTip\UploadTipFileController;
+use App\Http\Middleware\CheckPublicTechTipMiddleware;
 use App\Models\TechTip;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 use Illuminate\Support\Facades\Route;
@@ -38,6 +41,7 @@ Route::middleware('auth.secure')->group(function () {
                 ->breadcrumb('Tech Tip Settings', 'admin.index');
             Route::put('settings', 'update')->name('update');
         });
+
         Route::prefix('disabled-tips')->group(function () {
             Route::get('/', DisabledTipController::class)
                 ->name('deleted-tips')
@@ -130,19 +134,18 @@ Route::middleware('auth.secure')->group(function () {
         });
 });
 
-Route::get('public-tips-index', function () {
-    return 'public tips index';
-})->name('publicTips.index');
-
-Route::get('public-tips-show', function () {
-    return ' show public tip';
-})->name('publicTips.show');
-
-
-// Route::get('admin-deleted-tips', function () {
-//     return 'Deleted Tips';
-// })->name('admin.tech-tips.deleted-tips');
-
-// Route::get('admin-flagged-comments', function () {
-//     return 'admin flagged comments';
-// })->name('admin.tech-tips.flagged-comments.index');
+/*
+|-------------------------------------------------------------------------------
+| Public Tech Tips
+|-------------------------------------------------------------------------------
+*/
+Route::middleware(CheckPublicTechTipMiddleware::class)
+    ->prefix('knowledge-base')
+    ->name('publicTips.')
+    ->group(function () {
+        Route::controller(PublicTipController::class)->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('{tech_tip}', 'show')->name('show');
+        });
+        Route::post('/', SearchPublicTipController::class)->name('search');
+    });

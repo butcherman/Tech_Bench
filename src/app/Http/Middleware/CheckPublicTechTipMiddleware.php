@@ -2,6 +2,8 @@
 
 namespace App\Http\Middleware;
 
+use App\Exceptions\TechTip\PublicTipsDisabledException;
+use App\Exceptions\TechTip\TechTipNotPublicException;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,16 +23,14 @@ class CheckPublicTechTipMiddleware
          * If Feature is disabled, abort
          */
         if (! config('tech-tips.allow_public')) {
-            abort('404');
-            // TODO - Throw exception
+            throw new PublicTipsDisabledException;
         }
 
         /**
          * If Tech Tip is not public, abort
          */
         if ($request->tech_tip && ! $request->tech_tip->public) {
-            abort('404');
-            // TODO - Throw exception
+            throw new TechTipNotPublicException;
         }
 
         return $next($request);

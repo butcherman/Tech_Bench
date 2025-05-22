@@ -5,14 +5,20 @@ import {
     searchParams,
     triggerSearch,
     resetSearch,
+    triggerPublicSearch,
 } from "@/Composables/TechTip/TipSearch.module";
+
+const props = defineProps<{
+    isPublic?: boolean;
+    placeholder?: string;
+}>();
 
 /**
  * Clear all Search Parameters and set back to default
  */
 const onReset = (): void => {
     resetSearch();
-    triggerSearch();
+    search();
 };
 
 /**
@@ -22,18 +28,31 @@ const delayTimer = ref<number | undefined>();
 const checkToSearch = (): void => {
     clearTimeout(delayTimer.value);
     delayTimer.value = setTimeout(() => {
-        triggerSearch();
+        search();
     }, 500);
+};
+
+/**
+ * Determine if we are performing a public or private search.
+ */
+const search = () => {
+    if (props.isPublic) {
+        triggerPublicSearch();
+
+        return;
+    }
+
+    triggerSearch();
 };
 </script>
 
 <template>
-    <form @submit.prevent="triggerSearch">
+    <form @submit.prevent="search">
         <InputGroup>
             <InputText
                 v-model="searchParams.searchFor"
                 class="border px-2"
-                placeholder="Search for Tech Tip"
+                :placeholder="placeholder ?? 'Search for Tech Tip'"
                 @input="checkToSearch"
             />
             <InputGroupAddon class="bg-blue-400 text-white">

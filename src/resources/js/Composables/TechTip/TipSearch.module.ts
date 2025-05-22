@@ -61,6 +61,19 @@ export const triggerSearch = (): void => {
 };
 
 /**
+ * Perform a Tech Tip Search, but only for public Tech Tips.
+ */
+export const triggerPublicSearch = () => {
+    console.log("public search");
+
+    isDirty.value = true;
+
+    dataPost(route("publicTips.search"), searchParams).then((res) =>
+        processResults(res)
+    );
+};
+
+/**
  * Reset the Search Parameters back to default values.
  */
 export const resetSearch = (): void => {

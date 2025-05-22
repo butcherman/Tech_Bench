@@ -4,8 +4,13 @@ import SearchBody from "./SearchBody.vue";
 import {
     paginationData,
     searchParams,
+    triggerPublicSearch,
     triggerSearch,
 } from "@/Composables/TechTip/TipSearch.module";
+
+const props = defineProps<{
+    isPublic?: boolean;
+}>();
 
 /**
  * List of possible results to display in search results list.
@@ -18,6 +23,19 @@ const paginationArray: number[] = [25, 50, 100];
 const navigateToPage = (newPage: number): void => {
     console.log("navigate");
     searchParams.page = newPage;
+    search();
+};
+
+/**
+ * Determine if we are performing a public or private search.
+ */
+const search = () => {
+    if (props.isPublic) {
+        triggerPublicSearch();
+
+        return;
+    }
+
     triggerSearch();
 };
 </script>
@@ -32,7 +50,7 @@ const navigateToPage = (newPage: number): void => {
                     <th class="text-start">Date</th>
                 </tr>
             </thead>
-            <SearchBody />
+            <SearchBody :is-public="isPublic" />
             <tfoot>
                 <tr>
                     <td colspan="3" class="p-3">

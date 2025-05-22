@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import FlashAlert from "../_Shared/FlashAlert.vue";
+import StepNavigation from "@/Components/_Base/StepNavigation.vue";
 import { computed, ref } from "vue";
 import { usePage } from "@inertiajs/vue3";
-import StepNavigation from "@/Components/_Base/StepNavigation.vue";
 
 type initProps = {
     step: number;
