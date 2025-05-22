@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import KbLayout from "@/Layouts/KnowledgeBase/KbLayout.vue";
-import Card from "@/Components/_Base/Card.vue";
-import { ref, onMounted } from "vue";
-import SearchTipsForm from "@/Forms/TechTip/SearchTipsForm.vue";
-import { triggerPublicSearch } from "@/Composables/TechTip/TipSearch.module";
-import SearchFilters from "@/Components/TechTips/Search/SearchFilters.vue";
 import BaseButton from "@/Components/_Base/Buttons/BaseButton.vue";
+import Card from "@/Components/_Base/Card.vue";
+import KbLayout from "@/Layouts/KnowledgeBase/KbLayout.vue";
+import SearchTipsForm from "@/Forms/TechTip/SearchTipsForm.vue";
+import SearchFilters from "@/Components/TechTips/Search/SearchFilters.vue";
 import TipsSearchTable from "@/Components/TechTips/Search/TipsSearchTable.vue";
+import { ref, onMounted } from "vue";
+import { triggerPublicSearch } from "@/Composables/TechTip/TipSearch.module";
 
 defineProps<{
     filterData: {

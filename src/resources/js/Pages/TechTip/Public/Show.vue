@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import AppLayout from "@/Layouts/App/AppLayout.vue";
+import KbLayout from "@/Layouts/KnowledgeBase/KbLayout.vue";
 import Card from "@/Components/_Base/Card.vue";
 import { ref, reactive, onMounted } from "vue";
 
@@ -8,7 +8,7 @@ const props = defineProps<{}>();
 </script>
 
 <script lang="ts">
-export default { layout: AppLayout };
+export default { layout: KbLayout };
 </script>
 
 <template>
