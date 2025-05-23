@@ -1,14 +1,35 @@
 <?php
 
+use App\Http\Controllers\FileLink\ExpireLinkController;
+use App\Http\Controllers\FileLink\FileLinkController;
+use App\Http\Controllers\FileLink\FileLinkSettingsController;
+use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 use Illuminate\Support\Facades\Route;
 
-Route::get('show-link', function () {
-    return 'show link';
-})->name('links.show');
+/*
+|-------------------------------------------------------------------------------
+| File Link Based Routes
+|-------------------------------------------------------------------------------
+*/
 
-Route::get('link-index', function () {
-    return 'link index';
-})->name('links.index');
+Route::middleware('auth.secure')->group(function () {
+    /*
+    |---------------------------------------------------------------------------
+    | File Links
+    | /links
+    |---------------------------------------------------------------------------
+    */
+    Route::get('links/{link}/expire', ExpireLinkController::class)
+        ->name('links.expire');
+
+    Route::resource('links', FileLinkController::class)
+        ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
+            $breadcrumbs->index('File Links')
+                ->create('New File Link')
+                ->show('Link Details')
+                ->edit('Edit Link');
+        });
+});
 
 Route::get('guest-link', function () {
     return 'guest link';

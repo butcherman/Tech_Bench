@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use App\Models\AppSettings;
 use App\Models\FileLink;
 use App\Models\FileLinkFile;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Database\Seeder;
 use Illuminate\Foundation\Testing\WithFaker;
 
@@ -26,7 +28,14 @@ class FileLinkSeeder extends Seeder
         /**
          * Create 10 File Links for the Administrator User
          */
-        $linkList = FileLink::factory()->count(10)->create(['user_id' => 1]);
+        $linkList = FileLink::factory()
+            ->count(10)
+            ->state(
+                new Sequence(fn() => [
+                    'expire' => Carbon::now()->addDays(rand(-30, 30))
+                ])
+            )
+            ->create(['user_id' => 1]);
 
         // Add some files and history
         $linkList->each(function ($link) {
