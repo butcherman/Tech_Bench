@@ -26,7 +26,7 @@ class CustomerSlugChangedEvent implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('customer.' . $this->oldSlug),
+            new PrivateChannel('customer.'.$this->oldSlug),
         ];
     }
 

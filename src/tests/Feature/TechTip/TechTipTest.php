@@ -12,7 +12,6 @@ use App\Models\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Exceptions;
-use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
@@ -43,7 +42,7 @@ class TechTipTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('TechTip/Index')
                     ->has('permissions')
                     ->has('filter-data')
@@ -84,7 +83,7 @@ class TechTipTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('TechTip/Create')
                     ->has('permissions')
                     ->has('tip-types')
@@ -249,7 +248,7 @@ class TechTipTest extends TestCase
             'tip_type_id',
             'details',
             'sticky',
-            'public'
+            'public',
         ]));
 
         Event::assertDispatched(NotifiableTechTipEvent::class);
@@ -328,7 +327,7 @@ class TechTipTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('TechTip/Show')
                     ->has('allow-comments')
                     ->has('equipment')
@@ -350,7 +349,7 @@ class TechTipTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('TechTip/Show')
                     ->has('allow-comments')
                     ->has('equipment')
@@ -421,7 +420,7 @@ class TechTipTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('TechTip/Edit')
                     ->has('tech-tip')
                     ->has('equip-list')

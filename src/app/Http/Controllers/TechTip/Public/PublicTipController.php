@@ -5,7 +5,6 @@ namespace App\Http\Controllers\TechTip\Public;
 use App\Facades\CacheData;
 use App\Http\Controllers\Controller;
 use App\Models\TechTip;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -30,14 +29,14 @@ class PublicTipController extends Controller
     public function show(TechTip $tech_tip): Response
     {
         return Inertia::render('TechTip/Public/Show', [
-            'equipment' => fn() => $tech_tip->PublicEquipment->makeHidden([
+            'equipment' => fn () => $tech_tip->PublicEquipment->makeHidden([
                 'equip_id',
                 'cat_id',
-                'allow_public_tip'
+                'allow_public_tip',
             ]),
-            'files' => fn() => $tech_tip->Files->makeHidden([
+            'files' => fn () => $tech_tip->Files->makeHidden([
                 'created_stamp',
-                'pivot'
+                'pivot',
             ]),
             'tech-tip' => $tech_tip->makeHidden([
                 'allow_comments',
@@ -47,7 +46,7 @@ class PublicTipController extends Controller
                 'user_id',
                 'views',
                 'Files',
-                'PublicEquipment'
+                'PublicEquipment',
             ]),
         ]);
     }

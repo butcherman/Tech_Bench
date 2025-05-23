@@ -4,7 +4,6 @@ namespace Tests\Unit\Services\TechTip;
 
 use App\Events\TechTip\NotifiableTipCommentEvent;
 use App\Events\TechTip\TechTipCommentFlaggedEvent;
-use App\Exceptions\Database\RecordInUseException;
 use App\Models\TechTip;
 use App\Models\TechTipComment;
 use App\Models\User;
@@ -12,7 +11,6 @@ use App\Services\TechTip\TechTipCommentService;
 use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Exceptions;
-use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 
 class TechTipCommentServiceUnitTest extends TestCase
@@ -42,7 +40,6 @@ class TechTipCommentServiceUnitTest extends TestCase
             'comment' => $data['comment_data'],
             'user_id' => $user->user_id,
         ]);
-
 
         Event::assertDispatched(NotifiableTipCommentEvent::class);
     }
@@ -142,7 +139,7 @@ class TechTipCommentServiceUnitTest extends TestCase
         $testObj->releaseComment($comment);
 
         $this->assertDatabaseMissing('tech_tip_comment_flags', [
-            'comment_id' => $comment->comment_id
+            'comment_id' => $comment->comment_id,
         ]);
     }
 }

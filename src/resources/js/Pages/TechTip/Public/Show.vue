@@ -27,21 +27,21 @@ export default { layout: KbLayout };
                 :href="$route('publicTips.index')"
             />
         </div>
-        <Card>
-            <div class="pb-2 border-b border-slate-400">
-                <div class="flex gap-2">
-                    <h1 class="grow">
-                        {{ techTip.subject }}
-                    </h1>
-                </div>
-                <div class="flex gap-2">
-                    <TipData :tech-tip="techTip" class="grow" is-public />
-                </div>
+
+        <div class="pb-2 border-b border-slate-400">
+            <div class="flex gap-2">
+                <h1 class="grow">
+                    {{ techTip.subject }}
+                </h1>
             </div>
-            <div class="pb-2 border-b border-slate-400">
-                <TipEquipment :equipment-list="equipment" />
+            <div class="flex gap-2">
+                <TipData :tech-tip="techTip" class="grow" is-public />
             </div>
-        </Card>
+        </div>
+        <div v-if="equipment.length" class="pb-2 border-b border-slate-400">
+            <TipEquipment :equipment-list="equipment" />
+        </div>
+
         <div class="my-4">
             <Card
                 ><div v-html="techTip.details" class="overflow-auto min-h-60"

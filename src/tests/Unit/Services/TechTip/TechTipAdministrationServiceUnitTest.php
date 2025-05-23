@@ -49,19 +49,19 @@ class TechTipAdministrationServiceUnitTest extends TestCase
         $testObj->updateTechTipSettings(collect($data));
 
         $this->assertDatabaseHas('app_settings', [
-            'key' => 'tech-tips.allow_comments'
+            'key' => 'tech-tips.allow_comments',
         ]);
 
         $this->assertDatabaseHas('app_settings', [
-            'key' => 'tech-tips.allow_download'
+            'key' => 'tech-tips.allow_download',
         ]);
 
         $this->assertDatabaseHas('app_settings', [
-            'key' => 'tech-tips.allow_public'
+            'key' => 'tech-tips.allow_public',
         ]);
 
         $this->assertDatabaseHas('app_settings', [
-            'key' => 'tech-tips.public_link_text'
+            'key' => 'tech-tips.public_link_text',
         ]);
     }
 

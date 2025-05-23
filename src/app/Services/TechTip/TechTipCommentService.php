@@ -4,7 +4,6 @@ namespace App\Services\TechTip;
 
 use App\Events\TechTip\NotifiableTipCommentEvent;
 use App\Events\TechTip\TechTipCommentFlaggedEvent;
-use App\Facades\DbException;
 use App\Models\TechTip;
 use App\Models\TechTipComment;
 use App\Models\User;
@@ -62,7 +61,7 @@ class TechTipCommentService
         } catch (UniqueConstraintViolationException $e) {
             report($e);
             Log::notice(
-                $flaggedBy->full_name .
+                $flaggedBy->full_name.
                     ' is trying to flag a Tech Tip Comment that has already been flagged',
                 $comment->toArray()
             );

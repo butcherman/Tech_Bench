@@ -7,10 +7,7 @@ use App\Models\TechTip;
 use App\Models\TechTipComment;
 use App\Models\TechTipCommentFlag;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Event;
-use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class FlagTipTest extends TestCase

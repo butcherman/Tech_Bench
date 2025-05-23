@@ -17,7 +17,7 @@ class DownloadNoteController extends Controller
      */
     public function __invoke(Request $request, Customer $customer, CustomerNote $note): Response
     {
-        Log::info('Customer Note ID ' . $note->note_id . ' downloaded by ' .
+        Log::info('Customer Note ID '.$note->note_id.' downloaded by '.
             $request->user()->username);
 
         return Pdf::loadView('pdf.customer_note', [

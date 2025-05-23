@@ -5,9 +5,7 @@ namespace App\Http\Controllers\TechTip;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\BookmarkRequest;
 use App\Models\TechTip;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Inertia\Inertia;
 
 class TechTipBookmarkController extends Controller
 {

@@ -69,18 +69,18 @@ class TechTipController extends Controller
         $tech_tip->touchRecent($request->user());
 
         return Inertia::render('TechTip/Show', [
-            'allow-comments' => fn() => config('tech-tips.allow_comments'),
-            'allow-download' => fn() => config('tech-tips.allow_download'),
-            'equipment' => fn() => $tech_tip->Equipment,
-            'files' => fn() => $tech_tip->Files,
-            'is-fav' => fn() => $tech_tip->isFav($request->user()),
-            'permissions' => fn() => UserPermissions::techTipPermissions($request->user()),
-            'tech-tip' => fn() => $tech_tip->load(['CreatedBy', 'UpdatedBy']),
+            'allow-comments' => fn () => config('tech-tips.allow_comments'),
+            'allow-download' => fn () => config('tech-tips.allow_download'),
+            'equipment' => fn () => $tech_tip->Equipment,
+            'files' => fn () => $tech_tip->Files,
+            'is-fav' => fn () => $tech_tip->isFav($request->user()),
+            'permissions' => fn () => UserPermissions::techTipPermissions($request->user()),
+            'tech-tip' => fn () => $tech_tip->load(['CreatedBy', 'UpdatedBy']),
 
             /**
              * Deferred Data
              */
-            'comments' => Inertia::defer(fn() => $tech_tip->Comments)
+            'comments' => Inertia::defer(fn () => $tech_tip->Comments),
         ]);
     }
 

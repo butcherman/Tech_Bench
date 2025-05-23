@@ -19,12 +19,12 @@ class HandleLoginListener
         ]);
 
         Log::stack(['app', 'auth'])
-            ->info('User ' . $user->full_name .
-                ' successfully logged in from IP Address ' .
+            ->info('User '.$user->full_name.
+                ' successfully logged in from IP Address '.
                 request()->ip(), [
-                'User ID' => $user->user_id,
-                'Username' => $user->username,
-                'IP Address' => request()->ip(),
-            ]);
+                    'User ID' => $user->user_id,
+                    'Username' => $user->username,
+                    'IP Address' => request()->ip(),
+                ]);
     }
 }

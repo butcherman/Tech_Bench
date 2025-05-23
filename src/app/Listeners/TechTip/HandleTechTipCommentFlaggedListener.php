@@ -6,7 +6,6 @@ use App\Events\TechTip\TechTipCommentFlaggedEvent;
 use App\Mail\TechTip\TechTipCommentFlaggedMail;
 use App\Traits\AllowTrait;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Mail;
 
 class HandleTechTipCommentFlaggedListener implements ShouldQueue

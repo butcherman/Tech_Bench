@@ -4,7 +4,6 @@ namespace App\Http\Controllers\TechTip;
 
 use App\Http\Controllers\Controller;
 use App\Models\TechTipComment;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 

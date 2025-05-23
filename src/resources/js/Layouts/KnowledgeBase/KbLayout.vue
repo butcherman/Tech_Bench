@@ -4,7 +4,7 @@ import KbHeader from "./KbHeader.vue";
 </script>
 
 <template>
-    <div id="kb-layout-wrapper" class="flex flex-col">
+    <div id="kb-layout-wrapper" class="flex flex-col bg-gray-200">
         <KbHeader />
         <section id="kb-content" class="mt-14 p-3 grow">
             <slot />
@@ -15,7 +15,6 @@ import KbHeader from "./KbHeader.vue";
 
 <style scoped lang="postcss">
 #kb-layout-wrapper {
-    background: linear-gradient(135deg, #1f0683 0%, #24308e 50%, #0b77ca 100%);
     min-height: 100vh;
     width: 100%;
 }

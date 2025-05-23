@@ -8,8 +8,6 @@ use App\Models\TechTip;
 use App\Models\TechTipComment;
 use App\Services\TechTip\TechTipCommentService;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Inertia\Inertia;
 
 class TechTipCommentController extends Controller
 {

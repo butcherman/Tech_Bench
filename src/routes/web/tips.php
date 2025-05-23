@@ -1,8 +1,8 @@
 <?php
 
 use App\Exceptions\TechTip\TechTipNotFoundException;
-use App\Http\Controllers\TechTip\DisabledTipViewController;
 use App\Http\Controllers\TechTip\DisabledTipController;
+use App\Http\Controllers\TechTip\DisabledTipViewController;
 use App\Http\Controllers\TechTip\DownloadTipController;
 use App\Http\Controllers\TechTip\FlaggedCommentRestoreController;
 use App\Http\Controllers\TechTip\FlaggedCommentsController;
@@ -67,7 +67,7 @@ Route::middleware('auth.secure')->group(function () {
                 ->withTrashed()
                 ->name('deleted-tips.show')
                 ->breadcrumb(
-                    fn(TechTip $tech_tip) => $tech_tip->subject,
+                    fn (TechTip $tech_tip) => $tech_tip->subject,
                     'admin.tech-tips.deleted-tips'
                 );
         });
@@ -127,7 +127,7 @@ Route::middleware('auth.secure')->group(function () {
         ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
             $breadcrumbs->index('Tech Tips')
                 ->create('New Tech Tip')
-                ->show(fn(TechTip $tech_tip) => $tech_tip->subject)
+                ->show(fn (TechTip $tech_tip) => $tech_tip->subject)
                 ->edit('Edit Tech Tip');
         })->missing(function () {
             throw new TechTipNotFoundException;

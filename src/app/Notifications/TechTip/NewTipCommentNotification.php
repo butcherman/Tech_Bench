@@ -4,7 +4,6 @@ namespace App\Notifications\TechTip;
 
 use App\Models\TechTipComment;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
@@ -40,7 +39,7 @@ class NewTipCommentNotification extends Notification
     {
         return (new MailMessage)->markdown('mail.tips.newComment', [
             'user' => $notifiable,
-            'comment' => $this->comment->load('TechTip')
+            'comment' => $this->comment->load('TechTip'),
         ]);
     }
 

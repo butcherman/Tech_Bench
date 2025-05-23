@@ -5,9 +5,6 @@ namespace App\Listeners\File;
 use App\Events\File\FileDataDeletedEvent;
 use App\Jobs\File\DeleteFileDataJob;
 use App\Models\FileUpload;
-use Illuminate\Database\QueryException;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 
 class HandleFileDataDeletedListener
 {

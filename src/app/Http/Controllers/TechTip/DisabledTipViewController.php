@@ -17,9 +17,9 @@ class DisabledTipViewController extends Controller
         $this->authorize('manage', $tech_tip);
 
         return Inertia::render('TechTip/Admin/Deleted/Show', [
-            'equipment' => fn() => $tech_tip->Equipment,
-            'files' => fn() => $tech_tip->Files,
-            'tech-tip' => fn() => $tech_tip->load(['CreatedBy', 'UpdatedBy']),
+            'equipment' => fn () => $tech_tip->Equipment,
+            'files' => fn () => $tech_tip->Files,
+            'tech-tip' => fn () => $tech_tip->load(['CreatedBy', 'UpdatedBy']),
         ]);
     }
 }

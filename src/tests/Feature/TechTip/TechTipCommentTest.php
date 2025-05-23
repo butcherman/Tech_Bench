@@ -6,10 +6,7 @@ use App\Events\TechTip\NotifiableTipCommentEvent;
 use App\Models\TechTip;
 use App\Models\TechTipComment;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Event;
-use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class TechTipCommentTest extends TestCase
@@ -109,7 +106,7 @@ class TechTipCommentTest extends TestCase
         $response = $this->put(
             route('tech-tips.comments.update', [
                 $comment->TechTip->slug,
-                $comment->comment_id
+                $comment->comment_id,
             ]),
             $data
         );
@@ -134,7 +131,7 @@ class TechTipCommentTest extends TestCase
         $response = $this->actingAs($user)->put(
             route('tech-tips.comments.update', [
                 $comment->TechTip->slug,
-                $comment->comment_id
+                $comment->comment_id,
             ]),
             $data
         );
@@ -156,7 +153,7 @@ class TechTipCommentTest extends TestCase
         $response = $this->actingAs($user)->put(
             route('tech-tips.comments.update', [
                 $comment->TechTip->slug,
-                $comment->comment_id
+                $comment->comment_id,
             ]),
             $data
         );
@@ -178,7 +175,7 @@ class TechTipCommentTest extends TestCase
         $response = $this->actingAs($user)->put(
             route('tech-tips.comments.update', [
                 $invalid->slug,
-                $comment->comment_id
+                $comment->comment_id,
             ]),
             $data
         );
@@ -199,7 +196,7 @@ class TechTipCommentTest extends TestCase
         $response = $this->actingAs($user)->put(
             route('tech-tips.comments.update', [
                 $comment->TechTip->slug,
-                $comment->comment_id
+                $comment->comment_id,
             ]),
             $data
         );
@@ -209,7 +206,7 @@ class TechTipCommentTest extends TestCase
 
         $this->assertDatabaseHas('tech_tip_comments', [
             'comment_id' => $comment->comment_id,
-            'comment' => $data['comment_data']
+            'comment' => $data['comment_data'],
         ]);
     }
 
@@ -228,7 +225,7 @@ class TechTipCommentTest extends TestCase
         $response = $this->actingAs($user)->put(
             route('tech-tips.comments.update', [
                 $comment->TechTip->slug,
-                $comment->comment_id
+                $comment->comment_id,
             ]),
             $data
         );
@@ -247,7 +244,7 @@ class TechTipCommentTest extends TestCase
 
         $response = $this->delete(route('tech-tips.comments.destroy', [
             $comment->TechTip->slug,
-            $comment->comment_id
+            $comment->comment_id,
         ]));
 
         $response->assertStatus(302)
@@ -263,7 +260,7 @@ class TechTipCommentTest extends TestCase
 
         $response = $this->actingAs($user)->delete(route('tech-tips.comments.destroy', [
             $comment->TechTip->slug,
-            $comment->comment_id
+            $comment->comment_id,
         ]));
 
         $response->assertForbidden();
@@ -278,7 +275,7 @@ class TechTipCommentTest extends TestCase
 
         $response = $this->actingAs($user)->delete(route('tech-tips.comments.destroy', [
             $invalid->slug,
-            $comment->comment_id
+            $comment->comment_id,
         ]));
 
         $response->assertStatus(404);
@@ -293,7 +290,7 @@ class TechTipCommentTest extends TestCase
         $response = $this->actingAs($user)
             ->delete(route('tech-tips.comments.destroy', [
                 $comment->TechTip->slug,
-                $comment->comment_id
+                $comment->comment_id,
             ]));
 
         $response->assertStatus(302)
@@ -314,7 +311,7 @@ class TechTipCommentTest extends TestCase
         $response = $this->actingAs($user)
             ->delete(route('tech-tips.comments.destroy', [
                 $comment->TechTip->slug,
-                $comment->comment_id
+                $comment->comment_id,
             ]));
 
         $response->assertStatus(302)
@@ -337,7 +334,7 @@ class TechTipCommentTest extends TestCase
         $response = $this->actingAs($user)
             ->delete(route('tech-tips.comments.destroy', [
                 $comment->TechTip->slug,
-                $comment->comment_id
+                $comment->comment_id,
             ]));
 
         $response->assertForbidden();

@@ -5,9 +5,6 @@ namespace App\Http\Controllers\TechTip\Public;
 use App\Actions\TechTip\TechTipSearch;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TechTip\SearchTipsRequest;
-use App\Http\Resources\TechTip\PublicTipResource;
-use Illuminate\Http\Request;
-use Inertia\Inertia;
 
 class SearchPublicTipController extends Controller
 {
@@ -26,7 +23,7 @@ class SearchPublicTipController extends Controller
                 'type',
                 'updated_id',
                 'user_id',
-                'views'
+                'views',
             ]);
         }
 

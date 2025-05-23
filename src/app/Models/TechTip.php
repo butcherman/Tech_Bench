@@ -47,7 +47,7 @@ class TechTip extends Model
         'href',
         'public_href',
         'type',
-        'views'
+        'views',
     ];
 
     /*
@@ -87,21 +87,21 @@ class TechTip extends Model
     public function views(): Attribute
     {
         return Attribute::make(
-            get: fn() => $this->TechTipViews->views,
+            get: fn () => $this->TechTipViews->views,
         );
     }
 
     public function href(): Attribute
     {
         return Attribute::make(
-            get: fn() => route('tech-tips.show', $this->slug),
+            get: fn () => route('tech-tips.show', $this->slug),
         );
     }
 
     public function publicHref(): ?Attribute
     {
         return Attribute::make(
-            get: fn() => $this->public
+            get: fn () => $this->public
                 ? route('publicTips.show', $this->slug)
                 : null,
         );
@@ -110,7 +110,7 @@ class TechTip extends Model
     public function type(): Attribute
     {
         return Attribute::make(
-            get: fn() => $this->TechTipType->description,
+            get: fn () => $this->TechTipType->description,
         );
     }
 

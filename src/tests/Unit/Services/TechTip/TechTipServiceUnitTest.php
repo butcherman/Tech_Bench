@@ -149,7 +149,7 @@ class TechTipServiceUnitTest extends TestCase
             'public' => false,
             'removedFiles' => [
                 $techTip->Files[2]->file_id,
-                $techTip->Files[3]->file_id
+                $techTip->Files[3]->file_id,
             ],
         ];
 
@@ -158,8 +158,6 @@ class TechTipServiceUnitTest extends TestCase
             ->create()
             ->pluck('file_id')
             ->toArray();
-
-
 
         $testObj = new TechTipService;
         $res = $testObj->updateTechTip(collect($data), $techTip, $user, $fileList);

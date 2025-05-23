@@ -3,8 +3,6 @@
 namespace Tests\Feature\TechTip;
 
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
@@ -45,7 +43,7 @@ class TechTipSettingsTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('TechTip/Admin/Settings')
                     ->has('allow_comments')
                     ->has('allow_public')

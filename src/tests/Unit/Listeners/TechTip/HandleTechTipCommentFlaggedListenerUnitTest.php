@@ -7,7 +7,6 @@ use App\Mail\TechTip\TechTipCommentFlaggedMail;
 use App\Models\TechTipComment;
 use App\Models\User;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 
 class HandleTechTipCommentFlaggedListenerUnitTest extends TestCase

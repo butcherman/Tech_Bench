@@ -7,7 +7,6 @@ use App\Http\Requests\TechTip\TechTipSettingsRequest;
 use App\Models\TechTip;
 use App\Services\TechTip\TechTipAdministrationService;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 

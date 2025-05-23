@@ -23,7 +23,7 @@ trait AppSettingsTrait
     {
         // Verify that we are not trying to save over a fake password
         if ($value !== __('admin.fake-password') && $value !== null) {
-            Log::debug('Saving Permission Value for ' . $key);
+            Log::debug('Saving Permission Value for '.$key);
 
             // Verify that the value has actually changed
             if (config($key) != $value) {
@@ -51,7 +51,7 @@ trait AppSettingsTrait
     protected function saveSettingsArray(array $settingArray, ?string $prefix = null): void
     {
         foreach ($settingArray as $key => $value) {
-            $newKey = is_null($prefix) ? $key : $prefix . '.' . $key;
+            $newKey = is_null($prefix) ? $key : $prefix.'.'.$key;
 
             $this->saveSettings($newKey, $value);
         }
