@@ -20,9 +20,9 @@ class CheckPasswordExpiration
     {
         if ($request->user()->password_expires) {
             if ($request->user()->password_expires < Carbon::now()) {
-                Log::stack(['auth', 'daily'])
+                Log::stack(['auth', 'app'])
                     ->notice(
-                        'User '.$request->user()->full_name.
+                        'User ' . $request->user()->full_name .
                             ' is being force to change their expired password'
                     );
 
