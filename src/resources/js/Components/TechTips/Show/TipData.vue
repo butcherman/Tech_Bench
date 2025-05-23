@@ -3,6 +3,7 @@ import ClipboardCopy from "@/Components/_Base/ClipboardCopy.vue";
 
 defineProps<{
     techTip: techTip;
+    isPublic?: boolean;
 }>();
 </script>
 
@@ -13,23 +14,23 @@ defineProps<{
                 <strong>ID:</strong>
                 {{ techTip.tip_id }}
             </div>
-            <div class="px-1 md:border border-l-slate-400">
+            <div v-if="!isPublic" class="px-1 md:border-l border-l-slate-400">
                 <strong>Tip Type:</strong>
                 {{ techTip.type }}
             </div>
-            <div class="px-1 md:border border-l-slate-400">
+            <div class="px-1 md:border-l border-l-slate-400">
                 <strong>Created:</strong>
                 {{ techTip.created_at }}
             </div>
             <div
                 v-if="techTip.updated_by"
-                class="px-1 md:border border-l-slate-400"
+                class="px-1 md:border-l border-l-slate-400"
             >
                 <strong>Updated:</strong>
                 {{ techTip.updated_at }}
             </div>
         </div>
-        <div v-if="techTip.public">
+        <div v-if="techTip.public && !isPublic">
             <fa-icon icon="star" class="text-success" />
             <strong>Public Tech Tip</strong>
             <ClipboardCopy
