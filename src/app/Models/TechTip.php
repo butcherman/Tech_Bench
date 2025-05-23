@@ -33,10 +33,22 @@ class TechTip extends Model
     protected $guarded = ['tip_id', 'updated_at', 'created_at'];
 
     /** @var array<int, string> */
-    protected $hidden = ['deleted_at', 'tip_type_id', 'Bookmarks'];
+    protected $hidden = [
+        'Bookmarks',
+        'deleted_at',
+        'Recent',
+        'TechTipType',
+        'TechTipViews',
+        'tip_type_id',
+    ];
 
     /** @var array<int, string> */
-    protected $appends = ['href', 'public_href', 'equipList', 'fileList', 'equip_list', 'file_list'];
+    protected $appends = [
+        'href',
+        'public_href',
+        'type',
+        'views',
+    ];
 
     /*
     |---------------------------------------------------------------------------
@@ -51,6 +63,7 @@ class TechTip extends Model
             'deleted_at' => 'datetime:M d, Y',
             'sticky' => 'boolean',
             'public' => 'boolean',
+            'allow_comments' => 'boolean',
         ];
     }
 
@@ -71,6 +84,13 @@ class TechTip extends Model
     | Model Attributes
     |---------------------------------------------------------------------------
     */
+    public function views(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->TechTipViews->views,
+        );
+    }
+
     public function href(): Attribute
     {
         return Attribute::make(
@@ -85,37 +105,13 @@ class TechTip extends Model
                 ? route('publicTips.show', $this->slug)
                 : null,
         );
-
     }
 
-    protected function equipList(): Attribute
+    public function type(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->EquipmentType->pluck('equip_id')->toArray(),
+            get: fn () => $this->TechTipType->description,
         );
-    }
-
-    /**
-     * @depreciated
-     */
-    protected function getEquipListAttribute(): array
-    {
-        return $this->EquipmentType->pluck('equip_id')->toArray();
-    }
-
-    protected function fileList(): Attribute
-    {
-        return Attribute::make(
-            get: fn () => $this->FileUpload->pluck('file_id')->toArray(),
-        );
-    }
-
-    /**
-     * @depreciated
-     */
-    protected function getFileListAttribute(): array
-    {
-        return $this->FileUpload->pluck('file_id')->toArray();
     }
 
     /*
@@ -135,7 +131,7 @@ class TechTip extends Model
             ->withTrashed();
     }
 
-    public function EquipmentType(): BelongsToMany
+    public function Equipment(): BelongsToMany
     {
         return $this->belongsToMany(
             EquipmentType::class,
@@ -145,7 +141,7 @@ class TechTip extends Model
         )->withTimestamps();
     }
 
-    public function PublicEquipmentType(): BelongsToMany
+    public function PublicEquipment(): BelongsToMany
     {
         return $this->belongsToMany(
             EquipmentType::class,
@@ -155,7 +151,7 @@ class TechTip extends Model
         )->public()->withTimestamps();
     }
 
-    public function FileUpload(): BelongsToMany
+    public function Files(): BelongsToMany
     {
         return $this->belongsToMany(
             FileUpload::class,
@@ -170,7 +166,7 @@ class TechTip extends Model
         return $this->hasOne(TechTipType::class, 'tip_type_id', 'tip_type_id');
     }
 
-    public function TechTipComment(): HasMany
+    public function Comments(): HasMany
     {
         return $this->hasMany(TechTipComment::class, 'tip_id', 'tip_id');
     }
@@ -195,7 +191,7 @@ class TechTip extends Model
         )->withTimestamps();
     }
 
-    public function TechTipView(): HasOne
+    public function TechTipViews(): HasOne
     {
         return $this->hasOne(TechTipView::class, 'tip_id', 'tip_id');
     }
@@ -211,7 +207,7 @@ class TechTip extends Model
      */
     public function wasViewed(): void
     {
-        $this->TechTipView->increment('views');
+        $this->TechTipViews->increment('views');
     }
 
     /*
@@ -233,7 +229,7 @@ class TechTip extends Model
             'details' => $this->details,
             'public' => $this->public,
             'tip_type_id' => $this->tip_type_id,
-            'EquipmentType' => $this->EquipmentType,
+            'Equipment' => $this->Equipment,
         ];
     }
 
@@ -244,6 +240,6 @@ class TechTip extends Model
      */
     protected function makeAllSearchableUsing(Builder $query)
     {
-        return $query->with('EquipmentType');
+        return $query->with('Equipment');
     }
 }

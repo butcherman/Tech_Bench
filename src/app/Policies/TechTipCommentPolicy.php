@@ -44,7 +44,8 @@ class TechTipCommentPolicy
             return false;
         }
 
-        return $techTipComment->user_id === $user->user_id;
+        return $techTipComment->user_id === $user->user_id
+            && $this->checkPermission($user, 'Comment on Tech Tip');
     }
 
     /**

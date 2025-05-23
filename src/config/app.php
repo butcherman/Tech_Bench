@@ -25,7 +25,7 @@ return [
     |
     */
 
-    'company_name' => '',
+    'company_name' => 'Tech Bench',
 
     'logo' => '/images/TechBenchLogo.png',
 

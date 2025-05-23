@@ -58,12 +58,6 @@ class TechTipUnitTest extends TestCase
     {
         $this->assertArrayHasKey('href', $this->model->toArray());
         $this->assertArrayHasKey('public_href', $this->model->toArray());
-        $this->assertArrayHasKey('equip_list', $this->model->toArray());
-        $this->assertArrayHasKey('file_list', $this->model->toArray());
-
-        // Depreciated Attributes - To Be Removed
-        $this->assertArrayHasKey('equipList', $this->model->toArray());
-        $this->assertArrayHasKey('fileList', $this->model->toArray());
     }
 
     /*
@@ -91,7 +85,7 @@ class TechTipUnitTest extends TestCase
         );
     }
 
-    public function test_equipment_type_relationship(): void
+    public function test_equipment_relationship(): void
     {
         $equip = EquipmentType::factory()->create();
         TechTipEquipment::create([
@@ -101,11 +95,11 @@ class TechTipUnitTest extends TestCase
 
         $this->assertEquals(
             $equip->toArray(),
-            $this->model->EquipmentType[0]->toArray()
+            $this->model->Equipment[0]->toArray()
         );
     }
 
-    public function test_public_equipment_type_relationship(): void
+    public function test_public_equipment_relationship(): void
     {
         $equip1 = EquipmentType::factory()->create(['allow_public_tip' => false]);
         $equip2 = EquipmentType::factory()->create(['allow_public_tip' => true]);
@@ -121,7 +115,7 @@ class TechTipUnitTest extends TestCase
 
         $this->assertEquals(
             [$equip2->toArray()],
-            $this->model->PublicEquipmentType->toArray()
+            $this->model->PublicEquipment->toArray()
         );
     }
 
@@ -135,7 +129,7 @@ class TechTipUnitTest extends TestCase
 
         $this->assertEquals(
             $file->toArray(),
-            $this->model->FileUpload[0]->makeHidden('pivot')->toArray()
+            $this->model->Files[0]->makeHidden('pivot')->toArray()
         );
     }
 
@@ -156,7 +150,7 @@ class TechTipUnitTest extends TestCase
 
         $this->assertEquals(
             $comment->toArray(),
-            $this->model->TechTipComment[0]->toArray()
+            $this->model->Comments[0]->toArray()
         );
     }
 
@@ -200,7 +194,7 @@ class TechTipUnitTest extends TestCase
 
     public function test_tech_tip_view_relationship(): void
     {
-        $this->assertEquals(0, $this->model->TechTipView->views);
+        $this->assertEquals(0, $this->model->TechTipViews->views);
     }
 
     /*
@@ -212,6 +206,6 @@ class TechTipUnitTest extends TestCase
     {
         $this->model->wasViewed();
 
-        $this->assertEquals(1, $this->model->TechTipView->views);
+        $this->assertEquals(1, $this->model->TechTipViews->views);
     }
 }

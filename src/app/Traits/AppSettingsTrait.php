@@ -79,6 +79,8 @@ trait AppSettingsTrait
      */
     protected function cacheConfig(): void
     {
+        Artisan::call('cache:clear');
+
         if (App::environment('production')) {
             Artisan::call('config:cache');
             Log::debug('Caching new config');

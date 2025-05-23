@@ -191,10 +191,15 @@ class User extends Authenticatable
             ->first()
             ->setting_type_id;
 
-        return $this->UserSettings
+        $setting = $this->UserSettings
             ->where('setting_type_id', $settingTypeId)
-            ->first()
-            ->value;
+            ->first();
+
+        if (is_null($setting)) {
+            return false;
+        }
+
+        return $setting->value;
     }
 
     /**

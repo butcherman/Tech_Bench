@@ -17,6 +17,7 @@ const props = defineProps<{
     deleteMethod?: boolean;
     href?: string;
     icon?: string;
+    preserveScroll?: boolean;
     rejectText?: string;
     variant?: elementVariant;
 }>();
@@ -40,7 +41,9 @@ const handleClick = (event: MouseEvent): void => {
                 emit("accepted");
                 if (props.href) {
                     if (props.deleteMethod) {
-                        router.delete(props.href);
+                        router.delete(props.href, {
+                            preserveScroll: props.preserveScroll,
+                        });
                     } else {
                         handleLinkClick(event, props.href);
                     }
@@ -55,7 +58,11 @@ const handleClick = (event: MouseEvent): void => {
     }
 
     if (props.href) {
-        handleLinkClick(event, props.href);
+        handleLinkClick(
+            event,
+            props.href,
+            props.deleteMethod ? "delete" : "get"
+        );
     }
 };
 </script>

@@ -12,7 +12,7 @@ class HandleLockoutListener
      */
     public function handle(Lockout $event): void
     {
-        Log::stack(['daily', 'auth'])
+        Log::stack(['app', 'auth'])
             ->notice(
                 'Username '.$event->request->username.
                     ' has been locked out due to too many failed login attempts',

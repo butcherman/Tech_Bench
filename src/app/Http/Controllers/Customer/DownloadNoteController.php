@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Log;
 class DownloadNoteController extends Controller
 {
     /**
-     * Handle the incoming request.
+     * Download a Customer Note as a PDF File.
      */
     public function __invoke(Request $request, Customer $customer, CustomerNote $note): Response
     {

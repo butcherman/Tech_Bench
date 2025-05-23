@@ -19,11 +19,6 @@ import {
                 :key="cust.cust_id"
                 class="border-b"
             >
-                <!-- <td class="p-1 border-b">{{ cust.name }}</td>
-                <td class="p-1 border-b"></td>
-                <td class="p-1 border-b border-s">
-                    {{ cust.customer_site[0].city }}
-                </td> -->
                 <ResultWithoutSites v-if="cust.site_count === 1" :cust="cust" />
                 <ResultWithSites v-else :cust="cust" />
             </tr>

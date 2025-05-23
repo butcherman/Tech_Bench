@@ -18,7 +18,7 @@ class HandleLoginListener
             'ip_address' => request()->ip(),
         ]);
 
-        Log::stack(['daily', 'auth'])
+        Log::stack(['app', 'auth'])
             ->info('User '.$user->full_name.
                 ' successfully logged in from IP Address '.
                 request()->ip(), [

@@ -205,6 +205,15 @@ class UserUnitTest extends TestCase
         $this->assertTrue($this->model->checkUserSetting($settingName));
     }
 
+    public function test_check_user_setting_with_setting_missing(): void
+    {
+        $settingName = 'Receive Email Notifications';
+        DB::table('user_settings')
+            ->where('user_id', $this->model->user_id)->delete();
+
+        $this->assertFalse($this->model->checkUserSetting($settingName));
+    }
+
     public function test_get_new_expire_time(): void
     {
         // Test Immediate Expire

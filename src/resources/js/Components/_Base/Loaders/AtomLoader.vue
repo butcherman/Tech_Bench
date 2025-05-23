@@ -3,16 +3,22 @@
  * Note:  Atom Spinner code compliments of Epic Spinners
  * https://epic-spinners.epicmax.co/
  */
+defineProps<{
+    text?: string;
+}>();
 </script>
 
 <template>
-    <div class="atom-spinner">
-        <div class="spinner-inner">
-            <div class="spinner-line"></div>
-            <div class="spinner-line"></div>
-            <div class="spinner-line"></div>
-            <div class="spinner-circle">&#9679;</div>
+    <div>
+        <div class="atom-spinner mx-auto">
+            <div class="spinner-inner">
+                <div class="spinner-line"></div>
+                <div class="spinner-line"></div>
+                <div class="spinner-line"></div>
+                <div class="spinner-circle">&#9679;</div>
+            </div>
         </div>
+        <h5 v-if="text" class="text-center text-muted">{{ text }}</h5>
     </div>
 </template>
 

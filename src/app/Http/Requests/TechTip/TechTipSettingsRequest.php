@@ -23,6 +23,8 @@ class TechTipSettingsRequest extends FormRequest
         return [
             'allow_comments' => ['required', 'bool'],
             'allow_public' => ['required', 'bool'],
+            'allow_download' => ['required', 'bool'],
+            'public_link_text' => ['required', 'string'],
         ];
     }
 }

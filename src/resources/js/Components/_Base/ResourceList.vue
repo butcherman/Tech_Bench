@@ -89,7 +89,7 @@ const onRowClicked = (event: MouseEvent, item: T): void => {
             <li
                 v-for="(item, index) in currentChunk"
                 :key="index"
-                class="border-collapse"
+                class="border-collapse overflow-auto"
                 :class="[
                     {
                         border: !noBorder,
@@ -100,11 +100,15 @@ const onRowClicked = (event: MouseEvent, item: T): void => {
                 ]"
                 @click="onRowClicked($event, item)"
             >
-                <slot name="list-item" :item="item" :index="index">
-                    {{ labelField ? item[labelField] : item }}
-                </slot>
-                <div class="float-end">
-                    <slot name="actions" :item="item" />
+                <div class="flex">
+                    <div class="grow">
+                        <slot name="list-item" :item="item" :index="index">
+                            {{ labelField ? item[labelField] : item }}
+                        </slot>
+                    </div>
+                    <div>
+                        <slot name="actions" :item="item" />
+                    </div>
                 </div>
             </li>
         </ul>

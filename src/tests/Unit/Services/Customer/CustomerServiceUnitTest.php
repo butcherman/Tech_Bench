@@ -2,10 +2,12 @@
 
 namespace Tests\Unit\Services\Customer;
 
+use App\Events\Customer\CustomerSlugChangedEvent;
 use App\Exceptions\Database\RecordInUseException;
 use App\Models\Customer;
 use App\Models\CustomerSite;
 use App\Services\Customer\CustomerService;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
@@ -125,6 +127,8 @@ class CustomerServiceUnitTest extends TestCase
     */
     public function test_update_customer(): void
     {
+        Event::fake();
+
         $existing = Customer::factory()->create();
         $cust = Customer::factory()->make();
         $site = CustomerSite::factory()
@@ -147,10 +151,14 @@ class CustomerServiceUnitTest extends TestCase
             'dba_name' => $data['dba_name'],
             'primary_site_id' => $site->cust_site_id,
         ]);
+
+        Event::assertDispatched(CustomerSlugChangedEvent::class);
     }
 
     public function test_update_customer_duplicate_slug(): void
     {
+        Event::fake();
+
         $updating = Customer::factory()->create();
         $cust = Customer::factory()->make();
         $existing = Customer::factory()->createQuietly();
@@ -179,6 +187,8 @@ class CustomerServiceUnitTest extends TestCase
             'slug' => $slug,
             'primary_site_id' => $site->cust_site_id,
         ]);
+
+        Event::assertDispatched(CustomerSlugChangedEvent::class);
     }
 
     public function test_update_customer_without_modifying_slug(): void

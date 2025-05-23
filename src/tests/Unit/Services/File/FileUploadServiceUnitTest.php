@@ -3,15 +3,60 @@
 namespace Tests\Unit\Services\File;
 
 use App\Exceptions\Database\RecordInUseException;
-use App\Exceptions\File\FileMissingException;
 use App\Models\FileUpload;
 use App\Models\TechTipFile;
 use App\Services\File\FileUploadService;
-use Illuminate\Support\Facades\Storage;
+use Mockery\MockInterface;
 use Tests\TestCase;
 
 class FileUploadServiceUnitTest extends TestCase
 {
+    /*
+    |---------------------------------------------------------------------------
+    | moveUploadedFile()
+    |---------------------------------------------------------------------------
+    */
+    public function test_move_uploaded_file(): void
+    {
+        $upload = FileUpload::factory()->create([
+            'disk' => 'local',
+            'file_name' => 'test.txt',
+        ]);
+
+        /** @var FileUploadService */
+        $testObj = $this->partialMock(FileUploadService::class, function (MockInterface $mock) {
+            $mock->shouldReceive('moveDiskFile')->once();
+        });
+
+        $testObj->moveUploadedFile($upload, 'new_folder');
+
+        $this->assertDatabaseHas('file_uploads', [
+            'file_id' => $upload->file_id,
+            'folder' => 'new_folder',
+        ]);
+    }
+
+    public function test_move_uploaded_file_new_disk(): void
+    {
+        $upload = FileUpload::factory()->create([
+            'disk' => 'local',
+            'file_name' => 'test.txt',
+        ]);
+
+        /** @var FileUploadService */
+        $testObj = $this->partialMock(FileUploadService::class, function (MockInterface $mock) {
+            $mock->shouldReceive('moveDiskFile')->once();
+        });
+
+        $testObj->moveUploadedFile($upload, 'new_folder', 'tips');
+
+        $this->assertDatabaseHas('file_uploads', [
+            'file_id' => $upload->file_id,
+            'disk' => 'tips',
+            'folder' => 'new_folder',
+        ]);
+    }
+
     /*
     |---------------------------------------------------------------------------
     | deleteFileUpload()
@@ -19,17 +64,16 @@ class FileUploadServiceUnitTest extends TestCase
     */
     public function test_delete_file_upload(): void
     {
-        Storage::fake('local');
-
         $upload = FileUpload::factory()->create([
             'disk' => 'local',
             'file_name' => 'test.txt',
         ]);
 
-        Storage::disk('local')
-            ->put($upload->folder.DIRECTORY_SEPARATOR.'test.txt', 'This is a test file');
+        /** @var FileUploadService */
+        $testObj = $this->partialMock(FileUploadService::class, function (MockInterface $mock) {
+            $mock->shouldReceive('deleteDiskFile')->once();
+        });
 
-        $testObj = new FileUploadService;
         $res = $testObj->deleteFileUpload($upload);
 
         $this->assertTrue($res);
@@ -37,23 +81,20 @@ class FileUploadServiceUnitTest extends TestCase
         $this->assertDatabaseMissing('file_uploads', [
             'file_id' => $upload->file_id,
         ]);
-
-        Storage::disk('local')
-            ->assertMissing($upload->folder.DIRECTORY_SEPARATOR.'test.txt');
     }
 
     public function test_delete_file_upload_missing_file(): void
     {
-        Storage::fake('local');
-
         $upload = FileUpload::factory()->create([
             'disk' => 'local',
             'file_name' => 'test.txt',
         ]);
 
-        $this->expectException(FileMissingException::class);
+        /** @var FileUploadService */
+        $testObj = $this->partialMock(FileUploadService::class, function (MockInterface $mock) {
+            $mock->shouldReceive('deleteDiskFile')->once();
+        });
 
-        $testObj = new FileUploadService;
         $res = $testObj->deleteFileUpload($upload);
 
         $this->assertTrue($res);
@@ -61,24 +102,16 @@ class FileUploadServiceUnitTest extends TestCase
         $this->assertDatabaseMissing('file_uploads', [
             'file_id' => $upload->file_id,
         ]);
-
-        Storage::disk('local')
-            ->assertMissing($upload->folder.DIRECTORY_SEPARATOR.'test.txt');
     }
 
     public function test_delete_file_upload_still_in_use(): void
     {
-        Storage::fake('local');
-
         $upload = FileUpload::factory()->create([
             'disk' => 'local',
             'file_name' => 'test.txt',
         ]);
 
         TechTipFile::factory()->create(['file_id' => $upload->file_id]);
-
-        Storage::disk('local')
-            ->put($upload->folder.DIRECTORY_SEPARATOR.'test.txt', 'This is a test file');
 
         $this->expectException(RecordInUseException::class);
 
@@ -87,12 +120,9 @@ class FileUploadServiceUnitTest extends TestCase
 
         $this->assertTrue($res);
 
-        $this->assertDatabaseMissing('file_uploads', [
+        $this->assertDatabaseHas('file_uploads', [
             'file_id' => $upload->file_id,
         ]);
-
-        Storage::disk('local')
-            ->assertMissing($upload->folder.DIRECTORY_SEPARATOR.'test.txt');
     }
 
     /*
@@ -102,8 +132,6 @@ class FileUploadServiceUnitTest extends TestCase
     */
     public function test_delete_file_by_id(): void
     {
-        Storage::fake('local');
-
         $upload = FileUpload::factory()->create([
             'disk' => 'local',
             'file_name' => 'test.txt',
@@ -113,26 +141,19 @@ class FileUploadServiceUnitTest extends TestCase
             'file_name' => 'test2.txt',
         ]);
 
-        Storage::disk('local')
-            ->put($upload->folder.DIRECTORY_SEPARATOR.'test.txt', 'This is a test file');
+        /** @var FileUploadService */
+        $testObj = $this->partialMock(FileUploadService::class, function (MockInterface $mock) {
+            $mock->shouldReceive('deleteDiskFile')->twice();
+        });
 
-        Storage::disk('local')
-            ->put($upload->folder.DIRECTORY_SEPARATOR.'test2.txt', 'This is a test file');
-
-        $testObj = new FileUploadService;
         $testObj->deleteFileByID([$upload->file_id, $upload2->file_id]);
 
         $this->assertDatabaseMissing('file_uploads', [
             'file_id' => $upload->file_id,
         ]);
+
         $this->assertDatabaseMissing('file_uploads', [
             'file_id' => $upload2->file_id,
         ]);
-
-        Storage::disk('local')
-            ->assertMissing($upload->folder.DIRECTORY_SEPARATOR.'test.txt');
-
-        Storage::disk('local')
-            ->assertMissing($upload->folder.DIRECTORY_SEPARATOR.'test2.txt');
     }
 }

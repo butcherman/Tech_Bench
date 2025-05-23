@@ -1,6 +1,6 @@
 import { reactive, ref } from "vue";
 import { dataPost, isLoading } from "../axiosWrapper.module";
-import { AxiosResponse } from "axios";
+import type { AxiosResponse } from "axios";
 
 interface searchParams {
     searchFor: string;

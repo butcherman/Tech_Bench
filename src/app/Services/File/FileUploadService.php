@@ -9,6 +9,24 @@ use Illuminate\Database\QueryException;
 class FileUploadService extends FileStorageService
 {
     /**
+     * Move a file from one folder to another, and update the new folder in the
+     * database.
+     */
+    public function moveUploadedFile(FileUpload $file, string $newFolder, ?string $newDisk = null): void
+    {
+        $currentPath = $file->folder.DIRECTORY_SEPARATOR.$file->file_name;
+        $newPath = $newFolder.DIRECTORY_SEPARATOR.$file->file_name;
+
+        $this->moveDiskFile($file->disk, $currentPath, $newPath, $newDisk);
+
+        $file->folder = $newFolder;
+        if ($newDisk) {
+            $file->disk = $newDisk;
+        }
+        $file->save();
+    }
+
+    /**
      * Try to delete a file upload.  This process will fail if the upload is
      * currently a foreign key somewhere else in the database.
      */

@@ -140,7 +140,7 @@ return [
         'key' => env('MEILISEARCH_KEY', 'TechBenchMeilisearchMasterKey'),
         'index-settings' => [
             TechTip::class => [
-                'filterableAttributes' => ['EquipmentType', 'tip_type_id', 'public'],
+                'filterableAttributes' => ['Equipment', 'tip_type_id', 'public'],
                 'sortableAttributes' => ['sticky'],
                 'rankingRules' => [
                     'sort',
@@ -151,9 +151,6 @@ return [
                     'exactness',
                 ],
             ],
-            // 'users' => [
-            //     'filterableAttributes'=> ['id', 'name', 'email'],
-            // ],
         ],
     ],
 
