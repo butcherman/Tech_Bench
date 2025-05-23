@@ -10,7 +10,7 @@ class TechTipFileService extends FileUploadService
     /**
      * Move any files that are not in the proper folder for the Tech Tip.
      */
-    public function checkTipFileFolder(TechTip $techTip)
+    public function checkTipFileFolder(TechTip $techTip): void
     {
         $fileList = $techTip->Files;
 

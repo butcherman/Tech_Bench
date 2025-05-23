@@ -2,38 +2,40 @@
 
 namespace App\Services\FileLink;
 
+use App\Jobs\FileLink\ProcessLinkFilesJob;
 use App\Models\FileLink;
+use App\Models\FileLinkTimeline;
+use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 class FileLinkService
 {
     /**
      * Create a new File Link for User
      */
-    // public function createFileLink(
-    //     Collection $requestData,
-    //     User $user,
-    //     array $fileList
-    // ): FileLink {
-    //     $newLink = new FileLink($requestData->all());
-    //     $newLink->link_hash = Str::uuid()->toString();
+    public function createFileLink(Collection $requestData, User $user, array $fileList): FileLink
+    {
+        $newLink = new FileLink($requestData->all());
+        $newLink->link_hash = Str::uuid()->toString();
 
-    //     // Attach link to user
-    //     $user->FileLinks()->save($newLink);
+        // Attach link to user
+        $user->FileLinks()->save($newLink);
 
-    //     // Save any uploaded files
-    //     $timeline = $this->createTimelineEntry(
-    //         $newLink,
-    //         $user->user_id
-    //     );
+        // Save any uploaded files
+        $timeline = $this->createTimelineEntry($newLink, $user->user_id);
 
-    //     if (count($fileList)) {
-    //         $this->processLinkFiles($newLink, $timeline, false, $fileList);
-    //         MoveTmpFilesJob::dispatch($fileList, $newLink->link_id);
-    //     }
+        if (count($fileList)) {
+            $newLink->Files()->attach($fileList, [
+                'timeline_id' => $timeline->timeline_id,
+                'upload' => false,
+            ]);
+            ProcessLinkFilesJob::dispatch($newLink);
+        }
 
-    //     return $newLink;
-    // }
+        return $newLink;
+    }
 
     /**
      * Update an existing File Link
@@ -129,14 +131,14 @@ class FileLinkService
     /**
      * Create a Timeline Entry to link files and notes to.
      */
-    // protected function createTimelineEntry(FileLink $link, string|int $addedBy): FileLinkTimeline
-    // {
-    //     $timeline = new FileLinkTimeline([
-    //         'added_by' => $addedBy,
-    //     ]);
+    protected function createTimelineEntry(FileLink $link, string|int $addedBy): FileLinkTimeline
+    {
+        $timeline = new FileLinkTimeline([
+            'added_by' => $addedBy,
+        ]);
 
-    //     $link->Timeline()->save($timeline);
+        $link->Timeline()->save($timeline);
 
-    //     return $timeline;
-    // }
+        return $timeline;
+    }
 }

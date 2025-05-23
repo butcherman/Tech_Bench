@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\AppSettings;
 use App\Models\FileLink;
 use App\Models\FileLinkFile;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Database\Seeder;
@@ -46,5 +47,31 @@ class FileLinkSeeder extends Seeder
                 ]);
             }
         });
+
+        /**
+         * Create a random number of File Links for 10 random users
+         */
+        $userList = User::inRandomOrder()->limit(10)->get();
+
+        foreach ($userList as $user) {
+            $personalList = FileLink::factory()
+                ->count(rand(1, 10))
+                ->state(
+                    new Sequence(fn() => [
+                        'expire' => Carbon::now()->addDays(rand(-15, 90))
+                    ])
+                )
+                ->create(['user_id' => $user->user_id]);
+
+            // Add some files and history
+            $personalList->each(function ($link) {
+                if (rand(0, 1)) {
+                    FileLinkFile::factory()->create([
+                        'link_id' => $link->link_id,
+                        'upload' => false,
+                    ]);
+                }
+            });
+        }
     }
 }
