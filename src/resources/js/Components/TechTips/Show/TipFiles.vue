@@ -8,7 +8,9 @@ defineProps<{
 }>();
 
 const onRowClick = (event: MouseEvent, row: fileUpload) => {
-    window.open(route("download", [row.file_id, row.file_name]));
+    if (event) {
+        window.open(route("download", [row.file_id, row.file_name]));
+    }
 };
 </script>
 
