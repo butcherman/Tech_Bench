@@ -356,6 +356,25 @@ class FileLinkTest extends TestCase
             );
     }
 
+    public function test_show_as_admin(): void
+    {
+        config(['file-link.feature_enabled' => true]);
+
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
+        $link = FileLink::factory()->createQuietly();
+
+        $response = $this->actingAs($user)
+            ->get(route('links.show', $link->link_id));
+
+        $response->assertSuccessful()
+            ->assertInertia(
+                fn(Assert $page) => $page
+                    ->component('FileLink/Show')
+                    ->has('link')
+            );
+    }
+
     /*
     |---------------------------------------------------------------------------
     | Edit Method

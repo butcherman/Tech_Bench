@@ -115,6 +115,7 @@ class FileLink extends Model
                 'timeline_id',
                 'upload',
                 'link_file_id',
+                'created_at'
             ])
             ->withTimestamps();
     }
@@ -132,6 +133,7 @@ class FileLink extends Model
                 'timeline_id',
                 'upload',
                 'link_file_id',
+                'created_at'
             ])
             ->withTimestamps();
     }

@@ -2,11 +2,23 @@
 
 namespace App\Services\FileLink;
 
+use App\Events\File\FileDataDeletedEvent;
 use App\Models\FileLink;
+use App\Models\FileUpload;
 use App\Services\File\FileUploadService;
 
 class FileLinkFileService extends FileUploadService
 {
+    /**
+     * Delete a file attached to a file link
+     */
+    public function destroyFileLinkFile(FileLink $link, FileUpload $file): void
+    {
+        $link->Files()->detach($file);
+
+        FileDataDeletedEvent::dispatch($file->file_id);
+    }
+
     /**
      * Move any files that are in the tmp folder to the proper folder for link.
      */

@@ -1,17 +1,20 @@
 <script setup lang="ts">
 import AppLayout from "@/Layouts/App/AppLayout.vue";
+import AtomLoader from "@/Components/_Base/Loaders/AtomLoader.vue";
 import Card from "@/Components/_Base/Card.vue";
 import LinkActions from "@/Components/FileLink/LinkActions.vue";
 import LinkDetails from "@/Components/FileLink/LinkDetails.vue";
+import LinkFileList from "@/Components/FileLink/LinkFileList.vue";
 import LinkTimeline from "@/Components/FileLink/LinkTimeline.vue";
+import RefreshButton from "@/Components/_Base/Buttons/RefreshButton.vue";
+import { Deferred } from "@inertiajs/vue3";
 import { Message } from "primevue";
-import { ref, reactive, onMounted } from "vue";
 
-const props = defineProps<{
+defineProps<{
     link: fileLink;
     timeline?: fileLinkTimeline[];
-    uploads?: fileUpload[];
-    downloads?: fileUpload[];
+    uploads?: fileLinkFile[];
+    downloads?: fileLinkFile[];
 }>();
 </script>
 
@@ -43,7 +46,45 @@ export default { layout: AppLayout };
             </Card>
         </div>
         <LinkTimeline :timeline="timeline" />
-        {{ uploads }}
-        {{ downloads }}
+        <Card>
+            <template #title>
+                <RefreshButton :only="['timeline', 'uploads']" />
+                Uploaded Files
+            </template>
+            <Deferred data="uploads">
+                <template #fallback>
+                    <div class="flex justify-center">
+                        <AtomLoader />
+                    </div>
+                </template>
+                <template v-if="uploads">
+                    <LinkFileList
+                        :link="link"
+                        :file-list="uploads"
+                        :timeline="timeline"
+                    />
+                </template>
+            </Deferred>
+        </Card>
+        <Card>
+            <template #title>
+                <RefreshButton :only="['timeline', 'downloads']" />
+                Downloadable Files
+            </template>
+            <Deferred data="downloads">
+                <template #fallback>
+                    <div class="flex justify-center">
+                        <AtomLoader />
+                    </div>
+                </template>
+                <template v-if="downloads">
+                    <LinkFileList
+                        :link="link"
+                        :file-list="downloads"
+                        :timeline="timeline"
+                    />
+                </template>
+            </Deferred>
+        </Card>
     </div>
 </template>
