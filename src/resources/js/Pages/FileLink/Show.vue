@@ -10,6 +10,8 @@ import { ref, reactive, onMounted } from "vue";
 const props = defineProps<{
     link: fileLink;
     timeline?: fileLinkTimeline[];
+    uploads?: fileUpload[];
+    downloads?: fileUpload[];
 }>();
 </script>
 
@@ -41,5 +43,7 @@ export default { layout: AppLayout };
             </Card>
         </div>
         <LinkTimeline :timeline="timeline" />
+        {{ uploads }}
+        {{ downloads }}
     </div>
 </template>

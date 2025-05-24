@@ -85,6 +85,8 @@ class FileLinkController extends FileUploadController
              * Deferred Props
              */
             'timeline' => Inertia::defer(fn() => $link->Timeline),
+            'uploads' => Inertia::defer(fn() => $link->Uploads),
+            'downloads' => Inertia::defer(fn() => $link->Downloads),
         ]);
     }
 

@@ -92,7 +92,7 @@ class FileLink extends Model
     {
         return $this->belongsToMany(
             FileUpload::class,
-            'file_link_files',
+            FileLinkFile::class,
             'link_id',
             'file_id',
         )->withPivot([
@@ -106,11 +106,28 @@ class FileLink extends Model
     {
         return $this->belongsToMany(
             FileUpload::class,
-            'file_link_files',
+            FileLinkFile::class,
             'link_id',
             'file_id',
         )
             ->wherePivot('upload', true)
+            ->withPivot([
+                'timeline_id',
+                'upload',
+                'link_file_id',
+            ])
+            ->withTimestamps();
+    }
+
+    public function Downloads(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            FileUpload::class,
+            FileLinkFile::class,
+            'link_id',
+            'file_id',
+        )
+            ->wherePivot('upload', false)
             ->withPivot([
                 'timeline_id',
                 'upload',
