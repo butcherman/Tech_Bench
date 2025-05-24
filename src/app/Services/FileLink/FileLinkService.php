@@ -50,12 +50,12 @@ class FileLinkService
     /**
      * Extend the Expiration Date of a File Link.
      */
-    // public function extendFileLink(FileLink $link): void
-    // {
-    //     $link->update([
-    //         'expire' => $link->expire->addDays(30),
-    //     ]);
-    // }
+    public function extendFileLink(FileLink $link): void
+    {
+        $link->update([
+            'expire' => $link->expire->addDays(30),
+        ]);
+    }
 
     /**
      * Expire a File Link - set expiration to yesterday.

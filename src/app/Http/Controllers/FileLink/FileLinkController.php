@@ -39,7 +39,7 @@ class FileLinkController extends FileUploadController
         $this->authorize('create', FileLink::class);
 
         return Inertia::render('FileLink/Create', [
-            'default-expire' => Carbon::now()
+            'default-expire' => fn() =>  Carbon::now()
                 ->addDays(config('file-link.default_life_link'))
                 ->format('Y-m-d'),
         ]);
@@ -72,13 +72,15 @@ class FileLinkController extends FileUploadController
     }
 
     /**
-     *
+     * Show details for a File Link
      */
-    public function show(string $id)
+    public function show(FileLink $link): Response
     {
-        //
-        // return 'show';
-        return Inertia::render('FileLink/Show');
+        $this->authorize('view', $link);
+
+        return Inertia::render('FileLink/Show', [
+            'link' => fn() => $link,
+        ]);
     }
 
     /**

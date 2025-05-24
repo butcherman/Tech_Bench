@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Events\File\FileDataDeletedEvent;
 use App\Models\FileLink;
 use Illuminate\Support\Facades\Log;
 
@@ -15,7 +16,7 @@ class FileLinkObserver extends Observer
         // dispatch(new HandleLinkFilesJob($fileLink));
 
         Log::info(
-            'New File Link created by '.$this->user,
+            'New File Link created by ' . $this->user,
             $fileLink->toArray()
         );
     }
@@ -26,7 +27,7 @@ class FileLinkObserver extends Observer
     public function updated(FileLink $fileLink): void
     {
         Log::info(
-            'File Link Information updated by '.$this->user,
+            'File Link Information updated by ' . $this->user,
             $fileLink->toArray()
         );
     }
@@ -36,11 +37,11 @@ class FileLinkObserver extends Observer
      */
     public function deleting(FileLink $fileLink): void
     {
-        $fileList = $fileLink->FileUpload->pluck('file_id')->toArray();
+        $fileList = $fileLink->Files;
 
-        // foreach ($fileList as $fileId) {
-        //     event(new FileDataDeletedEvent($fileId));
-        // }
+        foreach ($fileList as $file) {
+            FileDataDeletedEvent::dispatch($file->file_id);
+        }
     }
 
     /**
@@ -49,7 +50,7 @@ class FileLinkObserver extends Observer
     public function deleted(FileLink $fileLink): void
     {
         Log::info(
-            'File Link deleted by '.$this->user,
+            'File Link deleted by ' . $this->user,
             $fileLink->toArray()
         );
     }

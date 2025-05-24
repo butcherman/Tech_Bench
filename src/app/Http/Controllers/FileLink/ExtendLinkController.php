@@ -10,19 +10,19 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
-class ExpireLinkController extends Controller
+class ExtendLinkController extends Controller
 {
     /**
-     * Set the Link's Expire Date to yesterday.
+     * Extend the links expire date 30 days.
      */
     public function __invoke(FileLinkService $svc, FileLink $link): RedirectResponse
     {
         $this->authorize('update', $link);
 
-        $svc->expireFileLink($link);
+        $svc->extendFileLink($link);
 
-        Log::info('A File Link was manually expired', $link->toArray());
+        Log::info('A File Link was manually extended 30 days', $link->toArray());
 
-        return back()->with('success', 'Link Expired');
+        return back()->with('success', 'Link Extended');
     }
 }

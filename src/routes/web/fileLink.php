@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\FileLink\ExpireLinkController;
+use App\Http\Controllers\FileLink\ExtendLinkController;
 use App\Http\Controllers\FileLink\FileLinkController;
 use App\Http\Controllers\FileLink\FileLinkSettingsController;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
@@ -21,6 +22,8 @@ Route::middleware('auth.secure')->group(function () {
     */
     Route::get('links/{link}/expire', ExpireLinkController::class)
         ->name('links.expire');
+    Route::get('links/{link}/extend', ExtendLinkController::class)
+        ->name('links.extend');
 
     Route::resource('links', FileLinkController::class)
         ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
@@ -31,7 +34,7 @@ Route::middleware('auth.secure')->group(function () {
         });
 });
 
-Route::get('guest-link', function () {
+Route::get('guest-link/{link}', function () {
     return 'guest link';
 })->name('guest-link.show');
 
