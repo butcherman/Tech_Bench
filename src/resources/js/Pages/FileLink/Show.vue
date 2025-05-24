@@ -3,11 +3,13 @@ import AppLayout from "@/Layouts/App/AppLayout.vue";
 import Card from "@/Components/_Base/Card.vue";
 import LinkActions from "@/Components/FileLink/LinkActions.vue";
 import LinkDetails from "@/Components/FileLink/LinkDetails.vue";
-import { ref, reactive, onMounted } from "vue";
+import LinkTimeline from "@/Components/FileLink/LinkTimeline.vue";
 import { Message } from "primevue";
+import { ref, reactive, onMounted } from "vue";
 
 const props = defineProps<{
     link: fileLink;
+    timeline?: fileLinkTimeline[];
 }>();
 </script>
 
@@ -16,7 +18,7 @@ export default { layout: AppLayout };
 </script>
 
 <template>
-    <div>
+    <div class="flex flex-col gap-3">
         <Message
             v-if="link.is_expired"
             class="my-3"
@@ -38,5 +40,6 @@ export default { layout: AppLayout };
                 <LinkActions :link="link" />
             </Card>
         </div>
+        <LinkTimeline :timeline="timeline" />
     </div>
 </template>

@@ -80,6 +80,11 @@ class FileLinkController extends FileUploadController
 
         return Inertia::render('FileLink/Show', [
             'link' => fn() => $link,
+
+            /**
+             * Deferred Props
+             */
+            'timeline' => Inertia::defer(fn() => $link->Timeline),
         ]);
     }
 

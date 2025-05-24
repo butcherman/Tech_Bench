@@ -10,7 +10,7 @@ import verifyModal from "@/Modules/verifyModal";
 import { router, Deferred } from "@inertiajs/vue3";
 
 defineProps<{
-    linkList: fileLink[];
+    linkList?: fileLink[];
 }>();
 
 /**

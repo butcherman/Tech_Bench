@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Prunable;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -99,6 +100,23 @@ class FileLink extends Model
             'upload',
             'link_file_id',
         ])->withTimestamps();
+    }
+
+    public function Uploads(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            FileUpload::class,
+            'file_link_files',
+            'link_id',
+            'file_id',
+        )
+            ->wherePivot('upload', true)
+            ->withPivot([
+                'timeline_id',
+                'upload',
+                'link_file_id',
+            ])
+            ->withTimestamps();
     }
 
     public function User(): HasOne
