@@ -4,6 +4,7 @@ namespace App\Services\FileLink;
 
 use App\Jobs\FileLink\ProcessLinkFilesJob;
 use App\Models\FileLink;
+use App\Models\FileLinkNote;
 use App\Models\FileLinkTimeline;
 use App\Models\User;
 use Carbon\Carbon;
@@ -25,6 +26,9 @@ class FileLinkService
 
         // Save any uploaded files
         $timeline = $this->createTimelineEntry($newLink, $user->user_id);
+        $timeline->Notes()->save(new FileLinkNote([
+            'note' => 'File Link Created'
+        ]));
 
         if (count($fileList)) {
             $newLink->Files()->attach($fileList, [
@@ -40,12 +44,20 @@ class FileLinkService
     /**
      * Update an existing File Link
      */
-    // public function updateFileLink(Collection $requestData, FileLink $link): FileLink
-    // {
-    //     $link->update($requestData->all());
+    public function updateFileLink(Collection $requestData, FileLink $link): FileLink
+    {
+        $link->update($requestData->all());
 
-    //     return $link;
-    // }
+        return $link->fresh();
+    }
+
+    /**
+     * Destroy a File Link
+     */
+    public function destroyFileLink(FileLink $link): void
+    {
+        $link->delete();
+    }
 
     /**
      * Extend the Expiration Date of a File Link.
@@ -65,14 +77,6 @@ class FileLinkService
         $link->update([
             'expire' => Carbon::yesterday(),
         ]);
-    }
-
-    /**
-     * Destroy a File Link
-     */
-    public function destroyFileLink(FileLink $link): void
-    {
-        $link->delete();
     }
 
     /**

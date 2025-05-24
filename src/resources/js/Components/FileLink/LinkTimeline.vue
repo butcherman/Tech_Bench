@@ -48,7 +48,7 @@ const shrinkTooltip = computed<string>(() =>
                 </template>
                 <template v-if="timeline?.length">
                     <ResourceList :list="timeline">
-                        <template #list-item="{ item }">
+                        <template #list-item="{ item, index }">
                             <div>
                                 <strong>Date:</strong> {{ item.created_at }}
                             </div>
@@ -59,7 +59,7 @@ const shrinkTooltip = computed<string>(() =>
                                 class="px-4 py-2 border border-slate-300 rounded-lg"
                             >
                                 <li
-                                    v-if="!item.files.length"
+                                    v-if="!item.files.length && !item.notes"
                                     class="flex justify-evenly"
                                 >
                                     <fa-icon

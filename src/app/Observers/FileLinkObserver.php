@@ -13,8 +13,6 @@ class FileLinkObserver extends Observer
      */
     public function created(FileLink $fileLink): void
     {
-        // dispatch(new HandleLinkFilesJob($fileLink));
-
         Log::info(
             'New File Link created by ' . $this->user,
             $fileLink->toArray()

@@ -110,7 +110,7 @@ class FileLinkController extends FileUploadController
     }
 
     /**
-     *
+     * Delete a file link and all attached files.
      */
     public function destroy(FileLink $link): RedirectResponse
     {

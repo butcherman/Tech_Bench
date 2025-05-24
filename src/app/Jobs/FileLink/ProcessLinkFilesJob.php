@@ -27,5 +27,6 @@ class ProcessLinkFilesJob implements ShouldQueue
             . $this->link->link_id);
 
         $svc->checkLinkFileFolder($this->link);
+        $svc->checkLinkFilePermission($this->link);
     }
 }

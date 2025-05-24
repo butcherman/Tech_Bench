@@ -20,4 +20,19 @@ class FileLinkFileService extends FileUploadService
             }
         }
     }
+
+    /**
+     * Determine if the files should be listed as public or private
+     */
+    public function checkLinkFilePermission(FileLink $link): void
+    {
+        $fileList = $link->Files;
+
+        foreach ($fileList as $file) {
+            if (!$file->pivot->upload) {
+                $file->public = true;
+                $file->save();
+            }
+        }
+    }
 }
