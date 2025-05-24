@@ -28,17 +28,31 @@ class CustomerEquipmentUnitTest extends TestCase
         $this->model->Sites()->sync([$this->customer->primary_site_id]);
     }
 
-    /**
-     * Model Attributes
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Route Key Binding
+    |---------------------------------------------------------------------------
+    */
+    public function test_get_route_key_name(): void
+    {
+        $this->assertEquals('cust_equip_id', $this->model->getRouteKeyName());
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | Model Attributes
+    |---------------------------------------------------------------------------
+    */
     public function test_model_attributes(): void
     {
         $this->assertArrayHasKey('equip_name', $this->model->toArray());
     }
 
-    /**
-     * Model Relationships
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Model Relationships
+    |---------------------------------------------------------------------------
+    */
     public function test_equipment_type_relationship(): void
     {
         $data = EquipmentType::where('equip_id', $this->model->equip_id)
@@ -111,9 +125,11 @@ class CustomerEquipmentUnitTest extends TestCase
         );
     }
 
-    /**
-     * Prunable Models
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Prunable Models
+    |---------------------------------------------------------------------------
+    */
     public function test_prunable(): void
     {
         $models = CustomerEquipment::factory()
@@ -178,5 +194,36 @@ class CustomerEquipmentUnitTest extends TestCase
             ->count();
 
         $this->assertEquals($totalContacts, 6);
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | Additional Methods
+    |---------------------------------------------------------------------------
+    */
+    public function test_get_notes(): void
+    {
+        CustomerNote::factory()
+            ->count(2)
+            ->create([
+                'cust_id' => $this->model->cust_id,
+                'cust_equip_id' => $this->model->cust_equip_id,
+            ]);
+
+        CustomerNote::factory()
+            ->count(5)
+            ->create(['cust_id' => $this->model->cust_id]);
+
+        $testSite = CustomerSite::factory()
+            ->create(['cust_id' => $this->model->cust_id]);
+
+        $ignoredNote = CustomerNote::factory()
+            ->create(['cust_id' => $this->model->cust_id]);
+
+        $testSite->SiteNote()->attach($ignoredNote);
+
+        $notes = $this->model->getNotes();
+
+        $this->assertCount(7, $notes);
     }
 }
