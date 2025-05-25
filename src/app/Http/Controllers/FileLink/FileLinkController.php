@@ -40,7 +40,7 @@ class FileLinkController extends FileUploadController
 
         return Inertia::render('FileLink/Create', [
             'default-expire' => fn() =>  Carbon::now()
-                ->addDays(config('file-link.default_life_link'))
+                ->addDays(config('file-link.default_link_life'))
                 ->format('Y-m-d'),
         ]);
     }
@@ -91,22 +91,29 @@ class FileLinkController extends FileUploadController
     }
 
     /**
-     *
+     * Edit the details for a File Link
      */
-    public function edit(string $id)
+    public function edit(FileLink $link): Response
     {
-        //
-        // return 'edit';
-        return Inertia::render('FileLink/Edit');
+        $this->authorize('update', $link);
+
+        return Inertia::render('FileLink/Edit', [
+            'link' => fn() => $link->mergeCasts(['expire' => 'datetime:Y-m-d']),
+        ]);
     }
 
     /**
-     *
+     * Update the details of a File Link
      */
-    public function update(Request $request, string $id)
+    public function update(FileLinkRequest $request, FileLink $link): RedirectResponse
     {
         //
-        return 'update';
+        // return 'update';
+
+        $this->svc->updateFileLink($request->safe()->collect(), $link);
+
+        return redirect(route('links.show', $link->link_id))
+            ->with('success', 'Link Details Updated');
     }
 
     /**

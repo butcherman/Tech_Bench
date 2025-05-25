@@ -56,7 +56,7 @@ const showFileDetails = (file: fileLinkFile) => {
 
 <template>
     <div>
-        <ResourceList :list="fileList" compact hover-row>
+        <ResourceList :list="fileList" empty-text="No Files" compact hover-row>
             <template #list-item="{ item }">
                 <a :href="item.href" class="block w-full ps-3">
                     {{ item.file_name }}

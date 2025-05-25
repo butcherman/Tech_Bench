@@ -48,7 +48,7 @@ const shrinkTooltip = computed<string>(() =>
                 </template>
                 <template v-if="timeline?.length">
                     <ResourceList :list="timeline">
-                        <template #list-item="{ item, index }">
+                        <template #list-item="{ item }">
                             <div>
                                 <strong>Date:</strong> {{ item.created_at }}
                             </div>
@@ -81,7 +81,7 @@ const shrinkTooltip = computed<string>(() =>
                                 </li>
                                 <li v-if="item.notes">
                                     <strong>Note:</strong>
-                                    {{ item.notes }}
+                                    {{ item.notes.note }}
                                 </li>
                             </ul>
                         </template>
