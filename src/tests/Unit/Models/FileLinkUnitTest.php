@@ -3,6 +3,7 @@
 namespace Tests\Unit\Models;
 
 use App\Exceptions\FileLink\FileLinkExpiredException;
+use App\Models\Customer;
 use App\Models\FileLink;
 use App\Models\FileLinkFile;
 use App\Models\FileLinkTimeline;
@@ -98,6 +99,19 @@ class FileLinkUnitTest extends TestCase
         $data = FileLinkTimeline::where('link_id', $this->model->link_id)->get();
 
         $this->assertEquals($data->toArray(), $this->model->Timeline->toArray());
+    }
+
+    public function test_customer_relationship(): void
+    {
+        $customer = Customer::factory()->create();
+        $this->model->cust_id = $customer->cust_id;
+        $this->model->save();
+        $this->model->fresh();
+
+        $this->assertEquals(
+            $customer->toArray(),
+            $this->model->Customer->toArray()
+        );
     }
 
     /*

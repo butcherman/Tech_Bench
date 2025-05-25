@@ -23,6 +23,8 @@ class FileLinkFileController extends FileUploadController
      */
     public function store(Request $request, FileLink $link): Response
     {
+        $this->authorize('update', $link);
+
         $this->setFileData(DiskEnum::links, $link->link_id);
         $savedFile = $this->getChunk($request->file('file'), $request);
 

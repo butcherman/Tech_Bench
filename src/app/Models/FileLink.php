@@ -150,9 +150,9 @@ class FileLink extends Model
         return $this->hasMany(FileLinkTimeline::class, 'link_id', 'link_id');
     }
 
-    public function Customer(): BelongsTo
+    public function Customer(): HasOne
     {
-        return $this->belongsTo(Customer::class, 'cust_id', 'cust_id');
+        return $this->hasOne(Customer::class, 'cust_id', 'cust_id');
     }
 
     /*

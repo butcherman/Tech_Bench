@@ -43,8 +43,10 @@ class FileLinkFileService extends FileUploadService
         $customer = Customer::find($requestData->get('cust_id'));
 
         // Assign the customer to the link to make future moves faster
-        if ($link->cust_id !== $customer->cust_id) {
-            $link->Customer->attach($customer);
+        $notProperCustomer = is_null($link->cust_id) || $link->cust_id !== $customer->cust_id;
+        if ($notProperCustomer) {
+            $link->cust_id = $customer->cust_id;
+            $link->save();
         }
 
         $fileObj = new CustomerFileService;

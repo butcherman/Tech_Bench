@@ -189,8 +189,16 @@ class UserUnitTest extends TestCase
             ->create(['user_id' => $this->model->user_id]);
 
         $this->assertEquals(
-            $linkList->toArray(),
-            $this->model->FileLinks->toArray()
+            $linkList->makeHidden([
+                'email_on_visit',
+                'link_hash',
+                'cust_id'
+            ])->toArray(),
+            $this->model->FileLinks->makeHidden([
+                'email_on_visit',
+                'link_hash',
+                'cust_id'
+            ])->toArray()
         );
     }
 
