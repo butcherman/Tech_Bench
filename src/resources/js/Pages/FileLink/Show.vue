@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import AddButton from "@/Components/_Base/Buttons/AddButton.vue";
+import AddFileModal from "@/Components/FileLink/AddFileModal.vue";
 import AppLayout from "@/Layouts/App/AppLayout.vue";
 import AtomLoader from "@/Components/_Base/Loaders/AtomLoader.vue";
 import Card from "@/Components/_Base/Card.vue";
@@ -20,6 +22,7 @@ defineProps<{
 }>();
 
 const moveModal = useTemplateRef("move-file-modal");
+const addModal = useTemplateRef("add-file-modal");
 </script>
 
 <script lang="ts">
@@ -77,6 +80,14 @@ export default { layout: AppLayout };
                 <RefreshButton :only="['timeline', 'downloads']" />
                 Downloadable Files
             </template>
+            <template #append-title>
+                <AddButton
+                    size="small"
+                    text="Add File"
+                    pill
+                    @click="addModal?.show()"
+                />
+            </template>
             <Deferred data="downloads">
                 <template #fallback>
                     <div class="flex justify-center">
@@ -94,5 +105,6 @@ export default { layout: AppLayout };
             </Deferred>
         </Card>
         <MoveFile :link="link" ref="move-file-modal" />
+        <AddFileModal :link="link" ref="add-file-modal" />
     </div>
 </template>

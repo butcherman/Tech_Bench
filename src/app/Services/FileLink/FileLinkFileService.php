@@ -6,6 +6,7 @@ use App\Events\File\FileDataDeletedEvent;
 use App\Models\Customer;
 use App\Models\CustomerFile;
 use App\Models\FileLink;
+use App\Models\FileLinkTimeline;
 use App\Models\FileUpload;
 use App\Models\User;
 use App\Services\Customer\CustomerFileService;
@@ -15,10 +16,30 @@ use Illuminate\Support\Collection;
 class FileLinkFileService extends FileUploadService
 {
     /**
+     * Attach a new file to a File Link
+     */
+    public function createFileLinkFile(FileLink $link, FileUpload $file, int|string $addedBy): void
+    {
+        $timeline = new FileLinkTimeline([
+            'added_by' => $addedBy,
+        ]);
+
+        $link->Timeline()->save($timeline);
+        $link->Files()->attach($file, [
+            'timeline_id' => $timeline->timeline_id,
+            'upload' => false,
+        ]);
+    }
+
+    /**
      * Attach file to customer profile and move to proper folder.
      */
-    public function moveFileLinkFile(Collection $requestData, FileLink $link, FileUpload $file, User $user): void
-    {
+    public function moveFileLinkFile(
+        Collection $requestData,
+        FileLink $link,
+        FileUpload $file,
+        User $user
+    ): void {
         $customer = Customer::find($requestData->get('cust_id'));
 
         // Assign the customer to the link to make future moves faster
@@ -29,7 +50,7 @@ class FileLinkFileService extends FileUploadService
         $fileObj = new CustomerFileService;
         $fileObj->createCustomerFile($requestData, $file, $customer, $user);
 
-        // $this->moveUploadedFile($file, $customer->cust_id, 'customers');
+        $this->moveUploadedFile($file, $customer->cust_id, 'customers');
 
         $link->Files()->updateExistingPivot($file->file_id, ['moved' => true]);
     }

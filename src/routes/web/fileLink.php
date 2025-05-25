@@ -28,11 +28,14 @@ Route::middleware('auth.secure')->group(function () {
         Route::get('{link}/extend', ExtendLinkController::class)
             ->name('extend');
 
-        Route::prefix('files/{link}')->controller(FileLinkFileController::class)->name('files.')->group(function () {
-            Route::post('{file}/store', 'store')->name('store');
-            Route::put('{file}/update', 'update')->name('update');
-            Route::delete('{file}/destroy', 'destroy')->name('destroy');
-        });
+        Route::prefix('files/{link}')
+            ->controller(FileLinkFileController::class)
+            ->name('files.')
+            ->group(function () {
+                Route::post('store', 'store')->name('store');
+                Route::put('{file}/update', 'update')->name('update');
+                Route::delete('{file}/destroy', 'destroy')->name('destroy');
+            });
     });
 
     Route::resource('links', FileLinkController::class)
