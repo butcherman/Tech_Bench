@@ -40,19 +40,19 @@ class UserSeeder extends Seeder
         ], 'id');
 
         // Create a tech user if it does not already exist
-        User::firstOrCreate(
-            [
-                'username' => 'tech',
-            ],
-            [
-                'role_id' => 4,
-                'first_name' => 'Tech',
-                'last_name' => 'User',
-                'email' => 'tech@em.com',
-                'password' => bcrypt('password'),
-                'password_expires' => null,
-            ]
-        );
+        if (!User::where('username', 'tech')->first()) {
+            User::factory()->create(
+                [
+                    'username' => 'tech',
+                    'role_id' => 4,
+                    'first_name' => 'Tech',
+                    'last_name' => 'User',
+                    'email' => 'tech@em.com',
+                    'password' => bcrypt('password'),
+                    'password_expires' => null,
+                ]
+            );
+        }
 
         DeviceToken::factory()
             ->count(5)
