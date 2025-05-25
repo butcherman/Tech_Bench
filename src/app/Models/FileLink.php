@@ -115,7 +115,8 @@ class FileLink extends Model
                 'timeline_id',
                 'upload',
                 'link_file_id',
-                'created_at'
+                'created_at',
+                'moved'
             ])
             ->withTimestamps();
     }
@@ -133,7 +134,8 @@ class FileLink extends Model
                 'timeline_id',
                 'upload',
                 'link_file_id',
-                'created_at'
+                'created_at',
+                'moved'
             ])
             ->withTimestamps();
     }
@@ -146,6 +148,11 @@ class FileLink extends Model
     public function Timeline(): HasMany
     {
         return $this->hasMany(FileLinkTimeline::class, 'link_id', 'link_id');
+    }
+
+    public function Customer(): BelongsTo
+    {
+        return $this->belongsTo(Customer::class, 'cust_id', 'cust_id');
     }
 
     /*

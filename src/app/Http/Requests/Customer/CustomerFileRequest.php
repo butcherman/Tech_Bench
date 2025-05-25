@@ -5,6 +5,7 @@ namespace App\Http\Requests\Customer;
 use App\Models\CustomerFile;
 use App\Traits\Requests\NormalizeJson;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class CustomerFileRequest extends FormRequest
 {
@@ -15,6 +16,10 @@ class CustomerFileRequest extends FormRequest
      */
     public function authorize(): bool
     {
+        if ($this->routeIs('links.files.update')) {
+            return $this->user()->can('update', $this->link);
+        }
+
         if ($this->isMethod('PUT')) {
             return $this->user()->can('update', $this->file);
         }
@@ -28,6 +33,7 @@ class CustomerFileRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'cust_id' => Rule::requiredIf(fn() => $this->routeIs('links.files.update')),
             'name' => ['required', 'string'],
             'file_type' => ['required', 'string'],
             'site_list' => ['required_if:file_type,site'],

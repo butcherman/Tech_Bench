@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\FileLink;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Customer\CustomerFileRequest;
 use App\Models\FileLink;
 use App\Models\FileUpload;
 use App\Services\FileLink\FileLinkFileService;
@@ -21,6 +22,16 @@ class FileLinkFileController extends Controller
     {
         //
         return 'store';
+    }
+
+    /**
+     * Attach a file to a customer Profile.
+     */
+    public function update(CustomerFileRequest $request, FileLink $link, FileUpload $file): RedirectResponse
+    {
+        $this->svc->moveFileLinkFile($request->safe()->collect(), $link, $file, $request->user());
+
+        return back()->with('success', 'File Moved to Customer');
     }
 
     /**

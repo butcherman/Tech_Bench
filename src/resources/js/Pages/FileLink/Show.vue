@@ -6,9 +6,11 @@ import LinkActions from "@/Components/FileLink/LinkActions.vue";
 import LinkDetails from "@/Components/FileLink/LinkDetails.vue";
 import LinkFileList from "@/Components/FileLink/LinkFileList.vue";
 import LinkTimeline from "@/Components/FileLink/LinkTimeline.vue";
+import MoveFile from "@/Components/FileLink/MoveFile.vue";
 import RefreshButton from "@/Components/_Base/Buttons/RefreshButton.vue";
 import { Deferred } from "@inertiajs/vue3";
 import { Message } from "primevue";
+import { useTemplateRef } from "vue";
 
 defineProps<{
     link: fileLink;
@@ -16,6 +18,8 @@ defineProps<{
     uploads?: fileLinkFile[];
     downloads?: fileLinkFile[];
 }>();
+
+const moveModal = useTemplateRef("move-file-modal");
 </script>
 
 <script lang="ts">
@@ -62,6 +66,8 @@ export default { layout: AppLayout };
                         :link="link"
                         :file-list="uploads"
                         :timeline="timeline"
+                        is-upload
+                        @move="moveModal?.triggerMove"
                     />
                 </template>
             </Deferred>
@@ -82,9 +88,11 @@ export default { layout: AppLayout };
                         :link="link"
                         :file-list="downloads"
                         :timeline="timeline"
+                        @move="moveModal?.triggerMove"
                     />
                 </template>
             </Deferred>
         </Card>
+        <MoveFile :link="link" ref="move-file-modal" />
     </div>
 </template>

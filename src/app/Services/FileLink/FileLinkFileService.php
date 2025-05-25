@@ -3,12 +3,37 @@
 namespace App\Services\FileLink;
 
 use App\Events\File\FileDataDeletedEvent;
+use App\Models\Customer;
+use App\Models\CustomerFile;
 use App\Models\FileLink;
 use App\Models\FileUpload;
+use App\Models\User;
+use App\Services\Customer\CustomerFileService;
 use App\Services\File\FileUploadService;
+use Illuminate\Support\Collection;
 
 class FileLinkFileService extends FileUploadService
 {
+    /**
+     * Attach file to customer profile and move to proper folder.
+     */
+    public function moveFileLinkFile(Collection $requestData, FileLink $link, FileUpload $file, User $user): void
+    {
+        $customer = Customer::find($requestData->get('cust_id'));
+
+        // Assign the customer to the link to make future moves faster
+        if ($link->cust_id !== $customer->cust_id) {
+            $link->Customer->attach($customer);
+        }
+
+        $fileObj = new CustomerFileService;
+        $fileObj->createCustomerFile($requestData, $file, $customer, $user);
+
+        // $this->moveUploadedFile($file, $customer->cust_id, 'customers');
+
+        $link->Files()->updateExistingPivot($file->file_id, ['moved' => true]);
+    }
+
     /**
      * Delete a file attached to a file link
      */

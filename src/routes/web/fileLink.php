@@ -5,6 +5,7 @@ use App\Http\Controllers\FileLink\ExtendLinkController;
 use App\Http\Controllers\FileLink\FileLinkController;
 use App\Http\Controllers\FileLink\FileLinkFileController;
 use App\Http\Controllers\FileLink\FileLinkSettingsController;
+use App\Http\Controllers\FileLink\MoveFileController;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 use Illuminate\Support\Facades\Route;
 
@@ -29,6 +30,7 @@ Route::middleware('auth.secure')->group(function () {
 
         Route::prefix('files/{link}')->controller(FileLinkFileController::class)->name('files.')->group(function () {
             Route::post('{file}/store', 'store')->name('store');
+            Route::put('{file}/update', 'update')->name('update');
             Route::delete('{file}/destroy', 'destroy')->name('destroy');
         });
     });

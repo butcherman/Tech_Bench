@@ -10,6 +10,7 @@ type fileLink = {
     allow_upload: boolean;
     created_at: string;
     updated_at: string;
+    cust_id?: number;
 };
 
 type fileLinkTimeline = {
@@ -27,6 +28,7 @@ type fileLinkFile = {
         created_at: string;
         updated_at: string;
         timeline_id: number;
+        moved: boolean;
     };
 } & fileUpload;
 

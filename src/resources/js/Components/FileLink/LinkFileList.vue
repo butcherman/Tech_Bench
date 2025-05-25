@@ -15,10 +15,15 @@ interface activeFileView {
     notes?: string;
 }
 
+defineEmits<{
+    move: [fileLinkFile];
+}>();
+
 const props = defineProps<{
     link: fileLink;
     fileList: fileLinkFile[];
     timeline?: fileLinkTimeline[];
+    isUpload?: boolean;
 }>();
 
 const modal = useTemplateRef("file-info-modal");
@@ -60,6 +65,12 @@ const showFileDetails = (file: fileLinkFile) => {
             </template>
             <template #actions="{ item }">
                 <BaseBadge
+                    v-if="isUpload && !item.pivot.moved"
+                    icon="share-nodes"
+                    v-tooltip.left="'Move File to Customer'"
+                    @click="$emit('move', item)"
+                />
+                <BaseBadge
                     class="mx-1"
                     icon="circle-info"
                     v-tooltip.left="'File Information'"
@@ -72,7 +83,7 @@ const showFileDetails = (file: fileLinkFile) => {
                             item.file_id,
                         ])
                     "
-                    v-tooltip.left="'Delete File'"
+                    v-tooltip.left="'Remove File From Link'"
                     confirm
                 />
             </template>

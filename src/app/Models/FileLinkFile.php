@@ -29,6 +29,7 @@ class FileLinkFile extends Pivot
     public function casts(): array
     {
         return [
+            'moved' => 'boolean',
             'upload' => 'boolean',
             'created_at' => 'datetime:M d, Y',
             'updated_at' => 'datetime:M d, Y',
