@@ -8,6 +8,7 @@ use App\Http\Controllers\FileLink\FileLinkFileController;
 use App\Http\Controllers\FileLink\FileLinkSettingsController;
 use App\Http\Controllers\FileLink\LinkAdministrationController;
 use App\Http\Controllers\FileLink\PublicLinkController;
+use App\Http\Controllers\FileLink\UploadLinkFileController;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 use Illuminate\Support\Facades\Route;
 
@@ -45,6 +46,8 @@ Route::middleware('auth.secure')->group(function () {
     |---------------------------------------------------------------------------
     */
     Route::prefix('links')->name('links.')->group(function () {
+        Route::post('upload', UploadLinkFileController::class)->name('upload');
+
         Route::get('{link}/expire', ExpireLinkController::class)
             ->name('expire');
         Route::get('{link}/extend', ExtendLinkController::class)
@@ -81,8 +84,11 @@ Route::prefix('file-links/{link:link_hash}')
     ->group(function () {
         Route::get('/', 'show')
             ->name('show')
-            ->missing(fn () => throw new FileLinkMissingException);
-        Route::post('/', 'update')
+            ->missing(fn() => throw new FileLinkMissingException);
+        Route::post('/', 'store')
+            ->name('store')
+            ->missing(fn() => throw new FileLinkMissingException);
+        Route::put('/', 'update')
             ->name('update')
-            ->missing(fn () => throw new FileLinkMissingException);
+            ->missing(fn() => throw new FileLinkMissingException);
     });

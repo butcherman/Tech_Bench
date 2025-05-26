@@ -2,6 +2,7 @@
 
 namespace App\Events\FileLink;
 
+use App\Models\FileLink;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Foundation\Events\Dispatchable;
@@ -11,23 +12,11 @@ class FileUploadedFromPublicEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    /**
-     * Create a new event instance.
-     */
-    public function __construct()
-    {
-        //
-    }
-
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return array<int, \Illuminate\Broadcasting\Channel>
-     */
-    public function broadcastOn(): array
-    {
-        return [
-            new PrivateChannel('channel-name'),
-        ];
-    }
+    /*
+    |---------------------------------------------------------------------------
+    | Event is triggered when a file is uploaded to a public file link from
+    | the public URL.  An email will be sent to the link creator.
+    |---------------------------------------------------------------------------
+    */
+    public function __construct(public FileLink $link, public int $timelineId) {}
 }

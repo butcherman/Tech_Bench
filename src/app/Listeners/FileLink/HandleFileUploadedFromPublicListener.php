@@ -2,23 +2,24 @@
 
 namespace App\Listeners\FileLink;
 
+use App\Events\FileLink\FileUploadedFromPublicEvent;
 use App\Events\FileLink\HandleFileUploadFromPublicEvent;
+use App\Notifications\FileLink\LinkFileUploadedNotification;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Facades\Notification;
 
-class HandleFileUploadedFromPublicListener
+class HandleFileUploadedFromPublicListener implements ShouldQueue
 {
-    /**
-     * Create the event listener.
-     */
-    public function __construct()
-    {
-        //
-    }
-
     /**
      * Handle the event.
      */
-    public function handle(HandleFileUploadFromPublicEvent $event): void
+    public function handle(FileUploadedFromPublicEvent $event): void
     {
-        //
+        $owner = $event->link->User;
+
+        Notification::send(
+            $owner,
+            new LinkFileUploadedNotification($event->link)
+        );
     }
 }

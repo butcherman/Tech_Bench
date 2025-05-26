@@ -80,59 +80,6 @@ class FileLinkService
     }
 
     /**
-     * Add a file to a File Link
-     */
-    // public function addFileLinkFile(
-    //     FileLink $link,
-    //     array $fileList,
-    //     int|string $addedBy
-    // ): void {
-    //     $timeline = $this->createTimelineEntry(
-    //         $link,
-    //         $addedBy
-    //     );
-
-    //     if (count($fileList)) {
-    //         $this->processLinkFiles(
-    //             $link,
-    //             $timeline,
-    //             ! is_int($addedBy),
-    //             $fileList
-    //         );
-    //     }
-    // }
-
-    /**
-     * Remove a File from a File Link
-     */
-    // public function removeFileLinkFile(FileLinkFile $linkFile): void
-    // {
-    //     $fileId = $linkFile->file_id;
-    //     $linkFile->delete();
-
-    //     event(new FileUploadDeletedEvent($fileId));
-    // }
-
-    /**
-     * Attach any files associated with the link
-     */
-    // protected function processLinkFiles(
-    //     FileLink $link,
-    //     FileLinkTimeline $timeline,
-    //     bool $isUpload,
-    //     array $fileList
-    // ): FileLinkTimeline {
-    //     if ($fileList) {
-    //         $link->FileUpload()->attach($fileList, [
-    //             'timeline_id' => $timeline->timeline_id,
-    //             'upload' => $isUpload,
-    //         ]);
-    //     }
-
-    //     return $timeline;
-    // }
-
-    /**
      * Create a Timeline Entry to link files and notes to.
      */
     protected function createTimelineEntry(FileLink $link, string|int $addedBy): FileLinkTimeline

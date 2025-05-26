@@ -1,15 +1,21 @@
 <script setup lang="ts">
 import Card from "@/Components/_Base/Card.vue";
 import LinkLayout from "@/Layouts/FileLink/LinkLayout.vue";
+import Overlay from "@/Components/_Base/Loaders/Overlay.vue";
 import prettyBytes from "pretty-bytes";
 import PublicFileForm from "@/Forms/FileLink/PublicFileForm.vue";
 import ResourceList from "@/Components/_Base/ResourceList.vue";
-import { computed } from "vue";
+import { computed, ref } from "vue";
+import { router } from "@inertiajs/vue3";
 
 const props = defineProps<{
     link: fileLink;
     files: fileUpload[];
 }>();
+
+const isLoading = ref(false);
+router.on("start", () => (isLoading.value = true));
+router.on("finish", () => (isLoading.value = false));
 
 /**
  * If no information is shared, show error notification
@@ -60,7 +66,9 @@ export default { layout: LinkLayout };
             </ResourceList>
         </Card>
         <Card v-if="link.allow_upload" class="tb-card" title="Upload File">
-            <PublicFileForm :link="link" />
+            <Overlay :loading="isLoading">
+                <PublicFileForm :link="link" />
+            </Overlay>
         </Card>
     </div>
 </template>

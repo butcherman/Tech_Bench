@@ -62,7 +62,7 @@ const schema = object({
         submit-text="Create File Link"
         :initial-values="initValues"
         :max-files="5"
-        :submit-route="$route('links.store')"
+        :submit-route="$route('links.upload')"
         :validation-schema="schema"
         @success="handleSuccessfulUpload"
     >

@@ -17,17 +17,27 @@ class FileLinkFileService extends FileUploadService
     /**
      * Attach a new file to a File Link
      */
-    public function createFileLinkFile(FileLink $link, FileUpload $file, int|string $addedBy): void
-    {
-        $timeline = new FileLinkTimeline([
-            'added_by' => $addedBy,
-        ]);
+    public function createFileLinkFile(
+        FileLink $link,
+        FileUpload $file,
+        int|string $addedBy,
+        ?int $timelineId
+    ): FileLinkTimeline {
+        if (is_null($timelineId)) {
+            $timeline = new FileLinkTimeline([
+                'added_by' => $addedBy,
+            ]);
+            $link->Timeline()->save($timeline);
+        } else {
+            $timeline = FileLinkTimeline::find($timelineId);
+        }
 
-        $link->Timeline()->save($timeline);
         $link->Files()->attach($file, [
             'timeline_id' => $timeline->timeline_id,
             'upload' => is_int($addedBy) ? false : true,
         ]);
+
+        return $timeline;
     }
 
     /**

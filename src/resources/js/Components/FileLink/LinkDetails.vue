@@ -26,7 +26,7 @@ const tableData = computed(() => {
             <a class="text-blue-600" :href="link.public_href" target="_blank">
                 {{ link.public_href }}
             </a>
-            <ClipboardCopy :value="link.public_href" />
+            <ClipboardCopy :value="link.public_href" class="ms-2" />
         </div>
     </div>
 </template>

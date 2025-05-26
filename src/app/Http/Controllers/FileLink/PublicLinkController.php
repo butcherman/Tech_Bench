@@ -21,27 +21,48 @@ class PublicLinkController extends FileUploadController
         $link->validatePublicLink();
 
         return Inertia::render('FileLink/Public/Show', [
-            'link' => fn () => $link->only([
+            'link' => fn() => $link->only([
                 'instructions',
                 'allow_upload',
                 'link_hash',
             ]),
-            'files' => fn () => $link->Downloads->makeHidden('pivot'),
+            'files' => fn() => $link->Downloads->makeHidden('pivot'),
         ]);
     }
 
-    public function update(PublicFileLinkRequest $request, FileLinkFileService $svc, FileLink $link)
+    /**
+     * Upload files to a file link.
+     */
+    public function store(PublicFileLinkRequest $request, FileLinkFileService $svc, FileLink $link)
     {
         $this->setFileData(DiskEnum::links, $link->link_id);
 
         $savedFile = $this->getChunk($request->file('file'), $request);
 
         if ($savedFile) {
-            $svc->createFileLinkFile($link, $savedFile, $request->get('name'));
-            // TODO - Determine when upload is done and send email
-            // FileUploadedFromPublicEvent::dispatch($link, $savedFile);
+            $timeline = $svc->createFileLinkFile(
+                $link,
+                $savedFile,
+                $request->get('name'),
+                $request->session()->get('timeline', null)
+            );
+
+            $request->session()->put('timeline', $timeline->timeline_id);
         }
 
         return response()->noContent();
+    }
+
+    /**
+     * Upload completed, notify the link owner of the new files.
+     */
+    public function update(PublicFileLinkRequest $request, FileLink $link)
+    {
+        FileUploadedFromPublicEvent::dispatch(
+            $link,
+            $request->session()->pull('timeline')
+        );
+
+        return back()->with('success', 'Files Uploaded');
     }
 }
