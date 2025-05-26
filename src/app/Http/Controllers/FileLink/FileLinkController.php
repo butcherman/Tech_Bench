@@ -51,7 +51,7 @@ class FileLinkController extends FileUploadController
     public function store(FileLinkRequest $request): HttpResponse|RedirectResponse
     {
         if ($request->has('file')) {
-            $this->setFileData(DiskEnum::links, 'tmp');
+            $this->setFileData(DiskEnum::links, 'tmp', true);
             $savedFile = $this->getChunk($request->file('file'), $request);
 
             if ($savedFile) {
@@ -109,9 +109,6 @@ class FileLinkController extends FileUploadController
      */
     public function update(FileLinkRequest $request, FileLink $link): RedirectResponse
     {
-        //
-        // return 'update';
-
         $this->svc->updateFileLink($request->safe()->collect(), $link);
 
         return redirect(route('links.show', $link->link_id))

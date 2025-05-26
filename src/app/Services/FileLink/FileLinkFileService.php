@@ -27,7 +27,7 @@ class FileLinkFileService extends FileUploadService
         $link->Timeline()->save($timeline);
         $link->Files()->attach($file, [
             'timeline_id' => $timeline->timeline_id,
-            'upload' => false,
+            'upload' => is_int($addedBy) ? false : true,
         ]);
     }
 

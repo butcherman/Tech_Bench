@@ -1,5 +1,6 @@
 <?php
 
+use App\Exceptions\FileLink\FileLinkMissingException;
 use App\Http\Controllers\FileLink\ExpireLinkController;
 use App\Http\Controllers\FileLink\ExtendLinkController;
 use App\Http\Controllers\FileLink\FileLinkController;
@@ -7,7 +8,9 @@ use App\Http\Controllers\FileLink\FileLinkFileController;
 use App\Http\Controllers\FileLink\FileLinkSettingsController;
 use App\Http\Controllers\FileLink\LinkAdministrationController;
 use App\Http\Controllers\FileLink\MoveFileController;
+use App\Http\Controllers\FileLink\PublicLinkController;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -24,11 +27,13 @@ Route::middleware('auth.secure')->group(function () {
     |---------------------------------------------------------------------------
     */
     Route::prefix('administration/file-links')->name('admin.links.')->group(function () {
-        Route::controller(FileLinkSettingsController::class)->name('settings.')->group(function () {
-            Route::get('settings', 'edit')->name('edit')
-                ->breadcrumb('File Link Settings', 'admin.index');
-            Route::put('settings/update', 'update')->name('update');
-        });
+        Route::controller(FileLinkSettingsController::class)
+            ->name('settings.')
+            ->group(function () {
+                Route::get('settings', 'edit')->name('edit')
+                    ->breadcrumb('File Link Settings', 'admin.index');
+                Route::put('settings/update', 'update')->name('update');
+            });
 
         Route::get('manage', LinkAdministrationController::class)
             ->name('manage.index')
@@ -66,14 +71,21 @@ Route::middleware('auth.secure')->group(function () {
         });
 });
 
-Route::get('guest-link/{link}', function () {
-    return 'guest link';
-})->name('guest-link.show');
-
-// Route::get('admin-links', function () {
-//     return 'something admin';
-// })->name('admin.links.settings.edit');
-
-// Route::get('admin-adfa', function () {
-//     return 'something admin';
-// })->name('admin.links.manage.index');
+/*
+|-------------------------------------------------------------------------------
+| Public File Link Routes
+| /file-links/{link-hash}
+|-------------------------------------------------------------------------------
+*/
+Route::prefix('file-links/{link:link_hash}')
+    ->controller(PublicLinkController::class)
+    ->name('guest-link.')
+    ->group(function () {
+        Route::get('/', 'show')
+            ->name('show')
+            ->missing(fn() => throw new FileLinkMissingException());
+        Route::post('/', 'update')
+            ->name('update')
+            ->missing(fn() => throw new FileLinkMissingException());
+    })
+;
