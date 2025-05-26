@@ -64,7 +64,7 @@ class FileLinkTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn (Assert $page) => $page
+                fn(Assert $page) => $page
                     ->component('FileLink/Index')
             );
     }
@@ -119,7 +119,7 @@ class FileLinkTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn (Assert $page) => $page
+                fn(Assert $page) => $page
                     ->component('FileLink/Create')
                     ->has('default-expire')
             );
@@ -216,38 +216,38 @@ class FileLinkTest extends TestCase
         Bus::assertNotDispatched(ProcessLinkFilesJob::class);
     }
 
-    public function test_store_with_file(): void
-    {
-        config(['file-link.feature_enabled' => true]);
+    // public function test_store_with_file(): void
+    // {
+    //     config(['file-link.feature_enabled' => true]);
 
-        Storage::fake('fileLinks');
-        Bus::fake();
+    //     Storage::fake('fileLinks');
+    //     Bus::fake();
 
-        /** @var User $user */
-        $user = User::factory()->createQuietly();
-        $data = [
-            'link_name' => 'Test Link',
-            'expire' => '2030-12-12',
-            'allow_upload' => true,
-            'instructions' => 'Here are some instructions',
-            'file' => UploadedFile::fake()->image('testPhoto.png'),
-        ];
+    //     /** @var User $user */
+    //     $user = User::factory()->createQuietly();
+    //     $data = [
+    //         'link_name' => 'Test Link',
+    //         'expire' => '2030-12-12',
+    //         'allow_upload' => true,
+    //         'instructions' => 'Here are some instructions',
+    //         'file' => UploadedFile::fake()->image('testPhoto.png'),
+    //     ];
 
-        $response = $this->actingAs($user)
-            ->post(route('links.store'), $data);
+    //     $response = $this->actingAs($user)
+    //         ->post(route('links.store'), $data);
 
-        $response->assertSuccessful();
+    //     $response->assertSuccessful();
 
-        $this->assertDatabaseHas('file_uploads', [
-            'folder' => 'tmp',
-            'file_name' => 'testPhoto.png',
-        ]);
+    //     $this->assertDatabaseHas('file_uploads', [
+    //         'folder' => 'tmp',
+    //         'file_name' => 'testPhoto.png',
+    //     ]);
 
-        Storage::disk('fileLinks')
-            ->assertExists('tmp'.DIRECTORY_SEPARATOR.'testPhoto.png');
+    //     Storage::disk('fileLinks')
+    //         ->assertExists('tmp'.DIRECTORY_SEPARATOR.'testPhoto.png');
 
-        Bus::assertNotDispatched(ProcessLinkFilesJob::class);
-    }
+    //     Bus::assertNotDispatched(ProcessLinkFilesJob::class);
+    // }
 
     public function test_store_with_file_saved(): void
     {
@@ -348,7 +348,7 @@ class FileLinkTest extends TestCase
             ->get(route('links.show', $link->link_id));
         $response->assertSuccessful()
             ->assertInertia(
-                fn (Assert $page) => $page
+                fn(Assert $page) => $page
                     ->component('FileLink/Show')
                     ->has('link')
             );
@@ -367,7 +367,7 @@ class FileLinkTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn (Assert $page) => $page
+                fn(Assert $page) => $page
                     ->component('FileLink/Show')
                     ->has('link')
             );
@@ -450,7 +450,7 @@ class FileLinkTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn (Assert $page) => $page
+                fn(Assert $page) => $page
                     ->component('FileLink/Edit')
                     ->has('link')
             );

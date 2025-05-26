@@ -3,12 +3,14 @@
 namespace Tests\Feature\FileLink;
 
 use App\Events\FileLink\FileUploadedFromPublicEvent;
+use App\Exceptions\FileLink\FileLinkExpiredException;
 use App\Models\FileLink;
 use App\Models\FileUpload;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Exceptions;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
@@ -29,12 +31,19 @@ class PublicLinkTest extends TestCase
 
     public function test_show_expired_link(): void
     {
+        Exceptions::fake();
+
         $link = FileLink::factory()
             ->createQuietly(['expire' => Carbon::yesterday()]);
 
-        $response = $this->get(route('guest-link.show', $link->link_hash));
+        $this->expectException(FileLinkExpiredException::class);
+
+        $response = $this->withoutExceptionHandling()
+            ->get(route('guest-link.show', $link->link_hash));
 
         $response->assertStatus(410);
+
+        Exceptions::assertReported(FileLinkExpiredException::class);
     }
 
     public function test_show_guest(): void
@@ -93,6 +102,8 @@ class PublicLinkTest extends TestCase
 
     public function test_store_expired_link(): void
     {
+        Exceptions::fake();
+
         $link = FileLink::factory()
             ->createQuietly(['expire' => Carbon::yesterday()]);
         $data = [
@@ -101,12 +112,16 @@ class PublicLinkTest extends TestCase
             'file' => UploadedFile::fake()->image('testPhoto.png'),
         ];
 
-        $response = $this->post(
+        $this->expectException(FileLinkExpiredException::class);
+
+        $response = $this->withoutExceptionHandling()->post(
             route('guest-link.store', $link->link_hash),
             $data
         );
 
         $response->assertStatus(410);
+
+        Exceptions::assertReported(FileLinkExpiredException::class);
     }
 
     public function test_store_guest_file_upload(): void
@@ -163,6 +178,8 @@ class PublicLinkTest extends TestCase
 
     public function test_update_expired_link(): void
     {
+        Exceptions::fake();
+
         $link = FileLink::factory()
             ->createQuietly(['expire' => Carbon::yesterday()]);
         $data = [
@@ -171,12 +188,16 @@ class PublicLinkTest extends TestCase
             'file' => UploadedFile::fake()->image('testPhoto.png'),
         ];
 
-        $response = $this->put(
+        $this->expectException(FileLinkExpiredException::class);
+
+        $response = $this->withoutExceptionHandling()->put(
             route('guest-link.update', $link->link_hash),
             $data
         );
 
         $response->assertStatus(410);
+
+        Exceptions::assertReported(FileLinkExpiredException::class);
     }
 
     public function test_update_guest_file_upload(): void

@@ -21,7 +21,7 @@ class FileLinkFileService extends FileUploadService
         FileLink $link,
         FileUpload $file,
         int|string $addedBy,
-        ?int $timelineId
+        ?int $timelineId = null
     ): FileLinkTimeline {
         if (is_null($timelineId)) {
             $timeline = new FileLinkTimeline([
@@ -52,7 +52,9 @@ class FileLinkFileService extends FileUploadService
         $customer = Customer::find($requestData->get('cust_id'));
 
         // Assign the customer to the link to make future moves faster
-        $notProperCustomer = is_null($link->cust_id) || $link->cust_id !== $customer->cust_id;
+        $notProperCustomer = is_null($link->cust_id)
+            || $link->cust_id !== $customer->cust_id;
+
         if ($notProperCustomer) {
             $link->cust_id = $customer->cust_id;
             $link->save();

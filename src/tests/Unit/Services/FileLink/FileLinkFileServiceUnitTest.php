@@ -40,6 +40,39 @@ class FileLinkFileServiceUnitTest extends TestCase
         ]);
     }
 
+    public function test_create_file_link_file_with_timeline(): void
+    {
+        $link = FileLink::factory()->create();
+        $file = FileUpload::factory()->create();
+        $timeline = FileLinkTimeline::create([
+            'link_id' => $link->link_id,
+            'added_by' => 'Billy Bob',
+        ]);
+
+        $testObj = new FileLinkFileService;
+        $res = $testObj->createFileLinkFile(
+            $link,
+            $file,
+            'Billy Bob',
+            $timeline->timeline_id
+        );
+
+        $this->assertEquals(
+            $res->makeHidden(['Files', 'Notes'])->toArray(),
+            $timeline->makeHidden(['Files', 'Notes'])->toArray()
+        );
+
+        $this->assertDatabaseHas('file_link_files', [
+            'file_id' => $file->file_id,
+            'link_id' => $link->link_id,
+        ]);
+
+        $this->assertDatabaseHas('file_link_timelines', [
+            'link_id' => $link->link_id,
+            'added_by' => 'Billy Bob',
+        ]);
+    }
+
     /*
     |---------------------------------------------------------------------------
     | moveFileLinkFile()
