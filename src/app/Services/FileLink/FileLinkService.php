@@ -27,7 +27,7 @@ class FileLinkService
         // Save any uploaded files
         $timeline = $this->createTimelineEntry($newLink, $user->user_id);
         $timeline->Notes()->save(new FileLinkNote([
-            'note' => 'File Link Created'
+            'note' => 'File Link Created',
         ]));
 
         if (count($fileList)) {

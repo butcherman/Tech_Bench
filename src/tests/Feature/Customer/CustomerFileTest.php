@@ -136,7 +136,7 @@ class CustomerFileTest extends TestCase
 
         Storage::disk('customers')
             ->assertExists(
-                $customer->cust_id . DIRECTORY_SEPARATOR . 'randomImage.png'
+                $customer->cust_id.DIRECTORY_SEPARATOR.'randomImage.png'
             );
     }
 
@@ -179,7 +179,7 @@ class CustomerFileTest extends TestCase
 
         Storage::disk('customers')
             ->assertExists(
-                $customer->cust_id . DIRECTORY_SEPARATOR . 'randomImage.png'
+                $customer->cust_id.DIRECTORY_SEPARATOR.'randomImage.png'
             );
     }
 
@@ -232,7 +232,7 @@ class CustomerFileTest extends TestCase
         ]);
 
         Storage::disk('customers')
-            ->assertExists($customer->cust_id . DIRECTORY_SEPARATOR . 'randomImage.png');
+            ->assertExists($customer->cust_id.DIRECTORY_SEPARATOR.'randomImage.png');
     }
 
     public function test_store_chunked_file(): void

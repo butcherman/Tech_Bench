@@ -24,7 +24,7 @@ class ProcessLinkFilesJob implements ShouldQueue
     public function handle(FileLinkFileService $svc): void
     {
         Log::debug('Starting Job - Process File Link Files Job for Link ID '
-            . $this->link->link_id);
+            .$this->link->link_id);
 
         $svc->checkLinkFileFolder($this->link);
         $svc->checkLinkFilePermission($this->link);

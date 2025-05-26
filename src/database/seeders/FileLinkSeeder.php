@@ -32,8 +32,8 @@ class FileLinkSeeder extends Seeder
         $linkList = FileLink::factory()
             ->count(10)
             ->state(
-                new Sequence(fn() => [
-                    'expire' => Carbon::now()->addDays(rand(-30, 30))
+                new Sequence(fn () => [
+                    'expire' => Carbon::now()->addDays(rand(-30, 30)),
                 ])
             )
             ->create(['user_id' => 1]);
@@ -57,8 +57,8 @@ class FileLinkSeeder extends Seeder
             $personalList = FileLink::factory()
                 ->count(rand(1, 10))
                 ->state(
-                    new Sequence(fn() => [
-                        'expire' => Carbon::now()->addDays(rand(-15, 90))
+                    new Sequence(fn () => [
+                        'expire' => Carbon::now()->addDays(rand(-15, 90)),
                     ])
                 )
                 ->create(['user_id' => $user->user_id]);

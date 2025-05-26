@@ -40,7 +40,7 @@ class UserSeeder extends Seeder
         ], 'id');
 
         // Create a tech user if it does not already exist
-        if (!User::where('username', 'tech')->first()) {
+        if (! User::where('username', 'tech')->first()) {
             User::factory()->create(
                 [
                     'username' => 'tech',

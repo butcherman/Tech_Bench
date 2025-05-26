@@ -6,8 +6,6 @@ use App\Jobs\FileLink\ProcessLinkFilesJob;
 use App\Models\FileLink;
 use App\Models\FileUpload;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Storage;
@@ -66,7 +64,7 @@ class FileLinkTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('FileLink/Index')
             );
     }
@@ -121,7 +119,7 @@ class FileLinkTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('FileLink/Create')
                     ->has('default-expire')
             );
@@ -246,7 +244,7 @@ class FileLinkTest extends TestCase
         ]);
 
         Storage::disk('fileLinks')
-            ->assertExists('tmp' . DIRECTORY_SEPARATOR . 'testPhoto.png');
+            ->assertExists('tmp'.DIRECTORY_SEPARATOR.'testPhoto.png');
 
         Bus::assertNotDispatched(ProcessLinkFilesJob::class);
     }
@@ -350,7 +348,7 @@ class FileLinkTest extends TestCase
             ->get(route('links.show', $link->link_id));
         $response->assertSuccessful()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('FileLink/Show')
                     ->has('link')
             );
@@ -369,7 +367,7 @@ class FileLinkTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('FileLink/Show')
                     ->has('link')
             );
@@ -452,7 +450,7 @@ class FileLinkTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('FileLink/Edit')
                     ->has('link')
             );

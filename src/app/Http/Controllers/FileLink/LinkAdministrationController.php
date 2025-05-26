@@ -4,7 +4,6 @@ namespace App\Http\Controllers\FileLink;
 
 use App\Http\Controllers\Controller;
 use App\Models\FileLink;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -19,7 +18,7 @@ class LinkAdministrationController extends Controller
 
         return Inertia::render('FileLink/Index', [
             'link-list' => Inertia::defer(
-                fn() => FileLink::orderBy('expire', 'desc')->get()->load('User')
+                fn () => FileLink::orderBy('expire', 'desc')->get()->load('User')
             ),
             'is-admin' => true,
         ]);

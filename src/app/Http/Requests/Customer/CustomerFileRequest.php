@@ -33,7 +33,7 @@ class CustomerFileRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'cust_id' => Rule::requiredIf(fn() => $this->routeIs('links.files.update')),
+            'cust_id' => Rule::requiredIf(fn () => $this->routeIs('links.files.update')),
             'name' => ['required', 'string'],
             'file_type' => ['required', 'string'],
             'site_list' => ['required_if:file_type,site'],

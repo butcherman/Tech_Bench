@@ -137,7 +137,7 @@ class FileLinkServiceUnitTest extends TestCase
 
         $this->assertDatabaseHas('file_links', [
             'link_id' => $link->link_id,
-            'expire' => Carbon::now()->addDays(60)->toDateString()
+            'expire' => Carbon::now()->addDays(60)->toDateString(),
         ]);
     }
 
@@ -164,7 +164,7 @@ class FileLinkServiceUnitTest extends TestCase
 
         $this->assertDatabaseHas('file_links', [
             'link_id' => $link->link_id,
-            'expire' => Carbon::yesterday()->toDateString()
+            'expire' => Carbon::yesterday()->toDateString(),
         ]);
     }
 }

@@ -10,12 +10,9 @@ use App\Models\FileLinkFile;
 use App\Models\FileLinkTimeline;
 use App\Models\FileUpload;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
-use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class FileLinkFileTest extends TestCase
@@ -99,7 +96,7 @@ class FileLinkFileTest extends TestCase
         ]);
 
         Storage::disk('fileLinks')
-            ->assertExists($link->link_id . '/testPhoto.png');
+            ->assertExists($link->link_id.'/testPhoto.png');
     }
 
     /*
@@ -236,7 +233,7 @@ class FileLinkFileTest extends TestCase
         $file = FileUpload::factory()->create([
             'disk' => 'fileLinks',
             'file_name' => 'test.txt',
-            'folder' => $link->link_id
+            'folder' => $link->link_id,
         ]);
         $data = [
             'cust_id' => $customer->cust_id,
@@ -251,7 +248,7 @@ class FileLinkFileTest extends TestCase
 
         Storage::disk('fileLinks')
             ->put(
-                $file->folder . DIRECTORY_SEPARATOR . $file->file_name,
+                $file->folder.DIRECTORY_SEPARATOR.$file->file_name,
                 'Test file contents'
             );
 
@@ -300,10 +297,10 @@ class FileLinkFileTest extends TestCase
         ]);
 
         Storage::disk('fileLinks')
-            ->assertMissing($file->folder . DIRECTORY_SEPARATOR . $file->file_name);
+            ->assertMissing($file->folder.DIRECTORY_SEPARATOR.$file->file_name);
 
         Storage::disk('customers')
-            ->assertExists($customer->cust_id . DIRECTORY_SEPARATOR . $file->file_name);
+            ->assertExists($customer->cust_id.DIRECTORY_SEPARATOR.$file->file_name);
     }
 
     /*
@@ -323,7 +320,7 @@ class FileLinkFileTest extends TestCase
             'added_by' => 'Outside User',
         ]);
 
-        $attachedFile = new FileLinkFile();
+        $attachedFile = new FileLinkFile;
         $attachedFile->link_id = $link->link_id;
         $attachedFile->file_id = $file->file_id;
         $attachedFile->timeline_id = $timeline->timeline_id;

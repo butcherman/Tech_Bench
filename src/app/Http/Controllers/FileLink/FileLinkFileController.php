@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\FileLink;
 
 use App\Enums\DiskEnum;
-use App\Http\Controllers\Controller;
 use App\Http\Controllers\FileUploadController;
 use App\Http\Requests\Customer\CustomerFileRequest;
 use App\Models\FileLink;
@@ -12,7 +11,6 @@ use App\Services\FileLink\FileLinkFileService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Inertia\Inertia;
 
 class FileLinkFileController extends FileUploadController
 {

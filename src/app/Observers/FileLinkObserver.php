@@ -14,7 +14,7 @@ class FileLinkObserver extends Observer
     public function created(FileLink $fileLink): void
     {
         Log::info(
-            'New File Link created by ' . $this->user,
+            'New File Link created by '.$this->user,
             $fileLink->toArray()
         );
     }
@@ -25,7 +25,7 @@ class FileLinkObserver extends Observer
     public function updated(FileLink $fileLink): void
     {
         Log::info(
-            'File Link Information updated by ' . $this->user,
+            'File Link Information updated by '.$this->user,
             $fileLink->toArray()
         );
     }
@@ -48,7 +48,7 @@ class FileLinkObserver extends Observer
     public function deleted(FileLink $fileLink): void
     {
         Log::info(
-            'File Link deleted by ' . $this->user,
+            'File Link deleted by '.$this->user,
             $fileLink->toArray()
         );
     }

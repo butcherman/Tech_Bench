@@ -4,8 +4,6 @@ namespace Tests\Feature\FileLink;
 
 use App\Events\Feature\FeatureChangedEvent;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Event;
 use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
@@ -51,7 +49,7 @@ class FileLinkSettingsTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('FileLink/Admin/Settings')
                     ->has('feature_enabled')
                     ->has('default_link_life')
@@ -72,7 +70,7 @@ class FileLinkSettingsTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('FileLink/Admin/Settings')
                     ->has('feature_enabled')
                     ->has('default_link_life')
@@ -102,8 +100,6 @@ class FileLinkSettingsTest extends TestCase
             ->assertRedirect(route('login'));
         $this->assertGuest();
     }
-
-
 
     public function test_update_no_permission(): void
     {

@@ -2,10 +2,8 @@
 
 namespace Tests\Unit\Models;
 
-use App\Models\User;
 use App\Models\UserRolePermissionCategory;
 use App\Models\UserRolePermissionType;
-use Illuminate\Support\Facades\Auth;
 use Tests\TestCase;
 
 class UserRolePermissionTypeUnitTest extends TestCase

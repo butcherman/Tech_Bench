@@ -76,7 +76,7 @@ class FileMaintenanceUnitTest extends TestCase
         $fileList = ['.gitignore', 'testOne.txt', 'testTwo.txt'];
 
         foreach ($fileList as $file) {
-            Storage::put($file, 'Test File For ' . $file);
+            Storage::put($file, 'Test File For '.$file);
         }
 
         $testObj = new class extends FileMaintenanceService

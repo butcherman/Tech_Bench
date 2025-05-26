@@ -42,7 +42,7 @@ class TechTipSeeder extends Seeder
             if ($i % 3 === 0) {
                 $newFile = FileUpload::factory()->create([
                     'disk' => 'tips',
-                    'folder' => $newTip->tip_id
+                    'folder' => $newTip->tip_id,
                 ]);
                 $newTip->Files()->attach($newFile);
             }

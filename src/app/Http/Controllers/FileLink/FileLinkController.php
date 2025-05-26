@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\FileLink;
 
 use App\Enums\DiskEnum;
-use App\Http\Controllers\Controller;
 use App\Http\Controllers\FileUploadController;
 use App\Http\Requests\FileLink\FileLinkRequest;
 use App\Models\FileLink;
@@ -27,7 +26,7 @@ class FileLinkController extends FileUploadController
         $this->authorize('viewAny', FileLink::class);
 
         return Inertia::render('FileLink/Index', [
-            'link-list' => Inertia::defer(fn() => $request->user()->FileLinks),
+            'link-list' => Inertia::defer(fn () => $request->user()->FileLinks),
         ]);
     }
 
@@ -39,7 +38,7 @@ class FileLinkController extends FileUploadController
         $this->authorize('create', FileLink::class);
 
         return Inertia::render('FileLink/Create', [
-            'default-expire' => fn() =>  Carbon::now()
+            'default-expire' => fn () => Carbon::now()
                 ->addDays(config('file-link.default_link_life'))
                 ->format('Y-m-d'),
         ]);
@@ -79,16 +78,16 @@ class FileLinkController extends FileUploadController
         $this->authorize('view', $link);
 
         return Inertia::render('FileLink/Show', [
-            'link' => fn() => $link,
-            'is-admin' => fn() => $request->user()->can('manage', $link)
+            'link' => fn () => $link,
+            'is-admin' => fn () => $request->user()->can('manage', $link)
                 && $link->user_id !== $request->user()->user_id,
 
             /**
              * Deferred Props
              */
-            'timeline' => Inertia::defer(fn() => $link->Timeline),
-            'uploads' => Inertia::defer(fn() => $link->Uploads),
-            'downloads' => Inertia::defer(fn() => $link->Downloads),
+            'timeline' => Inertia::defer(fn () => $link->Timeline),
+            'uploads' => Inertia::defer(fn () => $link->Uploads),
+            'downloads' => Inertia::defer(fn () => $link->Downloads),
         ]);
     }
 
@@ -100,7 +99,7 @@ class FileLinkController extends FileUploadController
         $this->authorize('update', $link);
 
         return Inertia::render('FileLink/Edit', [
-            'link' => fn() => $link->mergeCasts(['expire' => 'datetime:Y-m-d']),
+            'link' => fn () => $link->mergeCasts(['expire' => 'datetime:Y-m-d']),
         ]);
     }
 

@@ -4,8 +4,6 @@ namespace App\Exceptions\FileLink;
 
 use Exception;
 use Illuminate\Support\Facades\Log;
-use Inertia\Inertia;
-use Inertia\Response;
 
 class FileLinkMissingException extends Exception
 {

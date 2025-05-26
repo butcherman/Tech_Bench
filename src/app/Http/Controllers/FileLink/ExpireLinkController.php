@@ -6,9 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\FileLink;
 use App\Services\FileLink\FileLinkService;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Inertia\Inertia;
 
 class ExpireLinkController extends Controller
 {

@@ -4,7 +4,6 @@ namespace App\Services\FileLink;
 
 use App\Events\File\FileDataDeletedEvent;
 use App\Models\Customer;
-use App\Models\CustomerFile;
 use App\Models\FileLink;
 use App\Models\FileLinkTimeline;
 use App\Models\FileUpload;
@@ -89,7 +88,7 @@ class FileLinkFileService extends FileUploadService
         $fileList = $link->Files;
 
         foreach ($fileList as $file) {
-            if (!$file->pivot->upload) {
+            if (! $file->pivot->upload) {
                 $file->public = true;
                 $file->save();
             }

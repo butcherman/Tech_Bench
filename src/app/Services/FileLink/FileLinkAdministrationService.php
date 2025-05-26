@@ -8,7 +8,6 @@ use Illuminate\Support\Collection;
 
 class FileLinkAdministrationService
 {
-
     use AppSettingsTrait;
 
     /**

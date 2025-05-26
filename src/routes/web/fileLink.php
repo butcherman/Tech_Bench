@@ -7,10 +7,8 @@ use App\Http\Controllers\FileLink\FileLinkController;
 use App\Http\Controllers\FileLink\FileLinkFileController;
 use App\Http\Controllers\FileLink\FileLinkSettingsController;
 use App\Http\Controllers\FileLink\LinkAdministrationController;
-use App\Http\Controllers\FileLink\MoveFileController;
 use App\Http\Controllers\FileLink\PublicLinkController;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -83,9 +81,8 @@ Route::prefix('file-links/{link:link_hash}')
     ->group(function () {
         Route::get('/', 'show')
             ->name('show')
-            ->missing(fn() => throw new FileLinkMissingException());
+            ->missing(fn () => throw new FileLinkMissingException);
         Route::post('/', 'update')
             ->name('update')
-            ->missing(fn() => throw new FileLinkMissingException());
-    })
-;
+            ->missing(fn () => throw new FileLinkMissingException);
+    });

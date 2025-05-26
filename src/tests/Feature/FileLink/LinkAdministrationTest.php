@@ -4,8 +4,6 @@ namespace Tests\Feature\FileLink;
 
 use App\Models\FileLink;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
@@ -24,8 +22,6 @@ class LinkAdministrationTest extends TestCase
             ->assertRedirect(route('login'));
         $this->assertGuest();
     }
-
-
 
     public function test_invoke_no_permission(): void
     {
@@ -55,7 +51,7 @@ class LinkAdministrationTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('FileLink/Index')
                     ->has('is-admin')
             );
@@ -73,7 +69,7 @@ class LinkAdministrationTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('FileLink/Index')
                     ->has('is-admin')
             );

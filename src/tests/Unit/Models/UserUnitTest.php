@@ -192,12 +192,12 @@ class UserUnitTest extends TestCase
             $linkList->makeHidden([
                 'email_on_visit',
                 'link_hash',
-                'cust_id'
+                'cust_id',
             ])->toArray(),
             $this->model->FileLinks->makeHidden([
                 'email_on_visit',
                 'link_hash',
-                'cust_id'
+                'cust_id',
             ])->toArray()
         );
     }

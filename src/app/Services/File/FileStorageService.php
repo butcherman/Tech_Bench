@@ -47,7 +47,7 @@ class FileStorageService
     protected function checkForDiskFile(string $disk, string $path): void
     {
         if (Storage::disk($disk)->missing($path)) {
-            throw new FileMissingException($disk . DIRECTORY_SEPARATOR . $path);
+            throw new FileMissingException($disk.DIRECTORY_SEPARATOR.$path);
         }
     }
 }

@@ -6,11 +6,9 @@ use App\Events\File\FileDataDeletedEvent;
 use App\Models\Customer;
 use App\Models\CustomerFileType;
 use App\Models\FileLink;
-use App\Models\FileLinkFile;
 use App\Models\FileLinkTimeline;
 use App\Models\FileUpload;
 use App\Models\User;
-use App\Services\File\FileStorageService;
 use App\Services\FileLink\FileLinkFileService;
 use Illuminate\Support\Facades\Event;
 use Mockery\MockInterface;
@@ -118,7 +116,7 @@ class FileLinkFileServiceUnitTest extends TestCase
         $link->Files()->attach($file, [
             'timeline_id' => FileLinkTimeline::create([
                 'link_id' => $link->link_id,
-                'added_by' => 'bob'
+                'added_by' => 'bob',
             ])->timeline_id,
             'upload' => true,
         ]);
