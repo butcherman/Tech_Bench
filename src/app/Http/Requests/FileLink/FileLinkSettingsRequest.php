@@ -22,6 +22,7 @@ class FileLinkSettingsRequest extends FormRequest
     {
         return [
             'feature_enabled' => ['required', 'boolean'],
+            'allow_custom_url' => ['required', 'boolean'],
             'default_link_life' => ['required', 'numeric'],
             'auto_delete' => ['required', 'boolean'],
             'auto_delete_days' => ['required', 'numeric'],

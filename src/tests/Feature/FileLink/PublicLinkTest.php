@@ -4,8 +4,8 @@ namespace Tests\Feature\FileLink;
 
 use App\Events\FileLink\FileUploadedFromPublicEvent;
 use App\Exceptions\FileLink\FileLinkExpiredException;
+use App\Exceptions\FileLink\FileLinkMissingException;
 use App\Models\FileLink;
-use App\Models\FileUpload;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\UploadedFile;
@@ -24,9 +24,16 @@ class PublicLinkTest extends TestCase
     */
     public function test_show_bad_link(): void
     {
-        $response = $this->get(route('guest-link.show', 'random-string'));
+        Exceptions::fake();
+
+        $this->expectException(FileLinkMissingException::class);
+
+        $response = $this->withoutExceptionHandling()
+            ->get(route('guest-link.show', 'random-string'));
 
         $response->assertStatus(404);
+
+        Exceptions::assertReported(FileLinkExpiredException::class);
     }
 
     public function test_show_expired_link(): void
@@ -54,7 +61,7 @@ class PublicLinkTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('FileLink/Public/Show')
                     ->has('link')
                     ->has('files')
@@ -72,7 +79,7 @@ class PublicLinkTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('FileLink/Public/Show')
                     ->has('link')
                     ->has('files')
@@ -86,18 +93,24 @@ class PublicLinkTest extends TestCase
     */
     public function test_store_invalid_link(): void
     {
+        Exceptions::fake();
+
         $data = [
             'name' => 'Billy Bob',
             'note' => 'This is a note',
             'file' => UploadedFile::fake()->image('testPhoto.png'),
         ];
 
-        $response = $this->post(
+        $this->expectException(FileLinkMissingException::class);
+
+        $response = $this->withoutExceptionHandling()->post(
             route('guest-link.store', 'random-string'),
             $data
         );
 
         $response->assertStatus(404);
+
+        Exceptions::assertReported(FileLinkExpiredException::class);
     }
 
     public function test_store_expired_link(): void
@@ -152,7 +165,7 @@ class PublicLinkTest extends TestCase
         ]);
 
         Storage::disk('fileLinks')
-            ->assertExists($link->link_id . DIRECTORY_SEPARATOR . 'testPhoto.png');
+            ->assertExists($link->link_id.DIRECTORY_SEPARATOR.'testPhoto.png');
     }
 
     /*
@@ -162,18 +175,24 @@ class PublicLinkTest extends TestCase
     */
     public function test_update_invalid_link(): void
     {
+        Exceptions::fake();
+
         $data = [
             'name' => 'Billy Bob',
             'note' => 'This is a note',
             'file' => UploadedFile::fake()->image('testPhoto.png'),
         ];
 
-        $response = $this->put(
+        $this->expectException(FileLinkMissingException::class);
+
+        $response = $this->withoutExceptionHandling()->put(
             route('guest-link.update', 'random-string'),
             $data
         );
 
         $response->assertStatus(404);
+
+        Exceptions::assertReported(FileLinkExpiredException::class);
     }
 
     public function test_update_expired_link(): void

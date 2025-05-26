@@ -13,6 +13,14 @@ interface formData {
     [key: string]: string;
 }
 
+interface formError {
+    message: {
+        errors: { [key: string]: string[] };
+        message: string;
+    };
+    status: number;
+}
+
 const emit = defineEmits([
     "submitting",
     "success",
@@ -112,27 +120,21 @@ const onSubmit = handleSubmit((form: formData): void => {
 |-------------------------------------------------------------------------------
 */
 const uncaughtErrors = ref<string[]>([]);
-const handleErrors = (
-    originalForm: formData,
-    formErrors: Partial<Record<string | number, string>>
-) => {
+const handleErrors = (formErrors: formError) => {
     emit("has-errors", formErrors);
-    const formKeys = Object.keys(originalForm);
 
-    // Cycle through errors and assign to proper field values
-    for (const [key, value] of Object.entries(formErrors)) {
-        if (value) {
-            if (typeof value === "object") {
-                handleErrors(originalForm, value);
-            } else {
-                if (formKeys.indexOf(key) != -1) {
-                    setFieldError(key, value);
-                } else {
-                    // Errors that are not attache to input are displayed as alert
-                    uncaughtErrors.value.push(value);
-                }
+    isSubmitting.value = false;
+
+    if (formErrors.status === 422) {
+        for (const [key, value] of Object.entries(formErrors.message.errors)) {
+            console.log(key, value);
+
+            for (const v in value) {
+                setFieldError(key, v);
             }
         }
+    } else {
+        alert(formErrors.message);
     }
 };
 

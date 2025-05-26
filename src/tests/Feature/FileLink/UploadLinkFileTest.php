@@ -4,10 +4,7 @@ namespace Tests\Feature\FileLink;
 
 use App\Models\FileLink;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
-use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class UploadLinkFileTest extends TestCase
@@ -28,6 +25,7 @@ class UploadLinkFileTest extends TestCase
             'allow_upload' => true,
             'instructions' => 'Here are some instructions',
             'file' => UploadedFile::fake()->image('testPhoto.png'),
+            'link_hash' => 'custom-hash',
         ];
 
         $response = $this->post(route('links.upload', $link->link_hash), $data);
@@ -50,6 +48,7 @@ class UploadLinkFileTest extends TestCase
             'allow_upload' => true,
             'instructions' => 'Here are some instructions',
             'file' => UploadedFile::fake()->image('testPhoto.png'),
+            'link_hash' => 'custom-hash',
         ];
 
         $response = $this->actingAs($user)
@@ -71,6 +70,7 @@ class UploadLinkFileTest extends TestCase
             'allow_upload' => true,
             'instructions' => 'Here are some instructions',
             'file' => UploadedFile::fake()->image('testPhoto.png'),
+            'link_hash' => 'custom-hash',
         ];
 
         $response = $this->actingAs($user)

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\FileLink;
 
-use App\Enums\DiskEnum;
 use App\Http\Controllers\FileUploadController;
 use App\Http\Requests\FileLink\FileLinkRequest;
 use App\Models\FileLink;
@@ -11,6 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response as HttpResponse;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -26,7 +26,7 @@ class FileLinkController extends FileUploadController
         $this->authorize('viewAny', FileLink::class);
 
         return Inertia::render('FileLink/Index', [
-            'link-list' => Inertia::defer(fn() => $request->user()->FileLinks),
+            'link-list' => Inertia::defer(fn () => $request->user()->FileLinks),
         ]);
     }
 
@@ -38,9 +38,11 @@ class FileLinkController extends FileUploadController
         $this->authorize('create', FileLink::class);
 
         return Inertia::render('FileLink/Create', [
-            'default-expire' => fn() => Carbon::now()
+            'default-expire' => fn () => Carbon::now()
                 ->addDays(config('file-link.default_link_life'))
                 ->format('Y-m-d'),
+            'link-hash' => fn () => Str::uuid()->toString(),
+            'allow-custom-url' => fn () => config('file-link.allow_custom_url'),
         ]);
     }
 
@@ -67,16 +69,16 @@ class FileLinkController extends FileUploadController
         $this->authorize('view', $link);
 
         return Inertia::render('FileLink/Show', [
-            'link' => fn() => $link,
-            'is-admin' => fn() => $request->user()->can('manage', $link)
+            'link' => fn () => $link,
+            'is-admin' => fn () => $request->user()->can('manage', $link)
                 && $link->user_id !== $request->user()->user_id,
 
             /**
              * Deferred Props
              */
-            'timeline' => Inertia::defer(fn() => $link->Timeline),
-            'uploads' => Inertia::defer(fn() => $link->Uploads),
-            'downloads' => Inertia::defer(fn() => $link->Downloads),
+            'timeline' => Inertia::defer(fn () => $link->Timeline),
+            'uploads' => Inertia::defer(fn () => $link->Uploads),
+            'downloads' => Inertia::defer(fn () => $link->Downloads),
         ]);
     }
 
@@ -88,7 +90,8 @@ class FileLinkController extends FileUploadController
         $this->authorize('update', $link);
 
         return Inertia::render('FileLink/Edit', [
-            'link' => fn() => $link->mergeCasts(['expire' => 'datetime:Y-m-d']),
+            'link' => fn () => $link->mergeCasts(['expire' => 'datetime:Y-m-d']),
+            'allow-custom-url' => fn () => config('file-link.allow_custom_url'),
         ]);
     }
 

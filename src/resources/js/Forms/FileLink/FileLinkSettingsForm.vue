@@ -12,6 +12,7 @@ const props = defineProps<{
     auto_delete: boolean;
     auto_delete_days: number;
     auto_delete_override: boolean;
+    allow_custom_url: boolean;
 }>();
 
 const showCollapse = ref<boolean>(props.feature_enabled);
@@ -24,6 +25,7 @@ const showAutoDelete = ref<boolean>(props.auto_delete);
 */
 const initValues = {
     feature_enabled: props.feature_enabled,
+    allow_custom_url: props.allow_custom_url,
     default_link_life: props.default_link_life,
     auto_delete: props.auto_delete,
     auto_delete_days: props.auto_delete_days,
@@ -31,6 +33,7 @@ const initValues = {
 };
 const schema = object({
     feature_enabled: boolean().required(),
+    allow_custom_url: boolean().required(),
     default_link_life: number().required(),
     auto_delete: boolean().required(),
     auto_delete_days: number().required(),
@@ -55,6 +58,11 @@ const schema = object({
                     @change="showCollapse = !showCollapse"
                 />
                 <Collapse :show="showCollapse">
+                    <SwitchInput
+                        id="allow-custom-url"
+                        name="allow_custom_url"
+                        label="Allow Users to Customize the Link URL"
+                    />
                     <SwitchInput
                         id="auto-delete"
                         name="auto_delete"

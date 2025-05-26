@@ -3,7 +3,6 @@
 namespace App\Listeners\FileLink;
 
 use App\Events\FileLink\FileUploadedFromPublicEvent;
-use App\Events\FileLink\HandleFileUploadFromPublicEvent;
 use App\Notifications\FileLink\LinkFileUploadedNotification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Notification;

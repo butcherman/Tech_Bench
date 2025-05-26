@@ -21,6 +21,7 @@ class FileLinkAdministrationService
             'auto_delete' => (bool) config('file-link.auto_delete'),
             'auto_delete_days' => config('file-link.auto_delete_days'),
             'auto_delete_override' => (bool) config('file-link.auto_delete_override'),
+            'allow_custom_url' => (bool) config('file-link.allow_custom_url'),
         ];
     }
 

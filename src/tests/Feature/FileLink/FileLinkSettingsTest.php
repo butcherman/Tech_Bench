@@ -54,7 +54,8 @@ class FileLinkSettingsTest extends TestCase
                     ->has('feature_enabled')
                     ->has('default_link_life')
                     ->has('auto_delete_days')
-                    ->has('auto_delete_override'),
+                    ->has('auto_delete_override')
+                    ->has('allow_custom_url'),
             );
     }
 
@@ -75,7 +76,8 @@ class FileLinkSettingsTest extends TestCase
                     ->has('feature_enabled')
                     ->has('default_link_life')
                     ->has('auto_delete_days')
-                    ->has('auto_delete_override'),
+                    ->has('auto_delete_override')
+                    ->has('allow_custom_url'),
             );
     }
 
@@ -92,6 +94,7 @@ class FileLinkSettingsTest extends TestCase
             'auto_delete' => true,
             'auto_delete_days' => '365',
             'auto_delete_override' => false,
+            'allow_custom_url' => true,
         ];
 
         $response = $this->put(route('admin.links.settings.update'), $data);
@@ -113,6 +116,7 @@ class FileLinkSettingsTest extends TestCase
             'auto_delete' => true,
             'auto_delete_days' => '365',
             'auto_delete_override' => false,
+            'allow_custom_url' => true,
         ];
 
         $response = $this->actingAs($user)
@@ -135,6 +139,7 @@ class FileLinkSettingsTest extends TestCase
             'auto_delete' => false,
             'auto_delete_days' => '365',
             'auto_delete_override' => false,
+            'allow_custom_url' => true,
         ];
 
         $response = $this->actingAs($user)
@@ -154,6 +159,9 @@ class FileLinkSettingsTest extends TestCase
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'file-link.auto_delete_override',
+        ]);
+        $this->assertDatabaseHas('app_settings', [
+            'key' => 'file-link.allow_custom_url',
         ]);
 
         Event::assertDispatched(FeatureChangedEvent::class);
@@ -173,6 +181,7 @@ class FileLinkSettingsTest extends TestCase
             'auto_delete' => false,
             'auto_delete_days' => '365',
             'auto_delete_override' => false,
+            'allow_custom_url' => true,
         ];
 
         $response = $this->actingAs($user)
@@ -192,6 +201,9 @@ class FileLinkSettingsTest extends TestCase
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'file-link.auto_delete_override',
+        ]);
+        $this->assertDatabaseHas('app_settings', [
+            'key' => 'file-link.allow_custom_url',
         ]);
 
         Event::assertDispatched(FeatureChangedEvent::class);

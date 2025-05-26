@@ -5,6 +5,8 @@ import FileLinkCreateForm from "@/Forms/FileLink/FileLinkCreateForm.vue";
 
 defineProps<{
     defaultExpire: string;
+    linkHash: string;
+    allowCustomUrl: boolean;
 }>();
 </script>
 
@@ -15,7 +17,11 @@ export default { layout: AppLayout };
 <template>
     <div class="flex justify-center">
         <Card class="tb-card" title="New File Link">
-            <FileLinkCreateForm :default-expire="defaultExpire" />
+            <FileLinkCreateForm
+                :default-expire="defaultExpire"
+                :link-hash="linkHash"
+                :allow-custom-url="allowCustomUrl"
+            />
         </Card>
     </div>
 </template>

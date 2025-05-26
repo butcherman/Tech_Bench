@@ -10,6 +10,8 @@ import { useForm } from "@inertiajs/vue3";
 
 const props = defineProps<{
     defaultExpire: string;
+    linkHash: string;
+    allowCustomUrl: boolean;
 }>();
 
 const form = useTemplateRef("file-link-form");
@@ -44,12 +46,20 @@ watch(hasInstructions, (newInstruction) => {
 */
 const initValues = {
     link_name: "",
+    link_hash: props.linkHash,
     expire: props.defaultExpire,
     allow_upload: false,
     instructions: "",
 };
 const schema = object({
     link_name: string().required().label("Link Name"),
+    link_hash: string()
+        .required()
+        .matches(
+            /^[A-Za-z0-9\-]+$/,
+            "Only letters, numbers, and dashes are allowed"
+        )
+        .label("Link URL"),
     expire: date().required().typeError("Please enter a valid date"),
     allow_upload: boolean().required(),
     instructions: string().nullable(),
@@ -67,6 +77,19 @@ const schema = object({
         @success="handleSuccessfulUpload"
     >
         <TextInput id="link-name" name="link_name" label="Link Name" focus />
+        <div v-if="allowCustomUrl" class="flex flex-row">
+            <div
+                class="border border-collapse rounded-e-none rounded-lg ps-2 py-2 my-2 text-muted"
+            >
+                {{ $route("guest-link.index") }}/
+            </div>
+            <TextInput
+                id="link-hash"
+                name="link_hash"
+                label="Link URL"
+                class="grow rounded-s-none"
+            />
+        </div>
         <TextInput id="expire" name="expire" label="Expire Date" type="date" />
         <div class="flex justify-center">
             <div>

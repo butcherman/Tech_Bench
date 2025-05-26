@@ -4,6 +4,7 @@ namespace App\Http\Requests\FileLink;
 
 use App\Models\FileLink;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class FileLinkRequest extends FormRequest
 {
@@ -29,6 +30,12 @@ class FileLinkRequest extends FormRequest
             'expire' => ['required', 'string'],
             'allow_upload' => ['required'],
             'instructions' => ['nullable', 'string'],
+            'link_hash' => [
+                'required',
+                'string',
+                'regex:/^[A-Za-z0-9\-]+$/',
+                Rule::unique('file_links')->ignore($this->link),
+            ],
         ];
     }
 }

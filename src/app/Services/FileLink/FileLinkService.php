@@ -19,7 +19,7 @@ class FileLinkService
     public function createFileLink(Collection $requestData, User $user, array $fileList): FileLink
     {
         $newLink = new FileLink($requestData->all());
-        $newLink->link_hash = Str::uuid()->toString();
+        // $newLink->link_hash = Str::uuid()->toString();
 
         // Attach link to user
         $user->FileLinks()->save($newLink);

@@ -33,6 +33,7 @@ class FileLinkServiceUnitTest extends TestCase
             ->toArray();
         $data = [
             'link_name' => 'Test Link',
+            'link_hash' => 'custom-hash',
             'expire' => Carbon::now()->addDays(90)->format('Y-m-d'),
             'allow_upload' => true,
             'instructions' => 'Test Link Instruction',
@@ -74,6 +75,7 @@ class FileLinkServiceUnitTest extends TestCase
         $fileLink = FileLink::factory()->create();
         $data = [
             'link_name' => 'Test Link',
+            'link_hash' => 'custom-hash',
             'expire' => Carbon::now()->addDays(90)->format('Y-m-d'),
             'allow_upload' => true,
             'instructions' => 'Test Link Instruction',
@@ -90,6 +92,7 @@ class FileLinkServiceUnitTest extends TestCase
             'expire' => $data['expire'],
             'allow_upload' => $data['allow_upload'],
             'instructions' => $data['instructions'],
+            'link_hash' => 'custom-hash',
         ]);
     }
 

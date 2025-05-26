@@ -9,6 +9,7 @@ const props = defineProps<{
     auto_delete: boolean;
     auto_delete_days: number;
     auto_delete_override: boolean;
+    allow_custom_url: boolean;
 }>();
 </script>
 

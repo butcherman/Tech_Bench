@@ -3,12 +3,9 @@
 namespace App\Http\Controllers\FileLink;
 
 use App\Enums\DiskEnum;
-use App\Http\Controllers\Controller;
 use App\Http\Controllers\FileUploadController;
 use App\Http\Requests\FileLink\FileLinkRequest;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Inertia\Inertia;
 
 class UploadLinkFileController extends FileUploadController
 {

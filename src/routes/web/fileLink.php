@@ -78,17 +78,18 @@ Route::middleware('auth.secure')->group(function () {
 | /file-links/{link-hash}
 |-------------------------------------------------------------------------------
 */
+Route::get('/file-links', fn () => abort(404))->name('guest-link.index');
 Route::prefix('file-links/{link:link_hash}')
     ->controller(PublicLinkController::class)
     ->name('guest-link.')
     ->group(function () {
         Route::get('/', 'show')
             ->name('show')
-            ->missing(fn() => throw new FileLinkMissingException);
+            ->missing(fn () => throw new FileLinkMissingException);
         Route::post('/', 'store')
             ->name('store')
-            ->missing(fn() => throw new FileLinkMissingException);
+            ->missing(fn () => throw new FileLinkMissingException);
         Route::put('/', 'update')
             ->name('update')
-            ->missing(fn() => throw new FileLinkMissingException);
+            ->missing(fn () => throw new FileLinkMissingException);
     });

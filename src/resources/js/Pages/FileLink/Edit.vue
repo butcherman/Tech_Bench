@@ -5,6 +5,7 @@ import FileLinkEditForm from "@/Forms/FileLink/FileLinkEditForm.vue";
 
 defineProps<{
     link: fileLink;
+    allowCustomUrl: boolean;
 }>();
 </script>
 
@@ -15,7 +16,7 @@ export default { layout: AppLayout };
 <template>
     <div class="flex justify-center">
         <Card class="tb-card-lg" title="Update File Link Details">
-            <FileLinkEditForm :link="link" />
+            <FileLinkEditForm :link="link" :allow-custom-url="allowCustomUrl" />
         </Card>
     </div>
 </template>
