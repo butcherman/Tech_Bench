@@ -13,7 +13,7 @@ const showOption = computed(() => !props.link.is_expired && !props.isAdmin);
 </script>
 
 <template>
-    <div class="flex flex-col gap-2">
+    <div class="flex flex-col gap-2 h-full justify-center">
         <a
             v-if="showOption"
             :href="`mailto:?subject=A File Link Has Been Created For You

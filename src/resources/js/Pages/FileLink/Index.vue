@@ -7,10 +7,13 @@ import Card from "@/Components/_Base/Card.vue";
 import DataTable from "@/Components/_Base/DataTable/DataTable.vue";
 import DeleteBadge from "@/Components/_Base/Badges/DeleteBadge.vue";
 import verifyModal from "@/Modules/verifyModal";
+import { computed } from "vue";
 import { router, Deferred } from "@inertiajs/vue3";
+import type { tableColumnProp } from "@/Components/_Base/DataTable/DataTable.vue";
 
-defineProps<{
+const props = defineProps<{
     linkList?: fileLink[];
+    isAdmin?: boolean;
 }>();
 
 /**
@@ -44,23 +47,41 @@ const deleteLink = (row: fileLink): void => {
     });
 };
 
-const cols = [
-    {
-        label: "Link Name",
-        field: "link_name",
-        filterable: true,
-        sort: true,
-    },
-    {
-        label: "Expires",
-        field: "expire",
-        filterable: true,
-        sort: true,
-    },
-    {
+/**
+ * Columns that will show in the table
+ */
+const cols = computed(() => {
+    let base: tableColumnProp[] = [
+        {
+            label: "Link Name",
+            field: "link_name",
+            filterable: true,
+            sort: true,
+        },
+        {
+            label: "Expires",
+            field: "expire",
+            filterable: true,
+            sort: true,
+        },
+    ];
+
+    if (props.isAdmin) {
+        base.push({
+            label: "Owner",
+            field: "user.full_name",
+            filterable: true,
+            filterSelect: true,
+            sort: true,
+        });
+    }
+
+    base.push({
         field: "actions",
-    },
-];
+    });
+
+    return base;
+});
 </script>
 
 <script lang="ts">
@@ -81,32 +102,34 @@ export default { layout: AppLayout };
             <Deferred data="link-list">
                 <template #fallback>
                     <div class="flex justify-center">
-                        <AtomLoader />
+                        <AtomLoader text="Loading..." />
                     </div>
                 </template>
-                <DataTable
-                    :columns="cols"
-                    :rows="linkList"
-                    :row-bg-fn="isExpiredBg"
-                    :row-click-link="(row) => row.href"
-                >
-                    <template #row.actions="{ rowData }">
-                        <div class="flex justify-end">
-                            <BaseBadge
-                                v-if="!rowData.is_expired"
-                                class="me-1"
-                                icon="link-slash"
-                                variant="warning"
-                                v-tooltip="'Disable Link'"
-                                @click.stop="disableLink(rowData)"
-                            />
-                            <DeleteBadge
-                                v-tooltip="'Delete Link'"
-                                @click.stop="deleteLink(rowData)"
-                            />
-                        </div>
-                    </template>
-                </DataTable>
+                <template v-if="linkList">
+                    <DataTable
+                        :columns="cols"
+                        :rows="linkList"
+                        :row-bg-fn="isExpiredBg"
+                        :row-click-link="(row) => row.href"
+                    >
+                        <template #row.actions="{ rowData }">
+                            <div class="flex justify-end">
+                                <BaseBadge
+                                    v-if="!rowData.is_expired"
+                                    class="me-1"
+                                    icon="link-slash"
+                                    variant="warning"
+                                    v-tooltip="'Disable Link'"
+                                    @click.stop="disableLink(rowData)"
+                                />
+                                <DeleteBadge
+                                    v-tooltip="'Delete Link'"
+                                    @click.stop="deleteLink(rowData)"
+                                />
+                            </div>
+                        </template>
+                    </DataTable>
+                </template>
             </Deferred>
         </Card>
     </div>

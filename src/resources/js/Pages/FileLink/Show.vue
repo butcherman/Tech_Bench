@@ -19,6 +19,7 @@ defineProps<{
     timeline?: fileLinkTimeline[];
     uploads?: fileLinkFile[];
     downloads?: fileLinkFile[];
+    isAdmin?: boolean;
 }>();
 
 const moveModal = useTemplateRef("move-file-modal");
@@ -49,7 +50,7 @@ export default { layout: AppLayout };
                 <LinkDetails :link="link" />
             </Card>
             <Card class="grow">
-                <LinkActions :link="link" />
+                <LinkActions :link="link" :is-admin="isAdmin" />
             </Card>
         </div>
         <LinkTimeline :timeline="timeline" />

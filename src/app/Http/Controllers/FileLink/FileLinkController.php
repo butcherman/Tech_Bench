@@ -74,12 +74,14 @@ class FileLinkController extends FileUploadController
     /**
      * Show details for a File Link
      */
-    public function show(FileLink $link): Response
+    public function show(Request $request, FileLink $link): Response
     {
         $this->authorize('view', $link);
 
         return Inertia::render('FileLink/Show', [
             'link' => fn() => $link,
+            'is-admin' => fn() => $request->user()->can('manage', $link)
+                && $link->user_id !== $request->user()->user_id,
 
             /**
              * Deferred Props
