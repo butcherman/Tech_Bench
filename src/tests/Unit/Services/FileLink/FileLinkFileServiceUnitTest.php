@@ -111,7 +111,7 @@ class FileLinkFileServiceUnitTest extends TestCase
     */
     public function test_destroy_file_link_file(): void
     {
-        Event::fake();
+        Event::fake(FileDataDeletedEvent::class);
 
         $link = FileLink::factory()->create();
         $file = FileUpload::factory()->create();

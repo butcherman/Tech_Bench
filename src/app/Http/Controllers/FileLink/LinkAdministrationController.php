@@ -6,13 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Models\FileLink;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class LinkAdministrationController extends Controller
 {
     /**
-     * Handle the incoming request.
+     * Show a listing of all File Links for all Users.
      */
-    public function __invoke(Request $request)
+    public function __invoke(): Response
     {
         $this->authorize('manage', FileLink::class);
 
