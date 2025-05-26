@@ -58,15 +58,19 @@ class AppMaintenanceTest extends TestCase
         Storage::disk('local')->makeDirectory('test_one');
         Storage::disk('local')->put('test_one/valid.txt', 'valid file');
 
-        FileUpload::factory()->create([
+        FileUpload::create([
             'disk' => 'local',
             'folder' => 'test_one',
             'file_name' => 'valid.txt',
+            'file_size' => 0,
+            'public' => 0,
         ]);
-        FileUpload::factory()->create([
+        FileUpload::create([
             'disk' => 'local',
             'folder' => 'test_one',
             'file_name' => 'invalid.txt',
+            'file_size' => 0,
+            'public' => 0,
         ]);
 
         $this->artisan('app:maintenance --fix')
@@ -110,22 +114,28 @@ class AppMaintenanceTest extends TestCase
         Storage::put('test_two/test.txt', 'test file');
         Storage::put('test_two/valid.txt', 'valid file');
 
-        FileUpload::factory()->create([
+        FileUpload::create([
             'disk' => 'local',
             'folder' => 'test_one',
             'file_name' => 'valid.txt',
+            'file_size' => 0,
+            'public' => false,
         ]);
 
-        FileUpload::factory()->create([
+        FileUpload::create([
             'disk' => 'local',
             'folder' => 'test_one',
             'file_name' => 'invalid.txt',
+            'file_size' => 0,
+            'public' => false,
         ]);
 
-        FileUpload::factory()->create([
+        FileUpload::create([
             'disk' => 'local',
             'folder' => 'test_two',
             'file_name' => 'valid.txt',
+            'file_size' => 0,
+            'public' => false,
         ]);
 
         $this->artisan('app:maintenance --fix')

@@ -3,6 +3,7 @@
 namespace Tests\Feature\Customer;
 
 use App\Events\File\FileDataDeletedEvent;
+use App\Facades\CacheData;
 use App\Models\Customer;
 use App\Models\CustomerEquipment;
 use App\Models\CustomerFile;
@@ -16,6 +17,36 @@ use Tests\TestCase;
 
 class CustomerFileTest extends TestCase
 {
+    /*
+    |---------------------------------------------------------------------------
+    | Index Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_index_guest(): void
+    {
+        $customer = Customer::factory()->create();
+
+        $response = $this->get(route('customers.files.index', $customer->slug));
+
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
+        $this->assertGuest();
+    }
+
+    public function test_index(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->create();
+        $customer = Customer::factory()->create();
+
+        $response = $this->actingAs($user)->get(route('customers.files.index', $customer->slug));
+
+        $response->assertJson([
+            'equipmentList' => [],
+            'fileTypes' => CacheData::fileTypes()->toArray(),
+        ]);
+    }
+
     /*
     |---------------------------------------------------------------------------
     | Store Method
@@ -105,7 +136,7 @@ class CustomerFileTest extends TestCase
 
         Storage::disk('customers')
             ->assertExists(
-                $customer->cust_id.DIRECTORY_SEPARATOR.'randomImage.png'
+                $customer->cust_id . DIRECTORY_SEPARATOR . 'randomImage.png'
             );
     }
 
@@ -148,7 +179,7 @@ class CustomerFileTest extends TestCase
 
         Storage::disk('customers')
             ->assertExists(
-                $customer->cust_id.DIRECTORY_SEPARATOR.'randomImage.png'
+                $customer->cust_id . DIRECTORY_SEPARATOR . 'randomImage.png'
             );
     }
 
@@ -201,7 +232,7 @@ class CustomerFileTest extends TestCase
         ]);
 
         Storage::disk('customers')
-            ->assertExists($customer->cust_id.DIRECTORY_SEPARATOR.'randomImage.png');
+            ->assertExists($customer->cust_id . DIRECTORY_SEPARATOR . 'randomImage.png');
     }
 
     public function test_store_chunked_file(): void

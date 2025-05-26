@@ -52,18 +52,11 @@ class FileUploadUnitTest extends TestCase
 
     public function test_file_exists_missing(): void
     {
+        Storage::fake();
+        Storage::disk($this->model->disk)->delete(
+            $this->model->folder . DIRECTORY_SEPARATOR . $this->model->file_name
+        );
+
         $this->assertFalse($this->model->fileExists());
     }
-
-    // public function test_get_file_path(): void
-    // {
-    //     $this->assertEquals(
-    //         storage_path(
-    //             'app'.DIRECTORY_SEPARATOR.
-    //             $this->model->folder.DIRECTORY_SEPARATOR.
-    //             $this->model->file_name
-    //         ),
-    //         $this->model->getFilePath()
-    //     );
-    // }
 }

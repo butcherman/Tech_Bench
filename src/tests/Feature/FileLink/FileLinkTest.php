@@ -380,200 +380,201 @@ class FileLinkTest extends TestCase
     | Edit Method
     |---------------------------------------------------------------------------
     */
-    // public function test_edit_guest(): void
-    // {
-    //     $link = FileLink::factory()->createQuietly();
+    public function test_edit_guest(): void
+    {
+        $link = FileLink::factory()->createQuietly();
 
-    //     $response = $this->get(route('links.edit', $link->link_id));
+        $response = $this->get(route('links.edit', $link->link_id));
 
-    //     $response->assertStatus(302)
-    //         ->assertRedirect(route('login'));
-    //     $this->assertGuest();
-    // }
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
+        $this->assertGuest();
+    }
 
-    // public function test_edit_feature_disabled(): void
-    // {
-    //     config(['file-link.feature_enabled' => false]);
+    public function test_edit_feature_disabled(): void
+    {
+        config(['file-link.feature_enabled' => false]);
 
-    //     /** @var User $user */
-    //     $user = User::factory()->createQuietly();
-    //     $link = FileLink::factory()
-    //         ->createQuietly(['user_id' => $user->user_id]);
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+        $link = FileLink::factory()
+            ->createQuietly(['user_id' => $user->user_id]);
 
-    //     $response = $this->actingAs($user)
-    //         ->get(route('links.edit', $link->link_id));
+        $response = $this->actingAs($user)
+            ->get(route('links.edit', $link->link_id));
 
-    //     $response->assertForbidden();
-    // }
+        $response->assertForbidden();
+    }
 
-    // public function test_edit_no_permission(): void
-    // {
-    //     config(['file-link.feature_enabled' => true]);
-    //     $this->changeRolePermission(4, 'Use File Links', false);
+    public function test_edit_no_permission(): void
+    {
+        config(['file-link.feature_enabled' => true]);
+        $this->changeRolePermission(4, 'Use File Links', false);
 
-    //     /** @var User $user */
-    //     $user = User::factory()->createQuietly();
-    //     $link = FileLink::factory()
-    //         ->createQuietly(['user_id' => $user->user_id]);
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+        $link = FileLink::factory()
+            ->createQuietly(['user_id' => $user->user_id]);
 
-    //     $response = $this->actingAs($user)
-    //         ->get(route('links.edit', $link->link_id));
+        $response = $this->actingAs($user)
+            ->get(route('links.edit', $link->link_id));
 
-    //     $response->assertForbidden();
-    // }
+        $response->assertForbidden();
+    }
 
-    // public function test_edit_other_user(): void
-    // {
-    //     config(['file-link.feature_enabled' => true]);
+    public function test_edit_other_user(): void
+    {
+        config(['file-link.feature_enabled' => true]);
 
-    //     /** @var User $actingAs */
-    //     $actingAs = User::factory()->createQuietly();
-    //     $user = User::factory()->createQuietly();
-    //     $link = FileLink::factory()
-    //         ->createQuietly(['user_id' => $user->user_id]);
+        /** @var User $actingAs */
+        $actingAs = User::factory()->createQuietly();
+        $user = User::factory()->createQuietly();
+        $link = FileLink::factory()
+            ->createQuietly(['user_id' => $user->user_id]);
 
-    //     $response = $this->actingAs($actingAs)
-    //         ->get(route('links.edit', $link->link_id));
+        $response = $this->actingAs($actingAs)
+            ->get(route('links.edit', $link->link_id));
 
-    //     $response->assertForbidden();
-    // }
+        $response->assertForbidden();
+    }
 
-    // public function test_edit(): void
-    // {
-    //     config(['file-link.feature_enabled' => true]);
+    public function test_edit(): void
+    {
+        config(['file-link.feature_enabled' => true]);
 
-    //     /** @var User $user */
-    //     $user = User::factory()->createQuietly();
-    //     $link = FileLink::factory()
-    //         ->createQuietly(['user_id' => $user->user_id]);
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+        $link = FileLink::factory()
+            ->createQuietly(['user_id' => $user->user_id]);
 
-    //     $response = $this->actingAs($user)
-    //         ->get(route('links.edit', $link->link_id));
+        $response = $this->actingAs($user)
+            ->get(route('links.edit', $link->link_id));
 
-    //     $response->assertSuccessful()
-    //         ->assertInertia(fn (Assert $page) => $page
-    //             ->component('FileLinks/Edit')
-    //             ->has('link')
-    //         );
-    // }
+        $response->assertSuccessful()
+            ->assertInertia(
+                fn(Assert $page) => $page
+                    ->component('FileLink/Edit')
+                    ->has('link')
+            );
+    }
 
     /*
     |---------------------------------------------------------------------------
     | Update Method
     |---------------------------------------------------------------------------
     */
-    // public function test_update_guest(): void
-    // {
-    //     $user = User::factory()->createQuietly();
-    //     $link = FileLink::factory()
-    //         ->createQuietly(['user_id' => $user->user_id]);
-    //     $data = [
-    //         'link_name' => 'Test Link',
-    //         'expire' => '2030-12-12',
-    //         'allow_upload' => true,
-    //         'instructions' => 'Here are some instructions',
-    //     ];
+    public function test_update_guest(): void
+    {
+        $user = User::factory()->createQuietly();
+        $link = FileLink::factory()
+            ->createQuietly(['user_id' => $user->user_id]);
+        $data = [
+            'link_name' => 'Test Link',
+            'expire' => '2030-12-12',
+            'allow_upload' => true,
+            'instructions' => 'Here are some instructions',
+        ];
 
-    //     $response = $this->put(route('links.update', $link->link_id), $data);
+        $response = $this->put(route('links.update', $link->link_id), $data);
 
-    //     $response->assertStatus(302)
-    //         ->assertRedirect(route('login'));
-    //     $this->assertGuest();
-    // }
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
+        $this->assertGuest();
+    }
 
-    // public function test_update_feature_disabled(): void
-    // {
-    //     config(['file-link.feature_enabled' => false]);
+    public function test_update_feature_disabled(): void
+    {
+        config(['file-link.feature_enabled' => false]);
 
-    //     /** @var User $user */
-    //     $user = User::factory()->createQuietly();
-    //     $link = FileLink::factory()
-    //         ->createQuietly(['user_id' => $user->user_id]);
-    //     $data = [
-    //         'link_name' => 'Test Link',
-    //         'expire' => '2030-12-12',
-    //         'allow_upload' => true,
-    //         'instructions' => 'Here are some instructions',
-    //     ];
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+        $link = FileLink::factory()
+            ->createQuietly(['user_id' => $user->user_id]);
+        $data = [
+            'link_name' => 'Test Link',
+            'expire' => '2030-12-12',
+            'allow_upload' => true,
+            'instructions' => 'Here are some instructions',
+        ];
 
-    //     $response = $this->actingAs($user)
-    //         ->put(route('links.update', $link->link_id), $data);
+        $response = $this->actingAs($user)
+            ->put(route('links.update', $link->link_id), $data);
 
-    //     $response->assertForbidden();
-    // }
+        $response->assertForbidden();
+    }
 
-    // public function test_update_no_permission(): void
-    // {
-    //     config(['file-link.feature_enabled' => true]);
-    //     $this->changeRolePermission(4, 'Use File Links', false);
+    public function test_update_no_permission(): void
+    {
+        config(['file-link.feature_enabled' => true]);
+        $this->changeRolePermission(4, 'Use File Links', false);
 
-    //     /** @var User $user */
-    //     $user = User::factory()->createQuietly();
-    //     $link = FileLink::factory()
-    //         ->createQuietly(['user_id' => $user->user_id]);
-    //     $data = [
-    //         'link_name' => 'Test Link',
-    //         'expire' => '2030-12-12',
-    //         'allow_upload' => true,
-    //         'instructions' => 'Here are some instructions',
-    //     ];
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+        $link = FileLink::factory()
+            ->createQuietly(['user_id' => $user->user_id]);
+        $data = [
+            'link_name' => 'Test Link',
+            'expire' => '2030-12-12',
+            'allow_upload' => true,
+            'instructions' => 'Here are some instructions',
+        ];
 
-    //     $response = $this->actingAs($user)
-    //         ->put(route('links.update', $link->link_id), $data);
+        $response = $this->actingAs($user)
+            ->put(route('links.update', $link->link_id), $data);
 
-    //     $response->assertForbidden();
-    // }
+        $response->assertForbidden();
+    }
 
-    // public function test_update_other_user(): void
-    // {
-    //     config(['file-link.feature_enabled' => true]);
+    public function test_update_other_user(): void
+    {
+        config(['file-link.feature_enabled' => true]);
 
-    //     /** @var User $actingAs */
-    //     $actingAs = User::factory()->createQuietly();
-    //     $user = User::factory()->createQuietly();
-    //     $link = FileLink::factory()
-    //         ->createQuietly(['user_id' => $user->user_id]);
-    //     $data = [
-    //         'link_name' => 'Test Link',
-    //         'expire' => '2030-12-12',
-    //         'allow_upload' => true,
-    //         'instructions' => 'Here are some instructions',
-    //     ];
+        /** @var User $actingAs */
+        $actingAs = User::factory()->createQuietly();
+        $user = User::factory()->createQuietly();
+        $link = FileLink::factory()
+            ->createQuietly(['user_id' => $user->user_id]);
+        $data = [
+            'link_name' => 'Test Link',
+            'expire' => '2030-12-12',
+            'allow_upload' => true,
+            'instructions' => 'Here are some instructions',
+        ];
 
-    //     $response = $this->actingAs($actingAs)
-    //         ->put(route('links.update', $link->link_id), $data);
+        $response = $this->actingAs($actingAs)
+            ->put(route('links.update', $link->link_id), $data);
 
-    //     $response->assertForbidden();
-    // }
+        $response->assertForbidden();
+    }
 
-    // public function test_update(): void
-    // {
-    //     config(['file-link.feature_enabled' => true]);
+    public function test_update(): void
+    {
+        config(['file-link.feature_enabled' => true]);
 
-    //     /** @var User $user */
-    //     $user = User::factory()->createQuietly();
-    //     $link = FileLink::factory()
-    //         ->createQuietly(['user_id' => $user->user_id]);
-    //     $data = [
-    //         'link_name' => 'Test Link',
-    //         'expire' => '2030-12-12',
-    //         'allow_upload' => true,
-    //         'instructions' => 'Here are some instructions',
-    //     ];
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+        $link = FileLink::factory()
+            ->createQuietly(['user_id' => $user->user_id]);
+        $data = [
+            'link_name' => 'Test Link',
+            'expire' => '2030-12-12',
+            'allow_upload' => true,
+            'instructions' => 'Here are some instructions',
+        ];
 
-    //     $response = $this->actingAs($user)
-    //         ->put(route('links.update', $link->link_id), $data);
+        $response = $this->actingAs($user)
+            ->put(route('links.update', $link->link_id), $data);
 
-    //     $response->assertStatus(302);
+        $response->assertStatus(302);
 
-    //     $this->assertDatabaseHas('file_links', [
-    //         'link_id' => $link->link_id,
-    //         'link_name' => 'Test Link',
-    //         'expire' => '2030-12-12',
-    //         'allow_upload' => true,
-    //         'instructions' => 'Here are some instructions',
-    //     ]);
-    // }
+        $this->assertDatabaseHas('file_links', [
+            'link_id' => $link->link_id,
+            'link_name' => 'Test Link',
+            'expire' => '2030-12-12',
+            'allow_upload' => true,
+            'instructions' => 'Here are some instructions',
+        ]);
+    }
 
     /*
     |---------------------------------------------------------------------------
