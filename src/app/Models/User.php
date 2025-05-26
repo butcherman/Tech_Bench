@@ -133,9 +133,11 @@ class User extends Authenticatable
             TechTip::class,
             UserTechTipRecent::class,
             'user_id',
-            'tip_id'
-        )->latest('user_tech_tip_recents.created_at')
-            ->select(['slug', 'subject'])
+            'tip_id',
+            'user_id',
+            'tip_id',
+        )
+            ->latest('user_tech_tip_recents.updated_at')
             ->limit(10);
     }
 
@@ -146,8 +148,10 @@ class User extends Authenticatable
             UserCustomerRecent::class,
             'user_id',
             'cust_id',
-        )->latest('user_customer_recents.created_at')
-            ->select(['slug', 'name'])
+            'user_id',
+            'cust_id',
+        )
+            ->latest('user_customer_recents.updated_at')
             ->limit(10);
     }
 
@@ -158,7 +162,7 @@ class User extends Authenticatable
             'user_tech_tip_bookmarks',
             'user_id',
             'tip_id'
-        )->select(['slug', 'subject']);
+        );
     }
 
     public function CustomerBookmarks(): BelongsToMany
@@ -168,7 +172,7 @@ class User extends Authenticatable
             'user_customer_bookmarks',
             'user_id',
             'cust_id',
-        )->select(['slug', 'name']);
+        );
     }
 
     public function FileLinks(): HasMany

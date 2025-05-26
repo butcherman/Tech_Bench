@@ -121,7 +121,7 @@ defineExpose({
         :full-page="fullPageOverlay"
         class="h-full"
     >
-        <div>
+        <div class="h-full">
             <form
                 class="vld-parent h-full flex flex-col"
                 novalidate

@@ -10,10 +10,19 @@ use Inertia\Response;
 class DashboardController extends Controller
 {
     /**
-     * Handle the incoming request.
+     * Show the application Dashboard
      */
     public function __invoke(Request $request): Response
     {
-        return Inertia::render('Home/Dashboard');
+        return Inertia::render('Home/Dashboard', [
+            'bookmarks' => Inertia::defer(fn () => [
+                'techTips' => $request->user()->TechTipBookmarks,
+                'customers' => $request->user()->CustomerBookmarks,
+            ]),
+            'recent' => Inertia::defer(fn () => [
+                'techTips' => $request->user()->RecentTechTips,
+                'customers' => $request->user()->RecentCustomers,
+            ]),
+        ]);
     }
 }
