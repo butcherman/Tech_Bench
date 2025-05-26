@@ -3,26 +3,38 @@
 namespace App\Http\Controllers\FileLink;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\FileLink\FileLinkSettingsRequest;
+use App\Models\FileLink;
+use App\Services\FileLink\FileLinkAdministrationService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class FileLinkSettingsController extends Controller
 {
+    public function __construct(protected FileLinkAdministrationService $svc) {}
+
     /**
      * Show form to edit File Link Settings.
      */
-    public function edit(string $id)
+    public function edit(): Response
     {
-        //
-        return 'edit';
+        $this->authorize('manage', FileLink::class);
+
+        return Inertia::render(
+            'FileLink/Admin/Settings',
+            $this->svc->getFileLinkSettings()
+        );
     }
 
     /**
      * Update the File Link Settings
      */
-    public function update(Request $request, string $id)
+    public function update(FileLinkSettingsRequest $request): RedirectResponse
     {
-        //
-        return 'update';
+        $this->svc->saveFileLinkSettings($request->safe()->collect());
+
+        return back()->with('success', 'Settings Updated');
     }
 }
