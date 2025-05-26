@@ -3,6 +3,7 @@
 namespace Tests\Unit\Models;
 
 use App\Exceptions\FileLink\FileLinkExpiredException;
+use App\Models\Customer;
 use App\Models\FileLink;
 use App\Models\FileLinkFile;
 use App\Models\FileLinkTimeline;
@@ -41,7 +42,7 @@ class FileLinkUnitTest extends TestCase
     | Model Relationships
     |---------------------------------------------------------------------------
     */
-    public function test_file_upload_relationship(): void
+    public function test_files_relationship(): void
     {
         $fileData = FileLinkFile::factory()
             ->count(5)
@@ -51,8 +52,34 @@ class FileLinkUnitTest extends TestCase
 
         $this->assertEquals(
             FileUpload::find($fileData)->toArray(),
-            $this->model->FileUpload->makeHidden('pivot')->toArray()
+            $this->model->Files->makeHidden('pivot')->toArray()
         );
+    }
+
+    public function test_uploads_relationship(): void
+    {
+        FileLinkFile::factory()
+            ->count(5)
+            ->create(['link_id' => $this->model->link_id, 'upload' => true]);
+
+        FileLinkFile::factory()
+            ->count(4)
+            ->create(['link_id' => $this->model->link_id, 'upload' => false]);
+
+        $this->assertCount(5, $this->model->Uploads);
+    }
+
+    public function test_downloads_relationship(): void
+    {
+        FileLinkFile::factory()
+            ->count(5)
+            ->create(['link_id' => $this->model->link_id, 'upload' => true]);
+
+        FileLinkFile::factory()
+            ->count(4)
+            ->create(['link_id' => $this->model->link_id, 'upload' => false]);
+
+        $this->assertCount(4, $this->model->Downloads);
     }
 
     public function test_user_relationship(): void
@@ -72,6 +99,19 @@ class FileLinkUnitTest extends TestCase
         $data = FileLinkTimeline::where('link_id', $this->model->link_id)->get();
 
         $this->assertEquals($data->toArray(), $this->model->Timeline->toArray());
+    }
+
+    public function test_customer_relationship(): void
+    {
+        $customer = Customer::factory()->create();
+        $this->model->cust_id = $customer->cust_id;
+        $this->model->save();
+        $this->model->fresh();
+
+        $this->assertEquals(
+            $customer->toArray(),
+            $this->model->Customer->toArray()
+        );
     }
 
     /*

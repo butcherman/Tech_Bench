@@ -3,7 +3,6 @@ import BaseBadge from "./BaseBadge.vue";
 import ConfirmPopup from "primevue/confirmpopup";
 import { handleLinkClick } from "@/Composables/links.module";
 import { useConfirm } from "primevue";
-import { router } from "@inertiajs/vue3";
 
 const emit = defineEmits<{
     accepted: [];
@@ -14,9 +13,9 @@ const props = defineProps<{
     acceptText?: string;
     confirm?: boolean;
     confirmMsg?: string;
-    deleteMethod?: boolean;
     href?: string;
     icon?: string;
+    method?: "delete" | "get" | "post" | "put";
     preserveScroll?: boolean;
     rejectText?: string;
     variant?: elementVariant;
@@ -40,13 +39,11 @@ const handleClick = (event: MouseEvent): void => {
             accept: () => {
                 emit("accepted");
                 if (props.href) {
-                    if (props.deleteMethod) {
-                        router.delete(props.href, {
-                            preserveScroll: props.preserveScroll,
-                        });
-                    } else {
-                        handleLinkClick(event, props.href);
-                    }
+                    handleLinkClick(
+                        event,
+                        props.href,
+                        props.method ?? "delete"
+                    );
                 }
             },
             reject: () => {
@@ -58,11 +55,7 @@ const handleClick = (event: MouseEvent): void => {
     }
 
     if (props.href) {
-        handleLinkClick(
-            event,
-            props.href,
-            props.deleteMethod ? "delete" : "get"
-        );
+        handleLinkClick(event, props.href, props.method ?? "delete");
     }
 };
 </script>

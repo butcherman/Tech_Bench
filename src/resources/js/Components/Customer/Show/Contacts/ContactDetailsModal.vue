@@ -49,6 +49,7 @@ const onDeleteClicked = (): void => {
                 {
                     only: ["contactList"],
                     onFinish: () => modal.value?.hide(),
+                    preserveScroll: true,
                 }
             );
         }

@@ -46,7 +46,7 @@ class FileLinkTimelineUnitTest extends TestCase
         $this->assertEquals(
             FileUpload::find($fileData)->toArray(),
             $this->model
-                ->FileUpload
+                ->Files
                 ->makeHidden('laravel_through_key')
                 ->toArray()
         );
@@ -61,7 +61,7 @@ class FileLinkTimelineUnitTest extends TestCase
 
         $this->assertEquals(
             $note->toArray(),
-            $this->model->FileLinkNote->toArray()
+            $this->model->Notes->toArray()
         );
     }
 }

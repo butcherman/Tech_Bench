@@ -17,6 +17,9 @@ class FileLinkTimeline extends Model
     /** @var array<int, string> */
     protected $hidden = ['updated_at'];
 
+    /** @var array<int, string> */
+    protected $with = ['Files', 'Notes'];
+
     /*
     |---------------------------------------------------------------------------
     | Model Casting
@@ -35,7 +38,7 @@ class FileLinkTimeline extends Model
     | Model Relationships
     |---------------------------------------------------------------------------
     */
-    public function FileUpload(): HasManyThrough
+    public function Files(): HasManyThrough
     {
         return $this->hasManyThrough(
             FileUpload::class,
@@ -47,7 +50,7 @@ class FileLinkTimeline extends Model
         );
     }
 
-    public function FileLinkNote(): HasOne
+    public function Notes(): HasOne
     {
         return $this->hasOne(FileLinkNote::class, 'timeline_id', 'timeline_id');
     }

@@ -13,11 +13,7 @@ class FileLinkPolicy
 
     public function manage(User $user): bool
     {
-        if ($this->viewAny($user)) {
-            return $this->checkPermission($user, 'Manage File Links');
-        }
-
-        return false;
+        return $this->checkPermission($user, 'Manage File Links');
     }
 
     /**

@@ -125,25 +125,33 @@ class FileMaintenanceUnitTest extends TestCase
         Storage::put('test_dir/file_1.txt', 'test file one');
         Storage::put('test_dir/file_2.txt', 'test file one');
 
-        FileUpload::factory()->create([
+        FileUpload::create([
             'disk' => 'local',
             'folder' => 'test_dir',
             'file_name' => 'file_1.txt',
+            'file_size' => 0,
+            'public' => false,
         ]);
-        FileUpload::factory()->create([
+        FileUpload::create([
             'disk' => 'local',
             'folder' => 'test_dir',
             'file_name' => 'file_2.txt',
+            'file_size' => 0,
+            'public' => false,
         ]);
-        FileUpload::factory()->create([
+        FileUpload::create([
             'disk' => 'local',
             'folder' => 'test_dir',
             'file_name' => 'file_3.txt',
+            'file_size' => 0,
+            'public' => false,
         ]);
-        FileUpload::factory()->create([
+        FileUpload::create([
             'disk' => 'local',
             'folder' => 'test_dir',
             'file_name' => 'file_4.txt',
+            'file_size' => 0,
+            'public' => false,
         ]);
 
         $testObj = new FileMaintenanceService;

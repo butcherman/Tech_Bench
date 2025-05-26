@@ -173,7 +173,8 @@ class User extends Authenticatable
 
     public function FileLinks(): HasMany
     {
-        return $this->hasMany(FileLink::class, 'user_id', 'user_id');
+        return $this->hasMany(FileLink::class, 'user_id', 'user_id')
+            ->orderBy('expire', 'desc');
     }
 
     /*

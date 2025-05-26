@@ -41,6 +41,11 @@ class CustomerSiteUnitTest extends TestCase
         );
     }
 
+    public function test_get_route_key_name(): void
+    {
+        $this->assertEquals('site_slug', $this->model->getRouteKeyName());
+    }
+
     /**
      * Model Attributes
      */

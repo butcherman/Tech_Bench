@@ -87,11 +87,11 @@ class FileLink extends Model
     | Model Relationships
     |---------------------------------------------------------------------------
     */
-    public function FileUpload(): BelongsToMany
+    public function Files(): BelongsToMany
     {
         return $this->belongsToMany(
             FileUpload::class,
-            'file_link_files',
+            FileLinkFile::class,
             'link_id',
             'file_id',
         )->withPivot([
@@ -99,6 +99,44 @@ class FileLink extends Model
             'upload',
             'link_file_id',
         ])->withTimestamps();
+    }
+
+    public function Uploads(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            FileUpload::class,
+            FileLinkFile::class,
+            'link_id',
+            'file_id',
+        )
+            ->wherePivot('upload', true)
+            ->withPivot([
+                'timeline_id',
+                'upload',
+                'link_file_id',
+                'created_at',
+                'moved',
+            ])
+            ->withTimestamps();
+    }
+
+    public function Downloads(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            FileUpload::class,
+            FileLinkFile::class,
+            'link_id',
+            'file_id',
+        )
+            ->wherePivot('upload', false)
+            ->withPivot([
+                'timeline_id',
+                'upload',
+                'link_file_id',
+                'created_at',
+                'moved',
+            ])
+            ->withTimestamps();
     }
 
     public function User(): HasOne
@@ -109,6 +147,11 @@ class FileLink extends Model
     public function Timeline(): HasMany
     {
         return $this->hasMany(FileLinkTimeline::class, 'link_id', 'link_id');
+    }
+
+    public function Customer(): HasOne
+    {
+        return $this->hasOne(Customer::class, 'cust_id', 'cust_id');
     }
 
     /*

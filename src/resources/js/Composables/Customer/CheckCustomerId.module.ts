@@ -6,6 +6,7 @@ interface idResponse {
     cust_name?: string | null;
     route?: string | null;
     disabled?: boolean;
+    customer?: customer;
 }
 
 /**
@@ -20,6 +21,7 @@ export const checkCustId = async (custId: any): Promise<idResponse> => {
                 return {
                     in_use: res.data.cust_id ? true : false,
                     cust_name: res.data.name ?? null,
+                    customer: res.data,
                     route: res.data
                         ? route("customers.show", res.data.slug)
                         : null,

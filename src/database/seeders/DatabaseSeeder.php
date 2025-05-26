@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
             EquipmentSeeder::class,
             CustomerSeeder::class,
             TechTipSeeder::class,
-            // FileLinkSeeder::class,
+            FileLinkSeeder::class,
         ]);
 
         CacheData::clearCache();
@@ -34,7 +34,10 @@ class DatabaseSeeder extends Seeder
     protected function initializeApp(): void
     {
         // Turn off first time setup
-        AppSettings::find(1)->delete();
+        $settingId = AppSettings::find(1);
+        if ($settingId) {
+            $settingId->delete();
+        }
 
         // Set Admin User's password to not be expired
         User::find(1)->update([

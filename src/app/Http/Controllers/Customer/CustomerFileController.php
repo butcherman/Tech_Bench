@@ -3,17 +3,30 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Enums\DiskEnum;
+use App\Facades\CacheData;
 use App\Http\Controllers\FileUploadController;
 use App\Http\Requests\Customer\CustomerFileRequest;
 use App\Models\Customer;
 use App\Models\CustomerFile;
 use App\Services\Customer\CustomerFileService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 
 class CustomerFileController extends FileUploadController
 {
     public function __construct(protected CustomerFileService $svc) {}
+
+    /**
+     * Get a list of possible files and equipment to assign to a customer file.
+     */
+    public function index(Customer $customer): JsonResponse
+    {
+        return response()->json([
+            'equipmentList' => $customer->Equipment,
+            'fileTypes' => CacheData::fileTypes(),
+        ]);
+    }
 
     /**
      * Save and store an uploaded file.
