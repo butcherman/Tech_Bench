@@ -146,7 +146,7 @@ class Customer extends Model
     {
         return $this->belongsToMany(
             User::class,
-            'user_customer_recents',
+            UserCustomerRecent::class,
             'cust_id',
             'user_id'
         )->withTimestamps();
