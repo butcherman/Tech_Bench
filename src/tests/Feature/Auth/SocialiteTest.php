@@ -194,7 +194,7 @@ class SocialiteTest extends TestCase
 
         $response = $this->get(route('azure-callback'));
         $response->assertStatus(302);
-        $response->assertSessionMissing('2fa_verified', true);
+        $response->assertSessionMissing('2fa_verified');
 
         $this->assertAuthenticatedAs(User::where('email', $user->email)->first());
         $this->assertDatabaseHas('users', $user->only([
@@ -261,7 +261,7 @@ class SocialiteTest extends TestCase
 
         $response->assertStatus(302)
             ->assertRedirect(route('login'))
-            ->assertSessionHas('warning', 'You do not have permission to Login.  Please'.
+            ->assertSessionHas('warning', 'You do not have permission to Login.  Please' .
                 ' contact your system administrator');
 
         $this->assertDatabaseMissing('users', $user->only([
