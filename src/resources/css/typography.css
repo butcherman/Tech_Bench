@@ -4,50 +4,53 @@
 |---------------------------------------------------------------------------
 */
 
-a {
-    @apply hover:font-semibold;
-}
+@layer base {
+    a {
+        @apply hover:font-semibold;
+    }
 
-h1 {
-    @apply text-3xl! font-bold!;
-}
+    h1 {
+        @apply text-3xl! font-bold!;
+    }
 
-h2 {
-    @apply text-2xl! font-bold!;
-}
+    h2 {
+        @apply text-2xl! font-bold!;
+    }
 
-h3 {
-    @apply text-xl! font-bold!;
-}
+    h3 {
+        @apply text-xl! font-bold!;
+    }
 
-h4 {
-    @apply text-lg! font-bold!;
-}
+    h4 {
+        @apply text-lg! font-bold!;
+    }
 
-h5 {
-    @apply font-bold!;
-}
+    h5 {
+        @apply font-bold!;
+    }
 
-h6 {
-    @apply text-sm! font-bold!;
-}
+    h6 {
+        @apply text-sm! font-bold!;
+    }
 
-.text-success {
-    @apply text-green-500;
-}
+    .text-success {
+        @apply text-green-500;
+    }
 
-.text-warning {
-    @apply text-yellow-500
-}
+    .text-warning {
+        @apply text-yellow-500
+    }
 
-.text-muted {
-    @apply text-slate-500;
-}
+    .text-muted {
+        @apply text-slate-500;
+    }
 
-.text-error {
-    @apply text-red-900;
-}
+    .text-error {
+        @apply text-red-900;
+    }
 
-.text-danger {
-    @apply text-red-600;
+    .text-danger {
+        @apply text-red-600;
+    }
+
 }
