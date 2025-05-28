@@ -42,10 +42,9 @@ const {
         <FloatLabel variant="on" class="my-2">
             <Password
                 v-model="value"
-                class="p-2 rounded-md shadow-xs"
+                class="rounded-md shadow-xs"
                 :autocomplete="autocomplete ?? 'off'"
                 :autofocus="focus"
-                :class="borderType"
                 :disabled="disabled"
                 :feedback="false"
                 :input-id="id"
@@ -71,7 +70,9 @@ const {
     </div>
 </template>
 
-<style>
+<style lang="postcss">
+@reference '../../../css/app.css';
+
 .p-password-input {
     @apply shadow-none;
 }

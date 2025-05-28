@@ -12,7 +12,7 @@ const breadcrumbs = computed<breadcrumb[]>(
     <Breadcrumb
         v-if="breadcrumbs.length"
         :model="breadcrumbs"
-        class="text-center bg-blue-300 rounded-lg text-slate-600"
+        class="text-center! bg-blue-300! rounded-lg text-slate-600"
     >
         <template #item="{ item }">
             <Link v-if="!item.is_current_page" :href="item.url">

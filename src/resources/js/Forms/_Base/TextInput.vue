@@ -78,7 +78,7 @@ const {
             <FloatLabel variant="on" class="my-2">
                 <InputText
                     v-model="value"
-                    class="p-2"
+                    class="p-2 shadow-xs"
                     :autocomplete="autocomplete ?? 'off'"
                     :autofocus="focus"
                     :class="borderType"
