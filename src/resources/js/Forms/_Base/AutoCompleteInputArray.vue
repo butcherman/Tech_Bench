@@ -73,7 +73,7 @@ const removeWarning = (index: number) => {
             </div>
         </template>
         <template #footer>
-            <AddButton class="float-end !px-2 !py-0" pill @click="push('')" />
+            <AddButton class="float-end px-2! py-0!" pill @click="push('')" />
         </template>
     </draggable>
 </template>

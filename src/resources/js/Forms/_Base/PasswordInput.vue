@@ -42,7 +42,7 @@ const {
         <FloatLabel variant="on" class="my-2">
             <Password
                 v-model="value"
-                class="p-2 rounded-md shadow-sm"
+                class="p-2 rounded-md shadow-xs"
                 :autocomplete="autocomplete ?? 'off'"
                 :autofocus="focus"
                 :class="borderType"

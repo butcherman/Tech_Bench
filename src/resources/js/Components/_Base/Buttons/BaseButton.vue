@@ -82,7 +82,7 @@ const variantClass = computed<string>(() => {
         :class="[
             sizeClass,
             variantClass,
-            { '!rounded-full': pill, 'shadow-xl': !flat },
+            { 'rounded-full!': pill, 'shadow-xl': !flat },
         ]"
         class="rounded-lg inline-block text-center"
         type="button"
