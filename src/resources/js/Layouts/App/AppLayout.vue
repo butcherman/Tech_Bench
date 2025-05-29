@@ -38,7 +38,7 @@ const appTitle = computed<string | undefined>(
 const broadcast = useBroadcastStore();
 onMounted(() => broadcast.registerNotificationChannel());
 router.on("before", (e) => {
-    e.detail.visit.headers["X-Socket-ID"] = Echo.socketId();
+    e.detail.visit.headers["X-Socket-ID"] = Echo.socketId() ?? "";
 });
 </script>
 
@@ -57,7 +57,7 @@ router.on("before", (e) => {
                 <AppBreadcrumbs class="mb-2" />
                 <StaticAlert />
                 <div class="flex flex-col grow">
-                    <slot />
+                    <!-- <slot /> -->
                 </div>
             </div>
             <AppFooter />

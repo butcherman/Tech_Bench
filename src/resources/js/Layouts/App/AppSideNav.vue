@@ -29,6 +29,8 @@ const navbar = computed<navbarItem[]>(() => usePage<pageProps>().props.navbar);
 </template>
 
 <style lang="postcss" scoped>
+@reference '../../../css/app.css'
+
 nav {
     transition: width;
     transition-duration: 0.5s;
