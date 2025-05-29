@@ -17,8 +17,8 @@ const initValues = {
 };
 
 const schema = object({
-    username: string().required(),
-    password: string().required(),
+    username: string().required("Please enter your Username"),
+    password: string().required("Please enter your Password"),
     remember: boolean().required(),
 });
 </script>
@@ -36,17 +36,17 @@ const schema = object({
         <TextInput
             id="username"
             name="username"
-            label="Username"
+            placeholder="Username"
             help="Enter Your Username"
-            border-bottom
+            borderless
             focus
         />
         <PasswordInput
             id="password"
             name="password"
-            label="Password"
+            placeholder="Password"
             help="Enter Your Password"
-            border-bottom
+            borderless
         />
         <div class="text-right">
             <Link
@@ -56,11 +56,13 @@ const schema = object({
                 Forgot Password
             </Link>
         </div>
-        <SwitchInput
-            id="remember-me"
-            name="remember"
-            label="Remember Me"
-            center
-        />
+        <div class="flex justify-center">
+            <SwitchInput
+                id="remember-me"
+                name="remember"
+                label="Remember Me"
+                center
+            />
+        </div>
     </VueForm>
 </template>

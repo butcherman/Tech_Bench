@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { computed, ref, toRef } from "vue";
-import { useField } from "vee-validate";
 import {
     FloatLabel,
     InputGroup,
@@ -8,7 +6,8 @@ import {
     InputText,
     Message,
 } from "primevue";
-
+import { computed, ref, toRef } from "vue";
+import { useField } from "vee-validate";
 import type { Ref } from "vue";
 
 const emit = defineEmits<{
@@ -20,9 +19,8 @@ const props = defineProps<{
     id: string;
     name: string;
     autocomplete?: string;
-    borderBottom?: boolean;
+    borderless?: boolean;
     disabled?: boolean;
-    filled?: boolean;
     focus?: boolean;
     help?: string;
     label?: string;
@@ -30,8 +28,13 @@ const props = defineProps<{
     type?: string;
 }>();
 
-const borderType = computed<string>(() =>
-    props.borderBottom ? "border-b rounded-none" : "border"
+/**
+ * Auto Hide the placeholder when not in focus to support Floating Label.
+ */
+const inputPlaceholder = computed<string>(() =>
+    props.placeholder && (hasFocus.value || !props.label)
+        ? props.placeholder
+        : ""
 );
 
 /*
@@ -67,27 +70,27 @@ const {
 </script>
 
 <template>
-    <div>
-        <InputGroup>
+    <div class="my-2">
+        <InputGroup :class="{ 'border-b': borderless }">
             <InputGroupAddon
                 v-if="$slots['start-text']"
-                class="border border-e-0 my-2 shadow-xs"
+                :class="{ 'border-hidden!': borderless }"
             >
                 <slot name="start-text" />
             </InputGroupAddon>
-            <FloatLabel variant="on" class="my-2">
+            <FloatLabel variant="on">
                 <InputText
                     v-model="value"
-                    class="p-2 shadow-xs"
                     :autocomplete="autocomplete ?? 'off'"
                     :autofocus="focus"
-                    :class="borderType"
                     :disabled="disabled"
-                    :id="id"
-                    :placeholder="placeholder"
+                    :class="{
+                        'border-hidden!': borderless,
+                    }"
+                    :input-id="id"
+                    :invalid="errorMessage ? true : false"
+                    :placeholder="inputPlaceholder"
                     :type="type ?? 'text'"
-                    :variant="filled ? 'filled' : null"
-                    fluid
                     @focus="onFocus"
                     @blur="onBlur"
                 />
@@ -95,7 +98,7 @@ const {
             </FloatLabel>
             <InputGroupAddon
                 v-if="$slots['end-text']"
-                class="border border-s-0 my-2 shadow-xs"
+                :class="{ 'border-hidden!': borderless }"
             >
                 <slot name="end-text" />
             </InputGroupAddon>
@@ -104,7 +107,7 @@ const {
             <span v-html="errorMessage" />
         </Message>
         <Message
-            v-if="hasFocus"
+            v-show="hasFocus"
             size="small"
             severity="secondary"
             variant="simple"
@@ -113,13 +116,3 @@ const {
         </Message>
     </div>
 </template>
-
-<style lang="postcss">
-.p-inputtext::placeholder {
-    color: transparent;
-}
-
-.p-inputtext:focus::placeholder {
-    @apply text-muted-color;
-}
-</style>
