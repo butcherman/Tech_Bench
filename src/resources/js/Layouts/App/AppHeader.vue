@@ -13,7 +13,9 @@ const app = useAppStore();
 </script>
 
 <template>
-    <header class="fixed top-0 left-0 z-20 w-full h-14 bg-white flex flex-row">
+    <header
+        class="fixed top-0 left-0 z-20 w-full h-14 bg-white flex flex-row border-b border-b-slate-200"
+    >
         <Link :href="$route('dashboard')">
             <img class="max-h-full px-4 py-1" :src="app.logo" />
         </Link>

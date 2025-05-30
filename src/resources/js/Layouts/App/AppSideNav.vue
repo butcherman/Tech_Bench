@@ -19,13 +19,19 @@ const auth = useAuthStore();
 
 <template>
     <nav
-        class="fixed top-14 right-0 lg:left-0 h-full lg:w-64 overflow-hidden rounded-s-lg lg:rounded-none"
+        class="fixed top-14 right-0 lg:left-0 h-full lg:w-64 overflow-hidden rounded-s-lg lg:rounded-none border-s border-s-slate-200 lg:border-0"
         :class="hiddenClass"
     >
-        <Menu :model="auth.navbar" class="mt-4 border-none! rounded-none!">
+        <Menu
+            :model="auth.navbar"
+            class="pt-4 border-none! rounded-none! h-full"
+        >
             <template #item="{ item }">
                 <div class="my-2 ps-2">
-                    <Link class="w-full h-full m-0 py-2 block">
+                    <Link
+                        :href="item.route"
+                        class="w-full h-full m-0 py-2 block"
+                    >
                         <fa-icon :icon="item.icon" />
                         {{ item.name }}
                     </Link>
