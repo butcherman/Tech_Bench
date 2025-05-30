@@ -7,6 +7,8 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class CustomerRequest extends FormRequest
 {
+    protected $errorBag = 'form_error';
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -27,7 +29,7 @@ class CustomerRequest extends FormRequest
         if ($this->customer) {
             return [
                 'name' => ['required', 'string'],
-                'dba_name' => ['nullable'],
+                'dba_name' => ['nullable', 'string'],
                 'primary_site_id' => [
                     'required',
                     'exists:customer_sites,cust_site_id',
