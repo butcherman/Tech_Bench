@@ -6,6 +6,8 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class BookmarkRequest extends FormRequest
 {
+    protected $errorBag = 'form_error';
+
     /**
      * Determine if the user is authorized to make this request.
      */

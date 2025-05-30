@@ -11,6 +11,8 @@ class CustomerFileRequest extends FormRequest
 {
     use NormalizeJson;
 
+    protected $errorBag = 'form_error';
+
     /**
      * Determine if the user is authorized to make this request.
      */
