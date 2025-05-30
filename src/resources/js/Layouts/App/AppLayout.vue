@@ -45,7 +45,7 @@ router.on("before", (e) => {
 <template>
     <div class="h-screen flex flex-col">
         <Head :title="appTitle" />
-        <!-- <FlashAlert /> -->
+        <FlashAlert />
         <AppNotificationToast />
         <AppHeader @toggle-navbar="navbarHidden = !navbarHidden" />
         <AppSideNav :navbar-hidden="navbarHidden" />

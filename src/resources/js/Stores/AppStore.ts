@@ -71,7 +71,7 @@ export const useAppStore = defineStore("appStore", () => {
     const setFlashTimeout = (id: string) => {
         setTimeout(() => {
             removeFlashMsg(id);
-        }, 15000);
+        }, 5000);
     };
 
     /**
