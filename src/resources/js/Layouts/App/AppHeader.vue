@@ -1,8 +1,9 @@
 <script setup lang="ts">
+import AppHelp from "./AppHelp.vue";
 import BaseBadge from "@/Components/_Base/Badges/BaseBadge.vue";
-import { useAppStore } from "@/Stores/AppStore";
-import UserAvatar from "./UserAvatar.vue";
 import BaseButton from "@/Components/_Base/Buttons/BaseButton.vue";
+import UserAvatar from "./UserAvatar.vue";
+import { useAppStore } from "@/Stores/AppStore";
 
 defineEmits<{
     "toggle-navbar": [];
@@ -20,7 +21,7 @@ const app = useAppStore();
             Tech Bench
         </h1>
         <div class="grow md:grow-0 flex items-center justify-end gap-2 me-2">
-            <!-- <BaseBadge icon="circle-question" variant="help" class="p-1!" /> -->
+            <AppHelp />
             <BaseBadge
                 :href="$route('about')"
                 class="p-1! text-white bg-slate-600"
