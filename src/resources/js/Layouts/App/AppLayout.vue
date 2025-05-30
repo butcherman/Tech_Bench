@@ -43,13 +43,13 @@ router.on("before", (e) => {
 </script>
 
 <template>
-    <div id="app-layout-wrapper" class="h-screen z-0 flex flex-col">
+    <div id="app-layout-wrapper">
         <Head :title="appTitle" />
-        <FlashAlert />
-        <AppNotificationToast />
+        <!-- <FlashAlert /> -->
+        <!-- <AppNotificationToast /> -->
         <AppHeader @toggle-navbar="navbarHidden = !navbarHidden" />
         <AppSideNav :navbar-hidden="navbarHidden" />
-        <section
+        <!-- <section
             id="app-content"
             class="md:ms-64 mt-14 z-0 bg-gray-200 flex flex-col grow"
         >
@@ -57,10 +57,10 @@ router.on("before", (e) => {
                 <AppBreadcrumbs class="mb-2" />
                 <StaticAlert />
                 <div class="flex flex-col grow">
-                    <!-- <slot /> -->
+                    <slot />
                 </div>
             </div>
             <AppFooter />
-        </section>
+        </section> -->
     </div>
 </template>

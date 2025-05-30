@@ -29,7 +29,7 @@ const menuList = ref<menuItem[]>([
     <div>
         <button
             type="button"
-            v-tooltip="'Account Information'"
+            v-tooltip.left="'Account Information'"
             @click="userMenu?.toggle"
         >
             <Avatar

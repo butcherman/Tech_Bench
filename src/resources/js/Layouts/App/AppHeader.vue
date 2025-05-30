@@ -30,7 +30,7 @@ const app = useAppStore();
             />
             <UserAvatar />
             <BaseButton
-                class="md:hidden pointer"
+                class="lg:hidden pointer"
                 icon="bars"
                 variant="light"
                 @click="$emit('toggle-navbar')"

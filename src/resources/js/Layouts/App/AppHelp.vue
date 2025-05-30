@@ -83,6 +83,7 @@ router.on("finish", () => {
             icon="circle-question"
             variant="help"
             class="p-1!"
+            v-tooltip="'Help'"
             @click="showHelp = true"
         />
         <Drawer
