@@ -17,7 +17,6 @@ onMounted(() => {
     Echo.private("administration-channel").listen(
         ".AdministrationEvent",
         (msg: { msg: string }) => {
-            console.log(msg);
             setupMsg.value.push(msg.msg);
 
             if (msg.msg === "Setup Complete") {

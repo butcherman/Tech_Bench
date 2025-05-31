@@ -21,7 +21,6 @@ const paginationArray: number[] = [25, 50, 100];
  * Navigate to a new page.
  */
 const navigateToPage = (newPage: number): void => {
-    console.log("navigate");
     searchParams.page = newPage;
     search();
 };

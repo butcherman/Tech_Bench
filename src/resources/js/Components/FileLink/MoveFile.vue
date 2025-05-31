@@ -47,7 +47,6 @@ const assignCustomer = (cust: customer): void => {
 
     dataGet(route("customers.files.index", cust.slug)).then((res) => {
         if (res) {
-            console.log(res);
             equipmentList.value = res.data.equipmentList;
             fileTypes.value = res.data.fileTypes;
         }

@@ -7,8 +7,6 @@ export default (updatedRoute: string): Promise<unknown> => {
 };
 
 const alertModal = (updatedRoute: string): Promise<unknown> => {
-    console.log("opening alert modal");
-
     const promise = new Promise(function (resolve) {
         const newComp = createApp({
             setup() {

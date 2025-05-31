@@ -37,7 +37,6 @@ const onDragEnd = (event: dragEvent): void => {
 };
 
 const removeWarning = (index: number): void => {
-    console.log(fields.value[index].value);
     if (props.removeWarning && fields.value[index].value) {
         verifyModal(props.removeWarning).then((res) => {
             if (res) {

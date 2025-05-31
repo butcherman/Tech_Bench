@@ -70,7 +70,6 @@ const onTotalUploadProgress = (uploadProgress: {
     totalBytes: number;
     bytesSent: number;
 }): void => {
-    console.log(uploadProgress);
     totalUploadProgress.value = Math.floor(uploadProgress.progress);
 };
 
@@ -124,8 +123,6 @@ const uncaughtErrors = ref<string[]>([]);
 
 const handleErrors = (formErrors: dropzoneError): void => {
     emit("hasErrors", formErrors);
-
-    console.log(formErrors);
 
     isSubmitting.value = false;
 

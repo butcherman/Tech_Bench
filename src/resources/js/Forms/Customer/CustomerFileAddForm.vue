@@ -31,8 +31,6 @@ const form = useTemplateRef("add-file-form");
  * If the name field is empty when a file is dropped, add the filename field
  */
 const checkNameField = (file: DropzoneFile) => {
-    console.log("check name field");
-
     if (
         form.value?.getFieldValue("name") === undefined ||
         !form.value?.getFieldValue("name").length
@@ -48,23 +46,11 @@ const checkNameField = (file: DropzoneFile) => {
 |-------------------------------------------------------------------------------
 */
 const getInitFileCategory = (): fileCategory => {
-    // if ((props.note && props.note.cust_equip_id) || props.equipment) {
-    //     return "equipment";
-    // }
-
-    // if (
-    //     (props.note && props.note.sites.length > 0) ||
-    //     (props.currentSite && props.siteList.length > 1)
-    // ) {
-    //     return "site";
-    // }
-
     return "general";
 };
 
 const updateFileCategory = (type: fileCategory): void => {
     fileCategory.value = type;
-    console.log(type);
 };
 
 const fileCategory = ref<fileCategory>(getInitFileCategory());
