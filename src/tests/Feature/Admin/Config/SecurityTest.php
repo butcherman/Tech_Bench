@@ -95,7 +95,7 @@ class SecurityTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn (Assert $page) => $page
+                fn(Assert $page) => $page
                     ->component('Admin/Security/Index')
                     ->has('data')
             );
@@ -115,7 +115,7 @@ class SecurityTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn (Assert $page) => $page
+                fn(Assert $page) => $page
                     ->component('Admin/Security/Index')
                     ->has('data')
             );
@@ -158,7 +158,7 @@ class SecurityTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn (Assert $page) => $page
+                fn(Assert $page) => $page
                     ->component('Admin/Security/Create')
                     ->has('has-key')
             );
@@ -235,7 +235,7 @@ class SecurityTest extends TestCase
             ->post(route('admin.security.store'), $data);
 
         $response->assertStatus(302)
-            ->assertSessionHasErrors(['certificate']);
+            ->assertSessionHasErrorsIn('form_error', ['certificate']);
     }
 
     public function test_store_expired_cert(): void
@@ -260,7 +260,7 @@ class SecurityTest extends TestCase
             ->post(route('admin.security.store'), $data);
 
         $response->assertStatus(302)
-            ->assertSessionHasErrors(['certificate']);
+            ->assertSessionHasErrorsIn('form_error', ['certificate']);
     }
 
     /*
@@ -298,7 +298,7 @@ class SecurityTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn (Assert $page) => $page
+                fn(Assert $page) => $page
                     ->component('Admin/Security/Edit')
             );
     }
@@ -371,7 +371,7 @@ class SecurityTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn (Assert $page) => $page
+                fn(Assert $page) => $page
                     ->component('Admin/Security/Edit')
                     ->has('csr-request')
             );

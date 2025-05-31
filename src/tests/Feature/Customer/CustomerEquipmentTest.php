@@ -57,7 +57,7 @@ class CustomerEquipmentTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn (Assert $page) => $page
+                fn(Assert $page) => $page
                     ->component('Customer/Equipment/Index')
                     ->has('permissions')
                     ->has('customer')
@@ -184,7 +184,7 @@ class CustomerEquipmentTest extends TestCase
             );
 
         $response->assertStatus(302)
-            ->assertSessionHasErrors(['site_list']);
+            ->assertSessionHasErrorsIn('form_error', ['site_list']);;
     }
 
     /*
@@ -224,15 +224,13 @@ class CustomerEquipmentTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn (Assert $page) => $page
+                fn(Assert $page) => $page
                     ->component('Customer/Equipment/Show')
                     ->has('permissions')
                     ->has('customer')
                     ->has('equipment')
                     ->has('siteList')
                     ->has('equipment-data')
-                // ->has('notes')
-                // ->has('files')
             );
     }
 
