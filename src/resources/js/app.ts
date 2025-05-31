@@ -49,6 +49,9 @@ const pinia = createPinia();
 const primeVueConfig = {
     theme: {
         preset: Aura,
+        options: {
+            darkModeSelector: ".dark-mode-not-support-at-this-time",
+        },
     },
 };
 

@@ -27,7 +27,7 @@ const auth = useAuthStore();
             class="pt-4 border-none! rounded-none! h-full"
         >
             <template #item="{ item }">
-                <div class="my-2 ps-2">
+                <div class="ps-2">
                     <Link
                         :href="item.route"
                         class="w-full h-full m-0 py-2 block"

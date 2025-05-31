@@ -58,11 +58,12 @@ const {
                 :input-id="id"
                 :invalid="errorMessage ? true : false"
                 :disabled="disabled"
+                pt:handle:class="text-white"
                 @focus="onFocus"
                 @blur="onBlur"
             />
             <div>
-                <label>{{ label }}</label>
+                <label class="text-muted">{{ label }}</label>
                 <Message size="small" severity="error" variant="simple">
                     <span v-html="errorMessage" />
                 </Message>
