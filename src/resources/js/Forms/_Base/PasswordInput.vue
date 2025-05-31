@@ -15,6 +15,7 @@ const props = defineProps<{
     autocomplete?: string;
     borderless?: boolean;
     disabled?: boolean;
+    feedback?: boolean;
     focus?: boolean;
     help?: string;
     label?: string;
@@ -72,11 +73,12 @@ const {
                 :autofocus="focus"
                 :class="{ 'border-b': borderless }"
                 :disabled="disabled"
-                :feedback="false"
+                :feedback="feedback"
                 :input-id="id"
                 :inputClass="{
                     'border-hidden!': borderless,
                 }"
+                :invalid="errorMessage ? true : false"
                 :placeholder="inputPlaceholder"
                 pt:maskIcon:class="pointer"
                 pt:unmaskIcon:class="pointer"

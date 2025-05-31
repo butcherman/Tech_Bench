@@ -22,16 +22,6 @@ const props = defineProps<{
     valueField?: keyof T;
 }>();
 
-/**
- * Key names of Label Field and Value Fields
- */
-const selectLabelKey = computed<keyof T>(
-    () => props.labelField ?? ("label" as keyof T)
-);
-const selectValueKey = computed<keyof T>(
-    () => props.valueField ?? ("value" as keyof T)
-);
-
 // If the component is currently in focus
 const hasFocus = ref<boolean>(false);
 
@@ -46,6 +36,22 @@ const selectedList = ref<T[]>([]) as Ref<T[]>;
  */
 const availableHighlighted = ref<T[]>([]) as Ref<T[]>;
 const selectedHighlighted = ref<T[]>([]) as Ref<T[]>;
+
+/*
+|-------------------------------------------------------------------------------
+| Key and Value Data
+|-------------------------------------------------------------------------------
+*/
+
+/**
+ * Key names of Label Field and Value Fields
+ */
+const selectLabelKey = computed<keyof T>(
+    () => props.labelField ?? ("label" as keyof T)
+);
+const selectValueKey = computed<keyof T>(
+    () => props.valueField ?? ("value" as keyof T)
+);
 
 /**
  * Get the value for the item that is being pushed to the value field
@@ -176,7 +182,7 @@ const {
                 </div>
                 <select
                     v-model="availableHighlighted"
-                    class="w-full border rounded-lg overflow-auto p-2"
+                    class="w-full border rounded-lg overflow-auto p-2 focus:outline-green-300"
                     :id="`${id}-available-list`"
                     :size="size ?? 10"
                     multiple
@@ -194,18 +200,18 @@ const {
                     </template>
                 </select>
             </div>
-            <div class="basis-2/12 flex justify-center">
+            <div class="basis-2/12 flex justify-center text-muted">
                 <div class="flex flex-col justify-center">
                     <button
                         type="button"
-                        class="move-button"
+                        class="px-2 py-1 my-1 bg-slate-200 rounded-lg border border-slate-200"
                         @click="addAllItems()"
                     >
                         <fa-icon icon="angles-right" />
                     </button>
                     <button
                         type="button"
-                        class="move-button"
+                        class="px-2 py-1 my-1 bg-slate-200 rounded-lg border border-slate-200"
                         @click="addItems()"
                     >
                         <fa-icon icon="angle-right" />
@@ -213,7 +219,7 @@ const {
 
                     <button
                         type="button"
-                        class="move-button"
+                        class="px-2 py-1 my-1 bg-slate-200 rounded-lg border border-slate-200"
                         @click="removeItems()"
                     >
                         <fa-icon icon="angle-left" />
@@ -221,7 +227,7 @@ const {
 
                     <button
                         type="button"
-                        class="move-button"
+                        class="px-2 py-1 my-1 bg-slate-200 rounded-lg border border-slate-200"
                         @click="removeAllItems()"
                     >
                         <fa-icon icon="angles-left" />
@@ -234,7 +240,7 @@ const {
                 </div>
                 <select
                     v-model="selectedHighlighted"
-                    class="w-full border rounded-lg overflow-auto p-2"
+                    class="w-full border rounded-lg overflow-auto p-2 focus:outline-green-300"
                     :id="`${id}-selected-list`"
                     :size="size ?? 10"
                     multiple
@@ -266,9 +272,3 @@ const {
         </Message>
     </div>
 </template>
-
-<style scoped lang="postcss">
-.move-button {
-    @apply px-2 py-1 my-2 bg-slate-200 rounded-lg border;
-}
-</style>

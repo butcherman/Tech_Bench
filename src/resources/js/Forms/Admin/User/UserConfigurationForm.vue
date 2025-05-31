@@ -98,7 +98,7 @@ const schema = object({
         </fieldset>
         <fieldset class="border mb-3">
             <legend>Single Sign On</legend>
-            <div class="ms-4">
+            <div class="mx-4">
                 <SwitchInput
                     id="allow-oath"
                     name="oath.allow_login"
@@ -124,7 +124,7 @@ const schema = object({
                         <SwitchInput
                             id="two_fa_bypass"
                             name="oath.allow_bypass_2fa"
-                            class="w-100"
+                            class="w-full"
                             label="Allow Single Sign On Users to Bypass Two-Factor Authentication"
                         />
                         <TextInput
@@ -143,12 +143,6 @@ const schema = object({
                             name="oath.client_secret"
                             label="Azure Client Secret"
                         />
-                        <!-- <TextInput
-                            id="azure-secret-expiration"
-                            name="oath.secret_expires"
-                            label="Date Client Secret Expires"
-                            type="date"
-                        /> -->
                         <DatePicker
                             id="azure-secret-expiration"
                             name="oath.secret_expires"

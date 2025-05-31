@@ -1,37 +1,51 @@
 <script setup lang="ts">
-import { computed, ref, toRef } from "vue";
-import { useField } from "vee-validate";
 import {
     AutoComplete,
     FloatLabel,
-    Message,
     InputGroup,
     InputGroupAddon,
+    Message,
 } from "primevue";
+import { computed, ref, toRef } from "vue";
+import { useField } from "vee-validate";
 import type { Ref } from "vue";
 
-const props = defineProps<{
-    id: string;
-    dataList: string[];
-    name: string;
-    autocomplete?: string;
-    label?: string;
-    borderBottom?: boolean;
-    disabled?: boolean;
-    filled?: boolean;
-    focus?: boolean;
-    help?: string;
-    type?: string;
-    placeholder?: string;
+const emit = defineEmits<{
+    focus: [];
+    blur: [];
 }>();
 
-const hasFocus = ref<boolean>(false);
-const searchResults = ref<string[]>([]);
+const props = defineProps<{
+    dataList: string[];
+    id: string;
+    name: string;
+    autocomplete?: string;
+    borderless?: boolean;
+    disabled?: boolean;
+    focus?: boolean;
+    help?: string;
+    label?: string;
+    placeholder?: string;
+    type?: string;
+}>();
 
 /**
- * Filter the searched list based on what has been typed in the input box
+ * Auto Hide the placeholder when not in focus to support Floating Label.
  */
-const searchList = (event: { query: string }) => {
+const inputPlaceholder = computed<string>(() =>
+    props.placeholder && (hasFocus.value || !props.label)
+        ? props.placeholder
+        : ""
+);
+
+/*
+|-------------------------------------------------------------------------------
+| Auto Complete Search Results
+|-------------------------------------------------------------------------------
+*/
+const searchResults = ref<string[]>([]);
+
+const searchList = (event: { query: string }): void => {
     let query = event.query.trim().toLowerCase();
 
     if (!query.length) {
@@ -44,9 +58,22 @@ const searchList = (event: { query: string }) => {
     });
 };
 
-const borderType = computed(() =>
-    props.borderBottom ? "border-b rounded-none" : "border"
-);
+/*
+|-------------------------------------------------------------------------------
+| Input Focus State
+|-------------------------------------------------------------------------------
+*/
+const hasFocus = ref<boolean>(false);
+
+const onFocus = (): void => {
+    hasFocus.value = true;
+    emit("focus");
+};
+
+const onBlur = (): void => {
+    hasFocus.value = false;
+    emit("blur");
+};
 
 /*
 |-------------------------------------------------------------------------------
@@ -59,56 +86,52 @@ const {
     value,
 }: {
     errorMessage: Ref<string | undefined, string | undefined>;
-    value: Ref<string>;
+    value: Ref<string | undefined>;
 } = useField(nameRef);
 </script>
 
 <template>
-    <div>
-        <InputGroup>
+    <div class="my-2">
+        <InputGroup :class="{ 'border-b': borderless }">
             <InputGroupAddon
                 v-if="$slots['start-text']"
-                class="border border-e-0 my-2"
+                :class="{ 'border-hidden!': borderless }"
             >
                 <slot name="start-text" />
             </InputGroupAddon>
-            <FloatLabel variant="on" class="my-2">
+            <FloatLabel variant="on">
                 <AutoComplete
                     v-model="value"
-                    class="p-2"
-                    :type="type ?? 'text'"
+                    :autocomplete="autocomplete ?? 'off'"
                     :autofocus="focus"
                     :disabled="disabled"
-                    :id="id"
-                    :autocomplete="autocomplete ?? 'off'"
-                    :class="borderType"
-                    :variant="filled ? 'filled' : undefined"
-                    :placeholder="placeholder"
+                    :class="{
+                        'border-hidden!': borderless,
+                    }"
+                    :input-id="id"
+                    :invalid="errorMessage ? true : false"
+                    :placeholder="inputPlaceholder"
                     :suggestions="searchResults"
                     :show-empty-message="false"
-                    fluid
-                    @focus="hasFocus = true"
-                    @blur="hasFocus = false"
+                    :type="type ?? 'text'"
+                    @focus="onFocus"
+                    @blur="onBlur"
                     @complete="searchList"
-                >
-                    <template #option="{ option }">
-                        {{ option }}
-                    </template>
-                </AutoComplete>
+                />
                 <label :for="id">{{ label }}</label>
             </FloatLabel>
             <InputGroupAddon
                 v-if="$slots['end-text']"
-                class="border border-s-0 my-2"
+                :class="{ 'border-hidden!': borderless }"
             >
                 <slot name="end-text" />
             </InputGroupAddon>
         </InputGroup>
         <Message size="small" severity="error" variant="simple">
-            {{ errorMessage }}
+            <span v-html="errorMessage" />
         </Message>
         <Message
-            v-if="hasFocus"
+            v-show="hasFocus"
             size="small"
             severity="secondary"
             variant="simple"
@@ -117,13 +140,3 @@ const {
         </Message>
     </div>
 </template>
-
-<style lang="postcss">
-.p-inputtext::placeholder {
-    color: transparent;
-}
-
-.p-inputtext:focus::placeholder {
-    @apply text-muted-color;
-}
-</style>

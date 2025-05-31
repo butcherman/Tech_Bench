@@ -44,10 +44,10 @@ onMounted(() => verifyModal.value?.show());
             <BaseButton
                 text="Yes"
                 variant="danger"
-                class="mx-2"
+                class="mx-2 pointer"
                 @click="yesClicked"
             />
-            <BaseButton text="No" class="mx-2" @click="noClicked" />
+            <BaseButton text="No" class="mx-2 pointer" @click="noClicked" />
         </template>
     </Modal>
 </template>

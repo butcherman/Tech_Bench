@@ -138,7 +138,7 @@ const editorInit = {
         <Editor
             v-model="value"
             :id="id"
-            class="editor-input"
+            class="editor-input border border-slate-200 rounded-lg p-3"
             :class="{ 'is-valid': isValid, 'is-invalid': isInvalid }"
             :disabled="disabled"
             :init="editorInit"
@@ -161,10 +161,9 @@ const editorInit = {
     </div>
 </template>
 
-<style lang="postcss">
+<style>
 .editor-input {
     min-height: 500px;
-    @apply border border-slate-200 rounded-lg p-3;
 
     &:focus-visible {
         outline: none;

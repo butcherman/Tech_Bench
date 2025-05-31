@@ -4,6 +4,11 @@ import { ref, toRef } from "vue";
 import { useField } from "vee-validate";
 import type { Ref } from "vue";
 
+const emit = defineEmits<{
+    focus: [];
+    blur: [];
+}>();
+
 const props = defineProps<{
     id: string;
     label: string;
@@ -14,8 +19,22 @@ const props = defineProps<{
     valueText?: string;
 }>();
 
+/*
+|-------------------------------------------------------------------------------
+| Input Focus State
+|-------------------------------------------------------------------------------
+*/
 const hasFocus = ref<boolean>(false);
 
+const onFocus = (): void => {
+    hasFocus.value = true;
+    emit("focus");
+};
+
+const onBlur = (): void => {
+    hasFocus.value = false;
+    emit("blur");
+};
 /*
 |-------------------------------------------------------------------------------
 | Vee-Validate
@@ -32,19 +51,19 @@ const {
 </script>
 
 <template>
-    <div class="mb-3">
+    <div class="my-2">
         <label :for="id" class="text-muted font-bold mb-2">
             {{ label }}
         </label>
         <Slider
-            v-model="value as number"
+            v-model="value"
             class="my-2"
-            :id="id"
+            :input-id="id"
             :name="name"
             :min="min"
             :max="max"
-            @focus="hasFocus = true"
-            @blur="hasFocus = false"
+            @focus="onFocus"
+            @blur="onBlur"
         />
         <div class="text-muted">
             <slot name="value-slot" :value="value">

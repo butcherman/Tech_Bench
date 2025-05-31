@@ -63,7 +63,12 @@ const schema = object({
             label="Current Password"
             focus
         />
-        <PasswordInput id="password" name="password" label="New Password" />
+        <PasswordInput
+            id="password"
+            name="password"
+            label="New Password"
+            feedback
+        />
         <PasswordInput
             id="password-confirmed"
             name="password_confirmation"

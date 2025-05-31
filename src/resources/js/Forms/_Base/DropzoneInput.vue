@@ -1,28 +1,39 @@
 <script setup lang="ts">
 import Dropzone from "dropzone";
-import axios from "axios";
 import { ref, onMounted, computed, nextTick, unref } from "vue";
 import { usePage } from "@inertiajs/vue3";
 import { processFileIcon } from "@/Composables/fileIcons.module";
 import type { Router } from "ziggy-js";
+import type { DropzoneFile } from "dropzone";
 
 /**
  * Additional Styling for Drag and Drop
  */
 import "file-icon-vectors/dist/file-icon-vectors.min.css";
 import "dropzone/dist/basic.css";
+import { dataPost } from "@/Composables/axiosWrapper.module";
 
-const emit = defineEmits([
-    "error",
-    "file-added",
-    "file-removed",
-    "max-files-exceeded",
-    "max-files-reached",
-    "sending",
-    "total-upload-progress",
-    "upload-progress",
-    "success",
-]);
+const emit = defineEmits<{
+    error: [
+        {
+            file: DropzoneFile;
+            status: number | undefined;
+            message: string | Error;
+        }
+    ];
+    fileAdded: [DropzoneFile];
+    fileRemoved: [DropzoneFile];
+    maxFilesReached: [];
+    maxFilesExceeded: [];
+    sending: [DropzoneFile, XMLHttpRequest, FormData];
+    success: [string | null];
+    totalUploadProgress: [
+        { progress: number; totalBytes: number; bytesSent: number }
+    ];
+    uploadProgress: [
+        { file: DropzoneFile; progress: number; bytesSent: number }
+    ];
+}>();
 
 const props = defineProps<{
     uploadUrl: string | Router;
@@ -77,7 +88,7 @@ const initDropzone = (): void => {
         chunkSize: fileData.chunkSize,
         headers: {
             "X-CSRF-TOKEN": csrfToken,
-            "X-Socket-Id": Echo.socketId(),
+            "X-Socket-Id": Echo.socketId() ?? "",
         },
         maxFiles: props.maxFiles || 5,
         maxFilesize: fileData.maxSize,
@@ -107,7 +118,7 @@ const buildEventListeners = (): void => {
         processFileIcon(file);
         nextTick(() => {
             validate();
-            emit("file-added", file);
+            emit("fileAdded", file);
         });
     });
 
@@ -120,19 +131,19 @@ const buildEventListeners = (): void => {
 
         nextTick(() => {
             validate();
-            emit("file-removed", file);
+            emit("fileRemoved", file);
         });
     });
 
     // When the maximum number of files has been reached
     myDrop.on("maxfilesreached", () => {
-        emit("max-files-reached");
+        emit("maxFilesReached");
     });
 
     // When the maximum number of files has been exceeded
     myDrop.on("maxfilesexceeded", () => {
         overMaxFiles.value = true;
-        emit("max-files-exceeded");
+        emit("maxFilesExceeded");
     });
 
     // Append Form Data to each File Chunk
@@ -146,12 +157,12 @@ const buildEventListeners = (): void => {
 
     // Bubble Upload Progress
     myDrop.on("uploadprogress", (file, progress, bytesSent) => {
-        emit("upload-progress", { file, progress, bytesSent });
+        emit("uploadProgress", { file, progress, bytesSent });
     });
 
     // Bubble Total Upload Progress
     myDrop.on("totaluploadprogress", (progress, totalBytes, bytesSent) => {
-        emit("total-upload-progress", { progress, totalBytes, bytesSent });
+        emit("totalUploadProgress", { progress, totalBytes, bytesSent });
     });
 
     // Bubble any Errors that occur with Dropzone
@@ -215,16 +226,9 @@ const process = (form: { [key: string]: any }) => {
 
     // If no files are present, we do an axios submission
     if (myDrop.files.length === 0) {
-        axios
-            .post(props.uploadUrl.toString(), fileFormData)
-            .then((res) => emit("success", res.data))
-            .catch((err) =>
-                emit("error", {
-                    file: [],
-                    status: err.response.status,
-                    message: err.response.data,
-                })
-            );
+        dataPost(props.uploadUrl.toString(), fileFormData).then((res) => {
+            emit("success", res?.data ?? "success");
+        });
     } else {
         myDrop.processQueue();
     }

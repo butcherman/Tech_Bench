@@ -23,6 +23,22 @@ const props = defineProps<{
     valueField?: string;
 }>();
 
+const optionLabel = computed<string | undefined>(() => {
+    if (typeof props.list[0] === "string") {
+        return undefined;
+    }
+
+    return props.textField ?? "text";
+});
+
+const optionValue = computed<string | undefined>(() => {
+    if (typeof props.list[0] === "string") {
+        return undefined;
+    }
+
+    return props.valueField ?? "text";
+});
+
 /*
 |-------------------------------------------------------------------------------
 | Styling Data
@@ -49,22 +65,6 @@ const onBlur = (): void => {
     emit("blur");
 };
 
-const optionLabel = computed<string | undefined>(() => {
-    if (typeof props.list[0] === "string") {
-        return undefined;
-    }
-
-    return props.textField ?? "text";
-});
-
-const optionValue = computed<string | undefined>(() => {
-    if (typeof props.list[0] === "string") {
-        return undefined;
-    }
-
-    return props.valueField ?? "text";
-});
-
 /*
 |-------------------------------------------------------------------------------
 | Vee-Validate
@@ -81,26 +81,28 @@ const {
 </script>
 
 <template>
-    <FloatLabel variant="on" class="w-full my-2">
-        <Select
-            v-model="value"
-            class="w-full"
-            :class="borderType"
-            :disabled="disabled"
-            :id="id"
-            :options="list"
-            :option-label="optionLabel"
-            :option-value="optionValue"
-            :option-group-label="groupTextField"
-            :option-group-children="groupChildrenField"
-            @focus="onFocus"
-            @blur="onBlur"
-        >
-            <template #option="slotProps">
-                <slot name="option" v-bind="slotProps" />
-            </template>
-        </Select>
-        <label :for="id" class="text-muted">{{ label }}</label>
+    <div class="my-2">
+        <FloatLabel variant="on">
+            <Select
+                v-model="value"
+                class="w-full"
+                :class="borderType"
+                :disabled="disabled"
+                :input-id="id"
+                :options="list"
+                :option-label="optionLabel"
+                :option-value="optionValue"
+                :option-group-label="groupTextField"
+                :option-group-children="groupChildrenField"
+                @focus="onFocus"
+                @blur="onBlur"
+            >
+                <template #option="slotProps">
+                    <slot name="option" v-bind="slotProps" />
+                </template>
+            </Select>
+            <label :for="id" class="text-muted">{{ label }}</label>
+        </FloatLabel>
         <Message size="small" severity="error" variant="simple">
             {{ errorMessage }}
         </Message>
@@ -112,11 +114,5 @@ const {
         >
             {{ help }}
         </Message>
-    </FloatLabel>
+    </div>
 </template>
-
-<style lang="postcss">
-.p-select-option-label {
-    @apply ms-4;
-}
-</style>

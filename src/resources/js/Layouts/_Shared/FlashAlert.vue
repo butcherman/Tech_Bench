@@ -33,20 +33,20 @@ const onLeave = (el: Element, done: () => void): void => {
     <Teleport to="body">
         <div
             id="app-flash-wrapper"
-            class="absolute top-5 w-full z-50 flex flex-col items-center"
+            class="fixed top-5 w-full z-50 flex flex-col items-center overflow-hidden"
         >
             <TransitionGroup :css="false" @enter="onEnter" @leave="onLeave">
                 <div
                     v-for="flash in app.flashAlerts"
-                    :key="flash.id"
                     class="flash-alert flex justify-between w-11/12 md:w-1/2 px-3 py-2 my-2 rounded-xl text-xl"
                     :class="getStatusType(flash.type)"
+                    :key="flash.id"
                 >
-                    <div>
+                    <div class="flex items-center">
                         <fa-icon :icon="getStatusIcon(flash.type)" />
                     </div>
-                    <div>{{ flash.message }}</div>
-                    <div>
+                    <div class="text-center my-1">{{ flash.message }}</div>
+                    <div class="flex items-center">
                         <fa-icon :icon="getStatusIcon(flash.type)" />
                     </div>
                 </div>

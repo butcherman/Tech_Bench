@@ -19,7 +19,7 @@ const auth = useAuthStore();
 
 <template>
     <nav
-        class="fixed top-14 right-0 lg:left-0 h-full lg:w-64 overflow-hidden rounded-s-lg lg:rounded-none border-s border-s-slate-200 lg:border-0"
+        class="fixed top-14 right-0 lg:left-0 h-full z-50 lg:w-64 overflow-hidden rounded-s-lg lg:rounded-none border-s border-s-slate-200 lg:border-0"
         :class="hiddenClass"
     >
         <Menu

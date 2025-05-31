@@ -10,7 +10,12 @@ interface formData {
     [key: string]: string;
 }
 
-const emit = defineEmits(["submitting", "success", "has-errors"]);
+const emit = defineEmits<{
+    submitting: [formData];
+    success: [];
+    hasErrors: [Partial<Record<string | number, string>>];
+}>();
+
 const props = defineProps<{
     initialValues: { [key: string]: any };
     submitMethod: "post" | "put" | "delete";
@@ -23,6 +28,11 @@ const props = defineProps<{
     only?: string[];
 }>();
 
+/*
+|-------------------------------------------------------------------------------
+| Form State
+|-------------------------------------------------------------------------------
+*/
 const isSubmitting = ref<boolean>(false);
 const submitText = computed<string>(() => props.submitText ?? "Submit");
 const isDirty = computed<boolean>(() => meta.value.dirty);
@@ -50,7 +60,7 @@ const {
 | Submit the Form
 |-------------------------------------------------------------------------------
 */
-const onSubmit = handleSubmit((form) => {
+const onSubmit = handleSubmit((form: formData): void => {
     isSubmitting.value = true;
     uncaughtErrors.value = [];
     emit("submitting", form);
@@ -75,7 +85,7 @@ const handleErrors = (
     originalForm: formData,
     formErrors: Partial<Record<string | number, string>>
 ) => {
-    emit("has-errors", formErrors);
+    emit("hasErrors", formErrors);
     const formKeys = Object.keys(originalForm);
 
     // Cycle through errors and assign to proper field values
@@ -121,40 +131,38 @@ defineExpose({
         :full-page="fullPageOverlay"
         class="h-full"
     >
-        <div class="h-full">
-            <form
-                class="vld-parent h-full flex flex-col"
-                novalidate
-                v-focustrap
-                @submit.prevent="onSubmit"
-            >
-                <div v-if="uncaughtErrors.length" class="flex-none my-4">
-                    <Message
-                        v-for="err in uncaughtErrors"
-                        severity="error"
-                        size="large"
-                    >
-                        {{ err }}
-                    </Message>
-                </div>
-                <div class="grow">
-                    <slot />
-                </div>
-                <div class="flex-none text-center mt-4">
-                    <BaseButton
-                        class="w-3/4"
-                        type="submit"
-                        variant="primary"
-                        :icon="submitIcon"
-                        :text="submitText"
-                    >
-                        <span v-if="isSubmitting">
-                            <fa-icon icon="spinner" class="fa-spin-pulse" />
-                        </span>
-                    </BaseButton>
-                </div>
-            </form>
+        <form
+            class="vld-parent h-full flex flex-col z-10"
+            novalidate
+            v-focustrap
+            @submit.prevent="onSubmit"
+        >
+            <div v-if="uncaughtErrors.length" class="flex-none my-4">
+                <Message
+                    v-for="err in uncaughtErrors"
+                    severity="error"
+                    size="large"
+                >
+                    {{ err }}
+                </Message>
+            </div>
+            <div class="grow">
+                <slot />
+            </div>
+            <div class="flex-none text-center mt-4">
+                <BaseButton
+                    class="w-3/4"
+                    type="submit"
+                    variant="primary"
+                    :icon="submitIcon"
+                    :text="submitText"
+                >
+                    <span v-if="isSubmitting">
+                        <fa-icon icon="spinner" class="fa-spin-pulse" />
+                    </span>
+                </BaseButton>
+            </div>
             <slot name="after-form" />
-        </div>
+        </form>
     </Overlay>
 </template>
