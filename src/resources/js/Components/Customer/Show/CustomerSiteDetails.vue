@@ -29,7 +29,7 @@ const mapUrl = computed<string>(() => {
             {{ currentSite.site_name }}
         </h3>
         <address>
-            <div class="float-start me-1 h-100 text-muted">
+            <div class="float-start me-1 text-muted">
                 <fa-icon icon="fa-map-marked" />
             </div>
             <a
