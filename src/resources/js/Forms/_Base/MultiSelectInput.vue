@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup lang="ts" generic="T">
 import { MultiSelect, Message, FloatLabel } from "primevue";
 import { computed, ref, toRef } from "vue";
 import { useField } from "vee-validate";
@@ -11,44 +11,29 @@ const emit = defineEmits<{
 
 const props = defineProps<{
     id: string;
-    list: any[];
     name: string;
-    borderBottom?: boolean;
+    list: T[];
+    borderless?: boolean;
     disabled?: boolean;
     filter?: boolean;
     groupChildrenField?: string;
     groupTextField?: string;
     help?: string;
     label?: string;
+    placeholder?: string;
     textField?: string;
+    type?: string;
     valueField?: string;
 }>();
 
-/*
-|-------------------------------------------------------------------------------
-| Styling Data
-|-------------------------------------------------------------------------------
-*/
-const borderType = computed<string>(() =>
-    props.borderBottom ? "border-b rounded-none" : "border"
+/**
+ * Auto Hide the placeholder when not in focus to support Floating Label.
+ */
+const inputPlaceholder = computed<string>(() =>
+    props.placeholder && (hasFocus.value || !props.label)
+        ? props.placeholder
+        : ""
 );
-
-/*
-|-------------------------------------------------------------------------------
-| Input Focus State
-|-------------------------------------------------------------------------------
-*/
-const hasFocus = ref<boolean>(false);
-
-const onFocus = (): void => {
-    hasFocus.value = true;
-    emit("focus");
-};
-
-const onBlur = (): void => {
-    hasFocus.value = false;
-    emit("blur");
-};
 
 const optionLabel = computed<string | undefined>(() => {
     if (typeof props.list[0] === "string") {
@@ -68,6 +53,23 @@ const optionValue = computed<string | undefined>(() => {
 
 /*
 |-------------------------------------------------------------------------------
+| Input Focus State
+|-------------------------------------------------------------------------------
+*/
+const hasFocus = ref<boolean>(false);
+
+const onFocus = (): void => {
+    hasFocus.value = true;
+    emit("focus");
+};
+
+const onBlur = (): void => {
+    hasFocus.value = false;
+    emit("blur");
+};
+
+/*
+|-------------------------------------------------------------------------------
 | Vee-Validate
 |-------------------------------------------------------------------------------
 */
@@ -77,54 +79,54 @@ const {
     value,
 }: {
     errorMessage: Ref<string | undefined, string | undefined>;
-    value: Ref<string>;
+    value: Ref<string | undefined>;
 } = useField(nameRef);
 </script>
 
 <template>
-    <FloatLabel variant="on" class="w-full my-2">
-        <MultiSelect
-            v-model="value"
-            class="w-full"
-            display="chip"
-            :class="borderType"
-            :disabled="disabled"
-            :id="id"
-            :options="list"
-            :option-label="optionLabel"
-            :option-value="optionValue"
-            :option-group-label="groupTextField"
-            :option-group-children="groupChildrenField"
-            :filter="filter"
-            :pt="{
-                pcChip: {
-                    root: 'bg-green-300 rounded-lg',
-                },
-            }"
-            @focus="onFocus"
-            @blur="onBlur"
-        >
-            <template #option="slotProps">
-                <slot name="option" v-bind="slotProps" />
-            </template>
-        </MultiSelect>
-        <label :for="id" class="text-muted">{{ label }}</label>
+    <div class="my-2">
+        <FloatLabel variant="on">
+            <MultiSelect
+                v-model="value"
+                class="w-full"
+                display="chip"
+                :class="{
+                    'border-hidden!': borderless,
+                }"
+                :disabled="disabled"
+                :filter="filter"
+                :input-id="id"
+                :invalid="errorMessage ? true : false"
+                :options="list"
+                :option-label="optionLabel"
+                :option-value="optionValue"
+                :option-group-label="groupTextField"
+                :option-group-children="groupChildrenField"
+                :placeholder="inputPlaceholder"
+                :pt="{
+                    pcChip: {
+                        root: 'bg-green-200! rounded-lg!',
+                    },
+                }"
+                @focus="onFocus"
+                @blur="onBlur"
+            >
+                <template #option="slotProps">
+                    <slot name="option" v-bind="slotProps" />
+                </template>
+            </MultiSelect>
+            <label :for="id">{{ label }}</label>
+        </FloatLabel>
         <Message size="small" severity="error" variant="simple">
-            {{ errorMessage }}
+            <span v-html="errorMessage" />
         </Message>
         <Message
-            v-if="hasFocus"
+            v-show="hasFocus"
             size="small"
             severity="secondary"
             variant="simple"
         >
             {{ help }}
         </Message>
-    </FloatLabel>
+    </div>
 </template>
-
-<style lang="postcss">
-.p-select-option-label {
-    @apply ms-4;
-}
-</style>

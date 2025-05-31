@@ -69,6 +69,11 @@ type basicPermissions = {
 | Misc
 |-------------------------------------------------------------------------------
 */
+interface laravelValidationErrors {
+    errors: { [key: string]: string[] };
+    message: string;
+}
+
 type fileData = {
     chunkSize: number;
     maxSize: number;

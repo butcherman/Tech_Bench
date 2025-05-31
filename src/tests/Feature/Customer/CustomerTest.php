@@ -421,7 +421,7 @@ class CustomerTest extends TestCase
             ->delete(route('customers.destroy', $cust->slug));
 
         $response->assertStatus(302)
-            ->assertSessionHasErrors(['reason']);
+            ->assertSessionHasErrorsIn('form_error', ['reason']);
     }
 
     public function test_destroy(): void

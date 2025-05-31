@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import BaseButton from "./BaseButton.vue";
 import ConfirmPopup from "primevue/confirmpopup";
-import { computed } from "vue";
 import { handleLinkClick } from "@/Composables/links.module";
 import { useConfirm } from "primevue";
 
@@ -78,7 +77,16 @@ const handleClick = (event: MouseEvent) => {
                 {{ text ?? "Delete" }}
             </slot>
         </BaseButton>
-        <ConfirmPopup>
+        <ConfirmPopup
+            :pt="{
+                pcRejectButton: {
+                    root: 'bg-green-500!',
+                },
+                pcAcceptButton: {
+                    root: 'bg-red-500!',
+                },
+            }"
+        >
             <template #icon>
                 <fa-icon icon="exclamation-circle" class="text-danger" />
             </template>

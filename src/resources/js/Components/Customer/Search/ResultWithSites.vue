@@ -7,12 +7,14 @@ import { showSites } from "@/Composables/Customer/CustomerSearch.module";
 </script>
 
 <template>
-    <td :colspan="showSites ? 1 : 2">
+    <td class="h-1" :colspan="showSites ? 1 : 2">
         <Link
             :href="$route('customers.show', cust.slug)"
-            class="m-0 p-2 block hover:font-normal"
+            class="m-0 p-2 flex items-center hover:font-semi-bold h-full"
         >
-            {{ cust.name }}
+            <span>
+                {{ cust.name }}
+            </span>
         </Link>
     </td>
     <td v-if="showSites">

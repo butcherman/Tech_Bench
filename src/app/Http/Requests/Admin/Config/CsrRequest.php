@@ -7,6 +7,8 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class CsrRequest extends FormRequest
 {
+    protected $errorBag = 'form_error';
+
     /**
      * Determine if the user is authorized to make this request.
      */

@@ -235,7 +235,7 @@ class SecurityTest extends TestCase
             ->post(route('admin.security.store'), $data);
 
         $response->assertStatus(302)
-            ->assertSessionHasErrors(['certificate']);
+            ->assertSessionHasErrorsIn('form_error', ['certificate']);
     }
 
     public function test_store_expired_cert(): void
@@ -260,7 +260,7 @@ class SecurityTest extends TestCase
             ->post(route('admin.security.store'), $data);
 
         $response->assertStatus(302)
-            ->assertSessionHasErrors(['certificate']);
+            ->assertSessionHasErrorsIn('form_error', ['certificate']);
     }
 
     /*

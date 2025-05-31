@@ -8,6 +8,8 @@ use Illuminate\Validation\Validator;
 
 class VerificationCodeRequest extends FormRequest
 {
+    protected $errorBag = 'form_error';
+
     /**
      * Get the validation rules that apply to the request.
      */

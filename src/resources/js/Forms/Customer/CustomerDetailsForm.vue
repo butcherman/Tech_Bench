@@ -52,7 +52,6 @@ const newSchema = object({
         .nullable()
         .test("uniqueCustId", async function (value) {
             let usedData = await checkCustId(value).then((res) => res);
-            console.log(usedData);
             if (usedData.in_use) {
                 if (usedData.disabled) {
                     return this.createError({

@@ -1,8 +1,14 @@
 <script setup lang="ts">
 import { ToggleSwitch, Message } from "primevue";
-import { toRef, ref } from "vue";
+import { toRef, ref, computed } from "vue";
 import { useField } from "vee-validate";
 import type { Ref } from "vue";
+import BaseBadge from "@/Components/_Base/Badges/BaseBadge.vue";
+
+const emit = defineEmits<{
+    focus: [];
+    blur: [];
+}>();
 
 const props = defineProps<{
     id: string;
@@ -10,11 +16,29 @@ const props = defineProps<{
     center?: boolean;
     disabled?: boolean;
     help?: string;
-    inline?: boolean; // TODO - Add This Class
     label?: string;
 }>();
 
-const hasFocus = ref(false);
+/*
+|-------------------------------------------------------------------------------
+| Input Focus State
+|-------------------------------------------------------------------------------
+*/
+const hasFocus = ref<boolean>(false);
+const showHelp = ref<boolean>(false);
+const helpTooltip = computed(() =>
+    showHelp.value ? "Hide Help" : "Show Help"
+);
+
+const onFocus = (): void => {
+    hasFocus.value = true;
+    emit("focus");
+};
+
+const onBlur = (): void => {
+    hasFocus.value = false;
+    emit("blur");
+};
 
 /*
 |-------------------------------------------------------------------------------
@@ -32,33 +56,34 @@ const {
 </script>
 
 <template>
-    <div class="my-2" :class="{ 'justify-items-center': center }">
-        <div>
-            <div class="flex">
-                <ToggleSwitch
-                    :input-id="id"
-                    v-model="value"
-                    :disabled="disabled"
-                    @focus="hasFocus = true"
-                    @blur="hasFocus = false"
-                />
-                <label :for="id" class="align-top ms-2 text-muted">
-                    <slot name="label">
-                        {{ label }}
-                    </slot>
-                </label>
+    <div class="my-2" :class="{ 'flex justify-center': center }">
+        <div class="flex gap-2">
+            <ToggleSwitch
+                v-model="value"
+                :input-id="id"
+                :invalid="errorMessage ? true : false"
+                :disabled="disabled"
+                pt:handle:class="text-white"
+                @focus="onFocus"
+                @blur="onBlur"
+            />
+            <div class="grow">
+                <label class="text-muted">{{ label }}</label>
+                <Message size="small" severity="error" variant="simple">
+                    <span v-html="errorMessage" />
+                </Message>
+                <Message
+                    v-show="showHelp"
+                    size="small"
+                    severity="secondary"
+                    variant="simple"
+                >
+                    {{ help }}
+                </Message>
             </div>
-            <Message size="small" severity="error" variant="simple">
-                {{ errorMessage }}
-            </Message>
-            <Message
-                v-if="hasFocus"
-                size="small"
-                severity="secondary"
-                variant="simple"
-            >
-                {{ help }}
-            </Message>
+            <div v-if="help" v-tooltip="helpTooltip">
+                <BaseBadge icon="question" @click="showHelp = !showHelp" />
+            </div>
         </div>
     </div>
 </template>

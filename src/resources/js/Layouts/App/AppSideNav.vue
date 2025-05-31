@@ -1,24 +1,37 @@
 <script setup lang="ts">
-import { Menu } from "primevue";
 import { computed } from "vue";
-import { usePage } from "@inertiajs/vue3";
+import { Menu } from "primevue";
+import { useAuthStore } from "@/Stores/AuthStore";
 
-defineProps<{
-    navbarHidden: boolean | null;
+const props = defineProps<{
+    navbarHidden: boolean;
 }>();
 
-const navbar = computed<navbarItem[]>(() => usePage<pageProps>().props.navbar);
+/**
+ * On Mobile, determine width of navbar based on if hidden or not.
+ */
+const hiddenClass = computed<string>(() =>
+    props.navbarHidden ? "w-0" : "w-64"
+);
+
+const auth = useAuthStore();
 </script>
 
 <template>
     <nav
-        :class="{ 'navbar-hidden': navbarHidden }"
-        class="h-full w-64 z-20 fixed top-14 -md:right-0 overflow-hidden border-e -md:border -md:rounded-lg md:rounded-none"
+        class="fixed top-14 right-0 lg:left-0 h-full z-50 lg:w-64 overflow-hidden rounded-s-lg lg:rounded-none border-s border-s-slate-200 lg:border-0"
+        :class="hiddenClass"
     >
-        <Menu :model="navbar" id="app-navbar-menu" class="h-full w-full p-4">
+        <Menu
+            :model="auth.navbar"
+            class="pt-4 border-none! rounded-none! h-full"
+        >
             <template #item="{ item }">
-                <div class="my-2 mx-2">
-                    <Link :href="item.route">
+                <div class="ps-2">
+                    <Link
+                        :href="item.route"
+                        class="w-full h-full m-0 py-2 block"
+                    >
                         <fa-icon :icon="item.icon" />
                         {{ item.name }}
                     </Link>
@@ -28,13 +41,9 @@ const navbar = computed<navbarItem[]>(() => usePage<pageProps>().props.navbar);
     </nav>
 </template>
 
-<style lang="postcss" scoped>
+<style scoped>
 nav {
     transition: width;
     transition-duration: 0.5s;
-}
-
-.navbar-hidden {
-    @apply -md:w-0;
 }
 </style>

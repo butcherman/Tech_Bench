@@ -68,12 +68,21 @@ const handleClick = (event: MouseEvent): void => {
             :variant="variant ?? 'danger'"
             @click="handleClick"
         />
-        <ConfirmPopup>
+        <ConfirmPopup
+            :pt="{
+                pcRejectButton: {
+                    root: 'bg-green-500!',
+                },
+                pcAcceptButton: {
+                    root: 'bg-red-500!',
+                },
+            }"
+        >
             <template #icon>
                 <fa-icon icon="exclamation-circle" class="text-danger" />
             </template>
             <template #accepticon>
-                <fa-icon icon="check" class="text-danger" />
+                <fa-icon icon="check" class="text-red-800" />
             </template>
             <template #rejecticon>
                 <fa-icon icon="xmark" />

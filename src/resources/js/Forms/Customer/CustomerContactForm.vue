@@ -168,8 +168,7 @@ const schema = object({
             id="phone-list"
             name="phones"
             :phone-types="phoneTypes"
-            label="phone list"
-            remove-warning="This may be a bad idea"
+            label="Phone Numbers"
         />
     </VueForm>
 </template>

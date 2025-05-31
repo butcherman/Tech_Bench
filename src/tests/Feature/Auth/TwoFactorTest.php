@@ -161,7 +161,7 @@ class TwoFactorTest extends TestCase
         $response = $this->actingAs($user)->put(route('2fa.update'), $data);
 
         $response->assertStatus(302)
-            ->assertSessionHasErrors('code');
+            ->assertSessionHasErrorsIn('form_error', ['code']);
     }
 
     public function test_update_expired_code(): void
@@ -185,7 +185,7 @@ class TwoFactorTest extends TestCase
         $response = $this->actingAs($user)->put(route('2fa.update'), $data);
 
         $response->assertStatus(302)
-            ->assertSessionHasErrors('code');
+            ->assertSessionHasErrorsIn('form_error', ['code']);
     }
 
     public function test_update_with_remember_device(): void

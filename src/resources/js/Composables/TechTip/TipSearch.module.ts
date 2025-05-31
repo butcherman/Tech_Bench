@@ -51,8 +51,6 @@ export const paginationData = reactive<paginationData>({
  * Fetch data for Tech Tip Search.
  */
 export const triggerSearch = (): void => {
-    console.log("trigger search");
-
     isDirty.value = true;
 
     dataPost(route("tech-tips.search"), searchParams).then((res) =>
@@ -64,8 +62,6 @@ export const triggerSearch = (): void => {
  * Perform a Tech Tip Search, but only for public Tech Tips.
  */
 export const triggerPublicSearch = () => {
-    console.log("public search");
-
     isDirty.value = true;
 
     dataPost(route("publicTips.search"), searchParams).then((res) =>
@@ -89,7 +85,6 @@ export const resetSearch = (): void => {
  */
 const processResults = (res: void | AxiosResponse<any, techTip>): void => {
     if (res) {
-        console.log(res.data);
         // Assign results
         searchResults.value = res.data.data;
 

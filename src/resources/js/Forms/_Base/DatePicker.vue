@@ -1,27 +1,58 @@
 <script setup lang="ts">
-import { DatePicker, FloatLabel, Message, InputGroupAddon } from "primevue";
+import {
+    DatePicker,
+    FloatLabel,
+    InputGroup,
+    InputGroupAddon,
+    Message,
+} from "primevue";
 import { computed, ref, toRef } from "vue";
 import { useField } from "vee-validate";
 import type { Ref } from "vue";
+
+const emit = defineEmits<{
+    focus: [];
+    blur: [];
+}>();
 
 const props = defineProps<{
     id: string;
     name: string;
     autocomplete?: string;
-    borderBottom?: boolean;
+    borderless?: boolean;
     disabled?: boolean;
-    filled?: boolean;
     focus?: boolean;
     help?: string;
     label?: string;
     placeholder?: string;
+    type?: string;
 }>();
 
+/**
+ * Auto Hide the placeholder when not in focus to support Floating Label.
+ */
+const inputPlaceholder = computed<string>(() =>
+    props.placeholder && (hasFocus.value || !props.label)
+        ? props.placeholder
+        : ""
+);
+
+/*
+|-------------------------------------------------------------------------------
+| Input Focus State
+|-------------------------------------------------------------------------------
+*/
 const hasFocus = ref<boolean>(false);
 
-const borderType = computed<string>(() =>
-    props.borderBottom ? "border-b rounded-none" : "border"
-);
+const onFocus = (): void => {
+    hasFocus.value = true;
+    emit("focus");
+};
+
+const onBlur = (): void => {
+    hasFocus.value = false;
+    emit("blur");
+};
 
 /*
 |-------------------------------------------------------------------------------
@@ -39,35 +70,44 @@ const {
 </script>
 
 <template>
-    <div>
-        <FloatLabel variant="on" class="my-2">
-            <DatePicker
-                v-model="value"
-                class="p-2"
-                :autocomplete="autocomplete ?? 'off'"
-                :autofocus="focus"
-                :class="borderType"
-                :disabled="disabled"
-                :id="id"
-                :placeholder="placeholder"
-                :variant="filled ? 'filled' : null"
-                fluid
-                @focus="hasFocus = true"
-                @blur="hasFocus = false"
-            />
-            <label :for="id">{{ label }}</label>
-        </FloatLabel>
-        <InputGroupAddon
-            v-if="$slots['end-text']"
-            class="border border-s-0 my-2 shadow-sm"
-        >
-            <slot name="end-text" />
-        </InputGroupAddon>
+    <div class="my-2">
+        <InputGroup :class="{ 'border-b': borderless }">
+            <InputGroupAddon
+                v-if="$slots['start-text']"
+                :class="{ 'border-hidden!': borderless }"
+            >
+                <slot name="start-text" />
+            </InputGroupAddon>
+            <FloatLabel variant="on">
+                <DatePicker
+                    v-model="value"
+                    :autocomplete="autocomplete ?? 'off'"
+                    :autofocus="focus"
+                    :disabled="disabled"
+                    :class="{
+                        'border-hidden!': borderless,
+                    }"
+                    :input-id="id"
+                    :invalid="errorMessage ? true : false"
+                    :placeholder="inputPlaceholder"
+                    :type="type ?? 'text'"
+                    @focus="onFocus"
+                    @blur="onBlur"
+                />
+                <label :for="id">{{ label }}</label>
+            </FloatLabel>
+            <InputGroupAddon
+                v-if="$slots['end-text']"
+                :class="{ 'border-hidden!': borderless }"
+            >
+                <slot name="end-text" />
+            </InputGroupAddon>
+        </InputGroup>
         <Message size="small" severity="error" variant="simple">
-            {{ errorMessage }}
+            <span v-html="errorMessage" />
         </Message>
         <Message
-            v-if="hasFocus"
+            v-show="hasFocus"
             size="small"
             severity="secondary"
             variant="simple"
@@ -76,13 +116,3 @@ const {
         </Message>
     </div>
 </template>
-
-<style lang="postcss">
-.p-inputtext::placeholder {
-    color: transparent;
-}
-
-.p-inputtext:focus::placeholder {
-    @apply text-muted-color;
-}
-</style>

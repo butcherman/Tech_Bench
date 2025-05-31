@@ -26,7 +26,6 @@ defineProps<{
  * Remove the Soft Delete flag from a previously disabled item.
  */
 const restoreItem = (category: string, itemId: number): void => {
-    console.log("restore item");
     verifyModal("This item will be restored").then((res) => {
         if (res) {
             router.get(
@@ -43,7 +42,6 @@ const restoreItem = (category: string, itemId: number): void => {
  * Permanently Delete a soft deleted item.
  */
 const destroyItem = (category: string, itemId: number): void => {
-    console.log("destroy item");
     verifyModal("This Action Cannot Be Undone").then((res) => {
         if (res) {
             router.delete(
@@ -64,7 +62,6 @@ const destroyItem = (category: string, itemId: number): void => {
  * Restore a soft deleted site
  */
 const restoreSite = (siteId: number): void => {
-    console.log("restore site");
     verifyModal("Restore this site?").then((res) => {
         if (res) {
             //
@@ -79,7 +76,6 @@ const restoreSite = (siteId: number): void => {
  * Delete a site and all attached data
  */
 const destroySite = (siteId: number): void => {
-    console.log("destroy site");
     verifyModal("Delete this site?", "WARNING: POSSIBLE DATA LOSS").then(
         (res) => {
             if (res) {

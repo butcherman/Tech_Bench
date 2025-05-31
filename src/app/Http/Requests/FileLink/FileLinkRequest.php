@@ -3,11 +3,16 @@
 namespace App\Http\Requests\FileLink;
 
 use App\Models\FileLink;
+use App\Traits\Requests\NormalizeJson;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 class FileLinkRequest extends FormRequest
 {
+    use NormalizeJson;
+
+    protected $errorBag = 'form_error';
+
     /**
      * Determine if the user is authorized to make this request.
      */

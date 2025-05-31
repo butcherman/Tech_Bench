@@ -184,7 +184,7 @@ class CustomerEquipmentTest extends TestCase
             );
 
         $response->assertStatus(302)
-            ->assertSessionHasErrors(['site_list']);
+            ->assertSessionHasErrorsIn('form_error', ['site_list']);
     }
 
     /*
@@ -231,8 +231,6 @@ class CustomerEquipmentTest extends TestCase
                     ->has('equipment')
                     ->has('siteList')
                     ->has('equipment-data')
-                // ->has('notes')
-                // ->has('files')
             );
     }
 

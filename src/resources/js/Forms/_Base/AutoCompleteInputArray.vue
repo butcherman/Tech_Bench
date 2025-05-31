@@ -4,6 +4,7 @@ import AddButton from "@/Components/_Base/Buttons/AddButton.vue";
 import draggable from "vuedraggable";
 import verifyModal from "@/Modules/verifyModal";
 import { useFieldArray } from "vee-validate";
+import { ref } from "vue";
 
 type dragEvent = {
     oldIndex: number;
@@ -19,14 +20,23 @@ const props = defineProps<{
     removeWarning?: string;
 }>();
 
-const { remove, push, fields, move } = useFieldArray(props.name);
+/*
+|-------------------------------------------------------------------------------
+| Drag Events
+|-------------------------------------------------------------------------------
+*/
+const drag = ref<boolean>(false);
 
-const onDragEnd = (event: dragEvent) => {
+const onDragStart = (): void => {
+    drag.value = true;
+};
+
+const onDragEnd = (event: dragEvent): void => {
+    drag.value = false;
     move(event.oldIndex, event.newIndex);
 };
 
-const removeWarning = (index: number) => {
-    console.log(fields.value[index].value);
+const removeWarning = (index: number): void => {
     if (props.removeWarning && fields.value[index].value) {
         verifyModal(props.removeWarning).then((res) => {
             if (res) {
@@ -37,17 +47,26 @@ const removeWarning = (index: number) => {
         remove(index);
     }
 };
+
+/*
+|-------------------------------------------------------------------------------
+| Vee Validate
+|-------------------------------------------------------------------------------
+*/
+const { remove, push, move, fields } = useFieldArray(props.name);
 </script>
 
 <template>
     <draggable
+        :animation="200"
         :disabled="!draggable"
         :list="fields"
         item-key="index"
+        @start="onDragStart"
         @end="onDragEnd"
     >
         <template #item="{ element, index }">
-            <div class="px-2">
+            <div class="px-2 pointer">
                 <AutoCompleteInput
                     :id="`${name}-${element.key}`"
                     :name="`${name}[${index}]`"
@@ -56,7 +75,7 @@ const removeWarning = (index: number) => {
                     :data-list="dataList"
                 >
                     <template v-if="draggable" #start-text>
-                        <span class="pointer" v-tooltip="'Drag to Re-Order'">
+                        <span v-tooltip="'Drag to Re-Order'">
                             <fa-icon icon="sort" />
                         </span>
                     </template>
@@ -73,7 +92,7 @@ const removeWarning = (index: number) => {
             </div>
         </template>
         <template #footer>
-            <AddButton class="float-end !px-2 !py-0" pill @click="push('')" />
+            <AddButton class="float-end px-2! py-0!" pill @click="push('')" />
         </template>
     </draggable>
 </template>

@@ -24,6 +24,18 @@ export async function dataPost(
     return await axios
         .post(url, args)
         .then((res) => res)
-        .catch((err) => alert(err))
+        .catch((err) => {
+            if (err.status === 422) {
+                throw {
+                    status: err.status,
+                    message: {
+                        errors: err.response.data.errors,
+                        message: err.response.data.message,
+                    },
+                };
+            }
+
+            alert(err);
+        })
         .finally(() => (isLoading.value = false));
 }

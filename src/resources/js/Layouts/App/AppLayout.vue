@@ -16,7 +16,6 @@ import { useBroadcastStore } from "@/Stores/BroadcastStore";
 |-------------------------------------------------------------------------------
 */
 const navbarHidden = ref<boolean>(true);
-router.on("navigate", () => (navbarHidden.value = true));
 
 /*
 |-------------------------------------------------------------------------------
@@ -38,25 +37,23 @@ const appTitle = computed<string | undefined>(
 const broadcast = useBroadcastStore();
 onMounted(() => broadcast.registerNotificationChannel());
 router.on("before", (e) => {
-    e.detail.visit.headers["X-Socket-ID"] = Echo.socketId();
+    e.detail.visit.headers["X-Socket-ID"] = Echo.socketId() ?? "";
+    navbarHidden.value = true;
 });
 </script>
 
 <template>
-    <div id="app-layout-wrapper" class="h-screen z-0 flex flex-col">
-        <Head :title="appTitle" />
+    <div class="h-screen flex flex-col">
         <FlashAlert />
+        <Head :title="appTitle" />
         <AppNotificationToast />
         <AppHeader @toggle-navbar="navbarHidden = !navbarHidden" />
         <AppSideNav :navbar-hidden="navbarHidden" />
-        <section
-            id="app-content"
-            class="md:ms-64 mt-14 z-0 bg-gray-200 flex flex-col grow"
-        >
-            <div id="app-page-wrapper" class="flex flex-col grow p-5">
+        <section class="mt-14 lg:ms-64 grow bg-gray-200 flex flex-col">
+            <div class="p-5 grow">
                 <AppBreadcrumbs class="mb-2" />
                 <StaticAlert />
-                <div class="flex flex-col grow">
+                <div>
                     <slot />
                 </div>
             </div>

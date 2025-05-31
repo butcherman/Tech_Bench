@@ -1,21 +1,32 @@
-@import url('./typography.css');
+@import 'tailwindcss';
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@config '../../tailwind.config.js';
 
-html,
-body,
-#app {
-    min-height: 100vh;
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
 }
 
 .pointer {
     cursor: pointer;
 }
 
+
 /**
-* Utility classes to quickly set card sizes
+* Classes to quickly set Card Component sizes
 */
 .tb-card {
     @apply w-full md:w-3/4 xl:w-1/2 my-3;
@@ -33,6 +44,9 @@ body,
     @apply w-full;
 }
 
+/**
+* Standard margins for keeping spacing uniform
+*/
 .tb-gap {
     @apply my-3 mx-3;
 }
@@ -43,6 +57,57 @@ body,
 
 .tb-gap-y {
     @apply my-3;
+}
+
+@layer base {
+    a {
+        @apply hover:font-semibold;
+    }
+
+    h1 {
+        @apply text-3xl! font-bold!;
+    }
+
+    h2 {
+        @apply text-2xl! font-bold!;
+    }
+
+    h3 {
+        @apply text-xl! font-bold!;
+    }
+
+    h4 {
+        @apply text-lg! font-bold!;
+    }
+
+    h5 {
+        @apply font-bold!;
+    }
+
+    h6 {
+        @apply text-sm! font-bold!;
+    }
+
+    .text-success {
+        @apply text-green-500;
+    }
+
+    .text-warning {
+        @apply text-yellow-500
+    }
+
+    .text-muted {
+        @apply text-slate-500;
+    }
+
+    .text-error {
+        @apply text-red-900;
+    }
+
+    .text-danger {
+        @apply text-red-600;
+    }
+
 }
 
 /**

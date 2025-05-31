@@ -9,6 +9,8 @@ use Illuminate\Validation\Validator;
 
 class SslCertificateRequest extends FormRequest
 {
+    protected $errorBag = 'form_error';
+
     public function __construct(protected CertificateService $svc) {}
 
     /**

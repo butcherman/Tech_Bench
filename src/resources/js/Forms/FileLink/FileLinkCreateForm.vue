@@ -77,17 +77,15 @@ const schema = object({
         @success="handleSuccessfulUpload"
     >
         <TextInput id="link-name" name="link_name" label="Link Name" focus />
-        <div v-if="allowCustomUrl" class="flex flex-row">
-            <div
-                class="border border-collapse rounded-e-none rounded-lg ps-2 py-2 my-2 text-muted"
-            >
-                {{ $route("guest-link.index") }}/
-            </div>
+        <div v-show="allowCustomUrl">
             <TextInput
                 id="link-hash"
                 name="link_hash"
                 label="Link URL"
                 class="grow rounded-s-none"
+                :help="`Full URL will be ${$route('guest-link.index')}/${
+                    props.linkHash
+                }`"
             />
         </div>
         <TextInput id="expire" name="expire" label="Expire Date" type="date" />

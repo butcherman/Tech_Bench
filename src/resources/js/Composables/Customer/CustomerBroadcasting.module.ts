@@ -38,8 +38,6 @@ export const clearNotification = (key: alertKey): void => {
 |-------------------------------------------------------------------------------
 */
 export const registerCustomerChannel = (slug: string): void => {
-    console.log(`Registering to customer.${slug}`);
-
     Echo.private(`customer.${slug}`)
         .listen(".CustomerSlugChanged", (data: slugData) => onSlugChanged(data))
         .listen(".CustomerUpdated", (data: { model: customer }) =>
@@ -68,8 +66,7 @@ export const registerCustomerChannel = (slug: string): void => {
         )
         .listen(".CustomerNoteCreated", () => triggerNotification("notes"))
         .listen(".CustomerNoteUpdated", () => triggerNotification("notes"))
-        .listen(".customerNoteDeleted", () => triggerNotification("notes"))
-        .listenToAll((event, data) => console.log(event, data));
+        .listen(".customerNoteDeleted", () => triggerNotification("notes"));
 };
 
 export const leaveCustomerChannel = (slug: string): void => {
@@ -82,16 +79,13 @@ export const leaveCustomerChannel = (slug: string): void => {
 |-------------------------------------------------------------------------------
 */
 export const registerEquipmentChannel = (custEquipId: number): void => {
-    console.log("register to " + custEquipId);
-
     Echo.private(`customer.equipment.${custEquipId}`)
         .listen(".CustomerEquipmentDataUpdated", () =>
             triggerNotification("data")
         )
         .listen(".CustomerNoteCreated", () => triggerNotification("notes"))
         .listen(".CustomerNoteUpdated", () => triggerNotification("notes"))
-        .listen(".customerNoteDeleted", () => triggerNotification("notes"))
-        .listenToAll((event, data) => console.log(event, data));
+        .listen(".customerNoteDeleted", () => triggerNotification("notes"));
 };
 
 export const leaveEquipmentChannel = (custEquipId: number): void => {
@@ -112,7 +106,6 @@ const onSlugChanged = (data: slugData) => {
  */
 const onCustomerUpdated = (data: { model: customer }) => {
     if (data.model.primary_site_id !== customer.value.primary_site_id) {
-        console.log("primary site changed");
         router.reload({ only: ["siteList"] });
     } else {
         router.reload({ only: ["customer"] });

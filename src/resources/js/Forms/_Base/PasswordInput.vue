@@ -4,23 +4,50 @@ import { computed, ref, toRef } from "vue";
 import { useField } from "vee-validate";
 import type { Ref } from "vue";
 
-const props = defineProps<{
-    id: string;
-    label: string;
-    name: string;
-    autocomplete?: string;
-    borderBottom?: boolean;
-    disabled?: boolean;
-    filled?: boolean;
-    focus?: boolean;
-    help?: string;
+const emit = defineEmits<{
+    focus: [];
+    blur: [];
 }>();
 
+const props = defineProps<{
+    id: string;
+    name: string;
+    autocomplete?: string;
+    borderless?: boolean;
+    disabled?: boolean;
+    feedback?: boolean;
+    focus?: boolean;
+    help?: string;
+    label?: string;
+    placeholder?: string;
+    type?: string;
+}>();
+
+/**
+ * Auto Hide the placeholder when not in focus to support Floating Label.
+ */
+const inputPlaceholder = computed<string>(() =>
+    props.placeholder && (hasFocus.value || !props.label)
+        ? props.placeholder
+        : ""
+);
+
+/*
+|-------------------------------------------------------------------------------
+| Input Focus State
+|-------------------------------------------------------------------------------
+*/
 const hasFocus = ref<boolean>(false);
 
-const borderType = computed(() =>
-    props.borderBottom ? "border-b rounded-none" : "border"
-);
+const onFocus = (): void => {
+    hasFocus.value = true;
+    emit("focus");
+};
+
+const onBlur = (): void => {
+    hasFocus.value = false;
+    emit("blur");
+};
 
 /*
 |-------------------------------------------------------------------------------
@@ -33,27 +60,32 @@ const {
     value,
 }: {
     errorMessage: Ref<string | undefined, string | undefined>;
-    value: Ref<string>;
+    value: Ref<string | undefined>;
 } = useField(nameRef);
 </script>
 
 <template>
-    <div>
-        <FloatLabel variant="on" class="my-2">
+    <div class="my-2">
+        <FloatLabel variant="on">
             <Password
                 v-model="value"
-                class="p-2 rounded-md shadow-sm"
                 :autocomplete="autocomplete ?? 'off'"
                 :autofocus="focus"
-                :class="borderType"
+                :class="{ 'border-b': borderless }"
                 :disabled="disabled"
-                :feedback="false"
+                :feedback="feedback"
                 :input-id="id"
-                :variant="filled ? 'filled' : undefined"
+                :inputClass="{
+                    'border-hidden!': borderless,
+                }"
+                :invalid="errorMessage ? true : false"
+                :placeholder="inputPlaceholder"
+                pt:maskIcon:class="pointer"
+                pt:unmaskIcon:class="pointer"
                 fluid
                 toggle-mask
-                @focus="hasFocus = true"
-                @blur="hasFocus = false"
+                @focus="onFocus"
+                @blur="onBlur"
             />
             <label :for="id">{{ label }}</label>
             <Message size="small" severity="error" variant="simple">
@@ -71,7 +103,9 @@ const {
     </div>
 </template>
 
-<style>
+<style lang="postcss">
+@reference '../../../css/app.css';
+
 .p-password-input {
     @apply shadow-none;
 }

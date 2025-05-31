@@ -34,7 +34,6 @@ const onCustomerSelected = (event: MouseEvent, customer: customer): void => {
             fromCustomer.value = customer;
 
             if (customer.site_count > 1) {
-                console.log("select site");
                 siteModal.value?.show();
             } else {
                 selectedSite.value = customer.sites[0];
@@ -73,15 +72,12 @@ const onReset = (): void => {
  * Verify and then move the customer site to the proper customer
  */
 const onVerify = (): void => {
-    console.log("verify");
-
     verifyModal(
         `Equipment, Contacts, Notes and Files that are shared with other sites
          WILL NOT be moved with this site. Continue?`,
         "IMPORTANT NOTE"
     ).then((res) => {
         if (res) {
-            console.log("do it");
             const formData = useForm({
                 moveSiteId: selectedSite.value?.cust_site_id,
                 toCustomer: toCustomer.value?.cust_id,

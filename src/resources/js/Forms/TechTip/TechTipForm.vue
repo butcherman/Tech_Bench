@@ -48,8 +48,6 @@ const submitText = computed(() =>
  * After all files are uploaded, we need to process the rest of the form
  */
 const onSuccessfulUpload = () => {
-    console.log("upload completed");
-
     if (!tipForm.value) {
         return;
     }

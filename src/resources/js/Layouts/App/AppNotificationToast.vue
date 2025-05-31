@@ -1,26 +1,31 @@
 <script setup lang="ts">
+import BaseBadge from "@/Components/_Base/Badges/BaseBadge.vue";
 import Card from "@/Components/_Base/Card.vue";
-import { useBroadcastStore } from "@/Stores/BroadcastStore";
+import gsap from "gsap";
 import { handleLinkClick } from "@/Composables/links.module";
-import { gsap } from "gsap/gsap-core";
+import { useBroadcastStore } from "@/Stores/BroadcastStore";
 
 const msg = useBroadcastStore();
 
-/**
- * Animations
- */
-const onEnter = (el: Element) => {
+/*
+|-------------------------------------------------------------------------------
+| Animations
+|-------------------------------------------------------------------------------
+*/
+const onEnter = (el: Element, done: () => void): void => {
     gsap.from(el, {
         x: 1000,
         ease: "back.out",
         duration: 0.5,
+        onComplete: done,
     });
 };
 
-const onLeave = (el: Element, done: () => void) => {
+const onLeave = (el: Element, done: () => void): void => {
     gsap.to(el, {
         x: 1000,
         ease: "back.in",
+        duration: 0.5,
         onComplete: done,
     });
 };
@@ -28,22 +33,30 @@ const onLeave = (el: Element, done: () => void) => {
 
 <template>
     <Teleport to="body">
-        <div id="app-toast-wrapper" class="absolute bottom-2 right-2 w-full">
-            <TransitionGroup @enter="onEnter" @leave="onLeave" :css="false">
+        <div
+            id="app-toast-wrapper"
+            class="fixed bottom-2 right-2 w-full overflow-hidden flex flex-col items-end"
+        >
+            <TransitionGroup :css="false" @enter="onEnter" @leave="onLeave">
                 <div
                     v-for="toast in msg.notificationToasts"
-                    :key="toast.id"
-                    class="ms-auto my-2 w-64 notification-toast"
+                    class="my-2 w-64 notification-toast"
                     :class="{ pointer: toast.href }"
+                    :key="toast.id"
+                    :id="`toast-id-${toast.id}`"
                     @click="handleLinkClick($event, toast.href)"
                 >
                     <Card :title="toast.title">
                         <template #append-title>
-                            <button @click.stop="msg.removeToastMsg(toast.id)">
-                                <fa-icon icon="close" />
-                            </button>
+                            <BaseBadge
+                                icon="close"
+                                variant="light"
+                                @click.stop="msg.removeToastMsg(toast.id)"
+                            />
                         </template>
-                        {{ toast.message }}
+                        <div>
+                            {{ toast.message }}
+                        </div>
                     </Card>
                 </div>
             </TransitionGroup>
@@ -53,9 +66,7 @@ const onLeave = (el: Element, done: () => void) => {
 
 <style scoped>
 #app-toast-wrapper {
-    overflow: hidden;
     pointer-events: none;
-    z-index: 10000;
 }
 
 .notification-toast {

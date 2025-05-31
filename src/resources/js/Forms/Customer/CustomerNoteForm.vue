@@ -46,7 +46,6 @@ const getInitNoteType = (): noteType => {
 
 const updateNoteType = (type: noteType): void => {
     noteType.value = type;
-    console.log(type);
 };
 
 const noteType = ref<noteType>(getInitNoteType());

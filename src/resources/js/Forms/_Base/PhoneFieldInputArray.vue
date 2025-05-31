@@ -12,22 +12,22 @@ const props = defineProps<{
     removeWarning?: string;
 }>();
 
-const { remove, push, fields } = useFieldArray(props.name);
+const defaultRow = {
+    phone: "",
+    type: props.phoneTypes[0].description,
+    ext: "",
+};
 
 /*
 |-------------------------------------------------------------------------------
 | Add or remove data rows
 |-------------------------------------------------------------------------------
 */
-const addRow = () => {
-    push({
-        phone: "",
-        type: props.phoneTypes[0].description,
-        ext: "",
-    });
+const addRow = (): void => {
+    push(defaultRow);
 };
 
-const removeRow = (rowIndex: number) => {
+const removeRow = (rowIndex: number): void => {
     if (props.removeWarning) {
         verifyModal(props.removeWarning, "Warning").then((res) => {
             if (res) {
@@ -40,6 +40,13 @@ const removeRow = (rowIndex: number) => {
 
     remove(rowIndex);
 };
+
+/*
+|-------------------------------------------------------------------------------
+| Vee Validate
+|-------------------------------------------------------------------------------
+*/
+const { remove, push, fields } = useFieldArray(props.name);
 </script>
 
 <template>
@@ -51,7 +58,7 @@ const removeRow = (rowIndex: number) => {
             <template v-for="(field, index) in fields" :key="field.key">
                 <div class="flex">
                     <PhoneFieldInput
-                        :id="`ph-input-${index}`"
+                        :id="`ph-input-${field.key}`"
                         :name="`${name}[${index}]`"
                         :phone-types="phoneTypes"
                         class="grow"

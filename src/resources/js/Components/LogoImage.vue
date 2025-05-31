@@ -13,7 +13,7 @@ const app = useAppStore();
     <div>
         <h1
             class="text-center text-white"
-            :class="{ '!text-black': darkHeader }"
+            :class="{ 'text-black!': darkHeader }"
         >
             {{ app.name }}
         </h1>

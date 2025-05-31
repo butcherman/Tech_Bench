@@ -1,11 +1,17 @@
 <script setup lang="ts">
 import { Avatar, Menu } from "primevue";
-import { ref } from "vue";
+import { ref, useTemplateRef } from "vue";
 import { useAuthStore } from "@/Stores/AuthStore";
 
+interface menuItem {
+    label: string;
+    icon: string;
+    route: string;
+}
+
 const auth = useAuthStore();
-const userMenu = ref<InstanceType<typeof Menu> | null>(null);
-const menuList = ref([
+const userMenu = useTemplateRef("user-menu");
+const menuList = ref<menuItem[]>([
     {
         label: "Settings",
         icon: "fa-cog",
@@ -23,7 +29,7 @@ const menuList = ref([
     <div>
         <button
             type="button"
-            v-tooltip="'Account Information'"
+            v-tooltip.left="'Account Information'"
             @click="userMenu?.toggle"
         >
             <Avatar
@@ -33,23 +39,27 @@ const menuList = ref([
                 class="bg-blue-200"
             />
         </button>
-        <Menu ref="userMenu" :model="menuList" popup>
+        <Menu ref="user-menu" :model="menuList" popup>
             <template #start>
                 <div class="text-center font-semibold border-b my-2 p-2">
                     {{ auth.user.full_name }}
                 </div>
             </template>
             <template #item="{ item }">
-                <div class="p-2">
-                    <Link :href="item.route">
+                <div>
+                    <Link :href="item.route" class="w-full block p-2">
                         <fa-icon :icon="item.icon" />
                         {{ item.label }}
                     </Link>
                 </div>
             </template>
             <template #end>
-                <div class="border-t my-2 p-2">
-                    <Link :href="$route('logout')" method="POST">
+                <div class="border-t my-2">
+                    <Link
+                        :href="$route('logout')"
+                        method="POST"
+                        class="w-full block py-2 px-4 pointer text-start hover:bg-slate-100"
+                    >
                         <fa-icon icon="sign-out-alt" />
                         Logout
                     </Link>

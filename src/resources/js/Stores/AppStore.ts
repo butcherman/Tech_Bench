@@ -15,11 +15,29 @@ export const useAppStore = defineStore("appStore", () => {
     | Standard App Info
     |---------------------------------------------------------------------------
     */
-    const name = appData.name;
-    const companyName = appData.company_name;
-    const logo = appData.logo;
-    const version = appData.version;
-    const copyright = appData.copyright;
+    const name: string = appData.name;
+    const companyName: string = appData.company_name;
+    const logo: string = appData.logo;
+    const version: string = appData.version;
+    const copyright: string = appData.copyright;
+
+    /*
+    |---------------------------------------------------------------------------
+    | Non-bagged Error Messages display on top of page, under header.
+    |---------------------------------------------------------------------------
+    */
+    const errorList = computed<string[]>(() => {
+        let errorList = usePage().props.errors;
+        let nonBaggedErrors: string[] = [];
+
+        for (let key in errorList) {
+            if (typeof errorList[key] === "string") {
+                nonBaggedErrors.push(errorList[key]);
+            }
+        }
+
+        return nonBaggedErrors;
+    });
 
     /*
     |---------------------------------------------------------------------------
@@ -53,7 +71,7 @@ export const useAppStore = defineStore("appStore", () => {
     const setFlashTimeout = (id: string) => {
         setTimeout(() => {
             removeFlashMsg(id);
-        }, 15000);
+        }, 5000);
     };
 
     /**
@@ -74,6 +92,7 @@ export const useAppStore = defineStore("appStore", () => {
         logo,
         version,
         copyright,
+        errorList,
 
         flashAlerts,
         pushFlashMsg,

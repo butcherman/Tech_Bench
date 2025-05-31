@@ -17,7 +17,7 @@ import {
             <tr
                 v-for="cust in searchResults"
                 :key="cust.cust_id"
-                class="border-b"
+                class="border-b h-1"
             >
                 <ResultWithoutSites v-if="cust.site_count === 1" :cust="cust" />
                 <ResultWithSites v-else :cust="cust" />

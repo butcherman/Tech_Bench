@@ -17,7 +17,6 @@ onMounted(() => {
     Echo.private("administration-channel").listen(
         ".AdministrationEvent",
         (msg: { msg: string }) => {
-            console.log(msg);
             setupMsg.value.push(msg.msg);
 
             if (msg.msg === "Setup Complete") {
@@ -56,7 +55,7 @@ export default { layout: InitLayout };
     <Card title="Build Tech Bench" class="tb-card">
         <div class="w-full md:w-1/2 justify-self-center">
             <h6 class="text-center">Building Application...</h6>
-            <div class="ms-4 my-4 border rounded p-4">
+            <div class="ms-4 my-4 border rounded-sm p-4">
                 <div v-for="msg in setupMsg">{{ msg }}</div>
                 <EllipsisLoader v-if="!isComplete" />
             </div>

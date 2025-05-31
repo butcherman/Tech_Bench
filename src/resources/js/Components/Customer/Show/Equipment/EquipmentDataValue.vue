@@ -72,6 +72,6 @@ const checkForHyperlink = (url: string): string => {
 
 <style scoped lang="postcss">
 .mask-field {
-    @apply blur-sm hover:blur-none;
+    @apply blur-xs hover:blur-none;
 }
 </style>
