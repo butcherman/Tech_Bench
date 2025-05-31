@@ -8,7 +8,7 @@ defineProps<{
     <td colspan="2">
         <Link
             :href="$route('customers.show', cust.slug)"
-            class="m-0 p-2 block hover:font-normal"
+            class="m-0 p-2 block hover:font-semi-bold"
         >
             {{ cust.name }}
         </Link>
@@ -16,7 +16,7 @@ defineProps<{
     <td class="border-s">
         <Link
             :href="$route('customers.show', cust.slug)"
-            class="m-0 p-2 block hover:font-normal"
+            class="m-0 p-2 block hover:font-semi-bold"
         >
             {{ cust.sites[0].city }}
         </Link>

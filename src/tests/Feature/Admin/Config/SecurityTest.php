@@ -95,7 +95,7 @@ class SecurityTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('Admin/Security/Index')
                     ->has('data')
             );
@@ -115,7 +115,7 @@ class SecurityTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('Admin/Security/Index')
                     ->has('data')
             );
@@ -158,7 +158,7 @@ class SecurityTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('Admin/Security/Create')
                     ->has('has-key')
             );
@@ -298,7 +298,7 @@ class SecurityTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('Admin/Security/Edit')
             );
     }
@@ -371,7 +371,7 @@ class SecurityTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('Admin/Security/Edit')
                     ->has('csr-request')
             );
