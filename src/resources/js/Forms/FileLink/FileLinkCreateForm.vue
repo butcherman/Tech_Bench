@@ -21,6 +21,7 @@ const hasInstructions = ref(false);
  * After all files are uploaded, submit the empty form to create the file link.
  */
 const handleSuccessfulUpload = () => {
+    console.log("successful upload");
     let values = form.value?.values;
 
     if (values) {

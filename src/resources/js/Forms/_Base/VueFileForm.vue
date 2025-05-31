@@ -1,12 +1,13 @@
 <script setup lang="ts">
-// TODO - Verify
+import AtomLoader from "@/Components/_Base/Loaders/AtomLoader.vue";
 import BaseButton from "@/Components/_Base/Buttons/BaseButton.vue";
 import Collapse from "@/Components/_Base/Collapse.vue";
 import DropzoneInput from "./DropzoneInput.vue";
+import EllipsisLoader from "@/Components/_Base/Loaders/EllipsisLoader.vue";
 import okModal from "@/Modules/okModal";
 import Overlay from "../../Components/_Base/Loaders/Overlay.vue";
-import { computed, ref, useTemplateRef } from "vue";
 import { Message } from "primevue";
+import { computed, ref, useTemplateRef } from "vue";
 import { useForm } from "vee-validate";
 import type { DropzoneFile } from "dropzone";
 
@@ -14,24 +15,20 @@ interface formData {
     [key: string]: string;
 }
 
-interface formError {
-    message: {
-        errors: { [key: string]: string[] };
-        message: string;
-    };
-    status: number;
+interface dropzoneError {
+    file?: DropzoneFile;
+    status: number | undefined;
+    message: laravelValidationErrors;
 }
 
-const emit = defineEmits([
-    "submitting",
-    "success",
-    "has-errors",
-    "canceled",
-    "values",
-    "file-added",
-    "file-removed",
-    "queue-complete",
-]);
+const emit = defineEmits<{
+    submitting: [formData];
+    success: [];
+    hasErrors: dropzoneError[];
+    canceled: [];
+    fileAdded: [DropzoneFile];
+    fileRemoved: [DropzoneFile];
+}>();
 
 const props = defineProps<{
     initialValues: { [key: string]: any };
@@ -43,44 +40,46 @@ const props = defineProps<{
     submitText?: string;
     fileRequired?: boolean;
     maxFiles?: number;
-    acceptedFiles?: string[];
+    acceptedFiles?: [string];
     hideFileInput?: boolean;
-    inertiaSubmit?: boolean;
     uploadMessage?: string;
 }>();
 
+const showFileInput = ref(!props.hideFileInput);
+
+/*
+|-------------------------------------------------------------------------------
+| Form State
+|-------------------------------------------------------------------------------
+*/
 const isSubmitting = ref<boolean>(false);
 const submitText = computed<string>(() => props.submitText ?? "Submit");
 const isDirty = computed<boolean>(() => meta.value.dirty);
 
-const showInput = computed<boolean>(() => !props.hideFileInput);
-
 /*
 |-------------------------------------------------------------------------------
-| Dropzone File Upload
+| Dropzone File Data/Events
 |-------------------------------------------------------------------------------
 */
 const dropzoneInput = useTemplateRef("dropzone-input");
-const onFileAdded = (file: DropzoneFile): void => {
-    emit("file-added", file);
+
+const totalUploadProgress = ref<number>(0);
+
+const onTotalUploadProgress = (uploadProgress: {
+    progress: number;
+    totalBytes: number;
+    bytesSent: number;
+}): void => {
+    console.log(uploadProgress);
+    totalUploadProgress.value = Math.floor(uploadProgress.progress);
 };
-const onFileRemoved = (file: DropzoneFile): void => {
-    emit("file-removed", file);
-};
-const onCancel = (): void => {
+
+const onCancelUpload = (): void => {
     dropzoneInput.value?.cancelUpload();
     okModal("Upload Canceled");
     isSubmitting.value = false;
-    emit("canceled");
-};
 
-/**
- * Reset Form and remove dropzone files
- */
-const resetFileForm = (): void => {
-    isSubmitting.value = false;
-    resetForm();
-    dropzoneInput.value?.reset();
+    emit("canceled");
 };
 
 /*
@@ -108,10 +107,11 @@ const {
 */
 const onSubmit = handleSubmit((form: formData): void => {
     if (dropzoneInput.value?.validate()) {
-        emit("submitting");
-
+        uncaughtErrors.value = [];
         isSubmitting.value = true;
         dropzoneInput.value.process(form);
+
+        emit("submitting", form);
     }
 });
 
@@ -121,22 +121,35 @@ const onSubmit = handleSubmit((form: formData): void => {
 |-------------------------------------------------------------------------------
 */
 const uncaughtErrors = ref<string[]>([]);
-const handleErrors = (formErrors: formError) => {
-    emit("has-errors", formErrors);
+
+const handleErrors = (formErrors: dropzoneError): void => {
+    emit("hasErrors", formErrors);
+
+    console.log(formErrors);
 
     isSubmitting.value = false;
 
     if (formErrors.status === 422) {
-        for (const [key, value] of Object.entries(formErrors.message.errors)) {
-            console.log(key, value);
-
-            for (const v in value) {
-                setFieldError(key, v);
+        for (const [key, value] of Object.entries(formErrors.message?.errors)) {
+            let fieldVal = getFieldValue(key);
+            if (fieldVal) {
+                setFieldError(key, value);
+            } else {
+                for (const val of value) {
+                    uncaughtErrors.value.push(val);
+                }
             }
         }
-    } else {
-        alert(formErrors.message);
+
+        return;
     }
+
+    if (formErrors.status === 0) {
+        return;
+    }
+
+    // TODO - Properly Handle Error
+    alert(formErrors);
 };
 
 /*
@@ -153,7 +166,6 @@ defineExpose({
     setFieldValue,
     setFieldError,
     resetForm,
-    resetFileForm,
     handleReset,
     isDirty,
     isSubmitting,
@@ -167,8 +179,37 @@ defineExpose({
         :full-page="fullPageOverlay"
         class="h-full"
     >
+        <template #loader>
+            <div class="w-60 md:w-96">
+                <AtomLoader />
+                <div v-if="dropzoneInput?.hasFile">
+                    <div class="flex justify-center">
+                        <div class="flex items-center">
+                            Uploading
+                            <EllipsisLoader class="w-3" />
+                        </div>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-6">
+                        <div
+                            class="bg-blue-400 h-full rounded-full text-center text-white transition-[width] duration-700"
+                            :style="`width: ${totalUploadProgress}%`"
+                        >
+                            {{ totalUploadProgress }}%
+                        </div>
+                    </div>
+                    <BaseButton
+                        class="w-full my-4"
+                        icon="ban"
+                        text="Cancel Upload"
+                        variant="danger"
+                        @click="onCancelUpload"
+                    />
+                </div>
+            </div>
+        </template>
         <form
-            class="vld-parent h-full flex flex-col"
+            ref="file-form"
+            class="vld-parent h-full flex flex-col z-10"
             novalidate
             v-focustrap
             @submit.prevent="onSubmit"
@@ -184,24 +225,22 @@ defineExpose({
             </div>
             <div class="grow">
                 <slot />
-                <Collapse :show="showInput">
+                <Collapse :show="showFileInput">
                     <DropzoneInput
                         ref="dropzone-input"
-                        paramName="file"
                         :accepted-files="acceptedFiles"
                         :max-files="maxFiles || 1"
                         :required="fileRequired"
                         :upload-url="submitRoute"
                         :upload-message="uploadMessage"
                         @error="handleErrors"
-                        @file-added="onFileAdded"
-                        @file-removed="onFileRemoved"
+                        @file-added="$emit('fileAdded', $event)"
+                        @file-removed="$emit('fileRemoved', $event)"
                         @success="$emit('success')"
+                        @total-upload-progress="onTotalUploadProgress"
                     />
                 </Collapse>
-                <div>
-                    <slot name="after-file" />
-                </div>
+                <slot name="after-file" />
             </div>
             <div class="flex-none text-center mt-4">
                 <BaseButton
@@ -216,19 +255,7 @@ defineExpose({
                     </span>
                 </BaseButton>
             </div>
-            <div class="flex-none text-center mt-4">
-                <slot name="cancel">
-                    <BaseButton
-                        v-if="isSubmitting"
-                        class="w-3/4 pointer"
-                        text="Cancel Upload"
-                        type="button"
-                        variant="danger"
-                        :disabled="!isSubmitting"
-                        @click="onCancel"
-                    />
-                </slot>
-            </div>
+            <slot name="after-form" />
         </form>
     </Overlay>
 </template>

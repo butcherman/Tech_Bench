@@ -81,10 +81,11 @@ const onSubmit = handleSubmit((form: formData): void => {
 |-------------------------------------------------------------------------------
 */
 const uncaughtErrors = ref<string[]>([]);
+
 const handleErrors = (
     originalForm: formData,
     formErrors: Partial<Record<string | number, string>>
-) => {
+): void => {
     emit("hasErrors", formErrors);
     const formKeys = Object.keys(originalForm);
 

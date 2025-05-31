@@ -84,7 +84,7 @@ const variantClass = computed<string>(() => {
             variantClass,
             { 'rounded-full!': pill, 'shadow-xl': !flat },
         ]"
-        class="rounded-lg inline-block text-center"
+        class="rounded-lg inline-block text-center pointer"
         type="button"
     >
         <slot>
