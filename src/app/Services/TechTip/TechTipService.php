@@ -61,7 +61,9 @@ class TechTipService
         $techTip->updated_id = $user->user_id;
 
         // If the Subject has changed, we need to update the Slug for the URL.
-        $techTip->slug = $this->generateSlug($requestData->get('subject'));
+        if ($techTip->isDirty('subject')) {
+            $techTip->slug = $this->generateSlug($requestData->get('subject'));
+        }
 
         $techTip->save();
 
@@ -121,7 +123,7 @@ class TechTipService
         $slug = Str::slug($subject);
 
         while (TechTip::where('slug', $slug)->first()) {
-            $slug = Str::slug($subject).'-'.$index;
+            $slug = Str::slug($subject) . '-' . $index;
             $index++;
         }
 
