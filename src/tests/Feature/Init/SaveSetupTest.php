@@ -48,7 +48,7 @@ class SaveSetupTest extends TestCase
         App::useEnvironmentPath($filePath);
 
         /** @var User $user */
-        $user = User::factory()->createQuietly(['role_id' => 1]);
+        $user = User::find(1);
         $data = [
             'setup' => [
                 'basic-settings' => [

@@ -31,14 +31,14 @@ class StepTwoTest extends TestCase
         config(['app.env' => 'local']);
 
         /** @var User $user */
-        $user = User::factory()->createQuietly(['role_id' => 1]);
+        $user = User::find(1);
 
         $response = $this->actingAs($user)
             ->get(route('init.step-2'));
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn (Assert $page) => $page
+                fn(Assert $page) => $page
                     ->component('Init/StepTwo')
                     ->has('step')
                     ->has('settings')
@@ -51,7 +51,7 @@ class StepTwoTest extends TestCase
         config(['app.env' => 'local']);
 
         /** @var User $user */
-        $user = User::factory()->createQuietly(['role_id' => 1]);
+        $user = User::find(1);
 
         $response = $this->actingAs($user)
             ->withSession(['setup' => [
@@ -69,7 +69,7 @@ class StepTwoTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn (Assert $page) => $page
+                fn(Assert $page) => $page
                     ->component('Init/StepTwo')
                     ->has('step')
                     ->has('settings')

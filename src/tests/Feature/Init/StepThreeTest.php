@@ -31,14 +31,14 @@ class StepThreeTest extends TestCase
         config(['app.env' => 'local']);
 
         /** @var User $user */
-        $user = User::factory()->createQuietly(['role_id' => 1]);
+        $user = User::find(1);
 
         $response = $this->actingAs($user)
             ->get(route('init.step-3'));
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn (Assert $page) => $page
+                fn(Assert $page) => $page
                     ->component('Init/StepThree')
                     ->has('step')
                     ->has('policy')
@@ -51,7 +51,7 @@ class StepThreeTest extends TestCase
         config(['app.env' => 'local']);
 
         /** @var User $user */
-        $user = User::factory()->createQuietly(['role_id' => 1]);
+        $user = User::find(1);
 
         $response = $this->actingAs($user)
             ->withSession(['setup' => [
@@ -69,7 +69,7 @@ class StepThreeTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn (Assert $page) => $page
+                fn(Assert $page) => $page
                     ->component('Init/StepThree')
                     ->has('step')
                     ->has('policy')

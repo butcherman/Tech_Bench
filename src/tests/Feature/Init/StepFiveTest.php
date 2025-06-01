@@ -31,7 +31,7 @@ class StepFiveTest extends TestCase
         config(['app.env' => 'local']);
 
         /** @var User $user */
-        $user = User::factory()->createQuietly(['role_id' => 1]);
+        $user = User::find(1);;
 
         $response = $this->actingAs($user)
             ->withSession([
@@ -67,7 +67,7 @@ class StepFiveTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn (Assert $page) => $page
+                fn(Assert $page) => $page
                     ->component('Init/StepFive')
             );
     }

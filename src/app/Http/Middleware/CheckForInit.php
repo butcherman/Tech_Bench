@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Exceptions\Init\InvalidUserAccessingSetupException;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -21,13 +22,7 @@ class CheckForInit
         if (config('app.first_time_setup') && $request->user()) {
             // Only the built in admin user can access wizard
             if ($request->user()->user_id !== 1) {
-                Log::critical(
-                    'An unauthorized user tried to gain access to the First Time Setup Wizard',
-                    $request->user()->toArray()
-                );
-
-                abort(403);
-                // TODO - Throw exception
+                throw new InvalidUserAccessingSetupException;
             }
 
             Log::info('First Time Setup Required, redirecting to Initialization Wizard');

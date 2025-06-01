@@ -31,14 +31,14 @@ class StepFourTest extends TestCase
         config(['app.env' => 'local']);
 
         /** @var User $user */
-        $user = User::factory()->createQuietly(['role_id' => 1]);
+        $user = User::find(1);
 
         $response = $this->actingAs($user)
             ->get(route('init.step-4'));
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn (Assert $page) => $page
+                fn(Assert $page) => $page
                     ->component('Init/StepFour')
                     ->has('step')
                     ->has('rules')
@@ -54,7 +54,7 @@ class StepFourTest extends TestCase
         config(['app.env' => 'local']);
 
         /** @var User $user */
-        $user = User::factory()->createQuietly(['role_id' => 1]);
+        $user = User::find(1);
 
         $response = $this->actingAs($user)
             ->withSession([
@@ -66,7 +66,7 @@ class StepFourTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn (Assert $page) => $page
+                fn(Assert $page) => $page
                     ->component('Init/StepFour')
             );
     }
