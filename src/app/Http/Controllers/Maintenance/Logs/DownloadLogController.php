@@ -20,7 +20,6 @@ class DownloadLogController extends Controller
      */
     public function __invoke(Request $request, string $channel, string $logFile): StreamedResponse
     {
-        // TODO - Give logs their own policy
         $this->authorize('viewAny', AppSettings::class);
 
         $filePath = $this->svc->validateLogFile($channel, $logFile);
@@ -29,7 +28,7 @@ class DownloadLogController extends Controller
             throw new LogFileMissingException($logFile);
         }
 
-        Log::info($request->user()->username.' is downloading log file '.$filePath);
+        Log::info($request->user()->username . ' is downloading log file ' . $filePath);
 
         return Storage::disk('logs')->download($filePath);
     }
