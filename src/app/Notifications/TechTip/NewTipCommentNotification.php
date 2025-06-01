@@ -4,10 +4,12 @@ namespace App\Notifications\TechTip;
 
 use App\Models\TechTipComment;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class NewTipCommentNotification extends Notification
+class NewTipCommentNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -44,19 +46,14 @@ class NewTipCommentNotification extends Notification
     }
 
     /**
-     * Get the array representation of the notification.
-     *
-     * @return array<string, mixed>
+     * Get the broadcast representation of the notification.
      */
-    public function toArray(object $notifiable): array
+    public function toBroadcast(): BroadcastMessage
     {
-        return [
-            //
-        ];
+        return new BroadcastMessage([
+            'message' => $this->comment->TechTip->subject . ' has a new Comment',
+            'title' => 'New Tech Tip Comment Created',
+            'href' => route('tech-tips.show', $this->comment->TechTip->slug),
+        ]);
     }
-
-    // public function toBroadcast(object $notifiable)
-    // {
-    //     // TODO - Broadcast Notification
-    // }
 }

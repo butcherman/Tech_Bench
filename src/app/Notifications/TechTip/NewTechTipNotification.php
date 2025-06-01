@@ -6,6 +6,7 @@ use App\Models\TechTip;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
@@ -46,19 +47,14 @@ class NewTechTipNotification extends Notification implements ShouldQueue
     }
 
     /**
-     * Get the array representation of the notification.
-     *
-     * @return array<string, mixed>
+     * Get the broadcast representation of the notification.
      */
-    public function toArray(object $notifiable): array
+    public function toBroadcast(): BroadcastMessage
     {
-        return [
-            //
-        ];
+        return new BroadcastMessage([
+            'message' => $this->techTip->subject,
+            'title' => 'New Tech Tip Created',
+            'href' => route('tech-tips.show', $this->techTip->slug),
+        ]);
     }
-
-    // public function toBroadcast(object $notifiable)
-    // {
-    //     // TODO - Broadcast Notification
-    // }
 }
