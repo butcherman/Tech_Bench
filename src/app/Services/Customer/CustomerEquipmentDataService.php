@@ -74,30 +74,26 @@ class CustomerEquipmentDataService
     /**
      * Check All Customer Equipment Data Fields
      */
-    // public function checkAllCustomerEquipment(bool $fix, ?ProgressBar $progress = null): array
-    // {
-    //     $custEquip = CustomerEquipment::all();
-    //     $missing = [];
+    public function checkAllCustomerEquipment(bool $fix): array
+    {
+        $custEquip = CustomerEquipment::all();
+        $missing = [];
 
-    //     foreach ($custEquip as $equipment) {
+        foreach ($custEquip as $equipment) {
 
-    //         $equipDataFields = DataField::where('equip_id', $equipment->equip_id)
-    //             ->get()
-    //             ->pluck('field_id');
+            $equipDataFields = DataField::where('equip_id', $equipment->equip_id)
+                ->get()
+                ->pluck('field_id');
 
-    //         $missing[] = $this->verifyDataFields(
-    //             $equipment,
-    //             $equipDataFields,
-    //             $fix
-    //         );
+            $missing[] = $this->verifyCustomerEquipmentDataFields(
+                $equipment,
+                $equipDataFields,
+                $fix
+            )->toArray();
+        }
 
-    //         if ($progress) {
-    //             $progress->advance();
-    //         }
-    //     }
-
-    //     return $missing;
-    // }
+        return $missing;
+    }
 
     /*
     |---------------------------------------------------------------------------

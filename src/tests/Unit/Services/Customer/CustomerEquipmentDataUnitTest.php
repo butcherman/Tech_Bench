@@ -249,4 +249,83 @@ class CustomerEquipmentDataUnitTest extends TestCase
         $testObj = new CustomerEquipmentDataService;
         $testObj->updateDataFieldValue(collect($data), $invalid);
     }
+
+    /*
+    |---------------------------------------------------------------------------
+    | checkAllCustomerEquipment()
+    |---------------------------------------------------------------------------
+    */
+    public function test_check_all_customer_equipment_no_fix(): void
+    {
+        $equip = EquipmentType::factory()->create();
+        $equipList = CustomerEquipment::factory()
+            ->count(10)
+            ->create(['equip_id' => $equip->equip_id]);
+
+        DataField::create([
+            'equip_id' => $equip->equip_id,
+            'type_id' => 1,
+            'order' => 0,
+        ]);
+        DataField::create([
+            'equip_id' => $equip->equip_id,
+            'type_id' => 2,
+            'order' => 1,
+        ]);
+
+        $testObj = new CustomerEquipmentDataService;
+        $res = $testObj->checkAllCustomerEquipment(false);
+
+        foreach ($res as $r) {
+            $this->assertCount(2, $r);
+        }
+
+        foreach ($equipList as $custEquip) {
+            $this->assertDatabaseMissing('customer_equipment_data', [
+                'cust_equip_id' => $custEquip->cust_equip_id,
+                'field_id' => 1,
+            ]);
+            $this->assertDatabaseMissing('customer_equipment_data', [
+                'cust_equip_id' => $custEquip->cust_equip_id,
+                'field_id' => 2,
+            ]);
+        }
+    }
+
+    public function test_check_all_customer_equipment_with_fix(): void
+    {
+        $equip = EquipmentType::factory()->create();
+        $equipList = CustomerEquipment::factory()
+            ->count(10)
+            ->create(['equip_id' => $equip->equip_id]);
+
+        $field1 = DataField::create([
+            'equip_id' => $equip->equip_id,
+            'type_id' => 1,
+            'order' => 0,
+        ]);
+        $field2 = DataField::create([
+            'equip_id' => $equip->equip_id,
+            'type_id' => 2,
+            'order' => 1,
+        ]);
+
+        $testObj = new CustomerEquipmentDataService;
+        $res = $testObj->checkAllCustomerEquipment(true);
+
+        foreach ($res as $r) {
+            $this->assertCount(2, $r);
+        }
+
+        foreach ($equipList as $custEquip) {
+            $this->assertDatabaseHas('customer_equipment_data', [
+                'cust_equip_id' => $custEquip->cust_equip_id,
+                'field_id' => $field1->field_id,
+            ]);
+            $this->assertDatabaseHas('customer_equipment_data', [
+                'cust_equip_id' => $custEquip->cust_equip_id,
+                'field_id' => $field2->field_id,
+            ]);
+        }
+    }
 }
