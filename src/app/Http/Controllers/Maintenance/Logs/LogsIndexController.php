@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Maintenance\Logs;
 
+use App\Enums\LogChannels;
 use App\Http\Controllers\Controller;
 use App\Models\AppSettings;
 use App\Services\Maintenance\LogUtilitiesService;
@@ -21,7 +22,7 @@ class LogsIndexController extends Controller
 
         return Inertia::render('Maint/LogIndex', [
             'channels' => $this->svc->getLogChannels(),
-            'channel' => $channel,
+            'channel' =>  $channel,
             'log-list' => $channel ? $this->svc->getLogList($channel) : [],
         ]);
     }

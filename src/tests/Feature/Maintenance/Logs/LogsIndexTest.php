@@ -2,7 +2,9 @@
 
 namespace Tests\Feature\Maintenance\Logs;
 
+use App\Exceptions\Maintenance\InvalidLogChannelException;
 use App\Models\User;
+use Illuminate\Support\Facades\Exceptions;
 use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
@@ -42,7 +44,7 @@ class LogsIndexTest extends TestCase
             ->get(route('maint.logs.index'));
 
         $response->assertSuccessful()
-            ->assertInertia(fn (Assert $page) => $page
+            ->assertInertia(fn(Assert $page) => $page
                 ->component('Maint/LogIndex')
                 ->has('channels')
                 ->has('channel')
@@ -69,17 +71,23 @@ class LogsIndexTest extends TestCase
         $response->assertStatus(403);
     }
 
-    // TODO - Validate Log Channel
-    // public function test_invoke_with_invalid_channel(): void
-    // {
-    //     /** @var User $user */
-    //     $user = User::factory()->createQuietly(['role_id' => 1]);
+    public function test_invoke_with_invalid_channel(): void
+    {
+        Exceptions::fake();
 
-    //     $response = $this->actingAs($user)
-    //         ->get(route('maint.logs.index', ['YourMom']));
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
 
-    //     $response->assertStatus(404);
-    // }
+        $this->expectException(InvalidLogChannelException::class);
+
+        $response = $this->actingAs($user)
+            ->withoutExceptionHandling()
+            ->get(route('maint.logs.index', ['YourMom']));
+
+        $response->assertStatus(404);
+
+        Exceptions::assertReported(InvalidLogChannelException::class);
+    }
 
     public function test_invoke_with_channel(): void
     {
@@ -90,7 +98,7 @@ class LogsIndexTest extends TestCase
             ->get(route('maint.logs.index', ['Application']));
 
         $response->assertSuccessful()
-            ->assertInertia(fn (Assert $page) => $page
+            ->assertInertia(fn(Assert $page) => $page
                 ->component('Maint/LogIndex')
                 ->has('channels')
                 ->has('channel')

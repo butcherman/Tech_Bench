@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Maintenance\Logs;
 
+use App\Exceptions\Maintenance\InvalidLogChannelException;
 use App\Exceptions\Maintenance\LogFileMissingException;
 use App\Models\User;
 use Carbon\Carbon;
@@ -19,7 +20,7 @@ class ViewLogTest extends TestCase
     public function test_invoke_guest(): void
     {
         $date = date('Y-m-d', strtotime(Carbon::now()));
-        $filename = 'TechBench-'.$date;
+        $filename = 'TechBench-' . $date;
 
         $response = $this->get(route('maint.logs.show', [
             'Application',
@@ -36,7 +37,7 @@ class ViewLogTest extends TestCase
         /** @var User $user */
         $user = User::factory()->createQuietly();
         $date = date('Y-m-d', strtotime(Carbon::now()));
-        $filename = 'TechBench-'.$date;
+        $filename = 'TechBench-' . $date;
 
         $response = $this->actingAs($user)
             ->get(route('maint.logs.show', ['Application', $filename]));
@@ -49,19 +50,19 @@ class ViewLogTest extends TestCase
         Exceptions::fake();
 
         $this->withoutExceptionHandling();
-        $this->expectException(LogFileMissingException::class);
+        $this->expectException(InvalidLogChannelException::class);
 
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);
         $date = date('Y-m-d', strtotime(Carbon::now()));
-        $filename = 'TechBench-'.$date;
+        $filename = 'TechBench-' . $date;
 
         $response = $this->actingAs($user)
             ->get(route('maint.logs.show', ['YourMom', $filename]));
 
         $response->assertStatus(404);
 
-        Exceptions::assertReported(LogFileMissingException::class);
+        Exceptions::assertReported(InvalidLogChannelException::class);
     }
 
     public function test_invoke_bad_file_name(): void
@@ -87,13 +88,13 @@ class ViewLogTest extends TestCase
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);
         $date = date('Y-m-d', strtotime(Carbon::now()));
-        $filename = 'TechBench-'.$date;
+        $filename = 'TechBench-' . $date;
 
         $response = $this->actingAs($user)
             ->get(route('maint.logs.show', ['Application', $filename]));
 
         $response->assertSuccessful()
-            ->assertInertia(fn (Assert $page) => $page
+            ->assertInertia(fn(Assert $page) => $page
                 ->component('Maint/AppLogView')
                 ->has('channel')
                 ->has('log-file'));
