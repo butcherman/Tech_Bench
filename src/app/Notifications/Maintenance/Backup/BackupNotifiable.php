@@ -30,7 +30,6 @@ class BackupNotifiable extends Notifiable
      */
     public function routeNotificationForMail(): string|array
     {
-        // TODO - From name for backup notifications should be tech bench
         $userList = $this->getUsersWithPermission($this->permissionNeeded);
 
         $filtered = $userList->filter(function ($user) {

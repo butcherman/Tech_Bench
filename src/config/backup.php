@@ -212,55 +212,19 @@ return [
      */
     'notifications' => [
         'notifications' => [
-            \Spatie\Backup\Notifications\Notifications\BackupHasFailedNotification::class => ['mail'],
-            \Spatie\Backup\Notifications\Notifications\UnhealthyBackupWasFoundNotification::class => ['mail'],
-            \Spatie\Backup\Notifications\Notifications\CleanupHasFailedNotification::class => ['mail'],
-            \Spatie\Backup\Notifications\Notifications\BackupWasSuccessfulNotification::class => ['mail'],
-            \Spatie\Backup\Notifications\Notifications\HealthyBackupWasFoundNotification::class => ['mail'],
-            \Spatie\Backup\Notifications\Notifications\CleanupWasSuccessfulNotification::class => ['mail'],
+            \App\Notifications\Maintenance\Backup\BackupHasFailedNotification::class => ['mail'],
+            \App\Notifications\Maintenance\Backup\BackupWasSuccessfulNotification::class => ['mail'],
+            \App\Notifications\Maintenance\Backup\CleanupHasFailedNotification::class => ['mail'],
+            \App\Notifications\Maintenance\Backup\CleanupWasSuccessfulNotification::class => ['mail'],
+            \App\Notifications\Maintenance\Backup\HealthyBackupWasFoundNotification::class => ['mail'],
+            \App\Notifications\Maintenance\Backup\UnhealthyBackupWasFoundNotification::class => ['mail'],
         ],
 
         /*
          * Here you can specify the notifiable to which the notifications should be sent. The default
          * notifiable will use the variables specified in this config file.
          */
-        'notifiable' => BackupNotifiable::class,  //  \Spatie\Backup\Notifications\Notifiable::class,
-
-        // 'mail' => [
-        //     'to' => 'your@example.com',
-
-        //     'from' => [
-        //         'address' => env('MAIL_FROM_ADDRESS', 'tech-bench@noem.com'),
-        //         'name' => env('MAIL_FROM_NAME', 'Tech Bench'),
-        //     ],
-        // ],
-
-        // 'slack' => [
-        //     'webhook_url' => '',
-
-        //     /*
-        //      * If this is set to null the default channel of the webhook will be used.
-        //      */
-        //     'channel' => null,
-
-        //     'username' => null,
-
-        //     'icon' => null,
-        // ],
-
-        // 'discord' => [
-        //     'webhook_url' => '',
-
-        //     /*
-        //      * If this is an empty string, the name field on the webhook will be used.
-        //      */
-        //     'username' => '',
-
-        //     /*
-        //      * If this is an empty string, the avatar on the webhook will be used.
-        //      */
-        //     'avatar_url' => '',
-        // ],
+        'notifiable' => BackupNotifiable::class,
     ],
 
     /*
@@ -277,17 +241,6 @@ return [
                 \Spatie\Backup\Tasks\Monitor\HealthChecks\MaximumStorageInMegabytes::class => 5000,
             ],
         ],
-
-        /*
-        [
-            'name' => 'name of the second app',
-            'disks' => ['local', 's3'],
-            'health_checks' => [
-                \Spatie\Backup\Tasks\Monitor\HealthChecks\MaximumAgeInDays::class => 1,
-                \Spatie\Backup\Tasks\Monitor\HealthChecks\MaximumStorageInMegabytes::class => 5000,
-            ],
-        ],
-        */
     ],
 
     'cleanup' => [
