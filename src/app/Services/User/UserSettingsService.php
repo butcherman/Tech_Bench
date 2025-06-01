@@ -28,8 +28,6 @@ class UserSettingsService
                 ->where('setting_type_id', str_replace('type_id_', '', $key))
                 ->update(['value' => $value]);
         }
-
-        event(new UserSettingsUpdatedEvent($user));
     }
 
     /**

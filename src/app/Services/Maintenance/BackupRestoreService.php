@@ -63,7 +63,7 @@ class BackupRestoreService extends BackupService
     public function restoreCert(): void
     {
         $basePath = base_path('keystore');
-        $backedUpPath = $this->storage->path($this->tmpArchive.'app/keystore');
+        $backedUpPath = $this->storage->path($this->tmpArchive . 'app/keystore');
 
         // Wipe the current filesystem.
         $this->wipeDirectory($basePath);
@@ -106,12 +106,12 @@ class BackupRestoreService extends BackupService
      */
     public function restoreEnvironmentFile(): void
     {
-        $env = $this->storage->get($this->tmpArchive.'app/.env');
+        $env = $this->storage->get($this->tmpArchive . 'app/.env');
         $envPath = App::environmentFilePath();
 
         File::put($envPath, $env);
 
-        // TODO - Validate and update .env file
+        Artisan::call('app:validate-env --force');
     }
 
     /**
@@ -121,7 +121,7 @@ class BackupRestoreService extends BackupService
     {
         $basePath = storage_path('logs');
         $backedUpPath = $this->storage
-            ->path($this->tmpArchive.'app/storage/logs');
+            ->path($this->tmpArchive . 'app/storage/logs');
 
         // Wipe the current filesystem.
         $this->wipeDirectory($basePath);
@@ -137,7 +137,7 @@ class BackupRestoreService extends BackupService
     {
         $basePath = storage_path('app');
         $backedUpPath = $this->storage
-            ->path($this->tmpArchive.'app/storage/app');
+            ->path($this->tmpArchive . 'app/storage/app');
 
         // Wipe the current filesystem.
         $this->wipeDirectory($basePath);
@@ -177,7 +177,7 @@ class BackupRestoreService extends BackupService
     {
         $this->archive = new Zip;
 
-        $archivePath = $this->storage->path($this->backupBaseName.$backupName);
+        $archivePath = $this->storage->path($this->backupBaseName . $backupName);
 
         if (! $this->archive->check($archivePath)) {
             throw new BackupFileInvalidException('File Failed Archive Check');
@@ -195,7 +195,7 @@ class BackupRestoreService extends BackupService
         $filesToRestore = $this->getFileList($backedUpPath);
 
         foreach ($filesToRestore as $sourceFile) {
-            $destination = $restoreBase.str_replace($backedUpPath, '', $sourceFile);
+            $destination = $restoreBase . str_replace($backedUpPath, '', $sourceFile);
 
             // Make sure destination directory exists
             $pathInfo = pathinfo($destination);
@@ -223,7 +223,7 @@ class BackupRestoreService extends BackupService
 
         foreach ($structureFiles as $file) {
             if (! $this->archive->has($file)) {
-                throw new BackupFileInvalidException('Missing '.$file);
+                throw new BackupFileInvalidException('Missing ' . $file);
             }
         }
 
@@ -283,7 +283,7 @@ class BackupRestoreService extends BackupService
     protected function getDbFile(): array
     {
         $dbPath = $this->storage
-            ->path($this->tmpArchive.'db-dumps/mysql-tech-bench.sql');
+            ->path($this->tmpArchive . 'db-dumps/mysql-tech-bench.sql');
         $dbFile = file($dbPath);
 
         return $dbFile;

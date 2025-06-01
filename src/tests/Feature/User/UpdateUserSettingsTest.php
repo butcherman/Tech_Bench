@@ -33,8 +33,6 @@ class UpdateUserSettingsTest extends TestCase
 
     public function test_invoke(): void
     {
-        Event::fake();
-
         /** @var User $user */
         $user = User::factory()->createQuietly();
         $data = [
@@ -52,14 +50,10 @@ class UpdateUserSettingsTest extends TestCase
             'setting_type_id' => 1,
             'value' => false,
         ]);
-
-        Event::assertDispatched(UserSettingsUpdatedEvent::class);
     }
 
     public function test_invoke_another_user_as_admin(): void
     {
-        Event::fake();
-
         /** @var User $actingAs */
         $actingAs = User::factory()->createQuietly(['role_id' => 1]);
         $user = User::factory()->createQuietly();
@@ -78,14 +72,10 @@ class UpdateUserSettingsTest extends TestCase
             'setting_type_id' => 1,
             'value' => false,
         ]);
-
-        Event::assertDispatched(UserSettingsUpdatedEvent::class);
     }
 
     public function test_invoke_another_user(): void
     {
-        Event::fake();
-
         /** @var User $actingAs */
         $actingAs = User::factory()->createQuietly();
         $user = User::factory()->createQuietly();
@@ -97,14 +87,10 @@ class UpdateUserSettingsTest extends TestCase
             ->put(route('user.user-settings.update', $user->username), $data);
 
         $response->assertForbidden();
-
-        Event::assertNotDispatched(UserSettingsUpdatedEvent::class);
     }
 
     public function test_invoke_higher_user(): void
     {
-        Event::fake();
-
         /** @var User $actingAs */
         $actingAs = User::factory()->createQuietly(['role_id' => 2]);
         $user = User::factory()->createQuietly(['role_id' => 1]);
@@ -116,7 +102,5 @@ class UpdateUserSettingsTest extends TestCase
             ->put(route('user.user-settings.update', $user->username), $data);
 
         $response->assertForbidden();
-
-        Event::assertNotDispatched(UserSettingsUpdatedEvent::class);
     }
 }
