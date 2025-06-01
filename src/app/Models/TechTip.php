@@ -91,7 +91,7 @@ class TechTip extends Model
     public function views(): Attribute
     {
         return Attribute::make(
-            get: fn() => $this->TechTipViews->views,
+            get: fn() => $this->TechTipViews ? $this->TechTipViews->views : null,
         );
     }
 
@@ -255,9 +255,14 @@ class TechTip extends Model
 
     public function broadcastOn(string $event): array
     {
-        return  [
-            new PrivateChannel('tech-tips.' . $this->tip_id),
-        ];
+
+
+        return match ($event) {
+            'deleted', 'trashed' => [],
+            default => [
+                new PrivateChannel('tech-tips.' . $this->tip_id),
+            ],
+        };
     }
 
     public function newBroadcastableModelEvent(string $event): BroadcastableModelEventOccurred
