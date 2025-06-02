@@ -92,7 +92,7 @@ const initDropzone = (): void => {
             "X-Socket-Id": Echo.socketId() ?? "",
         },
         maxFiles: props.maxFiles || 5,
-        maxFilesize: fileData.maxSize,
+        maxFilesize: fileData.maxSize / (1024 * 1024),
         method: "POST",
         parallelUploads: 1,
         parallelChunkUploads: false,
@@ -178,8 +178,15 @@ const buildEventListeners = (): void => {
     // Bubble any Errors that occur with Dropzone
     myDrop.on(
         "error",
-        (file: DropzoneFile, message: laravelValidationErrors): void => {
-            emit("error", { file, status: file.xhr?.status, message });
+        (
+            file: DropzoneFile,
+            message: laravelValidationErrors | string
+        ): void => {
+            if (typeof message === "string") {
+                errMessage.value = message;
+            } else {
+                emit("error", { file, status: file.xhr?.status, message });
+            }
         }
     );
 
