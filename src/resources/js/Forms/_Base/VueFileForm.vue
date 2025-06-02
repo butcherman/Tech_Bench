@@ -45,8 +45,6 @@ const props = defineProps<{
     uploadMessage?: string;
 }>();
 
-const showFileInput = ref(!props.hideFileInput);
-
 /*
 |-------------------------------------------------------------------------------
 | Form State
@@ -222,7 +220,7 @@ defineExpose({
             </div>
             <div class="grow">
                 <slot />
-                <Collapse :show="showFileInput">
+                <Collapse :show="!hideFileInput">
                     <DropzoneInput
                         ref="dropzone-input"
                         :accepted-files="acceptedFiles"
