@@ -12,8 +12,6 @@ class TelescopeServiceProvider extends TelescopeApplicationServiceProvider
 {
     /**
      * Register any application services.
-     *
-     * @codeCoverageIgnore
      */
     public function register(): void
     {
@@ -23,18 +21,16 @@ class TelescopeServiceProvider extends TelescopeApplicationServiceProvider
 
         Telescope::filter(function (IncomingEntry $entry) use ($isLocal) {
             return $isLocal ||
-                   $entry->isReportableException() ||
-                   $entry->isFailedRequest() ||
-                   $entry->isFailedJob() ||
-                   $entry->isScheduledTask() ||
-                   $entry->hasMonitoredTag();
+                $entry->isReportableException() ||
+                $entry->isFailedRequest() ||
+                $entry->isFailedJob() ||
+                $entry->isScheduledTask() ||
+                $entry->hasMonitoredTag();
         });
     }
 
     /**
      * Prevent sensitive request details from being logged by Telescope.
-     *
-     * @codeCoverageIgnore
      */
     protected function hideSensitiveRequestDetails(): void
     {
@@ -55,8 +51,6 @@ class TelescopeServiceProvider extends TelescopeApplicationServiceProvider
      * Register the Telescope gate.
      *
      * This gate determines who can access Telescope in non-local environments.
-     *
-     * @codeCoverageIgnore
      */
     protected function gate(): void
     {
