@@ -37,7 +37,7 @@ class SaveStepTest extends TestCase
         config(['app.env' => 'local']);
 
         /** @var User $user */
-        $user = User::factory()->createQuietly(['role_id' => 1]);
+        $user = User::find(1);
         $data = [
             'url' => 'https://someUrl.noSite',
             'timezone' => 'UTC',
@@ -62,7 +62,7 @@ class SaveStepTest extends TestCase
         config(['app.env' => 'local']);
 
         /** @var User $user */
-        $user = User::factory()->createQuietly(['role_id' => 1]);
+        $user = User::find(1);
         $data = [
             'from_address' => 'new@email.org',
             'username' => 'testName',
@@ -90,7 +90,7 @@ class SaveStepTest extends TestCase
         config(['app.env' => 'local']);
 
         /** @var User $user */
-        $user = User::factory()->createQuietly(['role_id' => 1]);
+        $user = User::find(1);
         $data = [
             'expire' => '60',
             'min_length' => '12',
@@ -118,7 +118,7 @@ class SaveStepTest extends TestCase
         config(['app.env' => 'local']);
 
         /** @var User $user */
-        $user = User::factory()->createQuietly(['role_id' => 1]);
+        $user = User::find(1);
         $data = User::factory()->make()->makeVisible('role_id')->toArray();
 
         $response = $this->actingAs($user)
@@ -138,7 +138,7 @@ class SaveStepTest extends TestCase
         config(['app.env' => 'local']);
 
         /** @var User $user */
-        $user = User::factory()->createQuietly(['role_id' => 1]);
+        $user = User::find(1);
         $data = [
             'current_password' => 'password',
             'password' => 'SomeN3wP@ssword',

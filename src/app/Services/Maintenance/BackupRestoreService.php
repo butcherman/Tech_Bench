@@ -111,7 +111,7 @@ class BackupRestoreService extends BackupService
 
         File::put($envPath, $env);
 
-        // TODO - Validate and update .env file
+        Artisan::call('app:validate-env --force');
     }
 
     /**

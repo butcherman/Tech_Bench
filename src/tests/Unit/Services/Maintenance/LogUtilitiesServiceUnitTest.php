@@ -2,7 +2,9 @@
 
 namespace Tests\Unit\Services\Maintenance;
 
+use App\Enums\LogChannels;
 use App\Enums\LogLevels;
+use App\Exceptions\Maintenance\InvalidLogChannelException;
 use App\Services\Maintenance\LogUtilitiesService;
 use Carbon\Carbon;
 use Tests\TestCase;
@@ -31,7 +33,7 @@ class LogUtilitiesServiceUnitTest extends TestCase
     */
     public function test_get_log_channels(): void
     {
-        $shouldBe = ['Application', 'Authentication'];
+        $shouldBe = array_column(LogChannels::cases(), 'name');
 
         $testObj = new LogUtilitiesService;
         $res = $testObj->getLogChannels();
@@ -67,6 +69,8 @@ class LogUtilitiesServiceUnitTest extends TestCase
     public function test_validate_log_channel_fail(): void
     {
         $testChannel = 'Something';
+
+        $this->expectException(InvalidLogChannelException::class);
 
         $testObj = new LogUtilitiesService;
         $res = $testObj->validateLogChannel($testChannel);
@@ -116,6 +120,8 @@ class LogUtilitiesServiceUnitTest extends TestCase
 
     public function test_get_log_list_fail(): void
     {
+        $this->expectException(InvalidLogChannelException::class);
+
         $testObj = new LogUtilitiesService;
         $res = $testObj->getLogList('random');
 

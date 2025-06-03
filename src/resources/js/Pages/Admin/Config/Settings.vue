@@ -9,6 +9,8 @@ defineProps<{
         company_name: string;
         timezone: string;
         max_filesize: number;
+        welcome_message: string;
+        home_links: { url: string; text: string }[];
     };
     timezoneList: TimezoneList[];
 }>();
@@ -27,6 +29,8 @@ export default { layout: AppLayout };
                 :company_name="settings.company_name"
                 :timezone="settings.timezone"
                 :max-filesize="settings.max_filesize"
+                :welcome_message="settings.welcome_message"
+                :home_links="settings.home_links"
             />
         </Card>
     </div>

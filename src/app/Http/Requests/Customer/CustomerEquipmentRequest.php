@@ -29,11 +29,11 @@ class CustomerEquipmentRequest extends FormRequest
     {
         if ($this->equipment) {
             return [
+                'equip_id' => ['required', 'exists:equipment_types'],
                 'site_list' => [
                     'nullable',
                     'array',
-                    // TODO - Perform this check
-                    // new CheckForDuplicateSiteEquipment,
+                    new CheckForDuplicateSiteEquipment,
                 ],
             ];
         }

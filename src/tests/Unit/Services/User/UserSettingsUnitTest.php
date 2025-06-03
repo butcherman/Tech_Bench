@@ -3,7 +3,6 @@
 namespace Tests\Unit\Services\User;
 
 use App\Events\User\UserEmailChangedEvent;
-use App\Events\User\UserSettingsUpdatedEvent;
 use App\Models\User;
 use App\Services\User\UserSettingsService;
 use Illuminate\Support\Facades\DB;
@@ -74,8 +73,6 @@ class UserSettingsUnitTest extends TestCase
     */
     public function test_update_user_settings(): void
     {
-        Event::fake(UserSettingsUpdatedEvent::class);
-
         /** @var User $user */
         $user = User::factory()->createQuietly();
         $data = [
@@ -92,8 +89,6 @@ class UserSettingsUnitTest extends TestCase
             'setting_type_id' => 1,
             'value' => false,
         ]);
-
-        Event::assertDispatched(UserSettingsUpdatedEvent::class);
     }
 
     /*

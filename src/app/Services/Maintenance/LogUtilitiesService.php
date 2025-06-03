@@ -2,7 +2,9 @@
 
 namespace App\Services\Maintenance;
 
+use App\Enums\LogChannels;
 use App\Enums\LogLevels;
+use App\Exceptions\Maintenance\InvalidLogChannelException;
 use App\Traits\AppSettingsTrait;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
@@ -33,7 +35,7 @@ class LogUtilitiesService
      */
     public function getLogChannels(): array
     {
-        return $this->logChannels;
+        return array_column(LogChannels::cases(), 'name');
     }
 
     /**
@@ -42,11 +44,13 @@ class LogUtilitiesService
      */
     public function validateLogChannel(string $channel): string|false
     {
-        return match (strtolower($channel)) {
-            'application' => 'Application',
-            'authentication' => 'Auth',
-            default => false,
-        };
+        $valid = LogChannels::tryFrom(strtolower($channel));
+
+        if (! $valid) {
+            throw new InvalidLogChannelException;
+        }
+
+        return $valid->getFolder();
     }
 
     /**
@@ -70,10 +74,6 @@ class LogUtilitiesService
     public function getLogList(string $channel): array
     {
         $folder = $this->validateLogChannel($channel);
-
-        if (! $folder) {
-            return [];
-        }
 
         return $this->getLogFiles($folder);
     }

@@ -102,13 +102,13 @@ class FileMaintenanceService
      */
     public function getEmptyDirectories(string $basePath): array
     {
-        // TODO - Add Logging and refactor
         $directoryList = File::directories($basePath);
         $emptyList = [];
 
         foreach ($directoryList as $directory) {
             $fileList = File::allFiles($directory, true);
             if (empty($fileList)) {
+                Log::debug('Found empty directory at '.$directory);
                 $emptyList[] = $directory;
             } else {
                 $subList = $this->getEmptyDirectories($directory);

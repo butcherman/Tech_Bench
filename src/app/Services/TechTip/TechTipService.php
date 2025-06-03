@@ -61,7 +61,9 @@ class TechTipService
         $techTip->updated_id = $user->user_id;
 
         // If the Subject has changed, we need to update the Slug for the URL.
-        $techTip->slug = $this->generateSlug($requestData->get('subject'));
+        if ($techTip->wasChanged('subject')) {
+            $techTip->slug = $this->generateSlug($requestData->get('subject'));
+        }
 
         $techTip->save();
 

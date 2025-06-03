@@ -21,7 +21,7 @@ class DownloadLogTest extends TestCase
         $file = UploadedFile::fake()->create('logFile.log', 100);
 
         Storage::fake('logs');
-        Storage::disk('logs')->putFileAs('daily', $file, 'logFile.log');
+        Storage::disk('logs')->putFileAs('Application', $file, 'logFile.log');
 
         $response = $this->get(route('maint.logs.download', [
             'Application',
@@ -43,7 +43,7 @@ class DownloadLogTest extends TestCase
         $user = User::factory()->createQuietly();
 
         $response = $this->actingAs($user)
-            ->get(route('maint.logs.download', ['daily', 'logFile']));
+            ->get(route('maint.logs.download', ['Application', 'logFile']));
 
         $response->assertForbidden();
     }
@@ -63,7 +63,7 @@ class DownloadLogTest extends TestCase
         $user = User::factory()->createQuietly(['role_id' => 1]);
 
         $response = $this->actingAs($user)
-            ->get(route('maint.logs.download', ['daily', 'wrongName']));
+            ->get(route('maint.logs.download', ['application', 'wrongName']));
 
         $response->assertStatus(404);
 

@@ -7,6 +7,7 @@ use App\Traits\AppSettingsTrait;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 class CustomerAdministrationService extends CustomerService
 {
@@ -91,23 +92,23 @@ class CustomerAdministrationService extends CustomerService
     /**
      * Verify that a customer has at least one child site
      */
-    // public function verifyCustomerChildren(?bool $fix = false)
-    // {
-    //     $failed = [];
-    //     $customerList = Customer::withTrashed()->get();
+    public function verifyCustomerChildren(?bool $fix = false)
+    {
+        $failed = [];
+        $customerList = Customer::withTrashed()->get();
 
-    //     foreach ($customerList as $customer) {
-    //         if ($customer->site_count === 0) {
-    //             Log::debug('Customer '.$customer->name.' has no sites attached');
-    //             $failed[] = $customer->only(['cust_id', 'name']);
+        foreach ($customerList as $customer) {
+            if ($customer->site_count === 0) {
+                Log::debug('Customer '.$customer->name.' has no sites attached');
+                $failed[] = $customer->only(['cust_id', 'name']);
 
-    //             if ($fix) {
-    //                 Log::notice('Deleting Customer without any attached sites', $customer->toArray());
-    //                 $customer->forceDelete();
-    //             }
-    //         }
-    //     }
+                if ($fix) {
+                    Log::notice('Deleting Customer without any attached sites', $customer->toArray());
+                    $customer->forceDelete();
+                }
+            }
+        }
 
-    //     return $failed;
-    // }
+        return $failed;
+    }
 }

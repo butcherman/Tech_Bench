@@ -115,7 +115,7 @@ const encryptionTypes = [
             label="Encryption Method"
             :list="encryptionTypes"
         />
-        <div class="text-center">
+        <div class="flex justify-center">
             <SwitchInput
                 id="require-auth"
                 name="require_auth"

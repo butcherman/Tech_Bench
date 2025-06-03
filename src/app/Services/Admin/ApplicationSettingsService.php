@@ -24,6 +24,8 @@ class ApplicationSettingsService
             'company_name' => config('app.company_name'),
             'timezone' => config('app.timezone'),
             'max_filesize' => (int) config('filesystems.max_filesize'),
+            'welcome_message' => config('app.welcome_message'),
+            'home_links' => config('app.home_links'),
         ];
     }
 
@@ -49,6 +51,23 @@ class ApplicationSettingsService
         ];
 
         $this->saveSettingsArray($setArr);
+
+        $this->updateWelcomeMessage($requestData->get('welcome_message'));
+    }
+
+    /**
+     * Modify the Welcome Message for the home page.
+     */
+    protected function updateWelcomeMessage(?string $welcomeMsg): void
+    {
+        // Update or delete the welcome message
+        if (config('app.welcome_message') !== $welcomeMsg) {
+            if ($welcomeMsg) {
+                $this->saveSettings('app.welcome_message', $welcomeMsg);
+            } else {
+                $this->clearSetting('app.welcome_message');
+            }
+        }
     }
 
     /**

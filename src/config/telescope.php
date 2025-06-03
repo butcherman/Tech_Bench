@@ -115,6 +115,8 @@ return [
         'livewire*',
         'nova-api*',
         'pulse*',
+        'administration/horizon',
+        'broadcasting*',
     ],
 
     'ignore_commands' => [

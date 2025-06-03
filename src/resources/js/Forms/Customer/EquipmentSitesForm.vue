@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import PickListInput from "../_Base/PickListInput.vue";
 import VueForm from "@/Forms/_Base/VueForm.vue";
-import { object, array } from "yup";
+import { object, array, number } from "yup";
 
 defineEmits<{
     success: [];
@@ -19,9 +19,11 @@ const props = defineProps<{
 |-------------------------------------------------------------------------------
 */
 const initValues = {
+    equip_id: props.equipment.equip_id,
     site_list: props.siteList.map((site) => site.cust_site_id),
 };
 const schema = object({
+    equip_id: number().required(),
     site_list: array().nullable(),
 });
 </script>

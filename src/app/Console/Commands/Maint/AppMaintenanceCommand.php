@@ -2,6 +2,8 @@
 
 namespace App\Console\Commands\Maint;
 
+use App\Services\Customer\CustomerAdministrationService;
+use App\Services\Customer\CustomerEquipmentDataService;
 use App\Services\Maintenance\FileMaintenanceService;
 use App\Services\User\UserAdministrationService;
 use App\Services\User\UserSettingsService;
@@ -52,6 +54,7 @@ class AppMaintenanceCommand extends Command
 
         $this->userCheck();
         $this->customerCheck();
+        $this->customerEquipmentCheck();
         $this->fileSystemCheck();
 
         $this->newLine();
@@ -127,9 +130,65 @@ class AppMaintenanceCommand extends Command
         $this->info('User Profiles OK');
     }
 
+    /**
+     * Check each customer profile to make sure that they have at least one
+     * site attached.  Fix flag will delete customers with no sites attached.
+     */
     protected function customerCheck(): void
     {
-        // TODO - Build Customer Check
+        $svc = new CustomerAdministrationService;
+
+        // Check for customers that have no child sites
+        $this->newLine();
+        $this->line('Checking for Abandoned Customers');
+
+        $lonelyCustomers = $svc->verifyCustomerChildren($this->fix);
+        $this->newLine();
+
+        if ($lonelyCustomers) {
+            $this->error(
+                'Found '.count($lonelyCustomers).' Customers without a site attached'
+            );
+            $this->table(
+                ['Customer ID', 'Customer Name'],
+                $lonelyCustomers,
+            );
+
+            if ($this->fix) {
+                $this->info(
+                    'Deleted '.count($lonelyCustomers).' Customer Profiles'
+                );
+            }
+        } else {
+            $this->info('Customer Site Check OK');
+        }
+    }
+
+    protected function customerEquipmentCheck(): void
+    {
+        $service = new CustomerEquipmentDataService;
+
+        // Check for missing data fields in all customer equipment
+        $this->newLine();
+        $this->line('Checking Customer Equipment for Missing Data Fields');
+
+        $missingDataFields = $service->checkAllCustomerEquipment($this->fix);
+
+        $this->newLine();
+
+        if ($missingDataFields) {
+            $this->error('Customer Equipment Data Fields Missing');
+            $this->table(
+                ['Customer Equipment ID', 'Missing Data Field ID'],
+                $missingDataFields
+            );
+
+            if ($this->fix) {
+                $this->info('Added missing Customer Equipment Data Fields');
+            }
+        } else {
+            $this->info('No missing Customer Equipment Data Fields');
+        }
     }
 
     /**

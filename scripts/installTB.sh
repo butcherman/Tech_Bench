@@ -33,9 +33,8 @@ groupadd docker
 usermod -aG docker $USER
 
 # Download Docker Compose script and .env file
-# TODO - Change branch to master
-wget https://raw.githubusercontent.com/butcherman/Tech_Bench/dev7/docker-compose.yml
-wget https://raw.githubusercontent.com/butcherman/Tech_Bench/dev7/.env
+wget https://raw.githubusercontent.com/butcherman/Tech_Bench/master/docker-compose.yml
+wget https://raw.githubusercontent.com/butcherman/Tech_Bench/master/.env
 
 # Set permissions for downloaded files
 chown $USER:docker docker-compose.yml

@@ -256,6 +256,7 @@ class CustomerEquipmentTest extends TestCase
                 $newSites[0],
                 $newSites[1],
             ],
+            'equip_id' => $equip->equip_id,
         ];
 
         $response = $this->put(route('customers.equipment.update', [
@@ -290,6 +291,7 @@ class CustomerEquipmentTest extends TestCase
                 $newSites[0],
                 $newSites[1],
             ],
+            'equip_id' => $equip->equip_id,
         ];
 
         $response = $this->actingAs($user)
@@ -320,6 +322,7 @@ class CustomerEquipmentTest extends TestCase
                 $newSites[0],
                 $newSites[1],
             ],
+            'equip_id' => $equip->equip_id,
         ];
 
         $response = $this->actingAs($user)
@@ -373,6 +376,7 @@ class CustomerEquipmentTest extends TestCase
                 $newSites[0],
                 $newSites[1],
             ],
+            'equip_id' => $equip->equip_id,
         ];
 
         $response = $this->actingAs($user)

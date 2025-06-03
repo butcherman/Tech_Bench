@@ -6,6 +6,7 @@ use App\Models\Customer;
 use App\Models\CustomerSite;
 use App\Services\Customer\CustomerAdministrationService;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
 use Tests\TestCase;
 
 class CustomerAdministrationServiceUnitTest extends TestCase
@@ -123,5 +124,50 @@ class CustomerAdministrationServiceUnitTest extends TestCase
         $cust->refresh();
 
         $this->assertNull($cust->primary_site_id);
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | verifyCustomerChildren()
+    |---------------------------------------------------------------------------
+    */
+    public function test_verify_customer_children_no_fix(): void
+    {
+        Customer::factory()->count(10)->create();
+        $lonely = Customer::create([
+            'name' => 'Customer without children',
+            'slug' => Str::slug('Customer without children'),
+        ]);
+
+        $testObj = new CustomerAdministrationService;
+        $res = $testObj->verifyCustomerChildren();
+
+        $this->assertEquals($res, [[
+            'cust_id' => $lonely->cust_id,
+            'name' => $lonely->name,
+        ]]);
+
+        $this->assertDatabaseHas('customers', ['cust_id' => $lonely->cust_id]);
+    }
+
+    public function test_verify_customer_children_with_fix(): void
+    {
+        Customer::factory()->count(10)->create();
+        $lonely = Customer::create([
+            'name' => 'Customer without children',
+            'slug' => Str::slug('Customer without children'),
+        ]);
+
+        $testObj = new CustomerAdministrationService;
+        $res = $testObj->verifyCustomerChildren(true);
+
+        $this->assertEquals($res, [[
+            'cust_id' => $lonely->cust_id,
+            'name' => $lonely->name,
+        ]]);
+
+        $this->assertDatabaseMissing('customers', [
+            'cust_id' => $lonely->cust_id,
+        ]);
     }
 }

@@ -78,14 +78,14 @@ Broadcast::channel(
 |------------------------------------------------------------------------------
 */
 
-// Broadcast::channel('tech-tips.{tip_id}', function (User $user, int $tip_id) {
-//     Log::debug(
-//         'User ' . $user->username . ' registering to Tech Tip Channel for Tip ' .
-//             $tip_id
-//     );
+Broadcast::channel('tech-tips.{tip_id}', function (User $user, int $tip_id) {
+    Log::debug(
+        'User '.$user->username.' registering to Tech Tip Channel for Tip '.
+            $tip_id
+    );
 
-//     return $user ? true : false;
-// });
+    return $user ? true : false;
+});
 
 /*
 |------------------------------------------------------------------------------

@@ -2,9 +2,10 @@
 
 namespace App\Http\Middleware;
 
+use App\Exceptions\Init\FirstTimeSetupAlreadyCompletedException;
+use App\Exceptions\Init\InvalidUserAccessingSetupException;
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
 /*
@@ -20,16 +21,11 @@ class InitializeApp
     public function handle(Request $request, Closure $next): Response
     {
         if (! config('app.first_time_setup')) {
-            Log::error($request->user()->username.' is trying to access the setup wizard when the app is already setup');
-            abort(403, 'The First Time Setup can only be run once');
-            // TODO - Throw exception
+            throw new FirstTimeSetupAlreadyCompletedException;
         }
 
         if ($request->user()->user_id !== 1) {
-            Log::error(
-                'A user other than the built in Admin is trying to access the setup wizard',
-                $request->user()->toArray()
-            );
+            throw new InvalidUserAccessingSetupException;
         }
 
         return $next($request);

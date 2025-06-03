@@ -2,7 +2,6 @@
 
 namespace App\Services\User;
 
-use App\Events\User\UserSettingsUpdatedEvent;
 use App\Models\User;
 use App\Models\UserSetting;
 use App\Models\UserSettingType;
@@ -28,8 +27,6 @@ class UserSettingsService
                 ->where('setting_type_id', str_replace('type_id_', '', $key))
                 ->update(['value' => $value]);
         }
-
-        event(new UserSettingsUpdatedEvent($user));
     }
 
     /**

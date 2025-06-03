@@ -5,7 +5,10 @@ namespace App\Models;
 use App\Observers\TechTipObserver;
 use App\Traits\Models\HasBookmarks;
 use App\Traits\Models\HasRecents;
+use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\BroadcastableModelEventOccurred;
+use Illuminate\Database\Eloquent\BroadcastsEvents;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -20,6 +23,7 @@ use Laravel\Scout\Searchable;
 #[ObservedBy([TechTipObserver::class])]
 class TechTip extends Model
 {
+    use BroadcastsEvents;
     use HasBookmarks;
     use HasFactory;
     use HasRecents;
@@ -87,7 +91,7 @@ class TechTip extends Model
     public function views(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->TechTipViews->views,
+            get: fn () => $this->TechTipViews ? $this->TechTipViews->views : null,
         );
     }
 
@@ -241,5 +245,30 @@ class TechTip extends Model
     protected function makeAllSearchableUsing(Builder $query)
     {
         return $query->with('Equipment');
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | Model Broadcasting
+    |---------------------------------------------------------------------------
+    */
+
+    public function broadcastOn(string $event): array
+    {
+
+        return match ($event) {
+            'created', 'deleted', 'trashed' => [],
+            default => [
+                new PrivateChannel('tech-tips.'.$this->tip_id),
+            ],
+        };
+    }
+
+    public function newBroadcastableModelEvent(string $event): BroadcastableModelEventOccurred
+    {
+        return (new BroadcastableModelEventOccurred(
+            $this,
+            $event
+        ))->dontBroadcastToCurrentUser();
     }
 }

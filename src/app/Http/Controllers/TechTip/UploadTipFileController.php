@@ -15,7 +15,7 @@ class UploadTipFileController extends FileUploadController
     public function __invoke(TechTipRequest $request): Response
     {
         if ($request->has('file')) {
-            $this->setFileData(DiskEnum::tips, 'tmp');
+            $this->setFileData(DiskEnum::tips, 'tmp', $request->get('public'));
             $savedFile = $this->getChunk($request->file('file'), $request);
 
             if ($savedFile) {

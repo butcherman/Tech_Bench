@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Maintenance\Logs;
 
+use App\Exceptions\Maintenance\InvalidLogChannelException;
 use App\Exceptions\Maintenance\LogFileMissingException;
 use App\Models\User;
 use Carbon\Carbon;
@@ -49,7 +50,7 @@ class ViewLogTest extends TestCase
         Exceptions::fake();
 
         $this->withoutExceptionHandling();
-        $this->expectException(LogFileMissingException::class);
+        $this->expectException(InvalidLogChannelException::class);
 
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);
@@ -61,7 +62,7 @@ class ViewLogTest extends TestCase
 
         $response->assertStatus(404);
 
-        Exceptions::assertReported(LogFileMissingException::class);
+        Exceptions::assertReported(InvalidLogChannelException::class);
     }
 
     public function test_invoke_bad_file_name(): void

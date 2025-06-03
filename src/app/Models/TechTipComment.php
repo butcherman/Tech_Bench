@@ -4,7 +4,10 @@ namespace App\Models;
 
 use App\Observers\TechTipCommentObserver;
 use App\Traits\Models\HasUser;
+use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\BroadcastableModelEventOccurred;
+use Illuminate\Database\Eloquent\BroadcastsEvents;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,6 +17,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 #[ObservedBy([TechTipCommentObserver::class])]
 class TechTipComment extends Model
 {
+    use BroadcastsEvents;
     use HasFactory;
     use HasUser;
 
@@ -95,5 +99,26 @@ class TechTipComment extends Model
         $this->Flags()->save(new TechTipCommentFlag([
             'user_id' => $user->user_id,
         ]));
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | Model Broadcasting
+    |---------------------------------------------------------------------------
+    */
+
+    public function broadcastOn(string $event): array
+    {
+        return [
+            new PrivateChannel('tech-tips.'.$this->tip_id),
+        ];
+    }
+
+    public function newBroadcastableModelEvent(string $event): BroadcastableModelEventOccurred
+    {
+        return (new BroadcastableModelEventOccurred(
+            $this,
+            $event
+        ))->dontBroadcastToCurrentUser();
     }
 }

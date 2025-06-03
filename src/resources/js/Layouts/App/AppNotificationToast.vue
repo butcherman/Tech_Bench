@@ -35,7 +35,7 @@ const onLeave = (el: Element, done: () => void): void => {
     <Teleport to="body">
         <div
             id="app-toast-wrapper"
-            class="fixed bottom-2 right-2 w-full overflow-hidden flex flex-col items-end"
+            class="fixed bottom-2 right-2 w-full overflow-hidden flex flex-col items-end z-50"
         >
             <TransitionGroup :css="false" @enter="onEnter" @leave="onLeave">
                 <div

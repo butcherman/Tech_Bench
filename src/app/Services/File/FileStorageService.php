@@ -3,11 +3,14 @@
 namespace App\Services\File;
 
 use App\Exceptions\File\FileMissingException;
+use App\Traits\HandleFileTrait;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
 class FileStorageService
 {
+    use HandleFileTrait;
+
     /**
      * Move a file from one folder to another.
      */
@@ -19,10 +22,19 @@ class FileStorageService
     ): void {
         $this->checkForDiskFile($disk, $currentPath);
 
-        // TODO - Check for duplicate file
+        $newInfo = pathinfo($newPath);
+
+        $fileName = $this->checkForDuplicate(
+            $newDisk ?? $disk,
+            $newInfo['dirname'],
+            $newInfo['basename']
+        );
+
+        $properPath = $newInfo['dirname'].DIRECTORY_SEPARATOR.$fileName;
+
         if ($newDisk) {
             $currentFullPath = Storage::disk($disk)->path($currentPath);
-            $newFullPath = Storage::disk($newDisk)->path($newPath);
+            $newFullPath = Storage::disk($newDisk)->path($properPath);
             $newDirPath = pathinfo($newFullPath)['dirname'];
 
             File::ensureDirectoryExists($newDirPath);
@@ -31,7 +43,7 @@ class FileStorageService
             return;
         }
 
-        Storage::disk($disk)->move($currentPath, $newPath);
+        Storage::disk($disk)->move($currentPath, $properPath);
     }
 
     /**

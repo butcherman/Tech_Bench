@@ -20,7 +20,6 @@ class DownloadLogController extends Controller
      */
     public function __invoke(Request $request, string $channel, string $logFile): StreamedResponse
     {
-        // TODO - Give logs their own policy
         $this->authorize('viewAny', AppSettings::class);
 
         $filePath = $this->svc->validateLogFile($channel, $logFile);

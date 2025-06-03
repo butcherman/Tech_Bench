@@ -6,6 +6,7 @@ use App\Events\Config\UrlChangedEvent;
 use App\Events\Feature\FeatureChangedEvent;
 use App\Services\Admin\ApplicationSettingsService;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
@@ -23,6 +24,8 @@ class ApplicationSettingsUnitTest extends TestCase
             'company_name' => config('app.company_name'),
             'timezone' => config('app.timezone'),
             'max_filesize' => (int) config('filesystems.max_filesize'),
+            'welcome_message' => config('app.welcome_message'),
+            'home_links' => [],
         ];
 
         $testObj = new ApplicationSettingsService;
@@ -45,6 +48,7 @@ class ApplicationSettingsUnitTest extends TestCase
             'timezone' => 'America/LosAngeles',
             'max_filesize' => '123456',
             'company_name' => 'Bobs Fancy Cats',
+            'welcome_message' => 'New Welcome Message',
         ];
 
         $testObj = new ApplicationSettingsService;
@@ -65,6 +69,10 @@ class ApplicationSettingsUnitTest extends TestCase
         $this->assertDatabaseHas('app_settings', [
             'key' => 'app.company_name',
             'value' => $data['company_name'],
+        ]);
+        $this->assertDatabaseHas('app_settings', [
+            'key' => 'app.welcome_message',
+            'value' => $data['welcome_message'],
         ]);
 
         Event::assertDispatched(UrlChangedEvent::class);
@@ -95,6 +103,47 @@ class ApplicationSettingsUnitTest extends TestCase
         $this->assertDatabaseHas('app_settings', [
             'key' => 'app.company_name',
             'value' => $data['company_name'],
+        ]);
+
+        Event::assertNotDispatched(UrlChangedEvent::class);
+    }
+
+    public function test_update_basic_settings_remove_welcome_message(): void
+    {
+        Event::fake(UrlChangedEvent::class);
+
+        DB::table('app_settings')->insert([
+            'key' => 'app.welcome_message',
+            'value' => json_encode('This is a Welcome Message'),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        $data = [
+            'url' => str_replace('https://', '', config('app.url')),
+            'timezone' => 'America/LosAngeles',
+            'max_filesize' => '123456',
+            'company_name' => 'Bobs Fancy Cats',
+            'welcome_message' => null,
+        ];
+
+        $testObj = new ApplicationSettingsService;
+        $testObj->updateBasicSettings(collect($data));
+
+        $this->assertDatabaseHas('app_settings', [
+            'key' => 'app.timezone',
+            'value' => $data['timezone'],
+        ]);
+        $this->assertDatabaseHas('app_settings', [
+            'key' => 'filesystems.max_filesize',
+            'value' => $data['max_filesize'],
+        ]);
+        $this->assertDatabaseHas('app_settings', [
+            'key' => 'app.company_name',
+            'value' => $data['company_name'],
+        ]);
+        $this->assertDatabaseMissing('app_settings', [
+            'key' => 'app.welcome_message',
         ]);
 
         Event::assertNotDispatched(UrlChangedEvent::class);

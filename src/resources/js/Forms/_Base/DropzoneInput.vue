@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Dropzone from "dropzone";
+import Dropzone from "@deltablot/dropzone";
 import { dataPost } from "@/Composables/axiosWrapper.module";
 import { processFileIcon } from "@/Composables/fileIcons.module";
 import { ref, onMounted, computed, nextTick } from "vue";
@@ -11,7 +11,7 @@ import type { DropzoneFile } from "dropzone";
  * Additional Styling for Drag and Drop
  */
 import "file-icon-vectors/dist/file-icon-vectors.min.css";
-import "dropzone/dist/basic.css";
+import "../../../css/dropzone.css";
 
 const emit = defineEmits<{
     error: [
@@ -92,7 +92,7 @@ const initDropzone = (): void => {
             "X-Socket-Id": Echo.socketId() ?? "",
         },
         maxFiles: props.maxFiles || 5,
-        maxFilesize: fileData.maxSize,
+        maxFilesize: fileData.maxSize / (1024 * 1024),
         method: "POST",
         parallelUploads: 1,
         parallelChunkUploads: false,
@@ -178,8 +178,15 @@ const buildEventListeners = (): void => {
     // Bubble any Errors that occur with Dropzone
     myDrop.on(
         "error",
-        (file: DropzoneFile, message: laravelValidationErrors): void => {
-            emit("error", { file, status: file.xhr?.status, message });
+        (
+            file: DropzoneFile,
+            message: laravelValidationErrors | string
+        ): void => {
+            if (typeof message === "string") {
+                errMessage.value = message;
+            } else {
+                emit("error", { file, status: file.xhr?.status, message });
+            }
         }
     );
 
@@ -337,7 +344,7 @@ defineExpose({
 
 <style scoped>
 /**
-*   All styles for the Dropzone File Upload Box
+* Override default styles for the Dropzone File Upload Box
 **/
 .dropzone {
     background-color: rgb(158, 219, 247, 0.25);

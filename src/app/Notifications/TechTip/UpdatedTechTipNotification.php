@@ -4,10 +4,12 @@ namespace App\Notifications\TechTip;
 
 use App\Models\TechTip;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class UpdatedTechTipNotification extends Notification
+class UpdatedTechTipNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -44,14 +46,14 @@ class UpdatedTechTipNotification extends Notification
     }
 
     /**
-     * Get the array representation of the notification.
-     *
-     * @return array<string, mixed>
+     * Get the broadcast representation of the notification.
      */
-    public function toArray(object $notifiable): array
+    public function toBroadcast(): BroadcastMessage
     {
-        return [
-            //
-        ];
+        return new BroadcastMessage([
+            'message' => $this->techTip->subject.' has been updated with new information',
+            'title' => 'Tech Tip Updated',
+            'href' => route('tech-tips.show', $this->techTip->slug),
+        ]);
     }
 }
