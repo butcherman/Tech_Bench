@@ -24,6 +24,8 @@ class ApplicationSettingsService
             'company_name' => config('app.company_name'),
             'timezone' => config('app.timezone'),
             'max_filesize' => (int) config('filesystems.max_filesize'),
+            'welcome_message' => config('app.welcome_message'),
+            'home_links' => config('app.home_links'),
         ];
     }
 
@@ -45,10 +47,27 @@ class ApplicationSettingsService
             'app.company_name' => $requestData->get('company_name'),
             'app.schedule_timezone' => $requestData->get('timezone'),
             'filesystems.max_filesize' => $requestData->get('max_filesize'),
-            'services.azure.redirect' => 'https://'.$requestData->get('url').'/auth/callback',
+            'services.azure.redirect' => 'https://' . $requestData->get('url') . '/auth/callback',
         ];
 
         $this->saveSettingsArray($setArr);
+
+        $this->updateWelcomeMessage($requestData->get('welcome_message'));
+    }
+
+    /**
+     * Modify the Welcome Message for the home page.
+     */
+    protected function updateWelcomeMessage(string|null $welcomeMsg): void
+    {
+        // Update or delete the welcome message
+        if (config('app.welcome_message') !== $welcomeMsg) {
+            if ($welcomeMsg) {
+                $this->saveSettings('app.welcome_message', $welcomeMsg);
+            } else {
+                $this->clearSetting('app.welcome_message');
+            }
+        }
     }
 
     /**
@@ -113,7 +132,7 @@ class ApplicationSettingsService
         $storedFile = Storage::disk('public')
             ->putFile($path, new File($requestData->get('file')));
 
-        $this->saveSettings('app.logo', '/storage/'.$storedFile);
+        $this->saveSettings('app.logo', '/storage/' . $storedFile);
 
         CacheData::clearCache('appData');
 

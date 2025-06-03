@@ -27,6 +27,7 @@ class BasicSettingsRequest extends FormRequest
             'company_name' => ['required', 'string'],
             'timezone' => ['required', 'string'],
             'max_filesize' => ['required', 'numeric'],
+            'welcome_message' => ['nullable', 'string'],
         ];
     }
 }
