@@ -258,7 +258,7 @@ class TechTip extends Model
 
 
         return match ($event) {
-            'deleted', 'trashed' => [],
+            'created', 'deleted', 'trashed' => [],
             default => [
                 new PrivateChannel('tech-tips.' . $this->tip_id),
             ],
