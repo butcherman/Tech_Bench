@@ -2,7 +2,7 @@
 import FlashAlert from "../_Shared/FlashAlert.vue";
 import StepNavigation from "@/Components/_Base/StepNavigation.vue";
 import { computed, ref } from "vue";
-import { usePage } from "@inertiajs/vue3";
+import { router, usePage } from "@inertiajs/vue3";
 
 type initProps = {
     step: number;
@@ -10,7 +10,13 @@ type initProps = {
 
 const step = computed<number>(() => usePage<initProps>().props.step || 0);
 
-// TODO - Add Link to navigate between steps
+const onGoToStep = (newStep: number) => {
+    console.log("go to ", step);
+    if (step.value > newStep) {
+        router.get(route(`init.step-${newStep}`));
+    }
+};
+
 const stepList = ref([
     {
         id: 1,
@@ -48,9 +54,17 @@ const stepList = ref([
 <template>
     <div id="init-layout-wrapper">
         <FlashAlert />
-        <div class="flex flex-col items-center justify-center h-screen">
-            <StepNavigation :step-list="stepList" :current-step="step" />
-            <slot />
+        <div
+            class="h-full flex flex-col justify-center items-center overflow-auto"
+        >
+            <StepNavigation
+                :step-list="stepList"
+                :current-step="step"
+                @navigate-to="onGoToStep"
+            />
+            <div class="w-full flex justify-center">
+                <slot />
+            </div>
         </div>
     </div>
 </template>
@@ -59,6 +73,7 @@ const stepList = ref([
 #init-layout-wrapper {
     background: linear-gradient(135deg, #1f0683 0%, #24308e 50%, #0b77ca 100%);
     min-height: 100vh;
+    /* height: 100vh; */
     width: 100%;
 }
 </style>

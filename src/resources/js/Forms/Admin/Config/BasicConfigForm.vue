@@ -1,14 +1,11 @@
 <script setup lang="ts">
+import prettyBytes from "pretty-bytes";
 import RangeInput from "@/Forms/_Base/RangeInput.vue";
 import SelectInput from "@/Forms/_Base/SelectInput.vue";
 import TextInput from "@/Forms/_Base/TextInput.vue";
 import VueForm from "@/Forms/_Base/VueForm.vue";
 import { object, string, number } from "yup";
-import { computed, ref } from "vue";
-import prettyBytes from "pretty-bytes";
-import SwitchInput from "@/Forms/_Base/SwitchInput.vue";
-import Collapse from "@/Components/_Base/Collapse.vue";
-import { useFieldArray } from "vee-validate";
+import { computed } from "vue";
 
 defineEmits<{
     success: [];
@@ -20,7 +17,7 @@ const props = defineProps<{
     timezone: string;
     tzList: TimezoneList[];
     url: string;
-    welcome_message: string;
+    welcome_message?: string;
     init?: boolean;
 }>();
 

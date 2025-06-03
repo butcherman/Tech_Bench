@@ -10,6 +10,7 @@ defineProps<{
         timezone: string;
         max_filesize: number;
         company_name: string;
+        welcome_message?: string;
     };
     timezoneList: TimezoneList[];
 }>();
@@ -33,6 +34,7 @@ export default { layout: InitLayout };
                 :timezone="settings.timezone"
                 :max-filesize="settings.max_filesize"
                 :company_name="settings.company_name"
+                :welcome_message="settings.welcome_message"
                 init
                 @success="router.get($route('init.step-2'))"
             />
