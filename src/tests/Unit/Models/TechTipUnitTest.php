@@ -9,6 +9,7 @@ use App\Models\TechTipComment;
 use App\Models\TechTipEquipment;
 use App\Models\TechTipFile;
 use App\Models\TechTipType;
+use App\Models\TechTipView;
 use App\Models\User;
 use Tests\TestCase;
 
@@ -20,9 +21,14 @@ class TechTipUnitTest extends TestCase
     {
         parent::setUp();
 
-        $this->model = TechTip::factory()->create([
+        $this->model = TechTip::factory()->createQuietly([
             'public' => true,
             'updated_id' => User::factory(),
+        ]);
+
+        TechTipView::create([
+            'tip_id' => $this->model->tip_id,
+            'views' => 0,
         ]);
     }
 
