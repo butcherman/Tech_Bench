@@ -55,14 +55,14 @@ class TechTipComment extends Model
     public function isFlagged(): Attribute
     {
         return Attribute::make(
-            get: fn() => $this->Flags->count() > 0 ? true : false,
+            get: fn () => $this->Flags->count() > 0 ? true : false,
         );
     }
 
     public function author(): Attribute
     {
         return Attribute::make(
-            get: fn() => $this->User->full_name,
+            get: fn () => $this->User->full_name,
         );
     }
 
@@ -109,8 +109,8 @@ class TechTipComment extends Model
 
     public function broadcastOn(string $event): array
     {
-        return  [
-            new PrivateChannel('tech-tips.' . $this->tip_id),
+        return [
+            new PrivateChannel('tech-tips.'.$this->tip_id),
         ];
     }
 

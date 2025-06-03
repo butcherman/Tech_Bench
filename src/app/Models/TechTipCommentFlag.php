@@ -47,7 +47,7 @@ class TechTipCommentFlag extends Model
     public function flaggedBy(): Attribute
     {
         return Attribute::make(
-            get: fn() => $this->User->full_name,
+            get: fn () => $this->User->full_name,
         );
     }
 
@@ -73,8 +73,8 @@ class TechTipCommentFlag extends Model
 
     public function broadcastOn(string $event): array
     {
-        return  [
-            new PrivateChannel('tech-tips.' . $this->TechTipComment->tip_id),
+        return [
+            new PrivateChannel('tech-tips.'.$this->TechTipComment->tip_id),
         ];
     }
 

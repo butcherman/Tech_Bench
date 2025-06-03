@@ -20,11 +20,11 @@ class CleanupWasSuccessfulNotification extends BaseNotification implements Shoul
         $mailMessage = (new MailMessage)
             ->from(config('mail.from.address'), config('mail.from.name'))
             ->subject(trans('backup::notifications.cleanup_successful_subject', [
-                'application_name' => config('app.name')
+                'application_name' => config('app.name'),
             ]))
             ->line(trans('backup::notifications.cleanup_successful_body', [
                 'application_name' => config('app.name'),
-                'disk_name' => 'backups'
+                'disk_name' => 'backups',
             ]));
 
         $this->backupDestinationProperties()->each(

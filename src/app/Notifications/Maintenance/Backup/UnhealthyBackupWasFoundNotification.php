@@ -21,11 +21,11 @@ class UnhealthyBackupWasFoundNotification extends BaseNotification implements Sh
             ->error()
             ->from(config('mail.from.address'), config('mail.from.name'))
             ->subject(__('backup::notifications.unhealthy_backup_found_subject', [
-                'application_name' => config('app.name')
+                'application_name' => config('app.name'),
             ]))
             ->line(__('backup::notifications.unhealthy_backup_found_body', [
                 'application_name' => config('app.name'),
-                'disk_name' => 'backups'
+                'disk_name' => 'backups',
             ]))
             ->line($this->problemDescription());
 
@@ -37,12 +37,12 @@ class UnhealthyBackupWasFoundNotification extends BaseNotification implements Sh
 
         if ($this->failure()->wasUnexpected()) {
             $mailMessage
-                ->line('Health check: ' . $this->failure()->healthCheck()->name())
+                ->line('Health check: '.$this->failure()->healthCheck()->name())
                 ->line(__('backup::notifications.exception_message', [
-                    'message' => $this->failure()->exception()->getMessage()
+                    'message' => $this->failure()->exception()->getMessage(),
                 ]))
                 ->line(__('backup::notifications.exception_trace', [
-                    'trace' => $this->failure()->exception()->getTraceAsString()
+                    'trace' => $this->failure()->exception()->getTraceAsString(),
                 ]));
         }
 

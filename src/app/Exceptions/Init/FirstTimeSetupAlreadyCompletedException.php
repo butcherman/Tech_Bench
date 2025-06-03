@@ -10,7 +10,7 @@ class FirstTimeSetupAlreadyCompletedException extends Exception
     public function report(): void
     {
         Log::error(
-            request()->user()->username .
+            request()->user()->username.
                 ' is trying to access the setup wizard when the app is already setup'
         );
     }

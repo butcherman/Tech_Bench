@@ -54,5 +54,6 @@ export default { layout: AppLayout };
             :equipment="equipment"
         />
         <CustomerNotes :equipment="equipment" />
+        <!-- TODO - Add Customer Equipment Files -->
     </div>
 </template>

@@ -123,7 +123,7 @@ class TechTipService
         $slug = Str::slug($subject);
 
         while (TechTip::where('slug', $slug)->first()) {
-            $slug = Str::slug($subject) . '-' . $index;
+            $slug = Str::slug($subject).'-'.$index;
             $index++;
         }
 

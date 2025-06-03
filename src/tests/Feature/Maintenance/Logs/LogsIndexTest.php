@@ -44,7 +44,7 @@ class LogsIndexTest extends TestCase
             ->get(route('maint.logs.index'));
 
         $response->assertSuccessful()
-            ->assertInertia(fn(Assert $page) => $page
+            ->assertInertia(fn (Assert $page) => $page
                 ->component('Maint/LogIndex')
                 ->has('channels')
                 ->has('channel')
@@ -98,7 +98,7 @@ class LogsIndexTest extends TestCase
             ->get(route('maint.logs.index', ['Application']));
 
         $response->assertSuccessful()
-            ->assertInertia(fn(Assert $page) => $page
+            ->assertInertia(fn (Assert $page) => $page
                 ->component('Maint/LogIndex')
                 ->has('channels')
                 ->has('channel')

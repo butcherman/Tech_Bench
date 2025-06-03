@@ -57,7 +57,7 @@ class CustomerEquipmentTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('Customer/Equipment/Index')
                     ->has('permissions')
                     ->has('customer')
@@ -224,7 +224,7 @@ class CustomerEquipmentTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('Customer/Equipment/Show')
                     ->has('permissions')
                     ->has('customer')

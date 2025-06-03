@@ -91,21 +91,21 @@ class TechTip extends Model
     public function views(): Attribute
     {
         return Attribute::make(
-            get: fn() => $this->TechTipViews ? $this->TechTipViews->views : null,
+            get: fn () => $this->TechTipViews ? $this->TechTipViews->views : null,
         );
     }
 
     public function href(): Attribute
     {
         return Attribute::make(
-            get: fn() => route('tech-tips.show', $this->slug),
+            get: fn () => route('tech-tips.show', $this->slug),
         );
     }
 
     public function publicHref(): ?Attribute
     {
         return Attribute::make(
-            get: fn() => $this->public
+            get: fn () => $this->public
                 ? route('publicTips.show', $this->slug)
                 : null,
         );
@@ -114,7 +114,7 @@ class TechTip extends Model
     public function type(): Attribute
     {
         return Attribute::make(
-            get: fn() => $this->TechTipType->description,
+            get: fn () => $this->TechTipType->description,
         );
     }
 
@@ -256,11 +256,10 @@ class TechTip extends Model
     public function broadcastOn(string $event): array
     {
 
-
         return match ($event) {
             'created', 'deleted', 'trashed' => [],
             default => [
-                new PrivateChannel('tech-tips.' . $this->tip_id),
+                new PrivateChannel('tech-tips.'.$this->tip_id),
             ],
         };
     }

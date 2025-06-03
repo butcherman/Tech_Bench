@@ -51,7 +51,7 @@ class NewTipCommentNotification extends Notification implements ShouldQueue
     public function toBroadcast(): BroadcastMessage
     {
         return new BroadcastMessage([
-            'message' => $this->comment->TechTip->subject . ' has a new Comment',
+            'message' => $this->comment->TechTip->subject.' has a new Comment',
             'title' => 'New Tech Tip Comment Created',
             'href' => route('tech-tips.show', $this->comment->TechTip->slug),
         ]);

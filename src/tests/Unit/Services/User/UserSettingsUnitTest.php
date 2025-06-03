@@ -3,7 +3,6 @@
 namespace Tests\Unit\Services\User;
 
 use App\Events\User\UserEmailChangedEvent;
-use App\Events\User\UserSettingsUpdatedEvent;
 use App\Models\User;
 use App\Services\User\UserSettingsService;
 use Illuminate\Support\Facades\DB;

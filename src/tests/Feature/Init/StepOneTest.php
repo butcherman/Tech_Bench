@@ -38,7 +38,7 @@ class StepOneTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('Init/StepOne')
                     ->has('step')
                     ->has('settings')
@@ -69,7 +69,7 @@ class StepOneTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('Init/StepOne')
                     ->has('step')
                     ->has('settings')

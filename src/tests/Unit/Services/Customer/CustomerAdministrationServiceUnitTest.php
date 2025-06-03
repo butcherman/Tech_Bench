@@ -167,7 +167,7 @@ class CustomerAdministrationServiceUnitTest extends TestCase
         ]]);
 
         $this->assertDatabaseMissing('customers', [
-            'cust_id' => $lonely->cust_id
+            'cust_id' => $lonely->cust_id,
         ]);
     }
 }

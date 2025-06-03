@@ -47,7 +47,7 @@ class ApplicationSettingsService
             'app.company_name' => $requestData->get('company_name'),
             'app.schedule_timezone' => $requestData->get('timezone'),
             'filesystems.max_filesize' => $requestData->get('max_filesize'),
-            'services.azure.redirect' => 'https://' . $requestData->get('url') . '/auth/callback',
+            'services.azure.redirect' => 'https://'.$requestData->get('url').'/auth/callback',
         ];
 
         $this->saveSettingsArray($setArr);
@@ -58,7 +58,7 @@ class ApplicationSettingsService
     /**
      * Modify the Welcome Message for the home page.
      */
-    protected function updateWelcomeMessage(string|null $welcomeMsg): void
+    protected function updateWelcomeMessage(?string $welcomeMsg): void
     {
         // Update or delete the welcome message
         if (config('app.welcome_message') !== $welcomeMsg) {
@@ -132,7 +132,7 @@ class ApplicationSettingsService
         $storedFile = Storage::disk('public')
             ->putFile($path, new File($requestData->get('file')));
 
-        $this->saveSettings('app.logo', '/storage/' . $storedFile);
+        $this->saveSettings('app.logo', '/storage/'.$storedFile);
 
         CacheData::clearCache('appData');
 

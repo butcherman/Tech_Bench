@@ -21,20 +21,20 @@ class BackupHasFailedNotification extends BaseNotification implements ShouldQueu
             ->error()
             ->from(config('mail.from.address'), config('mail.from.name'))
             ->subject(__('backup::notifications.backup_failed_subject', [
-                'application_name' => config('app.name')
+                'application_name' => config('app.name'),
             ]))
             ->line(__('backup::notifications.backup_failed_body', [
-                'application_name' => config('app.name')
+                'application_name' => config('app.name'),
             ]))
             ->line(__('backup::notifications.exception_message', [
-                'message' => $this->event->exception->getMessage()
+                'message' => $this->event->exception->getMessage(),
             ]))
             ->line(__('backup::notifications.exception_trace', [
-                'trace' => $this->event->exception->getTraceAsString()
+                'trace' => $this->event->exception->getTraceAsString(),
             ]));
 
         $this->backupDestinationProperties()->each(
-            fn($value, $name) => $mailMessage->line("{$name}: {$value}")
+            fn ($value, $name) => $mailMessage->line("{$name}: {$value}")
         );
 
         return $mailMessage;

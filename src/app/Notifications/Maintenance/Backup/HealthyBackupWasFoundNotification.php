@@ -21,10 +21,10 @@ class HealthyBackupWasFoundNotification extends BaseNotification implements Shou
             ->from(config('mail.from.address'), config('mail.from.name'))
             ->subject(__('backup::notifications.healthy_backup_found_subject', [
                 'application_name' => config('app.name'),
-                'disk_name' => 'backups'
+                'disk_name' => 'backups',
             ]))
             ->line(__('backup::notifications.healthy_backup_found_body', [
-                'application_name' => config('app.name')
+                'application_name' => config('app.name'),
             ]));
 
         $this->backupDestinationProperties()->each(

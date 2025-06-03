@@ -23,19 +23,19 @@ class FileStorageServiceUnitTest extends TestCase
         $newFolder = 'newFolder';
 
         Storage::disk('local')
-            ->put($oldFolder . DIRECTORY_SEPARATOR . $file, 'This is a test file');
+            ->put($oldFolder.DIRECTORY_SEPARATOR.$file, 'This is a test file');
 
         $testObj = new FileStorageService;
         $testObj->moveDiskFile(
             'local',
-            $oldFolder . DIRECTORY_SEPARATOR . $file,
-            $newFolder . DIRECTORY_SEPARATOR . $file
+            $oldFolder.DIRECTORY_SEPARATOR.$file,
+            $newFolder.DIRECTORY_SEPARATOR.$file
         );
 
         Storage::disk('local')
-            ->assertMissing($oldFolder . DIRECTORY_SEPARATOR . $file);
+            ->assertMissing($oldFolder.DIRECTORY_SEPARATOR.$file);
         Storage::disk('local')
-            ->assertExists($newFolder . DIRECTORY_SEPARATOR . $file);
+            ->assertExists($newFolder.DIRECTORY_SEPARATOR.$file);
     }
 
     public function test_move_disk_file_duplicate_file(): void
@@ -47,23 +47,23 @@ class FileStorageServiceUnitTest extends TestCase
         $newFolder = 'newFolder';
 
         Storage::disk('local')
-            ->put($oldFolder . DIRECTORY_SEPARATOR . $file, 'This is a test file');
+            ->put($oldFolder.DIRECTORY_SEPARATOR.$file, 'This is a test file');
         Storage::disk('local')
-            ->put($newFolder . DIRECTORY_SEPARATOR . $file, 'This is a test file');
+            ->put($newFolder.DIRECTORY_SEPARATOR.$file, 'This is a test file');
 
         $testObj = new FileStorageService;
         $testObj->moveDiskFile(
             'local',
-            $oldFolder . DIRECTORY_SEPARATOR . $file,
-            $newFolder . DIRECTORY_SEPARATOR . $file
+            $oldFolder.DIRECTORY_SEPARATOR.$file,
+            $newFolder.DIRECTORY_SEPARATOR.$file
         );
 
         Storage::disk('local')
-            ->assertMissing($oldFolder . DIRECTORY_SEPARATOR . $file);
+            ->assertMissing($oldFolder.DIRECTORY_SEPARATOR.$file);
         Storage::disk('local')
-            ->assertExists($newFolder . DIRECTORY_SEPARATOR . $file);
+            ->assertExists($newFolder.DIRECTORY_SEPARATOR.$file);
         Storage::disk('local')
-            ->assertExists($newFolder . DIRECTORY_SEPARATOR . 'test(1).txt');
+            ->assertExists($newFolder.DIRECTORY_SEPARATOR.'test(1).txt');
     }
 
     public function test_move_disk_file_new_disk(): void
@@ -76,20 +76,20 @@ class FileStorageServiceUnitTest extends TestCase
         $newFolder = 'newFolder2';
 
         Storage::disk('local')
-            ->put($oldFolder . DIRECTORY_SEPARATOR . $file, 'This is a test file');
+            ->put($oldFolder.DIRECTORY_SEPARATOR.$file, 'This is a test file');
 
         $testObj = new FileStorageService;
         $testObj->moveDiskFile(
             'local',
-            $oldFolder . DIRECTORY_SEPARATOR . $file,
-            $newFolder . DIRECTORY_SEPARATOR . $file,
+            $oldFolder.DIRECTORY_SEPARATOR.$file,
+            $newFolder.DIRECTORY_SEPARATOR.$file,
             'customers'
         );
 
         Storage::disk('local')
-            ->assertMissing($oldFolder . DIRECTORY_SEPARATOR . $file);
+            ->assertMissing($oldFolder.DIRECTORY_SEPARATOR.$file);
         Storage::disk('customers')
-            ->assertExists($newFolder . DIRECTORY_SEPARATOR . $file);
+            ->assertExists($newFolder.DIRECTORY_SEPARATOR.$file);
     }
 
     public function test_move_disk_file_file_missing(): void
@@ -105,8 +105,8 @@ class FileStorageServiceUnitTest extends TestCase
         $testObj = new FileStorageService;
         $testObj->moveDiskFile(
             'local',
-            $oldFolder . DIRECTORY_SEPARATOR . $file,
-            $newFolder . DIRECTORY_SEPARATOR . $file
+            $oldFolder.DIRECTORY_SEPARATOR.$file,
+            $newFolder.DIRECTORY_SEPARATOR.$file
         );
     }
 

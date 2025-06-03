@@ -2,9 +2,7 @@
 
 namespace Tests\Feature\User;
 
-use App\Events\User\UserSettingsUpdatedEvent;
 use App\Models\User;
-use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
 class UpdateUserSettingsTest extends TestCase

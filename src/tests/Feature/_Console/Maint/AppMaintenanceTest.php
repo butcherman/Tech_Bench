@@ -61,7 +61,7 @@ class AppMaintenanceTest extends TestCase
             ->assertExitCode(0);
 
         $this->assertDatabaseMissing('customers', [
-            'cust_id' => $lonely->cust_id
+            'cust_id' => $lonely->cust_id,
         ]);
     }
 

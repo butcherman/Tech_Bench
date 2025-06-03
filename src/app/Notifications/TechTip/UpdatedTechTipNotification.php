@@ -51,7 +51,7 @@ class UpdatedTechTipNotification extends Notification implements ShouldQueue
     public function toBroadcast(): BroadcastMessage
     {
         return new BroadcastMessage([
-            'message' => $this->techTip->subject . ' has been updated with new information',
+            'message' => $this->techTip->subject.' has been updated with new information',
             'title' => 'Tech Tip Updated',
             'href' => route('tech-tips.show', $this->techTip->slug),
         ]);

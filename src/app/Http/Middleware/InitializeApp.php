@@ -6,7 +6,6 @@ use App\Exceptions\Init\FirstTimeSetupAlreadyCompletedException;
 use App\Exceptions\Init\InvalidUserAccessingSetupException;
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
 /*

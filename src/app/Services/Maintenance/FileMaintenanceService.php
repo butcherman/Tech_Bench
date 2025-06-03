@@ -35,7 +35,7 @@ class FileMaintenanceService
 
         $size = disk_free_space($path);
 
-        Log::debug('Get Disk Free Space - ' . $size);
+        Log::debug('Get Disk Free Space - '.$size);
 
         if ($humanReadable) {
             return $this->readableFileSize($size);
@@ -55,14 +55,14 @@ class FileMaintenanceService
         foreach ($fileList as $file) {
             $fileSize = Storage::disk($disk)->size($file);
 
-            Log::debug('Checking File Size for ' . $file, [
+            Log::debug('Checking File Size for '.$file, [
                 'size' => $fileSize,
             ]);
 
             $size += $fileSize;
         }
 
-        Log::debug('Get Storage Disk Size - ' . $size);
+        Log::debug('Get Storage Disk Size - '.$size);
 
         if ($humanReadable) {
             return $this->readableFileSize($size);
@@ -79,16 +79,16 @@ class FileMaintenanceService
     {
         $allFiles = File::allFiles($basePath, true);
 
-        Log::debug('Getting file list for path - ' . $basePath, [
+        Log::debug('Getting file list for path - '.$basePath, [
             'file_list' => $allFiles,
         ]);
 
         // Find and remove scaffolding files.
         foreach ($this->scaffoldFiles as $scFile) {
-            $scaffoldList = preg_grep('/' . $scFile . '/i', $allFiles);
+            $scaffoldList = preg_grep('/'.$scFile.'/i', $allFiles);
 
             foreach ($scaffoldList as $key => $file) {
-                Log::debug('Removing Scaffolding File from file list - ' . $file);
+                Log::debug('Removing Scaffolding File from file list - '.$file);
 
                 unset($allFiles[$key]);
             }
@@ -108,7 +108,7 @@ class FileMaintenanceService
         foreach ($directoryList as $directory) {
             $fileList = File::allFiles($directory, true);
             if (empty($fileList)) {
-                Log::debug('Found empty directory at ' . $directory);
+                Log::debug('Found empty directory at '.$directory);
                 $emptyList[] = $directory;
             } else {
                 $subList = $this->getEmptyDirectories($directory);
@@ -138,12 +138,12 @@ class FileMaintenanceService
                     '/'
                 ),
                 '/'
-            ) . DIRECTORY_SEPARATOR . $file->file_name;
+            ).DIRECTORY_SEPARATOR.$file->file_name;
 
-            Log::debug('Checking for file at ' . Storage::disk($file->disk)->path($filePath));
+            Log::debug('Checking for file at '.Storage::disk($file->disk)->path($filePath));
 
             if (Storage::disk($file->disk)->exists($filePath)) {
-                Log::debug('File ' . $filePath . ' exists.  Removing from list');
+                Log::debug('File '.$filePath.' exists.  Removing from list');
 
                 unset($fileList[$key]);
             }
@@ -173,7 +173,7 @@ class FileMaintenanceService
             $fileInfo = pathinfo($file);
 
             Log::debug(
-                'Checking file ' . $file,
+                'Checking file '.$file,
                 $fileInfo
             );
 
@@ -193,11 +193,11 @@ class FileMaintenanceService
                 foreach ($dbFiles as $dbFile) {
 
                     $databasePath = Storage::disk($dbFile->disk)
-                        ->path($dbFile->folder . DIRECTORY_SEPARATOR . $dbFile->file_name);
+                        ->path($dbFile->folder.DIRECTORY_SEPARATOR.$dbFile->file_name);
                     $storagePath = $file->getRealPath();
 
                     Log::debug(
-                        'Database Entry found for ' . $file . '. Validating proper location',
+                        'Database Entry found for '.$file.'. Validating proper location',
                         [
                             'database_path' => $databasePath,
                             'storage_path' => $storagePath,
@@ -213,7 +213,7 @@ class FileMaintenanceService
                     }
                 }
             } else {
-                Log::debug('No database entry found for ' . $file);
+                Log::debug('No database entry found for '.$file);
             }
         }
 
@@ -238,7 +238,7 @@ class FileMaintenanceService
         foreach ($fileList as $file) {
             File::delete($file);
 
-            Log::notice('File Deleted - ' . $file);
+            Log::notice('File Deleted - '.$file);
         }
 
         // Delete all the empty directories from the disk
@@ -246,7 +246,7 @@ class FileMaintenanceService
         foreach ($dirList as $dir) {
             File::deleteDirectory($dir);
 
-            Log::notice('Directory Deleted - ' . $dir);
+            Log::notice('Directory Deleted - '.$dir);
         }
     }
 

@@ -25,7 +25,7 @@ class BackupWasSuccessfulNotification extends BaseNotification implements Should
             ))
             ->line(__('backup::notifications.backup_successful_body', [
                 'application_name' => config('app.name'),
-                'disk_name' => 'backups'
+                'disk_name' => 'backups',
             ]));
 
         $this->backupDestinationProperties()->each(function ($value, $name) use ($mailMessage) {
