@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Dropzone from "dropzone";
+import Dropzone from "@deltablot/dropzone";
 import { dataPost } from "@/Composables/axiosWrapper.module";
 import { processFileIcon } from "@/Composables/fileIcons.module";
 import { ref, onMounted, computed, nextTick } from "vue";
@@ -11,7 +11,7 @@ import type { DropzoneFile } from "dropzone";
  * Additional Styling for Drag and Drop
  */
 import "file-icon-vectors/dist/file-icon-vectors.min.css";
-import "dropzone/dist/basic.css";
+import "../../../css/dropzone.css";
 
 const emit = defineEmits<{
     error: [
@@ -344,7 +344,7 @@ defineExpose({
 
 <style scoped>
 /**
-*   All styles for the Dropzone File Upload Box
+* Override default styles for the Dropzone File Upload Box
 **/
 .dropzone {
     background-color: rgb(158, 219, 247, 0.25);
