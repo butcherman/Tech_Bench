@@ -3,41 +3,57 @@ import type { DropzoneFile } from "dropzone";
 /**
  * For Dropzone input only, push file icon to DOM
  */
-export const processFileIcon = (file: DropzoneFile) => {
-    const mime = getFileMime(file);
-
-    if (mime && mime[0] !== "image") {
-        const ext = file.name.split(".").pop();
-        if (ext) {
-            let iconClass = getFileIcon(ext);
-            let innerSpan = "";
-            //  If not icon was found, insert the default class
-            if (!iconClass) {
-                iconClass = "fiv-cla fiv-icon-blank fiv-size-xl";
-                innerSpan = `<span class="ext-identifier">{.${ext}}</span>`;
-            }
-            const imgWrapper =
-                file.previewElement.getElementsByClassName("dz-image")[0];
-            imgWrapper.innerHTML = `<span class="${iconClass} w-full h-full" />${innerSpan}`;
-        }
+export const processFileIcon = (file: DropzoneFile): void => {
+    // If this is an image file, we will not do anything
+    if (file.type.split("/")[0] === "image") {
+        return;
     }
+
+    const fileWrapper: Element =
+        file.previewElement.getElementsByClassName("dz-image")[0];
+    const fileExt: string | undefined = file.name.split(".").pop();
+
+    fileWrapper.innerHTML = getInnerHtml(fileExt);
 };
 
 /**
- * Return the MIME type of the selected file
+ * Get the Inner HTML that will be displayed in the file preview
  */
-export const getFileMime = (file: DropzoneFile) => {
-    return file.type.split("/");
-};
-
-export const getFileIcon = (extension: string): string | false => {
-    //  TODO - Add some custom icons and test
-    //  Check the base catalog (file-icon-vectors) to see if the icon exists
-    if (baseCatalog.includes(extension)) {
-        return `fiv-viv fiv-icon-${extension} fiv-size-xl`;
+const getInnerHtml = (fileExt: string | undefined): string => {
+    if (fileExt === undefined) {
+        return getBlankElement();
     }
 
-    return false;
+    if (isInBase(fileExt)) {
+        return getBaseElement(fileExt);
+    }
+
+    return getUnknownElement(fileExt);
+};
+
+/**
+ * Determine if the icon is in the base catalog
+ */
+const isInBase = (fileExt: string): boolean => {
+    return baseCatalog.includes(fileExt);
+};
+
+/**
+ * Get a blank icon and file name element
+ */
+const getBlankElement = (): string => {
+    return `<div class="dz-icon-wrapper flex flex-col"><span class="fiv-viv fiv-icon-blank fiv-size-xl" /></div>`;
+};
+
+/**
+ * Get a blank icon and file name element
+ */
+const getUnknownElement = (fileExt: string): string => {
+    return `<div class="dz-icon-wrapper flex flex-col"><span class="fiv-viv fiv-icon-blank fiv-size-xl"></span><span>{.${fileExt}}</span></span></div>`;
+};
+
+const getBaseElement = (fileExt: string): string => {
+    return `<div class="dz-icon-wrapper flex flex-col"><span class="fiv-viv fiv-icon-${fileExt} fiv-size-xl" /></div>`;
 };
 
 /**
