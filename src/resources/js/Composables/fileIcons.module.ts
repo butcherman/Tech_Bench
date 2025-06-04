@@ -27,7 +27,7 @@ export const processFileIcon = (file: DropzoneFile) => {
  * Return the MIME type of the selected file
  */
 export const getFileMime = (file: DropzoneFile) => {
-    return file.type.split("/").pop();
+    return file.type.split("/");
 };
 
 export const getFileIcon = (extension: string): string | false => {
