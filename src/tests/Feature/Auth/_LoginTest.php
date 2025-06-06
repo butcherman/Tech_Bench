@@ -15,8 +15,8 @@ use Tests\TestCase;
 
 class _LoginTest extends TestCase
 {
-    // Verify the a valid user can log in
-    public function test_valid_login(): void
+    // Verify the a valid user can log in with username
+    public function test_valid_login_with_username(): void
     {
         Event::fake();
 
@@ -27,6 +27,28 @@ class _LoginTest extends TestCase
 
         $response = $this->post(route('login'), [
             'username' => $user->username,
+            'password' => $password,
+        ]);
+
+        $response->assertStatus(302)
+            ->assertRedirect(route('dashboard'));
+        $this->assertAuthenticatedAs($user);
+
+        Event::assertDispatched(Login::class);
+    }
+
+    // Verify the a valid user can log in with email address
+    public function test_valid_login_with_email(): void
+    {
+        Event::fake();
+
+        /** @var User $user */
+        $user = User::factory()->createQuietly([
+            'password' => bcrypt($password = 'randomPassword'),
+        ]);
+
+        $response = $this->post(route('login'), [
+            'username' => $user->email,
             'password' => $password,
         ]);
 
