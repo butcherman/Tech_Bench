@@ -34,9 +34,11 @@ class TelescopeServiceProvider extends TelescopeApplicationServiceProvider
      */
     protected function hideSensitiveRequestDetails(): void
     {
+        // @codeCoverageIgnoreStart
         if ($this->app->environment('local')) {
             return;
         }
+        // @codeCoverageIgnoreEnd
 
         Telescope::hideRequestParameters(['_token']);
 

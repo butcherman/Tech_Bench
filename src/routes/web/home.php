@@ -32,9 +32,4 @@ Route::middleware('auth.secure')->group(function () {
 | Download a File
 |-------------------------------------------------------------------------------
 */
-// Route::get('download/{file}/{fileName}', DownloadFileController::class)
-//     ->name('download');
-
-Route::get('download/{id}/{file_name}', function () {
-    return 'download';
-})->name('download');
+Route::get('download/{file}/{fileName}', DownloadFileController::class)->name('download');
