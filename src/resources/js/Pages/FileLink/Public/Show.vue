@@ -7,6 +7,7 @@ import PublicFileForm from "@/Forms/FileLink/PublicFileForm.vue";
 import ResourceList from "@/Components/_Base/ResourceList.vue";
 import { computed, ref } from "vue";
 import { router } from "@inertiajs/vue3";
+import { getIconFromFilename } from "@/Composables/fileIcons.module";
 
 const props = defineProps<{
     link: fileLink;
@@ -59,6 +60,10 @@ export default { layout: LinkLayout };
             <ResourceList :list="files" compact hover-row>
                 <template #list-item="{ item }">
                     <a :href="item.href" class="block text-center">
+                        <span
+                            v-html="getIconFromFilename(item.file_name)"
+                            class="me-1"
+                        />
                         {{ item.file_name }}
                         ({{ prettyBytes(item.file_size) }})
                     </a>

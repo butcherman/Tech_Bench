@@ -73,9 +73,9 @@ class FileUpload extends Model
     /**
      * Return the full path of the file
      */
-    // public function getFilePath(): string
-    // {
-    //     return Storage::disk($this->disk)
-    //         ->path($this->folder.DIRECTORY_SEPARATOR.$this->file_name);
-    // }
+    public function getFilePath(): string
+    {
+        return Storage::disk($this->disk)
+            ->path($this->folder.DIRECTORY_SEPARATOR.$this->file_name);
+    }
 }

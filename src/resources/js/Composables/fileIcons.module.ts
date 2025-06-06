@@ -1,52 +1,106 @@
 import type { DropzoneFile } from "dropzone";
 
-/**
- * For Dropzone input only, push file icon to DOM
- */
-export const processFileIcon = (file: DropzoneFile) => {
-    const mime = getFileMime(file);
+type iconPrefix = "viv" | "cla" | "sqo";
+type iconSize = "md" | "lg" | "xl";
 
-    if (mime && mime[0] !== "image") {
-        const ext = file.name.split(".").pop();
-        if (ext) {
-            let iconClass = getFileIcon(ext);
-            let innerSpan = "";
-            //  If not icon was found, insert the default class
-            if (!iconClass) {
-                iconClass = "fiv-cla fiv-icon-blank fiv-size-xl";
-                innerSpan = `<span class="ext-identifier">{.${ext}}</span>`;
-            }
-            const imgWrapper =
-                file.previewElement.getElementsByClassName("dz-image")[0];
-            imgWrapper.innerHTML = `<span class="${iconClass} w-full h-full" />${innerSpan}`;
+/*
+|-------------------------------------------------------------------------------
+| For Dropzone File Input.  Get the icon type belonging to the non image file.
+|-------------------------------------------------------------------------------
+*/
+export const processFileIcon = (file: DropzoneFile): void => {
+    // If this is an image file, we do nothing
+    if (file.type.split("/")[0] === "image") {
+        return;
+    }
+
+    // Get the icon for the file type
+    let extension: string | undefined = file.name.split(".").pop();
+    let icon: string = getFileIcon(extension, "viv", "xl");
+
+    const wrapper: Element =
+        file.previewElement.getElementsByClassName("dz-image")[0];
+
+    wrapper.innerHTML = `<div class="dz-icon-wrapper flex flex-col">${icon}<span>{${extension}}</span></div>`;
+};
+
+/*
+|-------------------------------------------------------------------------------
+| Functions to get the icon
+|-------------------------------------------------------------------------------
+*/
+export const getIconFromFilename = (fileName: string): string => {
+    let extension: string | undefined = fileName.split(".").pop();
+
+    return getFileIcon(extension);
+};
+
+const getFileIcon = (
+    fileExt: string | undefined,
+    iconPrefix: iconPrefix = "viv",
+    iconSize: iconSize | null = null
+): string => {
+    if (fileExt !== undefined) {
+        if (extendedCatalog.includes(fileExt)) {
+            return getExtendedIcon(fileExt, iconSize);
+        }
+
+        if (baseCatalog.includes(fileExt)) {
+            return getBaseIcon(fileExt, iconPrefix, iconSize);
         }
     }
+
+    let sizeText = getIconSizeText(iconSize);
+
+    return `<span class="fiv-${iconPrefix} fiv-icon-blank ${sizeText}"></span>`;
 };
 
 /**
- * Return the MIME type of the selected file
+ * Get an icon from the extended library
  */
-export const getFileMime = (file: DropzoneFile) => {
-    return file.type.split("/").pop();
+const getExtendedIcon = (
+    fileExt: string | undefined,
+    iconSize: iconSize | null = null
+): string => {
+    let sizeText = getIconSizeText(iconSize);
+
+    return `<span class="fiv-cla fiv-extended-${fileExt} ${sizeText}"></span>`;
 };
 
-export const getFileIcon = (extension: string): string | false => {
-    //  TODO - Add some custom icons and test
-    //  Check the base catalog (file-icon-vectors) to see if the icon exists
-    if (baseCatalog.includes(extension)) {
-        return `fiv-viv fiv-icon-${extension} fiv-size-xl`;
+/**
+ * Get an icon from the base library
+ */
+const getBaseIcon = (
+    fileExt: string | undefined,
+    iconPrefix: iconPrefix = "viv",
+    iconSize: iconSize | null = null
+): string => {
+    let sizeText = getIconSizeText(iconSize);
+
+    return `<span class="fiv-${iconPrefix} fiv-icon-${fileExt} ${sizeText}"></span>`;
+};
+
+/**
+ * Get the Icon Size
+ */
+const getIconSizeText = (iconSize: iconSize | null): string => {
+    if (iconSize) {
+        return `fiv-size-${iconSize}`;
     }
 
-    return false;
+    return "";
 };
+
+/*
+|-------------------------------------------------------------------------------
+| Icon Library
+|-------------------------------------------------------------------------------
+*/
 
 /**
  * Additional icons added outside of the file-icon-vectors package
  */
-// const extendedCatalog = [
-// "pcpx",
-// "pcp",
-// ];
+const extendedCatalog = ["pcpx2", "pcpx", "pcp"];
 
 /**
  * All Icons that are part of the file-icon-vectors package

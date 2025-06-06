@@ -59,4 +59,16 @@ class FileUploadUnitTest extends TestCase
 
         $this->assertFalse($this->model->fileExists());
     }
+
+    public function test_get_file_path(): void
+    {
+        $this->assertEquals(
+            storage_path(
+                'app'.DIRECTORY_SEPARATOR.
+                    $this->model->folder.DIRECTORY_SEPARATOR.
+                    $this->model->file_name
+            ),
+            $this->model->getFilePath()
+        );
+    }
 }

@@ -6,6 +6,7 @@ import prettyBytes from "pretty-bytes";
 import ResourceList from "../_Base/ResourceList.vue";
 import TableStacked from "../_Base/TableStacked.vue";
 import { ref, useTemplateRef } from "vue";
+import { getIconFromFilename } from "@/Composables/fileIcons.module";
 
 interface activeFileView {
     file_name: string;
@@ -59,6 +60,10 @@ const showFileDetails = (file: fileLinkFile) => {
         <ResourceList :list="fileList" empty-text="No Files" compact hover-row>
             <template #list-item="{ item }">
                 <a :href="item.href" class="block w-full ps-3">
+                    <span
+                        v-html="getIconFromFilename(item.file_name)"
+                        class="me-1"
+                    />
                     {{ item.file_name }}
                     ({{ prettyBytes(item.file_size) }})
                 </a>
