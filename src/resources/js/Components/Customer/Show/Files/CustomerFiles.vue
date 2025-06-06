@@ -13,6 +13,7 @@ import Overlay from "@/Components/_Base/Loaders/Overlay.vue";
 import NewFileModal from "./NewFileModal.vue";
 import RefreshButton from "@/Components/_Base/Buttons/RefreshButton.vue";
 import verifyModal from "@/Modules/verifyModal";
+import { getIconFromFilename } from "@/Composables/fileIcons.module";
 import { Deferred, router } from "@inertiajs/vue3";
 import { customer, fileList } from "@/Composables/Customer/CustomerData.module";
 import { ref, useTemplateRef } from "vue";
@@ -145,6 +146,17 @@ const tableColumns: tableColumnProp[] = [
                     striped
                     @row-click="onRowClick"
                 >
+                    <template #row.name="{ rowData }">
+                        <span
+                            v-html="
+                                getIconFromFilename(
+                                    rowData.file_upload.file_name
+                                )
+                            "
+                            class="me-1"
+                        />
+                        {{ rowData.name }}
+                    </template>
                     <template #row.actions="{ rowData }">
                         <div class="size-fit float-end">
                             <BaseBadge

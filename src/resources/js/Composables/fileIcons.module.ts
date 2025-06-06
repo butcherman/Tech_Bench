@@ -29,7 +29,13 @@ export const processFileIcon = (file: DropzoneFile): void => {
 | Functions to get the icon
 |-------------------------------------------------------------------------------
 */
-export const getFileIcon = (
+export const getIconFromFilename = (fileName: string): string => {
+    let extension: string | undefined = fileName.split(".").pop();
+
+    return getFileIcon(extension);
+};
+
+const getFileIcon = (
     fileExt: string | undefined,
     iconPrefix: iconPrefix = "viv",
     iconSize: iconSize | null = null
