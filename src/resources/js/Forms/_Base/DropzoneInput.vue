@@ -11,6 +11,7 @@ import type { DropzoneFile } from "dropzone";
  * Additional Styling for Drag and Drop
  */
 import "file-icon-vectors/dist/file-icon-vectors.min.css";
+import "../../../css/icon_extended_library.css";
 import "../../../css/dropzone.css";
 
 const emit = defineEmits<{
