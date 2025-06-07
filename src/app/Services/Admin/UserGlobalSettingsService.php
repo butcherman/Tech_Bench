@@ -51,6 +51,8 @@ class UserGlobalSettingsService
         return [
             'required' => (bool) config('auth.twoFa.required'),
             'allow_save_device' => (bool) config('auth.twoFa.allow_save_device'),
+            'allow_via_email' => (bool) config('auth.twoFa.allow_via_email'),
+            'allow_via_authenticator' => (bool) config('auth.twoFa.allow_via_authenticator'),
         ];
     }
 
@@ -70,7 +72,7 @@ class UserGlobalSettingsService
                 ? __('admin.fake-password') : '',
             'secret_expires' => config('services.azure.secret_expires')
                 ? Carbon::parse(config('services.azure.secret_expires'))->format('m/d/Y') : null,
-            'redirect' => config('services.azure.redirect') ?? 'https://'.config('app.url').'/auth/callback',
+            'redirect' => config('services.azure.redirect') ?? 'https://' . config('app.url') . '/auth/callback',
         ];
     }
 
