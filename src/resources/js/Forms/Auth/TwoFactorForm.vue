@@ -31,7 +31,7 @@ const schema = object({
         submit-method="put"
         submit-text="Verify"
     >
-        <OtpInput id="code" name="code" focus />
+        <OtpInput id="code" name="code" :length="6" focus />
         <SwitchInput
             v-if="allowRemember"
             id="remember-device"
