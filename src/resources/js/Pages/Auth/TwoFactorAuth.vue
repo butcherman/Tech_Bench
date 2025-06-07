@@ -14,10 +14,7 @@ export default { layout: AuthLayout };
 </script>
 
 <template>
-    <div
-        class="flex items-center justify-center h-screen"
-        style="border: 1px solid red"
-    >
+    <div class="flex items-center justify-center h-screen">
         <Card class="tb-card-sm" title="Two Factor Authentication">
             <h5 class="text-center">
                 A verification code has been sent to your email address.
