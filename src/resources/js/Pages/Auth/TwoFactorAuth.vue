@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import AppLayout from "@/Layouts/App/AppLayout.vue";
-import Card from "@/Components/_Base/Card.vue";
-import { ref, reactive, onMounted } from "vue";
-import TwoFactorForm from "@/Forms/Auth/TwoFactorForm.vue";
+import AuthLayout from "@/Layouts/Auth/AuthLayout.vue";
 import BaseButton from "@/Components/_Base/Buttons/BaseButton.vue";
+import Card from "@/Components/_Base/Card.vue";
+import TwoFactorForm from "@/Forms/Auth/TwoFactorForm.vue";
 
 defineProps<{
     allowRemember: boolean;
@@ -11,12 +10,15 @@ defineProps<{
 </script>
 
 <script lang="ts">
-export default { layout: AppLayout };
+export default { layout: AuthLayout };
 </script>
 
 <template>
-    <div class="flex justify-center align-middle">
-        <Card class="tb-card" title="Two Factor Authentication">
+    <div
+        class="flex items-center justify-center h-screen"
+        style="border: 1px solid red"
+    >
+        <Card class="tb-card-sm" title="Two Factor Authentication">
             <h5 class="text-center">
                 A verification code has been sent to your email address.
             </h5>

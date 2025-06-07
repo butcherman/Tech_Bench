@@ -30,6 +30,7 @@ const schema = object({
         :submit-route="$route('2fa.update')"
         submit-method="put"
         submit-text="Verify"
+        full-page-overlay
     >
         <OtpInput id="code" name="code" :length="6" focus />
         <SwitchInput
