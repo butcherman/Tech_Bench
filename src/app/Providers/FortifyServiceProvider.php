@@ -78,13 +78,15 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::twoFactorChallengeView(function ($request) {
             $user = User::find($request->session()->get('login.id'));
 
-            if ($user->two_factor_via === 'email') {
+            $via = $this->getTwoFaViaParam($user);
+
+            if ($via === 'email') {
                 $user->generateVerificationCode();
             }
 
             return Inertia::render('Auth/TwoFactorAuth', [
                 'allow-remember' => fn() => config('auth.twoFa.allow_save_device'),
-                'via' => fn() => $user->two_factor_via,
+                'via' => fn() => $via,
             ]);
         });
 
@@ -131,5 +133,29 @@ class FortifyServiceProvider extends ServiceProvider
 
             RateLimiter::hit($throttleKey, 600);
         });
+    }
+
+    /**
+     * Determine if the two factor auth code should be sent via email or
+     * the authenticator app.
+     */
+    protected function getTwoFaViaParam(User $user): string|null
+    {
+        $app = config('auth.twoFa.allow_via_authenticator');
+        $email = config('auth.twoFa.allow_via_email');
+
+        if ($app && $email) {
+            return $user->two_factor_via;
+        }
+
+        if ($app && !$email) {
+            return 'authenticator';
+        }
+
+        if ($email && !$app) {
+            return 'email';
+        }
+
+        return null;
     }
 }

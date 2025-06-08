@@ -26,6 +26,16 @@ class RedirectIfTwoFactorAuthenticatable extends BaseRedirectIfTwoFactorAuthenti
             }
         }
 
+        // If only authenticator is allowed, but user is not setup, redirect
+        if (
+            is_null($user->two_factor_confirmed_at) &&
+            (!config('auth.twoFa.allow_via_email') && config('auth.twoFa.allow_via_authenticator'))
+        ) {
+            app('redirect')->setIntendedUrl(route('two-factor.setup.authenticator'));
+
+            return $next($request);
+        }
+
         // If the user has not setup 2FA yet, redirect them to set it up
         if (
             is_null($user->two_factor_via) &&

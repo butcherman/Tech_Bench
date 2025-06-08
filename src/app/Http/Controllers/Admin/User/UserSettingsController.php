@@ -28,10 +28,10 @@ class UserSettingsController extends Controller
         $this->authorize('viewAny', AppSettings::class);
 
         return Inertia::render('Admin/User/UserSettings', [
-            'auto-logout-timer' => fn () => intval(config('auth.auto_logout_timer')),
-            'two-fa' => fn () => $this->svc->getTwoFaConfig(),
-            'oath' => fn () => $this->svc->getOathConfig(),
-            'role-list' => fn () => $this->getAvailableRoles($request->user()),
+            'auto-logout-timer' => fn() => intval(config('auth.auto_logout_timer')),
+            'two-fa' => fn() => $this->svc->getTwoFaConfig(),
+            'oath' => fn() => $this->svc->getOathConfig(),
+            'role-list' => fn() => $this->getAvailableRoles($request->user()),
         ]);
     }
 
@@ -42,16 +42,8 @@ class UserSettingsController extends Controller
     {
         $this->svc->updateUserSettingsConfig($request->safe()->collect());
 
-        /**
-         * If the user just enabled 2FA, they will be prompted for a code
-         * immediately.
-         *
-         * Bypass this by manually adding verification to session
-         */
-        $request->session()->put('2fa_verified', true);
-
         Log::notice(
-            'User Administration Settings updated by '.request()->user()->username,
+            'User Administration Settings updated by ' . request()->user()->username,
             $request->except(['client_secret'])
         );
 
