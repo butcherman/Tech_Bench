@@ -1,12 +1,23 @@
 <script setup lang="ts">
+import { computed } from "vue";
 import OtpInput from "../_Base/OtpInput.vue";
 import SwitchInput from "../_Base/SwitchInput.vue";
 import VueForm from "@/Forms/_Base/VueForm.vue";
 import { object, string, boolean } from "yup";
 
-defineProps<{
+const props = defineProps<{
     allowRemember: boolean;
+    via: "authenticator" | "email";
 }>();
+
+const submitRoute = computed(() => {
+    switch (props.via) {
+        case "authenticator":
+            return route("two-factor.login.store");
+        case "email":
+            return route("two-factor.login.email");
+    }
+});
 
 /*
 |---------------------------------------------------------------------------
@@ -27,7 +38,7 @@ const schema = object({
     <VueForm
         :initial-values="initValues"
         :validation-schema="schema"
-        :submit-route="$route('two-factor.login.store')"
+        :submit-route="submitRoute"
         submit-method="post"
         submit-text="Verify"
         full-page-overlay

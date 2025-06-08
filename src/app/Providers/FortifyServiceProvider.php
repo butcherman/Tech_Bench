@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Actions\Fortify\LogoutResponse;
 use App\Actions\Fortify\ResetUserPassword;
+use App\Actions\Fortify\TwoFactorLoginResponse;
 use App\Actions\Fortify\UpdateUserPassword;
 use App\Facades\CacheData;
 use App\Models\User;
@@ -15,6 +16,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Laravel\Fortify\Contracts\LogoutResponse as LogoutResponseContract;
+use Laravel\Fortify\Contracts\TwoFactorLoginResponse as TwoFactorLoginResponseContract;
 use Laravel\Fortify\Fortify;
 
 class FortifyServiceProvider extends ServiceProvider
@@ -23,6 +25,9 @@ class FortifyServiceProvider extends ServiceProvider
     {
         // Deliver a logout response when logging out.
         $this->app->instance(LogoutResponseContract::class, new LogoutResponse);
+
+        // Custom Login Response
+        $this->app->singleton(TwoFactorLoginResponseContract::class, TwoFactorLoginResponse::class);
     }
 
     /**
@@ -70,9 +75,16 @@ class FortifyServiceProvider extends ServiceProvider
         });
 
         // Two Factor Authentication Route
-        Fortify::twoFactorChallengeView(function () {
+        Fortify::twoFactorChallengeView(function ($request) {
+            $user = User::find($request->session()->get('login.id'));
+
+            if ($user->two_factor_via === 'email') {
+                $user->generateVerificationCode();
+            }
+
             return Inertia::render('Auth/TwoFactorAuth', [
                 'allow-remember' => fn() => config('auth.twoFa.allow_save_device'),
+                'via' => fn() => $user->two_factor_via,
             ]);
         });
 

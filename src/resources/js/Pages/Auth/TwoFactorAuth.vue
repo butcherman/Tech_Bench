@@ -6,6 +6,7 @@ import TwoFactorForm from "@/Forms/Auth/TwoFactorForm.vue";
 
 defineProps<{
     allowRemember: boolean;
+    via: "authenticator" | "email";
 }>();
 </script>
 
@@ -16,17 +17,19 @@ export default { layout: AuthLayout };
 <template>
     <div class="flex items-center justify-center h-screen">
         <Card class="tb-card-sm" title="Two Factor Authentication">
-            <!-- <h5 class="text-center">
-                A verification code has been sent to your email address.
-            </h5>
-            <p class="text-center">Please input the code below.</p> -->
-            <h5 class="text-center">
+            <div v-if="via === 'email'">
+                <h5 class="text-center">
+                    A verification code has been sent to your email address.
+                </h5>
+                <p class="text-center">Please input the code below.</p>
+            </div>
+            <h5 v-if="via === 'authenticator'" class="text-center">
                 Input the code from your Authenticator App
             </h5>
             <div>
-                <TwoFactorForm :allow-remember="allowRemember" />
+                <TwoFactorForm :allow-remember="allowRemember" :via="via" />
             </div>
-            <!-- <div class="text-center mt-4">
+            <div v-if="via === 'email'" class="text-center mt-4">
                 <BaseButton
                     :href="$route('dashboard')"
                     class="w-3/4"
@@ -34,7 +37,7 @@ export default { layout: AuthLayout };
                 >
                     Send New Verification Code
                 </BaseButton>
-            </div> -->
+            </div>
         </Card>
     </div>
 </template>

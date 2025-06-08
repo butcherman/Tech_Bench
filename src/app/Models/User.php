@@ -45,6 +45,7 @@ class User extends Authenticatable
         'UserRole',
         'two_factor_secret',
         'two_factor_recovery_codes',
+        'two_factor_via',
     ];
 
     /** @var array<string, string> */
@@ -234,6 +235,16 @@ class User extends Authenticatable
             ['user_id' => $this->user_id],
             ['code' => rand(100000, 999999)],
         );
+    }
+
+    /**
+     * Validate the Verification Code
+     */
+    public function validateVerificationCode(string $code): bool
+    {
+        $storedCode = UserVerificationCode::where('user_id', $this->user_id)->first();
+
+        return $storedCode->code === $code;
     }
 
     /**

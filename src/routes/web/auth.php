@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['guest', 'throttle:50,120'])->group(function () {
     Route::get('/', LoginController::class)->name('home');
+    Route::post('/two-factor-email', TwoFactorController::class)
+        ->name('two-factor.login.email');
 
     /*
     |---------------------------------------------------------------------------
@@ -24,16 +26,3 @@ Route::middleware(['guest', 'throttle:50,120'])->group(function () {
         Route::get('auth/callback', 'callback')->name('azure-callback');
     });
 });
-
-/*
-|-------------------------------------------------------------------------------
-| Two Factor Authentication Routes
-|-------------------------------------------------------------------------------
-*/
-Route::middleware('auth')
-    ->name('2fa.')
-    ->controller(TwoFactorController::class)
-    ->group(function () {
-        Route::get('two-factor-authentication', 'show')->name('show');
-        Route::put('two-factor-authentication', 'update')->name('update');
-    });
