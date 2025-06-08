@@ -18,12 +18,18 @@ class UserSettingsController extends Controller
         $this->authorize('view', $request->user());
 
         return Inertia::render('User/Settings', [
-            'allowSaveDevice' => fn() => config('auth.twoFa.allow_save_device')
-                && config('auth.twoFa.required'),
-            'allowViaAuthenticator' => fn() => config('auth.twoFa.allow_via_authenticator')
-                && config('auth.twoFa.required'),
-            'devices' => fn() => $request->user()->DeviceTokens,
             'settings' => fn() => $svc($request->user()),
+            'two-fa' => [
+                'allowSaveDevice' => fn() => config('auth.twoFa.allow_save_device')
+                    && config('auth.twoFa.required'),
+                'allowAuthenticator' => fn() => config('auth.twoFa.allow_via_authenticator')
+                    && config('auth.twoFa.required'),
+                'allowEmail' => fn() => config('auth.twoFa.allow_via_email')
+                    && config('auth.twoFa.required'),
+                'currentVia' => fn() => $request->user()->two_factor_via,
+                'devices' => fn() => $request->user()->DeviceTokens,
+                'enabled' => fn() => config('auth.twoFa.required'),
+            ],
         ]);
     }
 }

@@ -16,7 +16,7 @@ export default { layout: AuthLayout };
 
 <template>
     <div class="flex items-center justify-center h-screen">
-        <Card class="tb-card-sm" title="Two Factor Authentication">
+        <Card class="tb-card" title="Two Factor Authentication">
             <div v-if="via === 'email'">
                 <h5 class="text-center">
                     A verification code has been sent to your email address.

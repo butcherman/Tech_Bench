@@ -9,13 +9,10 @@ use Inertia\Inertia;
 class TwoFactorSetupAuthenticatorController extends Controller
 {
     /**
-     * Handle the incoming request.
+     * Show the form to setup 2FA notifications.
      */
     public function __invoke(Request $request)
     {
-        $request->user()->two_factor_via = 'authenticator';
-        $request->user()->save();
-
         return Inertia::render('Auth/TwoFactorAppSetup');
     }
 }

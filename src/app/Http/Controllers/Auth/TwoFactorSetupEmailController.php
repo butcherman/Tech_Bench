@@ -18,6 +18,10 @@ class TwoFactorSetupEmailController extends Controller
         $request->user()->two_factor_via = 'email';
         $request->user()->save();
 
+        if ($request->expectsJson()) {
+            return response()->noContent();
+        }
+
         return Inertia::render('Auth/TwoFactorAuth', [
             'allow-remember' => config('auth.twoFa.allow_save_device'),
             'via' => 'email',
