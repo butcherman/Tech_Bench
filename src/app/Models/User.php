@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Pennant\Concerns\HasFeatures;
 
 #[ObservedBy([UserObserver::class])]
@@ -23,6 +24,7 @@ class User extends Authenticatable
     use HasFeatures;
     use Notifiable;
     use SoftDeletes;
+    use TwoFactorAuthenticatable;
 
     /** @var string */
     protected $primaryKey = 'user_id';
@@ -41,6 +43,8 @@ class User extends Authenticatable
         'updated_at',
         'user_id',
         'UserRole',
+        'two_factor_secret',
+        'two_factor_recovery_codes',
     ];
 
     /** @var array<string, string> */
