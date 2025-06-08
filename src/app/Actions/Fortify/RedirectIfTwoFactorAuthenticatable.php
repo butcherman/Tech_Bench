@@ -26,11 +26,16 @@ class RedirectIfTwoFactorAuthenticatable extends BaseRedirectIfTwoFactorAuthenti
             }
         }
 
-        // If user is using the Authenticator App for 2FA, redirect
-        if ($user->two_factor_secret && in_array(TwoFactorAuthenticatable::class, class_uses_recursive($user))) {
-            return $this->twoFactorChallengeResponse($request, $user);
+        // If the user has not setup 2FA yet, redirect them to set it up
+        if (
+            is_null($user->two_factor_via) &&
+            (config('auth.twoFa.allow_via_email') && config('auth.twoFa.allow_via_authenticator'))
+        ) {
+            app('redirect')->setIntendedUrl(route('two-factor.setup.index'));
+
+            return $next($request);
         }
 
-        return $next($request);
+        return $this->twoFactorChallengeResponse($request, $user);
     }
 }
