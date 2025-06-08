@@ -160,7 +160,7 @@ class UserGlobalSettingsUnitTest extends TestCase
             'client_id' => config('services.azure.client_id'),
             'client_secret' => config('services.azure.client_secret') ? __('admin.fake-password') : '',
             'secret_expires' => Carbon::parse(config('services.azure.secret_expires'))->format('m/d/Y'),
-            'redirect' => config('services.azure.redirect') ?? 'https://' . config('app.url') . '/auth/callback',
+            'redirect' => config('services.azure.redirect') ?? 'https://'.config('app.url').'/auth/callback',
         ];
 
         $testObj = new UserGlobalSettingsService;

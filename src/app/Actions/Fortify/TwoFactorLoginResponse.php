@@ -5,16 +5,17 @@ namespace App\Actions\Fortify;
 use App\Models\DeviceToken;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Laravel\Fortify\Contracts\TwoFactorLoginResponse as TwoFactorLoginResponseContract;
-use Laravel\Fortify\Fortify;
 use Illuminate\Support\Str;
 use Karmendra\LaravelAgentDetector\AgentDetector;
+use Laravel\Fortify\Contracts\TwoFactorLoginResponse as TwoFactorLoginResponseContract;
+use Laravel\Fortify\Fortify;
 
 class TwoFactorLoginResponse implements TwoFactorLoginResponseContract
 {
     /**
      * If the "Remember Device" flag is set, create a cookie to bypass 2fa.
+     *
+     * @param  \Illuminate\Http\Request  $request
      */
     public function toResponse($request)
     {
@@ -26,7 +27,7 @@ class TwoFactorLoginResponse implements TwoFactorLoginResponseContract
             return $request->wantsJson()
                 ? new JsonResponse('', 204)
                 : redirect()->intended(Fortify::redirects('login'))
-                ->withCookie('remember_device', $token, 259200);
+                    ->withCookie('remember_device', $token, 259200);
         }
 
         return $request->wantsJson()
@@ -46,7 +47,7 @@ class TwoFactorLoginResponse implements TwoFactorLoginResponseContract
         $devToken = new DeviceToken([
             'token' => $token,
             'type' => $agent->device(),
-            'os' => $agent->platform() . ' ' . $agent->platformVersion(),
+            'os' => $agent->platform().' '.$agent->platformVersion(),
             'browser' => $agent->browser(),
             'registered_ip_address' => $ipAddr,
             'updated_ip_address' => $ipAddr,

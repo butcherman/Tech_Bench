@@ -72,7 +72,7 @@ class UserGlobalSettingsService
                 ? __('admin.fake-password') : '',
             'secret_expires' => config('services.azure.secret_expires')
                 ? Carbon::parse(config('services.azure.secret_expires'))->format('m/d/Y') : null,
-            'redirect' => config('services.azure.redirect') ?? 'https://' . config('app.url') . '/auth/callback',
+            'redirect' => config('services.azure.redirect') ?? 'https://'.config('app.url').'/auth/callback',
         ];
     }
 

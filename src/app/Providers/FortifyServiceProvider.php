@@ -52,7 +52,7 @@ class FortifyServiceProvider extends ServiceProvider
                 'welcome-message' => config('app.welcome_message'),
                 'home-links' => config('app.home_links'),
                 'allow-oath' => config('services.azure.allow_login'),
-                'public-link' => fn() => config('tech-tips.allow_public')
+                'public-link' => fn () => config('tech-tips.allow_public')
                     ? [
                         'url' => route('publicTips.index'),
                         'text' => config('tech-tips.public_link_text'),
@@ -85,8 +85,8 @@ class FortifyServiceProvider extends ServiceProvider
             }
 
             return Inertia::render('Auth/TwoFactorAuth', [
-                'allow-remember' => fn() => config('auth.twoFa.allow_save_device'),
-                'via' => fn() => $via,
+                'allow-remember' => fn () => config('auth.twoFa.allow_save_device'),
+                'via' => fn () => $via,
             ]);
         });
 
@@ -96,7 +96,7 @@ class FortifyServiceProvider extends ServiceProvider
 
         RateLimiter::for('login', function (Request $request) {
             $throttleKey = Str::transliterate(
-                Str::lower($request->input(Fortify::username())) . '|' . $request->ip()
+                Str::lower($request->input(Fortify::username())).'|'.$request->ip()
             );
 
             if (RateLimiter::tooManyAttempts($throttleKey, 5)) {
@@ -106,8 +106,8 @@ class FortifyServiceProvider extends ServiceProvider
 
                 return back()
                     ->withErrors([
-                        'throttle' => 'Too many failed login attempts, try again in ' .
-                            $availableIn . ' minutes',
+                        'throttle' => 'Too many failed login attempts, try again in '.
+                            $availableIn.' minutes',
                     ]);
             }
 
@@ -116,7 +116,7 @@ class FortifyServiceProvider extends ServiceProvider
 
         RateLimiter::for('two-factor', function (Request $request) {
             $throttleKey = Str::transliterate(
-                Str::lower($request->input(Fortify::username())) . '|' . $request->ip()
+                Str::lower($request->input(Fortify::username())).'|'.$request->ip()
             );
 
             if (RateLimiter::tooManyAttempts($throttleKey, 5)) {
@@ -126,8 +126,8 @@ class FortifyServiceProvider extends ServiceProvider
 
                 return back()
                     ->withErrors([
-                        'throttle' => 'Too many failed login attempts, try again in ' .
-                            $availableIn . ' minutes',
+                        'throttle' => 'Too many failed login attempts, try again in '.
+                            $availableIn.' minutes',
                     ]);
             }
 
@@ -139,7 +139,7 @@ class FortifyServiceProvider extends ServiceProvider
      * Determine if the two factor auth code should be sent via email or
      * the authenticator app.
      */
-    protected function getTwoFaViaParam(User $user): string|null
+    protected function getTwoFaViaParam(User $user): ?string
     {
         $app = config('auth.twoFa.allow_via_authenticator');
         $email = config('auth.twoFa.allow_via_email');
@@ -148,11 +148,11 @@ class FortifyServiceProvider extends ServiceProvider
             return $user->two_factor_via;
         }
 
-        if ($app && !$email) {
+        if ($app && ! $email) {
             return 'authenticator';
         }
 
-        if ($email && !$app) {
+        if ($email && ! $app) {
             return 'email';
         }
 

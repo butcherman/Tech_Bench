@@ -2,18 +2,23 @@
 
 namespace App\Actions\Fortify;
 
-use Illuminate\Http\Request;
 use Laravel\Fortify\Actions\RedirectIfTwoFactorAuthenticatable as BaseRedirectIfTwoFactorAuthenticatable;
-use Laravel\Fortify\TwoFactorAuthenticatable;
 
 class RedirectIfTwoFactorAuthenticatable extends BaseRedirectIfTwoFactorAuthenticatable
 {
+    /**
+     * Override the default Two Factor check to look for a save device code and
+     * allow for email as an option to get the 2FA code.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  callable  $next
+     */
     public function handle($request, $next): mixed
     {
         $user = $this->validateCredentials($request);
 
         // If 2FA is disabled, move on
-        if (!config('auth.twoFa.required')) {
+        if (! config('auth.twoFa.required')) {
             return $next($request);
         }
 
@@ -29,7 +34,7 @@ class RedirectIfTwoFactorAuthenticatable extends BaseRedirectIfTwoFactorAuthenti
         // If only authenticator is allowed, but user is not setup, redirect
         if (
             is_null($user->two_factor_confirmed_at) &&
-            (!config('auth.twoFa.allow_via_email') && config('auth.twoFa.allow_via_authenticator'))
+            (! config('auth.twoFa.allow_via_email') && config('auth.twoFa.allow_via_authenticator'))
         ) {
             app('redirect')->setIntendedUrl(route('two-factor.setup.authenticator'));
 

@@ -2,8 +2,6 @@
 
 namespace App\Listeners\Auth;
 
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 use Laravel\Fortify\Events\TwoFactorAuthenticationConfirmed;
 
 class HandleTwoFactorAuthenticationConfirmedListener

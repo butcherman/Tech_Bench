@@ -41,7 +41,7 @@ class UserSettingsTest extends TestCase
             ->get(route('admin.user.user-settings.edit'));
         $response->assertSuccessful()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('Admin/User/UserSettings')
                     ->has('auto-logout-timer')
                     ->has('two-fa')
