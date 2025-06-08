@@ -27,8 +27,8 @@ const schema = object({
     <VueForm
         :initial-values="initValues"
         :validation-schema="schema"
-        :submit-route="$route('2fa.update')"
-        submit-method="put"
+        :submit-route="$route('two-factor.login.store')"
+        submit-method="post"
         submit-text="Verify"
         full-page-overlay
     >

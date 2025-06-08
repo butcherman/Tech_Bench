@@ -19,8 +19,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
-        commands: __DIR__.'/../routes/console.php',
-        channels: __DIR__.'/../routes/channels.php',
+        commands: __DIR__ . '/../routes/console.php',
+        channels: __DIR__ . '/../routes/channels.php',
         using: function () {
             Route::middleware('web')
                 ->group(
@@ -40,7 +40,7 @@ return Application::configure(basePath: dirname(__DIR__))
         ])->appendToGroup('auth.secure', [
             Authenticate::class,
             CheckForInit::class,
-            CheckForTwoFactor::class,
+            // CheckForTwoFactor::class,
             CheckPasswordExpiration::class,
             EncryptHistoryMiddleware::class,
         ])->alias([

@@ -19,6 +19,12 @@ use Laravel\Fortify\Fortify;
 
 class FortifyServiceProvider extends ServiceProvider
 {
+    public function register(): void
+    {
+        // Deliver a logout response when logging out.
+        $this->app->instance(LogoutResponseContract::class, new LogoutResponse);
+    }
+
     /**
      * Bootstrap any application services.
      */
@@ -63,6 +69,13 @@ class FortifyServiceProvider extends ServiceProvider
             ]);
         });
 
+        // Two Factor Authentication Route
+        Fortify::twoFactorChallengeView(function () {
+            return Inertia::render('Auth/TwoFactorAuth', [
+                'allow-remember' => fn() => config('auth.twoFa.allow_save_device'),
+            ]);
+        });
+
         // Update and Reset Routes
         Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
@@ -87,7 +100,24 @@ class FortifyServiceProvider extends ServiceProvider
             RateLimiter::hit($throttleKey, 600);
         });
 
-        // Deliver a logout response when logging out.
-        $this->app->instance(LogoutResponseContract::class, new LogoutResponse);
+        RateLimiter::for('two-factor', function (Request $request) {
+            $throttleKey = Str::transliterate(
+                Str::lower($request->input(Fortify::username())) . '|' . $request->ip()
+            );
+
+            if (RateLimiter::tooManyAttempts($throttleKey, 5)) {
+                $availableIn = ceil(RateLimiter::availableIn($throttleKey) / 60);
+
+                event(new Lockout($request));
+
+                return back()
+                    ->withErrors([
+                        'throttle' => 'Too many failed login attempts, try again in ' .
+                            $availableIn . ' minutes',
+                    ]);
+            }
+
+            RateLimiter::hit($throttleKey, 600);
+        });
     }
 }
