@@ -31,7 +31,6 @@ class UserSettingsRequest extends FormRequest
             'twoFa.allow_via_authenticator' => ['required', 'boolean'],
             'oath.allow_login' => ['required', 'boolean'],
             'oath.allow_register' => ['required', 'boolean'],
-            'oath.allow_bypass_2fa' => ['required', 'boolean'],
             'oath.tenant' => ['required_if:oath.allow_login,true'],
             'oath.client_id' => ['required_if:oath.allow_login,true'],
             'oath.client_secret' => ['required_if:oath.allow_login,true'],

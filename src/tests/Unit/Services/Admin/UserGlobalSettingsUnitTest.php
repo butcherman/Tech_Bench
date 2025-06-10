@@ -153,14 +153,13 @@ class UserGlobalSettingsUnitTest extends TestCase
 
         $shouldBe = [
             'allow_login' => (bool) config('services.azure.allow_login'),
-            'allow_bypass_2fa' => (bool) config('services.azure.allow_bypass_2fa'),
             'allow_register' => (bool) config('services.azure.allow_register'),
             'default_role_id' => (int) config('services.azure.default_role_id'),
             'tenant' => config('services.azure.tenant'),
             'client_id' => config('services.azure.client_id'),
             'client_secret' => config('services.azure.client_secret') ? __('admin.fake-password') : '',
             'secret_expires' => Carbon::parse(config('services.azure.secret_expires'))->format('m/d/Y'),
-            'redirect' => config('services.azure.redirect') ?? 'https://'.config('app.url').'/auth/callback',
+            'redirect' => config('services.azure.redirect') ?? config('app.url').'/auth/callback',
         ];
 
         $testObj = new UserGlobalSettingsService;
@@ -202,7 +201,6 @@ class UserGlobalSettingsUnitTest extends TestCase
             'oath' => [
                 'allow_login' => true,
                 'allow_register' => true,
-                'allow_bypass_2fa' => true,
                 'default_role_id' => '3',
                 'tenant' => 'someRadomUUID',
                 'client_id' => 'someRandomID',
@@ -237,9 +235,6 @@ class UserGlobalSettingsUnitTest extends TestCase
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'services.azure.default_role_id',
-        ]);
-        $this->assertDatabaseHas('app_settings', [
-            'key' => 'services.azure.allow_bypass_2fa',
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'services.azure.tenant',

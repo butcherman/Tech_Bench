@@ -129,8 +129,7 @@ class SocialiteTest extends TestCase
         $response = $this->get(route('azure-callback'));
 
         $response->assertStatus(302)
-            ->assertRedirect(route('dashboard'))
-            ->assertSessionHas('2fa_verified', true);
+            ->assertRedirect(route('dashboard'));
 
         $this->assertAuthenticatedAs(User::where('email', $user->email)->first());
         $this->assertDatabaseHas('users', $user->only([

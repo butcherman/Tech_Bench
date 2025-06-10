@@ -48,7 +48,6 @@ const schema = object({
     oath: object({
         allow_login: boolean().required(),
         allow_register: boolean().required(),
-        allow_bypass_2fa: boolean().required(),
         tenant: string().when("allow_login", {
             is: true,
             then: (schema) =>
@@ -139,12 +138,6 @@ const schema = object({
                         :list="roleList"
                         text-field="name"
                         value-field="role_id"
-                    />
-                    <SwitchInput
-                        id="two_fa_bypass"
-                        name="oath.allow_bypass_2fa"
-                        class="w-full"
-                        label="Allow Single Sign On Users to Bypass Two-Factor Authentication"
                     />
                     <TextInput
                         id="azure-tenant-id"

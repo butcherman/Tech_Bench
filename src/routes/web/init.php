@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Init\FinishController;
 use App\Http\Controllers\Init\SaveSetupController;
 use App\Http\Controllers\Init\SaveStepController;
 use App\Http\Controllers\Init\StepFiveController;
@@ -25,7 +24,7 @@ Route::middleware(['auth', 'init'])
             ->name('step-4');
         Route::get('verify-information', StepFiveController::class)
             ->name('step-5');
-        Route::get('finish', FinishController::class)
+        Route::inertia('finish', 'Init/Finish', ['step' => 6])
             ->name('finish')
             ->withoutMiddleware('init');
 
