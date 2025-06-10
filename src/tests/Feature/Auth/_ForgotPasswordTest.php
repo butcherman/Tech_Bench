@@ -14,6 +14,12 @@ use Tests\TestCase;
 
 class _ForgotPasswordTest extends TestCase
 {
+    /*
+    |---------------------------------------------------------------------------
+    | Test the Reset Password features
+    |---------------------------------------------------------------------------
+    */
+
     /**
      * Verify user can view the email reset password form
      */
@@ -22,8 +28,9 @@ class _ForgotPasswordTest extends TestCase
         $response = $this->get(route('password.request'));
 
         $response->assertSuccessful()
-            ->assertInertia(fn (Assert $page) => $page
-                ->component('Auth/ForgotPassword')
+            ->assertInertia(
+                fn (Assert $page) => $page
+                    ->component('Auth/ForgotPassword')
             );
         $this->assertGuest();
     }

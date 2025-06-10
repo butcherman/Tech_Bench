@@ -156,6 +156,8 @@ class FortifyServiceProvider extends ServiceProvider
             return 'email';
         }
 
+        // @codeCoverageIgnoreStart
         return null;
+        // @codeCoverageIgnoreEnd
     }
 }

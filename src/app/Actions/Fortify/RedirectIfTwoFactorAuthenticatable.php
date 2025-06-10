@@ -23,22 +23,12 @@ class RedirectIfTwoFactorAuthenticatable extends BaseRedirectIfTwoFactorAuthenti
         }
 
         // If user has a Remember Device token, validate it and login
-        if ($rememberToken = $request->cookie('remember_device') && config('auth.twoFa.allow_save_device')) {
-            $valid = $user->validateDeviceToken($rememberToken);
+        if ($request->hasCookie('remember_device') && config('auth.twoFa.allow_save_device')) {
+            $valid = $user->validateDeviceToken($request->cookie('remember_device'));
 
             if ($valid) {
                 return $next($request);
             }
-        }
-
-        // If only authenticator is allowed, but user is not setup, redirect
-        if (
-            is_null($user->two_factor_confirmed_at) &&
-            (! config('auth.twoFa.allow_via_email') && config('auth.twoFa.allow_via_authenticator'))
-        ) {
-            app('redirect')->setIntendedUrl(route('two-factor.setup.authenticator'));
-
-            return $next($request);
         }
 
         // If the user has not setup 2FA yet, redirect them to set it up
@@ -47,6 +37,16 @@ class RedirectIfTwoFactorAuthenticatable extends BaseRedirectIfTwoFactorAuthenti
             (config('auth.twoFa.allow_via_email') && config('auth.twoFa.allow_via_authenticator'))
         ) {
             app('redirect')->setIntendedUrl(route('two-factor.setup.index'));
+
+            return $next($request);
+        }
+
+        // If only authenticator is allowed, but user is not setup, redirect
+        if (
+            is_null($user->two_factor_confirmed_at) &&
+            (! config('auth.twoFa.allow_via_email') && config('auth.twoFa.allow_via_authenticator'))
+        ) {
+            app('redirect')->setIntendedUrl(route('two-factor.setup.authenticator'));
 
             return $next($request);
         }

@@ -242,9 +242,9 @@ class User extends Authenticatable
      */
     public function validateVerificationCode(string $code): bool
     {
-        $storedCode = UserVerificationCode::where('user_id', $this->user_id)->first();
+        $storedCode = $this->UserVerificationCode->code;
 
-        return $storedCode->code === $code;
+        return $storedCode === $code;
     }
 
     /**

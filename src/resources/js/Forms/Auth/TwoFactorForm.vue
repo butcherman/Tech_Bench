@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { computed } from "vue";
 import OtpInput from "../_Base/OtpInput.vue";
 import SwitchInput from "../_Base/SwitchInput.vue";
 import VueForm from "@/Forms/_Base/VueForm.vue";
+import { computed } from "vue";
 import { object, string, boolean } from "yup";
 
 const props = defineProps<{
@@ -26,11 +26,11 @@ const submitRoute = computed(() => {
 */
 const initValues = {
     code: null,
-    remember: false,
+    remember_device: false,
 };
 const schema = object({
     code: string().required("A Code is Required to Continue"),
-    remember: boolean().required(),
+    remember_device: boolean().required(),
 });
 </script>
 
@@ -47,7 +47,7 @@ const schema = object({
         <SwitchInput
             v-if="allowRemember"
             id="remember-device"
-            name="remember"
+            name="remember_device"
             label="Remember This Device"
             center
         />

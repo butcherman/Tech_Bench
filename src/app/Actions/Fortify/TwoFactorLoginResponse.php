@@ -21,7 +21,7 @@ class TwoFactorLoginResponse implements TwoFactorLoginResponseContract
     {
         $user = $request->user();
 
-        if ($request->get('remember')) {
+        if ($request->get('remember_device')) {
             $token = $this->generateRememberDeviceToken($user, $request->header('User-Agent'));
 
             return $request->wantsJson()

@@ -9,6 +9,12 @@ use Tests\TestCase;
 
 class _LogoutTest extends TestCase
 {
+    /*
+    |---------------------------------------------------------------------------
+    | Test Logging out
+    |---------------------------------------------------------------------------
+    */
+
     // Verify that the user can log out
     public function test_logout(): void
     {

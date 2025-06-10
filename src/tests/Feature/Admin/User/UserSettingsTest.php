@@ -201,6 +201,8 @@ class UserSettingsTest extends TestCase
             'twoFa' => [
                 'required' => true,
                 'allow_save_device' => false,
+                'allow_via_email' => true,
+                'allow_via_authenticator' => false,
             ],
             'oath' => [
                 'allow_login' => true,
