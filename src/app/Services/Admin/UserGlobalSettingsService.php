@@ -63,7 +63,6 @@ class UserGlobalSettingsService
     {
         return [
             'allow_login' => (bool) config('services.azure.allow_login'),
-            'allow_bypass_2fa' => (bool) config('services.azure.allow_bypass_2fa'),
             'allow_register' => (bool) config('services.azure.allow_register'),
             'default_role_id' => (int) config('services.azure.default_role_id'),
             'tenant' => config('services.azure.tenant'),
@@ -72,7 +71,7 @@ class UserGlobalSettingsService
                 ? __('admin.fake-password') : '',
             'secret_expires' => config('services.azure.secret_expires')
                 ? Carbon::parse(config('services.azure.secret_expires'))->format('m/d/Y') : null,
-            'redirect' => config('services.azure.redirect') ?? 'https://'.config('app.url').'/auth/callback',
+            'redirect' => config('services.azure.redirect') ?? config('app.url').'/auth/callback',
         ];
     }
 

@@ -39,9 +39,8 @@ class AuthorizeUser
 
         Auth::login($localUser, true);
 
-        $this->bypass2fa();
-
-        Log::info('User '.$localUser->username.' logged in via Microsoft Azure');
+        Log::stack(['app', 'auth'])
+            ->info('User '.$localUser->username.' logged in via Microsoft Azure');
 
         return $localUser;
     }
@@ -85,15 +84,5 @@ class AuthorizeUser
         dispatch(new CreateUserSettingsJob($newUser));
 
         return $newUser;
-    }
-
-    /**
-     * Determine if the user can bypass 2FA and set necessary session
-     */
-    protected function bypass2fa(): void
-    {
-        if (config('services.azure.allow_bypass_2fa')) {
-            session()->put('2fa_verified', true);
-        }
     }
 }

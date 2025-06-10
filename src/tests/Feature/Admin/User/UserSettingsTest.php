@@ -68,7 +68,6 @@ class UserSettingsTest extends TestCase
             'oath' => [
                 'allow_login' => true,
                 'allow_register' => true,
-                'allow_bypass_2fa' => true,
                 'default_role_id' => '3',
                 'tenant' => 'someRadomUUID',
                 'client_id' => 'someRandomID',
@@ -100,7 +99,6 @@ class UserSettingsTest extends TestCase
             'oath' => [
                 'allow_login' => true,
                 'allow_register' => true,
-                'allow_bypass_2fa' => true,
                 'default_role_id' => '3',
                 'tenant' => 'someRadomUUID',
                 'client_id' => 'someRandomID',
@@ -131,7 +129,6 @@ class UserSettingsTest extends TestCase
             'oath' => [
                 'allow_login' => true,
                 'allow_register' => true,
-                'allow_bypass_2fa' => true,
                 'default_role_id' => '3',
                 'tenant' => 'someRadomUUID',
                 'client_id' => 'someRandomID',
@@ -166,9 +163,6 @@ class UserSettingsTest extends TestCase
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'services.azure.default_role_id',
-        ]);
-        $this->assertDatabaseHas('app_settings', [
-            'key' => 'services.azure.allow_bypass_2fa',
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'services.azure.tenant',
@@ -242,9 +236,6 @@ class UserSettingsTest extends TestCase
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'services.azure.default_role_id',
-        ]);
-        $this->assertDatabaseHas('app_settings', [
-            'key' => 'services.azure.allow_bypass_2fa',
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'services.azure.tenant',
