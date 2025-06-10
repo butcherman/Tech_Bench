@@ -27,6 +27,8 @@ class UserSettingsRequest extends FormRequest
             'auto_logout_timer' => ['required'],
             'twoFa.required' => ['required', 'boolean'],
             'twoFa.allow_save_device' => ['required', 'boolean'],
+            'twoFa.allow_via_email' => ['required', 'boolean'],
+            'twoFa.allow_via_authenticator' => ['required', 'boolean'],
             'oath.allow_login' => ['required', 'boolean'],
             'oath.allow_register' => ['required', 'boolean'],
             'oath.allow_bypass_2fa' => ['required', 'boolean'],

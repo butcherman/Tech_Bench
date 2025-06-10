@@ -132,6 +132,8 @@ class UserGlobalSettingsUnitTest extends TestCase
         $shouldBe = [
             'required' => (bool) config('auth.twoFa.required'),
             'allow_save_device' => (bool) config('auth.twoFa.allow_save_device'),
+            'allow_via_email' => (bool) config('auth.twoFa.allow_via_email'),
+            'allow_via_authenticator' => (bool) config('auth.twoFa.allow_via_authenticator'),
         ];
 
         $testObj = new UserGlobalSettingsService;
@@ -194,6 +196,8 @@ class UserGlobalSettingsUnitTest extends TestCase
             'twoFa' => [
                 'required' => true,
                 'allow_save_device' => false,
+                'allow_via_email' => true,
+                'allow_via_authenticator' => false,
             ],
             'oath' => [
                 'allow_login' => true,
@@ -220,6 +224,9 @@ class UserGlobalSettingsUnitTest extends TestCase
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'auth.twoFa.allow_save_device',
+        ]);
+        $this->assertDatabaseHas('app_settings', [
+            'key' => 'auth.twoFa.allow_via_authenticator',
         ]);
 
         $this->assertDatabaseHas('app_settings', [

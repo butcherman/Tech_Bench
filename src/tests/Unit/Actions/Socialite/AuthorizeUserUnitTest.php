@@ -59,7 +59,8 @@ class AuthorizeUserUnitTest extends TestCase
                 $mock->token = Str::uuid();
                 $mock->principalName = $user->email;
                 $mock->mail = $user->email;
-            });
+            }
+        );
 
         $provider = $this->mock(
             'Laravel\Socialite\Contracts\Provider',
@@ -67,7 +68,8 @@ class AuthorizeUserUnitTest extends TestCase
                 $mock
                     ->shouldReceive('user')
                     ->andReturn($abstractUser);
-            });
+            }
+        );
 
         Socialite::shouldReceive('driver')
             ->with('azure')
@@ -76,7 +78,10 @@ class AuthorizeUserUnitTest extends TestCase
         $testObject = new AuthorizeUser;
         $response = $testObject->handle();
 
-        $this->assertEquals($user->toArray(), $response->toArray());
+        $this->assertEquals(
+            $user->toArray(),
+            $response->makeHidden('two_factor_confirmed_at')->toArray()
+        );
 
         Event::assertDispatched(Login::class);
     }
@@ -112,7 +117,8 @@ class AuthorizeUserUnitTest extends TestCase
                 $mock->token = Str::uuid();
                 $mock->principalName = $user->email;
                 $mock->mail = $user->email;
-            });
+            }
+        );
 
         $provider = $this->mock(
             'Laravel\Socialite\Contracts\Provider',
@@ -120,7 +126,8 @@ class AuthorizeUserUnitTest extends TestCase
                 $mock
                     ->shouldReceive('user')
                     ->andReturn($abstractUser);
-            });
+            }
+        );
 
         Socialite::shouldReceive('driver')
             ->with('azure')
@@ -168,7 +175,8 @@ class AuthorizeUserUnitTest extends TestCase
                 $mock->token = Str::uuid();
                 $mock->principalName = $user->email;
                 $mock->mail = $user->email;
-            });
+            }
+        );
 
         $provider = $this->mock(
             'Laravel\Socialite\Contracts\Provider',
@@ -176,7 +184,8 @@ class AuthorizeUserUnitTest extends TestCase
                 $mock
                     ->shouldReceive('user')
                     ->andReturn($abstractUser);
-            });
+            }
+        );
 
         Socialite::shouldReceive('driver')
             ->with('azure')

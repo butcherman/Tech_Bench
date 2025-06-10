@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\User\UserSettingsRequest;
 use App\Models\AppSettings;
-use App\Models\User;
 use App\Services\Admin\UserGlobalSettingsService;
 use App\Traits\UserRoleTrait;
 use Illuminate\Http\RedirectResponse;
@@ -41,14 +40,6 @@ class UserSettingsController extends Controller
     public function update(UserSettingsRequest $request): RedirectResponse
     {
         $this->svc->updateUserSettingsConfig($request->safe()->collect());
-
-        /**
-         * If the user just enabled 2FA, they will be prompted for a code
-         * immediately.
-         *
-         * Bypass this by manually adding verification to session
-         */
-        $request->session()->put('2fa_verified', true);
 
         Log::notice(
             'User Administration Settings updated by '.request()->user()->username,

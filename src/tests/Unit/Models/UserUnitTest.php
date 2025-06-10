@@ -272,6 +272,26 @@ class UserUnitTest extends TestCase
         Mail::assertQueued(VerificationCodeMail::class);
     }
 
+    public function test_validate_verification_code_pass(): void
+    {
+        UserVerificationCode::createQuietly([
+            'user_id' => $this->model->user_id,
+            'code' => '123456',
+        ]);
+
+        $this->assertTrue($this->model->validateVerificationCode(123456));
+    }
+
+    public function test_validate_verification_code_fail(): void
+    {
+        UserVerificationCode::createQuietly([
+            'user_id' => $this->model->user_id,
+            'code' => '123456',
+        ]);
+
+        $this->assertFalse($this->model->validateVerificationCode(654321));
+    }
+
     public function test_validate_device_token(): void
     {
         $token = DeviceToken::factory()

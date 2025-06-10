@@ -5,7 +5,7 @@ import ForgotPasswordForm from "@/Forms/Auth/ForgotPasswordForm.vue";
 import LogoImage from "@/Components/LogoImage.vue";
 import { ref } from "vue";
 
-const success = ref(false);
+const success = ref<boolean>(false);
 </script>
 
 <script lang="ts">

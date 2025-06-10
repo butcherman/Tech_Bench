@@ -155,6 +155,7 @@ return [
         'required' => (bool) env('REQUIRE_2FA', false),
         'allow_save_device' => (bool) true,
         'allow_via_email' => (bool) true,
+        'allow_via_authenticator' => (bool) true,
     ],
 
 ];

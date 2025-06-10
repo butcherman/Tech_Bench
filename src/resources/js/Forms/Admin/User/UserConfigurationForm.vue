@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import Collapse from "@/Components/_Base/Collapse.vue";
 import DatePicker from "@/Forms/_Base/DatePicker.vue";
 import SelectInput from "@/Forms/_Base/SelectInput.vue";
 import SwitchInput from "@/Forms/_Base/SwitchInput.vue";
@@ -6,7 +7,6 @@ import TextInput from "@/Forms/_Base/TextInput.vue";
 import VueForm from "@/Forms/_Base/VueForm.vue";
 import { object, string, boolean } from "yup";
 import { ref } from "vue";
-import { growShow, shrinkHide } from "@/Composables/animations.module";
 
 const props = defineProps<{
     autoLogoutTimer: number;
@@ -33,6 +33,17 @@ const schema = object({
     twoFa: object({
         required: boolean().required(),
         allow_save_device: boolean().required(),
+        allow_via_email: boolean()
+            .required()
+            .when(["required", "allow_via_authenticator"], {
+                is: (required: boolean, app: boolean): boolean =>
+                    required && !app,
+                then: (schema) =>
+                    schema.oneOf(
+                        [true],
+                        "At least one Authenticator method must be selected"
+                    ),
+            }),
     }),
     oath: object({
         allow_login: boolean().required(),
@@ -86,14 +97,23 @@ const schema = object({
                     label="Require Two-Factor Authentication"
                     @change="require2Fa = !require2Fa"
                 />
-                <Transition @enter="growShow" @leave="shrinkHide">
+                <Collapse :show="require2Fa">
                     <SwitchInput
-                        v-show="require2Fa"
                         id="save-device"
                         name="twoFa.allow_save_device"
                         label="Allow Users to Save Devices for Future Login"
                     />
-                </Transition>
+                    <SwitchInput
+                        id="allow-via-email"
+                        name="twoFa.allow_via_email"
+                        label="Allow Email as Two Factor Method"
+                    />
+                    <SwitchInput
+                        id="allow-via-authenticator"
+                        name="twoFa.allow_via_authenticator"
+                        label="Allow Authenticator App as Two Factor Method"
+                    />
+                </Collapse>
             </div>
         </fieldset>
         <fieldset class="border mb-3">
@@ -105,58 +125,56 @@ const schema = object({
                     label="Allow Office 365 Login"
                     @change="allowOath = !allowOath"
                 />
-                <Transition @enter="growShow" @leave="shrinkHide">
-                    <div v-show="allowOath">
-                        <SwitchInput
-                            id="oath_register"
-                            name="oath.allow_register"
-                            class="w-100"
-                            label="Allow anyone in my organization to login"
-                        />
-                        <SelectInput
-                            id="default_role_id"
-                            name="oath.default_role_id"
-                            label="User Role When Creating New User"
-                            :list="roleList"
-                            text-field="name"
-                            value-field="role_id"
-                        />
-                        <SwitchInput
-                            id="two_fa_bypass"
-                            name="oath.allow_bypass_2fa"
-                            class="w-full"
-                            label="Allow Single Sign On Users to Bypass Two-Factor Authentication"
-                        />
-                        <TextInput
-                            id="azure-tenant-id"
-                            name="oath.tenant"
-                            label="Azure Tenant ID"
-                        />
-                        <TextInput
-                            id="azure-client-id"
-                            name="oath.client_id"
-                            label="Azure Client ID"
-                        />
-                        <TextInput
-                            id="azure-client-secret"
-                            type="password"
-                            name="oath.client_secret"
-                            label="Azure Client Secret"
-                        />
-                        <DatePicker
-                            id="azure-secret-expiration"
-                            name="oath.secret_expires"
-                            label="Date Client Secret Expires"
-                        />
-                        <TextInput
-                            id="azure-redirect"
-                            type="url"
-                            name="oath.redirect"
-                            label="Azure Redirect URI"
-                            disabled
-                        />
-                    </div>
-                </Transition>
+                <Collapse :show="allowOath">
+                    <SwitchInput
+                        id="oath_register"
+                        name="oath.allow_register"
+                        class="w-100"
+                        label="Allow anyone in my organization to login"
+                    />
+                    <SelectInput
+                        id="default_role_id"
+                        name="oath.default_role_id"
+                        label="User Role When Creating New User"
+                        :list="roleList"
+                        text-field="name"
+                        value-field="role_id"
+                    />
+                    <SwitchInput
+                        id="two_fa_bypass"
+                        name="oath.allow_bypass_2fa"
+                        class="w-full"
+                        label="Allow Single Sign On Users to Bypass Two-Factor Authentication"
+                    />
+                    <TextInput
+                        id="azure-tenant-id"
+                        name="oath.tenant"
+                        label="Azure Tenant ID"
+                    />
+                    <TextInput
+                        id="azure-client-id"
+                        name="oath.client_id"
+                        label="Azure Client ID"
+                    />
+                    <TextInput
+                        id="azure-client-secret"
+                        type="password"
+                        name="oath.client_secret"
+                        label="Azure Client Secret"
+                    />
+                    <DatePicker
+                        id="azure-secret-expiration"
+                        name="oath.secret_expires"
+                        label="Date Client Secret Expires"
+                    />
+                    <TextInput
+                        id="azure-redirect"
+                        type="url"
+                        name="oath.redirect"
+                        label="Azure Redirect URI"
+                        disabled
+                    />
+                </Collapse>
             </div>
         </fieldset>
     </VueForm>

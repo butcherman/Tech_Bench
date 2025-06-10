@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Auth;
 
-use App\Mail\Auth\VerificationCodeMail;
 use App\Models\DeviceToken;
 use App\Models\User;
 use Carbon\Carbon;
@@ -10,11 +9,16 @@ use Illuminate\Auth\Events\Failed;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
 class _LoginTest extends TestCase
 {
+    /*
+    |---------------------------------------------------------------------------
+    | Test Logging into the Tech Bench
+    |---------------------------------------------------------------------------
+    */
+
     // Verify the a valid user can log in with username
     public function test_valid_login_with_username(): void
     {
@@ -192,65 +196,76 @@ class _LoginTest extends TestCase
     // Make sure that the user is redirected to the 2fa page if enabled
     public function test_redirect_two_fa(): void
     {
-        Mail::fake();
-
         config(['auth.twoFa.required' => true]);
+        config(['auth.twoFa.allow_save_device' => true]);
+        config(['auth.twoFa.allow_via_authenticator' => false]);
+        config(['auth.twoFa.allow_via_email' => true]);
 
         /** @var User $user */
         $user = User::factory()->createQuietly();
 
-        $response = $this->actingAs($user)->get(route('dashboard'));
-        $response->assertStatus(302);
-        $response->assertRedirect(route('2fa.show'));
-
-        $this->assertDatabaseHas('user_verification_codes', [
-            'user_id' => $user->user_id,
+        $response = $this->post(route('login'), [
+            'username' => $user->username,
+            'password' => 'password',
+            'remember' => false,
         ]);
 
-        Mail::assertQueued(VerificationCodeMail::class);
+        $response->assertStatus(302)
+            ->assertRedirect(route('two-factor.login'))
+            ->assertSessionHas('login', [
+                'id' => $user->user_id,
+                'remember' => false,
+            ]);
     }
 
     // Make sure that if the password is expired, user is redirected to 2fa page first (if enabled)
     public function test_redirect_two_fa_with_password_expired(): void
     {
-        Mail::fake();
-
         config(['auth.twoFa.required' => true]);
+        config(['auth.twoFa.allow_save_device' => true]);
+        config(['auth.twoFa.allow_via_authenticator' => false]);
+        config(['auth.twoFa.allow_via_email' => true]);
 
         /** @var User $user */
         $user = User::factory()->createQuietly([
             'password_expires' => Carbon::yesterday(),
         ]);
 
-        $response = $this->actingAs($user)->get(route('dashboard'));
-
-        $response->assertStatus(302)
-            ->assertRedirect(route('2fa.show'));
-
-        $this->assertDatabaseHas('user_verification_codes', [
-            'user_id' => $user->user_id,
+        $response = $this->post(route('login'), [
+            'username' => $user->username,
+            'password' => 'password',
+            'remember' => false,
         ]);
 
-        Mail::assertQueued(VerificationCodeMail::class);
+        $response->assertStatus(302)
+            ->assertRedirect(route('two-factor.login'))
+            ->assertSessionHas('login', [
+                'id' => $user->user_id,
+                'remember' => false,
+            ]);
     }
 
     // Make sure that if the user has a remember device token, it will bypass the 2fa page
     public function test_redirect_with_valid_device_token(): void
     {
-        Mail::fake();
-
         config(['auth.twoFa.required' => true]);
+        config(['auth.twoFa.allow_save_device' => true]);
+        config(['auth.twoFa.allow_via_authenticator' => false]);
+        config(['auth.twoFa.allow_via_email' => true]);
 
         /** @var User $user */
         $user = User::factory()->createQuietly();
         $deviceToken = DeviceToken::factory()
             ->create(['user_id' => $user->user_id]);
 
-        $response = $this->actingAs($user)
-            ->withCookie('remember_device', $deviceToken->token)
-            ->get(route('dashboard'));
-        $response->assertSuccessful();
+        $response = $this->withCookie('remember_device', $deviceToken->token)
+            ->post(route('login'), [
+                'username' => $user->username,
+                'password' => 'password',
+                'remember' => false,
+            ]);
 
-        Mail::assertNotQueued(VerificationCodeMail::class);
+        $response->assertStatus(302)
+            ->assertRedirect(route('dashboard'));
     }
 }

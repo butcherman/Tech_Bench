@@ -149,9 +149,27 @@ return [
         Features::updatePasswords(),
         Features::twoFactorAuthentication([
             'confirm' => true,
-            'confirmPassword' => true,
+            'confirmPassword' => false,
             // 'window' => 0,
         ]),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Pipelines
+    |--------------------------------------------------------------------------
+    |
+    | Custom Logic added to allow both Authenticator App and Email as possible
+    | two Factor options.
+    |
+    */
+
+    'pipelines' => [
+        'login' => [
+            App\Actions\Fortify\RedirectIfTwoFactorAuthenticatable::class,
+            Laravel\Fortify\Actions\AttemptToAuthenticate::class,
+            Laravel\Fortify\Actions\PrepareAuthenticatedSession::class,
+        ],
     ],
 
 ];

@@ -40,12 +40,13 @@ class UserSettingsTest extends TestCase
         $response = $this->actingAs($user)
             ->get(route('admin.user.user-settings.edit'));
         $response->assertSuccessful()
-            ->assertInertia(fn (Assert $page) => $page
-                ->component('Admin/User/UserSettings')
-                ->has('auto-logout-timer')
-                ->has('two-fa')
-                ->has('oath')
-                ->has('role-list')
+            ->assertInertia(
+                fn (Assert $page) => $page
+                    ->component('Admin/User/UserSettings')
+                    ->has('auto-logout-timer')
+                    ->has('two-fa')
+                    ->has('oath')
+                    ->has('role-list')
             );
     }
 
@@ -61,6 +62,8 @@ class UserSettingsTest extends TestCase
             'twoFa' => [
                 'required' => false,
                 'allow_save_device' => false,
+                'allow_via_email' => true,
+                'allow_via_authenticator' => false,
             ],
             'oath' => [
                 'allow_login' => true,
@@ -91,6 +94,8 @@ class UserSettingsTest extends TestCase
             'twoFa' => [
                 'required' => false,
                 'allow_save_device' => false,
+                'allow_via_email' => true,
+                'allow_via_authenticator' => false,
             ],
             'oath' => [
                 'allow_login' => true,
@@ -120,6 +125,8 @@ class UserSettingsTest extends TestCase
             'twoFa' => [
                 'required' => true,
                 'allow_save_device' => false,
+                'allow_via_email' => true,
+                'allow_via_authenticator' => false,
             ],
             'oath' => [
                 'allow_login' => true,
@@ -194,6 +201,8 @@ class UserSettingsTest extends TestCase
             'twoFa' => [
                 'required' => true,
                 'allow_save_device' => false,
+                'allow_via_email' => true,
+                'allow_via_authenticator' => false,
             ],
             'oath' => [
                 'allow_login' => true,

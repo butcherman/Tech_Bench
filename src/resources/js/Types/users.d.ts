@@ -12,6 +12,7 @@ type user = {
     updated_at: string;
     deleted_at: string;
     user_role: userRole;
+    two_factor_confirmed_at: string | null;
 };
 
 type userSettings = {

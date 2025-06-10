@@ -37,8 +37,10 @@ const {
             v-model="value"
             class="flex justify-center"
             size="large"
+            :autofocus="focus"
             :input-id="id"
             :length="length ?? 4"
+            integer-only
         />
         <Message
             size="small"

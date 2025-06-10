@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Pennant\Concerns\HasFeatures;
 
 #[ObservedBy([UserObserver::class])]
@@ -23,6 +24,7 @@ class User extends Authenticatable
     use HasFeatures;
     use Notifiable;
     use SoftDeletes;
+    use TwoFactorAuthenticatable;
 
     /** @var string */
     protected $primaryKey = 'user_id';
@@ -41,6 +43,9 @@ class User extends Authenticatable
         'updated_at',
         'user_id',
         'UserRole',
+        'two_factor_secret',
+        'two_factor_recovery_codes',
+        'two_factor_via',
     ];
 
     /** @var array<string, string> */
@@ -228,8 +233,18 @@ class User extends Authenticatable
     {
         UserVerificationCode::updateOrCreate(
             ['user_id' => $this->user_id],
-            ['code' => rand(1000, 9999)],
+            ['code' => rand(100000, 999999)],
         );
+    }
+
+    /**
+     * Validate the Verification Code
+     */
+    public function validateVerificationCode(string $code): bool
+    {
+        $storedCode = $this->UserVerificationCode->code;
+
+        return $storedCode === $code;
     }
 
     /**

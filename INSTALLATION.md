@@ -68,3 +68,9 @@ Visit the website URL provided in the .env file.  The initial login will be:
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Password: ***password***
 
 You will be forced to change this password on the first login.
+
+### Accessing The Tech Bench
+
+In order to access the Tech Bench from outside your firewall, you will need to
+open ports in your firewall.  TCP Ports 80 and 443 need to be open for http and
+https access. Note: All http traffic will be redirected to https traffic.

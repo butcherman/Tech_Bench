@@ -31,11 +31,11 @@ class UserSettingsTest extends TestCase
             ->get(route('user.user-settings.show'));
 
         $response->assertSuccessful()
-            ->assertInertia(fn (Assert $page) => $page
-                ->component('User/Settings')
-                ->has('allowSaveDevice')
-                ->has('devices')
-                ->has('settings')
+            ->assertInertia(
+                fn (Assert $page) => $page
+                    ->component('User/Settings')
+                    ->has('two-fa')
+                    ->has('settings')
             );
     }
 }

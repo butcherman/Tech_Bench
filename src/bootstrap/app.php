@@ -40,7 +40,7 @@ return Application::configure(basePath: dirname(__DIR__))
         ])->appendToGroup('auth.secure', [
             Authenticate::class,
             CheckForInit::class,
-            CheckForTwoFactor::class,
+            // CheckForTwoFactor::class,
             CheckPasswordExpiration::class,
             EncryptHistoryMiddleware::class,
         ])->alias([
