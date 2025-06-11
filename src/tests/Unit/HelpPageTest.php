@@ -44,9 +44,6 @@ class HelpPageTest extends TestCase
 
         'admin.tech-tips.*',
         'admin.links.*',
-        'admin.logo.*',
-        'admin.features.edit',
-        'admin.security.*',
         'admin.file-types.*',
         'admin.phone-types.*',
     ];
