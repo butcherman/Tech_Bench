@@ -20,35 +20,29 @@ class HelpPageTest extends TestCase
         'debugbar.*',
         'download',
         'dusk.*',
+        'guest-link.*',
         'home',
         'horizon.*',
         'init.*',
         'initialize',
-
         'login',
-        'password.*',
-        'two-factor.*',
-        'telescope',
-        'guest-link.*',
-        'publicTips.*',
-        'storage.local',
-        'maint.logs.download',
         'maint.backups.download',
         'maint.backups.run-backup',
+        'maint.logs.download',
+        'password.*',
+        'publicTips.*',
+        'storage.local',
+        'telescope',
+        'two-factor.*',
 
         // TMP Removals
         'customers.*',
-        'equipment.*',
-        'equipment-data.*',
         'links.*',
         'user.*',
         'reports.*',
         'tech-tips.*',
-
         'admin.tech-tips.*',
         'admin.links.*',
-        'admin.file-types.*',
-        'admin.phone-types.*',
     ];
 
     /*
