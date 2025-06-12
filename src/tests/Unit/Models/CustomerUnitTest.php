@@ -150,10 +150,10 @@ class CustomerUnitTest extends TestCase
         $data = CustomerFile::factory()
             ->create(['cust_id' => $this->model->cust_id]);
         $this->assertEquals(
-            $data->makeHidden(['Customer', 'Sites'])->toArray(),
+            $data->makeHidden(['Customer', 'Sites', 'FileUpload'])->toArray(),
             $this->model
                 ->Files[0]
-                ->makeHidden(['Sites'])
+                ->makeHidden(['Sites', 'FileUpload'])
                 ->toArray()
         );
     }
