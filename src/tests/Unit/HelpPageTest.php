@@ -36,6 +36,7 @@ class HelpPageTest extends TestCase
         'two-factor.*',
 
         // TMP Removals
+        // TODO - Finish Adding Help Pages
         'customers.*',
         'links.*',
         'user.*',
@@ -75,7 +76,7 @@ class HelpPageTest extends TestCase
             $path = str_replace('.', DIRECTORY_SEPARATOR, $route);
 
             $this->assertFileExists(
-                resource_path('js/Help/Routes/' . $path . '.vue')
+                resource_path('js/Help/Routes/'.$path.'.vue')
             );
         }
     }
