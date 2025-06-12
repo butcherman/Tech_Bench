@@ -4,7 +4,7 @@ import HelpLoader from "@/Help/HelpLoader.vue";
 import HelpError from "@/Help/HelpError.vue";
 import { computed, ref, defineAsyncComponent, useTemplateRef } from "vue";
 import { Drawer } from "primevue";
-import { router } from "@inertiajs/vue3";
+import { router, usePage } from "@inertiajs/vue3";
 import type { DefineComponent } from "vue";
 
 type helpComponent = {
@@ -12,6 +12,7 @@ type helpComponent = {
 } & DefineComponent;
 
 const component = useTemplateRef<helpComponent>("help-component");
+const props = computed(() => usePage().props);
 
 /**
  * Show/Hide Help page
@@ -42,6 +43,8 @@ const HelpComponent = computed(() => {
     let helpPath = helpRoute.value?.replace(/\./g, "/");
     // Get a listing of files in the Help File folder
     let resolve = import.meta.glob("../../Help/Routes/**/*.vue");
+
+    console.log(helpPath);
 
     // If the Component is not found, return the Error Component
     if (!resolve[`../../Help/Routes/${helpPath}.vue`]) {
@@ -94,7 +97,7 @@ router.on("finish", () => {
             pt:header:class="border-b"
         >
             <div class="h-full w-full">
-                <HelpComponent ref="help-component" />
+                <HelpComponent ref="help-component" v-bind="props" />
             </div>
             &nbsp;
         </Drawer>
