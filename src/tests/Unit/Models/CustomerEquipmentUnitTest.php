@@ -106,7 +106,7 @@ class CustomerEquipmentUnitTest extends TestCase
             $data->makeHidden('Customer')->toArray(),
             $this->model
                 ->CustomerFile[0]
-                ->makeHidden(['Sites'])
+                ->makeHidden(['Sites', 'FileUpload'])
                 ->toArray()
         );
     }
@@ -223,6 +223,32 @@ class CustomerEquipmentUnitTest extends TestCase
         $testSite->SiteNote()->attach($ignoredNote);
 
         $notes = $this->model->getNotes();
+
+        $this->assertCount(7, $notes);
+    }
+
+    public function test_get_files(): void
+    {
+        CustomerFile::factory()
+            ->count(2)
+            ->create([
+                'cust_id' => $this->model->cust_id,
+                'cust_equip_id' => $this->model->cust_equip_id,
+            ]);
+
+        CustomerFile::factory()
+            ->count(5)
+            ->create(['cust_id' => $this->model->cust_id]);
+
+        $testSite = CustomerSite::factory()
+            ->create(['cust_id' => $this->model->cust_id]);
+
+        $ignoredFile = CustomerFile::factory()
+            ->create(['cust_id' => $this->model->cust_id]);
+
+        $testSite->SiteFile()->attach($ignoredFile);
+
+        $notes = $this->model->getFiles();
 
         $this->assertCount(7, $notes);
     }

@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Prunable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Log;
 
@@ -70,7 +71,7 @@ class CustomerEquipment extends Model
     public function equipName(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->EquipmentType->name
+            get: fn() => $this->EquipmentType->name
         );
     }
 
@@ -140,8 +141,8 @@ class CustomerEquipment extends Model
         $allChannels = array_merge(
             $siteChannels,
             [
-                new PrivateChannel('customer.'.$this->Customer->slug),
-                new PrivateChannel('customer-equipment.'.$this->cust_equip_id),
+                new PrivateChannel('customer.' . $this->Customer->slug),
+                new PrivateChannel('customer-equipment.' . $this->cust_equip_id),
             ]
         );
 
@@ -194,5 +195,19 @@ class CustomerEquipment extends Model
             ->get();
 
         return array_merge($equipNotes->toArray(), $otherNotes->toArray());
+    }
+
+    /**
+     * Combine all of the equipment files, and General Files for the customer
+     */
+    public function getFiles(): array
+    {
+        $equipFiles = $this->CustomerFile;
+        $otherFiles = CustomerFile::where('cust_id', $this->cust_id)
+            ->where('cust_equip_id', null)
+            ->doesntHave('Sites')
+            ->get();
+
+        return array_merge($equipFiles->toArray(), $otherFiles->toArray());
     }
 }

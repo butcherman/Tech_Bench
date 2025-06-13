@@ -113,13 +113,13 @@ defineExpose({ show, hide, isOpen: readonly(modalOpen) });
                                 v-if="!hideClose"
                                 class="absolute top-2 right-4 text-muted pointer"
                             >
-                                <button @click.stop="hide">
+                                <button class="pointer" @click.stop="hide">
                                     <fa-icon icon="close" />
                                 </button>
                             </div>
                             <div
-                                v-if="$slots.header || title"
-                                class="border-b mb-3"
+                                class="mb-3"
+                                :class="{ 'border-b': $slots.header || title }"
                             >
                                 <slot name="header">
                                     <h5 class="text-muted">{{ title }}</h5>
