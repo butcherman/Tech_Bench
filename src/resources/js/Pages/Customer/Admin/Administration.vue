@@ -3,11 +3,12 @@ import AppLayout from "@/Layouts/App/AppLayout.vue";
 import Card from "@/Components/_Base/Card.vue";
 import CustomerSettingsForm from "@/Forms/Customer/CustomerSettingsForm.vue";
 
-defineProps<{
+const props = defineProps<{
     select_id: boolean;
     update_slug: boolean;
     default_state: string;
     auto_purge: boolean;
+    allow_vpn_data: boolean;
 }>();
 </script>
 
@@ -18,12 +19,7 @@ export default { layout: AppLayout };
 <template>
     <div class="flex justify-center">
         <Card class="tb-card">
-            <CustomerSettingsForm
-                :select_id="select_id"
-                :update_slug="update_slug"
-                :default_state="default_state"
-                :auto_purge="auto_purge"
-            />
+            <CustomerSettingsForm v-bind="props" />
         </Card>
     </div>
 </template>

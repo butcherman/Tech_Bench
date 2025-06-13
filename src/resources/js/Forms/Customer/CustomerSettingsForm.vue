@@ -10,6 +10,7 @@ const props = defineProps<{
     update_slug: boolean;
     default_state: string;
     auto_purge: boolean;
+    allow_vpn_data: boolean;
 }>();
 
 /*
@@ -22,6 +23,7 @@ const initValues = {
     update_slug: props.update_slug,
     default_state: props.default_state,
     auto_purge: props.auto_purge,
+    allow_vpn_data: props.allow_vpn_data,
 };
 
 const schema = object({
@@ -29,6 +31,7 @@ const schema = object({
     update_slug: boolean().required(),
     default_state: string().required(),
     auto_purge: boolean().required(),
+    allow_vpn_data: boolean().required(),
 });
 </script>
 
@@ -44,8 +47,14 @@ const schema = object({
         <SwitchInput
             id="select_id"
             name="select_id"
-            label="Allow To Manually Input Customer ID when Creating New Customer"
+            label="Allow Users To Manually Input Customer ID when Creating New Customer"
             help="When creating a customer, should the user be able to manually enter the Customer ID?"
+        />
+        <SwitchInput
+            id="allow-vpn-data"
+            name="allow_vpn_data"
+            label="Allow VPN Data for Customer Profile"
+            help="Create a special section to show information for connecting to customer remotely via VPN Connection"
         />
         <SwitchInput
             id="auto_purge"
