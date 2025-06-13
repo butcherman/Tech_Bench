@@ -35,4 +35,6 @@ class DeviceToken extends Model
             'updated_at' => 'datetime:M d, Y',
         ];
     }
+
+    // TODO - Prune models after XX days.
 }

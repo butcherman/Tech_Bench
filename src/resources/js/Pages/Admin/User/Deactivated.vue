@@ -60,15 +60,7 @@ export default { layout: AppLayout };
 
 <template>
     <div class="flex justify-center">
-        <Card class="tb-card-lg overflow-x-auto" title="User Administration">
-            <template #append-title>
-                <AddButton
-                    text="New User"
-                    :href="$route('admin.user.create')"
-                    size="small"
-                    pill
-                />
-            </template>
+        <Card class="tb-card-lg overflow-x-auto" title="Disabled Users">
             <Deferred data="user-list">
                 <template #fallback>
                     <div class="flex justify-center">

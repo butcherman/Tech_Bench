@@ -142,10 +142,10 @@ Route::middleware('auth.secure')->prefix('administration')->name('admin.')->grou
     | /administration/file-types
     |---------------------------------------------------------------------------
     */
-    Route::resource('file-types', CustomerFileTypesController::class)
+    Route::apiResource('file-types', CustomerFileTypesController::class)
         ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
             $breadcrumbs->index('Uploaded File Types', 'admin.index');
-        })->except(['edit', 'show']);
+        })->except(['show']);
 
     /*
     |---------------------------------------------------------------------------
@@ -153,8 +153,8 @@ Route::middleware('auth.secure')->prefix('administration')->name('admin.')->grou
     | /administration/phone-types
     |---------------------------------------------------------------------------
     */
-    Route::resource('phone-types', ContactPhoneTypesController::class)
+    Route::apiResource('phone-types', ContactPhoneTypesController::class)
         ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
             $breadcrumbs->index('Contact Phone Types', 'admin.index');
-        })->except(['edit', 'show', 'create']);
+        })->except(['show']);
 });

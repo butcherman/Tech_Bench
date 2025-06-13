@@ -8,7 +8,6 @@ defineProps<{
     nightly_cleanup: boolean;
     encryption: boolean;
     password: string | null;
-    mail_to: string;
 }>();
 </script>
 
@@ -24,7 +23,6 @@ export default { layout: AppLayout };
                 :nightly_cleanup="nightly_cleanup"
                 :encryption="encryption"
                 :password="password"
-                :mail_to="mail_to"
             />
         </Card>
     </div>
