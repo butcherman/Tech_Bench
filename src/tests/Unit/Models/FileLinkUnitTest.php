@@ -109,8 +109,8 @@ class FileLinkUnitTest extends TestCase
         $this->model->fresh();
 
         $this->assertEquals(
-            $customer->toArray(),
-            $this->model->Customer->toArray()
+            $customer->makeHidden(['vpn_id'])->toArray(),
+            $this->model->Customer->makeHidden(['vpn_id'])->toArray()
         );
     }
 

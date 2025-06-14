@@ -5,13 +5,19 @@ namespace App\Http\Controllers\Customer;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customer\CustomerVpnRequest;
 use App\Models\Customer;
+use App\Models\CustomerEquipment;
 use App\Models\CustomerVpn;
 use App\Services\Customer\CustomerEquipmentService;
 use Illuminate\Http\RedirectResponse;
 
 class CustomerVpnController extends Controller
 {
-    public function __construct(protected CustomerEquipmentService $svc) {}
+    public function __construct(protected CustomerEquipmentService $svc)
+    {
+        if (! config('customer.allow_vpn_data')) {
+            abort(403);
+        }
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -38,6 +44,8 @@ class CustomerVpnController extends Controller
      */
     public function destroy(Customer $customer, CustomerVpn $vpn_datum): RedirectResponse
     {
+        $this->authorize('delete', CustomerEquipment::class);
+
         $this->svc->destroyCustomerVpnData($vpn_datum, $customer);
 
         return back()->with('warning', 'VPN Data Deleted');

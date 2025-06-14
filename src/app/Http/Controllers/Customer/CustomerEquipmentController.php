@@ -24,19 +24,19 @@ class CustomerEquipmentController extends Controller
     public function index(Request $request, Customer $customer): Response
     {
         return Inertia::render('Customer/Equipment/Index', [
-            'alerts' => fn() => $customer->Alerts,
-            'allowVpn' => fn() => config('customer.allow_vpn_data'),
-            'availableEquipment' => fn() => CacheData::equipmentCategorySelectBox(),
-            'customer' => fn() => $customer,
-            'permissions' => fn() => UserPermissions::customerPermissions($request->user()),
-            'siteList' => fn() => $customer->Sites->makeVisible(['href']),
-            'vpnData' => fn() => $customer->CustomerVpn,
+            'alerts' => fn () => $customer->Alerts,
+            'allowVpn' => fn () => config('customer.allow_vpn_data'),
+            'availableEquipment' => fn () => CacheData::equipmentCategorySelectBox(),
+            'customer' => fn () => $customer,
+            'permissions' => fn () => UserPermissions::customerPermissions($request->user()),
+            'siteList' => fn () => $customer->Sites->makeVisible(['href']),
+            'vpnData' => fn () => $customer->CustomerVpn,
 
             /**
              * Deferred Props
              */
             'groupedEquipmentList' => Inertia::defer(
-                fn() => $customer->Equipment
+                fn () => $customer->Equipment
                     ->load('Sites')
                     ->groupBy('equip_name')
                     ->chunk(25)
@@ -63,16 +63,16 @@ class CustomerEquipmentController extends Controller
     public function show(Request $request, Customer $customer, CustomerEquipment $equipment): Response
     {
         return Inertia::render('Customer/Equipment/Show', [
-            'alerts' => fn() => $customer->Alerts,
-            'allowVpn' => fn() => config('customer.allow_vpn_data'),
-            'permissions' => fn() => UserPermissions::customerPermissions($request->user()),
-            'customer' => fn() => $customer,
-            'equipment' => fn() => $equipment,
-            'siteList' => fn() => $equipment->Sites->makeVisible(['href']),
-            'equipment-data' => fn() => $equipment->CustomerEquipmentData,
-            'noteList' => fn() => $equipment->getNotes(),
-            'fileList' => fn() => $equipment->getFiles(),
-            'vpnData' => fn() => $customer->CustomerVpn,
+            'alerts' => fn () => $customer->Alerts,
+            'allowVpn' => fn () => config('customer.allow_vpn_data'),
+            'permissions' => fn () => UserPermissions::customerPermissions($request->user()),
+            'customer' => fn () => $customer,
+            'equipment' => fn () => $equipment,
+            'siteList' => fn () => $equipment->Sites->makeVisible(['href']),
+            'equipment-data' => fn () => $equipment->CustomerEquipmentData,
+            'noteList' => fn () => $equipment->getNotes(),
+            'fileList' => fn () => $equipment->getFiles(),
+            'vpnData' => fn () => $customer->CustomerVpn,
         ]);
     }
 

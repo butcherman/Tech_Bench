@@ -38,8 +38,8 @@ class CustomerController extends Controller
         $this->authorize('create', Customer::class);
 
         return Inertia::render('Customer/Create', [
-            'select-id' => fn() => config('customer.select_id'),
-            'default-state' => fn() => config('customer.default_state'),
+            'select-id' => fn () => config('customer.select_id'),
+            'default-state' => fn () => config('customer.default_state'),
         ]);
     }
 
@@ -65,64 +65,64 @@ class CustomerController extends Controller
 
         if ($customer->site_count === 1) {
             return Inertia::render('Customer/Site/Show', [
-                'alerts' => fn() => $customer->Alerts,
-                'allowShareVpn' => fn() => config('customer.allow_share_vpn_data'),
-                'allowVpn' => fn() => config('customer.allow_vpn_data'),
-                'availableEquipment' => fn() => CacheData::equipmentCategorySelectBox(),
-                'customer' => fn() => $customer,
-                'currentSite' => fn() => $customer->Sites[0],
-                'isFav' => fn() => $customer->isFav($request->user()),
-                'permissions' => fn() => UserPermissions::customerPermissions(
+                'alerts' => fn () => $customer->Alerts,
+                'allowShareVpn' => fn () => config('customer.allow_share_vpn_data'),
+                'allowVpn' => fn () => config('customer.allow_vpn_data'),
+                'availableEquipment' => fn () => CacheData::equipmentCategorySelectBox(),
+                'customer' => fn () => $customer,
+                'currentSite' => fn () => $customer->Sites[0],
+                'isFav' => fn () => $customer->isFav($request->user()),
+                'permissions' => fn () => UserPermissions::customerPermissions(
                     $request->user()
                 ),
-                'phoneTypes' => fn() => CacheData::phoneTypes(),
-                'fileTypes' => fn() => CacheData::fileTypes(),
+                'phoneTypes' => fn () => CacheData::phoneTypes(),
+                'fileTypes' => fn () => CacheData::fileTypes(),
 
                 /**
                  * Deferred Props
                  */
-                'contactList' => Inertia::defer(fn() => $customer->Contacts),
+                'contactList' => Inertia::defer(fn () => $customer->Contacts),
                 'groupedEquipmentList' => Inertia::defer(
-                    fn() => $customer->Equipment
+                    fn () => $customer->Equipment
                         ->load('Sites')
                         ->groupBy('equip_name')
                         ->chunk(5)
                 ),
-                'equipmentList' => Inertia::defer(fn() => $customer->Equipment->load('Sites')),
-                'noteList' => Inertia::defer(fn() => $customer->Notes),
-                'fileList' => Inertia::defer(fn() => $customer->Files->append('href')),
-                'vpnData' => Inertia::defer(fn() => $customer->CustomerVpn),
+                'equipmentList' => Inertia::defer(fn () => $customer->Equipment->load('Sites')),
+                'noteList' => Inertia::defer(fn () => $customer->Notes),
+                'fileList' => Inertia::defer(fn () => $customer->Files->append('href')),
+                'vpnData' => Inertia::defer(fn () => $customer->CustomerVpn),
             ]);
         }
 
         return Inertia::render('Customer/Show', [
-            'alerts' => fn() => $customer->Alerts,
-            'allowShareVpn' => fn() => config('customer.allow_share_vpn_data'),
-            'allowVpn' => fn() => config('customer.allow_vpn_data'),
-            'availableEquipment' => fn() => CacheData::equipmentCategorySelectBox(),
-            'customer' => fn() => $customer,
-            'isFav' => fn() => $customer->isFav($request->user()),
-            'permissions' => fn() => UserPermissions::customerPermissions(
+            'alerts' => fn () => $customer->Alerts,
+            'allowShareVpn' => fn () => config('customer.allow_share_vpn_data'),
+            'allowVpn' => fn () => config('customer.allow_vpn_data'),
+            'availableEquipment' => fn () => CacheData::equipmentCategorySelectBox(),
+            'customer' => fn () => $customer,
+            'isFav' => fn () => $customer->isFav($request->user()),
+            'permissions' => fn () => UserPermissions::customerPermissions(
                 $request->user()
             ),
-            'phoneTypes' => fn() => CacheData::phoneTypes(),
-            'fileTypes' => fn() => CacheData::fileTypes(),
-            'siteList' => fn() => $customer->Sites->makeVisible(['href']),
+            'phoneTypes' => fn () => CacheData::phoneTypes(),
+            'fileTypes' => fn () => CacheData::fileTypes(),
+            'siteList' => fn () => $customer->Sites->makeVisible(['href']),
 
             /**
              * Deferred Props
              */
-            'contactList' => Inertia::defer(fn() => $customer->Contacts),
+            'contactList' => Inertia::defer(fn () => $customer->Contacts),
             'groupedEquipmentList' => Inertia::defer(
-                fn() => $customer->Equipment
+                fn () => $customer->Equipment
                     ->load('Sites')
                     ->groupBy('equip_name')
                     ->chunk(5)
             ),
-            'equipmentList' => Inertia::defer(fn() => $customer->Equipment->load('Sites')),
-            'noteList' => Inertia::defer(fn() => $customer->Notes),
-            'fileList' => Inertia::defer(fn() => $customer->Files->append('href')),
-            'vpnData' => Inertia::defer(fn() => $customer->CustomerVpn),
+            'equipmentList' => Inertia::defer(fn () => $customer->Equipment->load('Sites')),
+            'noteList' => Inertia::defer(fn () => $customer->Notes),
+            'fileList' => Inertia::defer(fn () => $customer->Files->append('href')),
+            'vpnData' => Inertia::defer(fn () => $customer->CustomerVpn),
         ]);
     }
 
@@ -134,10 +134,10 @@ class CustomerController extends Controller
         $this->authorize('update', $customer);
 
         return Inertia::render('Customer/Edit', [
-            'selectId' => fn() => config('customer.select_id'),
-            'default-state' => fn() => config('customer.default_state'),
-            'customer' => fn() => $customer,
-            'siteList' => fn() => $customer->Sites,
+            'selectId' => fn () => config('customer.select_id'),
+            'default-state' => fn () => config('customer.default_state'),
+            'customer' => fn () => $customer,
+            'siteList' => fn () => $customer->Sites,
         ]);
     }
 
@@ -178,7 +178,7 @@ class CustomerController extends Controller
 
         $svc->restoreCustomer($customer);
 
-        Log::notice('Customer ' . $customer->name . ' has been restored');
+        Log::notice('Customer '.$customer->name.' has been restored');
 
         return back()
             ->with('success', __('cust.restored', ['name' => $customer->name]));

@@ -63,13 +63,19 @@ class CustomerEquipmentService
         $equipment->restore();
     }
 
+    /*
+    |---------------------------------------------------------------------------
+    | Customer VPN Data
+    |---------------------------------------------------------------------------
+    */
+
     /**
      * Create Customer VPN Data
      */
     public function createCustomerVpnData(Collection $requestData, Customer $customer): CustomerVpn
     {
         $vpnData = CustomerVpn::create($requestData->toArray());
-        $customer->CustomerVpn()->associate($vpnData)->save();
+        $this->shareCustomerVpnData($vpnData, $customer);
 
         return $vpnData;
     }

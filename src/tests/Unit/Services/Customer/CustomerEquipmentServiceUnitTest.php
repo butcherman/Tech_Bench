@@ -5,6 +5,7 @@ namespace Tests\Unit\Services\Customer;
 use App\Models\Customer;
 use App\Models\CustomerEquipment;
 use App\Models\CustomerSite;
+use App\Models\CustomerVpn;
 use App\Models\EquipmentType;
 use App\Services\Customer\CustomerEquipmentService;
 use Tests\TestCase;
@@ -140,5 +141,159 @@ class CustomerEquipmentServiceUnitTest extends TestCase
             'cust_equip_id' => $equipment->cust_equip_id,
             'deleted_at' => null,
         ]);
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | createCustomerVpnData()
+    |---------------------------------------------------------------------------
+    */
+    public function test_create_customer_vpn_data(): void
+    {
+        $customer = Customer::factory()->create();
+        $data = [
+            'vpn_client_name' => 'vpn client',
+            'vpn_portal_url' => 'vpn.random.portal',
+            'vpn_username' => 'myUsername',
+            'vpn_password' => 'myPassword',
+            'notes' => 'This is a test account',
+        ];
+
+        $testObj = new CustomerEquipmentService;
+        $res = $testObj->createCustomerVpnData(collect($data), $customer);
+
+        $this->assertEquals($res->makeHidden(['vpn_id', 'created_at', 'updated_at'])->toArray(), $data);
+
+        $this->assertDatabaseHas('customer_vpns', $data);
+
+        $this->assertDatabaseHas('customers', [
+            'cust_id' => $customer->cust_id,
+            'vpn_id' => $res->vpn_id,
+        ]);
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | shareCustomerVpnData()
+    |---------------------------------------------------------------------------
+    */
+    public function test_share_vpn_data(): void
+    {
+        $customer = Customer::factory()->create();
+        $vpnData = CustomerVpn::create([
+            'vpn_client_name' => 'vpn client',
+            'vpn_portal_url' => 'vpn.random.portal',
+            'vpn_username' => 'myUsername',
+            'vpn_password' => 'myPassword',
+            'notes' => 'This is a test account',
+        ]);
+
+        $testObj = new CustomerEquipmentService;
+        $testObj->shareCustomerVpnData($vpnData, $customer);
+
+        $this->assertDatabaseHas('customers', [
+            'cust_id' => $customer->cust_id,
+            'vpn_id' => $vpnData->vpn_id,
+        ]);
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | updateCustomerVpnData()
+    |---------------------------------------------------------------------------
+    */
+    public function test_update_customer_vpn_data(): void
+    {
+        $vpnData = CustomerVpn::create([
+            'vpn_client_name' => 'vpn client',
+            'vpn_portal_url' => 'vpn.random.portal',
+            'vpn_username' => 'myUsername',
+            'vpn_password' => 'myPassword',
+            'notes' => 'This is a test account',
+        ]);
+
+        $data = [
+            'vpn_client_name' => 'renamed client',
+            'vpn_portal_url' => 'vpn.portal.random',
+            'vpn_username' => 'usernameIsMy',
+            'vpn_password' => 'passwordIsMy',
+            'notes' => 'This is a test account',
+        ];
+
+        $testObj = new CustomerEquipmentService;
+        $testObj->updateCustomerVpnData(collect($data), $vpnData);
+
+        $this->assertDatabaseHas('customer_vpns', [
+            'vpn_id' => $vpnData->vpn_id,
+            'vpn_client_name' => 'renamed client',
+            'vpn_portal_url' => 'vpn.portal.random',
+            'vpn_username' => 'usernameIsMy',
+            'vpn_password' => 'passwordIsMy',
+            'notes' => 'This is a test account',
+        ]);
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | destroyCustomerVpnData()
+    |---------------------------------------------------------------------------
+    */
+    public function test_destroy_customer_vpn_data(): void
+    {
+        $customer = Customer::factory()->create();
+        $vpnData = CustomerVpn::create([
+            'vpn_client_name' => 'vpn client',
+            'vpn_portal_url' => 'vpn.random.portal',
+            'vpn_username' => 'myUsername',
+            'vpn_password' => 'myPassword',
+            'notes' => 'This is a test account',
+        ]);
+
+        $customer->vpn_id = $vpnData->vpn_id;
+        $customer->save();
+
+        $testObj = new CustomerEquipmentService;
+        $testObj->destroyCustomerVpnData($vpnData, $customer);
+
+        $this->assertDatabaseHas('customers', [
+            'cust_id' => $customer->cust_id,
+            'vpn_id' => null,
+        ]);
+
+        $this->assertDatabaseMissing('customer_vpns', $vpnData->toArray());
+    }
+
+    public function test_destroy_customer_vpn_data_in_use(): void
+    {
+        $customer1 = Customer::factory()->create();
+        $customer2 = Customer::factory()->create();
+        $vpnData = CustomerVpn::create([
+            'vpn_client_name' => 'vpn client',
+            'vpn_portal_url' => 'vpn.random.portal',
+            'vpn_username' => 'myUsername',
+            'vpn_password' => 'myPassword',
+            'notes' => 'This is a test account',
+        ]);
+
+        $customer1->vpn_id = $vpnData->vpn_id;
+        $customer1->save();
+
+        $customer2->vpn_id = $vpnData->vpn_id;
+        $customer2->save();
+
+        $testObj = new CustomerEquipmentService;
+        $testObj->destroyCustomerVpnData($vpnData, $customer1);
+
+        $this->assertDatabaseHas('customers', [
+            'cust_id' => $customer1->cust_id,
+            'vpn_id' => null,
+        ]);
+
+        $this->assertDatabaseHas('customers', [
+            'cust_id' => $customer2->cust_id,
+            'vpn_id' => $vpnData->vpn_id,
+        ]);
+
+        $this->assertDatabaseHas('customer_vpns', $vpnData->toArray());
     }
 }

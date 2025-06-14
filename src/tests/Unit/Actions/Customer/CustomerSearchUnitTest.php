@@ -57,7 +57,7 @@ class CustomerSearchUnitTest extends TestCase
         $res = $testObj($data);
 
         $this->assertEquals(
-            $res->makeHidden('deleted_at')->toArray(),
+            $res->makeHidden(['deleted_at', 'vpn_id'])->toArray(),
             $test->toArray()
         );
     }
