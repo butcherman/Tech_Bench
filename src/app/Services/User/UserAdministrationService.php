@@ -113,12 +113,29 @@ class UserAdministrationService
     }
 
     /**
+     * Clear the Two Factor settings for a single user
+     */
+    public function clearTwoFaSettings(User $user): void
+    {
+        // Delete 2FA Settings
+        $user->two_factor_secret = null;
+        $user->two_factor_recovery_codes = null;
+        $user->two_factor_confirmed_at = null;
+        $user->two_factor_via = null;
+
+        $user->save();
+
+        // Delete saved devices
+        $user->DeviceTokens()->delete();
+    }
+
+    /**
      * Update a users Password Expire date
      */
     public function resetPasswordExpire(User $user): void
     {
         $newExpireDate = $user->getNewExpireTime();
-        Log::debug('New Expiration Date for '.$user->username.' - '.$newExpireDate);
+        Log::debug('New Expiration Date for ' . $user->username . ' - ' . $newExpireDate);
 
         // If the new expire date is null, remove the expire date altogether
         if (is_null($newExpireDate)) {

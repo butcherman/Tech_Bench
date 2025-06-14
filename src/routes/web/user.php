@@ -2,6 +2,7 @@
 
 use App\Exceptions\Auth\InitializeUserLinkMissingException;
 use App\Http\Controllers\Admin\User\DisabledUserController;
+use App\Http\Controllers\Admin\User\ResetTwoFaController;
 use App\Http\Controllers\Admin\User\ResetUserPasswordController;
 use App\Http\Controllers\Admin\User\UserAdministrationController;
 use App\Http\Controllers\Admin\User\UserRolesController;
@@ -80,6 +81,9 @@ Route::middleware('auth.secure')->group(function () {
             Route::get('deactivated-users', DisabledUserController::class)
                 ->name('deactivated')
                 ->breadcrumb('Disabled Users', 'admin.user.index');
+
+            Route::put('{user}/reset-2fa', ResetTwoFaController::class)
+                ->name('two-factor.reset');
         });
 
         Route::resource('user', UserAdministrationController::class)
