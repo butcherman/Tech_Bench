@@ -9,10 +9,12 @@ import Overlay from "@/Components/_Base/Loaders/Overlay.vue";
 import Pagination from "@/Components/_Base/Pagination.vue";
 import RefreshButton from "@/Components/_Base/Buttons/RefreshButton.vue";
 import SelectEquipmentModal from "./SelectEquipmentModal.vue";
+import VpnData from "./VpnData.vue";
 import { Deferred } from "@inertiajs/vue3";
 import { handleLinkClick } from "@/Composables/links.module";
 import { computed, ref, useTemplateRef } from "vue";
 import {
+    allowVpn,
     customer,
     groupedEquipmentList,
 } from "@/Composables/Customer/CustomerData.module";
@@ -120,9 +122,10 @@ const onClickAction = (
                 </div>
             </template>
             <Overlay :loading="isLoading" class="h-full">
+                <VpnData v-if="allowVpn" />
                 <ul class="border rounded-lg border-collapse">
-                    <li v-if="!groupedEquipmentList.length" class="p-1">
-                        <h6 class="text-center">No Equipment</h6>
+                    <li v-if="!groupedEquipmentList.length" class="text-muted">
+                        <h4 class="text-center">No Equipment</h4>
                     </li>
                     <li v-for="(equip, index) in currentChunk" class="p-1">
                         <BaseButton

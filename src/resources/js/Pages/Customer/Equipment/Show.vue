@@ -6,8 +6,10 @@ import CustomerNotes from "@/Components/Customer/Show/Notes/CustomerNotes.vue";
 import EquipmentData from "@/Components/Customer/Show/Equipment/EquipmentData.vue";
 import EquipmentSites from "@/Components/Customer/Show/Equipment/EquipmentSites.vue";
 import ManageEquipment from "@/Components/Customer/Show/Equipment/ManageEquipment.vue";
+import VpnData from "@/Components/Customer/Show/Equipment/VpnData.vue";
 import { onMounted, onUnmounted } from "vue";
 import {
+    allowVpn,
     customer,
     permissions,
 } from "@/Composables/Customer/CustomerData.module";
@@ -44,6 +46,7 @@ export default { layout: AppLayout };
                 :equipment="equipment"
             />
         </div>
+        <VpnData v-if="allowVpn" />
         <EquipmentData
             class="my-3"
             :equipment="equipment"

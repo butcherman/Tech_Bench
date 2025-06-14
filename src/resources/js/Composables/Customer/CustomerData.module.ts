@@ -37,6 +37,8 @@ export const alerts = computed<customerAlert[]>(() => page.props.alerts);
 | Customer Equipment
 |-------------------------------------------------------------------------------
 */
+export const allowVpn = computed<boolean>(() => page.props.allowVpn);
+export const vpnData = computed<vpnData | null>(() => page.props.vpnData);
 export const groupedEquipmentList = computed<
     { [key: string]: customerEquipment[] }[]
 >(() => page.props.groupedEquipmentList);

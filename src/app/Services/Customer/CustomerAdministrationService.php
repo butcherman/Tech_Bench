@@ -94,7 +94,7 @@ class CustomerAdministrationService extends CustomerService
 
         foreach ($customerList as $customer) {
             if ($customer->site_count === 0) {
-                Log::debug('Customer ' . $customer->name . ' has no sites attached');
+                Log::debug('Customer '.$customer->name.' has no sites attached');
                 $failed[] = $customer->only(['cust_id', 'name']);
 
                 if ($fix) {

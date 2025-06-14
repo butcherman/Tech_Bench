@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('customer_vpns', function (Blueprint $table) {
             $table->id('vpn_id');
             $table->text('vpn_client_name');
+            $table->text('vpn_portal_url');
             $table->text('vpn_username')->nullable();
             $table->text('vpn_password')->nullable();
             $table->text('notes')->nullable();

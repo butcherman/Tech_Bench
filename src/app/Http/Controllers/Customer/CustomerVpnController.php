@@ -3,64 +3,43 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Customer\CustomerVpnRequest;
+use App\Models\Customer;
 use App\Models\CustomerVpn;
-use Illuminate\Http\Request;
+use App\Services\Customer\CustomerEquipmentService;
+use Illuminate\Http\RedirectResponse;
 
 class CustomerVpnController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+    public function __construct(protected CustomerEquipmentService $svc) {}
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CustomerVpnRequest $request, Customer $customer)
     {
-        //
-    }
+        $this->svc->createCustomerVpnData($request->safe()->collect(), $customer);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(CustomerVpn $customerVpn)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(CustomerVpn $customerVpn)
-    {
-        //
+        return back()->with('success', 'VPN Data Saved');
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, CustomerVpn $customerVpn)
+    public function update(CustomerVpnRequest $request, Customer $customer, CustomerVpn $vpn_datum)
     {
-        //
+        $this->svc->updateCustomerVpnData($request->safe()->collect(), $vpn_datum);
+
+        return back()->with('success', 'VPN Data Updated');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(CustomerVpn $customerVpn)
+    public function destroy(Customer $customer, CustomerVpn $vpn_datum): RedirectResponse
     {
-        //
+        $this->svc->destroyCustomerVpnData($vpn_datum, $customer);
+
+        return back()->with('warning', 'VPN Data Deleted');
     }
 }

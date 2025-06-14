@@ -34,6 +34,8 @@ type customerPageProps = {
     fileList: customerFile[];
     phoneTypes: phoneType[];
     fileTypes: customerFileType[];
+    allowVpn: boolean;
+    vpnData: vpnData;
 } & pageProps;
 
 /*
@@ -55,6 +57,15 @@ type customerEquipmentData = {
     field_name: string;
     value: string;
     data_field_type: dataTypes;
+};
+
+type vpnData = {
+    vpn_id: number;
+    vpn_client_name: string;
+    vpn_portal_url: string;
+    vpn_username: string | null;
+    vpn_password: string | null;
+    notes: string | null;
 };
 
 /*
