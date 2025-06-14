@@ -75,6 +75,14 @@ class CustomerEquipmentService
     }
 
     /**
+     * Share an existing Customer VPN Data with another customer
+     */
+    public function shareCustomerVpnData(CustomerVpn $vpnData, Customer $customer): void
+    {
+        $customer->CustomerVpn()->associate($vpnData)->save();
+    }
+
+    /**
      * Update Customer VPN Data
      */
     public function updateCustomerVpnData(Collection $requestData, CustomerVpn $vpnData): CustomerVpn

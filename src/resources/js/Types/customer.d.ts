@@ -36,6 +36,7 @@ type customerPageProps = {
     fileTypes: customerFileType[];
     allowVpn: boolean;
     vpnData: vpnData;
+    allowShareVpn: boolean;
 } & pageProps;
 
 /*

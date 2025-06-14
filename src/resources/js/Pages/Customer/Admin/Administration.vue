@@ -9,6 +9,7 @@ const props = defineProps<{
     default_state: string;
     auto_purge: boolean;
     allow_vpn_data: boolean;
+    allow_share_vpn_data: boolean;
 }>();
 </script>
 
