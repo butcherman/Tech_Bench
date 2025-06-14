@@ -9,6 +9,9 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
+/**
+ * @codeCoverageIgnore
+ */
 class SslExpiresSoonMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;

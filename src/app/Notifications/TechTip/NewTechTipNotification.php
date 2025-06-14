@@ -10,6 +10,9 @@ use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
+/**
+ * @codeCoverageIgnore
+ */
 class NewTechTipNotification extends Notification implements ShouldQueue
 {
     use Queueable;

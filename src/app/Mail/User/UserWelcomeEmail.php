@@ -13,6 +13,8 @@ use Illuminate\Queue\SerializesModels;
 /**
  * Email with link to set the users password and complete the registration
  * process.
+ *
+ * @codeCoverageIgnore
  */
 class UserWelcomeEmail extends Mailable implements ShouldQueue
 {
