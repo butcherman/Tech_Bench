@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import AppLayout from "@/Layouts/App/AppLayout.vue";
+import CustomerAlerts from "@/Components/Customer/Show/CustomerAlerts.vue";
 import CustomerDetails from "@/Components/Customer/Show/CustomerDetails.vue";
 import CustomerFiles from "@/Components/Customer/Show/Files/CustomerFiles.vue";
 import CustomerNotes from "@/Components/Customer/Show/Notes/CustomerNotes.vue";
@@ -46,6 +47,7 @@ export default { layout: AppLayout };
                 :equipment="equipment"
             />
         </div>
+        <CustomerAlerts />
         <VpnData v-if="allowVpn" />
         <EquipmentData
             class="my-3"
