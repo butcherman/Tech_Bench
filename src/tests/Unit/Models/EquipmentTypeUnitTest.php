@@ -77,8 +77,8 @@ class EquipmentTypeUnitTest extends TestCase
         ]);
 
         $this->assertEquals(
-            $cust->toArray(),
-            $this->model->Customer[0]->toArray()
+            $cust->makeHidden(['vpn_id'])->toArray(),
+            $this->model->Customer[0]->makeHidden(['vpn_id'])->toArray()
         );
     }
 

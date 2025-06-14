@@ -23,6 +23,8 @@ class CustomerAdministrationServiceUnitTest extends TestCase
             'update_slug' => config('customer.update_slug'),
             'default_state' => config('customer.default_state'),
             'auto_purge' => config('customer.auto_purge'),
+            'allow_vpn_data' => config('customer.allow_vpn_data'),
+            'allow_share_vpn_data' => config('customer.allow_share_vpn_data'),
         ];
 
         $testObj = new CustomerAdministrationService;

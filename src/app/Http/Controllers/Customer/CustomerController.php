@@ -66,6 +66,8 @@ class CustomerController extends Controller
         if ($customer->site_count === 1) {
             return Inertia::render('Customer/Site/Show', [
                 'alerts' => fn () => $customer->Alerts,
+                'allowShareVpn' => fn () => config('customer.allow_share_vpn_data'),
+                'allowVpn' => fn () => config('customer.allow_vpn_data'),
                 'availableEquipment' => fn () => CacheData::equipmentCategorySelectBox(),
                 'customer' => fn () => $customer,
                 'currentSite' => fn () => $customer->Sites[0],
@@ -89,11 +91,14 @@ class CustomerController extends Controller
                 'equipmentList' => Inertia::defer(fn () => $customer->Equipment->load('Sites')),
                 'noteList' => Inertia::defer(fn () => $customer->Notes),
                 'fileList' => Inertia::defer(fn () => $customer->Files->append('href')),
+                'vpnData' => Inertia::defer(fn () => $customer->CustomerVpn),
             ]);
         }
 
         return Inertia::render('Customer/Show', [
             'alerts' => fn () => $customer->Alerts,
+            'allowShareVpn' => fn () => config('customer.allow_share_vpn_data'),
+            'allowVpn' => fn () => config('customer.allow_vpn_data'),
             'availableEquipment' => fn () => CacheData::equipmentCategorySelectBox(),
             'customer' => fn () => $customer,
             'isFav' => fn () => $customer->isFav($request->user()),
@@ -117,6 +122,7 @@ class CustomerController extends Controller
             'equipmentList' => Inertia::defer(fn () => $customer->Equipment->load('Sites')),
             'noteList' => Inertia::defer(fn () => $customer->Notes),
             'fileList' => Inertia::defer(fn () => $customer->Files->append('href')),
+            'vpnData' => Inertia::defer(fn () => $customer->CustomerVpn),
         ]);
     }
 

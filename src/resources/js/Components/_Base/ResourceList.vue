@@ -79,7 +79,7 @@ const onRowClicked = (event: MouseEvent, item: T): void => {
 <template>
     <div class="h-full">
         <ul class="rounded-lg border-collapse" :class="{ border: !noBorder }">
-            <li v-if="!list.length">
+            <li v-if="!list.length" class="text-muted">
                 <slot name="empty-slot">
                     <h4 class="text-center">
                         {{ emptyText ?? "No Data" }}

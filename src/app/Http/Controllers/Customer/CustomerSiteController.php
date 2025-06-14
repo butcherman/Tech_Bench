@@ -62,6 +62,8 @@ class CustomerSiteController extends Controller
     {
         return Inertia::render('Customer/Site/Show', [
             'alerts' => fn () => $customer->Alerts,
+            'allowShareVpn' => fn () => config('customer.allow_share_vpn_data'),
+            'allowVpn' => fn () => config('customer.allow_vpn_data'),
             'availableEquipment' => fn () => CacheData::equipmentCategorySelectBox(),
             'customer' => fn () => $customer,
             'currentSite' => fn () => $site,
@@ -85,6 +87,7 @@ class CustomerSiteController extends Controller
             'equipmentList' => Inertia::defer(fn () => $site->SiteEquipment->load('Sites')),
             'noteList' => Inertia::defer(fn () => $site->SiteNote),
             'fileList' => Inertia::defer(fn () => $site->SiteFile->append('href')),
+            'vpnData' => Inertia::defer(fn () => $customer->CustomerVpn),
         ]);
     }
 

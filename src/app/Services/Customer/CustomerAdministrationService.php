@@ -24,12 +24,7 @@ class CustomerAdministrationService extends CustomerService
      */
     public function getCustomerSettings(): Collection
     {
-        return collect([
-            'select_id' => config('customer.select_id'),
-            'update_slug' => config('customer.update_slug'),
-            'default_state' => config('customer.default_state'),
-            'auto_purge' => config('customer.auto_purge'),
-        ]);
+        return collect(config('customer'));
     }
 
     /**
