@@ -57,7 +57,7 @@ class CustomerFile extends Model
     ];
 
     /** @var array<int, string> */
-    protected $with = ['Sites'];
+    protected $with = ['Sites', 'FileUpload'];
 
     /*
     |---------------------------------------------------------------------------

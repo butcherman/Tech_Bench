@@ -195,4 +195,18 @@ class CustomerEquipment extends Model
 
         return array_merge($equipNotes->toArray(), $otherNotes->toArray());
     }
+
+    /**
+     * Combine all of the equipment files, and General Files for the customer
+     */
+    public function getFiles(): array
+    {
+        $equipFiles = $this->CustomerFile;
+        $otherFiles = CustomerFile::where('cust_id', $this->cust_id)
+            ->where('cust_equip_id', null)
+            ->doesntHave('Sites')
+            ->get();
+
+        return array_merge($equipFiles->toArray(), $otherFiles->toArray());
+    }
 }

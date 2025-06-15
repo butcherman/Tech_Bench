@@ -27,6 +27,8 @@ class CustomerSettingsRequest extends FormRequest
             'update_slug' => ['required', 'boolean'],
             'default_state' => ['required', 'string'],
             'auto_purge' => ['required', 'boolean'],
+            'allow_vpn_data' => ['required', 'boolean'],
+            'allow_share_vpn_data' => ['required', 'boolean'],
         ];
     }
 }

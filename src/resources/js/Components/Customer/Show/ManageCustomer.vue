@@ -4,16 +4,20 @@ import DisableSiteForm from "@/Forms/Customer/DisableSiteForm.vue";
 import Menu from "primevue/menu";
 import Modal from "@/Components/_Base/Modal.vue";
 import okModal from "@/Modules/okModal";
+import VpnDataForm from "@/Forms/Customer/VpnDataForm.vue";
 import { ref, computed, useTemplateRef, shallowRef } from "vue";
 import { router } from "@inertiajs/vue3";
 import {
+    allowVpn,
     currentSite,
     customer,
     permissions,
+    vpnData,
 } from "@/Composables/Customer/CustomerData.module";
 
 const menuList = useTemplateRef("customer-admin-menu");
 const modal = useTemplateRef("disable-confirmation-modal");
+const vpnModal = useTemplateRef("vpn-data-modal");
 const warningMessage = ref<string>();
 const formComponent = shallowRef();
 
@@ -37,6 +41,17 @@ const isDisableSiteAllowed = (): boolean => {
  */
 const managementOptions = computed(() => {
     const options = [];
+
+    if (
+        allowVpn &&
+        permissions.value.equipment.create &&
+        vpnData.value == null
+    ) {
+        options.push({
+            label: "Add VPN Data",
+            command: () => vpnModal.value?.show(),
+        });
+    }
 
     if (permissions.value.details.update) {
         options.push({
@@ -159,6 +174,9 @@ const showDisableCustomer = () => {
                 class="mt-4"
                 @success="modal?.hide()"
             />
+        </Modal>
+        <Modal ref="vpn-data-modal" title="Add VPN Data">
+            <VpnDataForm :customer="customer" @success="vpnModal?.hide()" />
         </Modal>
     </div>
 </template>

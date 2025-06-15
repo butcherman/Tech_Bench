@@ -133,10 +133,10 @@ class CustomerSiteUnitTest extends TestCase
         $data->Sites()->sync([$this->model->cust_site_id]);
 
         $this->assertEquals(
-            $data->makeHidden(['Sites'])->toArray(),
+            $data->makeHidden(['Sites', 'FileUpload'])->toArray(),
             $this->model
                 ->SiteFile[0]
-                ->makeHidden(['Sites', 'pivot'])
+                ->makeHidden(['Sites', 'pivot', 'FileUpload'])
                 ->toArray()
         );
     }
@@ -176,7 +176,7 @@ class CustomerSiteUnitTest extends TestCase
             $data->makeHidden('Customer')->toArray(),
             $this->model
                 ->EquipmentFile()[0]
-                ->makeHidden(['CustomerEquipment', 'Sites', 'deleted_at'])
+                ->makeHidden(['CustomerEquipment', 'Sites', 'FileUpload', 'deleted_at'])
                 ->toArray()
         );
     }
@@ -206,7 +206,7 @@ class CustomerSiteUnitTest extends TestCase
             $data->makeHidden(['Customer', 'Sites'])->toArray(),
             $this->model
                 ->GeneralFile()[0]
-                ->makeHidden(['CustomerEquipment', 'Sites', 'deleted_at'])
+                ->makeHidden(['CustomerEquipment', 'Sites', 'FileUpload', 'deleted_at'])
                 ->toArray()
         );
     }

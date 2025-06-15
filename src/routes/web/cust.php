@@ -14,9 +14,11 @@ use App\Http\Controllers\Customer\CustomerFileController;
 use App\Http\Controllers\Customer\CustomerNoteController;
 use App\Http\Controllers\Customer\CustomerSearchController;
 use App\Http\Controllers\Customer\CustomerSiteController;
+use App\Http\Controllers\Customer\CustomerVpnController;
 use App\Http\Controllers\Customer\DisabledCustomerController;
 use App\Http\Controllers\Customer\DownloadNoteController;
 use App\Http\Controllers\Customer\ReAssignCustomerController;
+use App\Http\Controllers\Customer\ShareVpnDataController;
 use App\Models\Customer;
 use App\Models\CustomerEquipment;
 use App\Models\CustomerSite;
@@ -146,6 +148,17 @@ Route::middleware('auth.secure')->group(function () {
             ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
                 $breadcrumbs->index('Alerts', 'customers.show');
             });
+
+        /*
+        |---------------------------------------------------------------------------
+        | Customer VPN Data
+        | /customers/{customer-slug|customer-id}/vpn-data
+        |---------------------------------------------------------------------------
+        */
+        Route::put('vpn-data/{vpn_datum}/share', ShareVpnDataController::class)
+            ->name('vpn-data.share');
+        Route::apiResource('vpn-data', CustomerVpnController::class)
+            ->except(['show', 'index']);
 
         /*
         |-----------------------------------------------------------------------

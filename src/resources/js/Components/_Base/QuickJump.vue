@@ -66,10 +66,15 @@ const scrollToElement = (elId: string): void => {
                 </div>
             </div>
         </div>
-        <Drawer v-model:visible="showNav" header="Quick Jump" position="top">
+        <Drawer
+            v-model:visible="showNav"
+            header="Quick Jump"
+            position="top"
+            class="h-auto!"
+        >
             <div
                 v-for="(item, index) in navList"
-                class="grow text-muted mx-2 mt-1"
+                class="text-muted mx-2 mt-1"
                 :class="{ 'md:border-e': index !== navList.length - 1 }"
             >
                 <a @click="scrollToElement(item.navId)" class="pointer">

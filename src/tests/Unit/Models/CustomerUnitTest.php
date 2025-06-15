@@ -9,6 +9,7 @@ use App\Models\CustomerEquipment;
 use App\Models\CustomerFile;
 use App\Models\CustomerNote;
 use App\Models\CustomerSite;
+use App\Models\CustomerVpn;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
@@ -150,10 +151,10 @@ class CustomerUnitTest extends TestCase
         $data = CustomerFile::factory()
             ->create(['cust_id' => $this->model->cust_id]);
         $this->assertEquals(
-            $data->makeHidden(['Customer', 'Sites'])->toArray(),
+            $data->makeHidden(['Customer', 'Sites', 'FileUpload'])->toArray(),
             $this->model
                 ->Files[0]
-                ->makeHidden(['Sites'])
+                ->makeHidden(['Sites', 'FileUpload'])
                 ->toArray()
         );
     }
@@ -193,6 +194,24 @@ class CustomerUnitTest extends TestCase
                 ->Recent
                 ->pluck('user_id')
                 ->toArray()
+        );
+    }
+
+    public function test_customer_vpn_relationship(): void
+    {
+        $vpnData = CustomerVpn::create([
+            'vpn_client_name' => 'vpn client',
+            'vpn_portal_url' => 'vpn.random.portal',
+            'vpn_username' => 'myUsername',
+            'vpn_password' => 'myPassword',
+            'notes' => 'This is a test account',
+        ]);
+        $this->model->vpn_id = $vpnData->vpn_id;
+        $this->model->save();
+
+        $this->assertEquals(
+            $vpnData->toArray(),
+            $this->model->CustomerVpn->toArray()
         );
     }
 

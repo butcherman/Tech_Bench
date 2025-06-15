@@ -48,6 +48,8 @@ class CustomerAdministrationTest extends TestCase
                 ->has('update_slug')
                 ->has('default_state')
                 ->has('auto_purge')
+                ->has('allow_vpn_data')
+                ->has('allow_share_vpn_data')
         );
     }
 
@@ -63,6 +65,8 @@ class CustomerAdministrationTest extends TestCase
             'update_slug' => false,
             'default_state' => 'OR',
             'auto_purge' => false,
+            'allow_vpn_data' => true,
+            'allow_share_vpn_data' => true,
         ];
 
         $response = $this->put(route('customers.settings.update'), $data);
@@ -81,6 +85,8 @@ class CustomerAdministrationTest extends TestCase
             'update_slug' => false,
             'default_state' => 'OR',
             'auto_purge' => false,
+            'allow_vpn_data' => true,
+            'allow_share_vpn_data' => true,
         ];
 
         $response = $this->actingAs($user)
@@ -98,6 +104,8 @@ class CustomerAdministrationTest extends TestCase
             'update_slug' => false,
             'default_state' => 'OR',
             'auto_purge' => false,
+            'allow_vpn_data' => true,
+            'allow_share_vpn_data' => true,
         ];
 
         $response = $this->actingAs($user)

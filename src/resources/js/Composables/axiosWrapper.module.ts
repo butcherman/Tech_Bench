@@ -1,5 +1,11 @@
+import errorModal from "@/Modules/errorModal";
 import axios, { AxiosResponse } from "axios";
 import { ref } from "vue";
+
+interface errorMessage {
+    status: number | undefined;
+    message: laravelValidationErrors | string;
+}
 
 export const isLoading = ref<boolean>(false);
 
@@ -11,7 +17,7 @@ export async function dataGet(
     return await axios
         .get(url)
         .then((res) => res)
-        .catch((err) => alert(err))
+        .catch((err) => handleAxiosError(err))
         .finally(() => (isLoading.value = false));
 }
 
@@ -35,7 +41,21 @@ export async function dataPost(
                 };
             }
 
-            alert(err);
+            handleAxiosError(err);
         })
         .finally(() => (isLoading.value = false));
+}
+
+export function handleAxiosError(errorData: errorMessage) {
+    console.log(errorData);
+
+    let errMessage: string;
+
+    if (typeof errorData.message !== "string") {
+        errMessage = errorData.message.message;
+    } else {
+        errMessage = errorData.message;
+    }
+
+    errorModal(errorData.status, errMessage);
 }

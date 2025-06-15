@@ -9,6 +9,7 @@ import Overlay from "../../Components/_Base/Loaders/Overlay.vue";
 import { Message } from "primevue";
 import { computed, ref, useTemplateRef } from "vue";
 import { useForm } from "vee-validate";
+import { handleAxiosError } from "@/Composables/axiosWrapper.module";
 import type { DropzoneFile } from "dropzone";
 
 interface formData {
@@ -143,8 +144,7 @@ const handleErrors = (formErrors: dropzoneError): void => {
         return;
     }
 
-    // TODO - Properly Handle Error
-    alert(formErrors);
+    handleAxiosError(formErrors);
 };
 
 /*

@@ -1,12 +1,16 @@
 <script setup lang="ts">
 import AppLayout from "@/Layouts/App/AppLayout.vue";
+import CustomerAlerts from "@/Components/Customer/Show/CustomerAlerts.vue";
 import CustomerDetails from "@/Components/Customer/Show/CustomerDetails.vue";
+import CustomerFiles from "@/Components/Customer/Show/Files/CustomerFiles.vue";
 import CustomerNotes from "@/Components/Customer/Show/Notes/CustomerNotes.vue";
 import EquipmentData from "@/Components/Customer/Show/Equipment/EquipmentData.vue";
 import EquipmentSites from "@/Components/Customer/Show/Equipment/EquipmentSites.vue";
 import ManageEquipment from "@/Components/Customer/Show/Equipment/ManageEquipment.vue";
+import VpnData from "@/Components/Customer/Show/Equipment/VpnData.vue";
 import { onMounted, onUnmounted } from "vue";
 import {
+    allowVpn,
     customer,
     permissions,
 } from "@/Composables/Customer/CustomerData.module";
@@ -43,6 +47,8 @@ export default { layout: AppLayout };
                 :equipment="equipment"
             />
         </div>
+        <CustomerAlerts />
+        <VpnData v-if="allowVpn" />
         <EquipmentData
             class="my-3"
             :equipment="equipment"
@@ -54,6 +60,6 @@ export default { layout: AppLayout };
             :equipment="equipment"
         />
         <CustomerNotes :equipment="equipment" />
-        <!-- TODO - Add Customer Equipment Files -->
+        <CustomerFiles class="my-3" />
     </div>
 </template>
