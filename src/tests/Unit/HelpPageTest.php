@@ -40,7 +40,6 @@ class HelpPageTest extends TestCase
         // TMP Removals
         // TODO - Finish Adding Help Pages
         'customers.*',
-        'reports.*',
         'tech-tips.*',
         'admin.tech-tips.*',
     ];
