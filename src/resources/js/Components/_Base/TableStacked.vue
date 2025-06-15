@@ -3,6 +3,7 @@ defineProps<{
     bordered?: boolean;
     items: T;
     only?: string[];
+    skip?: string[];
 }>();
 
 /**
@@ -23,7 +24,10 @@ const toTitleCase = (str: string): string => {
         <tbody>
             <template v-for="(value, index) in items" :key="index">
                 <tr
-                    v-if="!only || only.includes(index.toString())"
+                    v-if="
+                        only?.includes(index.toString()) ||
+                        !skip?.includes(index.toString())
+                    "
                     class="border-b"
                 >
                     <slot name="row" :row-data="{ value, index }">
