@@ -6,14 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Services\User\UserAdministrationService;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Inertia\Inertia;
 
 class ResetTwoFaController extends Controller
 {
     public function __construct()
     {
-        if (!config('auth.twoFa.required')) {
+        if (! config('auth.twoFa.required')) {
             abort(403);
         }
     }

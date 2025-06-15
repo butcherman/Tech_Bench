@@ -26,7 +26,7 @@ class UserAdministrationController extends Controller
         $this->authorize('manage', User::class);
 
         return Inertia::render('Admin/User/Index', [
-            'user-list' => Inertia::defer(fn() => $this->svc->getAllUsers()),
+            'user-list' => Inertia::defer(fn () => $this->svc->getAllUsers()),
         ]);
     }
 
@@ -38,7 +38,7 @@ class UserAdministrationController extends Controller
         $this->authorize('create', User::class);
 
         return Inertia::render('Admin/User/Create', [
-            'roles' => fn() => $this->getAvailableRoles($request->user()),
+            'roles' => fn () => $this->getAvailableRoles($request->user()),
         ]);
     }
 
@@ -64,12 +64,12 @@ class UserAdministrationController extends Controller
         $this->authorize('view', $user);
 
         return Inertia::render('Admin/User/Show', [
-            'user' => fn() => $user->getAdminLoad(),
-            'role' => fn() => $user->UserRole,
-            'last-login' => fn() => $user->getLastLogin(),
-            'thirty-day-count' => fn() => $user->getLoginHistory(30)->count(),
-            'allow-two-fa' => fn() => config('auth.twoFa.required'),
-            'allow-save-device' => fn() => config('auth.twoFa.allow_save_device'),
+            'user' => fn () => $user->getAdminLoad(),
+            'role' => fn () => $user->UserRole,
+            'last-login' => fn () => $user->getLastLogin(),
+            'thirty-day-count' => fn () => $user->getLoginHistory(30)->count(),
+            'allow-two-fa' => fn () => config('auth.twoFa.required'),
+            'allow-save-device' => fn () => config('auth.twoFa.allow_save_device'),
         ]);
     }
 
@@ -81,8 +81,8 @@ class UserAdministrationController extends Controller
         $this->authorize('update', $user);
 
         return Inertia::render('Admin/User/Edit', [
-            'roles' => fn() => $this->getAvailableRoles($request->user()),
-            'user' => fn() => $user->getAdminLoad(),
+            'roles' => fn () => $this->getAvailableRoles($request->user()),
+            'user' => fn () => $user->getAdminLoad(),
         ]);
     }
 

@@ -135,7 +135,7 @@ class UserAdministrationService
     public function resetPasswordExpire(User $user): void
     {
         $newExpireDate = $user->getNewExpireTime();
-        Log::debug('New Expiration Date for ' . $user->username . ' - ' . $newExpireDate);
+        Log::debug('New Expiration Date for '.$user->username.' - '.$newExpireDate);
 
         // If the new expire date is null, remove the expire date altogether
         if (is_null($newExpireDate)) {

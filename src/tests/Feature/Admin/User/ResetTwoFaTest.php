@@ -4,10 +4,7 @@ namespace Tests\Feature\Admin\User;
 
 use App\Models\DeviceToken;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Str;
-use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class ResetTwoFaTest extends TestCase
