@@ -12,6 +12,8 @@ use Illuminate\Queue\SerializesModels;
 
 /**
  * Notification email with the users 2FA code.
+ *
+ * @codeCoverageIgnore
  */
 class VerificationCodeMail extends Mailable implements ShouldQueue
 {

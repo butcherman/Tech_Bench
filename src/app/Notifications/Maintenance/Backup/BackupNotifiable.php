@@ -2,10 +2,12 @@
 
 namespace App\Notifications\Maintenance\Backup;
 
-use App\Models\User;
 use App\Traits\AllowTrait;
 use Spatie\Backup\Notifications\Notifiable;
 
+/**
+ * @codeCoverageIgnore
+ */
 class BackupNotifiable extends Notifiable
 {
     use AllowTrait;

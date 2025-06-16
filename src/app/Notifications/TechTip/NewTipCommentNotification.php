@@ -9,6 +9,9 @@ use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
+/**
+ * @codeCoverageIgnore
+ */
 class NewTipCommentNotification extends Notification implements ShouldQueue
 {
     use Queueable;

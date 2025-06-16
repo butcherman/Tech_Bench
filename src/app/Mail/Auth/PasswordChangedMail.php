@@ -12,6 +12,8 @@ use Illuminate\Queue\SerializesModels;
 
 /**
  * Notification email to let the user know that their password has been changed
+ *
+ * @codeCoverageIgnore
  */
 class PasswordChangedMail extends Mailable implements ShouldQueue
 {

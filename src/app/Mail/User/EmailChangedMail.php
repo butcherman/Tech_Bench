@@ -13,6 +13,8 @@ use Illuminate\Queue\SerializesModels;
 /**
  * Notification Email to let the user know that their email address was changed.
  * This email goes to the original email address before the change.
+ *
+ * @codeCoverageIgnore
  */
 class EmailChangedMail extends Mailable implements ShouldQueue
 {

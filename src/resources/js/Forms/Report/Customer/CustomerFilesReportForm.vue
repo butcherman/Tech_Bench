@@ -6,6 +6,7 @@ import { object, string, array } from "yup";
 
 defineProps<{
     fileTypes: customerFileType[];
+    equipmentTypes: equipmentCategory[];
 }>();
 
 const selectDropdown = ["have", "are missing"];
@@ -18,12 +19,14 @@ const selectDropdown = ["have", "are missing"];
 const initValues = {
     hasInput: null,
     file_types: [],
+    has_equipment: null,
 };
 const schema = object({
     hasInput: string().required("Please make a selection"),
     file_types: array()
         .required()
         .min(1, "You must select at least one file type"),
+    has_equipment: string().nullable(),
 });
 </script>
 
@@ -39,7 +42,7 @@ const schema = object({
     >
         <p class="text-center">Show me customers that</p>
         <div class="flex justify-center">
-            <div class="w-1/2">
+            <div>
                 <SelectInput
                     id="has-input"
                     name="hasInput"
@@ -55,6 +58,16 @@ const schema = object({
             :list="fileTypes"
             label-field="description"
             value-field="file_type_id"
+        />
+        <SelectInput
+            id="has-equipment"
+            name="has_equipment"
+            label="Limit to Customers with this Equipment"
+            group-text-field="label"
+            group-children-field="items"
+            text-field="label"
+            value-field="value"
+            :list="equipmentTypes"
         />
     </VueForm>
 </template>

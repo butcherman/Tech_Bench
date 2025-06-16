@@ -8,6 +8,9 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Spatie\Backup\Notifications\Notifications\BackupHasFailedNotification as BaseNotification;
 
+/**
+ * @codeCoverageIgnore
+ */
 class BackupHasFailedNotification extends BaseNotification implements ShouldQueue
 {
     use Queueable;

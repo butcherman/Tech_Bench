@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use App\Observers\CustomerEquipmentDataObserver;
 use Illuminate\Broadcasting\PrivateChannel;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\BroadcastableModelEventOccurred;
 use Illuminate\Database\Eloquent\BroadcastsEvents;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -11,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 
+#[ObservedBy([CustomerEquipmentDataObserver::class])]
 class CustomerEquipmentData extends Model
 {
     use BroadcastsEvents;

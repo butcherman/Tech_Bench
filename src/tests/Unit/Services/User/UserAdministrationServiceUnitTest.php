@@ -7,11 +7,13 @@ use App\Exceptions\Database\RecordInUseException;
 use App\Jobs\User\CreateUserSettingsJob;
 use App\Jobs\User\SendWelcomeEmailJob;
 use App\Models\CustomerNote;
+use App\Models\DeviceToken;
 use App\Models\User;
 use App\Services\User\UserAdministrationService;
 use Database\Seeders\UserSeeder;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Str;
 use Mockery\MockInterface;
 use Tests\TestCase;
 
@@ -247,6 +249,37 @@ class UserAdministrationServiceUnitTest extends TestCase
                 ['deleted_at' => null],
             )
         );
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | clearTwoFaSettings()
+    |---------------------------------------------------------------------------
+    */
+    public function test_clear_two_fa_settings(): void
+    {
+        $user = User::factory()->create();
+        $user->two_factor_secret = Str::uuid();
+        $user->two_factor_recovery_codes = Str::uuid();
+        $user->two_factor_confirmed_at = now();
+        $user->two_factor_via = 'authenticator';
+
+        DeviceToken::factory()->count(5)->create(['user_id' => $user->user_id]);
+
+        $testObj = new UserAdministrationService;
+        $testObj->clearTwoFaSettings($user);
+
+        $this->assertDatabaseHas('users', [
+            'user_id' => $user->user_id,
+            'two_factor_secret' => null,
+            'two_factor_recovery_codes' => null,
+            'two_factor_confirmed_at' => null,
+            'two_factor_via' => null,
+        ]);
+
+        $this->assertDatabaseMissing('device_tokens', [
+            'user_id' => $user->user_id,
+        ]);
     }
 
     /*
