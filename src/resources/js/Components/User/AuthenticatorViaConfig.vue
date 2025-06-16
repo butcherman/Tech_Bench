@@ -43,7 +43,6 @@ const onSetupSuccess = () => {
  */
 const assignTwoFaViaEmail = () => {
     dataGet(route("two-factor.setup.email")).then((res) => {
-        console.log(res);
         twoFaEmailModal.value?.show();
     });
 };

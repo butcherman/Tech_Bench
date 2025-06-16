@@ -20,7 +20,6 @@ const getQrCode = () => {
         if (res) {
             dataGet(route("two-factor.qr-code")).then((res) => {
                 if (res) {
-                    console.log(res);
                     qrCode.value = res.data.svg;
                     qrUrl.value = res.data.url;
                     isLoading.value = false;

@@ -44,8 +44,6 @@ const HelpComponent = computed(() => {
     // Get a listing of files in the Help File folder
     let resolve = import.meta.glob("../../Help/Routes/**/*.vue");
 
-    console.log(helpPath);
-
     // If the Component is not found, return the Error Component
     if (!resolve[`../../Help/Routes/${helpPath}.vue`]) {
         return defineAsyncComponent({

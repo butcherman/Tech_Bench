@@ -11,7 +11,6 @@ type initProps = {
 const step = computed<number>(() => usePage<initProps>().props.step || 0);
 
 const onGoToStep = (newStep: number) => {
-    console.log("go to ", step);
     if (step.value > newStep) {
         router.get(route(`init.step-${newStep}`));
     }

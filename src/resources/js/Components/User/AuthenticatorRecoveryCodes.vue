@@ -14,7 +14,6 @@ const recoveryCode = ref<string>();
 const onGetRecoveryCodes = () => {
     dataGet(route("two-factor.secret-key")).then((res) => {
         if (res) {
-            console.log(res);
             recoveryCode.value = res.data.secretKey;
             twoFaCodes.value?.show();
         }
