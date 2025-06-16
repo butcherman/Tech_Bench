@@ -120,7 +120,7 @@ Route::middleware('auth.secure')->group(function () {
         ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
             $breadcrumbs->index('Customers')
                 ->show(
-                    fn (Customer|string $customer) => gettype($customer) === 'object'
+                    fn(Customer|string $customer) => gettype($customer) === 'object'
                         ? $customer->name
                         : $customer
                 )
@@ -147,7 +147,7 @@ Route::middleware('auth.secure')->group(function () {
             ->scoped(['alerts' => 'cust_id'])
             ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
                 $breadcrumbs->index('Alerts', 'customers.show');
-            });
+            })->except(['show']);
 
         /*
         |---------------------------------------------------------------------------
@@ -248,7 +248,7 @@ Route::middleware('auth.secure')->group(function () {
                 $breadcrumbs->index('Sites', 'customers.show')
                     ->create('New Customer Site')
                     ->show(
-                        fn (Customer $customer, CustomerSite|string $site) => gettype($site) === 'object'
+                        fn(Customer $customer, CustomerSite|string $site) => gettype($site) === 'object'
                             ? $site->site_name
                             : $site
                     )->edit('Edit Site');
@@ -278,7 +278,7 @@ Route::middleware('auth.secure')->group(function () {
             ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
                 $breadcrumbs->index('Equipment', 'customers.show')
                     ->show(
-                        fn (Customer $customer, CustomerEquipment $equipment) => $equipment->equip_name
+                        fn(Customer $customer, CustomerEquipment $equipment) => $equipment->equip_name
                     );
             });
 
@@ -317,43 +317,12 @@ Route::middleware('auth.secure')->group(function () {
 
         /*
         |-----------------------------------------------------------------------
-        | Customer Site Notes
-        | /customers/{customer-slug|customer-id}/site/{site-slug|site-id}/notes
-        |-----------------------------------------------------------------------
-        */
-        // Route::prefix('site/{site}')->name('site.')->group(function () {
-        //     Route::resource('notes', CustomerNoteSiteController::class)
-        //         ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
-        //             $breadcrumbs->create('New Note', 'customers.sites.show')
-        //                 ->show('Note Details', 'customers.sites.show')
-        //                 ->edit('Edit Note');
-        //         })->except(['index']);
-        // });
-
-        /*
-        |-----------------------------------------------------------------------
-        | Customer Equipment Notes
-        | /customers/{customer-slug|customer-id}/equipment/{equipment-id}/notes
-        |-----------------------------------------------------------------------
-        */
-        // Route::prefix('equipment/{equipment}')
-        //     ->name('equipment.')
-        //     ->group(function () {
-        //         Route::resource('notes', CustomerNoteEquipmentController::class)
-        //             ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
-        //                 $breadcrumbs->create('New Note', 'customers.equipment.show')
-        //                     ->show('Note Details', 'customers.equipment.show')
-        //                     ->edit('Edit Note');
-        //             })->except(['index']);
-        //     });
-
-        /*
-        |-----------------------------------------------------------------------
         | Customer Files
         | /customers/{customer-slug|customer-id}/files
         |-----------------------------------------------------------------------
         */
         Route::apiResource('files', CustomerFileController::class)
-            ->scoped(['files' => 'cust_id']);
+            ->scoped(['files' => 'cust_id'])
+            ->except(['show']);
     });
 });
