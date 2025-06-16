@@ -17,6 +17,10 @@ class HelpPageTest extends TestCase
         '*.restore',
         'admin.test-email',
         'azure*',
+        'customers.deleted-items.restore.*',
+        'customers.files.index',
+        'customers.not-found',
+        'customers.notes.download',
         'debugbar.*',
         'download',
         'dusk.*',
@@ -39,10 +43,6 @@ class HelpPageTest extends TestCase
         'tech-tips.not-found',
         'telescope',
         'two-factor.*',
-
-        // TMP Removals
-        // TODO - Finish Adding Help Pages
-        'customers.*',
     ];
 
     /*
@@ -57,7 +57,6 @@ class HelpPageTest extends TestCase
         })->map(function ($route) {
             return $route->action;
         })->pluck('as')->filter(function ($name) {
-            // return !is_null($name);
             if (is_null($name)) {
                 return false;
             }
