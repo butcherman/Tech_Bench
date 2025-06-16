@@ -25,6 +25,8 @@ class HelpPageTest extends TestCase
         'horizon.*',
         'init.*',
         'initialize',
+        'links.expire',
+        'links.extend',
         'login',
         'maint.backups.download',
         'maint.backups.run-backup',
@@ -38,12 +40,8 @@ class HelpPageTest extends TestCase
         // TMP Removals
         // TODO - Finish Adding Help Pages
         'customers.*',
-        'links.*',
-        'user.*',
-        'reports.*',
         'tech-tips.*',
         'admin.tech-tips.*',
-        'admin.links.*',
     ];
 
     /*
@@ -76,7 +74,7 @@ class HelpPageTest extends TestCase
             $path = str_replace('.', DIRECTORY_SEPARATOR, $route);
 
             $this->assertFileExists(
-                resource_path('js/Help/Routes/'.$path.'.vue')
+                resource_path('js/Help/Routes/' . $path . '.vue')
             );
         }
     }
