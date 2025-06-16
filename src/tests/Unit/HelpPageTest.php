@@ -34,14 +34,15 @@ class HelpPageTest extends TestCase
         'password.*',
         'publicTips.*',
         'storage.local',
+        'tech-tips.comments.flag',
+        'tech-tips.download',
+        'tech-tips.not-found',
         'telescope',
         'two-factor.*',
 
         // TMP Removals
         // TODO - Finish Adding Help Pages
         'customers.*',
-        'tech-tips.*',
-        'admin.tech-tips.*',
     ];
 
     /*
