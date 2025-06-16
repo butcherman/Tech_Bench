@@ -10,6 +10,7 @@ use App\Models\DataField;
 use App\Models\DataFieldType;
 use App\Models\EquipmentType;
 use App\Services\Customer\CustomerEquipmentDataService;
+use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
 
 class CustomerEquipmentDataUnitTest extends TestCase
@@ -248,6 +249,30 @@ class CustomerEquipmentDataUnitTest extends TestCase
 
         $testObj = new CustomerEquipmentDataService;
         $testObj->updateDataFieldValue(collect($data), $invalid);
+    }
+
+    public function test_update_field_data_do_not_log_value(): void
+    {
+        $testType = DataFieldType::where('name', 'Login Password')->first();
+        $testType->do_not_log_value = true;
+        $testType->save();
+
+        $dataField = DataField::factory()
+            ->create(['type_id' => $testType->type_id]);
+        $customerField = CustomerEquipmentData::factory()
+            ->create(['field_id' => $dataField->field_id]);
+
+        Log::shouldReceive('info')
+            ->once()
+            ->with('Customer Equipment Data Updated by Internal Service', [
+                'customer_equipment_id' => $customerField->cust_equip_id,
+                'data-field' => $customerField->field_name,
+                'old-value' => '<REDACTED>',
+                'new-value' => '<REDACTED>',
+            ]);
+
+        $customerField->value = 'password';
+        $customerField->save();
     }
 
     /*

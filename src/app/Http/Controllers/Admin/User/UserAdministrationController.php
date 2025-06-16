@@ -68,6 +68,8 @@ class UserAdministrationController extends Controller
             'role' => fn () => $user->UserRole,
             'last-login' => fn () => $user->getLastLogin(),
             'thirty-day-count' => fn () => $user->getLoginHistory(30)->count(),
+            'allow-two-fa' => fn () => config('auth.twoFa.required'),
+            'allow-save-device' => fn () => config('auth.twoFa.allow_save_device'),
         ]);
     }
 

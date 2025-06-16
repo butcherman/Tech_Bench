@@ -47,8 +47,6 @@ export async function dataPost(
 }
 
 export function handleAxiosError(errorData: errorMessage) {
-    console.log(errorData);
-
     let errMessage: string;
 
     if (typeof errorData.message !== "string") {

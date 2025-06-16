@@ -48,7 +48,7 @@ const schema = object({
             v-if="allowRemember"
             id="remember-device"
             name="remember_device"
-            label="Remember This Device"
+            label="Remember This Device for 180 days"
             center
         />
     </VueForm>
