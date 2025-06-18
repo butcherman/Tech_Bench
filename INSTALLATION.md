@@ -18,7 +18,7 @@ will be done from the browser after the Tech Bench has started.
 
 ```bash
 # Download Script
-wget https://raw.githubusercontent.com/butcherman/Tech_Bench/dev7/scripts/installTB.sh
+wget https://raw.githubusercontent.com/butcherman/Tech_Bench/master/scripts/installTB.sh
 # Make script executable
 chmod +x installTB.sh
 # Run the script
@@ -32,8 +32,8 @@ of the application server.  To download the files using wget, enter the followin
 commands:
 
 ```bash
-wget https://raw.githubusercontent.com/butcherman/Tech_Bench/dev7/docker-compose.yml
-wget https://raw.githubusercontent.com/butcherman/Tech_Bench/dev7/.env
+wget https://raw.githubusercontent.com/butcherman/Tech_Bench/master/docker-compose.yml
+wget https://raw.githubusercontent.com/butcherman/Tech_Bench/master/.env
 ```
 
 Read the .env file and modify any necessary fields.  The BASE_URL variable must
