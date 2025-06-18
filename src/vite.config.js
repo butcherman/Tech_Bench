@@ -42,8 +42,9 @@ export default defineConfig(({ mode }) => {
                 },
             },
             cors: {
-                origins: wsHost,
-                credentials: true,
+                origin: [
+                    `https://${wsHost}`,
+                ],
             }
         },
     };

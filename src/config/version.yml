@@ -5,16 +5,16 @@ current:
   major: 8
   minor: 0
   patch: 0
-  prerelease: dev
+  prerelease: null
   buildmetadata: null
-  commit: b13
+  commit: b18
   timestamp:
     year: 2025
     month: 6
-    day: 16
-    hour: 1
-    minute: 53
-    second: 8
+    day: 18
+    hour: 3
+    minute: 2
+    second: 26
     timezone: UTC
 commit:
   mode: git-local
