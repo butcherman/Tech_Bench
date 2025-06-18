@@ -36,16 +36,19 @@ const checkToSearch = () => {
                 placeholder="Search for Customer Name, Site Name or ID"
                 @input="checkToSearch"
             />
-            <InputGroupAddon class="bg-blue-400 text-white">
-                <button type="submit" class="btn btn-info">
+            <InputGroupAddon class="bg-blue-400! text-white!">
+                <button type="submit">
                     <fa-icon icon="magnifying-glass" />
-                    <span class="d-none d-md-inline"> Search </span>
+                    <span class="hidden md:inline"> Search </span>
                 </button>
             </InputGroupAddon>
-            <InputGroupAddon v-if="!hideReset" class="bg-yellow-500 text-white">
+            <InputGroupAddon
+                v-if="!hideReset"
+                class="bg-yellow-500! text-white!"
+            >
                 <button type="reset" class="btn btn-warning" @click="onReset">
                     <fa-icon icon="rotate" />
-                    <span class="d-none d-md-inline"> Reset </span>
+                    <span class="hidden md:inline"> Reset </span>
                 </button>
             </InputGroupAddon>
         </InputGroup>
