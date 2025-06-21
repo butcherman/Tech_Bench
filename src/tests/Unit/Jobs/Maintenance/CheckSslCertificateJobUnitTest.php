@@ -42,7 +42,9 @@ class CheckSslCertificateJobUnitTest extends TestCase
     {
         Mail::fake();
 
-        $this->generateCertificate(-6);
+        $this->generateCertificate(6);
+
+        $this->travel(30)->days();
 
         CheckSslCertificateJob::dispatch();
 
