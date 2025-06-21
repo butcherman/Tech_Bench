@@ -15,4 +15,4 @@ chmod +x updateTB.sh
 ./updateTB.sh
 ```
 
-This script is not actually built yet, so um yeah.......
+The script will check for the latest version and automatically download it if available.

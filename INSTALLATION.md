@@ -7,7 +7,8 @@ server for the application.  For more information regarding installing and setti
 up Docker, refer to the Docker website:  <https://www.docker.com/get-started/>
 
 By default, Tech Bench is set to run only through HTTPS.  It is highly recommended
-to upload a valid SSL Certificate to the application.
+to upload a valid SSL Certificate to the application.  This can be done once the
+initial setup has been completed by navigating to Administration -> Security Settings.
 
 ## Using Setup Script
 
@@ -21,8 +22,8 @@ will be done from the browser after the Tech Bench has started.
 wget https://raw.githubusercontent.com/butcherman/Tech_Bench/master/scripts/installTB.sh
 # Make script executable
 chmod +x installTB.sh
-# Run the script
-./installTB.sh
+# Run the script as sudo
+sudo ./installTB.sh
 ```
 
 ## Manual Installation Instructions
