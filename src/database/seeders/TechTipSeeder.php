@@ -2,60 +2,84 @@
 
 namespace Database\Seeders;
 
+use App\Models\AppSettings;
 use App\Models\EquipmentType;
 use App\Models\FileUpload;
 use App\Models\TechTip;
 use App\Models\TechTipComment;
-use App\Models\TechTipEquipment;
-use App\Models\TechTipFile;
 use App\Models\User;
 use Illuminate\Database\Seeder;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
 
 class TechTipSeeder extends Seeder
 {
     /**
-     * Run the database seeds
+     * Create 50 Tech Tips
      */
     public function run(): void
     {
-        //  Create 10 random Tech Tips
-        $tips = TechTip::factory()->count(10)->create([
-            'user_id' => 2,
+        // Enable Public Tech Tips
+        AppSettings::create([
+            'key' => 'tech-tips.allow_public',
+            'value' => json_encode(true),
         ]);
 
-        //  Assign equipment to the Tech Tip
-        for ($i = 0; $i < 10; $i++) {
-            TechTipEquipment::create([
-                'tip_id' => $tips[$i]->tip_id,
-                'equip_id' => EquipmentType::inRandomOrder()->first()->equip_id,
-            ]);
+        $equipTypeCount = EquipmentType::all()->count();
 
-            //  For the odd tips, add a comment
-            if ($i % 2 == 0) {
-                TechTipComment::factory()->create([
-                    'tip_id' => $tips[$i]->tip_id,
-                    'user_id' => User::inRandomOrder()->first()->user_id,
+        /**
+         * Create 60 new Tech Tips.  Assign a random number of equipment types
+         */
+        for ($i = 0; $i < 60; $i++) {
+            $newTip = TechTip::factory()->create();
+
+            // Assign random equipment to the Tech Tip
+            $randomNum = rand(1, $equipTypeCount);
+            $equipToLink = EquipmentType::inRandomOrder()
+                ->limit($randomNum)
+                ->get()
+                ->pluck('equip_id');
+
+            // Add a file to every third tech tip
+            if ($i % 3 === 0) {
+                $newFile = FileUpload::factory()->create([
+                    'disk' => 'tips',
+                    'folder' => $newTip->tip_id,
                 ]);
+                $newTip->Files()->attach($newFile);
             }
 
-            //  For the even tips, add a file
-            if ($i % 2 == 1) {
-                $file = FileUpload::factory()->create();
-                TechTipFile::factory()->create([
-                    'tip_id' => $tips[$i]->tip_id,
-                    'file_id' => $file->file_id,
-                ]);
-
-                //  Create a basic image file on the filesystem
-                Storage::disk('tips')
-                    ->putFileAs(
-                        $tips[$i]->tip_id,
-                        UploadedFile::fake()
-                            ->image($file->file_name), $file->file_name
-                    );
+            // Add comments to every 7th file
+            if ($i % 7 === 0) {
+                $numOfComments = rand(1, 5);
+                TechTipComment::factory()
+                    ->count($numOfComments)
+                    ->create(['tip_id' => $newTip->tip_id]);
             }
+
+            $newTip->Equipment()->sync($equipToLink);
         }
+
+        /**
+         * Disable 10 of the Tech Tips
+         */
+        $disabledTips = TechTip::inRandomOrder()->limit(10)->get();
+
+        foreach ($disabledTips as $tip) {
+            $tip->delete();
+        }
+
+        /**
+         * Give the Administrator five bookmarks and five recent visits
+         */
+        $admin = User::find(1);
+
+        $tipList1 = TechTip::inRandomOrder()->limit(5)->get();
+        $tipList1->each(function ($tip) use ($admin) {
+            $tip->toggleBookmark($admin, true);
+        });
+
+        $tipList2 = TechTip::inRandomOrder()->limit(5)->get();
+        $tipList2->each(function ($tip) use ($admin) {
+            $tip->touchRecent($admin);
+        });
     }
 }

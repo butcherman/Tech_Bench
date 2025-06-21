@@ -1,24 +1,7 @@
-<template>
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-body">
-                    <div class="card-title">User Settings</div>
-                    <UserSettingsForm
-                        :auto-logout-timer="autoLogoutTimer"
-                        :twoFa="twoFa"
-                        :oath="oath"
-                        :role-list="roleList"
-                    />
-                </div>
-            </div>
-        </div>
-    </div>
-</template>
-
 <script setup lang="ts">
-import AppLayout from "@/Layouts/AppLayout.vue";
-import UserSettingsForm from "@/Forms/Admin/User/UserSettingsForm.vue";
+import AppLayout from "@/Layouts/App/AppLayout.vue";
+import Card from "@/Components/_Base/Card.vue";
+import UserConfigurationForm from "@/Forms/Admin/User/UserConfigurationForm.vue";
 
 defineProps<{
     autoLogoutTimer: number;
@@ -31,3 +14,16 @@ defineProps<{
 <script lang="ts">
 export default { layout: AppLayout };
 </script>
+
+<template>
+    <div class="flex justify-center">
+        <Card class="tb-card">
+            <UserConfigurationForm
+                :auto-logout-timer="autoLogoutTimer"
+                :twoFa="twoFa"
+                :oath="oath"
+                :role-list="roleList"
+            />
+        </Card>
+    </div>
+</template>

@@ -15,20 +15,21 @@ class CustomerEquipmentDataTest extends TestCase
 
     protected $equipment;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->customer = Customer::factory()->create();
         $this->equipment = CustomerEquipment::factory()->create([
             'cust_id' => $this->customer->cust_id,
         ]);
-
     }
 
-    /**
-     * Invoke Method
-     */
-    public function test_invoke_guest()
+    /*
+    |---------------------------------------------------------------------------
+    | Invoke Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_invoke_guest(): void
     {
         $data = [
             'saveData' => [
@@ -38,7 +39,10 @@ class CustomerEquipmentDataTest extends TestCase
         ];
 
         $response = $this->put(
-            route('customers.update-equipment-data', $this->customer->slug),
+            route('customers.update-equipment-data', [
+                $this->customer->slug,
+                $this->equipment->cust_equip_id,
+            ]),
             $data
         );
         $response->assertStatus(302)
@@ -46,7 +50,7 @@ class CustomerEquipmentDataTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_invoke_one_field()
+    public function test_invoke_one_field(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly();
@@ -86,7 +90,10 @@ class CustomerEquipmentDataTest extends TestCase
 
         $response = $this->actingAs($user)
             ->put(
-                route('customers.update-equipment-data', $this->customer->slug),
+                route('customers.update-equipment-data', [
+                    $this->customer->slug,
+                    $this->equipment->cust_equip_id,
+                ]),
                 $data
             );
 
@@ -115,7 +122,7 @@ class CustomerEquipmentDataTest extends TestCase
         ]);
     }
 
-    public function test_invoke_all_fields()
+    public function test_invoke_all_fields(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly();
@@ -167,7 +174,10 @@ class CustomerEquipmentDataTest extends TestCase
 
         $response = $this->actingAs($user)
             ->put(
-                route('customers.update-equipment-data', $this->customer->slug),
+                route('customers.update-equipment-data', [
+                    $this->customer->slug,
+                    $this->equipment->cust_equip_id,
+                ]),
                 $data
             );
         $response->assertStatus(302)

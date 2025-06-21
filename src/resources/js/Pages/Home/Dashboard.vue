@@ -1,104 +1,92 @@
-<template>
-    <div>
-        <Head title="Dashboard" />
-        <h5>Hello {{ app.user?.full_name }}</h5>
-        <div class="row my-4 resource-links">
-            <div class="col">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-title">
-                            <span
-                                class="float-end pointer"
-                                title="Show/Hide Bookmarks"
-                                v-tooltip
-                                @click="showBookmarks = !showBookmarks"
-                            >
-                                <fa-icon :icon="showBookmarkIcon" />
-                            </span>
-                            Bookmarks:
-                        </div>
-                        <Transition
-                            @enter="growShow"
-                            @leave="shrinkHide"
-                            :css="false"
-                        >
-                            <ResourceLinks
-                                v-show="showBookmarks"
-                                :tech-tips="bookmarks.techTips"
-                                :customers="bookmarks.customers"
-                            />
-                        </Transition>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row my-4 resource-links">
-            <div class="col">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-title">
-                            <span
-                                class="float-end pointer"
-                                title="Show/Hide Bookmarks"
-                                v-tooltip
-                                @click="showRecents = !showRecents"
-                            >
-                                <fa-icon :icon="showRecentIcon" />
-                            </span>
-                            Recent Visits:
-                        </div>
-                        <Transition
-                            @enter="growShow"
-                            @leave="shrinkHide"
-                            :css="false"
-                        >
-                            <ResourceLinks
-                                v-show="showRecents"
-                                :tech-tips="recent.techTips"
-                                :customers="recent.customers"
-                            />
-                        </Transition>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</template>
-
 <script setup lang="ts">
-import AppLayout from "@/Layouts/AppLayout.vue";
-import ResourceLinks from "@/Components/Home/ResourceLinks.vue";
-import { useAppStore } from "@/Store/AppStore";
-import { ref, computed } from "vue";
-import { growShow, shrinkHide } from "@/Modules/Animation.module";
+import AppLayout from "@/Layouts/App/AppLayout.vue";
+import AtomLoader from "@/Components/_Base/Loaders/AtomLoader.vue";
+import Card from "@/Components/_Base/Card.vue";
+import ResourceList from "@/Components/_Base/ResourceList.vue";
+import { Deferred } from "@inertiajs/vue3";
+
+interface linkInterface {
+    techTips: techTip[];
+    customers: customer[];
+}
 
 defineProps<{
-    bookmarks: {
-        techTips: techTip[];
-        customers: customer[];
-    };
-    recent: {
-        techTips: techTip[];
-        customers: customer[];
-    };
+    bookmarks?: linkInterface;
+    recent?: linkInterface;
 }>();
-
-const app = useAppStore();
-const showBookmarks = ref(true);
-const showRecents = ref(true);
-
-const showBookmarkIcon = computed(() =>
-    showBookmarks.value
-        ? "down-left-and-up-right-to-center"
-        : "up-right-and-down-left-from-center"
-);
-const showRecentIcon = computed(() =>
-    showRecents.value
-        ? "down-left-and-up-right-to-center"
-        : "up-right-and-down-left-from-center"
-);
 </script>
 
 <script lang="ts">
 export default { layout: AppLayout };
 </script>
+
+<template>
+    <div class="flex flex-col items-center gap-3">
+        <Card class="tb-card-lg" title="Bookmarks">
+            <Deferred data="bookmarks">
+                <template #fallback>
+                    <AtomLoader />
+                </template>
+                <div v-if="bookmarks" class="flex flex-col md:flex-row gap-2">
+                    <div class="flex-1">
+                        <h4 class="text-center">Customer Bookmarks</h4>
+                        <ResourceList
+                            empty-text="No Customer Bookmarks"
+                            label-field="name"
+                            :list="bookmarks?.customers"
+                            :link-fn="
+                                (cust) => $route('customers.show', cust.slug)
+                            "
+                            center
+                        />
+                    </div>
+                    <div class="flex-1">
+                        <h4 class="text-center">Tech Tip Bookmarks</h4>
+                        <ResourceList
+                            empty-text="No Tech Tip Bookmarks"
+                            label-field="subject"
+                            :list="bookmarks?.techTips"
+                            :link-fn="
+                                (tip) => $route('tech-tips.show', tip.slug)
+                            "
+                            center
+                        />
+                    </div>
+                </div>
+            </Deferred>
+        </Card>
+        <Card class="tb-card-lg" title="Recent Visits">
+            <Deferred data="recent">
+                <template #fallback>
+                    <AtomLoader />
+                </template>
+                <div v-if="recent" class="flex flex-col md:flex-row gap-2">
+                    <div class="flex-1">
+                        <h4 class="text-center">Customer Recent Visits</h4>
+                        <ResourceList
+                            empty-text="No Recent Customer Visits"
+                            label-field="name"
+                            :list="recent?.customers"
+                            :link-fn="
+                                (cust) => $route('customers.show', cust.slug)
+                            "
+                            center
+                        />
+                    </div>
+                    <div class="flex-1">
+                        <h4 class="text-center">Tech Tip Recent Visits</h4>
+                        <ResourceList
+                            empty-text="No Recent Tech Tip Visits"
+                            label-field="subject"
+                            :list="recent?.techTips"
+                            :link-fn="
+                                (tip) => $route('tech-tips.show', tip.slug)
+                            "
+                            center
+                        />
+                    </div>
+                </div>
+            </Deferred>
+        </Card>
+    </div>
+</template>

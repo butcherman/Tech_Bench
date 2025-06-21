@@ -18,46 +18,66 @@ class CustomerEquipmentUnitTest extends TestCase
 
     protected $customer;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
         $this->customer = Customer::factory()->create();
         $this->model = CustomerEquipment::factory()
             ->create(['cust_id' => $this->customer->cust_id]);
-        $this->model->CustomerSite()->sync([$this->customer->primary_site_id]);
+        $this->model->Sites()->sync([$this->customer->primary_site_id]);
     }
 
-    /**
-     * Model Attributes
-     */
-    public function test_model_attributes()
+    /*
+    |---------------------------------------------------------------------------
+    | Route Key Binding
+    |---------------------------------------------------------------------------
+    */
+    public function test_get_route_key_name(): void
+    {
+        $this->assertEquals('cust_equip_id', $this->model->getRouteKeyName());
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | Model Attributes
+    |---------------------------------------------------------------------------
+    */
+    public function test_model_attributes(): void
     {
         $this->assertArrayHasKey('equip_name', $this->model->toArray());
     }
 
-    /**
-     * Model Relationships
-     */
-    public function test_equipment_type_relationship()
+    /*
+    |---------------------------------------------------------------------------
+    | Model Relationships
+    |---------------------------------------------------------------------------
+    */
+    public function test_equipment_type_relationship(): void
     {
-        $data = EquipmentType::where('equip_id', $this->model->equip_id)->first();
-
-        $this->assertEquals($data->toArray(), $this->model->EquipmentType->toArray());
-    }
-
-    public function test_customer_site_relationship()
-    {
-        $data = CustomerSite::where('cust_site_id', $this->customer->primary_site_id)
-            ->get();
+        $data = EquipmentType::where('equip_id', $this->model->equip_id)
+            ->first();
 
         $this->assertEquals(
             $data->toArray(),
-            $this->model->CustomerSite->toArray()
+            $this->model->EquipmentType->toArray()
         );
     }
 
-    public function test_customer_note_relationship()
+    public function test_customer_site_relationship(): void
+    {
+        $data = CustomerSite::where(
+            'cust_site_id',
+            $this->customer->primary_site_id
+        )->get();
+
+        $this->assertEquals(
+            $data->toArray(),
+            $this->model->Sites->toArray()
+        );
+    }
+
+    public function test_customer_note_relationship(): void
     {
         $data = CustomerNote::factory()
             ->create([
@@ -68,13 +88,13 @@ class CustomerEquipmentUnitTest extends TestCase
         $this->assertEquals(
             $data->makeHidden('Customer')->toArray(),
             $this->model
-                ->CustomerNote[0]
+                ->Notes[0]
                 ->makeHidden(['CustomerEquipment', 'deleted_at'])
                 ->toArray()
         );
     }
 
-    public function test_customer_file_relationship()
+    public function test_customer_file_relationship(): void
     {
         $data = CustomerFile::factory()
             ->create([
@@ -86,12 +106,12 @@ class CustomerEquipmentUnitTest extends TestCase
             $data->makeHidden('Customer')->toArray(),
             $this->model
                 ->CustomerFile[0]
-                ->makeHidden(['CustomerSite'])
+                ->makeHidden(['Sites', 'FileUpload'])
                 ->toArray()
         );
     }
 
-    public function test_customer_equipment_data()
+    public function test_customer_equipment_data(): void
     {
         $data = CustomerEquipmentData::factory()
             ->count(2)
@@ -105,10 +125,12 @@ class CustomerEquipmentUnitTest extends TestCase
         );
     }
 
-    /**
-     * Prunable Models
-     */
-    public function test_prunable()
+    /*
+    |---------------------------------------------------------------------------
+    | Prunable Models
+    |---------------------------------------------------------------------------
+    */
+    public function test_prunable(): void
     {
         $models = CustomerEquipment::factory()
             ->count(5)
@@ -129,14 +151,18 @@ class CustomerEquipmentUnitTest extends TestCase
         $models[4]->delete(); // now
 
         Artisan::call('model:prune', ['--model' => CustomerEquipment::class]);
-        $totalContacts = CustomerEquipment::where('cust_id', $this->customer->cust_id)
+
+        $totalContacts = CustomerEquipment::where(
+            'cust_id',
+            $this->customer->cust_id
+        )
             ->withTrashed()
             ->count();
 
         $this->assertEquals($totalContacts, 4);
     }
 
-    public function test_prunable_disabled()
+    public function test_prunable_disabled(): void
     {
         config(['customer.auto_purge' => false]);
 
@@ -159,10 +185,71 @@ class CustomerEquipmentUnitTest extends TestCase
         $models[4]->delete(); // now
 
         Artisan::call('model:prune', ['--model' => CustomerEquipment::class]);
-        $totalContacts = CustomerEquipment::where('cust_id', $this->customer->cust_id)
+
+        $totalContacts = CustomerEquipment::where(
+            'cust_id',
+            $this->customer->cust_id
+        )
             ->withTrashed()
             ->count();
 
         $this->assertEquals($totalContacts, 6);
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | Additional Methods
+    |---------------------------------------------------------------------------
+    */
+    public function test_get_notes(): void
+    {
+        CustomerNote::factory()
+            ->count(2)
+            ->create([
+                'cust_id' => $this->model->cust_id,
+                'cust_equip_id' => $this->model->cust_equip_id,
+            ]);
+
+        CustomerNote::factory()
+            ->count(5)
+            ->create(['cust_id' => $this->model->cust_id]);
+
+        $testSite = CustomerSite::factory()
+            ->create(['cust_id' => $this->model->cust_id]);
+
+        $ignoredNote = CustomerNote::factory()
+            ->create(['cust_id' => $this->model->cust_id]);
+
+        $testSite->SiteNote()->attach($ignoredNote);
+
+        $notes = $this->model->getNotes();
+
+        $this->assertCount(7, $notes);
+    }
+
+    public function test_get_files(): void
+    {
+        CustomerFile::factory()
+            ->count(2)
+            ->create([
+                'cust_id' => $this->model->cust_id,
+                'cust_equip_id' => $this->model->cust_equip_id,
+            ]);
+
+        CustomerFile::factory()
+            ->count(5)
+            ->create(['cust_id' => $this->model->cust_id]);
+
+        $testSite = CustomerSite::factory()
+            ->create(['cust_id' => $this->model->cust_id]);
+
+        $ignoredFile = CustomerFile::factory()
+            ->create(['cust_id' => $this->model->cust_id]);
+
+        $testSite->SiteFile()->attach($ignoredFile);
+
+        $notes = $this->model->getFiles();
+
+        $this->assertCount(7, $notes);
     }
 }

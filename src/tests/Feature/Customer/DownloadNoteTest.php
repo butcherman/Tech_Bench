@@ -9,10 +9,12 @@ use Tests\TestCase;
 
 class DownloadNoteTest extends TestCase
 {
-    /**
-     * Invoke Method
-     */
-    public function test_invoke_guest()
+    /*
+    |---------------------------------------------------------------------------
+    | Invoke Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_invoke_guest(): void
     {
         $customer = Customer::factory()->create();
         $note = CustomerNote::factory()->create([
@@ -28,18 +30,35 @@ class DownloadNoteTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_invoke()
+    public function test_invoke(): void
     {
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
         $customer = Customer::factory()->create();
         $note = CustomerNote::factory()->create([
             'cust_id' => $customer->cust_id,
         ]);
 
-        $response = $this->actingAs(User::factory()->createQuietly())
+        $response = $this->actingAs($user)
             ->get(route('customers.notes.download', [
                 $customer->slug,
                 $note->note_id,
             ]));
         $response->assertSuccessful();
+    }
+
+    public function test_invoke_scope_bindings(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+        $customer = Customer::factory()->create();
+        $note = CustomerNote::factory()->create();
+
+        $response = $this->actingAs($user)
+            ->get(route('customers.notes.download', [
+                $customer->slug,
+                $note->note_id,
+            ]));
+        $response->assertStatus(404);
     }
 }

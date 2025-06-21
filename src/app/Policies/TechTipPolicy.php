@@ -5,12 +5,10 @@ namespace App\Policies;
 use App\Features\PublicTechTipFeature;
 use App\Models\User;
 use App\Traits\AllowTrait;
-use Illuminate\Auth\Access\HandlesAuthorization;
 
 class TechTipPolicy
 {
     use AllowTrait;
-    use HandlesAuthorization;
 
     public function manage(User $user)
     {

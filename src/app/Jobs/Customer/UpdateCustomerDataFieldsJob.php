@@ -3,19 +3,24 @@
 namespace App\Jobs\Customer;
 
 use App\Models\EquipmentType;
-use App\Service\Customer\CustomerEquipmentDataService;
-use Illuminate\Bus\Queueable;
+use App\Services\Customer\CustomerEquipmentDataService;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
+use Illuminate\Foundation\Queue\Queueable;
+
+/*
+|-------------------------------------------------------------------------------
+| Job is triggered after Equipment Data has been updated for a selected piece
+| of equipment.  Job will cycle through all customer with this equipment to
+| verify that any new fields are added, and any removed fields are deleted.
+|-------------------------------------------------------------------------------
+*/
 
 class UpdateCustomerDataFieldsJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Queueable;
 
     /**
-     * Create a new job instance.
+     * @codeCoverageIgnore
      */
     public function __construct(protected EquipmentType $equipment) {}
 
@@ -24,6 +29,6 @@ class UpdateCustomerDataFieldsJob implements ShouldQueue
      */
     public function handle(CustomerEquipmentDataService $svc): void
     {
-        $svc->updateEquipmentDataFields($this->equipment);
+        $svc->updateEquipmentDataFieldsForEquipment($this->equipment);
     }
 }

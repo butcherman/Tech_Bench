@@ -2,7 +2,9 @@
 
 namespace App\Actions\Socialite;
 
-use App\Exceptions\Auth\UnableToCreateAzureUserException;
+use App\Exceptions\Auth\UnableToCreateSocialiteUserException;
+use App\Exceptions\Misc\FeatureDisabledException;
+use App\Jobs\User\CreateUserSettingsJob;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -10,14 +12,22 @@ use Illuminate\Support\Facades\Log;
 use Laravel\Socialite\Facades\Socialite;
 use SocialiteProviders\Azure\User as AzureUser;
 
-/**
- * Log user in via Office 365 Integration
- */
 class AuthorizeUser
 {
-    /**
-     * Attempt to authenticate azure user
-     */
+    public function __construct()
+    {
+        if (! config('services.azure.allow_login')) {
+            throw new FeatureDisabledException('Azure Login');
+        }
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | Attempt to authenticate azure user.  If the user does not currently
+    | exist in the database, configuration will determine if the user is
+    | to be created.
+    |---------------------------------------------------------------------------
+    */
     public function handle(): User
     {
         $azureUser = Socialite::driver('azure')->user();
@@ -29,9 +39,8 @@ class AuthorizeUser
 
         Auth::login($localUser, true);
 
-        $this->bypass2fa();
-
-        Log::info('User '.$localUser->username.' logged in via Microsoft Azure');
+        Log::stack(['app', 'auth'])
+            ->info('User '.$localUser->username.' logged in via Microsoft Azure');
 
         return $localUser;
     }
@@ -52,7 +61,7 @@ class AuthorizeUser
     protected function processNewUser(AzureUser $azureUser): User
     {
         if (! config('services.azure.allow_register')) {
-            throw (new UnableToCreateAzureUserException($azureUser));
+            throw new UnableToCreateSocialiteUserException($azureUser);
         }
 
         return $this->buildUser($azureUser);
@@ -72,16 +81,8 @@ class AuthorizeUser
             'password' => Hash::make($socUser->user['id']),
         ]);
 
-        return $newUser;
-    }
+        dispatch(new CreateUserSettingsJob($newUser));
 
-    /**
-     * Determine if the user can bypass 2FA and set necessary session
-     */
-    protected function bypass2fa(): void
-    {
-        if (config('services.azure.allow_bypass_2fa')) {
-            session()->put('2fa_verified', true);
-        }
+        return $newUser;
     }
 }

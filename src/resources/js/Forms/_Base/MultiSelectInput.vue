@@ -1,100 +1,132 @@
-<template>
-    <div class="mb-3">
-        <label v-if="label" :for="id" class="form-label w-100">
-            {{ label }}:
-        </label>
-        <Multiselect
-            ref="formMultiSelect"
-            v-model="value"
-            :id="id"
-            :options="selectList"
-            :mode="mode"
-            :groups="groups"
-            :searchable="searchable"
-            :valueProp="valueField"
-            :label="textField"
-            :class="{ 'is-valid': isValid, 'is-invalid': isInvalid }"
-            :close-on-select="closeOnSelect"
-        >
-            <template #beforelist v-if="allowSelectAll">
-                <ul class="multiselect-options">
-                    <li class="multiselect-option" @click="selectAll">
-                        Select All
-                    </li>
-                </ul>
-            </template>
-        </Multiselect>
-        <span
-            v-if="errorMessage && (meta.dirty || meta.touched)"
-            class="text-danger"
-        >
-            {{ errorMessage }}
-        </span>
-    </div>
-</template>
-
-<script setup lang="ts">
-import Multiselect from "@vueform/multiselect";
-import { ref, computed, toRef } from "vue";
+<script setup lang="ts" generic="T">
+import { MultiSelect, Message, FloatLabel } from "primevue";
+import { computed, ref, toRef } from "vue";
 import { useField } from "vee-validate";
-import "@vueform/multiselect/themes/default.css";
+import type { Ref } from "vue";
+
+const emit = defineEmits<{
+    focus: [];
+    blur: [];
+}>();
 
 const props = defineProps<{
     id: string;
     name: string;
-    list: any[] | any;
-    mode: "multiple" | "tags" | "single" | undefined;
+    list: T[];
+    borderless?: boolean;
+    disabled?: boolean;
+    filter?: boolean;
+    groupChildrenField?: string;
+    groupTextField?: string;
+    help?: string;
     label?: string;
-    groups?: boolean;
-    textField?: string;
-    valueField?: string;
     placeholder?: string;
-    searchable?: boolean;
-    allowNull?: boolean;
-    allowSelectAll?: boolean;
+    textField?: string;
+    type?: string;
+    valueField?: string;
 }>();
 
-const formMultiSelect = ref<InstanceType<typeof Multiselect> | null>(null);
+/**
+ * Auto Hide the placeholder when not in focus to support Floating Label.
+ */
+const inputPlaceholder = computed<string>(() =>
+    props.placeholder && (hasFocus.value || !props.label)
+        ? props.placeholder
+        : ""
+);
 
-const selectList = computed(() => {
-    let newList = [...props.list];
-
-    if (props.allowNull) {
-        if (props.textField && props.valueField) {
-            newList.unshift({
-                [props.textField]: null,
-                [props.valueField]: null,
-            });
-        } else {
-            newList.unshift(null);
-        }
+const optionLabel = computed<string | undefined>(() => {
+    if (typeof props.list[0] === "string") {
+        return undefined;
     }
 
-    return newList;
+    return props.textField ?? "text";
 });
 
-const closeOnSelect = computed(() =>
-    props.mode === "multiple" || props.mode === "tags" ? false : true
-);
+const optionValue = computed<string | undefined>(() => {
+    if (typeof props.list[0] === "string") {
+        return undefined;
+    }
 
-const valueField = computed(() =>
-    props.valueField ? props.valueField : "value"
-);
-const textField = computed(() => (props.textField ? props.textField : "text"));
-
-const isValid = computed<boolean>(() => {
-    return meta.valid && meta.validated && !meta.pending;
+    return props.valueField ?? "text";
 });
 
-const isInvalid = computed<boolean>(() => {
-    return !meta.valid && meta.validated && !meta.pending;
-});
+/*
+|-------------------------------------------------------------------------------
+| Input Focus State
+|-------------------------------------------------------------------------------
+*/
+const hasFocus = ref<boolean>(false);
 
-const selectAll = () => {
-    formMultiSelect.value?.selectAll();
-    formMultiSelect.value?.close();
+const onFocus = (): void => {
+    hasFocus.value = true;
+    emit("focus");
 };
 
+const onBlur = (): void => {
+    hasFocus.value = false;
+    emit("blur");
+};
+
+/*
+|-------------------------------------------------------------------------------
+| Vee-Validate
+|-------------------------------------------------------------------------------
+*/
 const nameRef = toRef(props, "name");
-const { errorMessage, value, meta } = useField(nameRef);
+const {
+    errorMessage,
+    value,
+}: {
+    errorMessage: Ref<string | undefined, string | undefined>;
+    value: Ref<string | undefined>;
+} = useField(nameRef);
 </script>
+
+<template>
+    <div class="my-2">
+        <FloatLabel variant="on">
+            <MultiSelect
+                v-model="value"
+                class="w-full"
+                display="chip"
+                :class="{
+                    'border-hidden!': borderless,
+                }"
+                :disabled="disabled"
+                :filter="filter"
+                :input-id="id"
+                :invalid="errorMessage ? true : false"
+                :options="list"
+                :option-label="optionLabel"
+                :option-value="optionValue"
+                :option-group-label="groupTextField"
+                :option-group-children="groupChildrenField"
+                :placeholder="inputPlaceholder"
+                :pt="{
+                    pcChip: {
+                        root: 'bg-green-200! rounded-lg!',
+                    },
+                }"
+                @focus="onFocus"
+                @blur="onBlur"
+            >
+                <template #option="slotProps">
+                    <slot name="option" v-bind="slotProps" />
+                </template>
+            </MultiSelect>
+            <label :for="id">{{ label }}</label>
+        </FloatLabel>
+        <Message size="small" severity="error" variant="simple">
+            <span v-html="errorMessage" />
+        </Message>
+        <Message
+            v-show="hasFocus"
+            size="small"
+            severity="secondary"
+            variant="simple"
+        >
+            {{ help }}
+        </Message>
+    </div>
+</template>

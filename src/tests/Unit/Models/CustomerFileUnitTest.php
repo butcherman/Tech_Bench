@@ -9,7 +9,8 @@ use App\Models\CustomerFileType;
 use App\Models\CustomerSite;
 use App\Models\FileUpload;
 use App\Models\User;
-use Artisan;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
 class CustomerFileUnitTest extends TestCase
@@ -18,7 +19,7 @@ class CustomerFileUnitTest extends TestCase
 
     protected $customer;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -26,13 +27,13 @@ class CustomerFileUnitTest extends TestCase
         $this->model = CustomerFile::factory()
             ->create(['cust_id' => $this->customer->cust_id])
             ->append('href');
-        $this->model->CustomerSite()->sync([$this->customer->primary_site_id]);
+        $this->model->Sites()->sync([$this->customer->primary_site_id]);
     }
 
     /**
      * Model Attributes
      */
-    public function test_model_attributes()
+    public function test_model_attributes(): void
     {
         $this->assertArrayHasKey('file_type', $this->model->toArray());
         $this->assertArrayHasKey('created_stamp', $this->model->toArray());
@@ -44,27 +45,32 @@ class CustomerFileUnitTest extends TestCase
     /**
      * Model Relationships
      */
-    public function test_file_upload_relationship()
+    public function test_file_upload_relationship(): void
     {
         $data = FileUpload::where('file_id', $this->model->file_id)->first();
 
-        $this->assertEquals($data->toArray(), $this->model->FileUpload->toArray());
+        $this->assertEquals(
+            $data->toArray(),
+            $this->model->FileUpload->toArray()
+        );
     }
 
-    public function test_customer_site_relationship()
+    public function test_customer_site_relationship(): void
     {
         $data = CustomerSite::where('cust_id', $this->customer->cust_id)->get();
 
         $this->assertEquals(
             $data->toArray(),
-            $this->model->CustomerSite->toArray()
+            $this->model->Sites->toArray()
         );
     }
 
-    public function test_customer_file_type_relationship()
+    public function test_customer_file_type_relationship(): void
     {
-        $data = CustomerFileType::where('file_type_id', $this->model->file_type_id)
-            ->first();
+        $data = CustomerFileType::where(
+            'file_type_id',
+            $this->model->file_type_id
+        )->first();
 
         $this->assertEquals(
             $data->toArray(),
@@ -72,30 +78,32 @@ class CustomerFileUnitTest extends TestCase
         );
     }
 
-    public function test_user_relationship()
+    public function test_user_relationship(): void
     {
         $data = User::where('user_id', $this->model->user_id)->first();
 
         $this->assertEquals($data->toArray(), $this->model->User->toArray());
     }
 
-    // public function test_customer_equipment_relationship()
-    // {
-    //     $data = CustomerEquipment::factory()
-    //         ->create(['cust_id' => $this->customer->cust_id]);
-    //     $this->model->update(['cust_equip_id' => $data->cust_equip_id]);
+    public function test_customer_equipment_relationship(): void
+    {
+        $data = CustomerEquipment::factory()
+            ->create(['cust_id' => $this->customer->cust_id]);
+        $this->model->update(['cust_equip_id' => $data->cust_equip_id]);
 
-    //     $this->assertEquals(
-    //         $data->toArray(),
-    //         $this->model->CustomerEquipment->toArray()
-    //     );
-    // }
+        $this->assertEquals(
+            $data->makeHidden('Customer')->toArray(),
+            $this->model->fresh()->CustomerEquipment->toArray()
+        );
+    }
 
     /**
      * Prunable Models
      */
-    public function test_prunable()
+    public function test_prunable(): void
     {
+        Event::fake();
+
         $models = CustomerFile::factory()
             ->count(5)
             ->create(['cust_id' => $this->customer->cust_id]);
@@ -115,6 +123,7 @@ class CustomerFileUnitTest extends TestCase
         $models[4]->delete(); // now
 
         Artisan::call('model:prune', ['--model' => CustomerFile::class]);
+
         $totalContacts = CustomerFile::where('cust_id', $this->customer->cust_id)
             ->withTrashed()
             ->count();
@@ -122,8 +131,10 @@ class CustomerFileUnitTest extends TestCase
         $this->assertEquals($totalContacts, 4);
     }
 
-    public function test_prunable_disabled()
+    public function test_prunable_disabled(): void
     {
+        Event::fake();
+
         config(['customer.auto_purge' => false]);
 
         $models = CustomerFile::factory()
@@ -145,6 +156,7 @@ class CustomerFileUnitTest extends TestCase
         $models[4]->delete(); // now
 
         Artisan::call('model:prune', ['--model' => CustomerFile::class]);
+
         $totalContacts = CustomerFile::where('cust_id', $this->customer->cust_id)
             ->withTrashed()
             ->count();

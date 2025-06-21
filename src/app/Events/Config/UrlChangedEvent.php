@@ -6,12 +6,16 @@ use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
+/*
+|-------------------------------------------------------------------------------
+| This event is called when an Administrator changes the public URL of the
+| application.  This will force a rebuild of all JS files.
+|-------------------------------------------------------------------------------
+*/
+
 class UrlChangedEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    /**
-     * Event is fired when the Tech Bench Public URL is changed
-     */
     public function __construct(public string $newUrl, public string $oldUrl) {}
 }

@@ -2,20 +2,25 @@
 
 namespace Tests\Feature\Auth;
 
+use App\Models\DeviceToken;
 use App\Models\User;
-use App\Notifications\User\SendAuthCode;
 use Carbon\Carbon;
 use Illuminate\Auth\Events\Failed;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 
 class _LoginTest extends TestCase
 {
-    //  Verify the a valid user can log in
-    public function test_valid_login()
+    /*
+    |---------------------------------------------------------------------------
+    | Test Logging into the Tech Bench
+    |---------------------------------------------------------------------------
+    */
+
+    // Verify the a valid user can log in with username
+    public function test_valid_login_with_username(): void
     {
         Event::fake();
 
@@ -29,14 +34,37 @@ class _LoginTest extends TestCase
             'password' => $password,
         ]);
 
-        $response->assertStatus(302)->assertRedirect(route('dashboard'));
+        $response->assertStatus(302)
+            ->assertRedirect(route('dashboard'));
         $this->assertAuthenticatedAs($user);
 
         Event::assertDispatched(Login::class);
     }
 
-    //  Verify user cannot login with incorrect password
-    public function test_incorrect_login()
+    // Verify the a valid user can log in with email address
+    public function test_valid_login_with_email(): void
+    {
+        Event::fake();
+
+        /** @var User $user */
+        $user = User::factory()->createQuietly([
+            'password' => bcrypt($password = 'randomPassword'),
+        ]);
+
+        $response = $this->post(route('login'), [
+            'username' => $user->email,
+            'password' => $password,
+        ]);
+
+        $response->assertStatus(302)
+            ->assertRedirect(route('dashboard'));
+        $this->assertAuthenticatedAs($user);
+
+        Event::assertDispatched(Login::class);
+    }
+
+    // Verify user cannot login with incorrect password
+    public function test_incorrect_login(): void
     {
         Event::fake();
 
@@ -56,8 +84,8 @@ class _LoginTest extends TestCase
         Event::assertDispatched(Failed::class);
     }
 
-    //  Verify a user that has been deactivated is not able to login
-    public function test_login_as_disabled_user()
+    // Verify a user that has been deactivated is not able to login
+    public function test_login_as_disabled_user(): void
     {
         Event::fake();
 
@@ -80,20 +108,21 @@ class _LoginTest extends TestCase
         Event::assertDispatched(Failed::class);
     }
 
-    //  Verify that the user is redirected if already logged in
-    public function test_valid_login_redirect()
+    // Verify that the user is redirected if already logged in
+    public function test_valid_login_redirect(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly();
 
         $response = $this->actingAs($user)->get(route('home'));
 
-        $response->assertStatus(302)->assertRedirect(route('dashboard'));
+        $response->assertStatus(302)
+            ->assertRedirect(route('dashboard'));
         $this->assertAuthenticatedAs($user);
     }
 
-    //  Verify that a user is locked out if they try more than five login attempts
-    public function test_login_lockout()
+    // Verify that a user is locked out if they try more than five login attempts
+    public function test_login_lockout(): void
     {
         Event::fake();
 
@@ -142,84 +171,101 @@ class _LoginTest extends TestCase
         ]);
 
         $response->assertStatus(302)
-            ->assertRedirect(route('home'))
-            ->assertSessionHasErrors(['username' => __('auth.failed')]);
+            ->assertRedirect(route('home'));
         $this->assertGuest();
 
         Event::assertDispatched(Failed::class);
     }
 
-    //  Make sure that the user is redirected to the Change Password page if their password has expired
-    public function test_password_expired_redirect()
+    // Make sure that the user is redirected to the Change Password page if their password has expired
+    public function test_password_expired_redirect(): void
     {
+        config(['auth.twoFa.required' => false]);
+
         /** @var User $user */
         $user = User::factory()
             ->createQuietly(['password_expires' => Carbon::yesterday()]);
 
         $response = $this->actingAs($user)->get(route('dashboard'));
-        $response->assertStatus(302);
-        $response->assertRedirect(route('user.change-password.show'));
-        $response->assertSessionHasErrors(['password']);
+
+        $response->assertStatus(302)
+            ->assertRedirect(route('user.change-password.show'))
+            ->assertSessionHasErrors(['password']);
     }
 
-    //  Make sure that the user is redirected to the 2fa page if enabled
-    public function test_redirect_two_fa()
+    // Make sure that the user is redirected to the 2fa page if enabled
+    public function test_redirect_two_fa(): void
     {
-        Notification::fake();
-
         config(['auth.twoFa.required' => true]);
+        config(['auth.twoFa.allow_save_device' => true]);
+        config(['auth.twoFa.allow_via_authenticator' => false]);
+        config(['auth.twoFa.allow_via_email' => true]);
 
         /** @var User $user */
         $user = User::factory()->createQuietly();
 
-        $response = $this->actingAs($user)->get(route('dashboard'));
-        $response->assertStatus(302);
-        $response->assertRedirect(route('2fa.show'));
-
-        $this->assertDatabaseHas('user_verification_codes', [
-            'user_id' => $user->user_id,
+        $response = $this->post(route('login'), [
+            'username' => $user->username,
+            'password' => 'password',
+            'remember' => false,
         ]);
 
-        Notification::assertSentTo($user, SendAuthCode::class);
+        $response->assertStatus(302)
+            ->assertRedirect(route('two-factor.login'))
+            ->assertSessionHas('login', [
+                'id' => $user->user_id,
+                'remember' => false,
+            ]);
     }
 
-    //  Make sure that if the password is expired, user is redirected to 2fa page first (if enabled)
-    public function test_redirect_two_fa_with_password_expired()
+    // Make sure that if the password is expired, user is redirected to 2fa page first (if enabled)
+    public function test_redirect_two_fa_with_password_expired(): void
     {
-        Notification::fake();
-
         config(['auth.twoFa.required' => true]);
+        config(['auth.twoFa.allow_save_device' => true]);
+        config(['auth.twoFa.allow_via_authenticator' => false]);
+        config(['auth.twoFa.allow_via_email' => true]);
 
         /** @var User $user */
         $user = User::factory()->createQuietly([
             'password_expires' => Carbon::yesterday(),
         ]);
 
-        $response = $this->actingAs($user)->get(route('dashboard'));
-        $response->assertStatus(302);
-        $response->assertRedirect(route('2fa.show'));
+        $response = $this->post(route('login'), [
+            'username' => $user->username,
+            'password' => 'password',
+            'remember' => false,
+        ]);
 
-        $this->assertDatabaseHas('user_verification_codes', ['user_id' => $user->user_id]);
-
-        Notification::assertSentTo($user, SendAuthCode::class);
+        $response->assertStatus(302)
+            ->assertRedirect(route('two-factor.login'))
+            ->assertSessionHas('login', [
+                'id' => $user->user_id,
+                'remember' => false,
+            ]);
     }
 
-    //  Make sure that if the user has a remember device token, it will bypass the 2fa page
-    public function test_redirect_with_valid_device_token()
+    // Make sure that if the user has a remember device token, it will bypass the 2fa page
+    public function test_redirect_with_valid_device_token(): void
     {
-        Notification::fake();
-
         config(['auth.twoFa.required' => true]);
+        config(['auth.twoFa.allow_save_device' => true]);
+        config(['auth.twoFa.allow_via_authenticator' => false]);
+        config(['auth.twoFa.allow_via_email' => true]);
 
         /** @var User $user */
         $user = User::factory()->createQuietly();
-        $deviceToken = $user->generateRememberDeviceToken();
+        $deviceToken = DeviceToken::factory()
+            ->create(['user_id' => $user->user_id]);
 
-        $response = $this->actingAs($user)
-            ->withCookie('remember_device', $deviceToken)
-            ->get(route('dashboard'));
-        $response->assertSuccessful();
+        $response = $this->withCookie('remember_device', $deviceToken->token)
+            ->post(route('login'), [
+                'username' => $user->username,
+                'password' => 'password',
+                'remember' => false,
+            ]);
 
-        Notification::assertNotSentTo($user, SendAuthCode::class);
+        $response->assertStatus(302)
+            ->assertRedirect(route('dashboard'));
     }
 }

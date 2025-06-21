@@ -3,17 +3,16 @@
 namespace App\Http\Controllers\Home;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UploadImageRequest;
+use App\Http\Requests\Home\UploadImageRequest;
 use Illuminate\Http\File;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class UploadImageController extends Controller
 {
     /**
-     * Handle the incoming request.
+     * Handle an image upload from the Vue Editor Component
      */
-    public function __invoke(UploadImageRequest $request, ?string $folderName = null)
+    public function __invoke(UploadImageRequest $request, ?string $folderName = null): array
     {
         $path = 'images/uploaded/'.$folderName;
         $location = Storage::disk('public')

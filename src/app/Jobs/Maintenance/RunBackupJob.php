@@ -2,11 +2,11 @@
 
 namespace App\Jobs\Maintenance;
 
-use App\Events\Admin\AdministrationEvent;
 use App\Exceptions\Maintenance\BackupFailedException;
-use App\Service\Misc\ConsoleOutputService;
+use App\Services\Maintenance\BackupService;
+use App\Services\Misc\ConsoleOutputService;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Broadcasting\ShouldBeUnique;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -14,21 +14,33 @@ use Illuminate\Queue\Middleware\WithoutOverlapping;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Process;
+use Spatie\Backup\Events\BackupHasFailed;
 
-/**
- * Triggered by manual backup command
- */
+/*
+|-------------------------------------------------------------------------------
+| Run an application backup. Triggered by manual interaction via Artisan console
+| or Maintenance->Backups page.
+|-------------------------------------------------------------------------------
+*/
+
 class RunBackupJob implements ShouldBeUnique, ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    /**
+     * Backups are only allowed on the backup queue.
+     *
+     * @codeCoverageIgnore
+     */
     public function __construct()
     {
         $this->onQueue('backups');
     }
 
-    public function middleware()
+    /**
+     * Lock job so that only one backup can be running at a time.
+     */
+    public function middleware(): array
     {
         return [
             (new WithoutOverlapping('backup_process')),
@@ -38,35 +50,17 @@ class RunBackupJob implements ShouldBeUnique, ShouldQueue
     /**
      * Execute the job.
      */
-    public function handle(): void
+    public function handle(BackupService $svc): void
     {
-        event(new AdministrationEvent('Backup Process Called'));
-        Log::info('Starting Backup');
+        Log::info('Starting Manual Backup');
 
-        $this->checkDiskSpace();
-        Artisan::call('backup:run', [], new ConsoleOutputService);
-    }
+        if (! $svc->verifyBackupDiskSpace()) {
+            $exception = new BackupFailedException('Not enough free space to run backup');
+            event(new BackupHasFailed($exception));
 
-    /**
-     * Calculate the size of the storage path vs available space
-     */
-    protected function checkDiskSpace()
-    {
-        event(new AdministrationEvent('Checking for available disk space'));
-
-        $backupFreeSpace = disk_free_space(storage_path('/backups'));
-        $storageProcess = Process::run('du -s '.storage_path());
-        preg_match('/\d*/', $storageProcess->output(), $storageSize);
-
-        Log::debug('Checking Disk Space before running backup', [
-            'free_space_in_backup_disk' => $backupFreeSpace,
-            'size_of_storage_folder' => $storageSize[0],
-        ]);
-
-        if ($backupFreeSpace <= $storageSize[0] - 500) {
-            throw new BackupFailedException('Not enough available disk space');
+            throw $exception;
         }
 
-        return true;
+        Artisan::call('backup:run', [], new ConsoleOutputService);
     }
 }

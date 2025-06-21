@@ -1,60 +1,59 @@
-<template>
-    <Teleport to="body">
-        <div
-            ref="okModal"
-            id="okModal"
-            class="modal modal-sm fade"
-            tabindex="-1"
-        >
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-body text-center">
-                        {{ message }}
-                    </div>
-                    <div class="modal-footer m-0 p-0">
-                        <button
-                            type="button"
-                            class="btn btn-info btn-sm"
-                            @click="okClicked"
-                        >
-                            OK
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </Teleport>
-</template>
-
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from "vue";
-import { Modal } from "bootstrap";
+import BaseButton from "@/Components/_Base/Buttons/BaseButton.vue";
+import Modal from "@/Components/_Base/Modal.vue";
+import { onMounted, ref } from "vue";
+
+const emit = defineEmits<{
+    "ok-clicked": [];
+    hide: [];
+    hidden: [];
+}>();
 
 defineProps<{
     message: string;
+    forceOk: boolean;
 }>();
 
-let emit = defineEmits(["hide", "hidden", "ok-clicked"]);
-let okModal = ref<HTMLInputElement | null>(null);
-let thisModalObj: any;
+const okModal = ref<InstanceType<typeof Modal> | null>(null);
+const shakeOk = ref<boolean>(false);
 
-onMounted(() => {
-    if (okModal.value) {
-        thisModalObj = new Modal(okModal.value);
-        thisModalObj.show();
+onMounted(() => okModal.value?.show());
 
-        window.addEventListener("hide.bs.modal", () => emit("hide"));
-        window.addEventListener("hidden.bs.modal", () => emit("hidden"));
-    }
-});
-
-onUnmounted(() => {
-    window.removeEventListener("hide.bs.modal", () => emit("hide"));
-    window.removeEventListener("hidden.bs.modal", () => emit("hidden"));
-});
-
-function okClicked(): void {
+/**
+ * Close Modal and emit OK was clicked to close out Promise
+ */
+const handleOkClick = (): void => {
     emit("ok-clicked");
-    thisModalObj.hide();
-}
+    okModal.value?.hide();
+};
+
+/**
+ * Shake the OK button to let the user know they must click on it
+ */
+const handleHidePrevented = (): void => {
+    shakeOk.value = true;
+
+    setTimeout(() => (shakeOk.value = false), 1000);
+};
 </script>
+
+<template>
+    <Modal
+        ref="okModal"
+        position="top"
+        :prevent-outside-click="forceOk"
+        @hidden="$emit('hidden')"
+        @hide="$emit('hide')"
+        @hide-prevented="handleHidePrevented"
+        hide-close
+    >
+        <h4 class="text-center">{{ message }}</h4>
+        <template #footer>
+            <BaseButton
+                text="OK"
+                :class="{ 'fa-shake': shakeOk }"
+                @click="handleOkClick"
+            />
+        </template>
+    </Modal>
+</template>

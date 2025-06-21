@@ -1,28 +1,22 @@
-<template>
-    <button
-        type="button"
-        class="btn btn-warning mx-1"
-        :class="{ 'rounded-5': pill, 'btn-sm': small }"
-        @click="onBtnClick"
-    >
-        <fa-icon icon="edit" class="me-1" />
-        <slot>{{ text || "Edit" }}</slot>
-    </button>
-</template>
-
 <script setup lang="ts">
-import { router } from "@inertiajs/vue3";
+import BaseButton from "./BaseButton.vue";
 
 const props = defineProps<{
-    pill?: boolean;
-    small?: boolean;
+    flat?: boolean;
     href?: string;
+    icon?: string;
+    pill?: boolean;
+    size?: "small" | "normal" | "large";
     text?: string;
+    variant?: elementVariant;
 }>();
-
-const onBtnClick = () => {
-    if (props.href) {
-        router.get(props.href);
-    }
-};
 </script>
+
+<template>
+    <BaseButton v-bind="props" :variant="variant ?? 'warning'">
+        <slot>
+            <fa-icon :icon="icon ?? 'pencil'" />
+            {{ text ?? "Edit" }}
+        </slot>
+    </BaseButton>
+</template>

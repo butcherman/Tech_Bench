@@ -11,16 +11,14 @@ use Illuminate\Validation\Rules\Password;
 trait PasswordValidationRules
 {
     /**
-     * Get the validation rules used to validate passwords
+     * Get the validation rules used to validate passwords.
      */
     protected function passwordRules(): array
     {
-        // @codeCoverageIgnoreStart
         $minLength = config('auth.passwords.settings.disable_compromised')
             ? Password::min(config('auth.passwords.settings.min_length'))
                 ->uncompromised(3)
             : Password::min(config('auth.passwords.settings.min_length'));
-        // @codeCoverageIgnoreEnd
 
         return [
             'required',
@@ -41,13 +39,15 @@ trait PasswordValidationRules
      */
     protected function tmpPasswordRules(array $passRules): array
     {
+        $basePath = 'auth.passwords.settings';
+
         config([
-            'auth.passwords.settings.disable_compromised' => $passRules['disable_compromised'],
-            'auth.passwords.settings.min_length' => $passRules['min_length'],
-            'auth.passwords.settings.contains_uppercase' => $passRules['contains_uppercase'],
-            'auth.passwords.settings.contains_lowercase' => $passRules['contains_lowercase'],
-            'auth.passwords.settings.contains_number' => $passRules['contains_number'],
-            'auth.passwords.settings.contains_special' => $passRules['contains_special'],
+            $basePath.'.disable_compromised' => $passRules['disable_compromised'],
+            $basePath.'.min_length' => $passRules['min_length'],
+            $basePath.'.contains_uppercase' => $passRules['contains_uppercase'],
+            $basePath.'.contains_lowercase' => $passRules['contains_lowercase'],
+            $basePath.'.contains_number' => $passRules['contains_number'],
+            $basePath.'.contains_special' => $passRules['contains_special'],
         ]);
 
         return $this->passwordRules();

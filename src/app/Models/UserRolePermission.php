@@ -3,14 +3,17 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class UserRolePermission extends Model
 {
+    /** @var string */
     protected $primaryKey = 'id';
 
+    /** @var array<int, string> */
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
+    /** @var array<int, string> */
     protected $hidden = [
         'id',
         'role_id',
@@ -19,36 +22,29 @@ class UserRolePermission extends Model
         'UserRolePermissionType',
     ];
 
-    protected $appends = ['description', 'feature_enabled'];
-
-    protected $casts = [
-        'allow' => 'boolean',
-    ];
-
-    /***************************************************************************
-     * Additional Attributes
-     ***************************************************************************/
-    public function getDescriptionAttribute()
+    /*
+    |---------------------------------------------------------------------------
+    | Model Casting
+    |---------------------------------------------------------------------------
+    */
+    protected function casts(): array
     {
-        return $this->UserRolePermissionType->description;
+        return [
+            'allow' => 'boolean',
+        ];
     }
 
-    public function getFeatureEnabledAttribute()
+    /*
+    |---------------------------------------------------------------------------
+    | Model Relationships
+    |---------------------------------------------------------------------------
+    */
+    public function UserRolePermissionType(): HasOne
     {
-        if ($this->UserRolePermissionType->feature_name) {
-            return Auth::user()
-                ->features()
-                ->active($this->UserRolePermissionType->feature_name);
-        }
-
-        return true;
-    }
-
-    /***************************************************************************
-     * Model Relationships
-     ***************************************************************************/
-    public function UserRolePermissionType()
-    {
-        return $this->hasOne(UserRolePermissionType::class, 'perm_type_id', 'perm_type_id');
+        return $this->hasOne(
+            UserRolePermissionType::class,
+            'perm_type_id',
+            'perm_type_id'
+        );
     }
 }

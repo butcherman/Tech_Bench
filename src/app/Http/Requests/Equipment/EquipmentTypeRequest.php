@@ -8,6 +8,8 @@ use Illuminate\Validation\Rule;
 
 class EquipmentTypeRequest extends FormRequest
 {
+    protected $errorBag = 'form_error';
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -21,7 +23,7 @@ class EquipmentTypeRequest extends FormRequest
     }
 
     /**
-     * Get the validation rules that apply to the request
+     * Get the validation rules that apply to the request.
      */
     public function rules(): array
     {

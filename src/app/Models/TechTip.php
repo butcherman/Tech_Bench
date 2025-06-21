@@ -3,117 +3,179 @@
 namespace App\Models;
 
 use App\Observers\TechTipObserver;
+use App\Traits\Models\HasBookmarks;
+use App\Traits\Models\HasRecents;
+use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\BroadcastableModelEventOccurred;
+use Illuminate\Database\Eloquent\BroadcastsEvents;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Scout\Searchable;
 
 #[ObservedBy([TechTipObserver::class])]
 class TechTip extends Model
 {
+    use BroadcastsEvents;
+    use HasBookmarks;
     use HasFactory;
+    use HasRecents;
     use Searchable;
     use SoftDeletes;
 
+    /** @var string */
     protected $primaryKey = 'tip_id';
 
+    /** @var array<int, string> */
     protected $guarded = ['tip_id', 'updated_at', 'created_at'];
 
-    protected $hidden = ['deleted_at', 'tip_type_id', 'Bookmarks'];
-
-    protected $appends = ['href', 'public_href', 'equipList', 'fileList'];
-
-    protected $casts = [
-        'created_at' => 'datetime:M d, Y',
-        'updated_at' => 'datetime:M d, Y',
-        'deleted_at' => 'datetime:M d, Y',
-        'sticky' => 'boolean',
-        'public' => 'boolean',
+    /** @var array<int, string> */
+    protected $hidden = [
+        'Bookmarks',
+        'deleted_at',
+        'Recent',
+        'TechTipType',
+        'TechTipViews',
+        'tip_type_id',
     ];
 
-    /***************************************************************************
-     * For Route/Model binding, we will use either the slug or tip_id
-     ***************************************************************************/
-    public function resolveRouteBinding($value, $field = null)
+    /** @var array<int, string> */
+    protected $appends = [
+        'href',
+        'public_href',
+        'type',
+        'views',
+    ];
+
+    /*
+    |---------------------------------------------------------------------------
+    | Model Casting
+    |---------------------------------------------------------------------------
+    */
+    protected function casts(): array
+    {
+        return [
+            'created_at' => 'datetime:M d, Y',
+            'updated_at' => 'datetime:M d, Y',
+            'deleted_at' => 'datetime:M d, Y',
+            'sticky' => 'boolean',
+            'public' => 'boolean',
+            'allow_comments' => 'boolean',
+        ];
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | For Route/Model binding, we will use either the slug or tip_id
+    |---------------------------------------------------------------------------
+    */
+    public function resolveRouteBinding($value, $field = null): TechTip
     {
         return $this->where('slug', $value)
             ->orWhere('tip_id', $value)
             ->firstOrFail();
     }
 
-    /***************************************************************************
-     * Model Attributes
-     ***************************************************************************/
-    public function getHrefAttribute()
+    /*
+    |---------------------------------------------------------------------------
+    | Model Attributes
+    |---------------------------------------------------------------------------
+    */
+    public function views(): Attribute
     {
-        return route('tech-tips.show', $this->slug);
+        return Attribute::make(
+            get: fn () => $this->TechTipViews ? $this->TechTipViews->views : null,
+        );
     }
 
-    public function getPublicHrefAttribute()
+    public function href(): Attribute
     {
-        if ($this->public) {
-            return route('publicTips.show', $this->slug);
-        }
+        return Attribute::make(
+            get: fn () => route('tech-tips.show', $this->slug),
+        );
     }
 
-    protected function getEquipListAttribute()
+    public function publicHref(): ?Attribute
     {
-        return $this->EquipmentType->pluck('equip_id')->toArray();
+        return Attribute::make(
+            get: fn () => $this->public
+                ? route('publicTips.show', $this->slug)
+                : null,
+        );
     }
 
-    protected function getFileListAttribute()
+    public function type(): Attribute
     {
-        return $this->FileUpload->pluck('file_id')->toArray();
+        return Attribute::make(
+            get: fn () => $this->TechTipType->description,
+        );
     }
 
-    /****************************************************************************
-     * Model Relationships
-     ***************************************************************************/
-    public function CreatedBy()
+    /*
+    |---------------------------------------------------------------------------
+    | Model Relationships
+    |---------------------------------------------------------------------------
+    */
+    public function CreatedBy(): BelongsTo
     {
-        return $this->hasOne(User::class, 'user_id', 'user_id')
+        return $this->belongsTo(User::class, 'user_id', 'user_id')
             ->withTrashed();
     }
 
-    public function UpdatedBy()
+    public function UpdatedBy(): BelongsTo
     {
-        return $this->hasOne(User::class, 'user_id', 'updated_id')
+        return $this->belongsTo(User::class, 'updated_id', 'user_id')
             ->withTrashed();
     }
 
-    public function EquipmentType()
+    public function Equipment(): BelongsToMany
     {
         return $this->belongsToMany(
             EquipmentType::class,
-            'tech_tip_equipment',
+            TechTipEquipment::class,
             'tip_id',
             'equip_id'
         )->withTimestamps();
     }
 
-    public function FileUpload()
+    public function PublicEquipment(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            EquipmentType::class,
+            TechTipEquipment::class,
+            'tip_id',
+            'equip_id'
+        )->public()->withTimestamps();
+    }
+
+    public function Files(): BelongsToMany
     {
         return $this->belongsToMany(
             FileUpload::class,
-            'tech_tip_files',
+            TechTipFile::class,
             'tip_id',
-            'file_id'
-        )->withTimestamps();
+            'file_id',
+        );
     }
 
-    public function TechTipType()
+    public function TechTipType(): HasOne
     {
         return $this->hasOne(TechTipType::class, 'tip_type_id', 'tip_type_id');
     }
 
-    public function TechTipComment()
+    public function Comments(): HasMany
     {
         return $this->hasMany(TechTipComment::class, 'tip_id', 'tip_id');
     }
 
-    public function Bookmarks()
+    public function Bookmarks(): BelongsToMany
     {
         return $this->belongsToMany(
             User::class,
@@ -123,7 +185,7 @@ class TechTip extends Model
         )->withTimestamps();
     }
 
-    public function Recent()
+    public function Recent(): BelongsToMany
     {
         return $this->belongsToMany(
             User::class,
@@ -133,98 +195,30 @@ class TechTip extends Model
         )->withTimestamps();
     }
 
-    public function TechTipView()
+    public function TechTipViews(): HasOne
     {
         return $this->hasOne(TechTipView::class, 'tip_id', 'tip_id');
     }
 
-    /***************************************************************************
-     * Additional Model Methods
-     ***************************************************************************/
+    /*
+    |---------------------------------------------------------------------------
+    | Additional Model Methods
+    |---------------------------------------------------------------------------
+    */
 
     /**
-     * Determine if the Tech Tip is bookmarked by this user
+     * Increase the view counter
      */
-    public function isFav(User $user)
+    public function wasViewed(): void
     {
-        $bookmarks = $this->Bookmarks->pluck('user_id')->toArray();
-
-        return in_array($user->user_id, $bookmarks);
+        $this->TechTipViews->increment('views');
     }
 
-    /**
-     * Update the Users Recent Tech Tip activity
-     */
-    public function touchRecent(User $user)
-    {
-        $isRecent = $this->Recent->where('user_id', $user->user_id)->first();
-        if ($isRecent) {
-            $this->Recent()->detach($user);
-        }
-        $this->Recent()->attach($user);
-    }
-
-    /**
-     * Load data needed to show the Tech Tip to user
-     */
-    public function loadShowData(bool $isDeleted = false)
-    {
-        $this->load(['CreatedBy', 'UpdatedBy', 'TechTipType', 'TechTipView'])
-            ->CreatedBy->makeHidden(['email', 'initials', 'role_name', 'username']);
-
-        // If Tip has been updated, load user data for who updated it
-        if ($this->UpdatedBy) {
-            $this->UpdatedBy
-                ->makeHidden(['email', 'initials', 'role_name', 'username']);
-        }
-
-        if (! $isDeleted) {
-            // Increase Views counter
-            $this->TechTipView->increment('views');
-
-            // Add Tip to users Recent visits
-            if (request()->user()) {
-                $this->touchRecent(request()->user());
-            }
-        }
-    }
-
-    /**
-     * Load and hide data needed for Public Viewing
-     */
-    public function loadPublicData()
-    {
-        $this->makeHidden([
-            'user_id',
-            'updated_id',
-            'sticky',
-            'allow_comments',
-            'slug',
-            'views',
-            'href',
-            'equipList',
-            'fileList',
-        ]);
-        $this->load([
-            'EquipmentType' => function ($q) {
-                $q->where('allow_public_tip', true);
-            },
-        ]);
-        $this->EquipmentType->makeHidden([
-            'allow_public_tip',
-            'cat_id',
-            'equip_id',
-        ]);
-        $this->load([
-            'FileUpload' => function ($q) {
-                $q->where('public', true);
-            },
-        ]);
-        $this->FileUpload->makeHidden([
-            'file_size',
-            'pivot',
-        ]);
-    }
+    /*
+    |---------------------------------------------------------------------------
+    | Meilisearch Search Data
+    |---------------------------------------------------------------------------
+    */
 
     /**
      * Search Results for Meilisearch
@@ -239,7 +233,7 @@ class TechTip extends Model
             'details' => $this->details,
             'public' => $this->public,
             'tip_type_id' => $this->tip_type_id,
-            'EquipmentType' => $this->EquipmentType,
+            'Equipment' => $this->Equipment,
         ];
     }
 
@@ -250,6 +244,31 @@ class TechTip extends Model
      */
     protected function makeAllSearchableUsing(Builder $query)
     {
-        return $query->with('EquipmentType');
+        return $query->with('Equipment');
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | Model Broadcasting
+    |---------------------------------------------------------------------------
+    */
+
+    public function broadcastOn(string $event): array
+    {
+
+        return match ($event) {
+            'created', 'deleted', 'trashed' => [],
+            default => [
+                new PrivateChannel('tech-tips.'.$this->tip_id),
+            ],
+        };
+    }
+
+    public function newBroadcastableModelEvent(string $event): BroadcastableModelEventOccurred
+    {
+        return (new BroadcastableModelEventOccurred(
+            $this,
+            $event
+        ))->dontBroadcastToCurrentUser();
     }
 }

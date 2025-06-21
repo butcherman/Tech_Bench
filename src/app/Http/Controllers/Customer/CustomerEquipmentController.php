@@ -2,47 +2,55 @@
 
 namespace App\Http\Controllers\Customer;
 
-use App\Actions\CustomerPermissions;
+use App\Facades\CacheData;
+use App\Facades\UserPermissions;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customer\CustomerEquipmentRequest;
 use App\Models\Customer;
 use App\Models\CustomerEquipment;
-use App\Service\Customer\CustomerEquipmentService;
+use App\Services\Customer\CustomerEquipmentService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class CustomerEquipmentController extends Controller
 {
-    public function __construct(
-        protected CustomerPermissions $permissions,
-        protected CustomerEquipmentService $svc
-    ) {}
+    public function __construct(protected CustomerEquipmentService $svc) {}
 
     /**
-     * Home Page showing Customer Equipment and related notes/files
+     * Show a list of all Equipment assigned to the customer.
      */
     public function index(Request $request, Customer $customer): Response
     {
         return Inertia::render('Customer/Equipment/Index', [
-            'permissions' => fn () => $this->permissions->get($request->user()),
+            'alerts' => fn () => $customer->Alerts,
+            'allowVpn' => fn () => config('customer.allow_vpn_data'),
+            'availableEquipment' => fn () => CacheData::equipmentCategorySelectBox(),
             'customer' => fn () => $customer,
-            'siteList' => fn () => $customer->CustomerSite,
-            'alerts' => fn () => $customer->CustomerAlert,
-            'equipmentList' => fn () => $customer->CustomerEquipment,
+            'permissions' => fn () => UserPermissions::customerPermissions($request->user()),
+            'siteList' => fn () => $customer->Sites->makeVisible(['href']),
+            'vpnData' => fn () => $customer->CustomerVpn,
+
+            /**
+             * Deferred Props
+             */
+            'groupedEquipmentList' => Inertia::defer(
+                fn () => $customer->Equipment
+                    ->load('Sites')
+                    ->groupBy('equip_name')
+                    ->chunk(25)
+            ),
         ]);
     }
 
     /**
-     * Store a newly created Customer Equipment in storage.
+     * Save a new piece of equipment to a customer.
      */
     public function store(CustomerEquipmentRequest $request, Customer $customer): RedirectResponse
     {
-        Log::critical($request->header('X-Socket-Id'));
-
-        $equip = $this->svc->createEquipment($request, $customer);
+        $equip = $this->svc
+            ->createEquipment($request->safe()->collect(), $customer);
 
         return back()->with('success', __('cust.equipment.created', [
             'equip' => $equip->equip_name,
@@ -50,51 +58,50 @@ class CustomerEquipmentController extends Controller
     }
 
     /**
-     * Display the specified Customer Equipment.
+     * Show the selected equipment and all relevant data.
      */
-    public function show(
-        Request $request,
-        Customer $customer,
-        CustomerEquipment $equipment
-    ): Response {
+    public function show(Request $request, Customer $customer, CustomerEquipment $equipment): Response
+    {
         return Inertia::render('Customer/Equipment/Show', [
-            'permissions' => fn () => $this->permissions->get($request->user()),
+            'alerts' => fn () => $customer->Alerts,
+            'allowVpn' => fn () => config('customer.allow_vpn_data'),
+            'permissions' => fn () => UserPermissions::customerPermissions($request->user()),
             'customer' => fn () => $customer,
             'equipment' => fn () => $equipment,
-            'siteList' => fn () => $equipment->CustomerSite->makeVisible('href'),
+            'siteList' => fn () => $equipment->Sites->makeVisible(['href']),
             'equipment-data' => fn () => $equipment->CustomerEquipmentData,
-            'notes' => fn () => $equipment->CustomerNote,
-            'files' => fn () => $equipment->CustomerFile->append('href'),
-            'equipmentList' => fn () => [$equipment],
+            'noteList' => fn () => $equipment->getNotes(),
+            'fileList' => fn () => $equipment->getFiles(),
+            'vpnData' => fn () => $customer->CustomerVpn,
         ]);
     }
 
     /**
-     * Update the specified Customer Equipment in storage.
+     * Update the list of sites that a piece of equipment belong to.
      */
     public function update(
         CustomerEquipmentRequest $request,
         Customer $customer,
         CustomerEquipment $equipment
     ): RedirectResponse {
-        $this->svc->updateEquipmentSites($request, $equipment);
+        $this->svc->updateEquipmentSites($request->safe()->collect(), $equipment);
 
         return back()->with('success', __('cust.equipment.site-updated'));
     }
 
     /**
-     * Remove the specified Customer Equipment from storage.
+     * Soft Delete Customer Equipment
      */
     public function destroy(Customer $customer, CustomerEquipment $equipment): RedirectResponse
     {
         $this->authorize('delete', $equipment);
 
+        $equipment->name;
+
         $this->svc->destroyEquipment($equipment);
 
         return redirect(route('customers.equipment.index', $customer->slug))
-            ->with('warning', __('cust.equipment.deleted', [
-                'equip' => $equipment->equip_name,
-            ]));
+            ->with('warning', 'Equipment Deleted');
     }
 
     /**

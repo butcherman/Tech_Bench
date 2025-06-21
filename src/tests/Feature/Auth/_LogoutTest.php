@@ -9,8 +9,14 @@ use Tests\TestCase;
 
 class _LogoutTest extends TestCase
 {
-    //  Verify that the user can log out
-    public function test_logout()
+    /*
+    |---------------------------------------------------------------------------
+    | Test Logging out
+    |---------------------------------------------------------------------------
+    */
+
+    // Verify that the user can log out
+    public function test_logout(): void
     {
         Event::fake();
 
@@ -26,8 +32,8 @@ class _LogoutTest extends TestCase
         Event::assertDispatched(Logout::class);
     }
 
-    //  Verify that the user can log out with a logout message
-    public function test_logout_timeout()
+    // Verify that the user can log out with a logout message
+    public function test_logout_timeout(): void
     {
         Event::fake();
 

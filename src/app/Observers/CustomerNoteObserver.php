@@ -5,63 +5,65 @@ namespace App\Observers;
 use App\Models\CustomerNote;
 use Illuminate\Support\Facades\Log;
 
-class CustomerNoteObserver
+class CustomerNoteObserver extends Observer
 {
-    /** @var User|string */
-    protected $user;
-
-    public function __construct()
-    {
-        $this->user = match (true) {
-            ! is_null(request()->user()) => request()->user()->username,
-            request()->ip() === '127.0.0.1' => 'Internal Service',
-            // @codeCoverageIgnoreStart
-            default => request()->ip(),
-            // @codeCoverageIgnoreEnd
-        };
-    }
-
-    public function created(CustomerNote $note): void
+    /**
+     * Handle the CustomerNote "created" event.
+     */
+    public function created(CustomerNote $customerNote): void
     {
         Log::info(
-            'New Customer Note created for '.$note->Customer->name.
+            'New Customer Note created for '.$customerNote->Customer->name.
                 ' by '.$this->user,
-            $note->toArray()
+            $customerNote->toArray()
         );
     }
 
-    public function updated(CustomerNote $note): void
+    /**
+     * Handle the CustomerNote "updated" event.
+     */
+    public function updated(CustomerNote $customerNote): void
     {
         Log::info(
-            'Customer Note for '.$note->Customer->name.
-                ' updated by '.$this->user,
-            $note->toArray()
-        );
-    }
-
-    public function deleted(CustomerNote $note): void
-    {
-        Log::notice(
-            'Customer Note for '.$note->Customer->name.
-                ' deleted by '.$this->user,
-            $note->toArray()
-        );
-    }
-
-    public function restored(CustomerNote $note): void
-    {
-        Log::info(
-            'Customer Note restored for '.$note->Customer->name.' by '.$this->user,
-            $note->toArray()
-        );
-    }
-
-    public function forceDeleted(CustomerNote $note): void
-    {
-        Log::notice(
-            'Customer NOte force deleted for '.$note->Customer->name.
+            'Customer Note updated for '.$customerNote->Customer->name.
                 ' by '.$this->user,
-            $note->toArray()
+            $customerNote->toArray()
+        );
+    }
+
+    /**
+     * Handle the CustomerNote "deleted" event.
+     */
+    public function deleted(CustomerNote $customerNote): void
+    {
+        Log::info(
+            'Customer Note deleted for '.$customerNote->Customer->name.
+                ' by '.$this->user,
+            $customerNote->toArray()
+        );
+    }
+
+    /**
+     * Handle the CustomerNote "restored" event.
+     */
+    public function restored(CustomerNote $customerNote): void
+    {
+        Log::info(
+            'Customer Note restored for '.$customerNote->Customer->name.
+                ' by '.$this->user,
+            $customerNote->toArray()
+        );
+    }
+
+    /**
+     * Handle the CustomerNote "force deleted" event.
+     */
+    public function forceDeleted(CustomerNote $customerNote): void
+    {
+        Log::info(
+            'Customer Note trashed for '.$customerNote->Customer->name.
+                ' by '.$this->user,
+            $customerNote->toArray()
         );
     }
 }

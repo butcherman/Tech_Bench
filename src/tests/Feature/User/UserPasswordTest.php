@@ -2,36 +2,42 @@
 
 namespace Tests\Feature\User;
 
+use App\Events\User\UserPasswordChangedEvent;
 use App\Models\User;
-use App\Notifications\User\PasswordChangedNotification;
-use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
 class UserPasswordTest extends TestCase
 {
-    /**
-     * Invoke Method
-     */
-    public function test_invoke_guest()
+    /*
+    |---------------------------------------------------------------------------
+    | Invoke Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_invoke_guest(): void
     {
         $response = $this->get(route('user.change-password.show'));
 
-        $response->assertStatus(302);
-        $response->assertRedirect(route('login'));
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
         $this->assertGuest();
     }
 
-    public function test_invoke()
+    public function test_invoke(): void
     {
-        $response = $this->actingAs(User::factory()->createQuietly())->get(route('user.change-password.show'));
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+
+        $response = $this->actingAs($user)
+            ->get(route('user.change-password.show'));
 
         $response->assertSuccessful();
     }
 
     /**
-     * Test Submitting the Change Passwor form (processed by Fortify)
+     * Test Submitting the Change Password form (processed by Fortify)
      */
-    public function test_submit_password_change_guest()
+    public function test_submit_password_change_guest(): void
     {
         $data = [
             'current_password' => 'password',
@@ -40,18 +46,20 @@ class UserPasswordTest extends TestCase
         ];
 
         $response = $this->put(route('user-password.update', $data));
-        $response->assertStatus(302);
-        $response->assertRedirect(route('login'));
+
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
         $this->assertGuest();
     }
 
     /**
-     * Test Submitting the Change Passwor form (processed by Fortify)
+     * Test Submitting the Change Password form (processed by Fortify)
      */
-    public function test_submit_password_change()
+    public function test_submit_password_change(): void
     {
-        Notification::fake();
+        Event::fake();
 
+        /** @var User $user */
         $user = User::factory()->createQuietly();
         $data = [
             'current_password' => 'password',
@@ -59,17 +67,22 @@ class UserPasswordTest extends TestCase
             'password_confirmation' => $pass,
         ];
 
-        $response = $this->actingAs($user)->put(route('user-password.update', $data));
+        $response = $this->actingAs($user)
+            ->put(route('user-password.update', $data));
+
         $response->assertStatus(302);
 
-        Notification::assertSentTo($user, PasswordChangedNotification::class);
+        Event::assertDispatched(UserPasswordChangedEvent::class);
     }
 
     /**
      * Test Password Complexity rules
      */
-    public function test_change_password_no_lowercase_enabled()
+    public function test_change_password_no_lowercase_enabled(): void
     {
+        Event::fake();
+
+        /** @var User $user */
         $user = User::factory()->createQuietly();
         $data = [
             'current_password' => 'password',
@@ -77,16 +90,22 @@ class UserPasswordTest extends TestCase
             'password_confirmation' => $pass,
         ];
 
-        $response = $this->actingAs($user)->put(route('user-password.update'), $data);
-        $response->assertStatus(302);
-        $response->assertInvalid();
+        $response = $this->actingAs($user)
+            ->put(route('user-password.update'), $data);
+
+        $response->assertStatus(302)
+            ->assertInvalid();
+
+        Event::assertNotDispatched(UserPasswordChangedEvent::class);
     }
 
-    public function test_change_password_no_lowercase_disabled()
+    public function test_change_password_no_lowercase_disabled(): void
     {
-        Notification::fake();
-
         config(['auth.passwords.settings.contains_lowercase' => false]);
+
+        Event::fake();
+
+        /** @var User $user */
         $user = User::factory()->createQuietly();
         $data = [
             'current_password' => 'password',
@@ -94,15 +113,20 @@ class UserPasswordTest extends TestCase
             'password_confirmation' => $pass,
         ];
 
-        $response = $this->actingAs($user)->put(route('user-password.update'), $data);
-        $response->assertStatus(302);
-        $response->assertValid();
+        $response = $this->actingAs($user)
+            ->put(route('user-password.update'), $data);
 
-        Notification::assertSentTo($user, PasswordChangedNotification::class);
+        $response->assertStatus(302)
+            ->assertValid();
+
+        Event::assertDispatched(UserPasswordChangedEvent::class);
     }
 
-    public function test_change_password_no_uppercase_enabled()
+    public function test_change_password_no_uppercase_enabled(): void
     {
+        Event::fake();
+
+        /** @var User $user */
         $user = User::factory()->createQuietly();
         $data = [
             'current_password' => 'password',
@@ -110,16 +134,22 @@ class UserPasswordTest extends TestCase
             'password_confirmation' => $pass,
         ];
 
-        $response = $this->actingAs($user)->put(route('user-password.update'), $data);
-        $response->assertStatus(302);
-        $response->assertInvalid();
+        $response = $this->actingAs($user)
+            ->put(route('user-password.update'), $data);
+
+        $response->assertStatus(302)
+            ->assertInvalid();
+
+        Event::assertNotDispatched(UserPasswordChangedEvent::class);
     }
 
-    public function test_change_password_no_uppercase_disabled()
+    public function test_change_password_no_uppercase_disabled(): void
     {
-        Notification::fake();
-
         config(['auth.passwords.settings.contains_uppercase' => false]);
+
+        Event::fake();
+
+        /** @var User $user */
         $user = User::factory()->createQuietly();
         $data = [
             'current_password' => 'password',
@@ -127,15 +157,20 @@ class UserPasswordTest extends TestCase
             'password_confirmation' => $pass,
         ];
 
-        $response = $this->actingAs($user)->put(route('user-password.update'), $data);
-        $response->assertStatus(302);
-        $response->assertValid();
+        $response = $this->actingAs($user)
+            ->put(route('user-password.update'), $data);
 
-        Notification::assertSentTo($user, PasswordChangedNotification::class);
+        $response->assertStatus(302)
+            ->assertValid();
+
+        Event::assertDispatched(UserPasswordChangedEvent::class);
     }
 
-    public function test_change_password_no_number_enabled()
+    public function test_change_password_no_number_enabled(): void
     {
+        Event::fake();
+
+        /** @var User $user */
         $user = User::factory()->createQuietly();
         $data = [
             'current_password' => 'password',
@@ -143,16 +178,22 @@ class UserPasswordTest extends TestCase
             'password_confirmation' => $pass,
         ];
 
-        $response = $this->actingAs($user)->put(route('user-password.update'), $data);
-        $response->assertStatus(302);
-        $response->assertInvalid();
+        $response = $this->actingAs($user)
+            ->put(route('user-password.update'), $data);
+
+        $response->assertStatus(302)
+            ->assertInvalid();
+
+        Event::assertNotDispatched(UserPasswordChangedEvent::class);
     }
 
-    public function test_change_password_no_number_disabled()
+    public function test_change_password_no_number_disabled(): void
     {
-        Notification::fake();
-
         config(['auth.passwords.settings.contains_number' => false]);
+
+        Event::fake();
+
+        /** @var User $user */
         $user = User::factory()->createQuietly();
         $data = [
             'current_password' => 'password',
@@ -160,13 +201,20 @@ class UserPasswordTest extends TestCase
             'password_confirmation' => $pass,
         ];
 
-        $response = $this->actingAs($user)->put(route('user-password.update'), $data);
-        $response->assertStatus(302);
-        $response->assertValid();
+        $response = $this->actingAs($user)
+            ->put(route('user-password.update'), $data);
+
+        $response->assertStatus(302)
+            ->assertValid();
+
+        Event::assertDispatched(UserPasswordChangedEvent::class);
     }
 
-    public function test_change_password_no_special_enabled()
+    public function test_change_password_no_special_enabled(): void
     {
+        Event::fake();
+
+        /** @var User $user */
         $user = User::factory()->createQuietly();
         $data = [
             'current_password' => 'password',
@@ -174,16 +222,22 @@ class UserPasswordTest extends TestCase
             'password_confirmation' => $pass,
         ];
 
-        $response = $this->actingAs($user)->put(route('user-password.update'), $data);
-        $response->assertStatus(302);
-        $response->assertInvalid();
+        $response = $this->actingAs($user)
+            ->put(route('user-password.update'), $data);
+
+        $response->assertStatus(302)
+            ->assertInvalid();
+
+        Event::assertNotDispatched(UserPasswordChangedEvent::class);
     }
 
-    public function test_change_password_no_special_disabled()
+    public function test_change_password_no_special_disabled(): void
     {
-        Notification::fake();
-
         config(['auth.passwords.settings.contains_special' => false]);
+
+        Event::fake();
+
+        /** @var User $user */
         $user = User::factory()->createQuietly();
         $data = [
             'current_password' => 'password',
@@ -191,16 +245,22 @@ class UserPasswordTest extends TestCase
             'password_confirmation' => $pass,
         ];
 
-        $response = $this->actingAs($user)->put(route('user-password.update'), $data);
-        $response->assertStatus(302);
-        $response->assertValid();
+        $response = $this->actingAs($user)
+            ->put(route('user-password.update'), $data);
+
+        $response->assertStatus(302)
+            ->assertValid();
+
+        Event::assertDispatched(UserPasswordChangedEvent::class);
     }
 
-    public function test_change_password_no_compromised_enabled()
+    public function test_change_password_no_compromised_enabled(): void
     {
-        Notification::fake();
-
         config(['auth.password.settings.disable_compromised' => true]);
+
+        Event::fake();
+
+        /** @var User $user */
         $user = User::factory()->createQuietly();
         $data = [
             'current_password' => 'password',
@@ -208,8 +268,12 @@ class UserPasswordTest extends TestCase
             'password_confirmation' => $pass,
         ];
 
-        $response = $this->actingAs($user)->put(route('user-password.update'), $data);
-        $response->assertStatus(302);
-        $response->assertInvalid();
+        $response = $this->actingAs($user)
+            ->put(route('user-password.update'), $data);
+
+        $response->assertStatus(302)
+            ->assertInvalid();
+
+        Event::assertNotDispatched(UserPasswordChangedEvent::class);
     }
 }

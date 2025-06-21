@@ -3,66 +3,79 @@
 namespace Tests\Unit;
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 use Tests\TestCase;
 
 class HelpPageTest extends TestCase
 {
     /**
-     * These routes should not have a help page
+     * These routes should not have a help page.
+     *
+     * @var array<int, string>
      */
     protected $bypassRoutes = [
-        null,
-        'debugbar',
-        'horizon',
-        'ignition',
-        'sanctum',
-        'init',
-        'login',
-        'logout',
-        'password',
-        'initialize',
-        '2fa',
-        'azure-login',
-        'azure-callback',
-        'home',
-        'remove-device',
-        'send-welcome',
-        'restore',
-        'check-id',
-        'notFound',
-        'equipment-list',
-        'phone-types',
-        'file-types',
+        '*.restore',
+        'admin.test-email',
+        'azure*',
+        'customers.deleted-items.restore.*',
+        'customers.files.index',
+        'customers.not-found',
+        'customers.notes.download',
+        'debugbar.*',
         'download',
-        'test-email',
-        'tech-tips.comments',
-        'publicTips',
-        'expire',
-        'extend',
-        'guest-link',
+        'dusk.*',
+        'guest-link.*',
+        'home',
+        'horizon.*',
+        'init.*',
+        'initialize',
+        'links.expire',
+        'links.extend',
+        'login',
+        'maint.backups.download',
+        'maint.backups.run-backup',
+        'maint.logs.download',
+        'password.*',
+        'publicTips.*',
+        'storage.local',
+        'tech-tips.comments.flag',
+        'tech-tips.download',
+        'tech-tips.not-found',
+        'telescope',
+        'two-factor.*',
     ];
 
-    /**
-     * Test to make sure that all routes have a help page
-     */
-    public function test_help_page_exists()
+    /*
+    |---------------------------------------------------------------------------
+    | Test to verify that all GET routes have a Help Page available.
+    |---------------------------------------------------------------------------
+    */
+    public function test_help_page_exists(): void
     {
         $routeList = collect(Route::getRoutes())->filter(function ($route) {
             return in_array('GET', $route->methods);
         })->map(function ($route) {
             return $route->action;
         })->pluck('as')->filter(function ($name) {
-            if (str_starts_with($name, 'generated::')) {
+            if (is_null($name)) {
                 return false;
             }
 
-            $exploded = explode('.', $name);
+            foreach ($this->bypassRoutes as $bypass) {
+                if (Str::is($bypass, $name)) {
+                    return false;
+                }
+            }
 
-            return count(array_intersect($this->bypassRoutes, $exploded)) == 0;
+            return true;
         });
 
         foreach ($routeList as $route) {
-            $this->assertFileExists(resource_path('js/Help/Pages/'.$route.'.vue'));
+            $path = str_replace('.', DIRECTORY_SEPARATOR, $route);
+
+            $this->assertFileExists(
+                resource_path('js/Help/Routes/'.$path.'.vue')
+            );
         }
     }
 }

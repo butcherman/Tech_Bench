@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Authentication Language Lines
@@ -14,7 +13,6 @@ return [
     */
 
     'failed' => 'These credentials do not match our records.',
-    'password' => 'The provided password is incorrect.',
-    'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
-
+    '2faFailed' => 'The provided code is incorrect.',
+    '2faExpired' => 'This Verification Code has expired. Please generate a new code and try again.',
 ];

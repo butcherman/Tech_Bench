@@ -44,7 +44,6 @@ return [
     |
     */
 
-    // 'queue' => false, // env('SCOUT_QUEUE', true),
     'queue' => [
         'connection' => 'redis',
         'queue' => 'scout',
@@ -141,7 +140,7 @@ return [
         'key' => env('MEILISEARCH_KEY', 'TechBenchMeilisearchMasterKey'),
         'index-settings' => [
             TechTip::class => [
-                'filterableAttributes' => ['EquipmentType', 'tip_type_id', 'public'],
+                'filterableAttributes' => ['Equipment', 'tip_type_id', 'public'],
                 'sortableAttributes' => ['sticky'],
                 'rankingRules' => [
                     'sort',
@@ -152,9 +151,6 @@ return [
                     'exactness',
                 ],
             ],
-            // 'users' => [
-            //     'filterableAttributes'=> ['id', 'name', 'email'],
-            // ],
         ],
     ],
 
@@ -191,6 +187,7 @@ return [
             'num_retries' => env('TYPESENSE_NUM_RETRIES', 3),
             'retry_interval_seconds' => env('TYPESENSE_RETRY_INTERVAL_SECONDS', 1),
         ],
+        // 'max_total_results' => env('TYPESENSE_MAX_TOTAL_RESULTS', 1000),
         'model-settings' => [
             // User::class => [
             //     'collection-schema' => [

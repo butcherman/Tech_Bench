@@ -1,5 +1,6 @@
 import VerifyModal from "./VerifyModal.vue";
 import { createApp, h } from "vue";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 export default (message?: string, title?: string) => {
     return verifyModal({ title, message });
@@ -24,7 +25,7 @@ const verifyModal = ({ title, message }: verifyObject) => {
                         onHidden: () => unmount(),
                     });
             },
-        });
+        }).component("fa-icon", FontAwesomeIcon);
 
         /**
          * Mount and show the new OK Modal

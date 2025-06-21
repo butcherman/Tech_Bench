@@ -9,10 +9,12 @@ use Tests\TestCase;
 
 class ExpireFileLinkTest extends TestCase
 {
-    /**
-     * Invoke Method
-     */
-    public function test_invoke_guest()
+    /*
+    |---------------------------------------------------------------------------
+    | Invoke Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_invoke_guest(): void
     {
         $link = FileLink::factory()->createQuietly();
 
@@ -23,7 +25,7 @@ class ExpireFileLinkTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_invoke_feature_disabled()
+    public function test_invoke_feature_disabled(): void
     {
         config(['file-link.feature_enabled' => false]);
 
@@ -37,7 +39,7 @@ class ExpireFileLinkTest extends TestCase
         $response->assertForbidden();
     }
 
-    public function test_invoke_different_user()
+    public function test_invoke_different_user(): void
     {
         config(['file-link.feature_enabled' => true]);
 
@@ -51,7 +53,7 @@ class ExpireFileLinkTest extends TestCase
         $response->assertForbidden();
     }
 
-    public function test_invoke_no_permission()
+    public function test_invoke_no_permission(): void
     {
         config(['file-link.feature_enabled' => true]);
 
@@ -68,7 +70,7 @@ class ExpireFileLinkTest extends TestCase
         $response->assertForbidden();
     }
 
-    public function test_invoke_as_admin()
+    public function test_invoke_as_admin(): void
     {
         config(['file-link.feature_enabled' => true]);
 
@@ -90,7 +92,7 @@ class ExpireFileLinkTest extends TestCase
         ]);
     }
 
-    public function test_invoke()
+    public function test_invoke(): void
     {
         config(['file-link.feature_enabled' => true]);
 

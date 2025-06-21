@@ -16,14 +16,12 @@ class CustomerSlugChangedEvent implements ShouldBroadcast
     /**
      * Create a new event instance.
      */
-    public function __construct(
-        public Customer $customer,
-        public string $oldSlug,
-        public string $newSlug
-    ) {}
+    public function __construct(public Customer $customer, public string $oldSlug) {}
 
     /**
      * Get the channels the event should broadcast on.
+     *
+     * @codeCoverageIgnore
      */
     public function broadcastOn(): array
     {
@@ -34,6 +32,8 @@ class CustomerSlugChangedEvent implements ShouldBroadcast
 
     /**
      * Get the name the event should broadcast as
+     *
+     * @codeCoverageIgnore
      */
     public function broadcastAs(): string
     {

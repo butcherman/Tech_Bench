@@ -7,6 +7,8 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class CustomerSettingsRequest extends FormRequest
 {
+    protected $errorBag = 'form_error';
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -25,6 +27,8 @@ class CustomerSettingsRequest extends FormRequest
             'update_slug' => ['required', 'boolean'],
             'default_state' => ['required', 'string'],
             'auto_purge' => ['required', 'boolean'],
+            'allow_vpn_data' => ['required', 'boolean'],
+            'allow_share_vpn_data' => ['required', 'boolean'],
         ];
     }
 }

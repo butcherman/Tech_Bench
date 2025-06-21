@@ -10,19 +10,23 @@ use Inertia\Response;
 class CustomerDeletedItemsController extends Controller
 {
     /**
-     * Show all customers that have been soft deleted
+     * Show a list of items that have been soft deleted for the customer.
      */
     public function __invoke(Customer $customer): Response
     {
         $this->authorize('manage', $customer);
 
-        return Inertia::render('Customer/DeletedItems', [
+        return Inertia::render('Customer/Admin/DeletedItems', [
             'customer' => fn () => $customer,
-            'deleted-items' => fn () => [
-                'equipment' => $customer->CustomerEquipment()->onlyTrashed()->get(),
-                'contacts' => $customer->CustomerContact()->onlyTrashed()->get(),
-                'notes' => $customer->CustomerNote()->onlyTrashed()->get(),
-                'files' => $customer->CustomerFile()->onlyTrashed()->get(),
+            'deleted-items' => [
+                'equipment' => $customer->Equipment()->onlyTrashed()->get(),
+                'contacts' => $customer->Contacts()->onlyTrashed()->get(),
+                'notes' => $customer->Notes()->onlyTrashed()->get(),
+                'files' => $customer->Files()->onlyTrashed()->get(),
+                'sites' => $customer->Sites()
+                    ->onlyTrashed()
+                    ->get()
+                    ->makeVisible(['deleted_at', 'deleted_reason']),
             ],
         ]);
     }

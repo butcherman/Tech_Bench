@@ -8,10 +8,12 @@ use Tests\TestCase;
 
 class StepFiveTest extends TestCase
 {
-    /**
-     * Invoke Method
-     */
-    public function test_invoke_guest()
+    /*
+    |---------------------------------------------------------------------------
+    | Invoke Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_invoke_guest(): void
     {
         config(['app.first_time_setup' => true]);
         config(['app.env' => 'local']);
@@ -23,13 +25,13 @@ class StepFiveTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_invoke()
+    public function test_invoke(): void
     {
         config(['app.first_time_setup' => true]);
         config(['app.env' => 'local']);
 
         /** @var User $user */
-        $user = User::factory()->createQuietly(['role_id' => 1]);
+        $user = User::find(1);
 
         $response = $this->actingAs($user)
             ->withSession([
@@ -64,8 +66,9 @@ class StepFiveTest extends TestCase
             ->get(route('init.step-5'));
 
         $response->assertSuccessful()
-            ->assertInertia(fn (Assert $page) => $page
-                ->component('Init/StepFive')
+            ->assertInertia(
+                fn (Assert $page) => $page
+                    ->component('Init/StepFive')
             );
     }
 }

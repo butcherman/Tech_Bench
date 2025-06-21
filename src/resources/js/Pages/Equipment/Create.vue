@@ -1,33 +1,10 @@
-<template>
-    <div class="row justify-content-center">
-        <Head title="Create New Equipment" />
-        <div class="col-md-10">
-            <div class="card">
-                <div class="card-body">
-                    <div class="card-title">Create New Equipment</div>
-                    <EquipmentForm
-                        :category-list="categoryList"
-                        :data-list="dataList"
-                        :public-tips="publicTips"
-                    />
-                    <div class="text-center">
-                        Click the
-                        <fa-icon icon="circle-question" class="text-muted" />
-                        icon for detailed information on each field.
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</template>
-
 <script setup lang="ts">
-import AppLayout from "@/Layouts/AppLayout.vue";
+import AppLayout from "@/Layouts/App/AppLayout.vue";
+import Card from "@/Components/_Base/Card.vue";
 import EquipmentForm from "@/Forms/Equipment/EquipmentForm.vue";
-import { ref, reactive, onMounted } from "vue";
 
-const props = defineProps<{
-    categoryList: categoryList[];
+defineProps<{
+    categoryList: equipmentCategory[];
     dataList: string[];
     publicTips: boolean;
 }>();
@@ -36,3 +13,15 @@ const props = defineProps<{
 <script lang="ts">
 export default { layout: AppLayout };
 </script>
+
+<template>
+    <div class="flex justify-center">
+        <Card class="tb-card" title="Create New Equipment">
+            <EquipmentForm
+                :category-list="categoryList"
+                :data-list="dataList"
+                :public-tips="publicTips"
+            />
+        </Card>
+    </div>
+</template>

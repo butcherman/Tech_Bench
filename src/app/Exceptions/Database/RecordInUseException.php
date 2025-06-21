@@ -6,10 +6,13 @@ use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
 
-/**
- * Exception triggered when database query fails due to foreign key
- * constraint.
- */
+/*
+|---------------------------------------------------------------------------
+| Exception notes that a database record cannot be deleted because its key
+| still exists somewhere in the database as a Foreign Key.
+|---------------------------------------------------------------------------
+*/
+
 class RecordInUseException extends Exception
 {
     public function report(): void

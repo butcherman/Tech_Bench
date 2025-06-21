@@ -1,90 +1,21 @@
-<template>
-    <div>
-        <Head title="Equipment Data Types" />
-        <div class="row justify-content-center">
-            <div class="col">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-title">
-                            <Link
-                                :href="$route('equipment-data.create')"
-                                class="float-end"
-                            >
-                                <AddButton text="Add Data Type" small pill />
-                            </Link>
-                            Equipment Data Types
-                        </div>
-                        <p class="text-center">
-                            When equipment is assigned to a customer, the
-                            following Data Types are available to gather
-                            information for that equipment.
-                        </p>
-                        <p class="text-center">
-                            <strong>Note:</strong> Data Types that are in use
-                            cannot be deleted until they have been removed from
-                            all Equipment Types
-                        </p>
-                        <hr />
-                        <Table
-                            :columns="tableColumns"
-                            :rows="dataTypes"
-                            responsive
-                            paginate
-                        >
-                            <template #action="{ rowData }">
-                                <Link
-                                    :href="
-                                        $route(
-                                            'equipment-data.edit',
-                                            rowData.type_id
-                                        )
-                                    "
-                                    class="float-end"
-                                >
-                                    <EditBadge />
-                                </Link>
-                                <DeleteBadge
-                                    v-if="!rowData.in_use"
-                                    class="float-end"
-                                    @click="verifyDeleteType(rowData)"
-                                />
-                            </template>
-                        </Table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</template>
-
 <script setup lang="ts">
-import AppLayout from "@/Layouts/AppLayout.vue";
-import Table from "@/Components/_Base/Table.vue";
 import AddButton from "@/Components/_Base/Buttons/AddButton.vue";
-import EditBadge from "@/Components/_Base/Badges/EditBadge.vue";
+import AppLayout from "@/Layouts/App/AppLayout.vue";
+import Card from "@/Components/_Base/Card.vue";
+import DataTable from "@/Components/_Base/DataTable/DataTable.vue";
 import DeleteBadge from "@/Components/_Base/Badges/DeleteBadge.vue";
-import verifyModal from "@/Modules/verifyModal";
-import { router } from "@inertiajs/vue3";
+import EditBadge from "@/Components/_Base/Badges/EditBadge.vue";
 
 defineProps<{
-    dataTypes: any[];
+    dataTypes: dataTypes[];
 }>();
-
-const verifyDeleteType = (type: dataTypes) => {
-    verifyModal("This cannot be undone").then((res) => {
-        if (res) {
-            router.delete(route("equipment-data.destroy", type.type_id));
-        }
-    });
-};
 
 const tableColumns = [
     {
         label: "Name",
         field: "name",
-        filterOptions: {
-            enabled: true,
-        },
+        filterable: true,
+        sort: true,
     },
     {
         label: "Pattern",
@@ -93,17 +24,17 @@ const tableColumns = [
     {
         label: "Allow Copy",
         field: "allow_copy",
-        isBoolean: true,
     },
     {
         label: "Masked",
         field: "masked",
-        isBoolean: true,
     },
     {
         label: "Hyperlink",
         field: "is_hyperlink",
-        isBoolean: true,
+    },
+    {
+        field: "actions",
     },
 ];
 </script>
@@ -111,3 +42,46 @@ const tableColumns = [
 <script lang="ts">
 export default { layout: AppLayout };
 </script>
+
+<template>
+    <div class="flex justify-center">
+        <Card class="tb-card" title="Equipment Data Types">
+            <template #append-title>
+                <AddButton
+                    text="New Data Type"
+                    size="small"
+                    :href="$route('equipment-data.create')"
+                    pill
+                />
+            </template>
+            <p class="text-center my-2">
+                When equipment is assigned to a customer, the following Data
+                Types are available to gather information for that equipment.
+            </p>
+            <p class="text-center my-2">
+                <strong>Note:</strong> Data Types that are in use cannot be
+                deleted until they have been removed from all Equipment Types
+            </p>
+            <hr />
+            <DataTable :columns="tableColumns" :rows="dataTypes">
+                <template #row.actions="{ rowData }">
+                    <EditBadge
+                        class="me-1"
+                        :href="$route('equipment-data.edit', rowData.type_id)"
+                        v-tooltip="'Edit'"
+                    />
+                    <DeleteBadge
+                        v-if="!rowData.in_use"
+                        class="me-1"
+                        :href="
+                            $route('equipment-data.destroy', rowData.type_id)
+                        "
+                        v-tooltip="'Delete'"
+                        confirm
+                        delete-method
+                    />
+                </template>
+            </DataTable>
+        </Card>
+    </div>
+</template>

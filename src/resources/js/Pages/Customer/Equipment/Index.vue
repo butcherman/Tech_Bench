@@ -1,41 +1,37 @@
-<template>
-    <div id="customer-wrapper">
-        <Head :title="customer.name" />
-        <div class="border-bottom border-secondary-subtle mb-2">
-            <CustomerDetails />
-        </div>
-        <CustomerAlerts />
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <CustomerEquipment />
-            </div>
-        </div>
-    </div>
-</template>
-
 <script setup lang="ts">
-import AppLayout from "@/Layouts/AppLayout.vue";
-import CustomerDetails from "@/Components/Customer/CustomerDetails.vue";
-import CustomerAlerts from "@/Components/Customer/CustomerAlerts.vue";
-import CustomerEquipment from "@/Components/Customer/CustomerEquipment.vue";
-import { customer } from "@/State/CustomerState";
+import AppLayout from "@/Layouts/App/AppLayout.vue";
+import CustomerAlerts from "@/Components/Customer/Show/CustomerAlerts.vue";
+import CustomerDetails from "@/Components/Customer/Show/CustomerDetails.vue";
+import CustomerEquipment from "@/Components/Customer/Show/Equipment/CustomerEquipment.vue";
 import { onMounted, onUnmounted } from "vue";
-import { registerCustomerChannel } from "@/Modules/CustomerBroadcasting.module";
+import { customer } from "@/Composables/Customer/CustomerData.module";
+import {
+    leaveCustomerChannel,
+    registerCustomerChannel,
+} from "@/Composables/Customer/CustomerBroadcasting.module";
 
-/**
- * Register to Customer Channel
- */
+/*
+|-------------------------------------------------------------------------------
+| Broadcasting Data
+|-------------------------------------------------------------------------------
+*/
 const channelName = customer.value.slug;
-onMounted(() => {
-    registerCustomerChannel(channelName);
-});
-
-/**
- * Leave Customer Channel
- */
-onUnmounted(() => Echo.leave(`customer.${channelName}`));
+onMounted(() => registerCustomerChannel(channelName));
+onUnmounted(() => leaveCustomerChannel(channelName));
 </script>
 
 <script lang="ts">
 export default { layout: AppLayout };
 </script>
+
+<template>
+    <div>
+        <div class="flex gap-2 pb-2 border-b border-slate-400">
+            <CustomerDetails class="grow" />
+        </div>
+        <CustomerAlerts />
+        <div class="flex justify-center">
+            <CustomerEquipment class="tb-card" />
+        </div>
+    </div>
+</template>

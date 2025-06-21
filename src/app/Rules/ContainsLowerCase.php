@@ -8,10 +8,13 @@ use Illuminate\Contracts\Validation\ValidationRule;
 class ContainsLowerCase implements ValidationRule
 {
     /**
-     * Run the validation rule
+     * Should the password be required to contain a Lower Case letter?
      */
-    public function validate(string $attribute, mixed $value, Closure $fail): void
-    {
+    public function validate(
+        string $attribute,
+        mixed $value,
+        Closure $fail
+    ): void {
         //  The configuration allows for this rule to be skipped
         if (config('auth.passwords.settings.contains_lowercase')) {
             if (! preg_match('/[a-z]/', $value)) {

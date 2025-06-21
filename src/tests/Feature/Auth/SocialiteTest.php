@@ -2,12 +2,15 @@
 
 namespace Tests\Feature\Auth;
 
-use App\Jobs\User\CreateUserSettingsEntriesJob;
+use App\Exceptions\Auth\UnableToCreateSocialiteUserException;
+use App\Exceptions\Misc\FeatureDisabledException;
+use App\Jobs\User\CreateUserSettingsJob;
 use App\Jobs\User\SendWelcomeEmailJob;
 use App\Models\User;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Exceptions;
 use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
 use Mockery\MockInterface;
@@ -15,19 +18,28 @@ use Tests\TestCase;
 
 class SocialiteTest extends TestCase
 {
-    /**
-     * RedirectAuth Method
-     */
-    public function test_redirect_auth_disabled()
+    /*
+    |---------------------------------------------------------------------------
+    | RedirectAuth Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_redirect_auth_disabled(): void
     {
+        $this->withoutExceptionHandling();
+        $this->expectException(FeatureDisabledException::class);
+
+        Exceptions::fake();
+
         config(['services.azure.allow_login' => false]);
 
         $response = $this->get(route('azure-login'));
 
         $response->assertStatus(404);
+
+        Exceptions::assertReported(FeatureDisabledException::class);
     }
 
-    public function test_redirect_auth()
+    public function test_redirect_auth(): void
     {
         config(['services.azure.allow_login' => true]);
 
@@ -36,19 +48,28 @@ class SocialiteTest extends TestCase
         $response->assertStatus(302);
     }
 
-    /**
-     * Callback Method
-     */
-    public function test_callback_feature_disabled()
+    /*
+    |---------------------------------------------------------------------------
+    | Callback Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_callback_feature_disabled(): void
     {
+        $this->withoutExceptionHandling();
+        $this->expectException(FeatureDisabledException::class);
+
+        Exceptions::fake();
+
         config(['services.azure.allow_login' => false]);
 
         $response = $this->get(route('azure-callback'));
 
         $response->assertStatus(404);
+
+        Exceptions::assertReported(FeatureDisabledException::class);
     }
 
-    public function test_callback_invalid_state()
+    public function test_callback_invalid_state(): void
     {
         config(['services.azure.allow_login' => true]);
 
@@ -57,7 +78,7 @@ class SocialiteTest extends TestCase
         $response->assertStatus(500);
     }
 
-    public function test_callback_new_user()
+    public function test_callback_new_user(): void
     {
         Event::fake(Login::class);
         Bus::fake();
@@ -89,7 +110,8 @@ class SocialiteTest extends TestCase
                 $mock->token = Str::uuid();
                 $mock->principalName = $user->email;
                 $mock->mail = $user->email;
-            });
+            }
+        );
 
         $provider = $this->mock(
             'Laravel\Socialite\Contracts\Provider',
@@ -97,7 +119,8 @@ class SocialiteTest extends TestCase
                 $mock
                     ->shouldReceive('user')
                     ->andReturn($abstractUser);
-            });
+            }
+        );
 
         Socialite::shouldReceive('driver')
             ->with('azure')
@@ -106,8 +129,7 @@ class SocialiteTest extends TestCase
         $response = $this->get(route('azure-callback'));
 
         $response->assertStatus(302)
-            ->assertRedirect(route('dashboard'))
-            ->assertSessionHas('2fa_verified', true);
+            ->assertRedirect(route('dashboard'));
 
         $this->assertAuthenticatedAs(User::where('email', $user->email)->first());
         $this->assertDatabaseHas('users', $user->only([
@@ -116,12 +138,12 @@ class SocialiteTest extends TestCase
             'email',
         ]));
 
-        Bus::assertDispatched(CreateUserSettingsEntriesJob::class);
+        Bus::assertDispatched(CreateUserSettingsJob::class);
         Bus::assertNotDispatched(SendWelcomeEmailJob::class);
         Event::assertDispatched(Login::class);
     }
 
-    public function test_callback_new_user_two_fa_bypass_disabled()
+    public function test_callback_new_user_two_fa_bypass_disabled(): void
     {
         Event::fake(Login::class);
         Bus::fake();
@@ -153,7 +175,8 @@ class SocialiteTest extends TestCase
                 $mock->token = Str::uuid();
                 $mock->principalName = $user->email;
                 $mock->mail = $user->email;
-            });
+            }
+        );
 
         $provider = $this->mock(
             'Laravel\Socialite\Contracts\Provider',
@@ -161,7 +184,8 @@ class SocialiteTest extends TestCase
                 $mock
                     ->shouldReceive('user')
                     ->andReturn($abstractUser);
-            });
+            }
+        );
 
         Socialite::shouldReceive('driver')
             ->with('azure')
@@ -169,7 +193,7 @@ class SocialiteTest extends TestCase
 
         $response = $this->get(route('azure-callback'));
         $response->assertStatus(302);
-        $response->assertSessionMissing('2fa_verified', true);
+        $response->assertSessionMissing('2fa_verified');
 
         $this->assertAuthenticatedAs(User::where('email', $user->email)->first());
         $this->assertDatabaseHas('users', $user->only([
@@ -178,13 +202,18 @@ class SocialiteTest extends TestCase
             'email',
         ]));
 
-        Bus::assertDispatched(CreateUserSettingsEntriesJob::class);
+        Bus::assertDispatched(CreateUserSettingsJob::class);
         Bus::assertNotDispatched(SendWelcomeEmailJob::class);
         Event::assertDispatched(Login::class);
     }
 
-    public function test_callback_new_user_register_disabled()
+    public function test_callback_new_user_register_disabled(): void
     {
+        Exceptions::fake();
+
+        $this->withoutExceptionHandling();
+        $this->expectException(UnableToCreateSocialiteUserException::class);
+
         config(['services.azure.allow_login' => true]);
         config(['services.azure.allow_register' => false]);
 
@@ -211,7 +240,8 @@ class SocialiteTest extends TestCase
                 $mock->token = Str::uuid();
                 $mock->principalName = $user->email;
                 $mock->mail = $user->email;
-            });
+            }
+        );
 
         $provider = $this->mock(
             'Laravel\Socialite\Contracts\Provider',
@@ -219,7 +249,8 @@ class SocialiteTest extends TestCase
                 $mock
                     ->shouldReceive('user')
                     ->andReturn($abstractUser);
-            });
+            }
+        );
 
         Socialite::shouldReceive('driver')
             ->with('azure')
@@ -230,12 +261,14 @@ class SocialiteTest extends TestCase
         $response->assertStatus(302)
             ->assertRedirect(route('login'))
             ->assertSessionHas('warning', 'You do not have permission to Login.  Please'.
-                   ' contact your system administrator');
+                ' contact your system administrator');
 
         $this->assertDatabaseMissing('users', $user->only([
             'first_name',
             'last_name',
             'email',
         ]));
+
+        Exceptions::assertReported(UnableToCreateSocialiteUserException::class);
     }
 }

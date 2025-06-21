@@ -1,41 +1,54 @@
-<template>
-    <button
-        type="button"
-        class="btn btn-sm"
-        title="Refresh"
-        v-tooltip
-        @click="refresh"
-    >
-        <fa-icon icon="fa-rotate" :spin="loading" />
-    </button>
-</template>
-
 <script setup lang="ts">
+import BaseButton from "./BaseButton.vue";
 import { ref } from "vue";
 import { router } from "@inertiajs/vue3";
 
-const emit = defineEmits(["loading-start", "loading-complete"]);
-const props = defineProps<{
-    only: string[];
+const emit = defineEmits<{
+    "loading-start": [];
+    "loading-complete": [];
 }>();
 
-const loading = ref<boolean>(false);
+const props = defineProps<{
+    flat?: boolean;
+    only?: string[];
+    pill?: boolean;
+    variant?: elementVariant;
+}>();
 
-const refresh = (): void => {
+const isLoading = ref<boolean>(false);
+
+/*
+|-------------------------------------------------------------------------------
+| Reload the page
+|-------------------------------------------------------------------------------
+*/
+const handleClick = (): void => {
+    isLoading.value = true;
     emit("loading-start");
-    loading.value = true;
 
-    let only: string[] = props.only;
-    only.push("flash");
+    let base = ["flash"];
 
     router.reload({
-        only: only,
+        only: base.concat(props.only ?? []),
         onFinish: () => {
+            isLoading.value = false;
             emit("loading-complete");
-            loading.value = false;
         },
     });
 };
-
-defineExpose({ refresh });
 </script>
+
+<template>
+    <BaseButton
+        size="small"
+        variant="none"
+        :flat="flat"
+        :pill="pill"
+        v-tooltip="'Refresh'"
+        @click="handleClick"
+    >
+        <slot>
+            <fa-icon icon="fa-rotate" :spin="isLoading" />
+        </slot>
+    </BaseButton>
+</template>

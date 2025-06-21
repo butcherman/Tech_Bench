@@ -8,10 +8,12 @@ use Tests\TestCase;
 
 class StepOneTest extends TestCase
 {
-    /**
-     * Invoke Method
-     */
-    public function test_invoke_guest()
+    /*
+    |---------------------------------------------------------------------------
+    | Invoke Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_invoke_guest(): void
     {
         config(['app.first_time_setup' => true]);
         config(['app.env' => 'local']);
@@ -23,33 +25,34 @@ class StepOneTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_invoke()
+    public function test_invoke(): void
     {
         config(['app.first_time_setup' => true]);
         config(['app.env' => 'local']);
 
         /** @var User $user */
-        $user = User::factory()->createQuietly(['role_id' => 1]);
+        $user = User::find(1);
 
         $response = $this->actingAs($user)
             ->get(route('init.step-1'));
 
         $response->assertSuccessful()
-            ->assertInertia(fn (Assert $page) => $page
-                ->component('Init/StepOne')
-                ->has('step')
-                ->has('settings')
-                ->has('timezone-list')
+            ->assertInertia(
+                fn (Assert $page) => $page
+                    ->component('Init/StepOne')
+                    ->has('step')
+                    ->has('settings')
+                    ->has('timezone-list')
             );
     }
 
-    public function test_invoke_with_session_data()
+    public function test_invoke_with_session_data(): void
     {
         config(['app.first_time_setup' => true]);
         config(['app.env' => 'local']);
 
         /** @var User $user */
-        $user = User::factory()->createQuietly(['role_id' => 1]);
+        $user = User::find(1);
 
         $response = $this->actingAs($user)
             ->withSession([
@@ -65,11 +68,12 @@ class StepOneTest extends TestCase
             ->get(route('init.step-1'));
 
         $response->assertSuccessful()
-            ->assertInertia(fn (Assert $page) => $page
-                ->component('Init/StepOne')
-                ->has('step')
-                ->has('settings')
-                ->has('timezone-list')
+            ->assertInertia(
+                fn (Assert $page) => $page
+                    ->component('Init/StepOne')
+                    ->has('step')
+                    ->has('settings')
+                    ->has('timezone-list')
             );
     }
 }

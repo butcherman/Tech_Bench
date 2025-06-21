@@ -2,69 +2,61 @@
 
 namespace App\Observers;
 
-use App\Jobs\User\CreateUserSettingsEntriesJob;
-use App\Jobs\User\SendWelcomeEmailJob;
+use App\Events\User\UserEmailChangedEvent;
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
 
-class UserObserver
+class UserObserver extends Observer
 {
     /**
-     * Handle User Created Event
+     * Handle the User "created" event.
      */
     public function created(User $user): void
     {
-        if (! request()->user()) {
-            Log::info('New User '.$user->username.' created via Microsoft Azure driver');
-
-            dispatch(new CreateUserSettingsEntriesJob($user));
-        } else {
-            Log::stack(['daily', 'auth'])
-                ->notice(
-                    'New User created by '.request()->user()->username,
-                    $user->toArray()
-                );
-
-            dispatch(new SendWelcomeEmailJob($user));
-            dispatch(new CreateUserSettingsEntriesJob($user));
-        }
+        Log::info('New User Profile created by '.$this->user, $user->toArray());
     }
 
     /**
-     * Handle User Updated Event
+     * Handle the User "updated" event.
      */
     public function updated(User $user): void
     {
-        if (! request()->user()) {
-            Log::stack(['daily', 'auth'])
-                ->notice('User '.$user->username.' has reset their forgotten password');
-        } else {
-            Log::stack(['daily', 'auth'])
-                ->info('User information for '.$user->username.' has been updated by '.
-                request()->user()->username, $user->toArray());
+        Log::info(
+            'User profile for '.$user->full_name.' updated by '.$this->user, [
+                'user_data' => $user->toArray(),
+            ]);
+
+        if ($user->wasChanged('email')) {
+            event(
+                new UserEmailChangedEvent($user, $user->getOriginal('email'))
+            );
         }
     }
 
     /**
-     * Handle User Soft Deleted Event.
+     * Handle the User "deleted" event.
      */
-    public function deleted(User $user): void
-    {
-        Log::stack(['daily', 'auth'])
-            ->notice(
-                'User '.$user->username.' has been deactivated by '.
-                request()->user()->username
-            );
-    }
+    // public function deleted(User $user): void
+    // {
+    //     //
+    //     Log::info('deleted');
+    // }
 
     /**
-     * Handle User Restored Event
+     * Handle the User "restored" event.
      */
-    public function restored(User $user): void
-    {
-        Log::stack(['daily', 'auth'])
-            ->notice(
-                'User '.$user->username.' has been reactivated by '.request()->user()->username
-            );
-    }
+    // public function restored(User $user): void
+    // {
+    //     //
+    //     Log::info('restored');
+    // }
+
+    /**
+     * Handle the User "force deleted" event.
+     */
+    // public function forceDeleted(User $user): void
+    // {
+    //     //
+    //     Log::info('force deleted');
+    // }
 }

@@ -17,25 +17,27 @@ class CustomerEquipmentTest extends TestCase
 {
     protected $customer;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
         $this->customer = Customer::factory()
-            ->has(CustomerSite::factory()->count(2))
+            ->has(CustomerSite::factory()->count(2), 'sites')
             ->create();
 
         $this->customer->primary_site_id = $this->customer
-            ->CustomerSite[0]
+            ->Sites[0]
             ->cust_site_id;
 
         $this->customer->save();
     }
 
-    /**
-     * Index Method
-     */
-    public function test_index_guest()
+    /*
+    |---------------------------------------------------------------------------
+    | Index Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_index_guest(): void
     {
         $response = $this->get(
             route('customers.equipment.index', $this->customer->slug)
@@ -45,7 +47,7 @@ class CustomerEquipmentTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_index()
+    public function test_index(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly();
@@ -54,24 +56,26 @@ class CustomerEquipmentTest extends TestCase
             ->get(route('customers.equipment.index', $this->customer->slug));
 
         $response->assertSuccessful()
-            ->assertInertia(fn (Assert $page) => $page
-                ->component('Customer/Equipment/Index')
-                ->has('permissions')
-                ->has('customer')
-                ->has('siteList')
-                ->has('alerts')
-                ->has('equipmentList')
+            ->assertInertia(
+                fn (Assert $page) => $page
+                    ->component('Customer/Equipment/Index')
+                    ->has('permissions')
+                    ->has('customer')
+                    ->has('siteList')
+                    ->has('alerts')
             );
     }
 
-    /**
-     * Store Method
-     */
-    public function test_store_guest()
+    /*
+    |---------------------------------------------------------------------------
+    | Store Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_store_guest(): void
     {
         $data = [
             'equip_id' => EquipmentType::factory()->create()->equip_id,
-            'site_list' => $this->customer->CustomerSite->toArray(),
+            'site_list' => $this->customer->Sites->toArray(),
         ];
 
         $response = $this->post(
@@ -84,7 +88,7 @@ class CustomerEquipmentTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_store_no_permission()
+    public function test_store_no_permission(): void
     {
         // Remove the 'Add Customer Equipment' permission from the Tech Role
         $this->changeRolePermission(4, 'Add Customer Equipment', false);
@@ -93,7 +97,7 @@ class CustomerEquipmentTest extends TestCase
         $user = User::factory()->createQuietly();
         $data = [
             'equip_id' => EquipmentType::factory()->createQuietly()->equip_id,
-            'site_list' => $this->customer->CustomerSite->toArray(),
+            'site_list' => $this->customer->Sites->toArray(),
         ];
 
         $response = $this->actingAs($user)
@@ -104,7 +108,7 @@ class CustomerEquipmentTest extends TestCase
         $response->assertForbidden();
     }
 
-    public function test_store()
+    public function test_store(): void
     {
         Bus::fake();
 
@@ -118,7 +122,7 @@ class CustomerEquipmentTest extends TestCase
         $data = [
             'equip_id' => $equip->equip_id,
             'site_list' => $this->customer
-                ->CustomerSite
+                ->Sites
                 ->pluck('cust_site_id')
                 ->toArray(),
         ];
@@ -139,23 +143,23 @@ class CustomerEquipmentTest extends TestCase
             'equip_id' => $equip->equip_id,
         ]);
         $this->assertDatabaseHas('customer_site_equipment', [
-            'cust_equip_id' => $this->customer->CustomerEquipment[0]->cust_equip_id,
+            'cust_equip_id' => $this->customer->Equipment[0]->cust_equip_id,
             'cust_site_id' => $data['site_list'][0],
         ]);
         $this->assertDatabaseHas('customer_site_equipment', [
-            'cust_equip_id' => $this->customer->CustomerEquipment[0]->cust_equip_id,
+            'cust_equip_id' => $this->customer->Equipment[0]->cust_equip_id,
             'cust_site_id' => $data['site_list'][1],
         ]);
 
         Bus::assertDispatched(CreateCustomerDataFieldsJob::class);
     }
 
-    public function test_store_duplicate_equipment()
+    public function test_store_duplicate_equipment(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly();
         $siteList = $this->customer
-            ->CustomerSite
+            ->Sites
             ->pluck('cust_site_id')
             ->toArray();
 
@@ -166,7 +170,7 @@ class CustomerEquipmentTest extends TestCase
             'cust_id' => $this->customer->cust_id,
             'equip_id' => $equip->equip_id,
         ]);
-        $custEquipment->CustomerSite()->sync($siteList);
+        $custEquipment->Sites()->sync($siteList);
 
         $data = [
             'equip_id' => $equip->equip_id,
@@ -180,13 +184,15 @@ class CustomerEquipmentTest extends TestCase
             );
 
         $response->assertStatus(302)
-            ->assertSessionHasErrors(['site_list']);
+            ->assertSessionHasErrorsIn('form_error', ['site_list']);
     }
 
-    /**
-     * Show Method
-     */
-    public function test_show_guest()
+    /*
+    |---------------------------------------------------------------------------
+    | Show Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_show_guest(): void
     {
         $equip = CustomerEquipment::factory()->create([
             'cust_id' => $this->customer->cust_id,
@@ -202,7 +208,7 @@ class CustomerEquipmentTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_show()
+    public function test_show(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly();
@@ -217,23 +223,23 @@ class CustomerEquipmentTest extends TestCase
             ]));
 
         $response->assertSuccessful()
-            ->assertInertia(fn (Assert $page) => $page
-                ->component('Customer/Equipment/Show')
-                ->has('permissions')
-                ->has('customer')
-                ->has('equipment')
-                ->has('siteList')
-                ->has('equipment-data')
-                ->has('notes')
-                ->has('files')
-                ->has('equipmentList')
+            ->assertInertia(
+                fn (Assert $page) => $page
+                    ->component('Customer/Equipment/Show')
+                    ->has('permissions')
+                    ->has('customer')
+                    ->has('equipment')
+                    ->has('siteList')
+                    ->has('equipment-data')
             );
     }
 
-    /**
-     * Update Method
-     */
-    public function test_update_guest()
+    /*
+    |---------------------------------------------------------------------------
+    | Update Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_update_guest(): void
     {
         $equip = CustomerEquipment::factory()->create([
             'cust_id' => $this->customer->cust_id,
@@ -246,10 +252,11 @@ class CustomerEquipmentTest extends TestCase
 
         $data = [
             'site_list' => [
-                $this->customer->CustomerSite[0]->cust_site_id,
+                $this->customer->Sites[0]->cust_site_id,
                 $newSites[0],
                 $newSites[1],
             ],
+            'equip_id' => $equip->equip_id,
         ];
 
         $response = $this->put(route('customers.equipment.update', [
@@ -262,7 +269,7 @@ class CustomerEquipmentTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_update_no_permission()
+    public function test_update_no_permission(): void
     {
         // Remove the 'Edit Customer Equipment' permission from the Tech Role
         $this->changeRolePermission(4, 'Edit Customer Equipment', false);
@@ -280,10 +287,11 @@ class CustomerEquipmentTest extends TestCase
 
         $data = [
             'site_list' => [
-                $this->customer->CustomerSite[0]->cust_site_id,
+                $this->customer->Sites[0]->cust_site_id,
                 $newSites[0],
                 $newSites[1],
             ],
+            'equip_id' => $equip->equip_id,
         ];
 
         $response = $this->actingAs($user)
@@ -295,7 +303,7 @@ class CustomerEquipmentTest extends TestCase
         $response->assertForbidden();
     }
 
-    public function test_update()
+    public function test_update(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly();
@@ -310,10 +318,11 @@ class CustomerEquipmentTest extends TestCase
 
         $data = [
             'site_list' => [
-                $this->customer->CustomerSite[0]->cust_site_id,
+                $this->customer->Sites[0]->cust_site_id,
                 $newSites[0],
                 $newSites[1],
             ],
+            'equip_id' => $equip->equip_id,
         ];
 
         $response = $this->actingAs($user)
@@ -330,27 +339,61 @@ class CustomerEquipmentTest extends TestCase
             'equip_id' => $equip->equip_id,
         ]);
         $this->assertDatabaseHas('customer_site_equipment', [
-            'cust_equip_id' => $this->customer->CustomerEquipment[0]->cust_equip_id,
+            'cust_equip_id' => $this->customer->Equipment[0]->cust_equip_id,
             'cust_site_id' => $data['site_list'][0],
         ]);
         $this->assertDatabaseHas('customer_site_equipment', [
-            'cust_equip_id' => $this->customer->CustomerEquipment[0]->cust_equip_id,
+            'cust_equip_id' => $this->customer->Equipment[0]->cust_equip_id,
             'cust_site_id' => $data['site_list'][1],
         ]);
         $this->assertDatabaseHas('customer_site_equipment', [
-            'cust_equip_id' => $this->customer->CustomerEquipment[0]->cust_equip_id,
+            'cust_equip_id' => $this->customer->Equipment[0]->cust_equip_id,
             'cust_site_id' => $data['site_list'][2],
         ]);
         $this->assertDatabaseMissing('customer_site_equipment', [
-            'cust_equip_id' => $this->customer->CustomerEquipment[0]->cust_equip_id,
-            'cust_site_id' => $this->customer->CustomerSite[1]->cust_site_id,
+            'cust_equip_id' => $this->customer->Equipment[0]->cust_equip_id,
+            'cust_site_id' => $this->customer->Sites[1]->cust_site_id,
         ]);
     }
 
-    /**
-     * Destroy Method
-     */
-    public function test_destroy_guest()
+    public function test_update_scope_bindings(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+        $invalid = Customer::factory()->create();
+        $equip = CustomerEquipment::factory()->create([
+            'cust_id' => $this->customer->cust_id,
+        ]);
+        $newSites = CustomerSite::factory()
+            ->count(2)
+            ->create(['cust_id' => $this->customer->cust_id])
+            ->pluck('cust_site_id')
+            ->toArray();
+
+        $data = [
+            'site_list' => [
+                $this->customer->Sites[0]->cust_site_id,
+                $newSites[0],
+                $newSites[1],
+            ],
+            'equip_id' => $equip->equip_id,
+        ];
+
+        $response = $this->actingAs($user)
+            ->put(route('customers.equipment.update', [
+                $invalid->slug,
+                $equip->cust_equip_id,
+            ]), $data);
+
+        $response->assertStatus(404);
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | Destroy Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_destroy_guest(): void
     {
         $equip = CustomerEquipment::factory()->create([
             'cust_id' => $this->customer->cust_id,
@@ -366,7 +409,7 @@ class CustomerEquipmentTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_destroy_no_permission()
+    public function test_destroy_no_permission(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly();
@@ -382,7 +425,7 @@ class CustomerEquipmentTest extends TestCase
         $response->assertForbidden();
     }
 
-    public function test_destroy()
+    public function test_destroy(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);
@@ -397,35 +440,54 @@ class CustomerEquipmentTest extends TestCase
             ]));
 
         $response->assertStatus(302)
-            ->assertSessionHas('warning', __('cust.equipment.deleted', [
-                'equip' => $equip->equip_name,
-            ]));
+            ->assertSessionHas('warning', 'Equipment Deleted');
 
         $this->assertSoftDeleted('customer_equipment', [
             'cust_equip_id' => $equip->cust_equip_id,
         ]);
     }
 
-    /**
-     * Restore Method
-     */
-    public function test_restore_guest()
+    public function test_destroy_scope_bindings(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
+        $invalid = Customer::factory()->create();
+        $equip = CustomerEquipment::factory()->create([
+            'cust_id' => $this->customer->cust_id,
+        ]);
+
+        $response = $this->actingAs($user)
+            ->delete(route('customers.equipment.destroy', [
+                $invalid->slug,
+                $equip->cust_equip_id,
+            ]));
+
+        $response->assertStatus(404);
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | Restore Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_restore_guest(): void
     {
         $equip = CustomerEquipment::factory()->create([
             'cust_id' => $this->customer->cust_id,
         ]);
 
         $response = $this->get(route('customers.deleted-items.restore.equipment', [
-            $equip->cust_id,
+            $equip->Customer->slug,
             $equip->cust_equip_id,
         ]));
 
         $response->assertStatus(302)
             ->assertRedirect(route('login'));
+
         $this->assertGuest();
     }
 
-    public function test_restore_no_permission()
+    public function test_restore_no_permission(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly();
@@ -435,14 +497,14 @@ class CustomerEquipmentTest extends TestCase
 
         $response = $this->actingAs($user)
             ->get(route('customers.deleted-items.restore.equipment', [
-                $equip->cust_id,
+                $equip->Customer->slug,
                 $equip->cust_equip_id,
             ]));
 
         $response->assertForbidden();
     }
 
-    public function test_restore()
+    public function test_restore(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);
@@ -452,7 +514,7 @@ class CustomerEquipmentTest extends TestCase
 
         $response = $this->actingAs($user)
             ->get(route('customers.deleted-items.restore.equipment', [
-                $equip->cust_id,
+                $equip->Customer->slug,
                 $equip->cust_equip_id,
             ]));
 
@@ -466,10 +528,30 @@ class CustomerEquipmentTest extends TestCase
         ]));
     }
 
-    /**
-     * Force Delete Method
-     */
-    public function test_force_delete_guest()
+    public function test_restore_scope_bindings(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
+        $invalid = Customer::factory()->create();
+        $equip = CustomerEquipment::factory()->create([
+            'cust_id' => $this->customer->cust_id,
+        ]);
+
+        $response = $this->actingAs($user)
+            ->get(route('customers.deleted-items.restore.equipment', [
+                $invalid->slug,
+                $equip->cust_equip_id,
+            ]));
+
+        $response->assertStatus(404);
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | Force Delete Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_force_delete_guest(): void
     {
         $equip = CustomerEquipment::factory()->create([
             'cust_id' => $this->customer->cust_id,
@@ -477,7 +559,7 @@ class CustomerEquipmentTest extends TestCase
         $equip->delete();
 
         $response = $this->delete(route('customers.deleted-items.force-delete.equipment', [
-            $equip->cust_id,
+            $equip->Customer->slug,
             $equip->cust_equip_id,
         ]));
 
@@ -486,7 +568,7 @@ class CustomerEquipmentTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_force_delete_no_permission()
+    public function test_force_delete_no_permission(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly();
@@ -497,14 +579,14 @@ class CustomerEquipmentTest extends TestCase
 
         $response = $this->actingAs($user)
             ->delete(route('customers.deleted-items.force-delete.equipment', [
-                $equip->cust_id,
+                $equip->Customer->slug,
                 $equip->cust_equip_id,
             ]));
 
         $response->assertForbidden();
     }
 
-    public function test_force_delete()
+    public function test_force_delete(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);
@@ -515,7 +597,7 @@ class CustomerEquipmentTest extends TestCase
 
         $response = $this->actingAs($user)
             ->delete(route('customers.deleted-items.force-delete.equipment', [
-                $equip->cust_id,
+                $equip->Customer->slug,
                 $equip->cust_equip_id,
             ]));
 
@@ -527,5 +609,24 @@ class CustomerEquipmentTest extends TestCase
         $this->assertDatabaseMissing('customer_equipment', $equip->only([
             'cust_equip_id',
         ]));
+    }
+
+    public function test_force_delete_scope_bindings(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
+        $invalid = Customer::factory()->create();
+        $equip = CustomerEquipment::factory()->create([
+            'cust_id' => $this->customer->cust_id,
+        ]);
+        $equip->delete();
+
+        $response = $this->actingAs($user)
+            ->delete(route('customers.deleted-items.force-delete.equipment', [
+                $invalid->slug,
+                $equip->cust_equip_id,
+            ]));
+
+        $response->assertStatus(404);
     }
 }

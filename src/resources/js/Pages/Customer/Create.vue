@@ -1,26 +1,9 @@
-<template>
-    <div class="row justify-content-center">
-        <Head title="Create Customer" />
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-body">
-                    <div class="card-title">Create Customer</div>
-                    <CustomerDetailsForm
-                        :select-id="selectId"
-                        :default-state="defaultState"
-                    />
-                </div>
-            </div>
-        </div>
-    </div>
-</template>
-
 <script setup lang="ts">
-import AppLayout from "@/Layouts/AppLayout.vue";
+import AppLayout from "@/Layouts/App/AppLayout.vue";
+import Card from "@/Components/_Base/Card.vue";
 import CustomerDetailsForm from "@/Forms/Customer/CustomerDetailsForm.vue";
-import { ref, reactive, onMounted } from "vue";
 
-const props = defineProps<{
+defineProps<{
     selectId: boolean;
     defaultState: string;
 }>();
@@ -29,3 +12,14 @@ const props = defineProps<{
 <script lang="ts">
 export default { layout: AppLayout };
 </script>
+
+<template>
+    <div class="flex justify-center">
+        <Card class="tb-card" title="Create New Customer">
+            <CustomerDetailsForm
+                :select-id="selectId"
+                :default-state="defaultState"
+            />
+        </Card>
+    </div>
+</template>

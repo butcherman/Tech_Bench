@@ -10,25 +10,30 @@ class UserRolePermissionTypeUnitTest extends TestCase
 {
     protected $model;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
         $this->model = UserRolePermissionType::where('perm_type_id', 1)->first();
     }
 
-    /**
-     * Model Attributes
-     */
-    public function test_model_attributes()
+    /*
+    |---------------------------------------------------------------------------
+    | Model Attributes
+    |---------------------------------------------------------------------------
+    */
+    public function test_model_attributes(): void
     {
         $this->assertArrayHasKey('group', $this->model->toArray());
+        $this->assertArrayHasKey('feature_enabled', $this->model->toArray());
     }
 
-    /**
-     * Model Relationships
-     */
-    public function test_user_role_permission_category_relationship()
+    /*
+    |---------------------------------------------------------------------------
+    | Model Relationships
+    |---------------------------------------------------------------------------
+    */
+    public function test_user_role_permission_category_relationship(): void
     {
         $roleCat = UserRolePermissionCategory::where('role_cat_id', $this->model->role_cat_id)
             ->first();

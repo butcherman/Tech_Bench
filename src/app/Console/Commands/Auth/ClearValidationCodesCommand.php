@@ -5,6 +5,13 @@ namespace App\Console\Commands\Auth;
 use App\Models\UserVerificationCode;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
+
+/*
+|-------------------------------------------------------------------------------
+| Command will delete any User Authorization Codes more than 15 minutes old.
+|-------------------------------------------------------------------------------
+*/
 
 class ClearValidationCodesCommand extends Command
 {
@@ -20,13 +27,15 @@ class ClearValidationCodesCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Clear any authorization codes more than 15 minutes old';
+    protected $description = 'Remove expired Authorization Codes';
 
     /**
-     * Execute the console command.
+     * Execute the console Command
      */
     public function handle(): void
     {
+        Log::debug('Running auth:clear-validation-codes command');
+
         $codeList = UserVerificationCode::where(
             'updated_at',
             '<',
@@ -35,9 +44,9 @@ class ClearValidationCodesCommand extends Command
 
         $count = $codeList->count();
 
-        foreach ($codeList as $code) {
-            $code->delete();
-        }
+        UserVerificationCode::destroy($codeList);
+
+        Log::debug('Cleared '.$count.' verification codes.');
 
         $this->line('Cleared '.$count.' verification codes.');
     }

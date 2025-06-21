@@ -1,85 +1,118 @@
-<template>
-    <div class="mb-3">
-        <label v-if="label" :for="id" class="form-label w-100">
-            {{ label }}:
-        </label>
-        <select
-            v-model="value"
-            :id="id"
-            class="form-select"
-            :class="{ 'is-valid': isValid, 'is-invalid': isInvalid }"
-            :disabled="disabled"
-        >
-            <option v-if="allowNull" :value="null"></option>
-            <template v-for="(option, key) in list" :key="key">
-                <template v-if="typeof option === 'string'">
-                    <option :value="option">{{ option }}</option>
-                </template>
-                <template v-else-if="Array.isArray(option)">
-                    <optgroup :label="key.toString()" :key="key">
-                        <template
-                            v-for="item in option"
-                            :key="item[valueField] || item"
-                        >
-                            <option
-                                :value="item[valueField] || item"
-                                :disabled="item.disabled || false"
-                            >
-                                {{ item[textField] || item }}
-                            </option>
-                        </template>
-                    </optgroup>
-                </template>
-                <template v-else>
-                    <option :value="option[valueField]">
-                        {{ option[textField] }}
-                    </option>
-                </template>
-            </template>
-        </select>
-        <span
-            v-if="errorMessage && (meta.dirty || meta.touched)"
-            class="text-danger"
-        >
-            {{ errorMessage }}
-        </span>
-    </div>
-</template>
-
 <script setup lang="ts">
-import { computed, toRef } from "vue";
+import { Select, Message, FloatLabel } from "primevue";
+import { computed, ref, toRef } from "vue";
 import { useField } from "vee-validate";
+import type { Ref } from "vue";
+
+const emit = defineEmits<{
+    focus: [];
+    blur: [];
+}>();
 
 const props = defineProps<{
     id: string;
+    list: any[];
     name: string;
+    borderBottom?: boolean;
+    disabled?: boolean;
+    groupChildrenField?: string;
+    groupTextField?: string;
+    help?: string;
     label?: string;
-    list: any | any[];
     textField?: string;
     valueField?: string;
-    allowNull?: boolean;
-    disabled?: boolean;
 }>();
 
-const valueField = computed(() =>
-    props.valueField ? props.valueField : "value"
+const optionLabel = computed<string | undefined>(() => {
+    if (typeof props.list[0] === "string") {
+        return undefined;
+    }
+
+    return props.textField ?? "text";
+});
+
+const optionValue = computed<string | undefined>(() => {
+    if (typeof props.list[0] === "string") {
+        return undefined;
+    }
+
+    return props.valueField ?? "text";
+});
+
+/*
+|-------------------------------------------------------------------------------
+| Styling Data
+|-------------------------------------------------------------------------------
+*/
+const borderType = computed<string>(() =>
+    props.borderBottom ? "border-b rounded-none" : "border"
 );
-const textField = computed(() => (props.textField ? props.textField : "text"));
 
-const isValid = computed<boolean>(() => {
-    return meta.valid && meta.validated && !meta.pending;
-});
+/*
+|-------------------------------------------------------------------------------
+| Input Focus State
+|-------------------------------------------------------------------------------
+*/
+const hasFocus = ref<boolean>(false);
 
-const isInvalid = computed<boolean>(() => {
-    return !meta.valid && meta.validated && !meta.pending;
-});
+const onFocus = (): void => {
+    hasFocus.value = true;
+    emit("focus");
+};
 
+const onBlur = (): void => {
+    hasFocus.value = false;
+    emit("blur");
+};
+
+/*
+|-------------------------------------------------------------------------------
+| Vee-Validate
+|-------------------------------------------------------------------------------
+*/
 const nameRef = toRef(props, "name");
-const { errorMessage, value, meta } = useField(nameRef);
+const {
+    errorMessage,
+    value,
+}: {
+    errorMessage: Ref<string | undefined, string | undefined>;
+    value: Ref<string>;
+} = useField(nameRef);
 </script>
 
-<style scoped lang="scss">
-label {
-    font-weight: bold;
-}
-</style>
+<template>
+    <div class="my-2">
+        <FloatLabel variant="on">
+            <Select
+                v-model="value"
+                class="w-full"
+                :class="borderType"
+                :disabled="disabled"
+                :input-id="id"
+                :options="list"
+                :option-label="optionLabel"
+                :option-value="optionValue"
+                :option-group-label="groupTextField"
+                :option-group-children="groupChildrenField"
+                @focus="onFocus"
+                @blur="onBlur"
+            >
+                <template #option="slotProps">
+                    <slot name="option" v-bind="slotProps" />
+                </template>
+            </Select>
+            <label :for="id" class="text-muted">{{ label }}</label>
+        </FloatLabel>
+        <Message size="small" severity="error" variant="simple">
+            {{ errorMessage }}
+        </Message>
+        <Message
+            v-if="hasFocus"
+            size="small"
+            severity="secondary"
+            variant="simple"
+        >
+            {{ help }}
+        </Message>
+    </div>
+</template>

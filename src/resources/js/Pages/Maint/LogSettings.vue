@@ -1,34 +1,27 @@
-<template>
-    <div>
-        <Head title="Log Settings" />
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-title">Log Settings</div>
-                        <LogSettingsForm
-                            :days="days"
-                            :log-level="logLevel"
-                            :level-list="levelList"
-                        />
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</template>
-
 <script setup lang="ts">
-import AppLayout from "@/Layouts/AppLayout.vue";
+import AppLayout from "@/Layouts/App/AppLayout.vue";
+import Card from "@/Components/_Base/Card.vue";
 import LogSettingsForm from "@/Forms/Maintenance/LogSettingsForm.vue";
 
 defineProps<{
     days: number;
     logLevel: string;
-    levelList: logLevel[];
+    levelList: string[];
 }>();
 </script>
 
 <script lang="ts">
 export default { layout: AppLayout };
 </script>
+
+<template>
+    <div class="flex justify-center">
+        <Card class="tb-card-sm" title="Log Settings">
+            <LogSettingsForm
+                :days="days"
+                :log-level="logLevel"
+                :level-list="levelList"
+            />
+        </Card>
+    </div>
+</template>

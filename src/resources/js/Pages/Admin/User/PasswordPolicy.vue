@@ -1,18 +1,6 @@
-<template>
-    <div class="row justify-content-center">
-        <div class="col-md-7">
-            <div class="card">
-                <div class="card-body">
-                    <div class="card-title">Password Policy</div>
-                    <PasswordPolicyForm :policy="policy" />
-                </div>
-            </div>
-        </div>
-    </div>
-</template>
-
 <script setup lang="ts">
-import AppLayout from "@/Layouts/AppLayout.vue";
+import AppLayout from "@/Layouts/App/AppLayout.vue";
+import Card from "@/Components/_Base/Card.vue";
 import PasswordPolicyForm from "@/Forms/Admin/User/PasswordPolicyForm.vue";
 
 defineProps<{
@@ -23,3 +11,11 @@ defineProps<{
 <script lang="ts">
 export default { layout: AppLayout };
 </script>
+
+<template>
+    <div class="flex justify-center">
+        <Card class="tb-card">
+            <PasswordPolicyForm :policy="policy" />
+        </Card>
+    </div>
+</template>

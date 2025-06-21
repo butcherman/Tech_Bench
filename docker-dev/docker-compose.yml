@@ -33,6 +33,7 @@ services:
         volumes:
             - ../src:/app
             - ./.env:/app/.env
+            - /var/run/docker.sock:/var/run/docker.sock
             - backupData:/app/storage/backups/tech-bench
         environment:
             - SERVICE=app
@@ -77,6 +78,7 @@ services:
             - app-tier
         depends_on:
             - tech_bench
+        entrypoint: php artisan reverb:start --debug
 
     #  Horizon Container to run background jobs
     horizon:
@@ -194,3 +196,14 @@ services:
             - tech_bench
             - nginx
         entrypoint: npm run dev
+
+    selenium:
+        container_name: selenium
+        image: selenium/standalone-chrome:4.3
+        volumes:
+            - ../src:/dev/shm
+        networks:
+            - app-tier
+        ports:
+            - "4444:4444"
+            - "7900:7900"

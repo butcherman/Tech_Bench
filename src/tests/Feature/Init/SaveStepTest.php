@@ -7,10 +7,12 @@ use Tests\TestCase;
 
 class SaveStepTest extends TestCase
 {
-    /**
-     * Invoke Method
-     */
-    public function test_invoke_guest()
+    /*
+    |---------------------------------------------------------------------------
+    | Invoke Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_invoke_guest(): void
     {
         config(['app.first_time_setup' => true]);
         config(['app.env' => 'local']);
@@ -29,13 +31,13 @@ class SaveStepTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_invoke_step_1()
+    public function test_invoke_step_1(): void
     {
         config(['app.first_time_setup' => true]);
         config(['app.env' => 'local']);
 
         /** @var User $user */
-        $user = User::factory()->createQuietly(['role_id' => 1]);
+        $user = User::find(1);
         $data = [
             'url' => 'https://someUrl.noSite',
             'timezone' => 'UTC',
@@ -47,19 +49,20 @@ class SaveStepTest extends TestCase
             ->put(route('init.step-1.submit'), $data);
 
         $response->assertStatus(302)
-            ->assertSessionHas(['setup' => [
-                'basic-settings' => $data,
-            ],
+            ->assertSessionHas([
+                'setup' => [
+                    'basic-settings' => $data,
+                ],
             ]);
     }
 
-    public function test_invoke_step_2()
+    public function test_invoke_step_2(): void
     {
         config(['app.first_time_setup' => true]);
         config(['app.env' => 'local']);
 
         /** @var User $user */
-        $user = User::factory()->createQuietly(['role_id' => 1]);
+        $user = User::find(1);
         $data = [
             'from_address' => 'new@email.org',
             'username' => 'testName',
@@ -74,19 +77,20 @@ class SaveStepTest extends TestCase
             ->put(route('init.step-2.submit'), $data);
 
         $response->assertStatus(302)
-            ->assertSessionHas(['setup' => [
-                'email-settings' => $data,
-            ],
+            ->assertSessionHas([
+                'setup' => [
+                    'email-settings' => $data,
+                ],
             ]);
     }
 
-    public function test_invoke_step_3()
+    public function test_invoke_step_3(): void
     {
         config(['app.first_time_setup' => true]);
         config(['app.env' => 'local']);
 
         /** @var User $user */
-        $user = User::factory()->createQuietly(['role_id' => 1]);
+        $user = User::find(1);
         $data = [
             'expire' => '60',
             'min_length' => '12',
@@ -101,38 +105,40 @@ class SaveStepTest extends TestCase
             ->put(route('init.step-3.submit'), $data);
 
         $response->assertStatus(302)
-            ->assertSessionHas(['setup' => [
-                'user-settings' => $data,
-            ],
+            ->assertSessionHas([
+                'setup' => [
+                    'user-settings' => $data,
+                ],
             ]);
     }
 
-    public function test_invoke_step_4()
+    public function test_invoke_step_4(): void
     {
         config(['app.first_time_setup' => true]);
         config(['app.env' => 'local']);
 
         /** @var User $user */
-        $user = User::factory()->createQuietly(['role_id' => 1]);
+        $user = User::find(1);
         $data = User::factory()->make()->makeVisible('role_id')->toArray();
 
         $response = $this->actingAs($user)
             ->put(route('init.step-4.submit', 'admin'), $data);
 
         $response->assertStatus(302)
-            ->assertSessionHas(['setup' => [
-                'admin' => $data,
-            ],
+            ->assertSessionHas([
+                'setup' => [
+                    'admin' => $data,
+                ],
             ]);
     }
 
-    public function test_invoke_step_4b()
+    public function test_invoke_step_4b(): void
     {
         config(['app.first_time_setup' => true]);
         config(['app.env' => 'local']);
 
         /** @var User $user */
-        $user = User::factory()->createQuietly(['role_id' => 1]);
+        $user = User::find(1);
         $data = [
             'current_password' => 'password',
             'password' => 'SomeN3wP@ssword',

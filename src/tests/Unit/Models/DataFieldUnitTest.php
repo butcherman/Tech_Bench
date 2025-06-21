@@ -10,20 +10,22 @@ class DataFieldUnitTest extends TestCase
 {
     protected $model;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
         $this->model = DataField::factory()->create();
     }
 
-    /**
-     * Model Relationships
-     */
-    public function test_data_field_type_relationship()
+    /*
+    |---------------------------------------------------------------------------
+    | Model Relationships
+    |---------------------------------------------------------------------------
+    */
+    public function test_data_field_type_relationship(): void
     {
-        $data = DataFieldType::find($this->model->type_id);
+        $type = DataFieldType::find($this->model->type_id);
 
-        $this->assertEquals($data->toArray(), $this->model->DataFieldType->toArray());
+        $this->assertEquals($type, $this->model->DataFieldType);
     }
 }

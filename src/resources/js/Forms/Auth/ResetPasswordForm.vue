@@ -1,56 +1,26 @@
-<template>
-    <VueForm
-        :initial-values="initValues"
-        :validation-schema="schema"
-        :submit-route="submitRoute"
-        :submit-method="submitMethod"
-        :submit-text="submitText"
-    >
-        <TextInput id="email" name="email" placeholder="Email Address" />
-        <TextInput
-            id="password"
-            name="password"
-            type="password"
-            placeholder="New Password"
-            focus
-        />
-        <TextInput
-            id="password-confirmation"
-            name="password_confirmation"
-            type="password"
-            placeholder="Confirm Password"
-        />
-    </VueForm>
-</template>
-
 <script setup lang="ts">
-import VueForm from "@/Forms/_Base/VueForm.vue";
+import PasswordInput from "../_Base/PasswordInput.vue";
 import TextInput from "@/Forms/_Base/TextInput.vue";
-import { computed } from "vue";
+import VueForm from "@/Forms/_Base/VueForm.vue";
 import { ref as reference, object, string } from "yup";
 
 const props = defineProps<{
     email: string;
     token: string;
-    initialize?: boolean;
 }>();
 
-const submitRoute = computed(() =>
-    props.initialize
-        ? route("initialize.update", props.token)
-        : route("password.reset")
-);
-const submitMethod = computed(() => (props.initialize ? "put" : "post"));
-const submitText = computed(() =>
-    props.initialize ? "Finish Setup" : "Reset Password"
-);
-
+/*
+|-------------------------------------------------------------------------------
+| Validation
+|-------------------------------------------------------------------------------
+*/
 const initValues = {
     email: props.email,
     token: props.token,
     password: null,
     password_confirmation: null,
 };
+
 const schema = object({
     email: string().email().required(),
     token: string().required(),
@@ -61,3 +31,33 @@ const schema = object({
     ),
 });
 </script>
+
+<template>
+    <VueForm
+        :initial-values="initValues"
+        :validation-schema="schema"
+        :submit-route="$route('password.update')"
+        submit-method="post"
+        submit-text="Reset Password"
+    >
+        <TextInput
+            id="email"
+            name="email"
+            label="Email Address"
+            variant="underlined"
+        />
+        <PasswordInput
+            id="password"
+            name="password"
+            label="New Password"
+            variant="underlined"
+            focus
+        />
+        <PasswordInput
+            id="password-confirmation"
+            name="password_confirmation"
+            label="Confirm Password"
+            variant="underlined"
+        />
+    </VueForm>
+</template>

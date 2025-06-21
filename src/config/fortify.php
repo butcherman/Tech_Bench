@@ -51,6 +51,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Lowercase Usernames
+    |--------------------------------------------------------------------------
+    |
+    | This value defines whether usernames should be lowercased before saving
+    | them in the database, as some database system string fields are case
+    | sensitive. You may disable this for your application if necessary.
+    |
+    */
+
+    'lowercase_usernames' => true,
+
+    /*
+    |--------------------------------------------------------------------------
     | Home Path
     |--------------------------------------------------------------------------
     |
@@ -60,7 +73,7 @@ return [
     |
     */
 
-    'home' => 'dashboard',
+    'home' => '/dashboard',
 
     /*
     |--------------------------------------------------------------------------
@@ -117,7 +130,7 @@ return [
     |
     */
 
-    'views' => false,
+    'views' => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -131,9 +144,32 @@ return [
     */
 
     'features' => [
-        // Features::registration(),
         Features::resetPasswords(),
+        Features::updateProfileInformation(),
         Features::updatePasswords(),
+        Features::twoFactorAuthentication([
+            'confirm' => true,
+            'confirmPassword' => false,
+            // 'window' => 0,
+        ]),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Pipelines
+    |--------------------------------------------------------------------------
+    |
+    | Custom Logic added to allow both Authenticator App and Email as possible
+    | two Factor options.
+    |
+    */
+
+    'pipelines' => [
+        'login' => [
+            App\Actions\Fortify\RedirectIfTwoFactorAuthenticatable::class,
+            Laravel\Fortify\Actions\AttemptToAuthenticate::class,
+            Laravel\Fortify\Actions\PrepareAuthenticatedSession::class,
+        ],
     ],
 
 ];

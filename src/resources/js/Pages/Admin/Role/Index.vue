@@ -1,56 +1,37 @@
-<template>
-    <div class="row justify-content-center">
-        <Head title="Roles and Permissions" />
-        <div class="col-md-10">
-            <div class="card">
-                <div class="card-body">
-                    <div class="card-title">
-                        Select A Role
-                        <Link
-                            :href="$route('admin.user-roles.create')"
-                            class="float-end"
-                        >
-                            <AddButton small pill>Create New Role</AddButton>
-                        </Link>
-                    </div>
-                    <Table
-                        :columns="columns"
-                        :rows="roles"
-                        row-clickable
-                        @on-row-click="onRowClick"
-                    />
-                </div>
-            </div>
-        </div>
-    </div>
-</template>
-
 <script setup lang="ts">
-import AppLayout from "@/Layouts/AppLayout.vue";
 import AddButton from "@/Components/_Base/Buttons/AddButton.vue";
-import Table from "@/Components/_Base/Table.vue";
-import { router } from "@inertiajs/vue3";
+import AppLayout from "@/Layouts/App/AppLayout.vue";
+import Card from "@/Components/_Base/Card.vue";
+import ResourceList from "@/Components/_Base/ResourceList.vue";
 
 defineProps<{
     roles: userRole[];
 }>();
-
-const columns = [
-    {
-        label: "Name",
-        field: "name",
-    },
-    {
-        label: "Description",
-        field: "description",
-    },
-];
-
-const onRowClick = (row: userRole) => {
-    router.get(route("admin.user-roles.show", row.role_id));
-};
 </script>
 
 <script lang="ts">
 export default { layout: AppLayout };
 </script>
+
+<template>
+    <div class="flex justify-center">
+        <Card class="tb-card" title="Select A Role">
+            <template #append-title>
+                <AddButton
+                    :href="$route('admin.user-roles.create')"
+                    size="small"
+                    text="Create Role"
+                    pill
+                />
+            </template>
+            <ResourceList
+                label-field="name"
+                :list="roles"
+                :link-fn="
+                    (item) => $route('admin.user-roles.show', item.role_id)
+                "
+                center
+            />
+        </Card>
+    </div>
+</template>

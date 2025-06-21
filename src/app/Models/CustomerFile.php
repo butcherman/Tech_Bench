@@ -4,13 +4,19 @@ namespace App\Models;
 
 use App\Observers\CustomerFileObserver;
 use App\Traits\CustomerBroadcastingTrait;
+use App\Traits\Models\HasUser;
 use Illuminate\Broadcasting\PrivateChannel;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\BroadcastableModelEventOccurred;
 use Illuminate\Database\Eloquent\BroadcastsEvents;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Prunable;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Log;
 
@@ -20,13 +26,17 @@ class CustomerFile extends Model
     use BroadcastsEvents;
     use CustomerBroadcastingTrait;
     use HasFactory;
+    use HasUser;
     use Prunable;
     use SoftDeletes;
 
+    /** @var string */
     protected $primaryKey = 'cust_file_id';
 
+    /** @var array<int, string> */
     protected $guarded = ['cust_file_id', 'created_at', 'updated_at'];
 
+    /** @var array<int, string> */
     protected $hidden = [
         'cust_id',
         'updated_at',
@@ -37,59 +47,105 @@ class CustomerFile extends Model
         'user',
     ];
 
+    /** @var array<int, string> */
     protected $appends = [
         'uploaded_by',
         'file_type',
         'equip_name',
         'created_stamp',
+        'file_category',
     ];
 
-    protected $with = ['CustomerSite'];
+    /** @var array<int, string> */
+    protected $with = ['Sites', 'FileUpload'];
 
-    protected $casts = [
-        'created_at' => 'datetime:M d, Y',
-        'updated_at' => 'datetime:M d, Y',
-        'deleted_at' => 'datetime:M d, Y',
-    ];
-
-    /***************************************************************************
-     * Model Attributes
-     ***************************************************************************/
-    public function getFileTypeAttribute()
+    /*
+    |---------------------------------------------------------------------------
+    | Model Casting
+    |---------------------------------------------------------------------------
+    */
+    public function casts(): array
     {
-        return $this->CustomerFileType->description;
+        return [
+            'created_at' => 'datetime:M d, Y',
+            'updated_at' => 'datetime:M d, Y',
+            'deleted_at' => 'datetime:M d, Y',
+        ];
     }
 
-    public function getCreatedStampAttribute()
+    /*
+    |---------------------------------------------------------------------------
+    | Model Attributes
+    |---------------------------------------------------------------------------
+    */
+    public function fileType(): Attribute
     {
-        return $this->created_at;
+        return Attribute::make(
+            get: fn () => $this->CustomerFileType->description
+        );
     }
 
-    public function getHrefAttribute()
+    public function createdStamp(): Attribute
     {
-        return route('download', [$this->file_id, $this->FileUpload->file_name]);
+        return Attribute::make(
+            get: fn () => $this->created_at
+        );
     }
 
-    public function getUploadedByAttribute()
+    public function href(): Attribute
     {
-        return $this->user->full_name;
+        return Attribute::make(
+            get: fn () => route(
+                'download',
+                [$this->file_id, $this->FileUpload->file_name]
+            )
+        );
     }
 
-    public function getEquipNameAttribute()
+    public function uploadedBy(): Attribute
     {
-        return $this->CustomerEquipment ?
-            $this->CustomerEquipment->equip_name : null;
+        return Attribute::make(
+            get: fn () => $this->user->full_name
+        );
     }
 
-    /***************************************************************************
-     * Model Relationships
-     ***************************************************************************/
-    public function FileUpload()
+    public function equipName(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->CustomerEquipment
+                ? $this->CustomerEquipment->equip_name
+                : null
+        );
+    }
+
+    public function fileCategory(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                if ($this->cust_equip_id) {
+                    return 'Equipment';
+                }
+
+                if (count($this->Sites) > 0) {
+                    return 'Site';
+                }
+
+                return 'General';
+            }
+        );
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | Model Relationships
+    |---------------------------------------------------------------------------
+    */
+    public function FileUpload(): BelongsTo
     {
         return $this->belongsTo(FileUpload::class, 'file_id', 'file_id');
     }
 
-    public function CustomerSite()
+    public function Sites(): BelongsToMany
     {
         return $this->belongsToMany(
             CustomerSite::class,
@@ -99,7 +155,7 @@ class CustomerFile extends Model
         );
     }
 
-    public function CustomerFileType()
+    public function CustomerFileType(): HasOne
     {
         return $this->hasOne(
             CustomerFileType::class,
@@ -108,18 +164,12 @@ class CustomerFile extends Model
         );
     }
 
-    public function User()
-    {
-        return $this->belongsTo(User::class, 'user_id', 'user_id')
-            ->withTrashed();
-    }
-
-    public function Customer()
+    public function Customer(): BelongsTo
     {
         return $this->belongsTo(Customer::class, 'cust_id', 'cust_id');
     }
 
-    public function CustomerEquipment()
+    public function CustomerEquipment(): BelongsTo
     {
         return $this->belongsTo(
             CustomerEquipment::class,
@@ -128,9 +178,11 @@ class CustomerFile extends Model
         );
     }
 
-    /***************************************************************************
-     * Model Broadcasting
-     ***************************************************************************/
+    /*
+    |---------------------------------------------------------------------------
+    | Model Broadcasting
+    |---------------------------------------------------------------------------
+    */
 
     /**
      * @codeCoverageIgnore
@@ -138,7 +190,7 @@ class CustomerFile extends Model
     public function broadcastOn(string $event): array
     {
         $siteChannels = $this->getSiteChannels(
-            $this->CustomerSite->pluck('site_slug')->toArray()
+            $this->Sites->pluck('site_slug')->toArray()
         );
 
         if ($this->cust_equip_id) {
@@ -150,11 +202,6 @@ class CustomerFile extends Model
             [new PrivateChannel('customer.'.$this->Customer->slug)]
         );
 
-        Log::debug(
-            'Broadcasting Customer Equipment Event - Event Name - '.$event,
-            $allChannels
-        );
-
         return match ($event) {
             'trashed', 'deleted' => [],
             default => $allChannels,
@@ -163,17 +210,18 @@ class CustomerFile extends Model
 
     public function newBroadcastableModelEvent(string $event): BroadcastableModelEventOccurred
     {
-        Log::debug('Calling Do Not Broadcast to Current User', $this->toArray());
-
         return (new BroadcastableModelEventOccurred(
-            $this, $event
+            $this,
+            $event
         ))->dontBroadcastToCurrentUser();
     }
 
-    /***************************************************************************
-     * Prune soft deleted models after 90 days
-     ***************************************************************************/
-    public function prunable()
+    /*
+    |---------------------------------------------------------------------------
+    | Prune soft deleted models after 90 days
+    |---------------------------------------------------------------------------
+    */
+    public function prunable(): Builder
     {
         Log::debug('Calling Prune Customer Files');
 

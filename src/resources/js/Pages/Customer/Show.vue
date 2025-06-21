@@ -1,134 +1,51 @@
-<template>
-    <div id="customer-wrapper">
-        <Head :title="customer.name" />
-        <div class="border-bottom border-secondary-subtle mb-2">
-            <CustomerManagement v-if="showManagement" class="float-end" />
-            <h3 class="float-start me-2">
-                <BookmarkItem
-                    :is-bookmark="isFav"
-                    :toggle-route="$route('customers.bookmark', customer.slug)"
-                />
-            </h3>
-            <CustomerDetails />
-        </div>
-        <CustomerAlerts />
-        <div class="row my-2">
-            <QuickJump :nav-list="quickJumpList" class="col" />
-        </div>
-        <div id="site-list" class="row my-2">
-            <div class="col">
-                <CustomerSiteList>
-                    <template #add-button>
-                        <Link
-                            v-if="permissions.details.create"
-                            :href="
-                                $route('customers.sites.create', customer.slug)
-                            "
-                        >
-                            <AddButton text="Add Site" small pill />
-                        </Link>
-                    </template>
-                </CustomerSiteList>
-            </div>
-        </div>
-        <div class="row">
-            <div id="equipment" class="col-md-7 my-2">
-                <CustomerEquipment />
-            </div>
-            <div id="contacts" class="col-md-5 my-2">
-                <CustomerContact />
-            </div>
-        </div>
-        <div id="notes" class="row my-2">
-            <div class="col my-2">
-                <CustomerNote />
-            </div>
-        </div>
-        <div id="files" class="row my-2">
-            <div class="col my-2">
-                <CustomerFile />
-            </div>
-        </div>
-        <Modal title="ALERT" ref="customerAlertModal" no-close-on-click>
-            <div>{{ customerAlertMessage }}</div>
-            <a
-                v-if="customerAlertLink"
-                :href="customerAlertLink.link"
-                class="btn btn-info w-100"
-            >
-                {{ customerAlertLink.text }}
-            </a>
-        </Modal>
-    </div>
-</template>
-
 <script setup lang="ts">
-import AppLayout from "@/Layouts/AppLayout.vue";
-import CustomerManagement from "@/Components/Customer/CustomerManagement.vue";
-import CustomerDetails from "@/Components/Customer/CustomerDetails.vue";
-import CustomerAlerts from "@/Components/Customer/CustomerAlerts.vue";
-import QuickJump from "@/Components/_Base/QuickJump.vue";
-import CustomerSiteList from "@/Components/Customer/CustomerSiteList.vue";
-import CustomerEquipment from "@/Components/Customer/CustomerEquipment.vue";
-import CustomerContact from "@/Components/Customer/CustomerContact.vue";
-import CustomerNote from "@/Components/Customer/CustomerNote.vue";
-import CustomerFile from "@/Components/Customer/CustomerFile.vue";
-import AddButton from "@/Components/_Base/Buttons/AddButton.vue";
+import AppLayout from "@/Layouts/App/AppLayout.vue";
 import BookmarkItem from "@/Components/_Base/BookmarkItem.vue";
-import Modal from "@/Components/_Base/Modal.vue";
-import { computed, onMounted, onUnmounted } from "vue";
-import { customer, permissions } from "@/State/CustomerState";
+import CustomerAlerts from "@/Components/Customer/Show/CustomerAlerts.vue";
+import CustomerContact from "@/Components/Customer/Show/Contacts/CustomerContact.vue";
+import CustomerDetails from "@/Components/Customer/Show/CustomerDetails.vue";
+import CustomerEquipment from "@/Components/Customer/Show/Equipment/CustomerEquipment.vue";
+import CustomerFiles from "@/Components/Customer/Show/Files/CustomerFiles.vue";
+import CustomerManagement from "@/Components/Customer/Show/ManageCustomer.vue";
+import CustomerNotes from "@/Components/Customer/Show/Notes/CustomerNotes.vue";
+import QuickJump from "@/Components/_Base/QuickJump.vue";
+import SiteList from "@/Components/Customer/Show/SiteList.vue";
+import { onMounted, onUnmounted } from "vue";
+import { customer, isFav } from "@/Composables/Customer/CustomerData.module";
 import {
     registerCustomerChannel,
-    customerAlertModal,
-    customerAlertMessage,
-    customerAlertLink,
-} from "@/Modules/CustomerBroadcasting.module";
+    leaveCustomerChannel,
+} from "@/Composables/Customer/CustomerBroadcasting.module";
 
-defineProps<{
-    isFav: boolean;
-}>();
-
-const showManagement = computed(
-    () =>
-        permissions.value.details.update ||
-        permissions.value.details.manage ||
-        permissions.value.details.delete
-);
-
-/**
- * Register to Customer Channel
- */
+/*
+|-------------------------------------------------------------------------------
+| Broadcasting Data
+|-------------------------------------------------------------------------------
+*/
 const channelName = customer.value.slug;
-onMounted(() => {
-    registerCustomerChannel(channelName);
-});
-
-/**
- * Leave Customer Channel
- */
-onUnmounted(() => Echo.leave(`customer.${channelName}`));
+onMounted(() => registerCustomerChannel(channelName));
+onUnmounted(() => leaveCustomerChannel(channelName));
 
 const quickJumpList = [
     {
         navId: "site-list",
-        name: "Sites",
+        label: "Sites",
     },
     {
         navId: "equipment",
-        name: "Equipment",
+        label: "Equipment",
     },
     {
         navId: "contacts",
-        name: "Contacts",
+        label: "Contacts",
     },
     {
         navId: "notes",
-        name: "Notes",
+        label: "Notes",
     },
     {
         navId: "files",
-        name: "Files",
+        label: "Files",
     },
 ];
 </script>
@@ -136,3 +53,31 @@ const quickJumpList = [
 <script lang="ts">
 export default { layout: AppLayout };
 </script>
+
+<template>
+    <div>
+        <div class="flex gap-2 pb-2 border-b border-slate-400">
+            <h1>
+                <BookmarkItem
+                    :is-bookmark="isFav"
+                    :toggle-route="$route('customers.bookmark', customer.slug)"
+                />
+            </h1>
+            <CustomerDetails class="grow" />
+            <div>
+                <CustomerManagement />
+            </div>
+        </div>
+        <CustomerAlerts />
+        <QuickJump :nav-list="quickJumpList" class="tb-gap-y" />
+        <div class="tb-card-lg tb-gap-y">
+            <SiteList id="sites" />
+        </div>
+        <div class="grid lg:grid-cols-2 tb-gap-y gap-3">
+            <CustomerEquipment id="equipment" />
+            <CustomerContact id="contacts" />
+        </div>
+        <CustomerNotes id="notes" class="tb-gap-y" />
+        <CustomerFiles id="files" class="tb-gap-y" />
+    </div>
+</template>

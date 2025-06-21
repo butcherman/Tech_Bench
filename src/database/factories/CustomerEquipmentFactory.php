@@ -3,21 +3,18 @@
 namespace Database\Factories;
 
 use App\Models\Customer;
-use App\Models\CustomerEquipment;
 use App\Models\EquipmentType;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+/**
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\CustomerEquipment>
+ */
 class CustomerEquipmentFactory extends Factory
 {
     /**
-     * The name of the factory's corresponding model
+     * Define the model's default state.
      */
-    protected $model = CustomerEquipment::class;
-
-    /**
-     * Define the model's default state
-     */
-    public function definition()
+    public function definition(): array
     {
         return [
             'cust_id' => Customer::factory(),

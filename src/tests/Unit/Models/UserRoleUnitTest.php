@@ -9,36 +9,27 @@ use Tests\TestCase;
 
 class UserRoleUnitTest extends TestCase
 {
+    /** @var User */
     protected $model;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
-        $this->model = UserRole::where('role_id', 1)->first();
-    }
-
-    /**
-     * Route Model Binding Key
-     */
-    public function test_route_binding_key()
-    {
-        $this->assertEquals($this->model->getRouteKeyName(), 'role_id');
+        $this->model = UserRole::find(1);
     }
 
     /**
      * Model Relationships
      */
-    public function test_user_role_permission_relationship()
+    public function test_user_role_permission_relationship(): void
     {
-        $user = User::factory()->createQuietly(['role_id' => 2]);
-        $this->actingAs($user);
-
-        $rolePermissions = UserRolePermission::where('role_id', $this->model->role_id)
+        $shouldBe = UserRolePermission::where('role_id', $this->model->role_id)
             ->get();
+
         $this->assertEquals(
+            $shouldBe->toArray(),
             $this->model->UserRolePermission->toArray(),
-            $rolePermissions->toArray()
         );
     }
 }

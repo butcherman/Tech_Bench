@@ -30,16 +30,15 @@ fi
 
 # Create the Docker Group
 groupadd docker
-usermod -aG docker $USER
+usermod -aG docker $SUDO_USER
 
 # Download Docker Compose script and .env file
-# TODO - Change branch to master
-wget https://raw.githubusercontent.com/butcherman/Tech_Bench/dev7/docker-compose.yml
-wget https://raw.githubusercontent.com/butcherman/Tech_Bench/dev7/.env
+wget https://raw.githubusercontent.com/butcherman/Tech_Bench/master/docker-compose.yml
+wget https://raw.githubusercontent.com/butcherman/Tech_Bench/master/.env
 
 # Set permissions for downloaded files
-chown $USER:docker docker-compose.yml
-chown $USER:docker .env
+chown $SUDO_USER:docker docker-compose.yml
+chown $SUDO_USER:docker .env
 chmod 755 docker-compose.yml
 chmod 775 .env
 
@@ -50,7 +49,7 @@ sed -i "s/BASE_URL=/BASE_URL=$WebURL/g" .env
 
 # Create the Backup Folder
 mkdir backupData
-chown $USER:docker backupData
+chown $SUDO_USER:docker backupData
 chmod 775 backupData
 
 # Start the Tech Bench

@@ -11,7 +11,7 @@ class CustomerEquipmentDataUnitTest extends TestCase
 {
     protected $model;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -21,7 +21,7 @@ class CustomerEquipmentDataUnitTest extends TestCase
     /**
      * MOdel Attributes
      */
-    public function test_model_attributes()
+    public function test_model_attributes(): void
     {
         $this->assertArrayHasKey('field_name', $this->model->toArray());
         $this->assertArrayHasKey('order', $this->model->toArray());
@@ -30,18 +30,26 @@ class CustomerEquipmentDataUnitTest extends TestCase
     /**
      * Model Relationships
      */
-    public function test_data_field_relationship()
+    public function test_data_field_relationship(): void
     {
         $data = DataField::where('field_id', $this->model->field_id)->first();
 
-        $this->assertEquals($data->toArray(), $this->model->DataField->toArray());
+        $this->assertEquals(
+            $data->toArray(),
+            $this->model->DataField->toArray()
+        );
     }
 
-    public function test_data_field_type_relationship()
+    public function test_data_field_type_relationship(): void
     {
-        $data = DataFieldType::where('type_id', $this->model->DataField->type_id)
-            ->first();
+        $data = DataFieldType::where(
+            'type_id',
+            $this->model->DataField->type_id
+        )->first();
 
-        $this->assertEquals($data->toArray(), $this->model->DataFieldType->toArray());
+        $this->assertEquals(
+            $data->toArray(),
+            $this->model->DataFieldType->toArray()
+        );
     }
 }

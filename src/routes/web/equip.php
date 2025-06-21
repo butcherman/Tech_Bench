@@ -2,34 +2,46 @@
 
 use App\Http\Controllers\Equipment\EquipmentCategoryController;
 use App\Http\Controllers\Equipment\EquipmentDataTypeController;
-use App\Http\Controllers\Equipment\EquipmentListController;
 use App\Http\Controllers\Equipment\EquipmentTypeController;
-use App\Models\EquipmentType;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('auth.secure')->group(function () {
-    Route::get('equipment-list', EquipmentListController::class)
-        ->name('equipment-list');
+/*
+|-------------------------------------------------------------------------------
+| Equipment Based Routes
+|-------------------------------------------------------------------------------
+*/
 
-    /***************************************************************************
-     * Equipment Administration
-     ***************************************************************************/
+Route::middleware('auth.secure')->group(function () {
+    /*
+    |---------------------------------------------------------------------------
+    | Equipment Type Administration
+    | /equipment
+    |---------------------------------------------------------------------------
+    */
     Route::resource('equipment', EquipmentTypeController::class)
+        ->except(['show'])
         ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
             $breadcrumbs->index('Equipment Categories and Types', 'admin.index')
                 ->create('Create New Equipment')
-                ->edit('Edit Equipment', 'equipment.index')
-                ->show(fn (EquipmentType $equipment) => $equipment->name.' References', 'equipment.edit');
+                ->edit('Edit Equipment', 'equipment.index');
         });
 
-    Route::post('equipment-category', [EquipmentCategoryController::class, 'store'])
-        ->name('equipment-category.store');
-    Route::put('equipment-category/{category}', [EquipmentCategoryController::class, 'update'])
-        ->name('equipment-category.update');
-    Route::delete('equipment-category/{category}', [EquipmentCategoryController::class, 'destroy'])
-        ->name('equipment-category.destroy');
+    /*
+    |---------------------------------------------------------------------------
+    | Equipment Category Administration
+    | /equipment-category
+    |---------------------------------------------------------------------------
+    */
+    Route::resource('equipment-category', EquipmentCategoryController::class)
+        ->only(['store', 'update', 'destroy']);
 
+    /*
+    |---------------------------------------------------------------------------
+    | Equipment Data Administration
+    | /equipment-data
+    |---------------------------------------------------------------------------
+    */
     Route::resource('equipment-data', EquipmentDataTypeController::class)
         ->except('show')
         ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {

@@ -1,53 +1,62 @@
-/**
- * Global Types
- */
+/*
+|-------------------------------------------------------------------------------
+| Inertia Page
+|-------------------------------------------------------------------------------
+*/
 type pageData = {
     props: pageProps;
 };
 
 type pageProps = {
-    app: appProps;
-    flash: flashData[];
-    current_user: user | null;
-    idle_timeout: number;
-    navbar: navbar[];
-    breadcrumbs: breadcrumbs[];
+    breadcrumbs: breadcrumb[];
+    csrf_token: string;
+    current_user: user;
     errors: { [key: string]: string }[];
+    flash: flashData[];
+    idle_timeout: number;
+    navbar: navbarItem[];
 };
 
-type appProps = {
-    name: string;
-    company_name: string;
-    logo: string;
-    version: string;
-    copyright: string;
-    fileData: fileData;
-};
-
-type navbar = {
+/*
+|-------------------------------------------------------------------------------
+| Page Layout Elements
+|-------------------------------------------------------------------------------
+*/
+type navbarItem = {
     name: string;
     route: string;
     icon: string;
 };
 
-type flashData = {
-    id?: string;
-    type: string;
-    message: string;
-};
-
-type toastData = {
-    id: string;
-    title: string;
-    message: string;
-    href?: string;
-};
-
-type breadcrumbs = {
+type breadcrumb = {
     title: string;
     url: string;
     is_current_page: boolean;
 };
+
+type flashData = {
+    id: string;
+    type: elementVariant;
+    message: string;
+};
+
+/*
+|-------------------------------------------------------------------------------
+| Shared Types
+|-------------------------------------------------------------------------------
+*/
+type elementVariant =
+    | "danger"
+    | "dark"
+    | "error"
+    | "help"
+    | "info"
+    | "light"
+    | "primary"
+    | "secondary"
+    | "success"
+    | "warning"
+    | "none";
 
 type basicPermissions = {
     create: boolean;
@@ -55,10 +64,19 @@ type basicPermissions = {
     delete: boolean;
 };
 
+/*
+|-------------------------------------------------------------------------------
+| Misc
+|-------------------------------------------------------------------------------
+*/
+interface laravelValidationErrors {
+    errors: { [key: string]: string[] };
+    message: string;
+}
+
 type fileData = {
     chunkSize: number;
     maxSize: number;
-    token: string;
 };
 
 type fileUpload = {
@@ -69,16 +87,7 @@ type fileUpload = {
     created_stamp: string;
 };
 
-interface tableColumn {
-    label: string;
-    field: string;
-    sort?: boolean;
-    sortField?: string;
-    isBoolean?: boolean;
-    filterOptions?: {
-        enabled: boolean;
-        placeholder?: string;
-    };
-    icon?: string;
-    textVariant?: string;
-}
+type phoneType = {
+    description: string;
+    icon_class: string;
+};

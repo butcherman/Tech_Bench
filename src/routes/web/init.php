@@ -1,27 +1,30 @@
 <?php
 
-use App\Http\Controllers\Init\Finish;
 use App\Http\Controllers\Init\SaveSetupController;
 use App\Http\Controllers\Init\SaveStepController;
-use App\Http\Controllers\Init\StepFive;
-use App\Http\Controllers\Init\StepFour;
-use App\Http\Controllers\Init\StepOne;
-use App\Http\Controllers\Init\StepThree;
-use App\Http\Controllers\Init\StepTwo;
+use App\Http\Controllers\Init\StepFiveController;
+use App\Http\Controllers\Init\StepFourController;
+use App\Http\Controllers\Init\StepOneController;
+use App\Http\Controllers\Init\StepThreeController;
+use App\Http\Controllers\Init\StepTwoController;
+use App\Http\Middleware\CheckForInit;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'init'])
+    ->withoutMiddleware(CheckForInit::class)
     ->prefix('first-time-setup')
     ->name('init.')
     ->group(function () {
         Route::inertia('/', 'Init/Welcome')->name('welcome');
 
-        Route::get('basic-settings', StepOne::class)->name('step-1');
-        Route::get('email-settings', StepTwo::class)->name('step-2');
-        Route::get('user-settings', StepThree::class)->name('step-3');
-        Route::get('administrator-account', StepFour::class)->name('step-4');
-        Route::get('verify-information', StepFive::class)->name('step-5');
-        Route::get('finish', Finish::class)
+        Route::get('basic-settings', StepOneController::class)->name('step-1');
+        Route::get('email-settings', StepTwoController::class)->name('step-2');
+        Route::get('user-settings', StepThreeController::class)->name('step-3');
+        Route::get('administrator-account', StepFourController::class)
+            ->name('step-4');
+        Route::get('verify-information', StepFiveController::class)
+            ->name('step-5');
+        Route::inertia('finish', 'Init/Finish', ['step' => 6])
             ->name('finish')
             ->withoutMiddleware('init');
 
@@ -38,5 +41,6 @@ Route::middleware(['auth', 'init'])
         Route::put('verify-information', SaveStepController::class)
             ->name('step-5.submit');
 
-        Route::get('save-setup', SaveSetupController::class)->name('save-setup');
+        Route::get('save-setup', SaveSetupController::class)
+            ->name('save-setup');
     });

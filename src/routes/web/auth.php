@@ -1,50 +1,41 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Controllers\Auth\TwoFactorController;
+use App\Http\Controllers\Auth\TwoFactorSetupAuthenticatorController;
+use App\Http\Controllers\Auth\TwoFactorSetupController;
+use App\Http\Controllers\Auth\TwoFactorSetupEmailController;
 use Illuminate\Support\Facades\Route;
-use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
 
 /*
-|--------------------------------------------------------------------------
-| Authentication Routes
-|--------------------------------------------------------------------------
+|-------------------------------------------------------------------------------
+| Authentication Routes not handled by Fortify
+|-------------------------------------------------------------------------------
 */
 
 Route::middleware(['guest', 'throttle:50,120'])->group(function () {
     Route::get('/', LoginController::class)->name('home');
-    Route::get('login', LoginController::class);
-    Route::middleware(['throttle:login'])
-        ->post('login', [AuthenticatedSessionController::class, 'store'])
-        ->name('login');
-
-    /**
-     * Forgot Password Routes
-     */
-    Route::name('password.')->group(function () {
-        Route::inertia('forgot-password', 'Auth/ForgotPassword')->name('forgot');
-        Route::get('reset-password', ResetPasswordController::class)->name('reset');
+    Route::post('two-factor-submit', TwoFactorController::class)
+        ->name('two-factor.login.email');
+    /*
+    |---------------------------------------------------------------------------
+    | Socialite Routes (Azure Login)
+    |---------------------------------------------------------------------------
+    */
+    Route::controller(SocialiteController::class)->group(function () {
+        Route::get('auth/redirect', 'redirectAuth')->name('azure-login');
+        Route::get('auth/callback', 'callback')->name('azure-callback');
     });
-
-    /**
-     * Socialite Routes (Azure Login)
-     */
-    Route::get('auth/redirect', [SocialiteController::class, 'redirectAuth'])
-        ->name('azure-login');
-    Route::get('auth/callback', [SocialiteController::class, 'callback'])
-        ->name('azure-callback');
 });
 
-/*
-|--------------------------------------------------------------------------
-| Two-Factor Authentication Routes
-|--------------------------------------------------------------------------
-*/
-Route::middleware('auth')->name('2fa.')->group(function () {
-    Route::get('two-factor-authentication', [TwoFactorController::class, 'show'])
-        ->name('show');
-    Route::put('two-factor-authentication', [TwoFactorController::class, 'update'])
-        ->name('update');
-});
+Route::middleware('auth')
+    ->prefix('two-factor-authentication/setup')
+    ->name('two-factor.setup.')
+    ->group(function () {
+        Route::get('/', TwoFactorSetupController::class)->name('index');
+        Route::get('email-verification', TwoFactorSetupEmailController::class)
+            ->name('email');
+        Route::get('authenticator-app-verification', TwoFactorSetupAuthenticatorController::class)
+            ->name('authenticator');
+    });

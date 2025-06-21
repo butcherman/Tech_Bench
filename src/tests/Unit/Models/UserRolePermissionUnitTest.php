@@ -8,33 +8,26 @@ use Tests\TestCase;
 
 class UserRolePermissionUnitTest extends TestCase
 {
+    /** @var UserRolePermission */
     protected $model;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
-        $this->model = UserRolePermission::where('id', 1)->first();
-    }
-
-    /**
-     * Model Attributes
-     */
-    public function test_model_attributes()
-    {
-        $this->assertArrayHasKey('description', $this->model);
+        $this->model = UserRolePermission::find(1);
     }
 
     /**
      * Model Relationships
      */
-    public function test_user_role_permission_type_relationship()
+    public function test_user_role_permission_type_relationship(): void
     {
-        $permType = UserRolePermissionType::where('perm_type_id', $this->model->perm_type_id)
-            ->first();
+        // Testing default data - Role Permission 1 is type App Settings
+        $permType = UserRolePermissionType::find(1);
         $this->assertEquals(
-            $this->model->UserRolePermissionType->perm_type_id,
-            $permType->perm_type_id
+            $this->model->UserRolePermissionType,
+            $permType
         );
     }
 }

@@ -1,3 +1,19 @@
+<script setup lang="ts">
+defineEmits<{
+    "navigate-to": [stepId: number];
+}>();
+
+defineProps<{
+    currentStep: number;
+    hideId?: boolean;
+    stepList: {
+        id: number;
+        name: string;
+        icon: string;
+    }[];
+}>();
+</script>
+
 <template>
     <ol class="step-indicator">
         <template v-for="step in stepList" :key="step.id">
@@ -6,13 +22,13 @@
                     active: step.id === currentStep,
                     complete: step.id < currentStep,
                 }"
-                @click="navigateToStep(step.id)"
+                @click="$emit('navigate-to', step.id)"
             >
                 <div class="step">
                     <fa-icon :icon="step.icon" />
                 </div>
                 <div class="caption hidden-sm">
-                    Step {{ step.id }} -
+                    <span v-if="!hideId"> Step {{ step.id }} - </span>
                     {{ step.name }}
                 </div>
             </li>
@@ -20,26 +36,7 @@
     </ol>
 </template>
 
-<script setup lang="ts">
-import { router } from "@inertiajs/vue3";
-
-const props = defineProps<{
-    stepList: {
-        id: number;
-        name: string;
-        icon: string;
-    }[];
-    currentStep: number;
-}>();
-
-const navigateToStep = (stepId: number): void => {
-    if (stepId <= props.currentStep) {
-        router.visit(route(`init.step-${stepId}`));
-    }
-};
-</script>
-
-<style lang="scss">
+<style scoped>
 .step-indicator {
     margin: 0;
     overflow: auto;

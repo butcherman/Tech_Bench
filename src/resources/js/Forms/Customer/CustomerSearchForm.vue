@@ -1,44 +1,17 @@
-<template>
-    <form @submit.prevent="triggerSearch">
-        <div class="input-group">
-            <input
-                v-model="searchParams.searchFor"
-                id="search-param"
-                name="search-param"
-                type="text"
-                placeholder="Search for Customer Name, Site Name, or ID"
-                class="form-control"
-                v-focus
-                @input="checkToSearch"
-            />
-            <button type="submit" class="btn btn-info">
-                <fa-icon icon="fa-brands fa-searchengin" />
-                <span class="d-none d-md-inline"> Search </span>
-            </button>
-            <button
-                v-if="!hideReset"
-                type="reset"
-                class="btn btn-warning"
-                @click="onReset"
-            >
-                <fa-icon icon="rotate" />
-                <span class="d-none d-md-inline"> Reset </span>
-            </button>
-        </div>
-    </form>
-</template>
-
 <script setup lang="ts">
-import { ref } from "vue";
+import { InputGroup, InputGroupAddon, InputText } from "primevue";
+import { onUnmounted, ref } from "vue";
 import {
     searchParams,
     triggerSearch,
     resetSearch,
-} from "@/Modules/CustomerSearch.module";
+} from "@/Composables/Customer/CustomerSearch.module";
 
 defineProps<{
     hideReset?: boolean;
 }>();
+
+onUnmounted(() => resetSearch());
 
 const onReset = () => {
     resetSearch();
@@ -53,3 +26,31 @@ const checkToSearch = () => {
     }, 500);
 };
 </script>
+
+<template>
+    <form @submit.prevent="triggerSearch">
+        <InputGroup>
+            <InputText
+                v-model="searchParams.searchFor"
+                class="border px-2"
+                placeholder="Search for Customer Name, Site Name or ID"
+                @input="checkToSearch"
+            />
+            <InputGroupAddon class="bg-blue-400! text-white!">
+                <button type="submit">
+                    <fa-icon icon="magnifying-glass" />
+                    <span class="hidden md:inline"> Search </span>
+                </button>
+            </InputGroupAddon>
+            <InputGroupAddon
+                v-if="!hideReset"
+                class="bg-yellow-500! text-white!"
+            >
+                <button type="reset" class="btn btn-warning" @click="onReset">
+                    <fa-icon icon="rotate" />
+                    <span class="hidden md:inline"> Reset </span>
+                </button>
+            </InputGroupAddon>
+        </InputGroup>
+    </form>
+</template>

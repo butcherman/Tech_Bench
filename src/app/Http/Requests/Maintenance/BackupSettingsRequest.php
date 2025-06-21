@@ -1,16 +1,13 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Http\Requests\Maintenance;
 
 use App\Models\AppSettings;
-use App\Traits\AppSettingsTrait;
 use Illuminate\Foundation\Http\FormRequest;
 
 class BackupSettingsRequest extends FormRequest
 {
-    use AppSettingsTrait;
+    protected $errorBag = 'form_error';
 
     /**
      * Determine if the user is authorized to make this request.
@@ -21,27 +18,15 @@ class BackupSettingsRequest extends FormRequest
     }
 
     /**
-     * Get the validation rules that apply to the request
+     * Get the validation rules that apply to the request.
      */
     public function rules(): array
     {
         return [
-            'nightly_backup' => 'required|boolean',
-            'nightly_cleanup' => 'required|boolean',
-            'encryption' => 'required|boolean',
-            'password' => 'required_if:encryption,true',
-            'mail_to' => 'required|email',
+            'nightly_backup' => ['required', 'boolean'],
+            'nightly_cleanup' => ['required', 'boolean'],
+            'encryption' => ['required', 'boolean'],
+            'password' => ['required_if:encryption,true'],
         ];
-    }
-
-    /**
-     * Process the different backup config settings
-     */
-    public function processBackupSettings(): void
-    {
-        $this->saveSettingsArray($this->only(['nightly_backup', 'nightly_cleanup']), 'backup');
-        $this->saveSettings('backup.backup.password', $this->password);
-        $this->saveSettings('backup.backup.encryption', $this->encryption ? 'default' : false);
-        $this->saveSettings('backup.notifications.mail.to', $this->mail_to);
     }
 }

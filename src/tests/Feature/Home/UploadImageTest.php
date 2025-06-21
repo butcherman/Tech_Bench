@@ -9,10 +9,12 @@ use Tests\TestCase;
 
 class UploadImageTest extends TestCase
 {
-    /**
-     * Invoke Method
-     */
-    public function test_invoke_guest()
+    /*
+    |---------------------------------------------------------------------------
+    | Invoke Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_invoke_guest(): void
     {
         Storage::fake('public');
         $data = ['file' => UploadedFile::fake()->image('testPhoto.png')];
@@ -24,7 +26,7 @@ class UploadImageTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_invoke()
+    public function test_invoke(): void
     {
         Storage::fake('public');
 

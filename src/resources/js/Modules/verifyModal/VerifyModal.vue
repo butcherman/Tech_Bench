@@ -1,84 +1,53 @@
-<template>
-    <Teleport to="body">
-        <div
-            ref="verifyModal"
-            id="verifyModal"
-            class="modal fade"
-            tabindex="-1"
-        >
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">
-                            {{ title ? title : "Are you sure?" }}
-                        </h5>
-                        <button
-                            type="button"
-                            class="btn-close"
-                            data-bs-dismiss="modal"
-                            aria-label="Close"
-                        />
-                    </div>
-                    <div class="modal-body text-center">
-                        {{ message }}
-                    </div>
-                    <div class="modal-footer">
-                        <button
-                            type="button"
-                            class="btn btn-warning btn-sm w-25"
-                            @click="noClicked"
-                        >
-                            No
-                        </button>
-                        <button
-                            type="button"
-                            class="btn btn-danger btn-sm w-25"
-                            @click="yesClicked"
-                        >
-                            Yes
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </Teleport>
-</template>
-
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from "vue";
-import { Modal } from "bootstrap";
+import BaseButton from "@/Components/_Base/Buttons/BaseButton.vue";
+import Modal from "@/Components/_Base/Modal.vue";
+import { onMounted, ref } from "vue";
+
+const emit = defineEmits<{
+    "yes-clicked": [];
+    "no-clicked": [];
+    hide: [];
+    hidden: [];
+}>();
 
 defineProps<{
-    title?: string;
+    title: string;
     message: string;
 }>();
 
-let emit = defineEmits(["yes-clicked", "no-clicked", "hide", "hidden"]);
-let verifyModal = ref<HTMLInputElement | null>(null);
-let thisModalObj: any;
-
-onMounted(() => {
-    if (verifyModal.value) {
-        thisModalObj = new Modal(verifyModal.value);
-        thisModalObj.show();
-
-        window.addEventListener("hide.bs.modal", () => emit("hide"));
-        window.addEventListener("hidden.bs.modal", () => emit("hidden"));
-    }
-});
-
-onUnmounted(() => {
-    window.removeEventListener("hide.bs.modal", () => emit("hide"));
-    window.removeEventListener("hidden.bs.modal", () => emit("hidden"));
-});
+const verifyModal = ref<InstanceType<typeof Modal> | null>(null);
 
 function yesClicked(): void {
     emit("yes-clicked");
-    thisModalObj.hide();
+    verifyModal.value?.hide();
 }
 
 function noClicked(): void {
     emit("no-clicked");
-    thisModalObj.hide();
+    verifyModal.value?.hide();
 }
+
+onMounted(() => verifyModal.value?.show());
 </script>
+
+<template>
+    <Modal
+        ref="verifyModal"
+        :title="title"
+        position="top"
+        @hidden="$emit('hidden')"
+        @hide="$emit('hide')"
+        hide-close
+    >
+        <h4 class="text-center">{{ message }}</h4>
+        <template #footer>
+            <BaseButton
+                text="Yes"
+                variant="danger"
+                class="mx-2 pointer"
+                @click="yesClicked"
+            />
+            <BaseButton text="No" class="mx-2 pointer" @click="noClicked" />
+        </template>
+    </Modal>
+</template>

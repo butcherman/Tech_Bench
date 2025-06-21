@@ -3,12 +3,11 @@
 namespace App\Http\Requests\FileLink;
 
 use App\Models\FileLink;
-use App\Traits\AppSettingsTrait;
 use Illuminate\Foundation\Http\FormRequest;
 
 class FileLinkSettingsRequest extends FormRequest
 {
-    use AppSettingsTrait;
+    protected $errorBag = 'form_error';
 
     /**
      * Determine if the user is authorized to make this request.
@@ -19,11 +18,13 @@ class FileLinkSettingsRequest extends FormRequest
     }
 
     /**
-     * Get the validation rules that apply to the request
+     * Get the validation rules that apply to the request.
      */
     public function rules(): array
     {
         return [
+            'feature_enabled' => ['required', 'boolean'],
+            'allow_custom_url' => ['required', 'boolean'],
             'default_link_life' => ['required', 'numeric'],
             'auto_delete' => ['required', 'boolean'],
             'auto_delete_days' => ['required', 'numeric'],

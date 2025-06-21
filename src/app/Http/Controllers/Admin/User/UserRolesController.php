@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers\Admin\User;
 
-use App\Actions\AvailableUserRoles;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\User\UserRoleRequest;
 use App\Models\UserRole;
-use App\Service\Admin\UserRoleAdministrationService;
+use App\Services\User\UserRoleService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -14,80 +13,74 @@ use Inertia\Response;
 
 class UserRolesController extends Controller
 {
-    public function __construct(
-        protected AvailableUserRoles $roles,
-        protected UserRoleAdministrationService $svc
-    ) {}
+    public function __construct(protected UserRoleService $svc) {}
 
     /**
-     * Display a listing of available User Roles
+     * Display a listing of the resource.
      */
-    public function index(Request $request): Response
+    public function index(): Response
     {
-        $this->authorize('view', UserRole::class);
+        $this->authorize('viewAny', UserRole::class);
 
         return Inertia::render('Admin/Role/Index', [
-            'roles' => UserRole::all(),
+            'roles' => fn () => $this->svc->getAllRoles(),
         ]);
     }
 
     /**
-     * Show the form for creating a new role or copying an existing one.
+     * Show the form for creating a new resource.
      */
     public function create(Request $request): Response
     {
         $this->authorize('create', UserRole::class);
 
-        // If we are copying an existing role, fetch that role
-        $baseRole = $request->role_id
-            ? UserRole::find($request->role_id)
-            : null;
-
         return Inertia::render('Admin/Role/Create', [
-            'base-role' => $baseRole,
             'permission-list' => $this->svc->getRolePermissionTypes(),
-            'permission-values' => $baseRole
-                ? $baseRole->UserRolePermission
+            'base-role' => fn () => $request->role_id
+                ? $this->svc->getRole($request->role_id)
+                : null,
+            'permission-values' => fn () => $request->role_id
+                ? $this->svc->getRole($request->role_id)->UserRolePermission
                 : [],
         ]);
     }
 
     /**
-     * Store a newly created User Role.
+     * Store a newly created resource in storage.
      */
     public function store(UserRoleRequest $request): RedirectResponse
     {
-        $newRole = $this->svc->createNewRole($request);
+        $newRole = $this->svc->createNewRole($request->safe()->collect());
 
         return redirect(route('admin.user-roles.show', $newRole->role_id))
             ->with('success', __('admin.user-role.created'));
     }
 
     /**
-     * Display a User Role along with its permissions
+     * Display the specified resource.
      */
     public function show(UserRole $user_role): Response
     {
         $this->authorize('view', $user_role);
 
         return Inertia::render('Admin/Role/Show', [
-            'role' => $user_role->makeVisible(['allow_edit']),
-            'permission-list' => $this->svc->getRolePermissionTypes(),
-            'permission-values' => $user_role->UserRolePermission,
+            'role' => fn () => $user_role->makeVisible(['allow_edit']),
+            'permission-list' => fn () => $this->svc->getRolePermissionTypes(),
+            'permission-values' => fn () => $user_role->UserRolePermission,
         ]);
     }
 
     /**
-     * Show the form for editing an existing User Role
+     * Show the form for editing the specified resource.
      */
     public function edit(UserRole $user_role): Response
     {
         $this->authorize('update', $user_role);
 
         return Inertia::render('Admin/Role/Edit', [
-            'base-role' => $user_role,
-            'permission-list' => $this->svc->getRolePermissionTypes(),
-            'permission-values' => $user_role->UserRolePermission,
+            'base-role' => fn () => $user_role,
+            'permission-list' => fn () => $this->svc->getRolePermissionTypes(),
+            'permission-values' => fn () => $user_role->UserRolePermission,
         ]);
     }
 
@@ -96,9 +89,10 @@ class UserRolesController extends Controller
      */
     public function update(UserRoleRequest $request, UserRole $user_role): RedirectResponse
     {
-        $this->svc->updateExistingRole($request, $user_role);
+        $this->svc->updateExistingRole($request->safe()->collect(), $user_role);
 
-        return back()->with('success', __('admin.user-role.updated'));
+        return redirect(route('admin.user-roles.show', $user_role->role_id))
+            ->with('success', __('admin.user-role.updated'));
     }
 
     /**

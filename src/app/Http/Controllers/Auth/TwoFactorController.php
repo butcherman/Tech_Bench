@@ -2,33 +2,28 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\VerificationCodeRequest;
-use Illuminate\Http\RedirectResponse;
-use Inertia\Inertia;
-use Inertia\Response;
+use Laravel\Fortify\Contracts\FailedTwoFactorLoginResponse;
+use Laravel\Fortify\Contracts\TwoFactorLoginResponse;
+use Laravel\Fortify\Http\Controllers\TwoFactorAuthenticatedSessionController;
+use Laravel\Fortify\Http\Requests\TwoFactorLoginRequest;
 
-class TwoFactorController extends Controller
+class TwoFactorController extends TwoFactorAuthenticatedSessionController
 {
     /**
-     * Show the 2FA Verification Form
+     * Validate the 2FA code sent via email and log the user in.
      */
-    public function show(): Response
+    public function __invoke(TwoFactorLoginRequest $request): FailedTwoFactorLoginResponse|TwoFactorLoginResponse
     {
-        return Inertia::render('Auth/TwoFactorAuth', [
-            'allow-remember' => (bool) config('auth.twoFa.allow_save_device'),
-        ]);
-    }
+        $user = $request->challengedUser();
 
-    /**
-     * Validate and save 2FA response
-     */
-    public function update(VerificationCodeRequest $request): RedirectResponse
-    {
-        $cookie = $request->user()->processValidCode($request->remember);
+        if (! $user->validateVerificationCode($request->get('code'))) {
+            return app(FailedTwoFactorLoginResponse::class);
+        }
 
-        return redirect()
-            ->intended(route('dashboard'))
-            ->withCookie('remember_device', $cookie, 259200);
+        $this->guard->login($user, $request->remember());
+
+        $request->session()->regenerate();
+
+        return app(TwoFactorLoginResponse::class);
     }
 }

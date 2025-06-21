@@ -2,11 +2,17 @@
 
 namespace App\Http\Requests\FileLink;
 
-use App\Http\Requests\UploadFileBaseRequest;
 use App\Models\FileLink;
+use App\Traits\Requests\NormalizeJson;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class FileLinkRequest extends UploadFileBaseRequest
+class FileLinkRequest extends FormRequest
 {
+    use NormalizeJson;
+
+    protected $errorBag = 'form_error';
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -20,7 +26,7 @@ class FileLinkRequest extends UploadFileBaseRequest
     }
 
     /**
-     * Get the validation rules that apply to the request
+     * Get the validation rules that apply to the request.
      */
     public function rules(): array
     {
@@ -29,6 +35,12 @@ class FileLinkRequest extends UploadFileBaseRequest
             'expire' => ['required', 'string'],
             'allow_upload' => ['required'],
             'instructions' => ['nullable', 'string'],
+            'link_hash' => [
+                'required',
+                'string',
+                'regex:/^[A-Za-z0-9\-]+$/',
+                Rule::unique('file_links')->ignore($this->link),
+            ],
         ];
     }
 }

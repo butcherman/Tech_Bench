@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Equipment\DataTypeRequest;
 use App\Models\DataFieldType;
 use App\Models\EquipmentType;
-use App\Service\Equipment\EquipmentDataService;
+use App\Services\Equipment\EquipmentDataService;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -23,7 +23,7 @@ class EquipmentDataTypeController extends Controller
         $this->authorize('viewAny', EquipmentType::class);
 
         return Inertia::render('Equipment/DataType/Index', [
-            'data-types' => DataFieldType::all(),
+            'data-types' => fn () => DataFieldType::all()->append('in_use'),
         ]);
     }
 
@@ -56,7 +56,7 @@ class EquipmentDataTypeController extends Controller
         $this->authorize('viewAny', EquipmentType::class);
 
         return Inertia::render('Equipment/DataType/Edit', [
-            'data-field-type' => $equipment_datum,
+            'data-field-type' => fn () => $equipment_datum,
         ]);
     }
 

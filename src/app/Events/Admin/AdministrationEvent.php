@@ -9,12 +9,19 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
+/*
+|-------------------------------------------------------------------------------
+| Administration Event is called when a real-time event happens that needs
+| to update a system administrator.  Used for long running processes.
+|-------------------------------------------------------------------------------
+*/
+
 class AdministrationEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
-     * Event is fired when an admin needs real time update of a working job
+     * Create a new event instance.
      */
     public function __construct(public string $msg)
     {
@@ -25,6 +32,8 @@ class AdministrationEvent implements ShouldBroadcast
 
     /**
      * Get the channels the event should broadcast on
+     *
+     * @codeCoverageIgnore
      */
     public function broadcastOn(): array
     {
@@ -35,6 +44,8 @@ class AdministrationEvent implements ShouldBroadcast
 
     /**
      * Get the name the event should broadcast as
+     *
+     * @codeCoverageIgnore
      */
     public function BroadcastAs(): string
     {

@@ -3,19 +3,23 @@
 namespace App\Jobs\Customer;
 
 use App\Models\CustomerEquipment;
-use App\Service\Customer\CustomerEquipmentDataService;
-use Illuminate\Bus\Queueable;
+use App\Services\Customer\CustomerEquipmentDataService;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
+use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Support\Facades\Log;
+
+/*
+|-------------------------------------------------------------------------------
+| Job is triggered when a new piece of equipment is added to a customer profile
+|-------------------------------------------------------------------------------
+*/
 
 class CreateCustomerDataFieldsJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Queueable;
 
     /**
-     * Create a new job instance.
+     * @codeCoverageIgnore
      */
     public function __construct(protected CustomerEquipment $equipment) {}
 
@@ -24,6 +28,11 @@ class CreateCustomerDataFieldsJob implements ShouldQueue
      */
     public function handle(CustomerEquipmentDataService $svc): void
     {
-        $svc->createEquipmentDataFields($this->equipment);
+        Log::info(
+            'Starting Job - Create Customer Equipment Data Fields',
+            $this->equipment->toArray()
+        );
+
+        $svc->createCustomerEquipmentDataFields($this->equipment);
     }
 }

@@ -1,88 +1,41 @@
-<template>
-    <VueForm
-        ref="customerNoteForm"
-        :initial-values="initValues"
-        :validation-schema="schema"
-        :submit-route="submitRoute"
-        :submit-method="submitMethod"
-        :submit-text="submitText"
-    >
-        <TextInput id="subject" name="subject" label="Subject" focus />
-        <div class="text-center mt-4">
-            <CheckboxSwitch
-                id="urgent"
-                name="urgent"
-                label="Mark Note As Urgent"
-                inline
-            />
-        </div>
-        <RadioGroupInput
-            id="note-type"
-            name="note_type"
-            :list="formTypes"
-            class="text-center"
-            inline
-            @change="updateNoteType"
-        />
-        <SelectBoxInput
-            v-if="noteType === 'site'"
-            id="site-list"
-            name="site_list"
-            label="Select which Sites this note is relevant to"
-            text-field="site_name"
-            value-field="cust_site_id"
-            :list="siteList"
-        />
-        <SelectInput
-            v-if="noteType === 'equipment'"
-            id="cust_equip-id"
-            name="cust_equip_id"
-            label="Select which Equipment this note is relevant to"
-            :list="equipList"
-            text-field="equip_name"
-            value-field="cust_equip_id"
-        />
-        <Editor
-            id="note"
-            name="details"
-            label="Note Details"
-            image-folder="customer_notes"
-        />
-    </VueForm>
-</template>
-
 <script setup lang="ts">
-import VueForm from "@/Forms/_Base/VueForm.vue";
-import TextInput from "@/Forms/_Base/TextInput.vue";
-import RadioGroupInput from "../_Base/RadioGroupInput.vue";
-import CheckboxSwitch from "../_Base/CheckboxSwitch.vue";
-import SelectBoxInput from "../_Base/SelectBoxInput.vue";
-import SelectInput from "../_Base/SelectInput.vue";
 import Editor from "../_Base/Editor.vue";
+import PickListInput from "../_Base/PickListInput.vue";
+import RadioGroupInput from "../_Base/RadioGroupInput.vue";
+import SelectInput from "../_Base/SelectInput.vue";
+import SwitchInput from "../_Base/SwitchInput.vue";
+import TextInput from "@/Forms/_Base/TextInput.vue";
+import VueForm from "@/Forms/_Base/VueForm.vue";
 import { computed, ref } from "vue";
 import { object, string, boolean, array } from "yup";
+import { shrinkHide, growShow } from "@/Composables/animations.module";
+import {
+    equipmentList,
+    siteList,
+} from "../../Composables/Customer/CustomerData.module";
+
+type noteType = "general" | "site" | "equipment";
 
 const props = defineProps<{
     customer: customer;
-    siteList: customerSite[];
-    equipList: customerEquipment[];
     currentSite: customerSite | null;
+    siteList: customerSite[];
     equipment?: customerEquipment;
     note?: customerNote;
 }>();
 
-const customerNoteForm = ref<InstanceType<typeof VueForm> | null>(null);
-
-/**
- * Determine the note type based on prop parameters
- */
-const getNoteType = (): "general" | "site" | "equipment" => {
+/*
+|-------------------------------------------------------------------------------
+| Determine the type of note being created/edited.
+|-------------------------------------------------------------------------------
+*/
+const getInitNoteType = (): noteType => {
     if ((props.note && props.note.cust_equip_id) || props.equipment) {
         return "equipment";
     }
 
     if (
-        (props.note && props.note.customer_site.length > 0) ||
+        (props.note && props.note.sites.length > 0) ||
         (props.currentSite && props.siteList.length > 1)
     ) {
         return "site";
@@ -90,35 +43,37 @@ const getNoteType = (): "general" | "site" | "equipment" => {
 
     return "general";
 };
-const noteType = ref(getNoteType());
 
+const updateNoteType = (type: noteType): void => {
+    noteType.value = type;
+};
+
+const noteType = ref<noteType>(getInitNoteType());
+
+const noteTypes: { label: string; value: noteType }[] = [
+    {
+        label: "General Note",
+        value: "general",
+    },
+    {
+        label: "Equipment Note",
+        value: "equipment",
+    },
+];
+
+if (props.siteList.length > 1) {
+    noteTypes.push({
+        label: "Site Note",
+        value: "site",
+    });
+}
+
+/*
+|-------------------------------------------------------------------------------
+| Handle Form
+|-------------------------------------------------------------------------------
+*/
 const submitRoute = computed(() => {
-    if (props.equipment) {
-        return props.note
-            ? route("customers.equipment.notes.update", [
-                  props.customer.slug,
-                  props.equipment.cust_equip_id,
-                  props.note.note_id,
-              ])
-            : route("customers.equipment.notes.store", [
-                  props.customer.slug,
-                  props.equipment.cust_equip_id,
-              ]);
-    }
-
-    if (props.currentSite) {
-        return props.note
-            ? route("customers.site.notes.update", [
-                  props.customer.slug,
-                  props.currentSite.site_slug,
-                  props.note.note_id,
-              ])
-            : route("customers.site.notes.store", [
-                  props.customer.slug,
-                  props.currentSite.site_slug,
-              ]);
-    }
-
     return props.note
         ? route("customers.notes.update", [
               props.customer.slug,
@@ -129,15 +84,28 @@ const submitRoute = computed(() => {
 const submitMethod = computed(() => (props.note ? "put" : "post"));
 const submitText = computed(() => (props.note ? "Edit Note" : "Create Note"));
 
+/*
+|-------------------------------------------------------------------------------
+| Vee Validate
+|-------------------------------------------------------------------------------
+*/
+const getInitSiteList = () => {
+    if (props.note && props.note.sites) {
+        return props.note.sites.map((site) => site.cust_site_id);
+    }
+
+    if (props.currentSite) {
+        return [props.currentSite.cust_site_id];
+    }
+
+    return [];
+};
+
 const initValues = {
     subject: props.note?.subject,
     note_type: noteType.value,
     urgent: props.note?.urgent || false,
-    site_list:
-        props.note?.customer_site.map((site) => site.cust_site_id) || [
-            props.currentSite?.cust_site_id,
-        ] ||
-        [],
+    site_list: getInitSiteList(),
     cust_equip_id: props.note?.cust_equip_id || props.equipment?.cust_equip_id,
     details: props.note?.details,
 };
@@ -161,29 +129,61 @@ const schema = object({
     }),
     details: string().required("Note Details are required"),
 });
-
-/**
- * Notes can be assigned to a specific equipment or site.  Unselected will be
- * a General note
- */
-const formTypes = [
-    {
-        text: "General Note",
-        value: "general",
-    },
-    {
-        text: "Equipment Note",
-        value: "equipment",
-    },
-];
-if (props.siteList.length > 1) {
-    formTypes.push({
-        text: "Site Note",
-        value: "site",
-    });
-}
-
-const updateNoteType = (type: "general" | "site" | "equipment") => {
-    noteType.value = type;
-};
 </script>
+
+<template>
+    <VueForm
+        :initial-values="initValues"
+        :submit-method="submitMethod"
+        :submit-route="submitRoute"
+        :submit-text="submitText"
+        :validation-schema="schema"
+    >
+        <TextInput id="subject" name="subject" label="Subject" focus />
+        <div class="flex justify-center">
+            <SwitchInput id="urgent" name="urgent" label="Mark Note Urgent" />
+        </div>
+        <div class="flex justify-center mt-2">
+            <RadioGroupInput
+                id="note-type"
+                name="note_type"
+                :list="noteTypes"
+                inline
+                @change="updateNoteType"
+            />
+        </div>
+        <TransitionGroup @enter="growShow" @leave="shrinkHide">
+            <PickListInput
+                v-if="noteType === 'site'"
+                id="site-list"
+                name="site_list"
+                label="Select which Sites this note is relevant to"
+                label-field="site_name"
+                value-field="cust_site_id"
+                :list="siteList"
+            />
+            <SelectInput
+                v-if="noteType === 'equipment'"
+                id="cust_equip-id"
+                name="cust_equip_id"
+                label="Select which Equipment this note is relevant to"
+                :list="equipmentList"
+                text-field="equip_name"
+                value-field="cust_equip_id"
+            >
+                <template #option="{ option }">
+                    {{ option.equip_name }}
+                    <span v-if="!currentSite">
+                        &nbsp; ({{ option.sites[0].site_name }})
+                    </span>
+                </template>
+            </SelectInput>
+        </TransitionGroup>
+        <Editor
+            id="note"
+            name="details"
+            label="Note Details"
+            image-folder="customer_notes"
+        />
+    </VueForm>
+</template>

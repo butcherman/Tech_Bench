@@ -1,20 +1,6 @@
-<template>
-    <div>
-        <Head title="New User" />
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-title">Enter New User Information</div>
-                        <UserForm :roles="roles" />
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</template>
 <script setup lang="ts">
-import AppLayout from "@/Layouts/AppLayout.vue";
+import AppLayout from "@/Layouts/App/AppLayout.vue";
+import Card from "@/Components/_Base/Card.vue";
 import UserForm from "@/Forms/Admin/User/UserForm.vue";
 
 defineProps<{
@@ -25,3 +11,11 @@ defineProps<{
 <script lang="ts">
 export default { layout: AppLayout };
 </script>
+
+<template>
+    <div class="flex justify-center">
+        <Card class="tb-card" title="Enter New User Information">
+            <UserForm :roles="roles" />
+        </Card>
+    </div>
+</template>

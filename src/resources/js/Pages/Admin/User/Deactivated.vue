@@ -1,57 +1,19 @@
-<template>
-    <div>
-        <Head title="User Administration" />
-        <div class="row justify-content-center">
-            <div class="col">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-title">
-                            User Administration
-                            <Link :href="$route('admin.user.create')">
-                                <AddButton class="float-end" pill small>
-                                    New User
-                                </AddButton>
-                            </Link>
-                        </div>
-                        <Table
-                            :columns="columns"
-                            :rows="userList"
-                            initial-sort="username"
-                            responsive
-                            row-clickable
-                            paginate
-                            :per-page-default="25"
-                            @on-row-click="rowClicked"
-                        >
-                            <template #action="{ rowData }">
-                                <span
-                                    class="badge bg-warning rounded-pill mx-1"
-                                    title="Enable User"
-                                    v-tooltip
-                                    @click="enableUser(rowData)"
-                                >
-                                    <fa-icon icon="unlock-alt" />
-                                </span>
-                            </template>
-                        </Table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</template>
-
 <script setup lang="ts">
-import AppLayout from "@/Layouts/AppLayout.vue";
-import AddButton from "@/Components/_Base/Buttons/AddButton.vue";
-import Table from "@/Components/_Base/Table.vue";
+import AppLayout from "@/Layouts/App/AppLayout.vue";
+import AtomLoader from "@/Components/_Base/Loaders/AtomLoader.vue";
+import BaseBadge from "@/Components/_Base/Badges/BaseBadge.vue";
+import Card from "@/Components/_Base/Card.vue";
+import DataTable from "@/Components/_Base/DataTable/DataTable.vue";
 import verifyModal from "@/Modules/verifyModal";
-import { router } from "@inertiajs/vue3";
+import { Deferred, router } from "@inertiajs/vue3";
 
 defineProps<{
-    userList: user[];
+    userList?: user[];
 }>();
 
+/**
+ * Re-Enable a soft deleted user
+ */
 const enableUser = (user: user) => {
     verifyModal(`${user.full_name} will be immediately enabled`).then((res) => {
         if (res) {
@@ -60,47 +22,34 @@ const enableUser = (user: user) => {
     });
 };
 
-const rowClicked = (row: user) => {
-    router.get(route("admin.user.show", row.username));
-};
-
 const columns = [
     {
         label: "Name",
         field: "full_name",
         sort: true,
-        filterOptions: {
-            enabled: true,
-            placeholder: "Filter Name",
-        },
+        filer: true,
     },
     {
         label: "Username",
         field: "username",
         sort: true,
-        filterOptions: {
-            enabled: true,
-            placeholder: "Filter Username",
-        },
+        filer: true,
     },
     {
         label: "Email",
         field: "email",
         sort: true,
-        filterOptions: {
-            enabled: true,
-            placeholder: "Filter Email",
-        },
+        filer: true,
     },
     {
         label: "Role",
         field: "role_name",
         sort: true,
+        filer: true,
+        filterSelect: true,
     },
     {
-        label: "Deactivated Date",
-        field: "deleted_at",
-        sort: true,
+        field: "actions",
     },
 ];
 </script>
@@ -108,3 +57,40 @@ const columns = [
 <script lang="ts">
 export default { layout: AppLayout };
 </script>
+
+<template>
+    <div class="flex justify-center">
+        <Card class="tb-card-lg overflow-x-auto" title="Disabled Users">
+            <Deferred data="user-list">
+                <template #fallback>
+                    <div class="flex justify-center">
+                        <div>
+                            <AtomLoader class="mx-auto" />
+                            Loading Users
+                        </div>
+                    </div>
+                </template>
+                <DataTable
+                    v-if="userList"
+                    :columns="columns"
+                    :rows="userList"
+                    :row-click-link="
+                        (row) => $route('admin.user.show', row.username)
+                    "
+                    paginate
+                    striped
+                >
+                    <template #row.actions="{ rowData }">
+                        <BaseBadge
+                            icon="unlock-alt"
+                            class="pointer"
+                            variant="warning"
+                            v-tooltip.left="'Enable User'"
+                            @click.stop="enableUser(rowData)"
+                        />
+                    </template>
+                </DataTable>
+            </Deferred>
+        </Card>
+    </div>
+</template>

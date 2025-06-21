@@ -23,7 +23,7 @@ then
     echo "Creating Self Signed SSL Certificate"
     openssl rand -base64 48 > /tmp/passphrase.txt
     openssl genrsa -aes128 -passout file:/tmp/passphrase.txt -out /tmp/server.key 2048
-    openssl req -new -passin file:/tmp/passphrase.txt -key /tmp/server.key -out /tmp/server.csr -subj "/C=FR/O=tb/OU=Domain Control Validated/CN=$APP_URL"       #  FIXME - copy host name from .env file
+    openssl req -new -passin file:/tmp/passphrase.txt -key /tmp/server.key -out /tmp/server.csr -subj "/C=FR/O=tb/OU=Domain Control Validated/CN=$APP_URL"
     cp /tmp/server.key /tmp/server.key.org
     openssl rsa -in /tmp/server.key.org -passin file:/tmp/passphrase.txt -out /tmp/server.key
     openssl x509 -req -days 36500 -in /tmp/server.csr -signkey /tmp/server.key -out /tmp/server.crt

@@ -10,6 +10,7 @@ return [
     'created' => 'New Equipment Created',
     'updated' => 'Equipment Updated',
     'destroyed' => 'Equipment Deleted',
+    'in_use' => 'This Equipment is currently being used by a Customer or Tech Tip and cannot be deleted',
 
     'category' => [
         'created' => 'New Equipment Category Created',

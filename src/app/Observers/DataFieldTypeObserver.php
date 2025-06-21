@@ -2,32 +2,21 @@
 
 namespace App\Observers;
 
+use App\Facades\CacheData;
 use App\Models\DataFieldType;
 use Illuminate\Support\Facades\Log;
 
-class DataFieldTypeObserver
+class DataFieldTypeObserver extends Observer
 {
-    /** @var User|string */
-    protected $user;
-
-    public function __construct()
-    {
-        $this->user = match (true) {
-            ! is_null(request()->user()) => request()->user()->username,
-            request()->ip() === '127.0.0.1' => 'Internal Service',
-            // @codeCoverageIgnoreStart
-            default => request()->ip(),
-            // @codeCoverageIgnoreEnd
-        };
-    }
-
     /**
      * Handle the DataFieldType "created" event.
      */
     public function created(DataFieldType $dataFieldType): void
     {
+        CacheData::clearCache('dataFieldTypes');
+
         Log::info(
-            'New Equipment Data Field created by '.$this->user,
+            'New Data Field Type for Customer Equipment created by '.$this->user,
             $dataFieldType->toArray()
         );
     }
@@ -37,8 +26,10 @@ class DataFieldTypeObserver
      */
     public function updated(DataFieldType $dataFieldType): void
     {
+        CacheData::clearCache('dataFieldTypes');
+
         Log::info(
-            'Equipment Data Type '.$dataFieldType->name.' updated by '.$this->user,
+            'Data Field Type for Customer Equipment updated by '.$this->user,
             $dataFieldType->toArray()
         );
     }
@@ -48,6 +39,11 @@ class DataFieldTypeObserver
      */
     public function deleted(DataFieldType $dataFieldType): void
     {
-        Log::notice('Data Field '.$dataFieldType->name.' deleted by '.$this->user);
+        CacheData::clearCache('dataFieldTypes');
+
+        Log::info(
+            'Data Field Type for Customer Equipment deleted by '.$this->user,
+            $dataFieldType->toArray()
+        );
     }
 }

@@ -3,28 +3,28 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Actions\Socialite\AuthorizeUser;
-use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
+use App\Exceptions\Misc\FeatureDisabledException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
 use Laravel\Socialite\Facades\Socialite;
 
-class SocialiteController extends Controller
+class SocialiteController
 {
     /**
      * If feature is disabled, show 404 page not found
      */
-    public function __construct(protected AuthorizeUser $authObj) {}
+    public function __construct()
+    {
+        if (! config('services.azure.allow_login')) {
+            throw new FeatureDisabledException('Azure Login');
+        }
+    }
 
     /**
      * Redirect the user to the Microsoft Login page
      */
     public function redirectAuth(): RedirectResponse
     {
-        if (! config('services.azure.allow_login')) {
-            abort(404);
-        }
-
         Log::info('Redirecting visitor to Microsoft Azure Authentication');
 
         return Socialite::driver('azure')->redirect();
@@ -33,14 +33,10 @@ class SocialiteController extends Controller
     /**
      * Callback from when a user is properly authenticated from Microsoft
      */
-    public function callback(): RedirectResponse
+    public function callback(AuthorizeUser $svc): RedirectResponse
     {
-        if (! config('services.azure.allow_login')) {
-            abort(404);
-        }
+        $svc->handle();
 
-        $this->authObj->handle();
-
-        return redirect()->intended(RouteServiceProvider::HOME);
+        return redirect()->intended(route('dashboard'));
     }
 }

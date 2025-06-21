@@ -1,4 +1,4 @@
-type categoryList = {
+type equipmentCategory = {
     cat_id: number;
     name: string;
     equipment_type: equipment[];

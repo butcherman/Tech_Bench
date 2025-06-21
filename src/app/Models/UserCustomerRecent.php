@@ -2,17 +2,21 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Prunable;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Support\Facades\Log;
 
-class UserCustomerRecent extends Model
+class UserCustomerRecent extends Pivot
 {
     use Prunable;
 
-    /***************************************************************************
-     * Prune activity older than 90 days
-     ***************************************************************************/
+    protected $table = 'user_customer_recents';
+
+    /*
+    |---------------------------------------------------------------------------
+    | Prune activity older than 90 days
+    |---------------------------------------------------------------------------
+    */
     public function prunable()
     {
         Log::debug('Calling Prune User Customer Recents');

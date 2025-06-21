@@ -1,12 +1,10 @@
+<script setup lang="ts">
+import TrinityRingsLoader from "@/Components/_Base/Loaders/TrinityRingsLoader.vue";
+</script>
+
 <template>
-    <div class="text-center">
-        <h6>Fetching Help Page...</h6>
-        <div>
-            <AtomLoader class="ms-auto me-auto" />
-        </div>
+    <div>
+        <h6 class="text-center">Fetching Help Page...</h6>
+        <TrinityRingsLoader class="mx-auto" />
     </div>
 </template>
-
-<script setup lang="ts">
-import AtomLoader from "@/Components/_Base/Loaders/AtomLoader.vue";
-</script>

@@ -2,52 +2,51 @@
 
 namespace App\Observers;
 
+use App\Facades\CacheData;
 use App\Models\EquipmentCategory;
-use App\Service\Cache;
 use Illuminate\Support\Facades\Log;
 
-class EquipmentCategoryObserver
+class EquipmentCategoryObserver extends Observer
 {
-    /** @var User|string */
-    protected $user;
-
-    public function __construct()
+    /**
+     * Handle the EquipmentCategory "created" event.
+     */
+    public function created(EquipmentCategory $equipmentCategory): void
     {
-        $this->user = match (true) {
-            ! is_null(request()->user()) => request()->user()->username,
-            request()->ip() === '127.0.0.1' => 'Internal Service',
-            // @codeCoverageIgnoreStart
-            default => request()->ip(),
-            // @codeCoverageIgnoreEnd
-        };
-    }
-
-    public function created(EquipmentCategory $category): void
-    {
-        Cache::clearCache(['equipmentTypes', 'equipmentCategories']);
+        CacheData::clearCache('equipmentTypes');
+        CacheData::clearCache('equipmentCategories');
 
         Log::info(
-            'New Equipment Category '.$category->name.' created by '.$this->user,
-            $category->toArray()
+            'New Equipment Category created by '.$this->user,
+            $equipmentCategory->toArray()
         );
     }
 
-    public function updated(EquipmentCategory $category): void
+    /**
+     * Handle the EquipmentCategory "updated" event.
+     */
+    public function updated(EquipmentCategory $equipmentCategory): void
     {
-        Cache::clearCache(['equipmentTypes', 'equipmentCategories']);
+        CacheData::clearCache('equipmentTypes');
+        CacheData::clearCache('equipmentCategories');
 
         Log::info(
-            'Equipment Category '.$category->name.' has been updated by '.
-                $this->user
+            'Equipment Category updated by '.$this->user,
+            $equipmentCategory->toArray()
         );
     }
 
-    public function deleted(EquipmentCategory $category): void
+    /**
+     * Handle the EquipmentCategory "deleted" event.
+     */
+    public function deleted(EquipmentCategory $equipmentCategory): void
     {
-        Cache::clearCache(['equipmentTypes', 'equipmentCategories']);
+        CacheData::clearCache('equipmentTypes');
+        CacheData::clearCache('equipmentCategories');
 
-        Log::notice('Equipment Category '.$category->name.' has been deleted by '.
-            $this->user
+        Log::info(
+            'Equipment Category deleted by '.$this->user,
+            $equipmentCategory->toArray()
         );
     }
 }

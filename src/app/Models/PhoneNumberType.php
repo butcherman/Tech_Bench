@@ -2,16 +2,16 @@
 
 namespace App\Models;
 
-use App\Observers\PhoneNumberTypeObserver;
-use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Model;
 
-#[ObservedBy([PhoneNumberTypeObserver::class])]
 class PhoneNumberType extends Model
 {
+    /** @var string */
     protected $primaryKey = 'phone_type_id';
 
+    /** @var array<int, string> */
     protected $guarded = ['phone_type_id', 'created_at', 'updated_at'];
 
+    /** @var array<int, string> */
     protected $hidden = ['phone_type_id', 'created_at', 'updated_at'];
 }

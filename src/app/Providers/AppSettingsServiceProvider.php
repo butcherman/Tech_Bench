@@ -21,7 +21,8 @@ class AppSettingsServiceProvider extends ServiceProvider
         if (File::missing('../../bootstrap/cache/config.php')) {
             try {
                 /*
-                 *   All App Settings that can be adjusted are stored in the database - retrieve them here and assign to the config
+                 * All App Settings that can be adjusted are stored in the
+                 * database - retrieve them here and assign to the config
                  */
                 if (Schema::hasTable('app_settings')) {
                     $settings = DB::table('app_settings')->get();
@@ -35,13 +36,5 @@ class AppSettingsServiceProvider extends ServiceProvider
             }
             // @codeCoverageIgnoreEnd
         }
-    }
-
-    /**
-     * Bootstrap services.
-     */
-    public function boot(): void
-    {
-        //
     }
 }

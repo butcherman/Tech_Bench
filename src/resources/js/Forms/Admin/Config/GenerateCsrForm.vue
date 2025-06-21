@@ -1,3 +1,36 @@
+<script setup lang="ts">
+import TextInput from "@/Forms/_Base/TextInput.vue";
+import VueForm from "@/Forms/_Base/VueForm.vue";
+import { object, string } from "yup";
+
+/*
+|-------------------------------------------------------------------------------
+| Vee Validate
+|-------------------------------------------------------------------------------
+*/
+const initValues = {
+    countryName: "US",
+    stateOrProvinceName: "",
+    localityName: "",
+    organizationName: "",
+    organizationalUnitName: "",
+    commonName: "",
+    emailAddress: "",
+};
+
+const schema = object({
+    countryName: string().required().label("Country Name"),
+    stateOrProvinceName: string().required().label("State or Province Name"),
+    localityName: string().required().label("Locality Name"),
+    organizationName: string().required().label("Organization Name"),
+    organizationalUnitName: string()
+        .required()
+        .label("Organizational Unit Name"),
+    commonName: string().required().label("Common Name"),
+    emailAddress: string().email().required().label("Email Address"),
+});
+</script>
+
 <template>
     <VueForm
         :initial-values="initValues"
@@ -32,30 +65,3 @@
         />
     </VueForm>
 </template>
-
-<script setup lang="ts">
-import VueForm from "@/Forms/_Base/VueForm.vue";
-import TextInput from "@/Forms/_Base/TextInput.vue";
-import { object, string } from "yup";
-
-const initValues = {
-    countryName: "US",
-    stateOrProvinceName: "",
-    localityName: "",
-    organizationName: "",
-    organizationalUnitName: "",
-    commonName: "",
-    emailAddress: "",
-};
-const schema = object({
-    countryName: string().required().label("Country Name"),
-    stateOrProvinceName: string().required().label("State or Province Name"),
-    localityName: string().required().label("Locality Name"),
-    organizationName: string().required().label("Organization Name"),
-    organizationalUnitName: string()
-        .required()
-        .label("Organizational Unit Name"),
-    commonName: string().required().label("Common Name"),
-    emailAddress: string().email().required().label("Email Address"),
-});
-</script>

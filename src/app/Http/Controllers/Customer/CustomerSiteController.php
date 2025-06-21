@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Customer;
 
-use App\Actions\CustomerPermissions;
+use App\Facades\CacheData;
+use App\Facades\UserPermissions;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Customer\CustomerDisableRequest;
 use App\Http\Requests\Customer\CustomerSiteRequest;
+use App\Http\Requests\Customer\DisableCustomerRequest;
 use App\Models\Customer;
 use App\Models\CustomerSite;
-use App\Service\Customer\CustomerService;
+use App\Services\Customer\CustomerService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -16,26 +17,21 @@ use Inertia\Response;
 
 class CustomerSiteController extends Controller
 {
-    public function __construct(
-        protected CustomerPermissions $permissions,
-        protected CustomerService $svc
-    ) {}
+    public function __construct(protected CustomerService $svc) {}
 
-    /**
-     * Display a listing of the Customer Sites.
-     */
     public function index(Request $request, Customer $customer): Response
     {
         return Inertia::render('Customer/Site/Index', [
-            'permissions' => fn () => $this->permissions->get($request->user()),
+            'alerts' => fn () => $customer->Alerts,
             'customer' => fn () => $customer,
-            'siteList' => fn () => $customer->CustomerSite->makeVisible('href'),
-            'alerts' => fn () => $customer->CustomerAlert,
+            'permissions' => fn () => UserPermissions::customerPermissions($request->user()),
+            'siteList' => fn () => $customer->Sites->makeVisible(['href']),
+            'isFav' => fn () => $customer->isFav($request->user()),
         ]);
     }
 
     /**
-     * Show the form for creating a new Customer Site.
+     * Form for creating a new Customer Site.
      */
     public function create(?Customer $customer = null): Response
     {
@@ -48,11 +44,11 @@ class CustomerSiteController extends Controller
     }
 
     /**
-     * Store a newly created Customer Site in storage.
+     * Save a new Customer Site.
      */
     public function store(CustomerSiteRequest $request, ?Customer $customer = null): RedirectResponse
     {
-        $newSite = $this->svc->createSite($request, $customer);
+        $newSite = $this->svc->createSite($request->safe()->collect(), $customer);
 
         return redirect(route('customers.sites.show', [
             $newSite->Customer->slug,
@@ -62,31 +58,39 @@ class CustomerSiteController extends Controller
         ]));
     }
 
-    /**
-     * Display the specified Customer Site.
-     */
     public function show(Request $request, Customer $customer, CustomerSite $site): Response
     {
-        // Update the users recent activity
-        $customer->touchRecent($request->user());
-
         return Inertia::render('Customer/Site/Show', [
-            'permissions' => fn () => $this->permissions->get($request->user()),
+            'alerts' => fn () => $customer->Alerts,
+            'allowShareVpn' => fn () => config('customer.allow_share_vpn_data'),
+            'allowVpn' => fn () => config('customer.allow_vpn_data'),
+            'availableEquipment' => fn () => CacheData::equipmentCategorySelectBox(),
             'customer' => fn () => $customer,
-            'site' => fn () => $site,
-            'siteList' => fn () => $customer->CustomerSite,
-            'alerts' => fn () => $customer->CustomerAlert,
-            'equipmentList' => fn () => $site->SiteEquipment,
-            'contacts' => fn () => $customer->CustomerContact,
-            'notes' => fn () => $site->getNotes(),
-            'files' => fn () => $site->getFiles()->append('href'),
-            'is-fav' => fn () => $customer->isFav($request->user()),
+            'currentSite' => fn () => $site,
+            'isFav' => fn () => $customer->isFav($request->user()),
+            'permissions' => fn () => UserPermissions::customerPermissions(
+                $request->user()
+            ),
+            'phoneTypes' => fn () => CacheData::phoneTypes(),
+            'fileTypes' => fn () => CacheData::fileTypes(),
+
+            /**
+             * Deferred Props
+             */
+            'contactList' => Inertia::defer(fn () => $site->SiteContact),
+            'groupedEquipmentList' => Inertia::defer(
+                fn () => $site->SiteEquipment
+                    ->load('Sites')
+                    ->groupBy('equip_name')
+                    ->chunk(5)
+            ),
+            'equipmentList' => Inertia::defer(fn () => $site->SiteEquipment->load('Sites')),
+            'noteList' => Inertia::defer(fn () => $site->SiteNote),
+            'fileList' => Inertia::defer(fn () => $site->SiteFile->append('href')),
+            'vpnData' => Inertia::defer(fn () => $customer->CustomerVpn),
         ]);
     }
 
-    /**
-     * Show the form for editing the specified Customer Site.
-     */
     public function edit(Customer $customer, CustomerSite $site): Response
     {
         $this->authorize('update', $site);
@@ -98,15 +102,9 @@ class CustomerSiteController extends Controller
         ]);
     }
 
-    /**
-     * Update the specified Customer Site in storage.
-     */
-    public function update(
-        CustomerSiteRequest $request,
-        Customer $customer,
-        CustomerSite $site
-    ): RedirectResponse {
-        $this->svc->updateSite($request, $site);
+    public function update(CustomerSiteRequest $request, Customer $customer, CustomerSite $site): RedirectResponse
+    {
+        $this->svc->updateSite($request->safe()->collect(), $site);
 
         return redirect(route('customers.sites.show', [
             $customer->slug,
@@ -116,16 +114,29 @@ class CustomerSiteController extends Controller
         ]));
     }
 
-    /**
-     * Remove the specified Customer Site from storage.
-     */
-    public function destroy(CustomerDisableRequest $request, Customer $customer, CustomerSite $site): RedirectResponse
+    public function destroy(DisableCustomerRequest $request, Customer $customer, CustomerSite $site): RedirectResponse
     {
-        $this->svc->destroySite($site, $request->reason);
+        $this->svc->destroySite($site, $request->get('reason'));
 
         return redirect(route('customers.show', $customer->slug))
-            ->with('danger', __('cust.destroy', [
-                'name' => $site->site_name,
-            ]));
+            ->with('danger', __('cust.destroy', ['name' => $site->site_name]));
+    }
+
+    public function restore(Customer $customer, CustomerSite $site): RedirectResponse
+    {
+        $this->authorize('restore', $customer);
+
+        $this->svc->restoreSite($site);
+
+        return back()->with('success', 'Customer Site Restored');
+    }
+
+    public function forceDelete(Customer $customer, CustomerSite $site): RedirectResponse
+    {
+        $this->authorize('forceDelete', $customer);
+
+        $this->svc->destroySite($site, 'Deleting Site', true);
+
+        return back()->with('danger', 'Customer Site Deleted');
     }
 }

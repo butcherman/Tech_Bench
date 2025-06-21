@@ -3,25 +3,10 @@
 namespace App\Observers;
 
 use App\Models\Customer;
-use App\Models\User;
 use Illuminate\Support\Facades\Log;
 
-class CustomerObserver
+class CustomerObserver extends Observer
 {
-    /** @var User|string */
-    protected $user;
-
-    public function __construct()
-    {
-        $this->user = match (true) {
-            ! is_null(request()->user()) => request()->user()->username,
-            request()->ip() === '127.0.0.1' => 'Internal Service',
-            // @codeCoverageIgnoreStart
-            default => request()->ip(),
-            // @codeCoverageIgnoreEnd
-        };
-    }
-
     public function created(Customer $customer): void
     {
         Log::info('New Customer created by '.$this->user, $customer->toArray());
@@ -30,7 +15,8 @@ class CustomerObserver
     public function updated(Customer $customer): void
     {
         Log::info(
-            'Customer information updated for '.$customer->name.' by '.$this->user,
+            'Customer information updated for '.
+                $customer->name.' by '.$this->user,
             $customer->toArray()
         );
     }
@@ -52,7 +38,8 @@ class CustomerObserver
     public function forceDeleted(Customer $customer): void
     {
         Log::warning(
-            'Customer '.$customer->name.' has been permanently removed by '.$this->user
+            'Customer '.$customer->name.' has been permanently removed by '.
+                $this->user
         );
     }
 }

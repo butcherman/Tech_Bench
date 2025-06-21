@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\Admin\Config;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\EmailSettingsRequest;
+use App\Http\Requests\Admin\Config\EmailSettingsRequest;
 use App\Models\AppSettings;
-use App\Service\Admin\ApplicationSettingsService;
+use App\Services\Admin\ApplicationSettingsService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -15,31 +16,28 @@ class EmailSettingsController extends Controller
     public function __construct(protected ApplicationSettingsService $svc) {}
 
     /**
-     * Display the Email Settings.
+     * Show the form for editing the resource.
      */
-    public function show(): Response
+    public function edit(): Response
     {
         $this->authorize('viewAny', AppSettings::class);
 
         return Inertia::render('Admin/Config/Email', [
-            'settings' => [
-                'from_address' => config('mail.from.address'),
-                'host' => config('mail.mailers.smtp.host'),
-                'port' => config('mail.mailers.smtp.port'),
-                'encryption' => strtoupper(config('mail.mailers.smtp.encryption')),
-                'username' => config('mail.mailers.smtp.username'),
-                'password' => config('mail.mailers.smtp.password') ? __('admin.fake_password') : '',
-                'require_auth' => config('mail.mailers.smtp.require_auth'),
-            ],
+            'settings' => fn () => $this->svc->getEmailSettings(),
         ]);
     }
 
     /**
-     * Update the Email Settings
+     * Update the resource in storage.
      */
     public function update(EmailSettingsRequest $request): RedirectResponse
     {
-        $this->svc->processEmailSettings($request);
+        $this->svc->updateEmailSettings($request->safe()->collect());
+
+        Log::notice(
+            'Email Settings Updated by '.$request->user()->username,
+            $request->except('password')
+        );
 
         return back()->with('success', __('admin.email.updated'));
     }

@@ -2,17 +2,21 @@
 
 namespace Tests\Feature\Equipment;
 
+use App\Exceptions\Database\RecordInUseException;
 use App\Models\EquipmentCategory;
 use App\Models\EquipmentType;
 use App\Models\User;
+use Illuminate\Support\Facades\Exceptions;
 use Tests\TestCase;
 
 class EquipmentCategoryTest extends TestCase
 {
-    /**
-     * Store Method
-     */
-    public function test_store_guest()
+    /*
+    |---------------------------------------------------------------------------
+    | Store Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_store_guest(): void
     {
         $data = [
             'name' => 'Cisco',
@@ -24,7 +28,7 @@ class EquipmentCategoryTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_store_no_permission()
+    public function test_store_no_permission(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly();
@@ -38,7 +42,7 @@ class EquipmentCategoryTest extends TestCase
         $response->assertForbidden();
     }
 
-    public function test_store()
+    public function test_store(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);
@@ -54,10 +58,12 @@ class EquipmentCategoryTest extends TestCase
         $this->assertDatabaseHas('equipment_categories', ['name' => 'Cisco']);
     }
 
-    /**
-     * Update Method
-     */
-    public function test_update_guest()
+    /*
+    |---------------------------------------------------------------------------
+    | Update Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_update_guest(): void
     {
         $cat = EquipmentCategory::factory()->create();
         $form = [
@@ -74,7 +80,7 @@ class EquipmentCategoryTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_update_user()
+    public function test_update_user(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly();
@@ -89,7 +95,7 @@ class EquipmentCategoryTest extends TestCase
         $response->assertForbidden();
     }
 
-    public function test_update()
+    public function test_update(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);
@@ -110,10 +116,12 @@ class EquipmentCategoryTest extends TestCase
         ]);
     }
 
-    /**
-     * Destroy Method
-     */
-    public function test_destroy_guest()
+    /*
+    |---------------------------------------------------------------------------
+    | Destroy Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_destroy_guest(): void
     {
         $cat = EquipmentCategory::factory()->create();
 
@@ -125,7 +133,7 @@ class EquipmentCategoryTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_destroy_user()
+    public function test_destroy_user(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly();
@@ -137,8 +145,13 @@ class EquipmentCategoryTest extends TestCase
         $response->assertForbidden();
     }
 
-    public function test_destroy_with_equipment()
+    public function test_destroy_with_equipment(): void
     {
+        Exceptions::fake();
+
+        $this->withoutExceptionHandling();
+        $this->expectException(RecordInUseException::class);
+
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);
         $cat = EquipmentCategory::factory()->create();
@@ -157,9 +170,11 @@ class EquipmentCategoryTest extends TestCase
             'cat_id' => $cat->cat_id,
             'name' => $cat->name,
         ]);
+
+        Exceptions::assertReported(RecordInUseException::class);
     }
 
-    public function test_destroy()
+    public function test_destroy(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);

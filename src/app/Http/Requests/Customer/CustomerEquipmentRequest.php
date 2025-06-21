@@ -8,6 +8,8 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class CustomerEquipmentRequest extends FormRequest
 {
+    protected $errorBag = 'form_error';
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -21,15 +23,17 @@ class CustomerEquipmentRequest extends FormRequest
     }
 
     /**
-     * Get the validation rules that apply to the request
+     * Get the validation rules that apply to the request.
      */
     public function rules(): array
     {
         if ($this->equipment) {
             return [
+                'equip_id' => ['required', 'exists:equipment_types'],
                 'site_list' => [
                     'nullable',
                     'array',
+                    new CheckForDuplicateSiteEquipment,
                 ],
             ];
         }

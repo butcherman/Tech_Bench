@@ -2,54 +2,53 @@
 
 namespace App\Http\Controllers\Customer;
 
-use App\Actions\CustomerPermissions;
+use App\Facades\CacheData;
+use App\Facades\UserPermissions;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Customer\CustomerDisableRequest;
 use App\Http\Requests\Customer\CustomerRequest;
-use App\Jobs\Customer\DestroyCustomerJob;
+use App\Http\Requests\Customer\DisableCustomerRequest;
+use App\Jobs\Customer\ForceDeleteCustomerJob;
 use App\Models\Customer;
-use App\Service\Customer\CustomerService;
+use App\Services\Customer\CustomerAdministrationService;
+use App\Services\Customer\CustomerService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class CustomerController extends Controller
 {
-    public function __construct(
-        protected CustomerPermissions $permissions,
-        protected CustomerService $svc
-    ) {}
-
     /**
-     * Customer Search Page
+     * Search page for finding a customer profile.
      */
     public function index(Request $request): Response
     {
         return Inertia::render('Customer/Index', [
-            'permissions' => fn () => $this->permissions->get($request->user()),
+            'permissions' => UserPermissions::customerPermissions($request->user()),
         ]);
     }
 
     /**
-     * Show the form for creating a new Customer.
+     * Create new customer profile form.
      */
     public function create(): Response
     {
         $this->authorize('create', Customer::class);
 
         return Inertia::render('Customer/Create', [
-            'selectId' => fn () => (bool) config('customer.select_id'),
+            'select-id' => fn () => config('customer.select_id'),
             'default-state' => fn () => config('customer.default_state'),
         ]);
     }
 
     /**
-     * Store a newly created Customer in storage.
+     * Store a newly created resource in storage.
      */
-    public function store(CustomerRequest $request): RedirectResponse
+    public function store(CustomerRequest $request, CustomerService $svc): RedirectResponse
     {
-        $newCustomer = $this->svc->createCustomer($request);
+        $newCustomer = $svc->createCustomer($request->safe()->collect());
 
         return redirect(route('customers.show', $newCustomer->slug))
             ->with('success', __('cust.created', [
@@ -58,104 +57,146 @@ class CustomerController extends Controller
     }
 
     /**
-     * Display the specified Customer.
+     * Show a customer profile.
      */
     public function show(Request $request, Customer $customer): Response
     {
-        // Update the users recent activity
         $customer->touchRecent($request->user());
 
-        // If the customer has multiple sites, show the Customer Home Page
-        if ($customer->CustomerSite->count() > 1 || $customer->CustomerSite->count() == 0) {
-            return Inertia::render('Customer/Show', [
-                'permissions' => fn () => $this->permissions->get($request->user()),
+        if ($customer->site_count === 1) {
+            return Inertia::render('Customer/Site/Show', [
+                'alerts' => fn () => $customer->Alerts,
+                'allowShareVpn' => fn () => config('customer.allow_share_vpn_data'),
+                'allowVpn' => fn () => config('customer.allow_vpn_data'),
+                'availableEquipment' => fn () => CacheData::equipmentCategorySelectBox(),
                 'customer' => fn () => $customer,
-                'siteList' => fn () => $customer->CustomerSite->makeVisible('href'),
-                'alerts' => fn () => $customer->CustomerAlert,
-                'equipmentList' => fn () => $customer->CustomerEquipment,
-                'contacts' => fn () => $customer->CustomerContact,
-                'notes' => fn () => $customer->CustomerNote,
-                'files' => fn () => $customer->CustomerFile->append('href'),
-                'is-fav' => fn () => $customer->isFav($request->user()),
+                'currentSite' => fn () => $customer->Sites[0],
+                'isFav' => fn () => $customer->isFav($request->user()),
+                'permissions' => fn () => UserPermissions::customerPermissions(
+                    $request->user()
+                ),
+                'phoneTypes' => fn () => CacheData::phoneTypes(),
+                'fileTypes' => fn () => CacheData::fileTypes(),
+
+                /**
+                 * Deferred Props
+                 */
+                'contactList' => Inertia::defer(fn () => $customer->Contacts),
+                'groupedEquipmentList' => Inertia::defer(
+                    fn () => $customer->Equipment
+                        ->load('Sites')
+                        ->groupBy('equip_name')
+                        ->chunk(5)
+                ),
+                'equipmentList' => Inertia::defer(fn () => $customer->Equipment->load('Sites')),
+                'noteList' => Inertia::defer(fn () => $customer->Notes),
+                'fileList' => Inertia::defer(fn () => $customer->Files->append('href')),
+                'vpnData' => Inertia::defer(fn () => $customer->CustomerVpn),
             ]);
         }
 
-        // If the customer only has a single site, show that sites details
-        return Inertia::render('Customer/Site/Show', [
-            'permissions' => fn () => $this->permissions->get($request->user()),
+        return Inertia::render('Customer/Show', [
+            'alerts' => fn () => $customer->Alerts,
+            'allowShareVpn' => fn () => config('customer.allow_share_vpn_data'),
+            'allowVpn' => fn () => config('customer.allow_vpn_data'),
+            'availableEquipment' => fn () => CacheData::equipmentCategorySelectBox(),
             'customer' => fn () => $customer,
-            'site' => fn () => $customer->CustomerSite[0],
-            'siteList' => fn () => $customer->CustomerSite,
-            'alerts' => fn () => $customer->CustomerAlert,
-            'equipmentList' => fn () => $customer->CustomerEquipment,
-            'contacts' => fn () => $customer->CustomerContact,
-            'notes' => fn () => $customer->CustomerNote,
-            'files' => fn () => $customer->CustomerFile->append('href'),
-            'is-fav' => fn () => $customer->isFav($request->user()),
+            'isFav' => fn () => $customer->isFav($request->user()),
+            'permissions' => fn () => UserPermissions::customerPermissions(
+                $request->user()
+            ),
+            'phoneTypes' => fn () => CacheData::phoneTypes(),
+            'fileTypes' => fn () => CacheData::fileTypes(),
+            'siteList' => fn () => $customer->Sites->makeVisible(['href']),
+
+            /**
+             * Deferred Props
+             */
+            'contactList' => Inertia::defer(fn () => $customer->Contacts),
+            'groupedEquipmentList' => Inertia::defer(
+                fn () => $customer->Equipment
+                    ->load('Sites')
+                    ->groupBy('equip_name')
+                    ->chunk(5)
+            ),
+            'equipmentList' => Inertia::defer(fn () => $customer->Equipment->load('Sites')),
+            'noteList' => Inertia::defer(fn () => $customer->Notes),
+            'fileList' => Inertia::defer(fn () => $customer->Files->append('href')),
+            'vpnData' => Inertia::defer(fn () => $customer->CustomerVpn),
         ]);
     }
 
     /**
-     * Show the form for editing the specified Customer.
+     * Show the form for editing the specified resource.
      */
     public function edit(Customer $customer): Response
     {
         $this->authorize('update', $customer);
 
         return Inertia::render('Customer/Edit', [
-            'selectId' => fn () => (bool) config('customer.select_id'),
+            'selectId' => fn () => config('customer.select_id'),
             'default-state' => fn () => config('customer.default_state'),
             'customer' => fn () => $customer,
-            'siteList' => fn () => $customer->CustomerSite,
+            'siteList' => fn () => $customer->Sites,
         ]);
     }
 
     /**
-     * Update the specified Customer in storage.
+     * Update the specified resource in storage.
      */
-    public function update(CustomerRequest $request, Customer $customer): RedirectResponse
-    {
-        $updatedCustomer = $this->svc->updateCustomer($request, $customer);
+    public function update(
+        CustomerRequest $request,
+        CustomerService $svc,
+        Customer $customer
+    ): RedirectResponse {
+        $updated = $svc->updateCustomer($request->safe()->collect(), $customer);
 
-        return redirect(route('customers.show', $updatedCustomer->slug))
-            ->with('success', __('cust.updated', [
-                'name' => $updatedCustomer->name,
-            ]));
+        return redirect(route('customers.show', $updated->slug))
+            ->with('success', __('cust.updated', ['name' => $updated->name]));
     }
 
     /**
-     * Remove the specified Customer from storage.
+     * Remove the specified resource from storage.
      */
-    public function destroy(CustomerDisableRequest $request, Customer $customer): RedirectResponse
-    {
-        $this->svc->destroyCustomer($customer, $request->reason);
+    public function destroy(
+        DisableCustomerRequest $request,
+        CustomerService $svc,
+        Customer $customer
+    ): RedirectResponse {
+        $svc->destroyCustomer($customer, $request->get('reason'));
 
-        return redirect(route('customers.index'))->with('danger', __('cust.destroy', [
-            'name' => $customer->name,
-        ]));
+        return redirect(route('customers.index'))
+            ->with('danger', __('cust.destroy', ['name' => $customer->name]));
     }
 
     /**
-     * Restore a soft deleted customer
+     * Restore a soft deleted customer.
      */
-    public function restore(Customer $customer): RedirectResponse
+    public function restore(CustomerService $svc, Customer $customer): RedirectResponse
     {
         $this->authorize('restore', $customer);
 
-        $this->svc->restoreCustomer($customer);
+        $svc->restoreCustomer($customer);
+
+        Log::notice('Customer '.$customer->name.' has been restored');
 
         return back()
             ->with('success', __('cust.restored', ['name' => $customer->name]));
     }
 
     /**
-     * Completely remove a soft deleted customer
+     * Force Delete a soft deleted customer.
      */
-    public function forceDelete(Customer $customer): RedirectResponse
-    {
+    public function forceDelete(
+        CustomerAdministrationService $svc,
+        Customer $customer
+    ): RedirectResponse {
         $this->authorize('forceDelete', $customer);
 
-        dispatch(new DestroyCustomerJob($customer));
+        // Place customer in working-jobs cache so it is not accessible.
+        $svc->addToWorkingJobs($customer);
+
+        ForceDeleteCustomerJob::dispatch($customer);
 
         return back()->with('danger', __('cust.force_deleted', [
             'name' => $customer->name,

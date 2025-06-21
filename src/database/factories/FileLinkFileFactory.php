@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 class FileLinkFileFactory extends Factory
 {
     /**
-     * Define the model's default state
+     * Define the model's default state.
      */
     public function definition(): array
     {

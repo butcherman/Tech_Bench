@@ -10,35 +10,38 @@ use Tests\TestCase;
 
 class FeatureTest extends TestCase
 {
-    /**
-     * Show Method
-     */
-    public function test_show_guest()
+    /*
+    |---------------------------------------------------------------------------
+    | Edit Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_edit_guest(): void
     {
-        $response = $this->get(route('admin.features.show'));
-        $response->assertStatus(302);
-        $response->assertRedirect(route('login'));
+        $response = $this->get(route('admin.features.edit'));
+
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
         $this->assertGuest();
     }
 
-    public function test_show_no_permission()
+    public function test_edit_no_permission(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly();
 
         $response = $this->actingAs($user)
-            ->get(route('admin.features.show'));
+            ->get(route('admin.features.edit'));
 
         $response->assertForbidden();
     }
 
-    public function test_show()
+    public function test_edit(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);
 
         $response = $this->actingAs($user)
-            ->get(route('admin.features.show'));
+            ->get(route('admin.features.edit'));
 
         $response->assertSuccessful()
             ->assertInertia(fn (Assert $page) => $page
@@ -47,10 +50,12 @@ class FeatureTest extends TestCase
             );
     }
 
-    /**
-     * Update Method
-     */
-    public function test_update_guest()
+    /*
+    |---------------------------------------------------------------------------
+    | Update Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_update_guest(): void
     {
         Event::fake();
 
@@ -61,14 +66,15 @@ class FeatureTest extends TestCase
         ];
 
         $response = $this->put(route('admin.features.update'), $data);
-        $response->assertStatus(302);
-        $response->assertRedirect(route('login'));
+
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
         $this->assertGuest();
 
         Event::assertNotDispatched(FeatureChangedEvent::class);
     }
 
-    public function test_update_no_permission()
+    public function test_update_no_permission(): void
     {
         Event::fake();
 
@@ -88,7 +94,7 @@ class FeatureTest extends TestCase
         Event::assertNotDispatched(FeatureChangedEvent::class);
     }
 
-    public function test_update()
+    public function test_update(): void
     {
         Event::fake();
 
@@ -102,6 +108,7 @@ class FeatureTest extends TestCase
 
         $response = $this->actingAs($user)
             ->put(route('admin.features.update'), $data);
+
         $response->assertStatus(302)
             ->assertSessionHas('success', 'Feature Settings Updated');
 

@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Home\BookmarkRequest;
+use App\Http\Requests\User\BookmarkRequest;
 use App\Models\Customer;
 use Illuminate\Http\Response;
 
 class CustomerBookmarkController extends Controller
 {
     /**
-     * Turn on or off a Customer Bookmark for a user
+     * Turn on or off a Customer Bookmark for user
      */
     public function __invoke(BookmarkRequest $request, Customer $customer): Response
     {

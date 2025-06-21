@@ -1,0 +1,137 @@
+@import 'tailwindcss';
+
+@config '../../tailwind.config.js';
+
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+
+/**
+* Classes to quickly set Card Component sizes
+*/
+.tb-card {
+    @apply w-full md:w-3/4 xl:w-1/2 my-3;
+}
+
+.tb-card-md {
+    @apply w-full md:w-1/2 xl:w-1/3 my-3;
+}
+
+.tb-card-sm {
+    @apply w-full md:w-1/3 xl:w-1/4 my-3;
+}
+
+.tb-card-lg {
+    @apply w-full;
+}
+
+/**
+* Standard margins for keeping spacing uniform
+*/
+.tb-gap {
+    @apply my-3 mx-3;
+}
+
+.tb-gap-x {
+    @apply mx-3;
+}
+
+.tb-gap-y {
+    @apply my-3;
+}
+
+@layer base {
+    a {
+        @apply hover:font-semibold;
+    }
+
+    h1 {
+        @apply text-3xl! font-bold!;
+    }
+
+    h2 {
+        @apply text-2xl! font-bold!;
+    }
+
+    h3 {
+        @apply text-xl! font-bold!;
+    }
+
+    h4 {
+        @apply text-lg! font-bold!;
+    }
+
+    h5 {
+        @apply font-bold!;
+    }
+
+    h6 {
+        @apply text-sm! font-bold!;
+    }
+
+    .text-success {
+        @apply text-green-500;
+    }
+
+    .text-warning {
+        @apply text-yellow-500
+    }
+
+    .text-muted {
+        @apply text-slate-500;
+    }
+
+    .text-error {
+        @apply text-red-900;
+    }
+
+    .text-danger {
+        @apply text-red-600;
+    }
+
+}
+
+/**
+* Separation line with text in middle
+*/
+div.separator {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin-top: 2em;
+    margin-bottom: 2em;
+
+    &::before,
+    &::after {
+        content: "";
+        flex: 1;
+        border-bottom: 1px solid #7b7a7a;
+    }
+
+    &:not(:empty)::before {
+        margin-right: 0.25em;
+    }
+
+    &:not(:empty)::after {
+        margin-left: 0.25em;
+    }
+}

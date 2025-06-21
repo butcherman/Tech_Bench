@@ -3,6 +3,7 @@
 namespace Tests\Feature\Customer;
 
 use App\Events\File\FileDataDeletedEvent;
+use App\Facades\CacheData;
 use App\Models\Customer;
 use App\Models\CustomerEquipment;
 use App\Models\CustomerFile;
@@ -17,9 +18,41 @@ use Tests\TestCase;
 class CustomerFileTest extends TestCase
 {
     /*
-     *   Store Method
-     */
-    public function test_store_guest()
+    |---------------------------------------------------------------------------
+    | Index Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_index_guest(): void
+    {
+        $customer = Customer::factory()->create();
+
+        $response = $this->get(route('customers.files.index', $customer->slug));
+
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
+        $this->assertGuest();
+    }
+
+    public function test_index(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->create();
+        $customer = Customer::factory()->create();
+
+        $response = $this->actingAs($user)->get(route('customers.files.index', $customer->slug));
+
+        $response->assertJson([
+            'equipmentList' => [],
+            'fileTypes' => CacheData::fileTypes()->toArray(),
+        ]);
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | Store Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_store_guest(): void
     {
         $customer = Customer::factory()->create();
         $data = [
@@ -42,7 +75,7 @@ class CustomerFileTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_store_no_permission()
+    public function test_store_no_permission(): void
     {
         // Remove the 'Add Customer File' permission from the Tech Role
         $this->changeRolePermission(4, 'Add Customer File', false);
@@ -66,7 +99,7 @@ class CustomerFileTest extends TestCase
         $response->assertForbidden();
     }
 
-    public function test_store()
+    public function test_store(): void
     {
         Storage::fake('customers');
 
@@ -87,12 +120,14 @@ class CustomerFileTest extends TestCase
 
         $response = $this->actingAs($user)
             ->post(route('customers.files.store', $customer->slug), $data);
+
         $response->assertSuccessful();
 
         $this->assertDatabaseHas('customer_files', [
             'cust_id' => $customer->cust_id,
             'name' => $fileName,
         ]);
+
         $this->assertDatabaseHas('file_uploads', [
             'disk' => 'customers',
             'folder' => $customer->cust_id,
@@ -105,7 +140,7 @@ class CustomerFileTest extends TestCase
             );
     }
 
-    public function test_store_equip_file()
+    public function test_store_equip_file(): void
     {
         Storage::fake('customers');
 
@@ -128,6 +163,7 @@ class CustomerFileTest extends TestCase
 
         $response = $this->actingAs($user)
             ->post(route('customers.files.store', $customer->slug), $data);
+
         $response->assertSuccessful();
 
         $this->assertDatabaseHas('customer_files', [
@@ -147,7 +183,7 @@ class CustomerFileTest extends TestCase
             );
     }
 
-    public function test_store_site_file()
+    public function test_store_site_file(): void
     {
         Storage::fake('customers');
 
@@ -169,23 +205,28 @@ class CustomerFileTest extends TestCase
 
         $response = $this->actingAs($user)
             ->post(route('customers.files.store', $customer->slug), $data);
+
         $response->assertSuccessful();
 
         $this->assertDatabaseHas('customer_files', [
             'cust_id' => $customer->cust_id,
             'name' => $fileName,
         ]);
+
         $this->assertDatabaseHas('file_uploads', [
             'disk' => 'customers',
             'folder' => $customer->cust_id,
             'file_name' => 'randomImage.png',
         ]);
+
         $this->assertDatabaseHas('customer_site_files', [
             'cust_site_id' => $sites[0]->cust_site_id,
         ]);
+
         $this->assertDatabaseHas('customer_site_files', [
             'cust_site_id' => $sites[1]->cust_site_id,
         ]);
+
         $this->assertDatabaseHas('customer_site_files', [
             'cust_site_id' => $sites[2]->cust_site_id,
         ]);
@@ -194,10 +235,99 @@ class CustomerFileTest extends TestCase
             ->assertExists($customer->cust_id.DIRECTORY_SEPARATOR.'randomImage.png');
     }
 
+    public function test_store_chunked_file(): void
+    {
+        Storage::fake('customers');
+
+        /** @var User $user */
+        $user = User::factory()->create();
+        $customer = Customer::factory()->create();
+        $chunks = [
+            [
+                'dzuuid' => 'a1ae8f25-be4c-4a75-9e3d-c5f4abe7cba0',
+                'dzchunkindex' => '0',
+                'dztotalfilesize' => '16711880',
+                'dzchunksize' => '5000000',
+                'dztotalchunkcount' => '4',
+                'dzchunkbyteoffset' => '0',
+                'name' => 'test_file.png',
+                'file_type' => 'general',
+                'site_list' => [],
+                'cust_equip_id' => 'null',
+                'file_type_id' => '2',
+                'file' => UploadedFile::fake()->image('test_file.png'),
+            ],
+            [
+                'dzuuid' => 'a1ae8f25-be4c-4a75-9e3d-c5f4abe7cba0',
+                'dzchunkindex' => '1',
+                'dztotalfilesize' => '16711880',
+                'dzchunksize' => '5000000',
+                'dztotalchunkcount' => '4',
+                'dzchunkbyteoffset' => '5000000',
+                'name' => 'test_file.png',
+                'file_type' => 'general',
+                'site_list' => [],
+                'cust_equip_id' => 'null',
+                'file_type_id' => '2',
+                'file' => UploadedFile::fake()->image('test_file.png'),
+            ],
+            [
+                'dzuuid' => 'a1ae8f25-be4c-4a75-9e3d-c5f4abe7cba0',
+                'dzchunkindex' => '2',
+                'dztotalfilesize' => '16711880',
+                'dzchunksize' => '5000000',
+                'dztotalchunkcount' => '4',
+                'dzchunkbyteoffset' => '10000000',
+                'name' => 'test_file.png',
+                'file_type' => 'general',
+                'site_list' => [],
+                'cust_equip_id' => 'null',
+                'file_type_id' => '2',
+                'file' => UploadedFile::fake()->image('test_file.png'),
+            ],
+            [
+                'dzuuid' => 'a1ae8f25-be4c-4a75-9e3d-c5f4abe7cba0',
+                'dzchunkindex' => '3',
+                'dztotalfilesize' => '16711880',
+                'dzchunksize' => '5000000',
+                'dztotalchunkcount' => '4',
+                'dzchunkbyteoffset' => '15000000',
+                'name' => 'test_file.png',
+                'file_type' => 'general',
+                'site_list' => [],
+                'cust_equip_id' => 'null',
+                'file_type_id' => '2',
+                'file' => UploadedFile::fake()->image('test_file.png'),
+            ],
+        ];
+
+        $response = $this->actingAs($user)
+            ->post(route('customers.files.store', $customer->slug), $chunks[0]);
+
+        $response->assertSuccessful();
+
+        $response = $this->actingAs($user)
+            ->post(route('customers.files.store', $customer->slug), $chunks[1]);
+
+        $response->assertSuccessful();
+
+        $response = $this->actingAs($user)
+            ->post(route('customers.files.store', $customer->slug), $chunks[2]);
+
+        $response->assertSuccessful();
+
+        $response = $this->actingAs($user)
+            ->post(route('customers.files.store', $customer->slug), $chunks[3]);
+
+        $response->assertSuccessful();
+    }
+
     /*
-     *   Update Method
-     */
-    public function test_update_guest()
+    |---------------------------------------------------------------------------
+    | Update Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_update_guest(): void
     {
         $customer = Customer::factory()->create();
         $file = CustomerFile::factory()
@@ -213,7 +343,7 @@ class CustomerFileTest extends TestCase
         ];
 
         $response = $this->put(route('customers.files.update', [
-            $customer->cust_id,
+            $customer->slug,
             $file->cust_file_id,
         ]), $data);
 
@@ -222,7 +352,7 @@ class CustomerFileTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_update_no_permission()
+    public function test_update_no_permission(): void
     {
         // Remove the 'Edit Customer File' permission from the Tech Role
         $this->changeRolePermission(4, 'Edit Customer File', false);
@@ -244,14 +374,14 @@ class CustomerFileTest extends TestCase
 
         $response = $this->actingAs($user)
             ->put(route('customers.files.update', [
-                $customer->cust_id,
+                $customer->slug,
                 $file->cust_file_id,
             ]), $data);
 
         $response->assertForbidden();
     }
 
-    public function test_update()
+    public function test_update(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly();
@@ -270,11 +400,12 @@ class CustomerFileTest extends TestCase
 
         $response = $this->actingAs($user)
             ->put(route('customers.files.update', [
-                $customer->cust_id,
+                $customer->slug,
                 $file->cust_file_id,
             ]), $data);
-        $response->assertStatus(302);
-        $response->assertSessionHas('success', __('cust.file.updated'));
+
+        $response->assertStatus(302)
+            ->assertSessionHas('success', __('cust.file.updated'));
 
         $this->assertDatabaseHas('customer_files', [
             'cust_id' => $customer->cust_id,
@@ -283,7 +414,34 @@ class CustomerFileTest extends TestCase
         ]);
     }
 
-    public function test_update_site_file()
+    public function test_update_scope_bindings(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+        $customer = Customer::factory()->create();
+        $invalid = Customer::factory()->create();
+        $file = CustomerFile::factory()
+            ->create(['cust_id' => $customer->cust_id]);
+        $data = [
+            'name' => 'This is a test file',
+            'file_type' => 'general',
+            'file_type_id' => CustomerFileType::inRandomOrder()
+                ->first()
+                ->file_type_id,
+            'cust_equip_id' => null,
+            'site_list' => [],
+        ];
+
+        $response = $this->actingAs($user)
+            ->put(route('customers.files.update', [
+                $invalid->slug,
+                $file->cust_file_id,
+            ]), $data);
+
+        $response->assertStatus(404);
+    }
+
+    public function test_update_site_file(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly();
@@ -293,7 +451,7 @@ class CustomerFileTest extends TestCase
             ->create(['cust_id' => $customer->cust_id])
             ->pluck('cust_site_id');
         $file = CustomerFile::factory()->create(['cust_id' => $customer->cust_id]);
-        $file->CustomerSite()->sync([$sites[0], $sites[1]]);
+        $file->Sites()->sync([$sites[0], $sites[1]]);
         $data = [
             'name' => 'This is a test file',
             'file_type' => 'site',
@@ -306,7 +464,7 @@ class CustomerFileTest extends TestCase
 
         $response = $this->actingAs($user)
             ->put(route('customers.files.update', [
-                $customer->cust_id,
+                $customer->slug,
                 $file->cust_file_id,
             ]), $data);
 
@@ -317,14 +475,17 @@ class CustomerFileTest extends TestCase
             'cust_id' => $customer->cust_id,
             'name' => $data['name'],
         ]);
+
         $this->assertDatabaseMissing('customer_site_files', [
             'cust_file_id' => $file->cust_file_id,
             'cust_site_id' => $sites[0],
         ]);
+
         $this->assertDatabaseHas('customer_site_files', [
             'cust_file_id' => $file->cust_file_id,
             'cust_site_id' => $sites[1],
         ]);
+
         $this->assertDatabaseHas('customer_site_files', [
             'cust_file_id' => $file->cust_file_id,
             'cust_site_id' => $sites[2],
@@ -332,22 +493,25 @@ class CustomerFileTest extends TestCase
     }
 
     /*
-     *   Destroy Method
-     */
-    public function test_destroy_guest()
+    |---------------------------------------------------------------------------
+    | Destroy Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_destroy_guest(): void
     {
         $data = CustomerFile::factory()->create();
 
         $response = $this->delete(route('customers.files.destroy', [
-            $data->cust_id,
+            $data->Customer->slug,
             $data->cust_file_id,
         ]));
 
         $response->assertStatus(302)
             ->assertRedirect(route('login'));
+        $this->assertGuest();
     }
 
-    public function test_destroy_no_permission()
+    public function test_destroy_no_permission(): void
     {
         // Remove the 'Add Customer File' permission from the Tech Role
         $this->changeRolePermission(4, 'Delete Customer File', false);
@@ -358,14 +522,14 @@ class CustomerFileTest extends TestCase
 
         $response = $this->actingAs($user)
             ->delete(route('customers.files.destroy', [
-                $data->cust_id,
+                $data->Customer->slug,
                 $data->cust_file_id,
             ]));
 
         $response->assertForbidden();
     }
 
-    public function test_destroy()
+    public function test_destroy(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly();
@@ -373,7 +537,7 @@ class CustomerFileTest extends TestCase
 
         $response = $this->actingAs($user)
             ->delete(route('customers.files.destroy', [
-                $data->cust_id,
+                $data->Customer->slug,
                 $data->cust_file_id,
             ]));
 
@@ -387,16 +551,34 @@ class CustomerFileTest extends TestCase
         ]));
     }
 
-    /**
-     * Restore Method
-     */
-    public function test_restore_guest()
+    public function test_destroy_scope_bindings(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+        $invalid = Customer::factory()->create();
+        $data = CustomerFile::factory()->create();
+
+        $response = $this->actingAs($user)
+            ->delete(route('customers.files.destroy', [
+                $invalid->slug,
+                $data->cust_file_id,
+            ]));
+
+        $response->assertStatus(404);
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | Restore Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_restore_guest(): void
     {
         $file = CustomerFile::factory()->create();
 
         $response = $this->get(route('customers.deleted-items.restore.files', [
-            $file->cust_id,
-            $file->file_id,
+            $file->Customer->slug,
+            $file->cust_file_id,
         ]));
 
         $response->assertStatus(302)
@@ -404,7 +586,7 @@ class CustomerFileTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_restore_no_permission()
+    public function test_restore_no_permission(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly();
@@ -412,14 +594,14 @@ class CustomerFileTest extends TestCase
 
         $response = $this->actingAs($user)
             ->get(route('customers.deleted-items.restore.files', [
-                $file->cust_id,
-                $file->file_id,
+                $file->Customer->slug,
+                $file->cust_file_id,
             ]));
 
         $response->assertForbidden();
     }
 
-    public function test_restore()
+    public function test_restore(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);
@@ -427,8 +609,8 @@ class CustomerFileTest extends TestCase
 
         $response = $this->actingAs($user)
             ->get(route('customers.deleted-items.restore.files', [
-                $file->cust_id,
-                $file->file_id,
+                $file->Customer->slug,
+                $file->cust_file_id,
             ]));
 
         $response->assertStatus(302)
@@ -439,17 +621,33 @@ class CustomerFileTest extends TestCase
         ]));
     }
 
+    public function test_restore_scope_bindings(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
+        $invalid = Customer::factory()->create();
+        $file = CustomerFile::factory()->create();
+
+        $response = $this->actingAs($user)
+            ->get(route('customers.deleted-items.restore.files', [
+                $invalid->slug,
+                $file->cust_file_id,
+            ]));
+
+        $response->assertStatus(404);
+    }
+
     /**
      * Force Delete Method
      */
-    public function test_force_delete_guest()
+    public function test_force_delete_guest(): void
     {
         $file = CustomerFile::factory()->create();
         $file->delete();
 
         $response = $this->delete(route('customers.deleted-items.force-delete.files', [
-            $file->cust_id,
-            $file->file_id,
+            $file->Customer->slug,
+            $file->cust_file_id,
         ]));
 
         $response->assertStatus(302)
@@ -457,7 +655,7 @@ class CustomerFileTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_force_delete_no_permission()
+    public function test_force_delete_no_permission(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly();
@@ -466,16 +664,16 @@ class CustomerFileTest extends TestCase
 
         $response = $this->actingAs($user)
             ->delete(route('customers.deleted-items.force-delete.files', [
-                $file->cust_id,
-                $file->file_id,
+                $file->Customer->slug,
+                $file->cust_file_id,
             ]));
 
         $response->assertForbidden();
     }
 
-    public function test_force_delete()
+    public function test_force_delete(): void
     {
-        Event::fake();
+        Event::fake(FileDataDeletedEvent::class);
 
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);
@@ -484,8 +682,8 @@ class CustomerFileTest extends TestCase
 
         $response = $this->actingAs($user)
             ->delete(route('customers.deleted-items.force-delete.files', [
-                $file->cust_id,
-                $file->file_id,
+                $file->Customer->slug,
+                $file->cust_file_id,
             ]));
 
         $response->assertStatus(302)
@@ -494,5 +692,26 @@ class CustomerFileTest extends TestCase
         $this->assertDatabaseMissing('customer_files', $file->only(['file_id']));
 
         Event::assertDispatched(FileDataDeletedEvent::class);
+    }
+
+    public function test_force_delete_scope_bindings(): void
+    {
+        Event::fake(FileDataDeletedEvent::class);
+
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
+        $invalid = Customer::factory()->create();
+        $file = CustomerFile::factory()->create();
+        $file->delete();
+
+        $response = $this->actingAs($user)
+            ->delete(route('customers.deleted-items.force-delete.files', [
+                $invalid->slug,
+                $file->cust_file_id,
+            ]));
+
+        $response->assertStatus(404);
+
+        Event::assertNotDispatched(FileDataDeletedEvent::class);
     }
 }

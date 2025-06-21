@@ -6,10 +6,13 @@ use App\Models\Customer;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
+/**
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\CustomerSite>
+ */
 class CustomerSiteFactory extends Factory
 {
     /**
-     * Define the model's default state
+     * Define the model's default state.
      */
     public function definition(): array
     {

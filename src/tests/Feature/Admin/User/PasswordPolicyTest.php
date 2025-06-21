@@ -3,45 +3,57 @@
 namespace Tests\Feature\Admin\User;
 
 use App\Models\User;
+use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class PasswordPolicyTest extends TestCase
 {
-    /**
-     * Show Method
-     */
-    public function test_show_guest()
+    /*
+    |---------------------------------------------------------------------------
+    | Show Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_edit_guest(): void
     {
-        $response = $this->get(route('admin.user.password-policy.show'));
-        $response->assertStatus(302);
-        $response->assertRedirect(route('login'));
+        $response = $this->get(route('admin.user.password-policy.edit'));
+
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
         $this->assertGuest();
     }
 
-    public function test_show_no_permission()
+    public function test_edit_no_permission(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly();
 
         $response = $this->actingAs($user)
-            ->get(route('admin.user.password-policy.show'));
-        $response->assertStatus(403);
+            ->get(route('admin.user.password-policy.edit'));
+
+        $response->assertForbidden();
     }
 
-    public function test_show()
+    public function test_edit(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);
 
         $response = $this->actingAs($user)
-            ->get(route('admin.user.password-policy.show'));
-        $response->assertSuccessful();
+            ->get(route('admin.user.password-policy.edit'));
+
+        $response->assertSuccessful()
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('Admin/User/PasswordPolicy')
+                ->has('policy')
+            );
     }
 
-    /**
-     * Update Method
-     */
-    public function test_update_guest()
+    /*
+    |---------------------------------------------------------------------------
+    | Update Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_update_guest(): void
     {
         $data = [
             'expire' => '60',
@@ -53,13 +65,17 @@ class PasswordPolicyTest extends TestCase
             'disable_compromised' => 'false',
         ];
 
-        $response = $this->put(route('admin.user.password-policy.update'), $data);
-        $response->assertStatus(302);
-        $response->assertRedirect(route('login'));
+        $response = $this->put(
+            route('admin.user.password-policy.update'),
+            $data
+        );
+
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
         $this->assertGuest();
     }
 
-    public function test_update_no_permission()
+    public function test_update_no_permission(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly();
@@ -75,10 +91,11 @@ class PasswordPolicyTest extends TestCase
 
         $response = $this->actingAs($user)
             ->put(route('admin.user.password-policy.update'), $data);
-        $response->assertStatus(403);
+
+        $response->assertForbidden();
     }
 
-    public function test_update()
+    public function test_update(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);
@@ -89,13 +106,15 @@ class PasswordPolicyTest extends TestCase
             'contains_lowercase' => false,
             'contains_number' => false,
             'contains_special' => false,
-            'disable_compromised' => 'false',
+            'disable_compromised' => true,
         ];
 
         $response = $this->actingAs($user)
             ->put(route('admin.user.password-policy.update'), $data);
-        $response->assertStatus(302);
-        $response->assertSessionHas('success', __('admin.user.password_policy'));
+
+        $response->assertStatus(302)
+            ->assertSessionHas('success', __('admin.user.password_policy'));
+
         $this->assertDatabaseHas('app_settings', [
             'key' => 'auth.passwords.settings.expire',
             'value' => $data['expire'],

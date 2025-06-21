@@ -1,76 +1,14 @@
-<template>
-    <div class="table-responsive">
-        <table class="table">
-            <tbody>
-                <tr v-for="(value, index) in computedRows" :key="index">
-                    <slot name="default" :row-data="{ value, index }">
-                        <th :class="[alignText, { 'w-50': limitWidth }]">
-                            <slot name="index" :row-data="{ value, index }">
-                                {{
-                                    titleCase
-                                        ? toTitleCase(index.toString())
-                                        : index
-                                }}:
-                            </slot>
-                        </th>
-                        <td>
-                            <slot name="value" :row-data="{ value, index }">
-                                <span v-if="typeof value === 'boolean'">
-                                    <fa-icon
-                                        v-if="value"
-                                        icon="check"
-                                        class="text-success"
-                                    />
-                                    <fa-icon
-                                        v-else
-                                        icon="xmark"
-                                        class="text-danger"
-                                    />
-                                </span>
-                                <span v-else>
-                                    {{ value }}
-                                </span>
-                            </slot>
-                        </td>
-                    </slot>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</template>
-
-<script setup lang="ts">
-import { computed } from "vue";
-
-interface rowHeaders {
-    label: string;
-    field: string;
-}
-
-const props = defineProps<{
-    rows: any;
-    headers?: rowHeaders[];
-    alignLeft?: boolean;
-    titleCase?: boolean;
-    limitWidth?: boolean;
+<script setup lang="ts" generic="T">
+defineProps<{
+    bordered?: boolean;
+    items: T;
+    only?: string[];
+    skip?: string[];
 }>();
 
-const alignText = computed(() => (props.alignLeft ? "text-start" : "text-end"));
-
-const computedRows = computed<{ [key: string]: string | any }>(() => {
-    if (props.headers) {
-        let rowData: { [key: string]: string } = {};
-
-        props.headers.forEach(
-            (header) => (rowData[header.label] = props.rows[header.field])
-        );
-
-        return rowData;
-    }
-
-    return props.rows;
-});
-
+/**
+ * Translate the table header from snake_case to Title Case
+ */
 const toTitleCase = (str: string): string => {
     return str
         .split("_")
@@ -80,3 +18,44 @@ const toTitleCase = (str: string): string => {
         .join(" ");
 };
 </script>
+
+<template>
+    <table class="table-fixed border-collapse" :class="{ border: bordered }">
+        <tbody>
+            <template v-for="(value, index) in items" :key="index">
+                <tr
+                    v-if="
+                        only?.includes(index.toString()) ||
+                        !skip?.includes(index.toString())
+                    "
+                    class="border-b"
+                >
+                    <slot name="row" :row-data="{ value, index }">
+                        <th class="text-end p-2 max-w-1/2 w-1/3">
+                            <slot name="index" :row-data="{ value, index }">
+                                {{ toTitleCase(index.toString()) }}:
+                            </slot>
+                        </th>
+                        <td class="p-2">
+                            <slot name="value" :row-data="{ value, index }">
+                                <span v-if="typeof value === 'boolean'">
+                                    <fa-icon
+                                        :icon="value ? 'check' : 'xmark'"
+                                        :class="
+                                            value
+                                                ? 'text-success'
+                                                : 'text-danger'
+                                        "
+                                    />
+                                </span>
+                                <span v-else>
+                                    {{ value }}
+                                </span>
+                            </slot>
+                        </td>
+                    </slot>
+                </tr>
+            </template>
+        </tbody>
+    </table>
+</template>

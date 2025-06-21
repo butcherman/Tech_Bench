@@ -3,8 +3,9 @@
 namespace Tests\Unit\Actions\Socialite;
 
 use App\Actions\Socialite\AuthorizeUser;
-use App\Exceptions\Auth\UnableToCreateAzureUserException;
-use App\Jobs\User\CreateUserSettingsEntriesJob;
+use App\Exceptions\Auth\UnableToCreateSocialiteUserException;
+use App\Exceptions\Misc\FeatureDisabledException;
+use App\Jobs\User\CreateUserSettingsJob;
 use App\Models\User;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Support\Facades\Bus;
@@ -16,8 +17,23 @@ use Tests\TestCase;
 
 class AuthorizeUserUnitTest extends TestCase
 {
-    public function test_with_existing_user()
+    /*
+    |---------------------------------------------------------------------------
+    | handle()
+    |---------------------------------------------------------------------------
+    */
+    public function test_with_feature_disabled(): void
     {
+        $this->expectException(FeatureDisabledException::class);
+
+        $testObject = new AuthorizeUser;
+        $testObject->handle();
+    }
+
+    public function test_with_existing_user(): void
+    {
+        config(['services.azure.allow_login' => true]);
+
         Event::fake();
 
         $user = User::factory()->create();
@@ -42,7 +58,8 @@ class AuthorizeUserUnitTest extends TestCase
                 $mock->token = Str::uuid();
                 $mock->principalName = $user->email;
                 $mock->mail = $user->email;
-            });
+            }
+        );
 
         $provider = $this->mock(
             'Laravel\Socialite\Contracts\Provider',
@@ -50,7 +67,8 @@ class AuthorizeUserUnitTest extends TestCase
                 $mock
                     ->shouldReceive('user')
                     ->andReturn($abstractUser);
-            });
+            }
+        );
 
         Socialite::shouldReceive('driver')
             ->with('azure')
@@ -59,17 +77,21 @@ class AuthorizeUserUnitTest extends TestCase
         $testObject = new AuthorizeUser;
         $response = $testObject->handle();
 
-        $this->assertEquals($user->toArray(), $response->toArray());
+        $this->assertEquals(
+            $user->toArray(),
+            $response->makeHidden('two_factor_confirmed_at')->toArray()
+        );
 
         Event::assertDispatched(Login::class);
     }
 
-    public function test_with_new_user_registration_enabled()
+    public function test_with_new_user_registration_enabled(): void
     {
+        config(['services.azure.allow_login' => true]);
+        config(['services.azure.allow_register' => true]);
+
         Bus::fake();
         Event::fake(Login::class);
-
-        config(['services.azure.allow_register' => true]);
 
         $user = User::factory()->make();
         $user->username = $user->email;
@@ -94,7 +116,8 @@ class AuthorizeUserUnitTest extends TestCase
                 $mock->token = Str::uuid();
                 $mock->principalName = $user->email;
                 $mock->mail = $user->email;
-            });
+            }
+        );
 
         $provider = $this->mock(
             'Laravel\Socialite\Contracts\Provider',
@@ -102,7 +125,8 @@ class AuthorizeUserUnitTest extends TestCase
                 $mock
                     ->shouldReceive('user')
                     ->andReturn($abstractUser);
-            });
+            }
+        );
 
         Socialite::shouldReceive('driver')
             ->with('azure')
@@ -118,13 +142,15 @@ class AuthorizeUserUnitTest extends TestCase
             'email',
         ]));
 
-        Bus::assertDispatched(CreateUserSettingsEntriesJob::class);
+        Bus::assertDispatched(CreateUserSettingsJob::class);
         Event::assertDispatched(Login::class);
     }
 
-    public function test_with_new_user_registration_disabled()
+    public function test_with_new_user_registration_disabled(): void
     {
+        config(['services.azure.allow_login' => true]);
         config(['services.azure.allow_register' => false]);
+
         $user = User::factory()->make();
         $user->username = $user->email;
 
@@ -148,7 +174,8 @@ class AuthorizeUserUnitTest extends TestCase
                 $mock->token = Str::uuid();
                 $mock->principalName = $user->email;
                 $mock->mail = $user->email;
-            });
+            }
+        );
 
         $provider = $this->mock(
             'Laravel\Socialite\Contracts\Provider',
@@ -156,7 +183,8 @@ class AuthorizeUserUnitTest extends TestCase
                 $mock
                     ->shouldReceive('user')
                     ->andReturn($abstractUser);
-            });
+            }
+        );
 
         Socialite::shouldReceive('driver')
             ->with('azure')
@@ -164,7 +192,7 @@ class AuthorizeUserUnitTest extends TestCase
 
         $testObject = new AuthorizeUser;
 
-        $this->expectException(UnableToCreateAzureUserException::class);
+        $this->expectException(UnableToCreateSocialiteUserException::class);
         $response = $testObject->handle();
 
         $this->assertFalse($response);

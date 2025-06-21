@@ -8,10 +8,12 @@ use Tests\TestCase;
 
 class StepFourTest extends TestCase
 {
-    /**
-     * Invoke Method
-     */
-    public function test_invoke_guest()
+    /*
+    |---------------------------------------------------------------------------
+    | Invoke Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_invoke_guest(): void
     {
         config(['app.first_time_setup' => true]);
         config(['app.env' => 'local']);
@@ -23,35 +25,36 @@ class StepFourTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_invoke()
+    public function test_invoke(): void
     {
         config(['app.first_time_setup' => true]);
         config(['app.env' => 'local']);
 
         /** @var User $user */
-        $user = User::factory()->createQuietly(['role_id' => 1]);
+        $user = User::find(1);
 
         $response = $this->actingAs($user)
             ->get(route('init.step-4'));
 
         $response->assertSuccessful()
-            ->assertInertia(fn (Assert $page) => $page
-                ->component('Init/StepFour')
-                ->has('step')
-                ->has('rules')
-                ->has('roles')
-                ->has('user')
-                ->has('has-pass')
+            ->assertInertia(
+                fn (Assert $page) => $page
+                    ->component('Init/StepFour')
+                    ->has('step')
+                    ->has('rules')
+                    ->has('roles')
+                    ->has('user')
+                    ->has('has-pass')
             );
     }
 
-    public function test_invoke_with_session_data()
+    public function test_invoke_with_session_data(): void
     {
         config(['app.first_time_setup' => true]);
         config(['app.env' => 'local']);
 
         /** @var User $user */
-        $user = User::factory()->createQuietly(['role_id' => 1]);
+        $user = User::find(1);
 
         $response = $this->actingAs($user)
             ->withSession([
@@ -62,8 +65,9 @@ class StepFourTest extends TestCase
             ->get(route('init.step-4'));
 
         $response->assertSuccessful()
-            ->assertInertia(fn (Assert $page) => $page
-                ->component('Init/StepFour')
+            ->assertInertia(
+                fn (Assert $page) => $page
+                    ->component('Init/StepFour')
             );
     }
 }

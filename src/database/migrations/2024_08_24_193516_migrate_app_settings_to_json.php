@@ -16,7 +16,7 @@ return new class extends Migration
 
         Schema::table('app_settings', function (Blueprint $table) {
             $table->renameColumn('value', 'value_old');
-            $table->json('value')->after('key');
+            $table->json('value')->after('key')->nullable();
         });
 
         foreach ($allSettings as $setting) {

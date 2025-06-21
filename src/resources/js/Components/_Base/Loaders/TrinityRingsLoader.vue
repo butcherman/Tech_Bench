@@ -6,7 +6,7 @@
     </div>
 </template>
 
-<style>
+<style scoped>
 .trinity-rings-spinner,
 .trinity-rings-spinner * {
     box-sizing: border-box;

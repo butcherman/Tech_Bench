@@ -1,108 +1,49 @@
-<template>
-    <div>
-        <Head :title="note.subject" />
-        <div class="border-bottom border-secondary-subtle my-2">
-            <CustomerDetails />
-        </div>
-        <div v-if="siteList.length" class="row justify-content-center my-2">
-            <div class="col">
-                <CustomerSiteList
-                    title-text="This note is for the following sites"
-                />
-            </div>
-        </div>
-        <div class="row justify-content-center my-2">
-            <div class="col">
-                <div class="card">
-                    <div class="card-body">
-                        <CustomerNoteDetails :note="note" is-expanded />
-                        <div>
-                            <div class="float-end">
-                                <Link :href="getEditRoute()">
-                                    <EditButton small pill />
-                                </Link>
-                                <DeleteButton small pill @click="deleteNote" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</template>
-
 <script setup lang="ts">
-import AppLayout from "@/Layouts/AppLayout.vue";
-import CustomerDetails from "@/Components/Customer/CustomerDetails.vue";
-import CustomerNoteDetails from "@/Components/Customer/CustomerNoteDetails.vue";
-import CustomerSiteList from "@/Components/Customer/CustomerSiteList.vue";
-import EditButton from "@/Components/_Base/Buttons/EditButton.vue";
-import DeleteButton from "@/Components/_Base/Buttons/DeleteButton.vue";
-import { ref, reactive, computed } from "vue";
-import { customer, siteList, currentSite } from "@/State/CustomerState";
-import verifyModal from "@/Modules/verifyModal";
-import { router } from "@inertiajs/vue3";
+import AppLayout from "@/Layouts/App/AppLayout.vue";
+import CustomerDetails from "@/Components/Customer/Show/CustomerDetails.vue";
+import NoteDetails from "@/Components/Customer/Show/Notes/NoteDetails.vue";
+import SiteList from "@/Components/Customer/Show/SiteList.vue";
+import { customer } from "@/Composables/Customer/CustomerData.module";
+import { onMounted, onUnmounted } from "vue";
+import {
+    leaveCustomerChannel,
+    registerCustomerChannel,
+} from "@/Composables/Customer/CustomerBroadcasting.module";
 
-const props = defineProps<{
+defineProps<{
     note: customerNote;
-    equipment?: customerEquipment;
 }>();
 
-const getEditRoute = () => {
-    if (props.equipment) {
-        return route("customers.equipment.notes.edit", [
-            customer.value.slug,
-            props.equipment.cust_equip_id,
-            props.note.note_id,
-        ]);
-    }
-
-    if (currentSite.value) {
-        return route("customers.site.notes.edit", [
-            customer.value.slug,
-            currentSite.value.site_slug,
-            props.note.note_id,
-        ]);
-    }
-
-    return route("customers.notes.edit", [
-        customer.value.slug,
-        props.note.note_id,
-    ]);
-};
-
-const deleteRoute = computed(() => {
-    if (props.equipment) {
-        return route("customers.equipment.notes.destroy", [
-            customer.value.slug,
-            props.equipment.cust_equip_id,
-            props.note.note_id,
-        ]);
-    }
-
-    if (currentSite.value) {
-        return route("customers.site.notes.destroy", [
-            customer.value.slug,
-            currentSite.value.site_slug,
-            props.note.note_id,
-        ]);
-    }
-
-    return route("customers.notes.destroy", [
-        customer.value.slug,
-        props.note.note_id,
-    ]);
-});
-
-const deleteNote = () => {
-    verifyModal("Do you want to delete this note?").then((res) => {
-        if (res) {
-            router.delete(deleteRoute.value);
-        }
-    });
-};
+/*
+|-------------------------------------------------------------------------------
+| Broadcasting Data
+|-------------------------------------------------------------------------------
+*/
+const channelName = customer.value.slug;
+onMounted(() => registerCustomerChannel(channelName));
+onUnmounted(() => leaveCustomerChannel(channelName));
 </script>
 
 <script lang="ts">
 export default { layout: AppLayout };
 </script>
+
+<template>
+    <div>
+        <div class="flex flex-col pb-2 mb-2 border-b border-slate-400">
+            <CustomerDetails />
+            <div class="text-muted leading-none text-sm pb-1">
+                <span class="font-semibold">Note ID: </span>
+                {{ note.note_id }}
+            </div>
+            <div class="text-muted leading-none text-sm">
+                <span class="font-semibold">Note Type:</span>
+                {{ note.note_type }} Note
+            </div>
+        </div>
+        <div v-if="note.note_type === 'Site'">
+            <SiteList title="Note is attached to these sites" />
+        </div>
+        <NoteDetails :note="note" class="my-2" />
+    </div>
+</template>

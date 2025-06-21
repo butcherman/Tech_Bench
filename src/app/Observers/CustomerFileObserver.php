@@ -2,64 +2,69 @@
 
 namespace App\Observers;
 
+use App\Events\File\FileDataDeletedEvent;
 use App\Models\CustomerFile;
 use Illuminate\Support\Facades\Log;
 
-class CustomerFileObserver
+class CustomerFileObserver extends Observer
 {
-    /** @var User|string */
-    protected $user;
-
-    public function __construct()
-    {
-        $this->user = match (true) {
-            ! is_null(request()->user()) => request()->user()->username,
-            request()->ip() === '127.0.0.1' => 'Internal Service',
-            // @codeCoverageIgnoreStart
-            default => request()->ip(),
-            // @codeCoverageIgnoreEnd
-        };
-    }
-
+    /**
+     * Handle the CustomerFile "created" event.
+     */
     public function created(CustomerFile $customerFile): void
     {
         Log::info(
-            'New Customer File created for '.
-            $customerFile->Customer->name.' by '.$this->user,
+            'New Customer File uploaded for '.$customerFile->Customer->name.
+                ' by '.$this->user,
             $customerFile->toArray()
         );
     }
 
+    /**
+     * Handle the CustomerFile "updated" event.
+     */
     public function updated(CustomerFile $customerFile): void
     {
         Log::info(
-            'Customer File Information updated by '.$this->user,
+            'Customer File details updated for '.$customerFile->Customer->name.
+                ' by '.$this->user,
             $customerFile->toArray()
         );
     }
 
+    /**
+     * Handle the CustomerFile "deleted" event.
+     */
     public function deleted(CustomerFile $customerFile): void
     {
-        Log::notice(
-            'Customer File deleted for by '.
-                $this->user,
+        Log::info(
+            'Customer File deleted for '.$customerFile->Customer->name.
+                ' by '.$this->user,
             $customerFile->toArray()
         );
     }
 
+    /**
+     * Handle the CustomerFile "restored" event.
+     */
     public function restored(CustomerFile $customerFile): void
     {
         Log::info(
-            'Customer File restored for '.$customerFile->Customer->name.' by '.
-                $this->user,
+            'Customer File deleted for '.$customerFile->Customer->name.
+                ' by '.$this->user,
             $customerFile->toArray()
         );
     }
 
+    /**
+     * Handle the CustomerFile "force deleted" event.
+     */
     public function forceDeleted(CustomerFile $customerFile): void
     {
-        Log::notice(
-            'Customer File force deleted for by '.$this->user,
+        FileDataDeletedEvent::dispatch($customerFile->file_id);
+
+        Log::info(
+            'Customer File trashed by '.$this->user,
             $customerFile->toArray()
         );
     }

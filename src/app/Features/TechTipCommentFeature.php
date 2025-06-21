@@ -2,11 +2,15 @@
 
 namespace App\Features;
 
+/*
+|-------------------------------------------------------------------------------
+| Tech Tip Comment Feature allows users to comment on Tech Tips to add
+| additional information that may not be in the tip.
+|-------------------------------------------------------------------------------
+*/
+
 class TechTipCommentFeature
 {
-    /**
-     * Check if Tech Tip Comment Feature is enabled.
-     */
     public function resolve(): bool
     {
         return config('tech-tips.allow_comments');

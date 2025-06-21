@@ -7,6 +7,8 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class CustomerSiteRequest extends FormRequest
 {
+    protected $errorBag = 'form_error';
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -20,7 +22,7 @@ class CustomerSiteRequest extends FormRequest
     }
 
     /**
-     * Get the validation rules that apply to the request
+     * Get the validation rules that apply to the request.
      */
     public function rules(): array
     {

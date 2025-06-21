@@ -2,13 +2,17 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Auth;
 
 class UserRolePermissionType extends Model
 {
+    /** @var string */
     protected $primaryKey = 'perm_type_id';
 
+    /** @var array<int, string> */
     protected $hidden = [
         'role_cat_id',
         'is_admin_link',
@@ -17,34 +21,39 @@ class UserRolePermissionType extends Model
         'UserRolePermissionCategory',
     ];
 
-    protected $guarded = []; // ['perm_type_id', 'created_at', 'updated_at']; TODO - Why do I have to remove this?
+    /** @var array<int, string> */
+    protected $guarded = ['perm_type_id', 'created_at', 'updated_at'];
 
+    /** @var array<int, string> */
     protected $appends = ['group', 'feature_enabled'];
 
-    /***************************************************************************
-     * Model Attributes
-     ***************************************************************************/
-    public function getGroupAttribute()
+    /*
+    |---------------------------------------------------------------------------
+    | Model Attributes
+    |---------------------------------------------------------------------------
+    */
+    public function group(): Attribute
     {
-        return $this->UserRolePermissionCategory ?
-            $this->UserRolePermissionCategory->category : null;
+        return Attribute::make(
+            get: fn () => $this->UserRolePermissionCategory->category ?? null,
+        );
     }
 
-    public function getFeatureEnabledAttribute()
+    public function featureEnabled(): Attribute
     {
-        if ($this->feature_name) {
-            return Auth::user()
-                ->features()
-                ->active($this->feature_name);
-        }
-
-        return true;
+        return Attribute::make(
+            get: fn () => $this->feature_name && Auth::check()
+                ? Auth::user()->features()->active($this->feature_name)
+                : true,
+        );
     }
 
-    /***************************************************************************
-     * Model Relationships
-     ***************************************************************************/
-    public function UserRolePermissionCategory()
+    /*
+    |---------------------------------------------------------------------------
+    | Model Relationships
+    |---------------------------------------------------------------------------
+    */
+    public function UserRolePermissionCategory(): BelongsTo
     {
         return $this->belongsTo(
             UserRolePermissionCategory::class,

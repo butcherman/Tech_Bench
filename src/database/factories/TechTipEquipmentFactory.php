@@ -2,26 +2,23 @@
 
 namespace Database\Factories;
 
-use App\Models\Equipment;
+use App\Models\EquipmentType;
 use App\Models\TechTip;
-use App\Models\TechTipEquipment;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+/**
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\TechTipEquipment>
+ */
 class TechTipEquipmentFactory extends Factory
 {
     /**
-     * The name of the factory's corresponding model
-     */
-    protected $model = TechTipEquipment::class;
-
-    /**
-     * Define the model's default state
+     * Define the model's default state.
      */
     public function definition(): array
     {
         return [
             'tip_id' => TechTip::factory(),
-            'equip_id' => Equipment::factory(),
+            'equip_id' => EquipmentType::factory(),
         ];
     }
 }

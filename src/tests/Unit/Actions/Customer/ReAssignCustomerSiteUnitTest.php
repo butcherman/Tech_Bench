@@ -13,49 +13,51 @@ use Tests\TestCase;
 
 class ReAssignCustomerSiteUnitTest extends TestCase
 {
-    public function test_job_solo_customer()
+    /*
+    |---------------------------------------------------------------------------
+    | __invoke()
+    |---------------------------------------------------------------------------
+    */
+    public function test_invoke_solo_customer(): void
     {
         $fromCust = Customer::factory()
-            ->has(CustomerEquipment::factory())
-            ->has(CustomerNote::factory())
-            ->has(CustomerContact::factory())
-            ->has(CustomerFile::factory())
+            ->has(CustomerEquipment::factory(), 'equipment')
+            ->has(CustomerNote::factory(), 'notes')
+            ->has(CustomerContact::factory(), 'contacts')
+            ->has(CustomerFile::factory(), 'files')
             ->createQuietly();
         $toCust = Customer::factory()->create();
 
-        $fromCust->CustomerEquipment[0]
-            ->CustomerSite()
+        $fromSite = $fromCust->Sites[0];
+
+        $fromCust->Equipment[0]
+            ->Sites()
             ->attach($fromCust->primary_site_id);
-        $fromCust->CustomerContact[0]
-            ->CustomerSite()
+        $fromCust->Contacts[0]
+            ->Sites()
             ->attach($fromCust->primary_site_id);
 
-        $noteId = $fromCust->CustomerNote[0]->note_id;
-        $fileId = $fromCust->CustomerFile[0]->cust_file_id;
+        $noteId = $fromCust->Notes[0]->note_id;
+        $fileId = $fromCust->Files[0]->cust_file_id;
 
-        $data = collect([
-            'moveSiteId' => $fromCust->primary_site_id,
-            'toCustomer' => $toCust->cust_id,
-        ]);
-
-        $obj = new ReAssignCustomerSite;
-        $obj($data);
+        $testObj = new ReAssignCustomerSite;
+        $testObj($fromSite, $toCust);
 
         $this->assertSoftDeleted($fromCust);
         $this->assertDatabaseMissing('customers', [
             'cust_id' => $fromCust->cust_id,
-            'primary_site_id' => $data['moveSiteId'],
+            'primary_site_id' => $fromSite->cust_site_id,
         ]);
         $this->assertDatabaseHas('customer_sites', [
-            'cust_site_id' => $data['moveSiteId'],
-            'cust_id' => $data['toCustomer'],
+            'cust_id' => $toCust->cust_id,
+            'cust_site_id' => $fromSite->cust_site_id,
         ]);
         $this->assertDatabaseHas('customer_equipment', [
-            'cust_equip_id' => $fromCust->CustomerEquipment[0]->cust_equip_id,
+            'cust_equip_id' => $fromCust->Equipment[0]->cust_equip_id,
             'cust_id' => $toCust->cust_id,
         ]);
         $this->assertDatabaseHas('customer_contacts', [
-            'cont_id' => $fromCust->CustomerContact[0]->cont_id,
+            'cont_id' => $fromCust->Contacts[0]->cont_id,
             'cust_id' => $toCust->cust_id,
         ]);
         $this->assertDatabaseHas('customer_notes', [
@@ -68,10 +70,10 @@ class ReAssignCustomerSiteUnitTest extends TestCase
         ]);
     }
 
-    public function test_job_with_equipment()
+    public function test_invoke_with_equipment(): void
     {
         $fromCust = Customer::factory()
-            ->has(CustomerSite::factory()->count(4))
+            ->has(CustomerSite::factory()->count(4), 'sites')
             ->createQuietly();
         $movingSite = CustomerSite::factory()
             ->create(['cust_id' => $fromCust->cust_id]);
@@ -85,8 +87,8 @@ class ReAssignCustomerSiteUnitTest extends TestCase
         $equip = CustomerEquipment::factory()
             ->count(2)
             ->createQuietly(['cust_id' => $fromCust->cust_id]);
-        $equip[0]->CustomerSite()->sync($siteArray);
-        $equip[1]->CustomerSite()->attach($movingSite->cust_site_id);
+        $equip[0]->Sites()->sync($siteArray);
+        $equip[1]->Sites()->attach($movingSite->cust_site_id);
 
         // Add Some Customer Notes to the equipment
         $notes = [
@@ -117,13 +119,8 @@ class ReAssignCustomerSiteUnitTest extends TestCase
                 ]),
         ];
 
-        $data = collect([
-            'moveSiteId' => $movingSite->cust_site_id,
-            'toCustomer' => $toCust->cust_id,
-        ]);
-
-        $obj = new ReAssignCustomerSite;
-        $obj($data);
+        $testObj = new ReAssignCustomerSite;
+        $testObj($movingSite, $toCust);
 
         $this->assertDatabaseHas('customer_sites', [
             'cust_id' => $toCust->cust_id,
@@ -158,11 +155,11 @@ class ReAssignCustomerSiteUnitTest extends TestCase
         ]);
     }
 
-    public function test_job_with_contacts()
+    public function test_invoke_with_contacts(): void
     {
         $fromCust = Customer::factory()
-            ->has(CustomerSite::factory()->count(4))
-            ->has(CustomerContact::factory()->count(3))
+            ->has(CustomerSite::factory()->count(4), 'sites')
+            ->has(CustomerContact::factory()->count(3), 'contacts')
             ->createQuietly();
         $movingSite = CustomerSite::factory()
             ->createQuietly(['cust_id' => $fromCust->cust_id]);
@@ -173,32 +170,27 @@ class ReAssignCustomerSiteUnitTest extends TestCase
             ->map(fn ($site) => $site->cust_site_id);
 
         // Assign the contacts to sites
-        $fromCust->CustomerContact[0]
-            ->CustomerSite()
+        $fromCust->Contacts[0]
+            ->Sites()
             ->sync($siteArray);
-        $fromCust->CustomerContact[1]
-            ->CustomerSite()
+        $fromCust->Contacts[1]
+            ->Sites()
             ->attach($movingSite->cust_site_id);
-        $fromCust->CustomerContact[2]
-            ->CustomerSite()
+        $fromCust->Contacts[2]
+            ->Sites()
             ->sync($siteArray);
-        $fromCust->CustomerContact[2]
-            ->CustomerSite()
+        $fromCust->Contacts[2]
+            ->Sites()
             ->detach($movingSite->cust_site_id);
 
         $contIdList = [
-            $fromCust->CustomerContact[0]->cont_id,
-            $fromCust->CustomerContact[1]->cont_id,
-            $fromCust->CustomerContact[2]->cont_id,
+            $fromCust->Contacts[0]->cont_id,
+            $fromCust->Contacts[1]->cont_id,
+            $fromCust->Contacts[2]->cont_id,
         ];
 
-        $data = collect([
-            'moveSiteId' => $movingSite->cust_site_id,
-            'toCustomer' => $toCust->cust_id,
-        ]);
-
-        $obj = new ReAssignCustomerSite;
-        $obj($data);
+        $testObj = new ReAssignCustomerSite;
+        $testObj($movingSite, $toCust);
 
         $this->assertDatabaseHas('customer_sites', [
             'cust_id' => $toCust->cust_id,
@@ -219,11 +211,11 @@ class ReAssignCustomerSiteUnitTest extends TestCase
         ]);
     }
 
-    public function test_job_with_notes()
+    public function test_invoke_with_notes(): void
     {
         $fromCust = Customer::factory()
-            ->has(CustomerSite::factory()->count(4))
-            ->has(CustomerNote::factory()->count(3))
+            ->has(CustomerSite::factory()->count(4), 'sites')
+            ->has(CustomerNote::factory()->count(3), 'notes')
             ->createQuietly();
         $movingSite = CustomerSite::factory()
             ->createQuietly(['cust_id' => $fromCust->cust_id]);
@@ -234,26 +226,21 @@ class ReAssignCustomerSiteUnitTest extends TestCase
             ->map(fn ($site) => $site->cust_site_id);
 
         // Assign the contacts to sites
-        $fromCust->CustomerNote[0]
-            ->CustomerSite()
+        $fromCust->Notes[0]
+            ->Sites()
             ->sync($siteArray);
-        $fromCust->CustomerNote[1]
-            ->CustomerSite()
+        $fromCust->Notes[1]
+            ->Sites()
             ->attach($movingSite->cust_site_id);
 
         $noteIdList = [
-            $fromCust->CustomerNote[0]->note_id,
-            $fromCust->CustomerNote[1]->note_id,
-            $fromCust->CustomerNote[2]->note_id,
+            $fromCust->Notes[0]->note_id,
+            $fromCust->Notes[1]->note_id,
+            $fromCust->Notes[2]->note_id,
         ];
 
-        $data = collect([
-            'moveSiteId' => $movingSite->cust_site_id,
-            'toCustomer' => $toCust->cust_id,
-        ]);
-
-        $obj = new ReAssignCustomerSite;
-        $obj($data);
+        $testObj = new ReAssignCustomerSite;
+        $testObj($movingSite, $toCust);
 
         $this->assertDatabaseHas('customer_sites', [
             'cust_id' => $toCust->cust_id,
@@ -274,11 +261,11 @@ class ReAssignCustomerSiteUnitTest extends TestCase
         ]);
     }
 
-    public function test_job_with_files()
+    public function test_invoke_with_files(): void
     {
         $fromCust = Customer::factory()
-            ->has(CustomerSite::factory()->count(4))
-            ->has(CustomerFile::factory()->count(3))
+            ->has(CustomerSite::factory()->count(4), 'sites')
+            ->has(CustomerFile::factory()->count(3), 'files')
             ->createQuietly();
         $movingSite = CustomerSite::factory()
             ->createQuietly(['cust_id' => $fromCust->cust_id]);
@@ -289,26 +276,21 @@ class ReAssignCustomerSiteUnitTest extends TestCase
             ->map(fn ($site) => $site->cust_site_id);
 
         // Assign the contacts to sites
-        $fromCust->CustomerFile[0]
-            ->CustomerSite()
+        $fromCust->Files[0]
+            ->Sites()
             ->sync($siteArray);
-        $fromCust->CustomerFile[1]
-            ->CustomerSite()
+        $fromCust->Files[1]
+            ->Sites()
             ->attach($movingSite->cust_site_id);
 
         $fileIdList = [
-            $fromCust->CustomerFile[0]->cust_file_id,
-            $fromCust->CustomerFile[1]->cust_file_id,
-            $fromCust->CustomerFile[2]->cust_file_id,
+            $fromCust->Files[0]->cust_file_id,
+            $fromCust->Files[1]->cust_file_id,
+            $fromCust->Files[2]->cust_file_id,
         ];
 
-        $data = collect([
-            'moveSiteId' => $movingSite->cust_site_id,
-            'toCustomer' => $toCust->cust_id,
-        ]);
-
-        $obj = new ReAssignCustomerSite;
-        $obj($data);
+        $testObj = new ReAssignCustomerSite;
+        $testObj($movingSite, $toCust);
 
         $this->assertDatabaseHas('customer_sites', [
             'cust_id' => $toCust->cust_id,
@@ -319,10 +301,12 @@ class ReAssignCustomerSiteUnitTest extends TestCase
             'cust_file_id' => $fileIdList[0],
             'cust_site_id' => $movingSite->cust_site_id,
         ]);
+
         $this->assertDatabaseHas('customer_site_files', [
             'cust_file_id' => $fileIdList[1],
             'cust_site_id' => $movingSite->cust_site_id,
         ]);
+
         $this->assertDatabaseMissing('customer_site_files', [
             'cust_file_id' => $fileIdList[2],
             'cust_site_id' => $movingSite->cust_site_id,

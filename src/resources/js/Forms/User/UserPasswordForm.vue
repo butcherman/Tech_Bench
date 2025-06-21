@@ -1,51 +1,38 @@
-<template>
-    <VueForm
-        ref="userPasswordForm"
-        :initial-values="initValues"
-        :validation-schema="schema"
-        :submit-route="submitRoute"
-        submit-method="put"
-        submit-text="Update Password"
-        @success="$emit('success')"
-    >
-        <TextInput
-            id="current-password"
-            name="current_password"
-            label="Current Password"
-            type="password"
-            v-focus
-        />
-        <TextInput
-            id="password"
-            name="password"
-            label="New Password"
-            type="password"
-        />
-        <TextInput
-            id="password-confirmed"
-            name="password_confirmation"
-            label="Confirm Password"
-            type="password"
-        />
-    </VueForm>
-</template>
-
 <script setup lang="ts">
+import PasswordInput from "../_Base/PasswordInput.vue";
 import VueForm from "@/Forms/_Base/VueForm.vue";
-import TextInput from "@/Forms/_Base/TextInput.vue";
-import { computed, ref } from "vue";
 import { object, string, ref as reference } from "yup";
+import { computed, useTemplateRef } from "vue";
 
-defineEmits(["success"]);
+const emit = defineEmits<{
+    success: [];
+}>();
+
 const props = defineProps<{
     init?: boolean;
 }>();
 
+const passwordForm = useTemplateRef("password-form");
+
+/*
+|-------------------------------------------------------------------------------
+| Handle Form
+|-------------------------------------------------------------------------------
+*/
 const submitRoute = computed(() =>
     props.init ? route("init.step-4b.submit") : route("user-password.update")
 );
 
-const userPasswordForm = ref<InstanceType<typeof VueForm> | null>(null);
+const onSuccess = () => {
+    emit("success");
+    passwordForm.value?.resetForm();
+};
+
+/*
+|-------------------------------------------------------------------------------
+| Validation
+|-------------------------------------------------------------------------------
+*/
 const initValues = {
     current_password: null,
     password: null,
@@ -59,3 +46,33 @@ const schema = object({
         .oneOf([reference("password")], "Passwords must match"),
 });
 </script>
+
+<template>
+    <VueForm
+        ref="password-form"
+        :initial-values="initValues"
+        :validation-schema="schema"
+        :submit-route="submitRoute"
+        submit-method="put"
+        submit-text="Update Password"
+        @success="onSuccess"
+    >
+        <PasswordInput
+            id="current-password"
+            name="current_password"
+            label="Current Password"
+            focus
+        />
+        <PasswordInput
+            id="password"
+            name="password"
+            label="New Password"
+            feedback
+        />
+        <PasswordInput
+            id="password-confirmed"
+            name="password_confirmation"
+            label="Confirm Password"
+        />
+    </VueForm>
+</template>

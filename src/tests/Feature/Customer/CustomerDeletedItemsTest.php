@@ -9,10 +9,12 @@ use Tests\TestCase;
 
 class CustomerDeletedItemsTest extends TestCase
 {
-    /**
-     * Invoke Method
-     */
-    public function test_invoke_guest()
+    /*
+    |---------------------------------------------------------------------------
+    | Invoke Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_invoke_guest(): void
     {
         $customer = Customer::factory()->create();
 
@@ -22,7 +24,7 @@ class CustomerDeletedItemsTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_invoke_no_permission()
+    public function test_invoke_no_permission(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly();
@@ -35,7 +37,7 @@ class CustomerDeletedItemsTest extends TestCase
         $response->assertForbidden();
     }
 
-    public function test_invoke()
+    public function test_invoke(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);
@@ -45,10 +47,11 @@ class CustomerDeletedItemsTest extends TestCase
             ->get(route('customers.deleted-items.index', $customer->slug));
 
         $response->assertSuccessful()
-            ->assertInertia(fn (Assert $page) => $page
-                ->component('Customer/DeletedItems')
-                ->has('customer')
-                ->has('deleted-items')
+            ->assertInertia(
+                fn (Assert $page) => $page
+                    ->component('Customer/Admin/DeletedItems')
+                    ->has('customer')
+                    ->has('deleted-items')
             );
     }
 }

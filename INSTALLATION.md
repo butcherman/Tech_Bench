@@ -7,7 +7,8 @@ server for the application.  For more information regarding installing and setti
 up Docker, refer to the Docker website:  <https://www.docker.com/get-started/>
 
 By default, Tech Bench is set to run only through HTTPS.  It is highly recommended
-to upload a valid SSL Certificate to the application.
+to upload a valid SSL Certificate to the application.  This can be done once the
+initial setup has been completed by navigating to Administration -> Security Settings.
 
 ## Using Setup Script
 
@@ -18,11 +19,11 @@ will be done from the browser after the Tech Bench has started.
 
 ```bash
 # Download Script
-wget https://raw.githubusercontent.com/butcherman/Tech_Bench/dev7/scripts/installTB.sh
+wget https://raw.githubusercontent.com/butcherman/Tech_Bench/master/scripts/installTB.sh
 # Make script executable
 chmod +x installTB.sh
-# Run the script
-./installTB.sh
+# Run the script as sudo
+sudo ./installTB.sh
 ```
 
 ## Manual Installation Instructions
@@ -32,8 +33,8 @@ of the application server.  To download the files using wget, enter the followin
 commands:
 
 ```bash
-wget https://raw.githubusercontent.com/butcherman/Tech_Bench/dev7/docker-compose.yml
-wget https://raw.githubusercontent.com/butcherman/Tech_Bench/dev7/.env
+wget https://raw.githubusercontent.com/butcherman/Tech_Bench/master/docker-compose.yml
+wget https://raw.githubusercontent.com/butcherman/Tech_Bench/master/.env
 ```
 
 Read the .env file and modify any necessary fields.  The BASE_URL variable must
@@ -68,3 +69,9 @@ Visit the website URL provided in the .env file.  The initial login will be:
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Password: ***password***
 
 You will be forced to change this password on the first login.
+
+### Accessing The Tech Bench
+
+In order to access the Tech Bench from outside your firewall, you will need to
+open ports in your firewall.  TCP Ports 80 and 443 need to be open for http and
+https access. Note: All http traffic will be redirected to https traffic.

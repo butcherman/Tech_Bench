@@ -1,99 +1,64 @@
-<template>
-    <div>
-        <Head title="Customers" />
-        <div
-            v-if="permissions.details.create"
-            class="row justify-content-center my-2"
-        >
-            <div class="col">
-                <AddButton
-                    class="float-end"
-                    small
-                    pill
-                    @click="selectCustTypeModal?.show"
-                >
-                    Add New Customer
-                </AddButton>
-            </div>
-        </div>
-        <div class="row my-3">
-            <div class="col">
-                <div class="card">
-                    <div class="card-body">
-                        <CustomerSearchForm />
-                        <div class="text-center">
-                            <div
-                                class="form-check form-switch form-check-inline"
-                            >
-                                <input
-                                    v-model="showSiteList"
-                                    id="show-site-list"
-                                    class="form-check-input"
-                                    type="checkbox"
-                                />
-                                <label
-                                    for="show-site-list"
-                                    class="form-check-label"
-                                >
-                                    Show Customer Sites (where available)
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <div class="card">
-                    <div class="card-body">
-                        <CustomerSearchTable />
-                    </div>
-                </div>
-            </div>
-        </div>
-        <Modal ref="selectCustTypeModal">
-            <div class="text-center">
-                <Link
-                    as="button"
-                    :href="$route('customers.create')"
-                    class="btn btn-info w-75 m-2"
-                >
-                    New Customer
-                </Link>
-                <Link
-                    as="button"
-                    :href="$route('customers.create-site')"
-                    class="btn btn-info w-75 m-2"
-                >
-                    Add Site to Existing Customer
-                </Link>
-            </div>
-        </Modal>
-    </div>
-</template>
-
 <script setup lang="ts">
-import AppLayout from "@/Layouts/AppLayout.vue";
-import Modal from "@/Components/_Base/Modal.vue";
 import AddButton from "@/Components/_Base/Buttons/AddButton.vue";
+import AppLayout from "@/Layouts/App/AppLayout.vue";
+import BaseButton from "@/Components/_Base/Buttons/BaseButton.vue";
+import Card from "@/Components/_Base/Card.vue";
 import CustomerSearchForm from "@/Forms/Customer/CustomerSearchForm.vue";
-import CustomerSearchTable from "@/Components/Customer/CustomerSearchTable.vue";
-import { ref, onMounted } from "vue";
+import CustomerSearchTable from "@/Components/Customer/Search/CustomerSearchTable.vue";
+import Modal from "@/Components/_Base/Modal.vue";
+import { onMounted, useTemplateRef } from "vue";
+import { ToggleSwitch } from "primevue";
 import {
+    showSites,
     triggerSearch,
-    showSiteList,
-} from "../../Modules/CustomerSearch.module";
-
-onMounted(() => triggerSearch());
+} from "@/Composables/Customer/CustomerSearch.module";
 
 defineProps<{
     permissions: customerPermissions;
 }>();
 
-const selectCustTypeModal = ref<InstanceType<typeof Modal> | null>(null);
+const modal = useTemplateRef("add-customer-modal");
+
+onMounted(() => triggerSearch());
 </script>
 
 <script lang="ts">
 export default { layout: AppLayout };
 </script>
+
+<template>
+    <div>
+        <div
+            v-if="permissions.details.create"
+            class="w-full flex flex-row-reverse tb-gap-y"
+        >
+            <AddButton text="Add New Customer" pill @click="modal?.show()" />
+        </div>
+        <Card class="tb-gap-y">
+            <CustomerSearchForm />
+            <div class="flex justify-center mt-2">
+                <div>
+                    <ToggleSwitch input-id="show-sites" v-model="showSites" />
+                    <label for="show-sites" class="align-top ms-2 text-muted">
+                        Show Site List (where available)
+                    </label>
+                </div>
+            </div>
+        </Card>
+        <Card class="tb-gap-y">
+            <CustomerSearchTable />
+        </Card>
+        <Modal ref="add-customer-modal" title="Select Which Option to Add">
+            <BaseButton
+                text="Create New Customer"
+                class="w-full my-2"
+                :href="$route('customers.create')"
+            />
+            <BaseButton
+                text="Add Site to Existing Customer"
+                class="w-full my-2"
+                :href="$route('customers.create-site')"
+            />
+        </Modal>
+    </div>
+</template>

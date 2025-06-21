@@ -1,56 +1,92 @@
-<template>
-    <div class="mb-3">
-        <label v-if="label" :for="id" class="form-label w-100">
-            {{ label }}:
-        </label>
-        <textarea
-            v-model="value"
-            :name="name"
-            :rows="getRows"
-            :id="id"
-            :disabled="disabled"
-            :class="{ 'is-valid': isValid, is_invalid: isInvalid }"
-            class="form-control"
-            :placeholder="placeholder"
-            @change="$emit('change', value)"
-        />
-        <span
-            v-if="errorMessage && (meta.dirty || meta.touched)"
-            class="text-danger"
-        >
-            {{ errorMessage }}
-        </span>
-    </div>
-</template>
-
 <script setup lang="ts">
-import { toRef, computed } from "vue";
+import Textarea from "primevue/textarea";
+import { FloatLabel, Message } from "primevue";
+import { toRef, ref, computed } from "vue";
 import { useField } from "vee-validate";
+import type { Ref } from "vue";
 
-defineEmits(["change"]);
+const emit = defineEmits<{
+    blur: [];
+    change: [];
+    focus: [];
+}>();
 
 const props = defineProps<{
     id: string;
     name: string;
-    label?: string;
-    placeholder?: string;
     disabled?: boolean;
     help?: string;
+    label?: string;
+    placeholder?: string;
     rows?: number;
 }>();
 
-const isValid = computed<boolean>(() => {
-    return meta.valid && meta.validated && !meta.pending;
-});
+/**
+ * Auto Hide the placeholder when not in focus to support Floating Label.
+ */
+const inputPlaceholder = computed<string>(() =>
+    props.placeholder && (hasFocus.value || !props.label)
+        ? props.placeholder
+        : ""
+);
 
-const isInvalid = computed<boolean>(() => {
-    return !meta.valid && meta.validated && !meta.pending;
-});
+/*
+|-------------------------------------------------------------------------------
+| Input Focus State
+|-------------------------------------------------------------------------------
+*/
+const hasFocus = ref<boolean>(false);
 
-const getRows = computed<number>(() => {
-    return props.rows !== undefined ? props.rows : 3;
-});
+const onFocus = (): void => {
+    hasFocus.value = true;
+    emit("focus");
+};
 
+const onBlur = (): void => {
+    hasFocus.value = false;
+    emit("blur");
+};
+
+/*
+|-------------------------------------------------------------------------------
+| Vee Validate
+|-------------------------------------------------------------------------------
+*/
 const nameRef = toRef(props, "name");
-const { errorMessage, value, meta } = useField(nameRef);
+const {
+    errorMessage,
+    value,
+}: {
+    errorMessage: Ref<string | undefined, string | undefined>;
+    value: Ref<string>;
+} = useField(nameRef);
 </script>
+
+<template>
+    <div class="my-2">
+        <FloatLabel variant="on">
+            <Textarea
+                v-model="value"
+                class="w-full border p-2"
+                :disabled="disabled"
+                :id="id"
+                :placeholder="inputPlaceholder"
+                :rows="rows ?? 3"
+                @focus="onFocus"
+                @blur="onBlur"
+            />
+            <label for="on_label">{{ label }}</label>
+        </FloatLabel>
+        <Message size="small" severity="error" variant="simple">
+            {{ errorMessage }}
+        </Message>
+        <Message
+            v-if="hasFocus"
+            severity="secondary"
+            size="small"
+            variant="simple"
+        >
+            {{ help }}
+        </Message>
+    </div>
+</template>

@@ -1,16 +1,12 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Console\Commands\Maint;
 
-use App\Service\Maint\RestoreService;
+use App\Services\Maintenance\BackupRestoreService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Process;
-use Illuminate\Support\Facades\Storage;
-use PragmaRX\Version\Package\Version;
 
 use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\select;
@@ -20,205 +16,184 @@ use function Laravel\Prompts\warning;
 class BackupRestoreCommand extends Command
 {
     /**
-     * The name and signature of the console command
+     * The name and signature of the console command.
+     *
+     * @var string
      */
     protected $signature = 'app:backup-restore';
 
     /**
-     * The console command description
+     * The console command description.
+     *
+     * @var string
      */
-    protected $description = 'Restore a System Backup';
-
-    protected $backupObj;
-
-    protected $hasErrors = false;
+    protected $description = 'Restore Tech Bench from a backup';
 
     /**
-     * Execute the console command.
+     * Constructor will inject the Restore Service Class
      */
-    public function handle()
+    public function __construct(protected BackupRestoreService $svc)
     {
-        $this->backupObj = new RestoreService;
-        $this->components->alert('Database Restore');
+        parent::__construct();
+    }
 
-        // Notify this is a major risk
+    /**
+     * Execute the command.
+     */
+    public function handle(): void
+    {
+        $this->components->alert('Database Restore');
         $this->components->alert(
             'WARNING: RESTORING DATABASE WILL OVERWRITE ALL EXISTING DATA'
         );
         $this->components->alert('PROCEED WITH CAUTION');
 
-        // Have use select which backup file to use
+        // Select Backup file to Restore
         $backupChoice = select(
-            label: 'Select the upload to restore',
-            options: $this->getBackupList()
+            label: 'Select Backup File to Restore',
+            options: collect($this->svc->getBackupListWithMetaData())
+                ->pluck('name'),
         );
 
-        // Confirm that this is the correct file
-        warning('You have selected '.$backupChoice);
-        $confirm = confirm(
-            label: 'Are you sure you want to restore this backup?',
+        /*
+        |-----------------------------------------------------------------------
+        | Mount and Validate the backup file
+        |-----------------------------------------------------------------------
+        */
+        spin(
+            message: 'Validating Backup File',
+            callback: fn () => $this->svc->validateBackupArchive($backupChoice),
+        );
+
+        $this->info('Backup File is Valid');
+
+        /*
+        |-----------------------------------------------------------------------
+        | Should Logs and SSL Cert be restored?
+        |-----------------------------------------------------------------------
+        */
+        $restoreEnv = confirm(
+            label: 'Restore Environment File?',
+            default: true,
+        );
+
+        $restoreLogs = confirm(
+            label: 'Restore Log Files?',
+            default: true,
+        );
+
+        $restoreCert = confirm(
+            label: 'Restore SSL Certificate?',
+            default: true,
+        );
+
+        $this->components->alert('WARNING:  All Existing Data Will Be Erased');
+        warning('Selected Backup File - '.$backupChoice);
+
+        $continue = confirm(
+            label: 'Continue?',
             default: false,
         );
 
-        // If user selected no, exit script
-        if (! $confirm) {
-            warning('Exiting');
-
-            return;
+        if (! $continue) {
+            $this->abortRestore('Recovery Confirmation Aborted');
         }
 
-        /***********************************************************************
-         * Validate the Backup File
-         ***********************************************************************/
-        if (! spin(
-            message: 'Verifying File is Valid Tech Bench Backup',
-            callback: fn () => $this->backupObj->validateBackupFile($backupChoice)
-        )) {
-            $this->components->error('Invalid Backup File');
-            $this->components->error('Exiting');
+        /*
+        |-----------------------------------------------------------------------
+        | Start the Restore Process - Restore Database
+        |-----------------------------------------------------------------------
+        */
 
-            return;
-        } else {
-            $this->components->success('Backup File is Valid');
-        }
+        $this->components->info(
+            'Starting Database Restore Process, this may take some time.'
+        );
+        $this->components->info('Taking Tech Bench Offline');
 
-        /***********************************************************************
-         * Start the Restore Process
-         ***********************************************************************/
-        $this->components->info('Putting Application in Maintenance Mode');
         $this->call('down');
 
-        if (! $this->validateBackupVersion()) {
-            warning('Exiting');
-            $this->cleanup();
-
-            return;
-        }
-
-        /**
-         * Extract the backup to temporary folder
-         */
-        if (! spin(
-            message: 'Extracting Backup Files',
-            callback: fn () => $this->backupObj->extractBackup()
-        )) {
-            $this->components->error('Unable to extract Backup File');
-            $this->cleanup();
-
-            return;
-        } else {
-            $this->components->success('Backup File Extracted');
-        }
-
-        /**
-         * Backup the .env file just in case
-         */
-        File::copy(
-            base_path().DIRECTORY_SEPARATOR.'.env',
-            base_path().DIRECTORY_SEPARATOR.'.env.old',
+        spin(
+            message: 'Extracting Backup',
+            callback: fn () => $this->svc->extractBackup(),
         );
 
-        /***********************************************************************
-         * Restore the database
-         ***********************************************************************/
-        if (! spin(
+        $this->components->info('Backup Extracted');
+
+        spin(
             message: 'Restoring Database',
-            callback: fn () => $this->backupObj->restoreDatabase()
-        )) {
-            $this->components->error('Restore Failed');
-            $this->components->error('Unable to Restore Database');
-            $this->cleanup();
+            callback: fn () => $this->svc->restoreDatabase()
+        );
 
-            return;
-        } else {
-            $this->components->success('Database Restored');
+        $this->components->info('Database Restored');
+
+        /*
+        |-----------------------------------------------------------------------
+        | Restore filesystem.
+        |-----------------------------------------------------------------------
+        */
+
+        spin(
+            message: 'Restoring Filesystem',
+            callback: fn () => $this->svc->restoreFileSystem()
+        );
+
+        $this->components->info('Filesystem Restored');
+
+        if ($restoreEnv) {
+            spin(
+                message: 'Restoring Environment File',
+                callback: fn () => $this->svc->restoreEnvironmentFile()
+            );
+
+            $this->components->info('Environment File Restored');
         }
 
-        /***********************************************************************
-         * Restore Disk Files
-         ***********************************************************************/
-        $restorePaths = config('backup.backup.source.files.include');
-        if (! spin(
-            message: 'Restoring Files',
-            callback: fn () => $this->backupObj->restoreFiles($restorePaths)
-        )) {
-            $this->components->error('Unable to restore files');
-            $this->hasErrors = true;
+        if ($restoreLogs) {
+            spin(
+                message: 'Restoring Log Files',
+                callback: fn () => $this->svc->restoreLogFiles()
+            );
 
-        } else {
-            $this->components->success('Files Restored');
+            $this->components->info('Log Files Restored');
         }
 
-        /**
-         * Move the .env file
-         */
-        if (! spin(
-            message: 'Building Application Environment',
-            callback: fn () => $this->backupObj->restoreEnv()
-        )) {
-            $this->components->error('Unable to restore Environment File');
-            $this->hasErrors = true;
-        } else {
-            $this->call('app:validate-env', ['--force' => true]);
-            $this->components->success('Environment Restored');
+        if ($restoreCert) {
+            spin(
+                message: 'Restoring SSL Certificate',
+                callback: fn () => $this->svc->restoreCert()
+            );
+
+            $this->components->info('SSL Certificate Restored');
         }
 
-        /**
-         * Wrap up
-         */
+        $this->components->info('Restore Process Complete');
+        $this->components->info('Performing Cleanup Tasks');
+
+        $this->cleanup(true);
+    }
+
+    /**
+     * Abort the Restore Process with error.
+     */
+    private function abortRestore(string $reason): void
+    {
+        Log::error('Aborting Restore Process.  Reason - '.$reason);
+
+        $this->components->error('Backup Recovery Failed.  Aborting.');
+
         $this->cleanup();
 
-        /**
-         * Display final message
-         */
-        if ($this->hasErrors) {
-            $this->components->alert('Backup completed, but some files were not properly moved');
-        } else {
-            $this->components->success('Backup Completed Successfully');
-        }
-
-        $this->components->info('Please Reboot Tech Bench to Complete Restore Process');
-    }
-
-    /**
-     * Get a list of Backup Files
-     */
-    protected function getBackupList()
-    {
-        $backupList = collect($this->backupObj->getBackupFiles());
-
-        return $backupList->pluck('name');
-    }
-
-    /**
-     * Verify that the backup version is the same or older than the app version
-     */
-    protected function validateBackupVersion()
-    {
-        $backupVersion = $this->backupObj->getBackupVersion();
-        $appVersion = (new Version)->compact();
-
-        $valid = version_compare($appVersion, $backupVersion);
-
-        if ($valid == -1) {
-            $this->components->error('Invalid Backup Version');
-            $this->line('The Backup File is newer than the current Tech Bench Version');
-            $this->line('Please update Tech Bench to '.$backupVersion.' or higher');
-
-            return false;
-        }
-
-        return true;
+        $this->fail($reason);
     }
 
     /**
      * Cleanup all temporary files and re-enable application
      */
-    protected function cleanup()
+    protected function cleanup(bool $reboot = false): void
     {
-        Storage::disk('backups')->deleteDirectory('restore-tmp');
+        $this->svc->deleteExtractedFiles();
 
-        // Rebuild assets and cache new config
+        // @codeCoverageIgnoreStart
         if (App::environment('production')) {
             // Clear and re-cache all config data
             $this->call('optimize:clear');
@@ -228,7 +203,14 @@ class BackupRestoreCommand extends Command
             // Rebuild all JS application files
             Process::run('npm run build');
         }
+        // @codeCoverageIgnoreEnd
 
-        $this->call('up');
+        if (App::isDownForMaintenance()) {
+            $this->call('up');
+        }
+
+        if ($reboot) {
+            $this->call('app:reboot', ['--force' => true]);
+        }
     }
 }

@@ -6,9 +6,12 @@ use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
 
-/**
- * @codeCoverageIgnore
- */
+/*
+|-------------------------------------------------------------------------------
+| Exception is triggered when an application backup fails.
+|-------------------------------------------------------------------------------
+*/
+
 class BackupFailedException extends Exception
 {
     public function report(): void
@@ -18,6 +21,7 @@ class BackupFailedException extends Exception
 
     public function render(): RedirectResponse
     {
-        return back()->withErrors('Backup Failed.  Reason - '.$this->getMessage());
+        return back()
+            ->withErrors('Backup Failed.  Reason - '.$this->getMessage());
     }
 }

@@ -2,95 +2,78 @@
 
 namespace App\Models;
 
-use App\Exceptions\Filesystem\FileMissingException;
-use App\Exceptions\Filesystem\IncorrectFilenameException;
-use App\Exceptions\Filesystem\PrivateFileException;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class FileUpload extends Model
 {
     use HasFactory;
 
+    /** @var string */
     protected $primaryKey = 'file_id';
 
+    /** @var array<int, string> */
     protected $guarded = ['file_id', 'created_at', 'updated_at'];
 
+    /** @var array<int, string> */
     protected $hidden = ['disk', 'created_at', 'folder', 'updated_at', 'public'];
 
+    /** @var array<int, string> */
     protected $appends = ['href', 'created_stamp'];
 
-    protected $casts = [
-        'created_at' => 'datetime:M d, Y',
-        'updated_at' => 'datetime:M d, Y',
-    ];
-
-    /****************************************************************************
-     * Model Attributes
-     ***************************************************************************/
-    public function getHrefAttribute()
+    /*
+    |---------------------------------------------------------------------------
+    | Model Casting
+    |---------------------------------------------------------------------------
+    */
+    protected function casts(): array
     {
-        return route('download', [$this->file_id, $this->file_name]);
+        return [
+            'created_at' => 'datetime:M d, Y',
+            'updated_at' => 'datetime:M d, Y',
+        ];
     }
 
-    public function getCreatedStampAttribute()
+    /*
+    |---------------------------------------------------------------------------
+    | Model Attributes
+    |---------------------------------------------------------------------------
+    */
+    public function href(): Attribute
     {
-        return $this->created_at;
+        return Attribute::make(
+            get: fn () => route('download', [$this->file_id, $this->file_name]),
+        );
     }
 
-    /***************************************************************************
-     * Additional Methods
-     ***************************************************************************/
+    public function createdStamp(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->created_at,
+        );
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | Additional Methods
+    |---------------------------------------------------------------------------
+    */
 
     /**
-     * Verify that the file is valid and user is allowed to download
+     * Verify that the file exists in the storage system.
      */
-    public function validateFile($fileName)
+    public function fileExists(): bool
     {
-        $this->verifyFileName($fileName);
-        $this->verifyPublicDownload();
-        $this->verifyFileExists();
-    }
-
-    /**
-     * Verify that the File Name passed to download route matches file
-     */
-    protected function verifyFileName($fileName)
-    {
-        if ($fileName !== $this->file_name) {
-            throw new IncorrectFilenameException($fileName, $this);
-        }
-    }
-
-    /**
-     * If the file is public, make sure the file is tagged for public download
-     */
-    protected function verifyPublicDownload()
-    {
-        if (! Auth::check() && ! $this->public) {
-            throw new PrivateFileException($this);
-        }
-    }
-
-    /**
-     * Verify that the file exists on the file system
-     */
-    protected function verifyFileExists()
-    {
-        if (
-            Storage::disk($this->disk)
-                ->missing($this->folder.DIRECTORY_SEPARATOR.$this->file_name)
-        ) {
-            throw new FileMissingException($this);
-        }
+        return Storage::disk($this->disk)
+            ->exists($this->folder.DIRECTORY_SEPARATOR.$this->file_name);
     }
 
     /**
      * Return the full path of the file
      */
-    public function getFilePath()
+    public function getFilePath(): string
     {
         return Storage::disk($this->disk)
             ->path($this->folder.DIRECTORY_SEPARATOR.$this->file_name);

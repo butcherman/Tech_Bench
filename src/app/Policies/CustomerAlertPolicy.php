@@ -2,7 +2,6 @@
 
 namespace App\Policies;
 
-use App\Models\CustomerAlert;
 use App\Models\User;
 use App\Traits\AllowTrait;
 
@@ -29,7 +28,7 @@ class CustomerAlertPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, CustomerAlert $customerAlert): bool
+    public function update(User $user): bool
     {
         return $this->checkPermission($user, 'Manage Customers');
     }
@@ -37,7 +36,7 @@ class CustomerAlertPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, CustomerAlert $customerAlert): bool
+    public function delete(User $user): bool
     {
         return $this->checkPermission($user, 'Manage Customers');
     }

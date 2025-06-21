@@ -7,10 +7,12 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\BroadcastableModelEventOccurred;
 use Illuminate\Database\Eloquent\BroadcastsEvents;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Log;
 
 #[ObservedBy([CustomerSiteObserver::class])]
 class CustomerSite extends Model
@@ -19,69 +21,90 @@ class CustomerSite extends Model
     use HasFactory;
     use SoftDeletes;
 
+    /** @var string */
     protected $primaryKey = 'cust_site_id';
 
+    /** @var array<int, string> */
     protected $guarded = ['updated_at', 'created_at', 'deleted_at'];
 
-    protected $appends = ['is_primary', 'href'];
-
+    /** @var array<int, string> */
     protected $hidden = [
         'updated_at',
         'created_at',
         'deleted_at',
         'deleted_reason',
         'Customer',
-        'href',
         'pivot',
     ];
 
-    protected $casts = [
-        'created_at' => 'datetime:M d, Y',
-        'updated_at' => 'datetime:M d, Y',
-        'deleted_at' => 'datetime:M d, Y',
-    ];
+    /** @var array<int, string> */
+    protected $appends = ['is_primary'];
 
-    /***************************************************************************
-     * For Route/Model binding we will use either the slug or cust_id columns
-     ***************************************************************************/
-    public function resolveRouteBinding($value, $field = null)
+    /*
+    |---------------------------------------------------------------------------
+    | Model Casting
+    |---------------------------------------------------------------------------
+    */
+    protected function casts(): array
+    {
+        return [
+            'created_at' => 'datetime:M d, Y',
+            'updated_at' => 'datetime:M d, Y',
+            'deleted_at' => 'datetime:M d, Y',
+        ];
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | For Route/Model binding use either the site_slug or cust_site_id columns
+    |---------------------------------------------------------------------------
+    */
+    public function resolveRouteBinding($value, $field = null): CustomerSite
     {
         return $this->where('site_slug', $value)
             ->orWhere('cust_site_id', $value)
             ->firstOrFail();
     }
 
-    /***************************************************************************
-     * Model Attributes
-     ***************************************************************************/
-    public function getIsPrimaryAttribute()
+    public function getRouteKeyName(): string
     {
-        if ($this->Customer) {
-            return $this->Customer->primary_site_id === $this->cust_site_id;
-        }
-
-        // @codeCoverageIgnoreStart
-        return false;
-        // @codeCoverageIgnoreEnd
+        return 'site_slug';
     }
 
-    public function getHrefAttribute()
+    /*
+    |---------------------------------------------------------------------------
+    | Model Attributes
+    |---------------------------------------------------------------------------
+    */
+    public function isPrimary(): Attribute
     {
-        return route('customers.sites.show', [
-            $this->Customer->slug,
-            $this->site_slug,
-        ]);
+        return Attribute::make(
+            get: fn () => $this->Customer
+                && $this->Customer->primary_site_id === $this->cust_site_id,
+        );
     }
 
-    /***************************************************************************
-     * Model Relationships
-     ***************************************************************************/
-    public function Customer()
+    public function href(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => route('customers.sites.show', [
+                $this->Customer->slug,
+                $this->site_slug,
+            ])
+        );
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | Model Relationships
+    |---------------------------------------------------------------------------
+    */
+    public function Customer(): BelongsTo
     {
         return $this->belongsTo(Customer::class, 'cust_id', 'cust_id');
     }
 
-    public function SiteEquipment()
+    public function SiteEquipment(): BelongsToMany
     {
         return $this->belongsToMany(
             CustomerEquipment::class,
@@ -91,7 +114,7 @@ class CustomerSite extends Model
         );
     }
 
-    public function SiteContact()
+    public function SiteContact(): BelongsToMany
     {
         return $this->belongsToMany(
             CustomerContact::class,
@@ -101,7 +124,7 @@ class CustomerSite extends Model
         );
     }
 
-    public function SiteNote()
+    public function SiteNote(): BelongsToMany
     {
         return $this->belongsToMany(
             CustomerNote::class,
@@ -111,7 +134,7 @@ class CustomerSite extends Model
         );
     }
 
-    public function SiteFile()
+    public function SiteFile(): BelongsToMany
     {
         return $this->belongsToMany(
             CustomerFile::class,
@@ -121,17 +144,17 @@ class CustomerSite extends Model
         );
     }
 
-    /***************************************************************************
-     * Model Broadcasting
-     ***************************************************************************/
+    /*
+    |---------------------------------------------------------------------------
+    | Model Broadcasting
+    |---------------------------------------------------------------------------
+    */
 
     /**
      * @codeCoverageIgnore
      */
     public function broadcastOn(string $event): array
     {
-        Log::debug('Broadcasting Customer Site Event - Event Name - '.$event);
-
         return match ($event) {
             'deleted', 'trashed', 'created' => [
                 new PrivateChannel('customer.'.$this->Customer->slug),
@@ -145,16 +168,17 @@ class CustomerSite extends Model
 
     public function newBroadcastableModelEvent(string $event): BroadcastableModelEventOccurred
     {
-        Log::debug('Calling Dont Broadcast to Current User', $this->toArray());
-
         return (new BroadcastableModelEventOccurred(
-            $this, $event
+            $this,
+            $event
         ))->dontBroadcastToCurrentUser();
     }
 
-    /***************************************************************************
-     * Additional Methods
-     ***************************************************************************/
+    /*
+    |---------------------------------------------------------------------------
+    | Additional Methods
+    |---------------------------------------------------------------------------
+    */
     public function EquipmentNote()
     {
         return CustomerNote::whereIn(
@@ -175,7 +199,7 @@ class CustomerSite extends Model
     {
         return CustomerNote::where('cust_id', $this->Customer->cust_id)
             ->whereNull('cust_equip_id')
-            ->doesntHave('CustomerSite')
+            ->doesntHave('Sites')
             ->get();
     }
 
@@ -183,7 +207,7 @@ class CustomerSite extends Model
     {
         return CustomerFile::where('cust_id', $this->Customer->cust_id)
             ->whereNull('cust_equip_id')
-            ->doesntHave('CustomerSite')
+            ->doesntHave('Sites')
             ->get();
     }
 

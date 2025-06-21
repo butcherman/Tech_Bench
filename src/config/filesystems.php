@@ -6,24 +6,43 @@ return [
     |--------------------------------------------------------------------------
     | Default Filesystem Disk
     |--------------------------------------------------------------------------
+    |
+    | Here you may specify the default filesystem disk that should be used
+    | by the framework. The "local" disk, as well as a variety of cloud
+    | based disks are available to your application for file storage.
+    |
+    | Max File upload size and Chunk Size of chunked file uploads are also
+    | defined here in bytes.  Default settings are 2GB for Max File upload
+    | and 5MB for chunk upload size.
+    |
     */
 
-    'default' => env('FILESYSTEM_DRIVER', 'local'),
-    'max_filesize' => env('MAX_UPLOAD', 2000000000), //  2000000000 Bytes = 2GB
-    'chunk_size' => 5000000,                       //  5000000 Bytes = 5 MB
+    'default' => env('FILESYSTEM_DISK', 'local'),
+
+    'max_filesize' => env('MAX_UPLOAD', 2000000000),
+
+    'chunk_size' => 5000000,
 
     /*
     |--------------------------------------------------------------------------
     | Filesystem Disks
     |--------------------------------------------------------------------------
+    |
+    | Below you may configure as many filesystem disks as necessary, and you
+    | may even configure multiple disks for the same driver. Examples for
+    | most supported storage drivers are configured here for reference.
+    |
+    | Supported drivers: "local", "ftp", "sftp", "s3"
+    |
     */
 
     'disks' => [
 
         'local' => [
-            'base_folder' => 'app',
             'driver' => 'local',
             'root' => storage_path('app'),
+            'serve' => true,
+            'throw' => false,
             'permissions' => [
                 'file' => [
                     'public' => 0644,
@@ -61,13 +80,14 @@ return [
         ],
 
         /**
-         * Only used for public accessible items such as images
+         * Used for public accessible items such as images
          */
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
+            'throw' => false,
         ],
 
         /**
@@ -94,19 +114,17 @@ return [
             'root' => base_path('keystore'),
         ],
 
-    /**
-     * Downloaded Update files will be stored here
-     */
-        // 'updates' => [
-        //     'driver' => 'local',
-        //     'root' => storage_path('updates'),
-        // ],
     ],
 
     /*
     |--------------------------------------------------------------------------
     | Symbolic Links
     |--------------------------------------------------------------------------
+    |
+    | Here you may configure the symbolic links that will be created when the
+    | `storage:link` Artisan command is executed. The array keys should be
+    | the locations of the links and the values should be their targets.
+    |
     */
 
     'links' => [

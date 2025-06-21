@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'domain' => null,
+    'domain' => env('HORIZON_DOMAIN'),
 
     /*
     |--------------------------------------------------------------------------
@@ -113,9 +113,7 @@ return [
     |
     */
 
-    'silenced' => [
-        // App\Jobs\ExampleJob::class,
-    ],
+    'silenced' => [],
 
     /*
     |--------------------------------------------------------------------------
@@ -177,7 +175,7 @@ return [
     'defaults' => [
         'supervisor-1' => [
             'connection' => 'redis',
-            'queue' => ['default'],
+            'queue' => ['default', 'queue'],
             'balance' => 'auto',
             'maxProcesses' => 5,
             'maxTime' => 0,

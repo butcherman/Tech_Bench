@@ -6,11 +6,17 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
-/**
- * Exception is triggered when the selected log file is missing from filesystem
- */
+/*
+|-------------------------------------------------------------------------------
+| Exception is triggered when trying to access a log file that does not exist
+|-------------------------------------------------------------------------------
+*/
+
 class LogFileMissingException extends Exception
 {
+    /**
+     * @codeCoverageIgnore
+     */
     public function __construct(protected string $badLogFile)
     {
         parent::__construct();
@@ -24,6 +30,6 @@ class LogFileMissingException extends Exception
 
     public function render(): never
     {
-        abort(404, 'Invalid Log File Name');
+        abort(404, 'Invalid Log File');
     }
 }

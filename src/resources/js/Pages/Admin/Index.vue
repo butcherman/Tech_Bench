@@ -1,31 +1,7 @@
-<template>
-    <div class="row justify-content-center">
-        <Head title="Administration" />
-        <template v-for="(items, group) in menu" :key="group">
-            <div v-if="items.length" class="col-md-5 mt-2">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-title">{{ group }}</div>
-                        <ul class="list-unstyled">
-                            <li v-for="(link, key) in items" :key="key">
-                                <Link
-                                    :href="link.route"
-                                    class="text-secondary text-decoration-none"
-                                >
-                                    <fa-icon :icon="link.icon" />
-                                    {{ link.name }}
-                                </Link>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </template>
-    </div>
-</template>
-
 <script setup lang="ts">
-import AppLayout from "@/Layouts/AppLayout.vue";
+import AppLayout from "@/Layouts/App/AppLayout.vue";
+import Card from "@/Components/_Base/Card.vue";
+import ResourceList from "@/Components/_Base/ResourceList.vue";
 
 defineProps<{
     menu: {
@@ -41,3 +17,26 @@ defineProps<{
 <script lang="ts">
 export default { layout: AppLayout };
 </script>
+
+<template>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+        <template v-for="(items, group) in menu" :key="group">
+            <Card v-if="items.length" :title="group.toString()">
+                <ResourceList
+                    label-field="name"
+                    :list="items"
+                    :link-fn="(row) => row.route"
+                    no-border
+                    compact
+                >
+                    <template #list-item="myItem">
+                        <span class="text-muted">
+                            <fa-icon :icon="myItem.item.icon" />
+                            {{ myItem.item.name }}
+                        </span>
+                    </template>
+                </ResourceList>
+            </Card>
+        </template>
+    </div>
+</template>

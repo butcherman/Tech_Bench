@@ -1,22 +1,21 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Http\Controllers\User;
 
+use App\Facades\CacheData;
 use App\Http\Controllers\Controller;
-use App\Service\Cache;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class UserPasswordController extends Controller
 {
     /**
-     * Display the resource.
+     * Show the Password Change Page.
      */
-    public function __invoke()
+    public function __invoke(): Response
     {
         return Inertia::render('User/Password', [
-            'rules' => Cache::PasswordRules(),
+            'rules' => fn () => CacheData::passwordRules(),
         ]);
     }
 }

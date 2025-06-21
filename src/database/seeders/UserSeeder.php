@@ -2,51 +2,68 @@
 
 namespace Database\Seeders;
 
+use App\Models\AppSettings;
+use App\Models\DeviceToken;
 use App\Models\User;
-use App\Traits\AppSettingsTrait;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Database\Seeder;
 
 class UserSeeder extends Seeder
 {
-    use AppSettingsTrait;
-
     /**
-     *  Create 20 random users with different roles
+     * Create 21 users.
      */
     public function run(): void
     {
-        //  Make it so that the admin password is not expired
-        User::find(1)->update([
-            'password_expires' => null,
-        ]);
+        // Nerf the password policy for testing
+        AppSettings::upsert([
+            [
+                'key' => 'auth.passwords.settings.min_length',
+                'value' => json_encode(3),
+            ],
+            [
+                'key' => 'auth.passwords.settings.contains_uppercase',
+                'value' => json_encode(false),
+            ],
+            [
+                'key' => 'auth.passwords.settings.contains_lowercase',
+                'value' => json_encode(false),
+            ],
+            [
+                'key' => 'auth.passwords.settings.contains_number',
+                'value' => json_encode(false),
+            ],
+            [
+                'key' => 'auth.passwords.settings.contains_special',
+                'value' => json_encode(false),
+            ],
+        ], 'id');
 
-        //  Turn off the "first time setup" flag
-        $this->clearSetting('app.first_time_setup');
-
-        //  Create a Tech User that has restricted access if it does not already exist
-        $techUser = User::where('username', 'tech')
-            ->orWhere('email', 'tech@em.com')
-            ->first();
-
-        if (! $techUser) {
-            User::create([
-                'role_id' => 4,
-                'username' => 'tech',
-                'first_name' => 'Tech',
-                'last_name' => 'User',
-                'email' => 'tech@em.com',
-                'password' => bcrypt('password'),
-                'password_expires' => null,
-            ]);
+        // Create a tech user if it does not already exist
+        if (! User::where('username', 'tech')->first()) {
+            User::factory()->create(
+                [
+                    'username' => 'tech',
+                    'role_id' => 4,
+                    'first_name' => 'Tech',
+                    'last_name' => 'User',
+                    'email' => 'tech@em.com',
+                    'password' => bcrypt('password'),
+                    'password_expires' => null,
+                ]
+            );
         }
+
+        DeviceToken::factory()
+            ->count(5)
+            ->create(['user_id' => User::first()->user_id]);
 
         //  Create 10 users each with a different role_id
         User::factory()->count(20)->state(new Sequence(
             ['role_id' => 2],
             ['role_id' => 3],
             ['role_id' => 4]
-        ))->create();
+        ))->has(DeviceToken::factory(rand(0, 5)))->create();
 
         //  Create 10 users and disable them
         User::factory()->count(5)->trashed()->create();

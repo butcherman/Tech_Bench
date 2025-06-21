@@ -4,40 +4,43 @@ namespace Tests\Feature\Admin\Config;
 
 use App\Events\Config\UrlChangedEvent;
 use App\Models\User;
-use Illuminate\Support\Facades\Event;
+use Event;
 use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class BasicSettingsTest extends TestCase
 {
-    /**
-     * Show Method
-     */
-    public function test_show_guest()
+    /*
+    |---------------------------------------------------------------------------
+    | Edit Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_edit_guest(): void
     {
-        $response = $this->get(route('admin.basic-settings.show'));
-        $response->assertStatus(302);
-        $response->assertRedirect(route('login'));
+        $response = $this->get(route('admin.basic-settings.edit'));
+
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
         $this->assertGuest();
     }
 
-    public function test_show_no_permission()
+    public function test_edit_no_permission(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly();
 
         $response = $this->actingAs($user)
-            ->get(route('admin.basic-settings.show'));
+            ->get(route('admin.basic-settings.edit'));
         $response->assertForbidden();
     }
 
-    public function test_show()
+    public function test_edit(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);
 
         $response = $this->actingAs($user)
-            ->get(route('admin.basic-settings.show'));
+            ->get(route('admin.basic-settings.edit'));
 
         $response->assertSuccessful()
             ->assertInertia(fn (Assert $page) => $page
@@ -47,12 +50,14 @@ class BasicSettingsTest extends TestCase
             );
     }
 
-    /**
-     * Update Method
-     */
-    public function test_update_guest()
+    /*
+    |---------------------------------------------------------------------------
+    | Update Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_update_guest(): void
     {
-        Event::fake();
+        Event::fake(UrlChangedEvent::class);
 
         $data = [
             'url' => 'https://someUrl.noSite',
@@ -62,14 +67,15 @@ class BasicSettingsTest extends TestCase
         ];
 
         $response = $this->put(route('admin.basic-settings.update'), $data);
-        $response->assertStatus(302);
-        $response->assertRedirect(route('login'));
+
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
         $this->assertGuest();
 
         Event::assertNotDispatched(UrlChangedEvent::class);
     }
 
-    public function test_update_no_permission()
+    public function test_update_no_permission(): void
     {
         Event::fake();
 
@@ -90,7 +96,7 @@ class BasicSettingsTest extends TestCase
         Event::assertNotDispatched(UrlChangedEvent::class);
     }
 
-    public function test_update()
+    public function test_update(): void
     {
         Event::fake();
 
@@ -129,7 +135,7 @@ class BasicSettingsTest extends TestCase
         Event::assertDispatched(UrlChangedEvent::class);
     }
 
-    public function test_update_url_not_changed()
+    public function test_update_url_not_changed(): void
     {
         Event::fake();
 

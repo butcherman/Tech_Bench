@@ -1,160 +1,14 @@
-<template>
-    <div>
-        <Head title="User Details" />
-        <div
-            v-if="app.user?.username === user.username"
-            class="alert alert-danger text-center"
-        >
-            Please visit the Settings Page to make changes to your own account
-        </div>
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-title">User Details</div>
-                        <div class="table-responsive">
-                            <table class="table">
-                                <tbody>
-                                    <tr>
-                                        <th class="text-end">Username:</th>
-                                        <td>{{ user.username }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th class="text-end">First Name:</th>
-                                        <td>{{ user.first_name }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th class="text-end">Last Name:</th>
-                                        <td>{{ user.last_name }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th class="text-end">Email Address:</th>
-                                        <td>{{ user.email }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th class="text-end">Role:</th>
-                                        <td>{{ role.name }}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div v-if="app.user?.username !== user.username" class="col-md-5">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-title">Actions</div>
-                        <template v-if="!user.deleted_at">
-                            <button
-                                v-if="!lastLogin"
-                                class="btn btn-primary w-100 m-1"
-                                @click="resendInvite"
-                            >
-                                <fa-icon
-                                    icon="envelope"
-                                    class="float-start mt-1"
-                                />
-                                Resend Welcome Email
-                            </button>
-                            <button
-                                class="btn btn-warning w-100 m-1"
-                                @click="sendResetLink"
-                            >
-                                <fa-icon icon="key" class="float-start mt-1" />
-                                Send Reset Password Link
-                            </button>
-                            <Link
-                                as="button"
-                                :href="$route('admin.user.edit', user.username)"
-                                class="btn btn-info w-100 m-1"
-                            >
-                                <fa-icon icon="edit" class="float-start mt-1" />
-                                Update User Information
-                            </Link>
-                            <button
-                                class="btn btn-danger w-100 m-1"
-                                @click="disableUser"
-                            >
-                                <fa-icon
-                                    icon="user-slash"
-                                    class="float-start mt-1"
-                                />
-                                Disable User
-                            </button>
-                        </template>
-                        <template v-else>
-                            <button
-                                class="btn btn-danger w-100 m-1"
-                                @click="restoreUser"
-                            >
-                                <fa-icon
-                                    icon="unlock-alt"
-                                    class="float-start mt-1"
-                                />
-                                Enable User
-                            </button>
-                        </template>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row justify-content-center mt-4">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-title">User Activity</div>
-                        <div class="table-responsive">
-                            <table class="table">
-                                <tbody>
-                                    <tr>
-                                        <th class="text-end">User Created:</th>
-                                        <td>{{ user.created_at }}</td>
-                                    </tr>
-                                    <tr v-if="user.deleted_at">
-                                        <th class="text-end">
-                                            Deactivated Date
-                                        </th>
-                                        <td>{{ user.deleted_at }}</td>
-                                    </tr>
-                                    <tr v-if="lastLogin">
-                                        <th class="text-end">
-                                            Profile Last Updated:
-                                        </th>
-                                        <td>{{ user.updated_at }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th class="text-end">
-                                            Last Login Date:
-                                        </th>
-                                        <td>
-                                            {{
-                                                lastLogin?.created_at ||
-                                                "User Has Never Logged In"
-                                            }}
-                                        </td>
-                                    </tr>
-                                    <tr v-if="lastLogin">
-                                        <th class="text-end">
-                                            # Logins Last 30 Days:
-                                        </th>
-                                        <td>{{ thirtyDayCount }}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</template>
-
 <script setup lang="ts">
-import AppLayout from "@/Layouts/AppLayout.vue";
+import AppLayout from "@/Layouts/App/AppLayout.vue";
+import BaseButton from "@/Components/_Base/Buttons/BaseButton.vue";
+import Card from "@/Components/_Base/Card.vue";
+import Modal from "@/Components/_Base/Modal.vue";
+import ResetUserPasswordForm from "@/Forms/Admin/User/ResetUserPasswordForm.vue";
+import TableStacked from "@/Components/_Base/TableStacked.vue";
 import verifyModal from "@/Modules/verifyModal";
-import { useAppStore } from "@/Store/AppStore";
-import { router, useForm } from "@inertiajs/vue3";
+import { router } from "@inertiajs/vue3";
+import { useAuthStore } from "@/Stores/AuthStore";
+import { useTemplateRef } from "vue";
 
 const props = defineProps<{
     user: user;
@@ -164,34 +18,45 @@ const props = defineProps<{
         created_at: string;
     } | null;
     thirtyDayCount: number;
+    allowTwoFa: boolean;
+    allowSaveDevice: boolean;
 }>();
 
-const app = useAppStore();
+const resetModal = useTemplateRef("reset-password-modal");
+const auth = useAuthStore();
 
-const resendInvite = () => {
-    verifyModal(
-        `Resending the Welcome Email will create a new setup link and invalidate
-         the original Welcome Email`
-    ).then((res) => {
-        if (res) {
-            router.get(route("admin.user.send-welcome", props.user.username));
-        }
-    });
+/**
+ * Destructure and re-assemble data for view tables
+ */
+const {
+    username,
+    first_name,
+    last_name,
+    email,
+    role_name,
+    created_at,
+    updated_at,
+} = props.user;
+
+const userData = { username, first_name, last_name, email, role_name };
+const userActivity = {
+    user_created: created_at,
+    profile_last_update: updated_at,
+    last_login_date: props.lastLogin?.created_at ?? "Never",
+    logins_last_30_days: props.thirtyDayCount,
 };
 
-const sendResetLink = () => {
-    verifyModal(
-        `This will send the user an email with a link and instructions for resetting
-         their password`
-    ).then((res) => {
-        if (res) {
-            const formData = useForm({ email: props.user.email });
-            formData.post(route("admin.user.password-link"));
-        }
-    });
+/**
+ * Email a link to the user to allow them to reset their own password.
+ */
+const sendResetLink = (): void => {
+    router.post(route("admin.user.password-link"), { email: props.user.email });
 };
 
-const disableUser = () => {
+/**
+ * Disable User and log them out of all sessions.
+ */
+const disableUser = (): void => {
     verifyModal(`${props.user.full_name} will be immediately disabled`).then(
         (res) => {
             if (res) {
@@ -201,7 +66,10 @@ const disableUser = () => {
     );
 };
 
-const restoreUser = () => {
+/**
+ * Restore a Disabled user
+ */
+const restoreUser = (): void => {
     verifyModal(`${props.user.full_name} will be immediately enabled`).then(
         (res) => {
             if (res) {
@@ -210,8 +78,102 @@ const restoreUser = () => {
         }
     );
 };
+
+/**
+ * Remove all 2FA settings and devices so user has to setup again.
+ */
+const resetTwoFa = (): void => {
+    // verifyModal('Two Factor Settings will be reset and all ')
+
+    let verifyMessage = "Two Factor Settings will be reset";
+    if (props.allowSaveDevice) {
+        verifyMessage += " and all Saved Devices will be deleted";
+    }
+
+    verifyModal(verifyMessage).then((res) => {
+        if (res) {
+            router.put(
+                route("admin.user.two-factor.reset", props.user.username)
+            );
+        }
+    });
+};
 </script>
 
 <script lang="ts">
 export default { layout: AppLayout };
 </script>
+
+<template>
+    <div>
+        <div class="grid lg:grid-cols-3 gap-3 my-3">
+            <Card title="User Details" class="lg:col-span-2">
+                <TableStacked class="w-full" :items="userData" />
+            </Card>
+            <Card>
+                <template v-if="auth.user?.username == user.username">
+                    <div class="h-full flex flex-col justify-center">
+                        <h4 class="text-center text-muted">
+                            Please visit the User Settings Page to make changes
+                            to your own account
+                        </h4>
+                    </div>
+                </template>
+                <template v-else-if="!user.deleted_at">
+                    <div class="h-full flex flex-col justify-center">
+                        <BaseButton
+                            class="w-full mb-1"
+                            text="Reset Users Password"
+                            variant="warning"
+                            @click="resetModal?.show()"
+                        />
+                        <BaseButton
+                            v-if="allowTwoFa"
+                            class="w-full mb-1"
+                            text="Reset 2FA Settings"
+                            variant="info"
+                            @click="resetTwoFa()"
+                        />
+                        <BaseButton
+                            class="w-full mb-1"
+                            text="Send Reset Password Link"
+                            variant="help"
+                            @click="sendResetLink()"
+                        />
+                        <BaseButton
+                            class="w-full mb-1"
+                            text="Update User Information"
+                            :href="$route('admin.user.edit', user.username)"
+                        />
+                        <BaseButton
+                            class="w-full mb-1"
+                            text="Disable User"
+                            variant="danger"
+                            @click="disableUser()"
+                        />
+                    </div>
+                </template>
+                <template v-else>
+                    <BaseButton
+                        class="w-full my-2"
+                        text="Enable User"
+                        variant="error"
+                        @click="restoreUser()"
+                    />
+                </template>
+            </Card>
+        </div>
+        <div>
+            <Card title="User Activity" class="flex justify-center">
+                <TableStacked
+                    :items="userActivity"
+                    class="w-full lg:w-3/4 mx-auto"
+                    title-case
+                />
+            </Card>
+        </div>
+        <Modal title="Reset Password" ref="reset-password-modal">
+            <ResetUserPasswordForm :user="user" @success="resetModal?.hide()" />
+        </Modal>
+    </div>
+</template>

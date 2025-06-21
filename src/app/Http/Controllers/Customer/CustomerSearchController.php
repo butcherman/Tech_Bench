@@ -2,20 +2,17 @@
 
 namespace App\Http\Controllers\Customer;
 
+use App\Actions\Customer\CustomerSearch;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customer\CustomerSearchRequest;
-use App\Service\Customer\CustomerSearchService;
-use Illuminate\Http\JsonResponse;
 
 class CustomerSearchController extends Controller
 {
     /**
-     * Perform a search for a customer
+     * Search for a customer based on ID, Customer Name or Site Name.
      */
-    public function __invoke(CustomerSearchRequest $request): JsonResponse
+    public function __invoke(CustomerSearchRequest $request, CustomerSearch $svc): mixed
     {
-        $searchObj = new CustomerSearchService($request);
-
-        return response()->json($searchObj());
+        return $svc($request->safe()->collect());
     }
 }

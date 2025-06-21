@@ -11,12 +11,10 @@ class TechTipCommentPolicy
 {
     use AllowTrait;
 
-    protected $permName = 'Comment on Tech Tip';
-
     /**
      * Determine who has management abilities for comments
      */
-    public function manage(User $user)
+    public function manage(User $user): bool
     {
         if ($user->features()->inactive(TechTipCommentFeature::class)) {
             return false;
@@ -46,7 +44,8 @@ class TechTipCommentPolicy
             return false;
         }
 
-        return $techTipComment->user_id === $user->user_id;
+        return $techTipComment->user_id === $user->user_id
+            && $this->checkPermission($user, 'Comment on Tech Tip');
     }
 
     /**

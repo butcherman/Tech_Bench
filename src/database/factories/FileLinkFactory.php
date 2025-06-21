@@ -13,7 +13,7 @@ use Illuminate\Support\Str;
 class FileLinkFactory extends Factory
 {
     /**
-     * Define the model's default state
+     * Define the model's default state.
      */
     public function definition(): array
     {

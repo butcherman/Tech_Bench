@@ -2,47 +2,64 @@
 
 namespace App\Http\Controllers\FileLink;
 
-use App\Http\Controllers\Controller;
+use App\Enums\DiskEnum;
+use App\Http\Controllers\FileUploadController;
+use App\Http\Requests\Customer\CustomerFileRequest;
 use App\Models\FileLink;
-use App\Models\FileLinkFile;
-use App\Service\FileLink\FileLinkFileService;
-use App\Traits\FileTrait;
+use App\Models\FileUpload;
+use App\Services\FileLink\FileLinkFileService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class FileLinkFileController extends Controller
+class FileLinkFileController extends FileUploadController
 {
-    use FileTrait;
-
     public function __construct(protected FileLinkFileService $svc) {}
 
     /**
-     * Store a File Link File and attach it to the File Link.
+     * Save a new file to the File Link
      */
     public function store(Request $request, FileLink $link): Response
     {
         $this->authorize('update', $link);
 
-        if ($request->has('file')) {
-            $this->svc->processIncomingFile($request, $link, true);
+        $this->setFileData(DiskEnum::links, $link->link_id, true);
+        $savedFile = $this->getChunk($request->file('file'), $request);
 
-            return response()->noContent();
+        if ($savedFile) {
+            $this->svc->createFileLinkFile(
+                $link,
+                $savedFile,
+                $request->user()->user_id
+            );
         }
-
-        $this->svc->savePrivateLoadedFile($link);
 
         return response()->noContent();
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Attach a file to a customer Profile.
      */
-    public function destroy(FileLink $link, FileLinkFile $linkFile): RedirectResponse
+    public function update(CustomerFileRequest $request, FileLink $link, FileUpload $file): RedirectResponse
+    {
+        $this->svc->moveFileLinkFile(
+            $request->safe()->collect(),
+            $link,
+            $file,
+            $request->user()
+        );
+
+        return back()->with('success', 'File Moved to Customer');
+    }
+
+    /**
+     * Delete a file from the File Link
+     */
+    public function destroy(FileLink $link, FileUpload $file): RedirectResponse
     {
         $this->authorize('update', $link);
 
-        $this->svc->destroyLinkFile($linkFile);
+        $this->svc->destroyFileLinkFile($link, $file);
 
         return back()->with('warning', 'File Deleted');
     }

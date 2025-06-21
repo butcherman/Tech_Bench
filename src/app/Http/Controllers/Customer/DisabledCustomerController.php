@@ -4,23 +4,21 @@ namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
+use App\Services\Customer\CustomerAdministrationService;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class DisabledCustomerController extends Controller
 {
     /**
-     * Show the list of customers that have been soft deleted
+     * Get a list of customers that have been soft deleted
      */
-    public function __invoke(): Response
+    public function __invoke(CustomerAdministrationService $svc): Response
     {
         $this->authorize('manage', Customer::class);
 
-        return Inertia::render('Customer/Disabled', [
-            'disabled-list' => Customer::onlyTrashed()
-                ->get()
-                ->makeHidden(['CustomerSite'])
-                ->makeVisible(['deleted_at', 'deleted_reason']),
+        return Inertia::render('Customer/Admin/DisabledCustomers', [
+            'disabled-list' => $svc->getDisabledCustomers(),
         ]);
     }
 }

@@ -1,12 +1,12 @@
-<template>
-    <div class="loading">{{ text }}</div>
-</template>
-
 <script setup lang="ts">
 defineProps<{
     text?: string;
 }>();
 </script>
+
+<template>
+    <div class="loading">{{ text }}</div>
+</template>
 
 <style scoped>
 .loading {

@@ -3,35 +3,41 @@
 namespace App\Http\Controllers\Admin\User;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\PasswordPolicyRequest;
+use App\Http\Requests\Admin\User\PasswordPolicyRequest;
 use App\Models\User;
-use App\Service\Admin\ApplicationSettingsService;
+use App\Services\Admin\UserGlobalSettingsService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class PasswordPolicyController extends Controller
 {
-    public function __construct(protected ApplicationSettingsService $svc) {}
+    public function __construct(protected UserGlobalSettingsService $svc) {}
 
     /**
-     * Display the current password policy.
+     * Show the Password Policy Form.
      */
-    public function show(): Response
+    public function edit(): Response
     {
-        $this->authorize('viewAny', User::class);
+        $this->authorize('manage', User::class);
 
         return Inertia::render('Admin/User/PasswordPolicy', [
-            'policy' => $this->svc->getPasswordSettings(),
+            'policy' => fn () => $this->svc->getPasswordPolicy(),
         ]);
     }
 
     /**
-     * Update the password policy.
+     * Update the Password Policy Form.
      */
     public function update(PasswordPolicyRequest $request): RedirectResponse
     {
-        $this->svc->processPasswordSettings($request);
+        $this->svc->savePasswordPolicy($request->safe()->collect());
+
+        Log::notice(
+            $request->user()->username.' has updated the User Password Policy',
+            $request->toArray()
+        );
 
         return back()->with('success', __('admin.user.password_policy'));
     }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Home;
 
+use App\Actions\Misc\ValidateFileForDownload;
 use App\Http\Controllers\Controller;
 use App\Models\FileUpload;
 use Illuminate\Http\Request;
@@ -10,11 +11,12 @@ use Illuminate\Support\Facades\Log;
 class DownloadFileController extends Controller
 {
     /**
-     * Download a file from the Storage System.
+     * Attempt to download the selected file
      */
-    public function __invoke(Request $request, FileUpload $file, string $fileName)
+    public function __invoke(Request $request, ValidateFileForDownload $svc, FileUpload $file, string $fileName): void
     {
-        $file->validateFile($fileName);
+        // Make sure user is allowed to download file
+        $svc($file, $fileName, $request->user());
 
         // @codeCoverageIgnoreStart
         $path = $file->getFilePath();

@@ -9,10 +9,12 @@ use Tests\TestCase;
 
 class ExtendLinkTest extends TestCase
 {
-    /**
-     * Invoke Method
-     */
-    public function test_invoke_guest()
+    /*
+    |---------------------------------------------------------------------------
+    | Invoke Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_invoke_guest(): void
     {
         $link = FileLink::factory()->createQuietly();
 
@@ -23,7 +25,7 @@ class ExtendLinkTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_invoke_feature_disabled()
+    public function test_invoke_feature_disabled(): void
     {
         config(['file-link.feature_enabled' => false]);
 
@@ -37,7 +39,7 @@ class ExtendLinkTest extends TestCase
         $response->assertForbidden();
     }
 
-    public function test_invoke_different_user()
+    public function test_invoke_different_user(): void
     {
         config(['file-link.feature_enabled' => true]);
 
@@ -50,14 +52,14 @@ class ExtendLinkTest extends TestCase
         $response->assertForbidden();
     }
 
-    public function test_invoke_no_permission()
+    public function test_invoke_no_permission(): void
     {
         config(['file-link.feature_enabled' => true]);
         $this->changeRolePermission(4, 'Use File Links', false);
 
         /** @var User $user */
         $user = User::factory()->createQuietly();
-        $link = FileLink::factory()->createQuietly(['user_id' => $user->user_id]);
+        $link = FileLink::factory()->create(['user_id' => $user->user_id]);
 
         $response = $this->actingAs($user)
             ->get(route('links.extend', $link->link_id));
@@ -65,22 +67,25 @@ class ExtendLinkTest extends TestCase
         $response->assertForbidden();
     }
 
-    public function test_invoke()
+    public function test_invoke(): void
     {
         config(['file-link.feature_enabled' => true]);
 
         /** @var User $user */
         $user = User::factory()->createQuietly();
-        $link = FileLink::factory()->createQuietly(['user_id' => $user->user_id]);
+        $link = FileLink::factory()->create(['user_id' => $user->user_id]);
 
-        $response = $this->actingAs($user)->get(route('links.extend', $link->link_id));
+        $response = $this->actingAs($user)
+            ->get(route('links.extend', $link->link_id));
 
         $response->assertStatus(302)
             ->assertSessionHas('success');
 
         $this->assertDatabaseHas('file_links', [
             'link_id' => $link->link_id,
-            'expire' => Carbon::parse($link->expire)->addDays(30)->format('Y-m-d'),
+            'expire' => Carbon::parse($link->expire)
+                ->addDays(30)
+                ->format('Y-m-d'),
         ]);
     }
 }

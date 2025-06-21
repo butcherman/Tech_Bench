@@ -3,66 +3,67 @@
 namespace App\Observers;
 
 use App\Models\CustomerContact;
-use App\Models\User;
 use Illuminate\Support\Facades\Log;
 
-class CustomerContactObserver
+class CustomerContactObserver extends Observer
 {
-    /** @var User|string */
-    protected $user;
-
-    public function __construct()
-    {
-        $this->user = match (true) {
-            ! is_null(request()->user()) => request()->user()->username,
-            request()->ip() === '127.0.0.1' => 'Internal Service',
-            // @codeCoverageIgnoreStart
-            default => request()->ip(),
-            // @codeCoverageIgnoreEnd
-        };
-    }
-
-    public function created(CustomerContact $contact): void
+    /**
+     * Handle the CustomerContact "created" event.
+     */
+    public function created(CustomerContact $customerContact): void
     {
         Log::info(
-            'New Customer Contact created for '.$contact->Customer->name.' by '.
-                $this->user,
-            $contact->toArray()
-        );
-    }
-
-    public function updated(CustomerContact $contact): void
-    {
-        Log::info(
-            'Customer Contact updated by '.$this->user,
-            $contact->load('Customer')->toArray()
-        );
-    }
-
-    public function deleted(CustomerContact $contact): void
-    {
-        Log::notice(
-            'Customer Contact soft-deleted for '.
-                $contact->Customer->name.' by '.$this->user,
-            $contact->toArray()
-        );
-    }
-
-    public function restored(CustomerContact $contact): void
-    {
-        Log::info(
-            'Customer Contact restored for '.$contact->Customer->name.' by '.
-                $this->user,
-            $contact->toArray()
-        );
-    }
-
-    public function forceDeleting(CustomerContact $contact): void
-    {
-        Log::notice(
-            'Customer Contact force deleted for '.$contact->Customer->name.
+            'New Customer Contact created for '.$customerContact->Customer->name.
                 ' by '.$this->user,
-            $contact->toArray()
+            $customerContact->toArray()
+        );
+    }
+
+    /**
+     * Handle the CustomerContact "updated" event.
+     */
+    public function updated(CustomerContact $customerContact): void
+    {
+        Log::info(
+            'Customer Contact updated for '.$customerContact->Customer->name.
+                ' by '.$this->user,
+            $customerContact->toArray()
+        );
+    }
+
+    /**
+     * Handle the CustomerContact "deleted" event.
+     */
+    public function deleted(CustomerContact $customerContact): void
+    {
+        Log::info(
+            'Customer Contact deleted for '.$customerContact->Customer->name.
+                ' by '.$this->user,
+            $customerContact->toArray()
+        );
+    }
+
+    /**
+     * Handle the CustomerContact "restored" event.
+     */
+    public function restored(CustomerContact $customerContact): void
+    {
+        Log::info(
+            'Customer Contact restored for '.$customerContact->Customer->name.
+                ' by '.$this->user,
+            $customerContact->toArray()
+        );
+    }
+
+    /**
+     * Handle the CustomerContact "force deleted" event.
+     */
+    public function forceDeleted(CustomerContact $customerContact): void
+    {
+        Log::info(
+            'Customer Contact trashed for '.$customerContact->Customer->name.
+                ' by '.$this->user,
+            $customerContact->toArray()
         );
     }
 }

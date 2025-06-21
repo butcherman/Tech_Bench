@@ -1,30 +1,10 @@
-<template>
-    <div>
-        <Head title="Edit Customer" />
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-body">
-                        <CustomerDetailsForm
-                            :select-id="selectId"
-                            :default-state="defaultState"
-                            :customer="customer"
-                            :site-list="siteList"
-                        />
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</template>
-
 <script setup lang="ts">
-import AppLayout from "@/Layouts/AppLayout.vue";
+import AppLayout from "@/Layouts/App/AppLayout.vue";
+import Card from "@/Components/_Base/Card.vue";
 import CustomerDetailsForm from "@/Forms/Customer/CustomerDetailsForm.vue";
-import { ref, reactive, onMounted } from "vue";
-import { customer, siteList } from "@/State/CustomerState";
+import { customer, siteList } from "@/Composables/Customer/CustomerData.module";
 
-const props = defineProps<{
+defineProps<{
     selectId: boolean;
     defaultState: string;
 }>();
@@ -33,3 +13,16 @@ const props = defineProps<{
 <script lang="ts">
 export default { layout: AppLayout };
 </script>
+
+<template>
+    <div class="flex justify-center">
+        <Card class="tb-card" title="Edit Customer">
+            <CustomerDetailsForm
+                :select-id="selectId"
+                :default-state="defaultState"
+                :customer="customer"
+                :site-list="siteList"
+            />
+        </Card>
+    </div>
+</template>

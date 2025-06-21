@@ -4,23 +4,23 @@ namespace App\Http\Controllers\FileLink;
 
 use App\Http\Controllers\Controller;
 use App\Models\FileLink;
+use App\Services\FileLink\FileLinkService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Log;
 
 class ExtendLinkController extends Controller
 {
     /**
-     * Extend the Expire date on a file link by 30 days
+     * Extend the links expire date 30 days.
      */
-    public function __invoke(FileLink $link): RedirectResponse
+    public function __invoke(FileLinkService $svc, FileLink $link): RedirectResponse
     {
         $this->authorize('update', $link);
 
-        $link->extendLink();
+        $svc->extendFileLink($link);
 
-        return back()
-            ->with(
-                'success',
-                'Link Extended until '.$link->expire->format('M d, Y')
-            );
+        Log::info('A File Link was manually extended 30 days', $link->toArray());
+
+        return back()->with('success', 'Link Extended');
     }
 }

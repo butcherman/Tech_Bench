@@ -2,20 +2,17 @@
 
 namespace Database\Factories;
 
-use App\Models\UserRole;
 use App\Models\UserRolePermission;
 use App\Models\UserRolePermissionType;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+/**
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\UserRole>
+ */
 class UserRoleFactory extends Factory
 {
     /**
-     * The name of the factory's corresponding model
-     */
-    protected $model = UserRole::class;
-
-    /**
-     * Define the model's default state
+     * Define the model's default state.
      */
     public function definition(): array
     {
@@ -25,6 +22,9 @@ class UserRoleFactory extends Factory
         ];
     }
 
+    /**
+     * Create permissions attached to this role
+     */
     public function configure(): static
     {
         return $this->afterCreating(function ($role) {

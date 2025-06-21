@@ -1,14 +1,13 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Http\Requests\User;
 
-use App\Models\UserSetting;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UserSettingsRequest extends FormRequest
 {
+    protected $errorBag = 'form_error';
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -23,19 +22,7 @@ class UserSettingsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'settingList' => 'required|array',
+            'settingList' => ['required', 'array'],
         ];
-    }
-
-    /**
-     * Cycle through the user settings and update their values
-     */
-    public function updateSettings()
-    {
-        foreach ($this->settingList as $key => $value) {
-            UserSetting::where('user_id', $this->user->user_id)
-                ->where('setting_type_id', str_replace('type_id_', '', $key))
-                ->update(['value' => $value]);
-        }
     }
 }

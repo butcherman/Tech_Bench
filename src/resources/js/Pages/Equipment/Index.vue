@@ -1,176 +1,89 @@
-<template>
-    <div>
-        <Head title="Equipment Categories and Types" />
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-title">
-                            Equipment Categories and Types
-                        </div>
-
-                        <div v-if="!equipmentList.length" class="text-center">
-                            <p>
-                                You have not created any equipment profiles yet
-                            </p>
-                            <p>
-                                Click the Create New button below to get started
-                            </p>
-                        </div>
-                        <div class="table-responsive">
-                            <table class="table">
-                                <tbody>
-                                    <template
-                                        v-for="cat in equipmentList"
-                                        :key="cat.cat_id"
-                                    >
-                                        <tr>
-                                            <th>{{ cat.name }}</th>
-                                            <td class="text-end">
-                                                <EditBadge
-                                                    tooltip="Edit Category Name"
-                                                    @click="openEditModal(cat)"
-                                                />
-                                                <DeleteBadge
-                                                    v-if="
-                                                        !cat.equipment_type
-                                                            .length
-                                                    "
-                                                    tooltip="Delete Category"
-                                                    @click="
-                                                        verifyDeleteCategory(
-                                                            cat
-                                                        )
-                                                    "
-                                                />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="2">
-                                                <div
-                                                    v-if="
-                                                        !cat.equipment_type
-                                                            .length
-                                                    "
-                                                    class="text-center"
-                                                >
-                                                    No Equipment has been
-                                                    created for this Category
-                                                </div>
-                                                <table
-                                                    class="table table-striped table-hover mx-1"
-                                                >
-                                                    <tbody>
-                                                        <tr
-                                                            v-for="equip in cat.equipment_type"
-                                                            :key="
-                                                                equip.equip_id
-                                                            "
-                                                            class="row-link"
-                                                        >
-                                                            <td>
-                                                                <Link
-                                                                    :href="
-                                                                        $route(
-                                                                            'equipment.edit',
-                                                                            equip.equip_id
-                                                                        )
-                                                                    "
-                                                                >
-                                                                    {{
-                                                                        equip.name
-                                                                    }}
-                                                                </Link>
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </td>
-                                        </tr>
-                                    </template>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row justify-content-center mt-4">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-body flex-row justify-content-center">
-                        <AddButton
-                            text="Create New Equipment Category"
-                            class="mx-auto"
-                            @click="categoryFormModal?.show"
-                        />
-                        <Link
-                            v-if="equipmentList.length"
-                            :href="$route('equipment.create')"
-                            class="mx-auto"
-                        >
-                            <AddButton text="Create New Equipment" />
-                        </Link>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <Modal
-            ref="categoryFormModal"
-            :title="modalTitle"
-            @show="showForm = true"
-            @hidden="showForm = false"
-        >
-            <CategoryForm
-                v-if="showForm"
-                :category="activeCategory"
-                @success="closeEditModal"
-            />
-        </Modal>
-    </div>
-</template>
-
 <script setup lang="ts">
-import AppLayout from "@/Layouts/AppLayout.vue";
-import EditBadge from "@/Components/_Base/Badges/EditBadge.vue";
-import DeleteBadge from "@/Components/_Base/Badges/DeleteBadge.vue";
-import Modal from "@/Components/_Base/Modal.vue";
 import AddButton from "@/Components/_Base/Buttons/AddButton.vue";
+import AppLayout from "@/Layouts/App/AppLayout.vue";
+import Card from "@/Components/_Base/Card.vue";
 import CategoryForm from "@/Forms/Equipment/CategoryForm.vue";
-import { ref, computed } from "vue";
-import verifyModal from "@/Modules/verifyModal";
+import DeleteBadge from "@/Components/_Base/Badges/DeleteBadge.vue";
+import EditBadge from "@/Components/_Base/Badges/EditBadge.vue";
+import Modal from "@/Components/_Base/Modal.vue";
+import ResourceList from "@/Components/_Base/ResourceList.vue";
+import { ref, useTemplateRef } from "vue";
 import { router } from "@inertiajs/vue3";
 
 defineProps<{
-    equipmentList: categoryList[];
+    equipmentList: equipmentCategory[];
 }>();
 
-const categoryFormModal = ref<InstanceType<typeof Modal> | null>(null);
-const showForm = ref<boolean>(false);
-const activeCategory = ref<categoryList | null>(null);
-const modalTitle = computed(() =>
-    activeCategory.value === null ? "Create Category" : "Update Category Name"
-);
+const catModal = useTemplateRef("category-modal");
+const activeCategory = ref<equipmentCategory | undefined>();
 
-const openEditModal = (cat: categoryList) => {
+/**
+ * Open Modal to edit Category Name
+ */
+const editCategory = (cat: equipmentCategory) => {
     activeCategory.value = cat;
-    categoryFormModal.value?.show();
+    catModal.value?.show();
 };
 
-const closeEditModal = () => {
-    activeCategory.value = null;
-    categoryFormModal.value?.hide();
-};
-
-const verifyDeleteCategory = (cat: categoryList) => {
-    verifyModal("This cannot be undone").then((res) => {
-        if (res) {
-            router.delete(route("equipment-category.destroy", cat.cat_id));
-        }
-    });
+/**
+ * Delete a category after confirmation
+ */
+const deleteCategory = (cat: equipmentCategory): void => {
+    router.delete(route("equipment-category.destroy", cat.cat_id));
 };
 </script>
 
 <script lang="ts">
 export default { layout: AppLayout };
 </script>
+
+<template>
+    <div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <Card
+                v-for="cat in equipmentList"
+                :title="cat.name"
+                :key="cat.cat_id"
+            >
+                <template #append-title>
+                    <EditBadge
+                        class="mx-1"
+                        v-tooltip="`Edit ${cat.name}`"
+                        @click="editCategory(cat)"
+                    />
+                    <DeleteBadge
+                        v-if="!cat.equipment_type.length"
+                        class="mx-1"
+                        v-tooltip="`Delete ${cat.name}`"
+                        confirm
+                        @accepted="deleteCategory(cat)"
+                    />
+                </template>
+                <ResourceList
+                    :list="cat.equipment_type"
+                    empty-text="No Equipment"
+                    label-field="name"
+                    :link-fn="(item) => $route('equipment.edit', item.equip_id)"
+                />
+            </Card>
+        </div>
+        <div class="flex place-content-center mt-3 gap-3">
+            <AddButton text="Create New Category" @click="catModal?.show()" />
+            <AddButton
+                text="Create New Equipment"
+                :href="$route('equipment.create')"
+            />
+        </div>
+        <Modal
+            ref="category-modal"
+            title="Equipment Category"
+            @hidden="activeCategory = undefined"
+        >
+            <CategoryForm
+                v-if="catModal?.isOpen || activeCategory"
+                :category="activeCategory"
+                @success="catModal?.hide()"
+            />
+        </Modal>
+    </div>
+</template>

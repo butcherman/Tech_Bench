@@ -5,10 +5,13 @@ namespace Database\Factories;
 use App\Models\Customer;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+/**
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\CustomerAlert>
+ */
 class CustomerAlertFactory extends Factory
 {
     /**
-     * Define the model's default state
+     * Define the model's default state.
      */
     public function definition(): array
     {

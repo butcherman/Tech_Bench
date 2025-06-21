@@ -5,7 +5,8 @@ namespace App\Http\Controllers\Equipment;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Equipment\EquipmentCategoryRequest;
 use App\Models\EquipmentCategory;
-use App\Service\Equipment\EquipmentService;
+use App\Models\EquipmentType;
+use App\Services\Equipment\EquipmentService;
 use Illuminate\Http\RedirectResponse;
 
 class EquipmentCategoryController extends Controller
@@ -17,7 +18,7 @@ class EquipmentCategoryController extends Controller
      */
     public function store(EquipmentCategoryRequest $request): RedirectResponse
     {
-        $this->svc->createCategory($request);
+        $this->svc->createCategory($request->safe()->collect());
 
         return back()->with('success', __('equipment.category.created'));
     }
@@ -27,9 +28,12 @@ class EquipmentCategoryController extends Controller
      */
     public function update(
         EquipmentCategoryRequest $request,
-        EquipmentCategory $category
+        EquipmentCategory $equipment_category
     ): RedirectResponse {
-        $this->svc->updateCategory($request, $category);
+        $this->svc->updateCategory(
+            $request->safe()->collect(),
+            $equipment_category
+        );
 
         return back()->with('success', __('equipment.category.updated'));
     }
@@ -37,11 +41,12 @@ class EquipmentCategoryController extends Controller
     /**
      * Remove the Equipment Category.
      */
-    public function destroy(EquipmentCategory $category): RedirectResponse
-    {
-        $this->authorize('delete', $category);
+    public function destroy(
+        EquipmentCategory $equipment_category
+    ): RedirectResponse {
+        $this->authorize('delete', EquipmentType::class);
 
-        $this->svc->destroyCategory($category);
+        $this->svc->destroyCategory($equipment_category);
 
         return back()->with('warning', __('equipment.category.destroyed'));
     }

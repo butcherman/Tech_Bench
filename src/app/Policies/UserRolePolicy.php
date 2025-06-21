@@ -5,35 +5,41 @@ namespace App\Policies;
 use App\Models\User;
 use App\Models\UserRole;
 use App\Traits\AllowTrait;
-use Illuminate\Auth\Access\HandlesAuthorization;
 
 class UserRolePolicy
 {
     use AllowTrait;
-    use HandlesAuthorization;
 
     /**
-     * Determine whether the user can view the model
+     * Determine whether the user can view any models.
      */
-    public function view(User $user)
+    public function viewAny(User $user): bool
     {
         return $this->checkPermission($user, 'Manage Permissions');
     }
 
     /**
-     * Determine whether the user can create models
+     * Determine whether the user can view the model.
      */
-    public function create(User $user)
+    public function view(User $user): bool
     {
         return $this->checkPermission($user, 'Manage Permissions');
     }
 
     /**
-     * Determine whether the user can update the model
+     * Determine whether the user can create models.
      */
-    public function update(User $user, UserRole $role)
+    public function create(User $user): bool
     {
-        if (! $role->allow_edit) {
+        return $this->checkPermission($user, 'Manage Permissions');
+    }
+
+    /**
+     * Determine whether the user can update the model.
+     */
+    public function update(User $user, UserRole $userRole): bool
+    {
+        if (! $userRole->allow_edit) {
             return false;
         }
 
@@ -41,11 +47,11 @@ class UserRolePolicy
     }
 
     /**
-     * Determine whether the user can delete the model
+     * Determine whether the user can delete the model.
      */
-    public function delete(User $user, UserRole $role)
+    public function delete(User $user, UserRole $userRole): bool
     {
-        if (! $role->allow_edit) {
+        if (! $userRole->allow_edit) {
             return false;
         }
 

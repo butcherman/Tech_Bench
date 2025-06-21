@@ -2,10 +2,10 @@
 
 namespace Tests\Feature\FileLink;
 
-use App\Jobs\FileLink\HandleLinkFilesJob;
+use App\Jobs\FileLink\ProcessLinkFilesJob;
 use App\Models\FileLink;
+use App\Models\FileUpload;
 use App\Models\User;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Testing\AssertableInertia as Assert;
@@ -13,10 +13,12 @@ use Tests\TestCase;
 
 class FileLinkTest extends TestCase
 {
-    /**
-     * Index Method
-     */
-    public function test_index_guest()
+    /*
+    |---------------------------------------------------------------------------
+    | Index Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_index_guest(): void
     {
         $response = $this->get(route('links.index'));
 
@@ -25,7 +27,7 @@ class FileLinkTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_index_feature_disabled()
+    public function test_index_feature_disabled(): void
     {
         config(['file-link.feature_enabled' => false]);
 
@@ -37,7 +39,7 @@ class FileLinkTest extends TestCase
         $response->assertForbidden();
     }
 
-    public function test_index_no_permission()
+    public function test_index_no_permission(): void
     {
         config(['file-link.feature_enabled' => true]);
         $this->changeRolePermission(4, 'Use File Links', false);
@@ -50,7 +52,7 @@ class FileLinkTest extends TestCase
         $response->assertForbidden();
     }
 
-    public function test_index()
+    public function test_index(): void
     {
         config(['file-link.feature_enabled' => true]);
 
@@ -60,16 +62,18 @@ class FileLinkTest extends TestCase
         $response = $this->actingAs($user)->get(route('links.index'));
 
         $response->assertSuccessful()
-            ->assertInertia(fn (Assert $page) => $page
-                ->component('FileLinks/Index')
-                ->has('link-list')
+            ->assertInertia(
+                fn (Assert $page) => $page
+                    ->component('FileLink/Index')
             );
     }
 
-    /**
-     * Create Method
-     */
-    public function test_create_guest()
+    /*
+    |---------------------------------------------------------------------------
+    | Create Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_create_guest(): void
     {
         $response = $this->get(route('links.create'));
 
@@ -78,7 +82,7 @@ class FileLinkTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_create_feature_disabled()
+    public function test_create_feature_disabled(): void
     {
         config(['file-link.feature_enabled' => false]);
 
@@ -90,7 +94,7 @@ class FileLinkTest extends TestCase
         $response->assertForbidden();
     }
 
-    public function test_create_no_permission()
+    public function test_create_no_permission(): void
     {
         config(['file-link.feature_enabled' => true]);
         $this->changeRolePermission(4, 'Use File Links', false);
@@ -103,7 +107,7 @@ class FileLinkTest extends TestCase
         $response->assertForbidden();
     }
 
-    public function test_create()
+    public function test_create(): void
     {
         config(['file-link.feature_enabled' => true]);
 
@@ -113,22 +117,28 @@ class FileLinkTest extends TestCase
         $response = $this->actingAs($user)->get(route('links.create'));
 
         $response->assertSuccessful()
-            ->assertInertia(fn (Assert $page) => $page
-                ->component('FileLinks/Create')
-                ->has('default-expire')
+            ->assertInertia(
+                fn (Assert $page) => $page
+                    ->component('FileLink/Create')
+                    ->has('default-expire')
+                    ->has('link-hash')
+                    ->has('allow-custom-url')
             );
     }
 
-    /**
-     * Store Method
-     */
-    public function test_store_guest()
+    /*
+    |---------------------------------------------------------------------------
+    | Store Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_store_guest(): void
     {
         $data = [
             'link_name' => 'Test Link',
             'expire' => '2030-12-12',
             'allow_upload' => true,
             'instructions' => 'Here are some instructions',
+            'link_hash' => 'custom-hash',
         ];
 
         $response = $this->post(route('links.store'), $data);
@@ -138,7 +148,7 @@ class FileLinkTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_store_feature_disabled()
+    public function test_store_feature_disabled(): void
     {
         config(['file-link.feature_enabled' => false]);
 
@@ -149,6 +159,7 @@ class FileLinkTest extends TestCase
             'expire' => '2030-12-12',
             'allow_upload' => true,
             'instructions' => 'Here are some instructions',
+            'link_hash' => 'custom-hash',
         ];
 
         $response = $this->actingAs($user)
@@ -157,7 +168,7 @@ class FileLinkTest extends TestCase
         $response->assertForbidden();
     }
 
-    public function test_store_no_permission()
+    public function test_store_no_permission(): void
     {
         config(['file-link.feature_enabled' => true]);
         $this->changeRolePermission(4, 'Use File Links', false);
@@ -169,6 +180,7 @@ class FileLinkTest extends TestCase
             'expire' => '2030-12-12',
             'allow_upload' => true,
             'instructions' => 'Here are some instructions',
+            'link_hash' => 'custom-hash',
         ];
 
         $response = $this->actingAs($user)
@@ -177,7 +189,7 @@ class FileLinkTest extends TestCase
         $response->assertForbidden();
     }
 
-    public function test_store()
+    public function test_store(): void
     {
         Bus::fake();
 
@@ -190,6 +202,7 @@ class FileLinkTest extends TestCase
             'expire' => '2030-12-12',
             'allow_upload' => true,
             'instructions' => 'Here are some instructions',
+            'link_hash' => 'custom-hash',
         ];
 
         $response = $this->actingAs($user)
@@ -205,10 +218,10 @@ class FileLinkTest extends TestCase
             'instructions' => 'Here are some instructions',
         ]);
 
-        Bus::assertDispatched(HandleLinkFilesJob::class);
+        Bus::assertNotDispatched(ProcessLinkFilesJob::class);
     }
 
-    public function test_store_with_file()
+    public function test_store_with_file_saved(): void
     {
         config(['file-link.feature_enabled' => true]);
 
@@ -217,34 +230,30 @@ class FileLinkTest extends TestCase
 
         /** @var User $user */
         $user = User::factory()->createQuietly();
+        $fileList = FileUpload::factory()->create()->pluck('file_id')->toArray();
         $data = [
             'link_name' => 'Test Link',
             'expire' => '2030-12-12',
             'allow_upload' => true,
             'instructions' => 'Here are some instructions',
-            'file' => UploadedFile::fake()->image('testPhoto.png'),
+            'link_hash' => 'custom-hash',
         ];
 
         $response = $this->actingAs($user)
+            ->withSession(['link-file' => $fileList])
             ->post(route('links.store'), $data);
 
-        $response->assertSuccessful();
+        $response->assertStatus(302);
 
-        $this->assertDatabaseHas('file_uploads', [
-            'folder' => 'tmp',
-            'file_name' => 'testPhoto.png',
-        ]);
-
-        Storage::disk('fileLinks')
-            ->assertExists('tmp'.DIRECTORY_SEPARATOR.'testPhoto.png');
-
-        Bus::assertNotDispatched(HandleLinkFilesJob::class);
+        Bus::assertDispatched(ProcessLinkFilesJob::class);
     }
 
-    /**
-     * Show Method
-     */
-    public function test_show_guest()
+    /*
+    |---------------------------------------------------------------------------
+    | Show Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_show_guest(): void
     {
         $link = FileLink::factory()->createQuietly();
 
@@ -255,7 +264,7 @@ class FileLinkTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_show_feature_disabled()
+    public function test_show_feature_disabled(): void
     {
         config(['file-link.feature_enabled' => false]);
 
@@ -270,7 +279,7 @@ class FileLinkTest extends TestCase
         $response->assertForbidden();
     }
 
-    public function test_show_no_permission()
+    public function test_show_no_permission(): void
     {
         config(['file-link.feature_enabled' => true]);
         $this->changeRolePermission(4, 'Use File Links', false);
@@ -285,7 +294,7 @@ class FileLinkTest extends TestCase
         $response->assertForbidden();
     }
 
-    public function test_show_other_user()
+    public function test_show_other_user(): void
     {
         config(['file-link.feature_enabled' => true]);
 
@@ -296,18 +305,10 @@ class FileLinkTest extends TestCase
         $response = $this->actingAs($user)
             ->get(route('links.show', $link->link_id));
 
-        $response->assertSuccessful()
-            ->assertInertia(fn (Assert $page) => $page
-                ->component('FileLinks/Show')
-                ->has('link')
-                ->has('table-data')
-                ->has('timeline')
-                ->has('downloadable-files')
-                ->has('uploaded-files')
-            );
+        $response->assertForbidden();
     }
 
-    public function test_show()
+    public function test_show(): void
     {
         config(['file-link.feature_enabled' => true]);
 
@@ -319,20 +320,38 @@ class FileLinkTest extends TestCase
         $response = $this->actingAs($user)
             ->get(route('links.show', $link->link_id));
         $response->assertSuccessful()
-            ->assertInertia(fn (Assert $page) => $page
-                ->component('FileLinks/Show')
-                ->has('link')
-                ->has('table-data')
-                ->has('timeline')
-                ->has('downloadable-files')
-                ->has('uploaded-files')
+            ->assertInertia(
+                fn (Assert $page) => $page
+                    ->component('FileLink/Show')
+                    ->has('link')
             );
     }
 
-    /**
-     * Edit Method
-     */
-    public function test_edit_guest()
+    public function test_show_as_admin(): void
+    {
+        config(['file-link.feature_enabled' => true]);
+
+        /** @var User $user */
+        $user = User::factory()->createQuietly(['role_id' => 1]);
+        $link = FileLink::factory()->createQuietly();
+
+        $response = $this->actingAs($user)
+            ->get(route('links.show', $link->link_id));
+
+        $response->assertSuccessful()
+            ->assertInertia(
+                fn (Assert $page) => $page
+                    ->component('FileLink/Show')
+                    ->has('link')
+            );
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | Edit Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_edit_guest(): void
     {
         $link = FileLink::factory()->createQuietly();
 
@@ -343,7 +362,7 @@ class FileLinkTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_edit_feature_disabled()
+    public function test_edit_feature_disabled(): void
     {
         config(['file-link.feature_enabled' => false]);
 
@@ -358,7 +377,7 @@ class FileLinkTest extends TestCase
         $response->assertForbidden();
     }
 
-    public function test_edit_no_permission()
+    public function test_edit_no_permission(): void
     {
         config(['file-link.feature_enabled' => true]);
         $this->changeRolePermission(4, 'Use File Links', false);
@@ -374,7 +393,7 @@ class FileLinkTest extends TestCase
         $response->assertForbidden();
     }
 
-    public function test_edit_other_user()
+    public function test_edit_other_user(): void
     {
         config(['file-link.feature_enabled' => true]);
 
@@ -390,7 +409,7 @@ class FileLinkTest extends TestCase
         $response->assertForbidden();
     }
 
-    public function test_edit()
+    public function test_edit(): void
     {
         config(['file-link.feature_enabled' => true]);
 
@@ -403,16 +422,19 @@ class FileLinkTest extends TestCase
             ->get(route('links.edit', $link->link_id));
 
         $response->assertSuccessful()
-            ->assertInertia(fn (Assert $page) => $page
-                ->component('FileLinks/Edit')
-                ->has('link')
+            ->assertInertia(
+                fn (Assert $page) => $page
+                    ->component('FileLink/Edit')
+                    ->has('link')
             );
     }
 
-    /**
-     * Update Method
-     */
-    public function test_update_guest()
+    /*
+    |---------------------------------------------------------------------------
+    | Update Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_update_guest(): void
     {
         $user = User::factory()->createQuietly();
         $link = FileLink::factory()
@@ -422,6 +444,7 @@ class FileLinkTest extends TestCase
             'expire' => '2030-12-12',
             'allow_upload' => true,
             'instructions' => 'Here are some instructions',
+            'link_hash' => 'custom-hash',
         ];
 
         $response = $this->put(route('links.update', $link->link_id), $data);
@@ -431,7 +454,7 @@ class FileLinkTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_update_feature_disabled()
+    public function test_update_feature_disabled(): void
     {
         config(['file-link.feature_enabled' => false]);
 
@@ -444,6 +467,7 @@ class FileLinkTest extends TestCase
             'expire' => '2030-12-12',
             'allow_upload' => true,
             'instructions' => 'Here are some instructions',
+            'link_hash' => 'custom-hash',
         ];
 
         $response = $this->actingAs($user)
@@ -452,7 +476,7 @@ class FileLinkTest extends TestCase
         $response->assertForbidden();
     }
 
-    public function test_update_no_permission()
+    public function test_update_no_permission(): void
     {
         config(['file-link.feature_enabled' => true]);
         $this->changeRolePermission(4, 'Use File Links', false);
@@ -466,6 +490,7 @@ class FileLinkTest extends TestCase
             'expire' => '2030-12-12',
             'allow_upload' => true,
             'instructions' => 'Here are some instructions',
+            'link_hash' => 'custom-hash',
         ];
 
         $response = $this->actingAs($user)
@@ -474,7 +499,7 @@ class FileLinkTest extends TestCase
         $response->assertForbidden();
     }
 
-    public function test_update_other_user()
+    public function test_update_other_user(): void
     {
         config(['file-link.feature_enabled' => true]);
 
@@ -488,6 +513,7 @@ class FileLinkTest extends TestCase
             'expire' => '2030-12-12',
             'allow_upload' => true,
             'instructions' => 'Here are some instructions',
+            'link_hash' => 'custom-hash',
         ];
 
         $response = $this->actingAs($actingAs)
@@ -496,7 +522,7 @@ class FileLinkTest extends TestCase
         $response->assertForbidden();
     }
 
-    public function test_update()
+    public function test_update(): void
     {
         config(['file-link.feature_enabled' => true]);
 
@@ -509,6 +535,7 @@ class FileLinkTest extends TestCase
             'expire' => '2030-12-12',
             'allow_upload' => true,
             'instructions' => 'Here are some instructions',
+            'link_hash' => 'custom-hash',
         ];
 
         $response = $this->actingAs($user)
@@ -522,13 +549,16 @@ class FileLinkTest extends TestCase
             'expire' => '2030-12-12',
             'allow_upload' => true,
             'instructions' => 'Here are some instructions',
+            'link_hash' => 'custom-hash',
         ]);
     }
 
-    /**
-     * Destroy Method
-     */
-    public function test_destroy_guest()
+    /*
+    |---------------------------------------------------------------------------
+    | Destroy Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_destroy_guest(): void
     {
         $link = FileLink::factory()->createQuietly();
 
@@ -539,7 +569,7 @@ class FileLinkTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_destroy_feature_disabled()
+    public function test_destroy_feature_disabled(): void
     {
         config(['file-link.feature_enabled' => false]);
 
@@ -554,7 +584,7 @@ class FileLinkTest extends TestCase
         $response->assertForbidden();
     }
 
-    public function test_destroy_no_permission()
+    public function test_destroy_no_permission(): void
     {
         config(['file-link.feature_enabled' => true]);
         $this->changeRolePermission(4, 'Use File Links', false);
@@ -570,7 +600,7 @@ class FileLinkTest extends TestCase
         $response->assertForbidden();
     }
 
-    public function test_destroy_as_admin()
+    public function test_destroy_as_admin(): void
     {
         config(['file-link.feature_enabled' => true]);
 
@@ -583,14 +613,14 @@ class FileLinkTest extends TestCase
             ->delete(route('links.destroy', $link->link_id));
 
         $response->assertStatus(302)
-            ->assertSessionHas('danger', 'File Link Deleted');
+            ->assertSessionHas('danger', 'Link Deleted');
 
         $this->assertDatabaseMissing('file_links', [
             'link_id' => $link->link_id,
         ]);
     }
 
-    public function test_destroy_other_user()
+    public function test_destroy_other_user(): void
     {
         config(['file-link.feature_enabled' => true]);
 
@@ -605,7 +635,7 @@ class FileLinkTest extends TestCase
         $response->assertForbidden();
     }
 
-    public function test_destroy()
+    public function test_destroy(): void
     {
         config(['file-link.feature_enabled' => true]);
 
@@ -617,7 +647,7 @@ class FileLinkTest extends TestCase
             ->delete(route('links.destroy', $link->link_id));
 
         $response->assertStatus(302)
-            ->assertSessionHas('danger', 'File Link Deleted');
+            ->assertSessionHas('danger', 'Link Deleted');
 
         $this->assertDatabaseMissing('file_links', [
             'link_id' => $link->link_id,

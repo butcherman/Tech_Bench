@@ -1,46 +1,35 @@
-<template>
-    <div>
-        <Head :title="customer.name" />
-        <div class="border-bottom border-secondary-subtle mb-2">
-            <CustomerDetails />
-        </div>
-        <CustomerAlerts />
-        <div class="row justify-content-center">
-            <div class="col">
-                <div class="card">
-                    <div class="card-body">
-                        <CustomerNoteForm
-                            :customer="customer"
-                            :site-list="siteList"
-                            :equip-list="equipmentList"
-                            :current-site="currentSite"
-                            :equipment="equipment"
-                        />
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</template>
-
 <script setup lang="ts">
-import AppLayout from "@/Layouts/AppLayout.vue";
-import CustomerDetails from "@/Components/Customer/CustomerDetails.vue";
-import CustomerAlerts from "@/Components/Customer/CustomerAlerts.vue";
+import AppLayout from "@/Layouts/App/AppLayout.vue";
+import Card from "@/Components/_Base/Card.vue";
+import CustomerDetails from "@/Components/Customer/Show/CustomerDetails.vue";
 import CustomerNoteForm from "@/Forms/Customer/CustomerNoteForm.vue";
 import {
+    currentSite,
     customer,
     siteList,
-    currentSite,
-    equipmentList,
-} from "@/State/CustomerState";
+} from "@/Composables/Customer/CustomerData.module";
 
 defineProps<{
-    equipment?: customerEquipment;
+    activeEquipment?: customerEquipment;
 }>();
 </script>
 
 <script lang="ts">
 export default { layout: AppLayout };
 </script>
-s
+
+<template>
+    <div>
+        <div class="flex gap-2 pb-2 mb-2 border-b border-slate-400">
+            <CustomerDetails class="grow" />
+        </div>
+        <Card>
+            <CustomerNoteForm
+                :customer="customer"
+                :site-list="siteList ?? []"
+                :current-site="currentSite"
+                :equipment="activeEquipment"
+            />
+        </Card>
+    </div>
+</template>

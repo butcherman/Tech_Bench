@@ -3,39 +3,37 @@
 namespace App\Policies;
 
 use App\Models\User;
-use App\Models\UserRolePermission;
 use App\Traits\AllowTrait;
-use Illuminate\Auth\Access\HandlesAuthorization;
 
 class GatePolicy
 {
     use AllowTrait;
-    use HandlesAuthorization;
 
     /**
      * Determine if the user is allowed to see the Administration navigation link
      */
-    public function adminLink(User $user)
+    public function adminLink(User $user): bool
     {
-        $userRole = UserRolePermission::whereRoleId($user->role_id)
-            ->whereHas('UserRolePermissionType', function ($q) {
-                $q->whereIsAdminLink(1);
-            })
-            ->whereAllow(1)
-            ->count();
-
-        return $userRole == 0 ? false : true;
+        return $this->seeAdminLink($user);
     }
 
     /**
      * Determine if the user is allowed to see the Reports navigation link
      */
-    public function reportsLink(User $user)
+    public function reportsLink(User $user): bool
     {
         if ($this->checkPermission($user, 'Run Reports')) {
             return true;
         }
 
         return false;
+    }
+
+    /**
+     * Determine if the user is an Installer Level User
+     */
+    public function isInstaller(User $user): bool
+    {
+        return $user->role_id === 1;
     }
 }

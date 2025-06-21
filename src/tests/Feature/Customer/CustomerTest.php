@@ -2,24 +2,32 @@
 
 namespace Tests\Feature\Customer;
 
-use App\Jobs\Customer\DestroyCustomerJob;
+use App\Events\Customer\CustomerSlugChangedEvent;
+use App\Exceptions\Customer\CustomerNotFoundException;
+use App\Jobs\Customer\ForceDeleteCustomerJob;
 use App\Models\Customer;
 use App\Models\CustomerContact;
 use App\Models\CustomerFile;
 use App\Models\CustomerNote;
 use App\Models\CustomerSite;
 use App\Models\User;
+use App\Services\Customer\CustomerAdministrationService;
 use Illuminate\Support\Facades\Bus;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Exceptions;
 use Illuminate\Support\Str;
 use Inertia\Testing\AssertableInertia as Assert;
+use Mockery\MockInterface;
 use Tests\TestCase;
 
 class CustomerTest extends TestCase
 {
-    /**
-     * Index Method
-     */
-    public function test_index_guest()
+    /*
+    |---------------------------------------------------------------------------
+    | Index Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_index_guest(): void
     {
         $response = $this->get(route('customers.index'));
         $response->assertStatus(302)
@@ -27,7 +35,7 @@ class CustomerTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_index()
+    public function test_index(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly();
@@ -41,10 +49,12 @@ class CustomerTest extends TestCase
                 ->has('permissions'));
     }
 
-    /**
-     * Create Method
-     */
-    public function test_create_guest()
+    /*
+    |---------------------------------------------------------------------------
+    | Create Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_create_guest(): void
     {
         $response = $this->get(route('customers.create'));
         $response->assertStatus(302)
@@ -52,7 +62,7 @@ class CustomerTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_create_no_permission()
+    public function test_create_no_permission(): void
     {
         //  Remove the "Add Customer" permission from the Tech Role
         $this->changeRolePermission(4, 'Add Customer', false);
@@ -64,7 +74,7 @@ class CustomerTest extends TestCase
         $response->assertForbidden();
     }
 
-    public function test_create()
+    public function test_create(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly();
@@ -75,14 +85,16 @@ class CustomerTest extends TestCase
         $response->assertSuccessful()
             ->assertInertia(fn (Assert $page) => $page
                 ->component('Customer/Create')
-                ->has('selectId')
+                ->has('select-id')
                 ->has('default-state'));
     }
 
-    /**
-     * Store Method
-     */
-    public function test_store_guest()
+    /*
+    |---------------------------------------------------------------------------
+    | Store Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_store_guest(): void
     {
         $cust = Customer::factory()->make();
         $site = CustomerSite::factory()->make();
@@ -107,7 +119,7 @@ class CustomerTest extends TestCase
         ]);
     }
 
-    public function test_store_no_permission()
+    public function test_store_no_permission(): void
     {
         //  Remove the "Add Customer" permission from the Tech Role
         $this->changeRolePermission(4, 'Add Customer', false);
@@ -136,7 +148,7 @@ class CustomerTest extends TestCase
         ]);
     }
 
-    public function test_store()
+    public function test_store(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly();
@@ -173,92 +185,12 @@ class CustomerTest extends TestCase
         ]);
     }
 
-    public function test_store_duplicate_slug()
-    {
-        /** @var User $user */
-        $user = User::factory()->createQuietly();
-        $existing = Customer::factory()->createQuietly();
-        $cust = Customer::factory()->make();
-        $site = CustomerSite::factory()->make();
-
-        $data = [
-            'name' => $existing->name,
-            'dba_name' => $cust->dba_name,
-            'address' => $site->address,
-            'city' => $site->city,
-            'state' => $site->state,
-            'zip' => $site->zip,
-        ];
-        $slug = Str::slug($data['name'].' 1');
-
-        $response = $this->actingAs($user)
-            ->post(route('customers.store'), $data);
-
-        $response->assertStatus(302)
-            ->assertSessionHas('success', __('cust.created', [
-                'name' => $data['name'],
-            ]))
-            ->assertRedirect(route('customers.show', $slug));
-
-        $this->assertDatabaseHas('customers', [
-            'name' => $data['name'],
-            'dba_name' => $data['dba_name'],
-        ]);
-        $this->assertDatabaseHas('customer_sites', [
-            'site_name' => $data['name'],
-            'address' => $data['address'],
-            'city' => $data['city'],
-        ]);
-    }
-
-    public function test_store_second_duplicate_slug()
-    {
-        /** @var User $user */
-        $user = User::factory()->createQuietly();
-        $existing1 = Customer::factory()
-            ->has(CustomerSite::factory())
-            ->createQuietly();
-        Customer::factory()->createQuietly([
-            'name' => $existing1->name,
-            'slug' => Str::slug($existing1->slug.'-1'),
-        ]);
-
-        $cust = Customer::factory()->make();
-
-        $data = [
-            'name' => $existing1->name,
-            'dba_name' => $cust->dba_name,
-            'address' => $existing1->CustomerSite[0]->address,
-            'city' => $existing1->CustomerSite[0]->city,
-            'state' => $existing1->CustomerSite[0]->state,
-            'zip' => $existing1->CustomerSite[0]->zip,
-        ];
-        $slug = Str::slug($data['name'].' 2');
-
-        $response = $this->actingAs($user)
-            ->post(route('customers.store'), $data);
-
-        $response->assertStatus(302)
-            ->assertSessionHas('success', __('cust.created', [
-                'name' => $data['name'],
-            ]))
-            ->assertRedirect(route('customers.show', $slug));
-
-        $this->assertDatabaseHas('customers', [
-            'name' => $data['name'],
-            'dba_name' => $data['dba_name'],
-        ]);
-        $this->assertDatabaseHas('customer_sites', [
-            'site_name' => $data['name'],
-            'address' => $data['address'],
-            'city' => $data['city'],
-        ]);
-    }
-
-    /**
-     * Show Method
-     */
-    public function test_show_guest()
+    /*
+    |---------------------------------------------------------------------------
+    | Show Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_show_guest(): void
     {
         $cust = Customer::factory()->create();
 
@@ -269,7 +201,7 @@ class CustomerTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_show()
+    public function test_show_single_site(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly();
@@ -283,17 +215,12 @@ class CustomerTest extends TestCase
                 ->component('Customer/Site/Show')
                 ->has('permissions')
                 ->has('customer')
-                ->has('site')
-                ->has('siteList')
+                ->has('currentSite')
                 ->has('alerts')
-                ->has('equipmentList')
-                ->has('contacts')
-                ->has('notes')
-                ->has('files')
-                ->has('is-fav'));
+                ->has('isFav'));
     }
 
-    public function test_show_multiple_sites()
+    public function test_show_multiple_sites(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly();
@@ -310,29 +237,34 @@ class CustomerTest extends TestCase
                 ->has('customer')
                 ->has('siteList')
                 ->has('alerts')
-                ->has('equipmentList')
-                ->has('contacts')
-                ->has('notes')
-                ->has('files')
-                ->has('is-fav'));
+                ->has('isFav'));
     }
 
-    public function test_show_invalid_customer()
+    public function test_show_invalid_customer(): void
     {
+        Exceptions::fake();
+
         /** @var User $user */
         $user = User::factory()->createQuietly();
-        $response = $this->actingAs($user)
+
+        $this->expectException(CustomerNotFoundException::class);
+
+        $response = $this->withoutExceptionHandling()
+            ->actingAs($user)
             ->get(route('customers.show', 'someRandomCustomerSlug'));
 
-        $response->assertSuccessful()
-            ->assertInertia(fn (Assert $page) => $page
-                ->component('Customer/NotFound'));
+        $response->assertStatus(302)
+            ->assertRedirect(route('customers.not-found'));
+
+        Exceptions::assertReported(CustomerNotFoundException::class);
     }
 
-    /**
-     * Edit Method
-     */
-    public function test_edit_guest()
+    /*
+    |---------------------------------------------------------------------------
+    | Edit Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_edit_guest(): void
     {
         $customer = Customer::factory()->create();
 
@@ -343,7 +275,7 @@ class CustomerTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_edit_no_permission()
+    public function test_edit_no_permission(): void
     {
         //  Remove the "Update Customer" permission from the Tech Role
         $this->changeRolePermission(4, 'Update Customer', false);
@@ -357,7 +289,7 @@ class CustomerTest extends TestCase
         $response->assertForbidden();
     }
 
-    public function test_edit()
+    public function test_edit(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly();
@@ -375,10 +307,12 @@ class CustomerTest extends TestCase
                 ->has('siteList'));
     }
 
-    /**
-     * Update Method
-     */
-    public function test_update_guest()
+    /*
+    |---------------------------------------------------------------------------
+    | Update Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_update_guest(): void
     {
         $customer = Customer::factory()->createQuietly();
         $updated = Customer::factory()->make();
@@ -394,7 +328,7 @@ class CustomerTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_update_no_permission()
+    public function test_update_no_permission(): void
     {
         //  Remove the "Update Customer" permission from the Tech Role
         $this->changeRolePermission(4, 'Update Customer', false);
@@ -414,8 +348,10 @@ class CustomerTest extends TestCase
         $response->assertForbidden();
     }
 
-    public function test_update()
+    public function test_update(): void
     {
+        Event::fake();
+
         /** @var User $user */
         $user = User::factory()->createQuietly();
         $customer = Customer::factory()->createQuietly();
@@ -443,12 +379,16 @@ class CustomerTest extends TestCase
             'cust_id' => $customer->cust_id,
             'name' => $updated->name,
         ]);
+
+        Event::assertDispatched(CustomerSlugChangedEvent::class);
     }
 
-    /**
-     * Destroy Method
-     */
-    public function test_destroy_guest()
+    /*
+    |---------------------------------------------------------------------------
+    | Destroy Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_destroy_guest(): void
     {
         $cust = Customer::factory()->createQuietly();
 
@@ -458,7 +398,7 @@ class CustomerTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_destroy_no_permission()
+    public function test_destroy_no_permission(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly();
@@ -471,7 +411,7 @@ class CustomerTest extends TestCase
         $this->assertDatabaseHas('customers', $cust->only(['cust_id', 'name']));
     }
 
-    public function test_destroy_without_reason()
+    public function test_destroy_without_reason(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);
@@ -481,10 +421,10 @@ class CustomerTest extends TestCase
             ->delete(route('customers.destroy', $cust->slug));
 
         $response->assertStatus(302)
-            ->assertSessionHasErrors(['reason']);
+            ->assertSessionHasErrorsIn('form_error', ['reason']);
     }
 
-    public function test_destroy()
+    public function test_destroy(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);
@@ -506,13 +446,13 @@ class CustomerTest extends TestCase
     /**
      * Restore Method
      */
-    public function test_restore_guest()
+    public function test_restore_guest(): void
     {
         $cust = Customer::factory()->createQuietly();
         $cust->delete();
 
         $response = $this->get(
-            route('customers.disabled.restore', $cust->cust_id)
+            route('customers.disabled.restore', $cust->slug)
         );
 
         $response->assertStatus(302)
@@ -520,7 +460,7 @@ class CustomerTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_restore_no_permission()
+    public function test_restore_no_permission(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly();
@@ -528,12 +468,12 @@ class CustomerTest extends TestCase
         $cust->delete();
 
         $response = $this->actingAs($user)
-            ->get(route('customers.disabled.restore', $cust->cust_id));
+            ->get(route('customers.disabled.restore', $cust->slug));
 
         $response->assertForbidden();
     }
 
-    public function test_restore()
+    public function test_restore(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);
@@ -541,7 +481,7 @@ class CustomerTest extends TestCase
         $cust->delete();
 
         $response = $this->actingAs($user)
-            ->get(route('customers.disabled.restore', $cust->cust_id));
+            ->get(route('customers.disabled.restore', $cust->slug));
 
         $response->assertStatus(302)
             ->assertSessionHas('success', __('cust.restored', [
@@ -558,13 +498,13 @@ class CustomerTest extends TestCase
     /**
      * Force Delete Function
      */
-    public function test_force_delete_guest()
+    public function test_force_delete_guest(): void
     {
         $cust = Customer::factory()->createQuietly();
         $cust->delete();
 
         $response = $this->delete(
-            route('customers.disabled.force-delete', $cust->cust_id)
+            route('customers.disabled.force-delete', $cust->slug)
         );
 
         $response->assertStatus(302)
@@ -572,7 +512,7 @@ class CustomerTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_force_delete_no_permission()
+    public function test_force_delete_no_permission(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly();
@@ -580,32 +520,36 @@ class CustomerTest extends TestCase
         $cust->delete();
 
         $response = $this->actingAs($user)
-            ->delete(route('customers.disabled.force-delete', $cust->cust_id));
+            ->delete(route('customers.disabled.force-delete', $cust->slug));
 
         $response->assertForbidden();
     }
 
-    public function test_force_delete()
+    public function test_force_delete(): void
     {
         Bus::fake();
 
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);
         $cust = Customer::factory()
-            ->has(CustomerFile::factory())
-            ->has(CustomerNote::factory())
-            ->has(CustomerContact::factory())
+            ->has(CustomerFile::factory(), 'files')
+            ->has(CustomerNote::factory(), 'notes')
+            ->has(CustomerContact::factory(), 'contacts')
             ->createQuietly();
         $cust->delete();
 
+        $this->mock(CustomerAdministrationService::class, function (MockInterface $mock) {
+            $mock->shouldReceive('addToWorkingJobs')->once()->with(Customer::class);
+        });
+
         $response = $this->actingAs($user)
-            ->delete(route('customers.disabled.force-delete', $cust->cust_id));
+            ->delete(route('customers.disabled.force-delete', $cust->slug));
 
         $response->assertStatus(302)
             ->assertSessionHas('danger', __('cust.force_deleted', [
                 'name' => $cust->name,
             ]));
 
-        Bus::assertDispatched(DestroyCustomerJob::class);
+        Bus::assertDispatched(ForceDeleteCustomerJob::class);
     }
 }

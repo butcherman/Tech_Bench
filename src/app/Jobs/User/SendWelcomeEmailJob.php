@@ -2,39 +2,42 @@
 
 namespace App\Jobs\User;
 
+use App\Mail\User\UserWelcomeEmail;
 use App\Models\User;
 use App\Models\UserInitialize;
-use App\Notifications\User\SendWelcomeEmail;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
+
+/*
+|-------------------------------------------------------------------------------
+| Create a link that allows the user to finish setting up their account and
+| email it to them.
+|-------------------------------------------------------------------------------
+*/
 
 class SendWelcomeEmailJob implements ShouldQueue
 {
     use Queueable;
 
     /**
-     * Create a new job instance.
+     * @codeCoverageIgnore
      */
     public function __construct(protected User $user) {}
 
     /**
-     * Update or Create a User Initialize link and email to the user
+     * Execute the job.
      */
     public function handle(): void
     {
         $token = Str::uuid();
 
-        UserInitialize::firstOrCreate(
+        UserInitialize::updateOrCreate(
             ['username' => $this->user->username],
-            ['token' => $token],
-        )->update(['token' => $token]);
+            ['token' => $token]
+        );
 
-        Log::stack(['daily', 'auth'])->info('Sending Welcome Email to '.
-            $this->user->full_name);
-
-        Notification::send($this->user, new SendWelcomeEmail($token));
+        Mail::to($this->user)->send(new UserWelcomeEmail($this->user, $token));
     }
 }

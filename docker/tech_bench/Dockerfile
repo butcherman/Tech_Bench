@@ -44,15 +44,11 @@ RUN chmod -R 777 /staging/storage
 USER tbuser
 
 # Install dependencies
-RUN cp .env.example .env
 RUN composer install --no-dev --no-interaction --optimize-autoloader
-RUN npm install --only-production
+RUN npm install --omit=dev
 
 #  Place a version file in the staging directory to note what version this image is
 RUN echo $(php /app/artisan version --format=compact | sed -e 's/Tech Bench //g') > /staging/version
-
-# Remove the temporary .env file so first time startup will run properly
-RUN rm .env
 
 # Finalize image
 WORKDIR /app

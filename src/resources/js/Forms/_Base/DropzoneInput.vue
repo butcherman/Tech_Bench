@@ -1,50 +1,46 @@
-<template>
-    <div>
-        <div class="dropzone pb-4" id="dropzone-container">
-            <div class="dz-message">
-                <fa-icon icon="cloud-arrow-up" />
-                {{ message || "Drag file here or click to upload" }}
-            </div>
-        </div>
-        <DropzonePreviewContainer id="preview-template-container" />
-        <div v-if="errMessage" class="dz-validation-message">
-            {{ errMessage }}
-        </div>
-    </div>
-</template>
-
 <script setup lang="ts">
-import Dropzone from "dropzone";
-import DropzonePreviewContainer from "./DropzonePreviewContainer.vue";
-import axios from "axios";
-import { ref, onMounted, computed, nextTick, unref } from "vue";
+import Dropzone from "@deltablot/dropzone";
+import { dataPost } from "@/Composables/axiosWrapper.module";
+import { processFileIcon } from "@/Composables/fileIcons.module";
+import { ref, onMounted, computed, nextTick } from "vue";
 import { usePage } from "@inertiajs/vue3";
-import { processFileIcon } from "@/Modules/FileIcons.module";
 import type { Router } from "ziggy-js";
+import type { DropzoneFile } from "dropzone";
 
 /**
  * Additional Styling for Drag and Drop
  */
 import "file-icon-vectors/dist/file-icon-vectors.min.css";
-import "dropzone/dist/basic.css";
-import "@/../scss/dropzoneInput.scss";
+import "../../../css/icon_extended_library.css";
+import "../../../css/dropzone.css";
 
-const emit = defineEmits([
-    "error",
-    "file-added",
-    "file-removed",
-    "max-files-exceeded",
-    "max-files-reached",
-    "sending",
-    "total-upload-progress",
-    "upload-progress",
-    "success",
-]);
+const emit = defineEmits<{
+    error: [
+        {
+            file?: DropzoneFile;
+            status: number | undefined;
+            message: laravelValidationErrors;
+        }
+    ];
+    fileAdded: [DropzoneFile];
+    fileRemoved: [DropzoneFile];
+    maxFilesReached: [];
+    maxFilesExceeded: [];
+    sending: [DropzoneFile, XMLHttpRequest, FormData];
+    success: [string | null];
+    totalUploadProgress: [
+        { progress: number; totalBytes: number; bytesSent: number }
+    ];
+    uploadProgress: [
+        { file: DropzoneFile; progress: number; bytesSent: number }
+    ];
+}>();
+
 const props = defineProps<{
     uploadUrl: string | Router;
     paramName?: string;
     maxFiles?: number;
-    message?: string;
+    uploadMessage?: string;
     required?: boolean;
     acceptedFiles?: string[];
 }>();
@@ -54,26 +50,32 @@ onMounted(() => {
     buildEventListeners();
 });
 
-/*******************************************************************************
- * Variables
- *******************************************************************************/
+/*
+|-------------------------------------------------------------------------------
+| Variables
+|-------------------------------------------------------------------------------
+*/
 let myDrop: Dropzone;
 let fileFormData: { [key: string]: any };
 
-const fileData: fileData = usePage<pageProps>().props.app.fileData;
+const fileData: fileData = appData.fileData;
+const csrfToken: string = usePage<pageProps>().props.csrf_token;
 const isDirty = ref<boolean>(false);
 const overMaxFiles = ref<boolean>(false);
 const errMessage = ref<string | null>(null);
 const completeMessage = ref<string | null>(null);
+const hasFile = ref<boolean>(false);
 
-const acceptedFiles = computed(() =>
+const acceptedFiles = computed<string | undefined>(() =>
     props.acceptedFiles ? props.acceptedFiles.join(", ") : undefined
 );
 
-/*******************************************************************************
- * Initialize Dropzone Component
- *******************************************************************************/
-const initDropzone = () => {
+/*
+ |-------------------------------------------------------------------------------
+ | Initialize Dropzone Component
+ |-------------------------------------------------------------------------------
+ */
+const initDropzone = (): void => {
     // Grab the template for adding new files to the dropzone container
     let previewNode = document.getElementById("preview-template-container");
     let previewTemplate = previewNode?.innerHTML;
@@ -87,11 +89,11 @@ const initDropzone = () => {
         chunking: true,
         chunkSize: fileData.chunkSize,
         headers: {
-            "X-CSRF-TOKEN": fileData.token,
-            "X-Socket-Id": Echo.socketId(),
+            "X-CSRF-TOKEN": csrfToken,
+            "X-Socket-Id": Echo.socketId() ?? "",
         },
         maxFiles: props.maxFiles || 5,
-        maxFilesize: fileData.maxSize,
+        maxFilesize: fileData.maxSize / (1024 * 1024),
         method: "POST",
         parallelUploads: 1,
         parallelChunkUploads: false,
@@ -102,26 +104,28 @@ const initDropzone = () => {
     });
 };
 
-/*******************************************************************************
- * Initialize Dropzone Event Listeners
- *******************************************************************************/
-const buildEventListeners = () => {
+/*
+|-------------------------------------------------------------------------------
+| Initialize Dropzone Event Listeners
+|-------------------------------------------------------------------------------
+*/
+const buildEventListeners = (): void => {
     // Turn AutoProcessQueue back on so multiple files can be uploaded
     myDrop.on("processing", () => (myDrop.options.autoProcessQueue = true));
 
     // When a file is added to the queue
-    myDrop.on("addedfile", (file) => {
+    myDrop.on("addedfile", (file: DropzoneFile): void => {
         //  Note Dropzone has been touched/interacted with
         isDirty.value = true;
         processFileIcon(file);
         nextTick(() => {
             validate();
-            emit("file-added", file);
+            emit("fileAdded", file);
         });
     });
 
     // When a file is removed from the queue
-    myDrop.on("removedfile", (file) => {
+    myDrop.on("removedfile", (file: DropzoneFile): void => {
         // Reprocess any rejected files
         let rejected = myDrop.getRejectedFiles();
         rejected.forEach((file) => myDrop.removeFile(file));
@@ -129,63 +133,86 @@ const buildEventListeners = () => {
 
         nextTick(() => {
             validate();
-            emit("file-removed", file);
+            emit("fileRemoved", file);
         });
     });
 
     // When the maximum number of files has been reached
-    myDrop.on("maxfilesreached", () => {
-        emit("max-files-reached");
+    myDrop.on("maxfilesreached", (): void => {
+        emit("maxFilesReached");
     });
 
     // When the maximum number of files has been exceeded
-    myDrop.on("maxfilesexceeded", () => {
+    myDrop.on("maxfilesexceeded", (): void => {
         overMaxFiles.value = true;
-        emit("max-files-exceeded");
+        emit("maxFilesExceeded");
     });
 
     // Append Form Data to each File Chunk
-    myDrop.on("sending", (file, xhr, formData) => {
-        for (const [field, value] of Object.entries(fileFormData)) {
-            formData.append(field, JSON.stringify(value));
-        }
+    myDrop.on(
+        "sending",
+        (file: DropzoneFile, xhr: XMLHttpRequest, formData: FormData): void => {
+            for (const [field, value] of Object.entries(fileFormData)) {
+                formData.append(field, JSON.stringify(value));
+            }
 
-        emit("sending", file, xhr, formData);
-    });
+            emit("sending", file, xhr, formData);
+        }
+    );
 
     // Bubble Upload Progress
-    myDrop.on("uploadprogress", (file, progress, bytesSent) => {
-        emit("upload-progress", { file, progress, bytesSent });
-    });
+    myDrop.on(
+        "uploadprogress",
+        (file: DropzoneFile, progress: number, bytesSent: number): void => {
+            emit("uploadProgress", { file, progress, bytesSent });
+        }
+    );
 
     // Bubble Total Upload Progress
-    myDrop.on("totaluploadprogress", (progress, totalBytes, bytesSent) => {
-        emit("total-upload-progress", { progress, totalBytes, bytesSent });
-    });
+    myDrop.on(
+        "totaluploadprogress",
+        (progress: number, totalBytes: number, bytesSent: number): void => {
+            emit("totalUploadProgress", { progress, totalBytes, bytesSent });
+        }
+    );
 
     // Bubble any Errors that occur with Dropzone
-    myDrop.on("error", (file, message) => {
-        emit("error", { file, status: file.xhr?.status, message });
-    });
+    myDrop.on(
+        "error",
+        (
+            file: DropzoneFile,
+            message: laravelValidationErrors | string
+        ): void => {
+            if (typeof message === "string") {
+                errMessage.value = message;
+            } else {
+                emit("error", { file, status: file.xhr?.status, message });
+            }
+        }
+    );
 
     // When a file completes its upload, we will store the latest response
-    myDrop.on("complete", (file) => {
+    myDrop.on("complete", (file: DropzoneFile): void => {
         completeMessage.value = file.xhr?.response;
     });
 
     // When all files have uploaded, we will emit success with the last complete message
-    myDrop.on("queuecomplete", () => {
+    myDrop.on("queuecomplete", (): void => {
         emit("success", completeMessage.value);
     });
 };
 
-/*******************************************************************************
- * Validate the dropzone field by making sure there are no errors
- *******************************************************************************/
-const validate = () => {
+/*
+ |-------------------------------------------------------------------------------
+ | Validate the dropzone field by making sure there are no errors
+ |-------------------------------------------------------------------------------
+ */
+const validate = (): boolean => {
     // If any files were rejected by Dropzone, we trigger an error
     let rejected = myDrop.getRejectedFiles();
     let queued = myDrop.getAcceptedFiles();
+
+    hasFile.value = queued.length > 0 ? true : false;
 
     if (rejected.length) {
         // If there are too many files, we will say so
@@ -212,45 +239,49 @@ const validate = () => {
     return true;
 };
 
-/*******************************************************************************
- * Process and Upload all files along with Form Data
- *******************************************************************************/
-const process = (form: { [key: string]: any }) => {
+/*
+ |-------------------------------------------------------------------------------
+ | Process and Upload all files along with Form Data
+ |-------------------------------------------------------------------------------
+ */
+const process = (form: { [key: string]: any }): void => {
     fileFormData = form;
 
     // If no files are present, we do an axios submission
     if (myDrop.files.length === 0) {
-        axios
-            .post(props.uploadUrl.toString(), fileFormData)
-            .then((res) => emit("success", res.data))
-            .catch((err) =>
-                emit("error", {
-                    file: [],
-                    status: err.response.status,
-                    message: err.response.data,
-                })
-            );
+        dataPost(props.uploadUrl.toString(), fileFormData)
+            .catch((err) => {
+                emit("error", err);
+            })
+            .then((res) => {
+                emit("success", res?.data ?? "success");
+            });
     } else {
         myDrop.processQueue();
     }
 };
 
-/*******************************************************************************
- * Reset Dropzone to its initial state
- *******************************************************************************/
-const reset = () => {
+/*
+ |-------------------------------------------------------------------------------
+ | Reset Dropzone to its initial state
+ |-------------------------------------------------------------------------------
+ */
+const reset = (): void => {
     myDrop.removeAllFiles();
-    nextTick(() => {
+
+    nextTick((): void => {
         errMessage.value = null;
         isDirty.value = false;
         myDrop.options.autoProcessQueue = false;
     });
 };
 
-/*******************************************************************************
- * Cancel the upload process and remove all files from queue
- *******************************************************************************/
-const cancelUpload = () => {
+/*
+ |-------------------------------------------------------------------------------
+ | Cancel the upload process and remove all files from queue
+ |-------------------------------------------------------------------------------
+ */
+const cancelUpload = (): void => {
     const fileList = myDrop.files;
     fileList.forEach((file) => myDrop.cancelUpload(file));
 };
@@ -260,6 +291,54 @@ defineExpose({
     reset,
     cancelUpload,
     validate,
-    isDirty: unref(isDirty),
+    isDirty: isDirty,
+    hasFile: hasFile,
 });
 </script>
+
+<template>
+    <div>
+        <div class="dropzone pb-4" id="dropzone-container">
+            <div class="dz-message">
+                <fa-icon icon="cloud-arrow-up" />
+                {{ uploadMessage ?? "Drag file here or click to upload" }}
+            </div>
+        </div>
+        <div id="preview-template-container">
+            <div class="dz-preview-wrapper">
+                <div class="dz-preview">
+                    <div class="dz-preview dz-file-preview">
+                        <div class="dz-image">
+                            <img data-dz-thumbnail />
+                        </div>
+                        <div class="dz-details">
+                            <div class="dz-size" data-dz-size></div>
+                            <div class="dz-filename">
+                                <span data-dz-name />
+                            </div>
+                        </div>
+                        <span class="dz-remove dz-tooltip" data-dz-remove>
+                            <fa-icon icon="fa-trash-alt" />
+                            <span class="dz-tooltip-text">Remove File</span>
+                        </span>
+                        <div class="dz-progress">
+                            <span class="dz-upload" data-dz-uploadprogress />
+                        </div>
+                        <div class="dz-success-mark">
+                            <fa-icon icon="fa-check" />
+                        </div>
+                        <div class="dz-error-mark">
+                            <fa-icon icon="fa-exclamation-circle" />
+                        </div>
+                        <div class="dz-error-message">
+                            <span data-dz-errormessage />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div v-if="errMessage" class="dz-validation-message">
+            {{ errMessage }}
+        </div>
+    </div>
+</template>

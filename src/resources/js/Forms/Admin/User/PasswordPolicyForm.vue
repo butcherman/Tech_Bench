@@ -1,11 +1,65 @@
+<script setup lang="ts">
+import RangeInput from "@/Forms/_Base/RangeInput.vue";
+import SwitchInput from "@/Forms/_Base/SwitchInput.vue";
+import TextInput from "@/Forms/_Base/TextInput.vue";
+import VueForm from "@/Forms/_Base/VueForm.vue";
+import { object, number, boolean } from "yup";
+import { computed } from "vue";
+
+defineEmits(["success"]);
+const props = defineProps<{
+    policy: passwordPolicy;
+    init?: boolean;
+}>();
+
+/*
+|-------------------------------------------------------------------------------
+| Handle Form
+|-------------------------------------------------------------------------------
+*/
+const submitRoute = computed(() =>
+    props.init
+        ? route("init.step-3.submit")
+        : route("admin.user.password-policy.update")
+);
+
+const submitText = computed(() =>
+    props.init ? "Save and Continue" : "Update Password Policy"
+);
+
+/*
+|-------------------------------------------------------------------------------
+| Validation
+|-------------------------------------------------------------------------------
+*/
+const initValues = {
+    expire: props.policy.expire,
+    min_length: props.policy.min_length,
+    contains_uppercase: props.policy.contains_uppercase,
+    contains_lowercase: props.policy.contains_lowercase,
+    contains_number: props.policy.contains_number,
+    contains_special: props.policy.contains_special,
+    disable_compromised: props.policy.disable_compromised,
+};
+
+const schema = object({
+    expire: number().required(),
+    min_length: number().required(),
+    contains_uppercase: boolean().required(),
+    contains_lowercase: boolean().required(),
+    contains_number: boolean().required(),
+    contains_special: boolean().required(),
+    disable_compromised: boolean().required(),
+});
+</script>
+
 <template>
     <VueForm
-        ref="form"
+        submit-method="put"
         :initial-values="initValues"
-        :validation-schema="schema"
         :submit-route="submitRoute"
         :submit-text="submitText"
-        submit-method="put"
+        :validation-schema="schema"
         @success="$emit('success')"
     >
         <TextInput
@@ -27,27 +81,27 @@
                     A password should contain at least one each of the
                     following:
                 </p>
-                <CheckboxSwitch
+                <SwitchInput
                     id="policy-uppercase"
                     name="contains_uppercase"
                     label="Uppercase Letter"
                 />
-                <CheckboxSwitch
+                <SwitchInput
                     id="policy-lowercase"
                     name="contains_lowercase"
                     label="Lowercase Letter"
                 />
-                <CheckboxSwitch
+                <SwitchInput
                     id="policy-number"
                     name="contains_number"
                     label="Number (0-9)"
                 />
-                <CheckboxSwitch
+                <SwitchInput
                     id="policy-special"
                     name="contains_special"
                     label="Special Character (!@#$%^&*)"
                 />
-                <CheckboxSwitch
+                <SwitchInput
                     id="policy-compromised"
                     name="disable_compromised"
                     label="Disable Known Compromised Passwords (Example: Pa$$word!)"
@@ -56,47 +110,3 @@
         </fieldset>
     </VueForm>
 </template>
-
-<script setup lang="ts">
-import VueForm from "@/Forms/_Base/VueForm.vue";
-import TextInput from "@/Forms/_Base/TextInput.vue";
-import RangeInput from "@/Forms/_Base/RangeInput.vue";
-import CheckboxSwitch from "@/Forms/_Base/CheckboxSwitch.vue";
-import { object, boolean, number } from "yup";
-import { computed } from "vue";
-
-defineEmits(["success"]);
-const props = defineProps<{
-    policy: passwordPolicy;
-    init?: boolean;
-}>();
-
-const submitRoute = computed(() =>
-    props.init
-        ? route("init.step-3.submit")
-        : route("admin.user.password-policy.update")
-);
-
-const submitText = computed(() =>
-    props.init ? "Save and Continue" : "Update Password Policy"
-);
-
-const initValues = {
-    expire: props.policy.expire,
-    min_length: props.policy.min_length,
-    contains_uppercase: props.policy.contains_uppercase,
-    contains_lowercase: props.policy.contains_lowercase,
-    contains_number: props.policy.contains_number,
-    contains_special: props.policy.contains_special,
-    disable_compromised: props.policy.disable_compromised,
-};
-const schema = object({
-    expire: number().required(),
-    min_length: number().required(),
-    contains_uppercase: boolean().required(),
-    contains_lowercase: boolean().required(),
-    contains_number: boolean().required(),
-    contains_special: boolean().required(),
-    disable_compromised: boolean().required(),
-});
-</script>

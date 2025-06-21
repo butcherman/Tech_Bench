@@ -1,42 +1,34 @@
-<template>
-    <div class="row justify-content-center">
-        <div class="col">
-            <CustomerSiteList>
-                <template #add-button>
-                    <Link
-                        v-if="permissions.details.create"
-                        :href="$route('customers.sites.create', customer.slug)"
-                    >
-                        <AddButton text="Add Site" small pill />
-                    </Link>
-                </template>
-            </CustomerSiteList>
-        </div>
-    </div>
-</template>
-
 <script setup lang="ts">
-import AppLayout from "@/Layouts/AppLayout.vue";
-import CustomerSiteList from "@/Components/Customer/CustomerSiteList.vue";
-import AddButton from "@/Components/_Base/Buttons/AddButton.vue";
-import { customer, permissions } from "@/State/CustomerState";
-import { onMounted, onUnmounted } from "vue";
-import { registerCustomerChannel } from "@/Modules/CustomerBroadcasting.module";
-
-/**
- * Register to Customer Channel
- */
-const channelName = customer.value.slug;
-onMounted(() => {
-    registerCustomerChannel(channelName);
-});
-
-/**
- * Leave Customer Channel
- */
-onUnmounted(() => Echo.leave(`customer.${channelName}`));
+import AppLayout from "@/Layouts/App/AppLayout.vue";
+import BookmarkItem from "@/Components/_Base/BookmarkItem.vue";
+import CustomerAlerts from "@/Components/Customer/Show/CustomerAlerts.vue";
+import CustomerDetails from "@/Components/Customer/Show/CustomerDetails.vue";
+import CustomerManagement from "@/Components/Customer/Show/ManageCustomer.vue";
+import SiteList from "@/Components/Customer/Show/SiteList.vue";
+import { customer, isFav } from "@/Composables/Customer/CustomerData.module";
 </script>
 
 <script lang="ts">
 export default { layout: AppLayout };
 </script>
+
+<template>
+    <div>
+        <div class="flex gap-2 border-b border-slate-400">
+            <h1>
+                <BookmarkItem
+                    :is-bookmark="isFav"
+                    :toggle-route="$route('customers.bookmark', customer.slug)"
+                />
+            </h1>
+            <CustomerDetails class="grow" />
+            <div>
+                <CustomerManagement />
+            </div>
+        </div>
+        <CustomerAlerts />
+        <div class="tb-card-lg mt-2">
+            <SiteList />
+        </div>
+    </div>
+</template>

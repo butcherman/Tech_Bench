@@ -2,34 +2,19 @@
 
 namespace App\Observers;
 
-use App\Events\TechTips\TipCommentedEvent;
 use App\Models\TechTipComment;
 use Illuminate\Support\Facades\Log;
 
-class TechTipCommentObserver
+class TechTipCommentObserver extends Observer
 {
-    protected $user;
-
-    public function __construct()
-    {
-        $this->user = match (true) {
-            request()->user() !== null => request()->user()->username,
-            request()->ip() === '127.0.0.1' => 'Internal Service',
-            // @codeCoverageIgnoreStart
-            default => request()->ip(),
-            // @codeCoverageIgnoreEnd
-        };
-    }
-
     /**
      * Handle the TechTipComment "created" event.
      */
     public function created(TechTipComment $techTipComment): void
     {
-        event(new TipCommentedEvent($techTipComment));
-
         Log::info(
-            'New Tech Tip Comment created by '.$this->user,
+            'New Tech Tip Comment created by '.$this->user.' for Tech Tip ID '.
+                $techTipComment->tip_id,
             $techTipComment->toArray()
         );
     }
@@ -40,7 +25,8 @@ class TechTipCommentObserver
     public function updated(TechTipComment $techTipComment): void
     {
         Log::info(
-            'A Tech Tip Comment has been updated by '.$this->user,
+            'Tech Tip Comment updated by '.$this->user.' for Tech Tip ID '.
+                $techTipComment->tip_id,
             $techTipComment->toArray()
         );
     }
@@ -50,8 +36,9 @@ class TechTipCommentObserver
      */
     public function deleted(TechTipComment $techTipComment): void
     {
-        Log::notice(
-            'Tech Tip Comment has been deleted by '.$this->user,
+        Log::info(
+            'Tech Tip Comment deleted by '.$this->user.' for Tech Tip ID '.
+                $techTipComment->tip_id,
             $techTipComment->toArray()
         );
     }

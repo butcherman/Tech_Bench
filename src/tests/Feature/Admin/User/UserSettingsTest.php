@@ -3,56 +3,71 @@
 namespace Tests\Feature\Admin\User;
 
 use App\Models\User;
+use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class UserSettingsTest extends TestCase
 {
-    /**
-     * Show Method
-     */
-    public function test_show_guest()
+    /*
+    |---------------------------------------------------------------------------
+    | Edit Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_show_guest(): void
     {
-        $response = $this->get(route('admin.user.user-settings.show'));
-        $response->assertStatus(302);
-        $response->assertRedirect(route('login'));
+        $response = $this->get(route('admin.user.user-settings.edit'));
+
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
         $this->assertGuest();
     }
 
-    public function test_show_no_permission()
+    public function test_show_no_permission(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly();
 
         $response = $this->actingAs($user)
-            ->get(route('admin.user.user-settings.show'));
-        $response->assertStatus(403);
+            ->get(route('admin.user.user-settings.edit'));
+        $response->assertForbidden();
     }
 
-    public function test_show()
+    public function test_show(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);
 
         $response = $this->actingAs($user)
-            ->get(route('admin.user.user-settings.show'));
-        $response->assertSuccessful();
+            ->get(route('admin.user.user-settings.edit'));
+        $response->assertSuccessful()
+            ->assertInertia(
+                fn (Assert $page) => $page
+                    ->component('Admin/User/UserSettings')
+                    ->has('auto-logout-timer')
+                    ->has('two-fa')
+                    ->has('oath')
+                    ->has('role-list')
+            );
     }
 
-    /**
-     * Update Method
-     */
-    public function test_update_guest()
+    /*
+    |---------------------------------------------------------------------------
+    | Update Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_update_guest(): void
     {
         $data = [
             'auto_logout_timer' => '5',
             'twoFa' => [
                 'required' => false,
                 'allow_save_device' => false,
+                'allow_via_email' => true,
+                'allow_via_authenticator' => false,
             ],
             'oath' => [
                 'allow_login' => true,
                 'allow_register' => true,
-                'allow_bypass_2fa' => true,
                 'default_role_id' => '3',
                 'tenant' => 'someRadomUUID',
                 'client_id' => 'someRandomID',
@@ -63,12 +78,13 @@ class UserSettingsTest extends TestCase
         ];
 
         $response = $this->put(route('admin.user.user-settings.update'), $data);
-        $response->assertStatus(302);
-        $response->assertRedirect(route('login'));
+
+        $response->assertStatus(302)
+            ->assertRedirect(route('login'));
         $this->assertGuest();
     }
 
-    public function test_update_no_permission()
+    public function test_update_no_permission(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly();
@@ -77,11 +93,12 @@ class UserSettingsTest extends TestCase
             'twoFa' => [
                 'required' => false,
                 'allow_save_device' => false,
+                'allow_via_email' => true,
+                'allow_via_authenticator' => false,
             ],
             'oath' => [
                 'allow_login' => true,
                 'allow_register' => true,
-                'allow_bypass_2fa' => true,
                 'default_role_id' => '3',
                 'tenant' => 'someRadomUUID',
                 'client_id' => 'someRandomID',
@@ -93,10 +110,11 @@ class UserSettingsTest extends TestCase
 
         $response = $this->actingAs($user)
             ->put(route('admin.user.user-settings.update'), $data);
-        $response->assertStatus(403);
+
+        $response->assertForbidden();
     }
 
-    public function test_update()
+    public function test_update(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);
@@ -105,11 +123,12 @@ class UserSettingsTest extends TestCase
             'twoFa' => [
                 'required' => true,
                 'allow_save_device' => false,
+                'allow_via_email' => true,
+                'allow_via_authenticator' => false,
             ],
             'oath' => [
                 'allow_login' => true,
                 'allow_register' => true,
-                'allow_bypass_2fa' => true,
                 'default_role_id' => '3',
                 'tenant' => 'someRadomUUID',
                 'client_id' => 'someRandomID',
@@ -121,12 +140,12 @@ class UserSettingsTest extends TestCase
 
         $response = $this->actingAs($user)
             ->put(route('admin.user.user-settings.update'), $data);
-        $response->assertStatus(302);
-        $response->assertSessionHas('success', __('admin.user.settings_updated'));
+
+        $response->assertStatus(302)
+            ->assertSessionHas('success', __('admin.user.settings_updated'));
 
         $this->assertDatabaseHas('app_settings', [
             'key' => 'auth.auto_logout_timer',
-            'value' => '5',
         ]);
 
         $this->assertDatabaseHas('app_settings', [
@@ -144,10 +163,6 @@ class UserSettingsTest extends TestCase
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'services.azure.default_role_id',
-            'value' => '3',
-        ]);
-        $this->assertDatabaseHas('app_settings', [
-            'key' => 'services.azure.allow_bypass_2fa',
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'services.azure.tenant',
@@ -171,7 +186,7 @@ class UserSettingsTest extends TestCase
         ]);
     }
 
-    public function test_update_no_password_change()
+    public function test_update_no_password_change(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);
@@ -180,6 +195,8 @@ class UserSettingsTest extends TestCase
             'twoFa' => [
                 'required' => true,
                 'allow_save_device' => false,
+                'allow_via_email' => true,
+                'allow_via_authenticator' => false,
             ],
             'oath' => [
                 'allow_login' => true,
@@ -196,12 +213,12 @@ class UserSettingsTest extends TestCase
 
         $response = $this->actingAs($user)
             ->put(route('admin.user.user-settings.update'), $data);
-        $response->assertStatus(302);
-        $response->assertSessionHas('success', __('admin.user.settings_updated'));
+
+        $response->assertStatus(302)
+            ->assertSessionHas('success', __('admin.user.settings_updated'));
 
         $this->assertDatabaseHas('app_settings', [
             'key' => 'auth.auto_logout_timer',
-            'value' => '5',
         ]);
 
         $this->assertDatabaseHas('app_settings', [
@@ -219,10 +236,6 @@ class UserSettingsTest extends TestCase
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'services.azure.default_role_id',
-            'value' => '3',
-        ]);
-        $this->assertDatabaseHas('app_settings', [
-            'key' => 'services.azure.allow_bypass_2fa',
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'services.azure.tenant',

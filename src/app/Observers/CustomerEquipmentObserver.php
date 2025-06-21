@@ -3,58 +3,67 @@
 namespace App\Observers;
 
 use App\Models\CustomerEquipment;
-use App\Models\User;
 use Illuminate\Support\Facades\Log;
 
-class CustomerEquipmentObserver
+class CustomerEquipmentObserver extends Observer
 {
-    /** @var User|string */
-    protected $user;
-
-    public function __construct()
-    {
-        $this->user = match (true) {
-            ! is_null(request()->user()) => request()->user()->username,
-            request()->ip() === '127.0.0.1' => 'Internal Service',
-            // @codeCoverageIgnoreStart
-            default => request()->ip(),
-            // @codeCoverageIgnoreEnd
-        };
-    }
-
-    public function created(CustomerEquipment $equipment): void
+    /**
+     * Handle the CustomerEquipment "created" event.
+     */
+    public function created(CustomerEquipment $customerEquipment): void
     {
         Log::info(
-            'New Customer Equipment added to '.$equipment->Customer->name.
+            'New Equipment added to '.$customerEquipment->Customer->name.
                 ' by '.$this->user,
-            $equipment->toArray()
+            $customerEquipment->toArray()
         );
     }
 
-    public function deleted(CustomerEquipment $equipment): void
-    {
-        Log::notice(
-            'Customer Equipment Disabled for '.$equipment->Customer->name.
-                ' by '.$this->user,
-            $equipment->toArray()
-        );
-    }
-
-    public function restored(CustomerEquipment $equipment): void
+    /**
+     * Handle the CustomerEquipment "updated" event.
+     */
+    public function updated(CustomerEquipment $customerEquipment): void
     {
         Log::info(
-            'Customer Equipment restored for '.$equipment->Customer->name.' by '.
-                $this->user,
-            $equipment->toArray()
+            'Equipment updated for '.$customerEquipment->Customer->name.
+                ' by '.$this->user,
+            $customerEquipment->toArray()
         );
     }
 
-    public function forceDeleted(CustomerEquipment $equipment): void
+    /**
+     * Handle the CustomerEquipment "deleted" event.
+     */
+    public function deleted(CustomerEquipment $customerEquipment): void
     {
-        Log::notice(
-            'Customer Equipment force deleted for '.$equipment->Customer->name.
+        Log::info(
+            'Equipment deleted for '.$customerEquipment->Customer->name.
                 ' by '.$this->user,
-            $equipment->toArray()
+            $customerEquipment->toArray()
+        );
+    }
+
+    /**
+     * Handle the CustomerEquipment "restored" event.
+     */
+    public function restored(CustomerEquipment $customerEquipment): void
+    {
+        Log::info(
+            'Equipment restored for '.$customerEquipment->Customer->name.
+                ' by '.$this->user,
+            $customerEquipment->toArray()
+        );
+    }
+
+    /**
+     * Handle the CustomerEquipment "force deleted" event.
+     */
+    public function forceDeleted(CustomerEquipment $customerEquipment): void
+    {
+        Log::info(
+            'Equipment trashed for '.$customerEquipment->Customer->name.
+                ' by '.$this->user,
+            $customerEquipment->toArray()
         );
     }
 }

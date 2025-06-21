@@ -1,15 +1,9 @@
 <?php
 
-// TODO - Move commented tests to unit test for job
-
 namespace Tests\Feature\Customer;
 
 use App\Jobs\Customer\ReAssignSiteJob;
 use App\Models\Customer;
-use App\Models\CustomerContact;
-use App\Models\CustomerEquipment;
-use App\Models\CustomerFile;
-use App\Models\CustomerNote;
 use App\Models\User;
 use Illuminate\Support\Facades\Bus;
 use Inertia\Testing\AssertableInertia as Assert;
@@ -17,10 +11,12 @@ use Tests\TestCase;
 
 class ReAssignCustomerTest extends TestCase
 {
-    /**
-     * Edit Method
-     */
-    public function test_edit_guest()
+    /*
+    |---------------------------------------------------------------------------
+    | Edit Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_edit_guest(): void
     {
         $response = $this->get(route('customers.re-assign.edit'));
 
@@ -29,7 +25,7 @@ class ReAssignCustomerTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_edit_no_permission()
+    public function test_edit_no_permission(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly();
@@ -40,7 +36,7 @@ class ReAssignCustomerTest extends TestCase
         $response->assertForbidden();
     }
 
-    public function test_edit()
+    public function test_edit(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);
@@ -49,15 +45,18 @@ class ReAssignCustomerTest extends TestCase
             ->get(route('customers.re-assign.edit'));
 
         $response->assertSuccessful()
-            ->assertInertia(fn (Assert $page) => $page
-                ->component('Customer/ReAssign')
+            ->assertInertia(
+                fn (Assert $page) => $page
+                    ->component('Customer/Admin/ReAssignSite')
             );
     }
 
-    /**
-     * Update Method
-     */
-    public function test_update_guest()
+    /*
+    |---------------------------------------------------------------------------
+    | Update Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_update_guest(): void
     {
         $data = [
             'moveSiteId' => 1,
@@ -71,7 +70,7 @@ class ReAssignCustomerTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_update_no_permission()
+    public function test_update_no_permission(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly();
@@ -86,29 +85,14 @@ class ReAssignCustomerTest extends TestCase
         $response->assertForbidden();
     }
 
-    public function test_update_solo_customer()
+    public function test_update_solo_customer(): void
     {
         Bus::fake();
 
         /** @var User $user */
         $user = User::factory()->createQuietly(['role_id' => 1]);
-        $fromCust = Customer::factory()
-            ->has(CustomerEquipment::factory())
-            ->has(CustomerNote::factory())
-            ->has(CustomerContact::factory())
-            ->has(CustomerFile::factory())
-            ->createQuietly();
+        $fromCust = Customer::factory()->create();
         $toCust = Customer::factory()->create();
-
-        $fromCust->CustomerEquipment[0]
-            ->CustomerSite()
-            ->attach($fromCust->primary_site_id);
-        $fromCust->CustomerContact[0]
-            ->CustomerSite()
-            ->attach($fromCust->primary_site_id);
-
-        $noteId = $fromCust->CustomerNote[0]->note_id;
-        $fileId = $fromCust->CustomerFile[0]->cust_file_id;
 
         $data = [
             'moveSiteId' => $fromCust->primary_site_id,
@@ -121,7 +105,7 @@ class ReAssignCustomerTest extends TestCase
         $response->assertStatus(302)
             ->assertSessionHas(
                 'success',
-                'Re-Assignment job started in background.  This may take some time'
+                __('cust.admin.re-assigned')
             );
 
         Bus::assertDispatched(ReAssignSiteJob::class);

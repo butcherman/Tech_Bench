@@ -1,29 +1,26 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Http\Controllers\Maintenance\Backup;
 
-use App\Http\Controllers\Controller;
+use App\Enums\DiskEnum;
+use App\Http\Controllers\FileUploadController;
 use App\Models\AppSettings;
-use App\Traits\FileTrait;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 
-class UploadBackupController extends Controller
+class UploadBackupController extends FileUploadController
 {
-    use FileTrait;
-
     /**
      * Handle the incoming request.
      */
-    public function __invoke(Request $request)
+    public function __invoke(Request $request): Response
     {
         $this->authorize('viewAny', AppSettings::class);
 
-        $this->setFileData('backups', 'tech-bench');
+        $this->setFileData(DiskEnum::backups, 'tech-bench');
 
-        if ($savedFile = $this->getChunk($request)) {
+        if ($savedFile = $this->getChunk($request->file('file'), $request)) {
             Log::info('New Backup File Uploaded '.$savedFile->file_name);
         }
 

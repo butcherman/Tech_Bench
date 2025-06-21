@@ -1,47 +1,49 @@
 <?php
 
-// TODO - Refactor
-
 namespace App\Http\Controllers\User;
 
 use App\Actions\Fortify\ResetUserPassword;
+use App\Events\User\UserInitializeComplete;
+use App\Facades\CacheData;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\ResetPasswordRequest;
 use App\Models\UserInitialize;
-use App\Service\Cache;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class InitializeUserController extends Controller
 {
+    public function __construct(protected ResetUserPassword $svc) {}
+
     /**
-     * Display the resource.
+     * Show the finish user profile setup page.
      */
-    public function show(UserInitialize $token)
+    public function show(UserInitialize $token): Response
     {
         return Inertia::render('User/Initialize', [
-            'token' => $token->token,
-            'user' => $token->User,
-            'rules' => Cache::PasswordRules(),
+            'token' => fn () => $token->token,
+            'user' => fn () => $token->User,
+            'rules' => fn () => CacheData::passwordRules(),
         ]);
     }
 
     /**
-     * Set the users password and finish setting up their account
+     * Update the resource in storage.
      */
-    public function update(ResetPasswordRequest $request, UserInitialize $token)
+    public function update(Request $request, UserInitialize $token): RedirectResponse
     {
-        $resetObj = new ResetUserPassword;
-        $resetObj->reset($token->User, $request->only(['password', 'password_confirmation']));
+        $this->svc->reset(
+            $token->User,
+            $request->only(['password', 'password_confirmation'])
+        );
 
-        // Log the user in and send them to the Dashboard
-        Auth::login($token->User, true);
+        event(new UserInitializeComplete($token));
 
-        Log::stack(['daily', 'auth'])
-            ->info('User '.$token->User->full_name.' has finished setting up their account');
-        $token->delete();
+        Auth::login($token->User);
 
-        return redirect(route('dashboard'))->with('success', __('user.initialized'));
+        return redirect(route('dashboard'))
+            ->with('success', __('user.initialized'));
     }
 }

@@ -8,10 +8,12 @@ use Tests\TestCase;
 
 class DashboardTest extends TestCase
 {
-    /**
-     * Invoke Method
-     */
-    public function test_dashboard_guest()
+    /*
+    |---------------------------------------------------------------------------
+    | Invoke Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_dashboard_guest(): void
     {
         $response = $this->get(route('dashboard'));
 
@@ -20,7 +22,7 @@ class DashboardTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_dashboard()
+    public function test_dashboard(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly();
@@ -28,10 +30,6 @@ class DashboardTest extends TestCase
         $response = $this->actingAs($user)->get(route('dashboard'));
 
         $response->assertSuccessful()
-            ->assertInertia(fn (Assert $page) => $page
-                ->component('Home/Dashboard')
-                ->has('bookmarks')
-                ->has('recent')
-            );
+            ->assertInertia(fn (Assert $page) => $page->component('Home/Dashboard'));
     }
 }

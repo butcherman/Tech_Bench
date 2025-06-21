@@ -5,22 +5,8 @@ namespace App\Observers;
 use App\Models\CustomerSite;
 use Illuminate\Support\Facades\Log;
 
-class CustomerSiteObserver
+class CustomerSiteObserver extends Observer
 {
-    /** @var User|string */
-    protected $user;
-
-    public function __construct()
-    {
-        $this->user = match (true) {
-            ! is_null(request()->user()) => request()->user()->username,
-            request()->ip() === '127.0.0.1' => 'Internal Service',
-            // @codeCoverageIgnoreStart
-            default => request()->ip(),
-            // @codeCoverageIgnoreEnd
-        };
-    }
-
     public function created(CustomerSite $site): void
     {
         Log::info(
@@ -41,14 +27,18 @@ class CustomerSiteObserver
     public function deleted(CustomerSite $site): void
     {
         Log::alert(
-            'Customer Site '.$site->site_name.' has been disabled by '.$this->user
+            'Customer Site '.$site->site_name.' has been disabled by '.
+                $this->user
         );
     }
 
-    // public function restored(CustomerSite $site): void
-    // {
-    //     //
-    // }
+    public function restored(CustomerSite $site): void
+    {
+        Log::alert(
+            'Customer Site '.$site->site_name.' has been restored by '.
+                $this->user
+        );
+    }
 
     public function forceDeleted(CustomerSite $site): void
     {

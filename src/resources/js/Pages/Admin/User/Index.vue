@@ -1,77 +1,35 @@
-<template>
-    <div>
-        <Head title="User Administration" />
-        <div class="row justify-content-center">
-            <div class="col">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-title">
-                            User Administration
-                            <Link :href="$route('admin.user.create')">
-                                <AddButton class="float-end" pill small>
-                                    New User
-                                </AddButton>
-                            </Link>
-                        </div>
-                        <Table
-                            :columns="columns"
-                            :rows="userLinkList"
-                            initial-sort="username"
-                            responsive
-                            paginate
-                            :per-page-default="25"
-                        >
-                            <template #action="{ rowData }">
-                                <span
-                                    class="badge bg-danger rounded-pill mx-1"
-                                    title="Disable"
-                                    v-tooltip
-                                    @click="disableUser(rowData)"
-                                >
-                                    <fa-icon icon="user-slash" />
-                                </span>
-                            </template>
-                        </Table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</template>
-
 <script setup lang="ts">
-import AppLayout from "@/Layouts/AppLayout.vue";
 import AddButton from "@/Components/_Base/Buttons/AddButton.vue";
-import Table from "@/Components/_Base/Table.vue";
+import AppLayout from "@/Layouts/App/AppLayout.vue";
+import AtomLoader from "@/Components/_Base/Loaders/AtomLoader.vue";
+import BaseBadge from "@/Components/_Base/Badges/BaseBadge.vue";
+import Card from "@/Components/_Base/Card.vue";
+import DataTable from "@/Components/_Base/DataTable/DataTable.vue";
+import okModal from "@/Modules/okModal";
 import verifyModal from "@/Modules/verifyModal";
-import { computed } from "vue";
-import { router } from "@inertiajs/vue3";
+import { Deferred, router } from "@inertiajs/vue3";
+import { useAuthStore } from "@/Stores/AuthStore";
 
-type userLinkList = {
-    href: string;
-} & user;
-
-const props = defineProps<{
-    userList: userLinkList[];
+defineProps<{
+    userList?: user[];
 }>();
 
-const userLinkList = computed<userLinkList[]>(() => {
-    let newList = [...props.userList];
-    newList.forEach((item) => {
-        item.href = route("admin.user.edit", item.username);
-    });
+const app = useAuthStore();
 
-    return newList;
-});
+const disableUser = (row: user) => {
+    if (row.username === app.user?.username) {
+        okModal("You cannot disable yourself");
+        return;
+    }
 
-const disableUser = (user: user) => {
-    verifyModal(`${user.full_name} will be immediately disabled`).then(
-        (res) => {
-            if (res) {
-                router.delete(route("admin.user.destroy", user.username));
-            }
+    verifyModal("This User Will No Longer Be Allowed Access").then((res) => {
+        if (res) {
+            router.delete(route("admin.user.destroy", row.username), {
+                preserveScroll: true,
+                async: true,
+            });
         }
-    );
+    });
 };
 
 const columns = [
@@ -79,33 +37,29 @@ const columns = [
         label: "Name",
         field: "full_name",
         sort: true,
-        filterOptions: {
-            enabled: true,
-            placeholder: "Filter Name",
-        },
+        filterable: true,
     },
     {
         label: "Username",
         field: "username",
         sort: true,
-        filterOptions: {
-            enabled: true,
-            placeholder: "Filter Username",
-        },
+        filterable: true,
     },
     {
         label: "Email",
         field: "email",
         sort: true,
-        filterOptions: {
-            enabled: true,
-            placeholder: "Filter Email",
-        },
+        filterable: true,
     },
     {
         label: "Role",
         field: "role_name",
         sort: true,
+        filterable: true,
+        filterSelect: true,
+    },
+    {
+        field: "actions",
     },
 ];
 </script>
@@ -113,3 +67,48 @@ const columns = [
 <script lang="ts">
 export default { layout: AppLayout };
 </script>
+
+<template>
+    <div class="flex justify-center">
+        <Card class="tb-card-lg overflow-x-auto" title="User Administration">
+            <template #append-title>
+                <AddButton
+                    text="New User"
+                    :href="$route('admin.user.create')"
+                    size="small"
+                    pill
+                />
+            </template>
+            <Deferred data="user-list">
+                <template #fallback>
+                    <div class="flex justify-center">
+                        <div>
+                            <AtomLoader class="mx-auto" />
+                            Loading Users
+                        </div>
+                    </div>
+                </template>
+                <DataTable
+                    v-if="userList"
+                    :columns="columns"
+                    :rows="userList"
+                    :row-click-link="
+                        (row) => $route('admin.user.show', row.username)
+                    "
+                    paginate
+                    striped
+                >
+                    <template #row.actions="{ rowData }">
+                        <BaseBadge
+                            icon="user-slash"
+                            class="pointer"
+                            variant="danger"
+                            v-tooltip.left="'Disable User'"
+                            @click.stop="disableUser(rowData)"
+                        />
+                    </template>
+                </DataTable>
+            </Deferred>
+        </Card>
+    </div>
+</template>

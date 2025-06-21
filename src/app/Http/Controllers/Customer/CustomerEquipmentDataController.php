@@ -5,21 +5,23 @@ namespace App\Http\Controllers\Customer;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customer\CustomerEquipmentDataRequest;
 use App\Models\Customer;
-use App\Service\Customer\CustomerEquipmentDataService;
+use App\Models\CustomerEquipment;
+use App\Services\Customer\CustomerEquipmentDataService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 
 class CustomerEquipmentDataController extends Controller
 {
-    public function __construct(protected CustomerEquipmentDataService $svc) {}
-
     /**
-     * Save changes made to Customer Equipment Data
+     * Handle the incoming request.
      */
     public function __invoke(
         CustomerEquipmentDataRequest $request,
-        Customer $customer
+        CustomerEquipmentDataService $svc,
+        Customer $customer,
+        CustomerEquipment $equipment
     ): RedirectResponse {
-        $this->svc->updateDataFieldValue($request, $customer);
+        $svc->updateDataFieldValue($request->safe()->collect(), $equipment);
 
         return back()->with('success', 'Saved Successfully');
     }

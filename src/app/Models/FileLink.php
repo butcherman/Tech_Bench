@@ -5,10 +5,15 @@ namespace App\Models;
 use App\Exceptions\FileLink\FileLinkExpiredException;
 use App\Observers\FileLinkObserver;
 use Carbon\Carbon;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Prunable;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\Log;
 
 #[ObservedBy([FileLinkObserver::class])]
@@ -17,52 +22,76 @@ class FileLink extends Model
     use HasFactory;
     use Prunable;
 
+    /** @var string */
     protected $primaryKey = 'link_id';
 
+    /** @var array<int, string> */
     protected $guarded = ['link_id', 'created_at', 'updated_at'];
 
+    /** @var array<int, string> */
     protected $hidden = ['user_id', 'created_at', 'updated_at'];
 
+    /** @var array<int, string> */
     protected $appends = ['is_expired', 'href', 'public_href', 'created_stamp'];
 
-    protected $casts = [
-        'allow_upload' => 'boolean',
-        'created_at' => 'datetime:M d, Y',
-        'updated_at' => 'datetime:M d, Y',
-        'expire' => 'datetime:M d, Y',
-    ];
-
-    /***************************************************************************
-     * Model Attributes
-     ***************************************************************************/
-    public function getIsExpiredAttribute()
+    /*
+    |---------------------------------------------------------------------------
+    | Model Casting
+    |---------------------------------------------------------------------------
+    */
+    public function casts(): array
     {
-        return $this->expire < Carbon::now();
+        return [
+            'allow_upload' => 'boolean',
+            'created_at' => 'datetime:M d, Y',
+            'updated_at' => 'datetime:M d, Y',
+            'expire' => 'datetime:M d, Y',
+        ];
     }
 
-    public function getHrefAttribute()
+    /*
+    |---------------------------------------------------------------------------
+    | Model Attributes
+    |---------------------------------------------------------------------------
+    */
+    public function isExpired(): Attribute
     {
-        return route('links.show', $this->link_id);
+        return Attribute::make(
+            get: fn () => $this->expire < Carbon::now(),
+        );
     }
 
-    public function getPublicHrefAttribute()
+    public function href(): Attribute
     {
-        return route('guest-link.show', $this->link_hash);
+        return Attribute::make(
+            get: fn () => route('links.show', $this->link_id),
+        );
     }
 
-    public function getCreatedStampAttribute()
+    public function publicHref(): Attribute
     {
-        return $this->created_at;
+        return Attribute::make(
+            get: fn () => route('guest-link.show', $this->link_hash),
+        );
     }
 
-    /***************************************************************************
-     * Model Relationships
-     ***************************************************************************/
-    public function FileUpload()
+    public function createdStamp(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->created_at,
+        );
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | Model Relationships
+    |---------------------------------------------------------------------------
+    */
+    public function Files(): BelongsToMany
     {
         return $this->belongsToMany(
             FileUpload::class,
-            'file_link_files',
+            FileLinkFile::class,
             'link_id',
             'file_id',
         )->withPivot([
@@ -72,55 +101,83 @@ class FileLink extends Model
         ])->withTimestamps();
     }
 
-    public function User()
+    public function Uploads(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            FileUpload::class,
+            FileLinkFile::class,
+            'link_id',
+            'file_id',
+        )
+            ->wherePivot('upload', true)
+            ->withPivot([
+                'timeline_id',
+                'upload',
+                'link_file_id',
+                'created_at',
+                'moved',
+            ])
+            ->withTimestamps();
+    }
+
+    public function Downloads(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            FileUpload::class,
+            FileLinkFile::class,
+            'link_id',
+            'file_id',
+        )
+            ->wherePivot('upload', false)
+            ->withPivot([
+                'timeline_id',
+                'upload',
+                'link_file_id',
+                'created_at',
+                'moved',
+            ])
+            ->withTimestamps();
+    }
+
+    public function User(): HasOne
     {
         return $this->hasOne(User::class, 'user_id', 'user_id');
     }
 
-    public function Timeline()
+    public function Timeline(): HasMany
     {
         return $this->hasMany(FileLinkTimeline::class, 'link_id', 'link_id');
     }
 
-    /***************************************************************************
-     * Additional Model Methods
-     ***************************************************************************/
-    public function expireLink()
+    public function Customer(): HasOne
     {
-        $this->update([
-            'expire' => Carbon::yesterday(),
-        ]);
-
-        Log::info('A File link was manually expired', $this->toArray());
+        return $this->hasOne(Customer::class, 'cust_id', 'cust_id');
     }
 
-    public function extendLink()
-    {
-        $currentExpire = Carbon::parse($this->expire);
-        $this->update([
-            'expire' => $currentExpire->addDays(30),
-        ]);
-
-        Log::info(
-            'A File Link expiration date has been extended 30 days',
-            $this->toArray()
-        );
-    }
+    /*
+    |---------------------------------------------------------------------------
+    | Additional Model Methods
+    |---------------------------------------------------------------------------
+    */
 
     /**
      * Verify that the link is valid
      */
-    public function validatePublicLink()
+    public function validatePublicLink(): bool
     {
         if (Carbon::parse($this->expire) < Carbon::now()) {
             throw new FileLinkExpiredException($this);
         }
+
+        return true;
     }
 
-    /***************************************************************************
-     * Prune expired models after xx days
-     ***************************************************************************/
-    public function prunable()
+    /*
+    |---------------------------------------------------------------------------
+    | Prune expired models after xx days
+    |---------------------------------------------------------------------------
+    */
+    public function prunable(): Builder
     {
         Log::debug('Calling Prune File Links');
 

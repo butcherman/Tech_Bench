@@ -2,28 +2,43 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class FileLinkTimeline extends Model
 {
-    use HasFactory;
-
+    /** @var string */
     protected $primaryKey = 'timeline_id';
 
+    /** @var array<int, string> */
     protected $guarded = ['timeline_id', 'updated_at'];
 
+    /** @var array<int, string> */
     protected $hidden = ['updated_at'];
 
-    protected $casts = [
-        'created_at' => 'datetime:M d, Y h:i A',
-        'updated_at' => 'datetime:M d, Y',
-    ];
+    /** @var array<int, string> */
+    protected $with = ['Files', 'Notes'];
 
-    /**
-     * Model Relationships
-     */
-    public function FileUpload()
+    /*
+    |---------------------------------------------------------------------------
+    | Model Casting
+    |---------------------------------------------------------------------------
+    */
+    public function casts(): array
+    {
+        return [
+            'created_at' => 'datetime:M d, Y h:i A',
+            'updated_at' => 'datetime:M d, Y',
+        ];
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | Model Relationships
+    |---------------------------------------------------------------------------
+    */
+    public function Files(): HasManyThrough
     {
         return $this->hasManyThrough(
             FileUpload::class,
@@ -35,7 +50,7 @@ class FileLinkTimeline extends Model
         );
     }
 
-    public function FileLinkNote()
+    public function Notes(): HasOne
     {
         return $this->hasOne(FileLinkNote::class, 'timeline_id', 'timeline_id');
     }

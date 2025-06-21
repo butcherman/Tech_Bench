@@ -2,33 +2,37 @@
 
 namespace App\Models;
 
-use App\Notifications\User\SendAuthCode;
 use App\Observers\UserObserver;
-use App\Traits\Notifiable;
 use Carbon\Carbon;
-use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Support\Facades\Notification;
-use Illuminate\Support\Str;
-use Karmendra\LaravelAgentDetector\AgentDetector;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Pennant\Concerns\HasFeatures;
 
 #[ObservedBy([UserObserver::class])]
 class User extends Authenticatable
 {
-    use CanResetPassword;
     use HasFactory;
     use HasFeatures;
     use Notifiable;
     use SoftDeletes;
+    use TwoFactorAuthenticatable;
 
+    /** @var string */
     protected $primaryKey = 'user_id';
 
+    /** @var array<int, string> */
     protected $guarded = ['user_id', 'created_at', 'updated_at'];
 
+    /** @var array<int, string> */
     protected $hidden = [
         'role_id',
         'password',
@@ -39,192 +43,219 @@ class User extends Authenticatable
         'updated_at',
         'user_id',
         'UserRole',
+        'two_factor_secret',
+        'two_factor_recovery_codes',
+        'two_factor_via',
     ];
 
-    protected $casts = [
-        'created_at' => 'datetime:M d, Y',
-        'updated_at' => 'datetime:M d, Y',
-        'deleted_at' => 'datetime:M d, Y',
-        'password_expires' => 'datetime: M d, Y',
-    ];
+    /** @var array<string, string> */
+    protected $appends = ['initials', 'full_name', 'role_name'];
 
-    protected $appends = ['full_name', 'initials', 'role_name'];
+    /*
+    |---------------------------------------------------------------------------
+    | Model Casting
+    |---------------------------------------------------------------------------
+    */
+    protected function casts(): array
+    {
+        return [
+            'created_at' => 'datetime:M d, Y',
+            'updated_at' => 'datetime:M d, Y',
+            'deleted_at' => 'datetime:M d, Y',
+            'password_expires' => 'datetime: M d, Y',
+        ];
+    }
 
-    /***************************************************************************
-     * Key for Route/Model binding
-     ***************************************************************************/
-    public function getRouteKeyName()
+    /*
+    |---------------------------------------------------------------------------
+    | Route Model Binding Key
+    |---------------------------------------------------------------------------
+    */
+    public function getRouteKeyName(): string
     {
         return 'username';
     }
 
-    /***************************************************************************
-     * Additional Attributes
-     ***************************************************************************/
-    public function getFullNameAttribute()
+    /*
+    |---------------------------------------------------------------------------
+    | Model Attributes
+    |---------------------------------------------------------------------------
+    */
+    public function fullName(): Attribute
     {
-        return "{$this->first_name} {$this->last_name}";
+        return Attribute::make(
+            get: fn () => $this->first_name.' '.$this->last_name,
+        );
     }
 
-    public function getInitialsAttribute()
+    public function initials(): Attribute
     {
-        return "{$this->first_name[0]}{$this->last_name[0]}";
+        return Attribute::make(
+            get: fn () => $this->first_name[0].$this->last_name[0],
+        );
     }
 
-    public function getRoleNameAttribute()
+    public function roleName(): Attribute
     {
-        return $this->UserRole->name ?? null;
+        return Attribute::make(
+            get: fn () => $this->UserRole->name,
+        );
     }
 
-    /***************************************************************************
-     * Model Relationships
-     ***************************************************************************/
-    public function UserRole()
+    /*
+    |---------------------------------------------------------------------------
+    | Model Relationships
+    |---------------------------------------------------------------------------
+    */
+    public function DeviceTokens(): HasMany
     {
-        return $this->hasOne(UserRole::class, 'role_id', 'role_id');
+        return $this->hasMany(DeviceToken::class, 'user_id', 'user_id');
     }
 
-    public function UserSetting()
-    {
-        return $this->hasMany(UserSetting::class, 'user_id', 'user_id');
-    }
-
-    public function FileLink()
-    {
-        return $this->hasMany(FileLink::class, 'user_id', 'user_id');
-    }
-
-    public function UserVerificationCode()
+    public function UserVerificationCode(): HasOne
     {
         return $this->hasOne(UserVerificationCode::class, 'user_id', 'user_id');
     }
 
-    /***************************************************************************
-     * Bookmark Relationships
-     ***************************************************************************/
-    public function TechTipBookmarks()
+    public function UserLogins(): HasMany
+    {
+        return $this->hasMany(UserLogin::class, 'user_id', 'user_id');
+    }
+
+    public function UserSettings(): HasMany
+    {
+        return $this->hasMany(UserSetting::class, 'user_id', 'user_id');
+    }
+
+    public function UserRole(): HasOne
+    {
+        return $this->hasOne(UserRole::class, 'role_id', 'role_id');
+    }
+
+    public function RecentTechTips(): HasManyThrough
+    {
+        return $this->hasManyThrough(
+            TechTip::class,
+            UserTechTipRecent::class,
+            'user_id',
+            'tip_id',
+            'user_id',
+            'tip_id',
+        )
+            ->latest('user_tech_tip_recents.updated_at')
+            ->limit(10);
+    }
+
+    public function RecentCustomers(): HasManyThrough
+    {
+        return $this->hasManyThrough(
+            Customer::class,
+            UserCustomerRecent::class,
+            'user_id',
+            'cust_id',
+            'user_id',
+            'cust_id',
+        )
+            ->latest('user_customer_recents.updated_at')
+            ->limit(10);
+    }
+
+    public function TechTipBookmarks(): BelongsToMany
     {
         return $this->belongsToMany(
             TechTip::class,
             'user_tech_tip_bookmarks',
             'user_id',
             'tip_id'
-        )->select(['slug', 'subject']);
+        );
     }
 
-    public function TechTipRecent()
-    {
-        return $this->belongsToMany(
-            TechTip::class,
-            'user_tech_tip_recents',
-            'user_id',
-            'tip_id'
-        )->latest('user_tech_tip_recents.created_at')
-            ->select(['slug', 'subject'])
-            ->limit(10);
-    }
-
-    public function CustomerBookmarks()
+    public function CustomerBookmarks(): BelongsToMany
     {
         return $this->belongsToMany(
             Customer::class,
             'user_customer_bookmarks',
             'user_id',
             'cust_id',
-        )->select(['slug', 'name']);
+        );
     }
 
-    public function CustomerRecent()
+    public function FileLinks(): HasMany
     {
-        return $this->belongsToMany(
-            Customer::class,
-            'user_customer_recents',
-            'user_id',
-            'cust_id',
-        )->latest('user_customer_recents.created_at')
-            ->select(['slug', 'name'])
-            ->limit(10);
+        return $this->hasMany(FileLink::class, 'user_id', 'user_id')
+            ->orderBy('expire', 'desc');
     }
 
-    /***************************************************************************
-     * Additional Methods for User Model
-     ***************************************************************************/
+    /*
+    |---------------------------------------------------------------------------
+    | Additional Model Methods
+    |---------------------------------------------------------------------------
+    */
+
+    /**
+     * Check a user's Setting value based on the name field.
+     */
+    public function checkUserSetting(string $settingName): bool
+    {
+        $settingTypeId = UserSettingType::where('name', $settingName)
+            ->first()
+            ->setting_type_id;
+
+        $setting = $this->UserSettings
+            ->where('setting_type_id', $settingTypeId)
+            ->first();
+
+        if (is_null($setting)) {
+            return false;
+        }
+
+        return $setting->value;
+    }
 
     /**
      * Determine the new expire date for an updated password
-     *
-     * TODO - Refactor?
      */
-    public function getNewExpireTime($immediate = false)
+    public function getNewExpireTime(?bool $immediate = false): ?Carbon
     {
         if ($immediate) {
             return Carbon::yesterday();
         }
 
-        return config('auth.passwords.settings.expire') ?
-            Carbon::now()->addDays(config('auth.passwords.settings.expire')) : null;
+        return (int) config('auth.passwords.settings.expire') > 0
+            ? Carbon::now()->addDays(config('auth.passwords.settings.expire'))
+            : null;
     }
 
     /**
      * Generate a 2FA Code
      */
-    public function generateVerificationCode()
+    public function generateVerificationCode(): void
     {
-        $code = rand(1000, 9999);
-
         UserVerificationCode::updateOrCreate(
             ['user_id' => $this->user_id],
-            ['code' => $code],
+            ['code' => rand(100000, 999999)],
         );
-
-        Notification::send($this, new SendAuthCode($code));
     }
 
     /**
-     * After a 2FA Code is verified, save verification to session
+     * Validate the Verification Code
      */
-    public function processValidCode(bool $rememberDevice)
+    public function validateVerificationCode(string $code): bool
     {
-        // Save verification to session
-        session()->put('2fa_verified', true);
+        $storedCode = $this->UserVerificationCode->code;
 
-        // If Remember Device enabled, generate cookie
-        return $rememberDevice ? $this->generateRememberDeviceToken() : null;
-    }
-
-    /**
-     * Generate a Remember token for a device
-     */
-    public function generateRememberDeviceToken()
-    {
-        $token = Str::random(60);
-        $agent = new AgentDetector(request()->header('User-Agent'));
-        $ipAddr = \Request::ip();
-
-        DeviceToken::create([
-            'user_id' => $this->user_id,
-            'token' => $token,
-            'type' => $agent->device(),
-            'os' => $agent->platform().' '.$agent->platformVersion(),
-            'browser' => $agent->browser(),
-            'registered_ip_address' => $ipAddr,
-            'updated_ip_address' => $ipAddr,
-        ]);
-
-        return $token;
+        return $storedCode === $code;
     }
 
     /**
      * Validate a Remember Me device token
      */
-    public function validateDeviceToken($token)
+    public function validateDeviceToken(string $token): bool
     {
-        $valid = DeviceToken::where('user_id', $this->user_id)
-            ->where('token', $token)
-            ->first();
+        $valid = $this->DeviceTokens->where('token', $token)->first();
 
         if ($valid) {
-            $valid->update(['updated_ip_address' => \Request::ip()]);
+            $valid->update(['updated_ip_address' => request()->ip()]);
 
             return true;
         }
@@ -233,13 +264,25 @@ class User extends Authenticatable
     }
 
     /**
+     * Unhide fields to allow User Administration
+     */
+    public function getAdminLoad(): User
+    {
+        return $this->makeVisible([
+            'role_id',
+            'created_at',
+            'updated_at',
+            'deleted_at',
+        ]);
+    }
+
+    /**
      * Function to get login history for the last xx days
      */
     public function getLoginHistory($days = 365)
     {
-        return UserLogins::whereUserId($this->user_id)
-            ->where('created_at', '>', now()->subDays($days))
-            ->get();
+        return $this->UserLogins
+            ->where('created_at', '>', now()->subDays($days));
     }
 
     /**
@@ -247,7 +290,7 @@ class User extends Authenticatable
      */
     public function getLastLogin()
     {
-        return UserLogins::whereUserId($this->user_id)
+        return $this->UserLogins()
             ->orderBy('created_at', 'desc')
             ->first();
     }

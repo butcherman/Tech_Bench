@@ -1,40 +1,24 @@
-<template>
-    <VueForm
-        ref="customerAlertForm"
-        :initial-values="initValues"
-        :validation-schema="schema"
-        :submit-route="submitRoute"
-        :submit-method="submitMethod"
-        :submit-text="submitText"
-        @success="resetForm"
-    >
-        <TextInput id="message" name="message" label="Alert Message" focus />
-        <SelectInput
-            id="type"
-            name="type"
-            label="Alert Type"
-            :list="alertTypeList"
-            text-field="name"
-            value-field="value"
-        />
-    </VueForm>
-</template>
-
 <script setup lang="ts">
-import VueForm from "@/Forms/_Base/VueForm.vue";
-import TextInput from "@/Forms/_Base/TextInput.vue";
 import SelectInput from "../_Base/SelectInput.vue";
-import { ref, computed } from "vue";
+import TextInput from "@/Forms/_Base/TextInput.vue";
+import VueForm from "@/Forms/_Base/VueForm.vue";
+import { computed } from "vue";
 import { object, string } from "yup";
 
-const emit = defineEmits(["success"]);
-const props = defineProps<{
-    customer: customer;
-    alert: customerAlert | null;
+defineEmits<{
+    success: [];
 }>();
 
-const customerAlertForm = ref<InstanceType<typeof VueForm> | null>(null);
+const props = defineProps<{
+    customer: customer;
+    alert?: customerAlert;
+}>();
 
+/*
+|-------------------------------------------------------------------------------
+| Handle Form
+|-------------------------------------------------------------------------------
+*/
 const submitText = computed(() =>
     props.alert ? "Update Alert" : "Create Alert"
 );
@@ -48,6 +32,11 @@ const submitRoute = computed(() =>
         : route("customers.alerts.store", props.customer.slug)
 );
 
+/*
+|-------------------------------------------------------------------------------
+| Vee Validate
+|-------------------------------------------------------------------------------
+*/
 const initValues = {
     message: props.alert?.message || "",
     type: props.alert?.type || "danger",
@@ -59,12 +48,7 @@ const schema = object({
     type: string().required(),
 });
 
-const resetForm = () => {
-    emit("success");
-    customerAlertForm.value?.resetForm();
-};
-
-const alertTypeList = ref([
+const alertTypeList = [
     {
         name: "General Note (green background)",
         value: "success",
@@ -77,5 +61,27 @@ const alertTypeList = ref([
         name: "Alert (red background)",
         value: "danger",
     },
-]);
+];
 </script>
+
+<template>
+    <VueForm
+        ref="customerAlertForm"
+        :initial-values="initValues"
+        :validation-schema="schema"
+        :submit-route="submitRoute"
+        :submit-method="submitMethod"
+        :submit-text="submitText"
+        @success="$emit('success')"
+    >
+        <TextInput id="message" name="message" label="Alert Message" focus />
+        <SelectInput
+            id="type"
+            name="type"
+            label="Alert Type"
+            :list="alertTypeList"
+            text-field="name"
+            value-field="value"
+        />
+    </VueForm>
+</template>

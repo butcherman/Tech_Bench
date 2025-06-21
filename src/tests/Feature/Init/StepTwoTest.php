@@ -8,10 +8,12 @@ use Tests\TestCase;
 
 class StepTwoTest extends TestCase
 {
-    /**
-     * Invoke Method
-     */
-    public function test_invoke_guest()
+    /*
+    |---------------------------------------------------------------------------
+    | Invoke Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_invoke_guest(): void
     {
         config(['app.first_time_setup' => true]);
         config(['app.env' => 'local']);
@@ -23,32 +25,33 @@ class StepTwoTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_invoke()
+    public function test_invoke(): void
     {
         config(['app.first_time_setup' => true]);
         config(['app.env' => 'local']);
 
         /** @var User $user */
-        $user = User::factory()->createQuietly(['role_id' => 1]);
+        $user = User::find(1);
 
         $response = $this->actingAs($user)
             ->get(route('init.step-2'));
 
         $response->assertSuccessful()
-            ->assertInertia(fn (Assert $page) => $page
-                ->component('Init/StepTwo')
-                ->has('step')
-                ->has('settings')
+            ->assertInertia(
+                fn (Assert $page) => $page
+                    ->component('Init/StepTwo')
+                    ->has('step')
+                    ->has('settings')
             );
     }
 
-    public function test_invoke_with_session_data()
+    public function test_invoke_with_session_data(): void
     {
         config(['app.first_time_setup' => true]);
         config(['app.env' => 'local']);
 
         /** @var User $user */
-        $user = User::factory()->createQuietly(['role_id' => 1]);
+        $user = User::find(1);
 
         $response = $this->actingAs($user)
             ->withSession(['setup' => [
@@ -65,10 +68,11 @@ class StepTwoTest extends TestCase
             ->get(route('init.step-2'));
 
         $response->assertSuccessful()
-            ->assertInertia(fn (Assert $page) => $page
-                ->component('Init/StepTwo')
-                ->has('step')
-                ->has('settings')
+            ->assertInertia(
+                fn (Assert $page) => $page
+                    ->component('Init/StepTwo')
+                    ->has('step')
+                    ->has('settings')
             );
     }
 }

@@ -10,19 +10,19 @@ use Inertia\Response;
 class DashboardController extends Controller
 {
     /**
-     * Home Landing page of Authenticated users
+     * Show the application Dashboard
      */
     public function __invoke(Request $request): Response
     {
         return Inertia::render('Home/Dashboard', [
-            'bookmarks' => [
+            'bookmarks' => Inertia::defer(fn () => [
                 'techTips' => $request->user()->TechTipBookmarks,
                 'customers' => $request->user()->CustomerBookmarks,
-            ],
-            'recent' => [
-                'techTips' => $request->user()->TechTipRecent,
-                'customers' => $request->user()->CustomerRecent,
-            ],
+            ]),
+            'recent' => Inertia::defer(fn () => [
+                'techTips' => $request->user()->RecentTechTips,
+                'customers' => $request->user()->RecentCustomers,
+            ]),
         ]);
     }
 }

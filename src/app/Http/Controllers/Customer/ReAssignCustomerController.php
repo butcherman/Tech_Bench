@@ -6,31 +6,38 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Customer\ReAssignSiteRequest;
 use App\Jobs\Customer\ReAssignSiteJob;
 use App\Models\Customer;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class ReAssignCustomerController extends Controller
 {
     /**
-     * Show the form for moving a customer site from one customer to another
+     * Show the form for moving a customer site to new customer ID.
      */
-    public function edit()
+    public function edit(): Response
     {
         $this->authorize('manage', Customer::class);
 
-        return Inertia::render('Customer/ReAssign');
+        return Inertia::render('Customer/Admin/ReAssignSite');
     }
 
     /**
-     * Trigger the job to move the customer site
+     * Move the customer site to the new Customer ID.
      */
-    public function update(ReAssignSiteRequest $request)
+    public function update(ReAssignSiteRequest $request): RedirectResponse
     {
-        dispatch(new ReAssignSiteJob($request->collect(), $request->user()));
+        ReAssignSiteJob::dispatch(
+            $request->get('moveSiteId'),
+            $request->get('toCustomer')
+        );
 
-        return back()
-            ->with(
-                'success',
-                'Re-Assignment job started in background.  This may take some time'
-            );
+        Log::notice(
+            'Move Customer Site called by '.$request->user()->username,
+            $request->toArray()
+        );
+
+        return back()->with('success', __('cust.admin.re-assigned'));
     }
 }

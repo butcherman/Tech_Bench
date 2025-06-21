@@ -3,37 +3,57 @@
 namespace App\Http\Controllers\Admin\Config;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\LogoRequest;
+use App\Http\Requests\Admin\Config\LogoRequest;
 use App\Models\AppSettings;
-use App\Service\Admin\ApplicationSettingsService;
-use App\Traits\AppSettingsTrait;
+use App\Services\Admin\ApplicationSettingsService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response as HttpResponse;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class LogoController extends Controller
 {
-    use AppSettingsTrait;
-
     public function __construct(protected ApplicationSettingsService $svc) {}
 
     /**
-     * Display the current logo.
+     * Show the form for uploading a new logo.
      */
-    public function show(): Response
+    public function edit(): Response
     {
         $this->authorize('viewAny', AppSettings::class);
 
-        return Inertia::render('Admin/Config/Logo');
+        return Inertia::render('Admin/Config/Logo', [
+            'current-logo' => config('app.logo'),
+        ]);
     }
 
     /**
-     * Update the current logo
+     * Upload and save a new logo
      */
     public function update(LogoRequest $request): HttpResponse
     {
-        $this->svc->processLogo($request);
+        $storedFile = $this->svc->updateLogo($request->safe()->collect());
+
+        Log::notice(
+            'New Tech Bench Logo uploaded by '.$request->user()->username,
+            [
+                'file-location' => $storedFile,
+            ]
+        );
 
         return response()->noContent();
+    }
+
+    /**
+     * Delete the current logo and revert to the default one
+     */
+    public function destroy(): RedirectResponse
+    {
+        $this->authorize('viewAny', AppSettings::class);
+
+        $this->svc->destroyLogo();
+
+        return back()->with('success', 'Logo Deleted');
     }
 }

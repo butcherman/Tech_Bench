@@ -1,72 +1,82 @@
-<template>
-    <div>
-        <span
-            v-if="help"
-            title="What is this?"
-            class="pointer pl-2 text-info float-end"
-            @click.prevent="showHelp"
-            v-tooltip
-        >
-            <fa-icon icon="fa-circle-question" />
-        </span>
-        <div
-            v-for="(item, index) in list"
-            class="form-check"
-            :class="{ 'form-check-inline': inline }"
-        >
-            <input
-                v-model="value"
-                class="form-check-input"
-                type="radio"
-                :name="name"
-                :id="`radio-group-${name}-${index}`"
-                :value="item.value"
-                :disabled="disabled"
-                @change="$emit('change', value)"
-            />
-            <label
-                :for="`radio-group-${name}-${index}`"
-                class="form-check-label"
-            >
-                <slot name="item-label" :text="item.text" :value="item.value">
-                    {{ item.text }}
-                </slot>
-            </label>
-        </div>
-        <span
-            v-if="errorMessage && (meta.dirty || meta.touched)"
-            class="text-danger"
-            v-html="upperFirst(errorMessage)"
-        />
-    </div>
-</template>
-
 <script setup lang="ts">
-import okModal from "@/Modules/okModal";
-import { toRef } from "vue";
+import { RadioButton, Message } from "primevue";
+import { computed, ref, toRef } from "vue";
 import { useField } from "vee-validate";
-import { upperFirst } from "lodash";
+import type { Ref } from "vue";
 
 interface radioGroupList {
-    text: string;
+    label: string;
     value: string;
 }
 
-defineEmits(["change"]);
+defineEmits<{
+    change: [string | boolean];
+}>();
 
 const props = defineProps<{
     id: string;
+    list: string[] | radioGroupList[];
     name: string;
-    list: radioGroupList[];
-    inline?: boolean;
-    help?: string;
     disabled?: boolean;
+    help?: string;
+    inline?: boolean;
 }>();
 
-const showHelp = () => {
-    okModal(props.help!!);
-};
+const hasFocus = ref<boolean>(false);
+const flexDirection = computed<string>(() =>
+    props.inline ? "flex-row" : "flex-col"
+);
 
+/*
+|-------------------------------------------------------------------------------
+| Vee Validate
+|-------------------------------------------------------------------------------
+*/
 const nameRef = toRef(props, "name");
-const { errorMessage, value, meta } = useField(nameRef);
+const {
+    errorMessage,
+    value,
+}: {
+    errorMessage: Ref<string | undefined, string | undefined>;
+    value: Ref<string | boolean>;
+} = useField(nameRef);
 </script>
+
+<template>
+    <div class="flex gap-1 flex-wrap my-2" :class="flexDirection">
+        <div v-for="(item, index) in list">
+            <RadioButton
+                v-model="value"
+                size="small"
+                class="mb-1"
+                :input-id="`radio-group-${name}-${index}`"
+                :name="name"
+                :value="typeof item === 'string' ? item : item.value"
+                :pt="{
+                    box: () => ({
+                        class: ['border border-slate-400'],
+                    }),
+                }"
+                @focus="hasFocus = true"
+                @blur="hasFocus = false"
+                @change="$emit('change', value)"
+            />
+            <label :for="`radio-group-${name}-${index}`" class="ms-1">
+                <slot name="item-label" :item="item">
+                    {{ typeof item === "string" ? item : item.label }}
+                </slot>
+            </label>
+        </div>
+        <Message size="small" severity="error" variant="simple">
+            {{ errorMessage }}
+        </Message>
+        <Message
+            v-if="hasFocus"
+            size="small"
+            severity="secondary"
+            variant="simple"
+        >
+            {{ help }}
+        </Message>
+    </div>
+</template>

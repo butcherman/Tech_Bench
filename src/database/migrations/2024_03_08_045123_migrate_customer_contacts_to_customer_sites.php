@@ -31,7 +31,7 @@ return new class extends Migration
         $customerContacts = CustomerContact::withTrashed()->get();
 
         foreach ($customerContacts as $contact) {
-            $contact->CustomerSite()->attach($contact->cust_id);
+            $contact->Sites()->attach($contact->cust_id);
 
             // Verify the contact is applied to the primary Customer ID
             $cust = Customer::withTrashed()->find($contact->cust_id);
@@ -45,7 +45,7 @@ return new class extends Migration
             if ($contact->shared) {
                 $siteList = CustomerSite::where('cust_id', $contact->cust_id)
                     ->get()->pluck('cust_site_id')->toArray();
-                $contact->CustomerSite()->sync($siteList);
+                $contact->Sites()->sync($siteList);
             }
         }
     }

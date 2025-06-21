@@ -99,7 +99,6 @@ return new class extends Migration
         Schema::table('file_link_files', function (Blueprint $table) {
             $table->dropForeign(['link_id']);
             $table->dropForeign(['file_id']);
-            $table->dropForeign(['user_id']);
         });
         Schema::dropIfExists('file_link_files');
     }

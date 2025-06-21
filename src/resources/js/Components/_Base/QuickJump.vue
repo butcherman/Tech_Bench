@@ -1,105 +1,86 @@
-<template>
-    <div>
-        <div id="quick-jump-wrapper">
-            <nav
-                id="quick-jump-nav"
-                class="navbar navbar-expand-lg bg-body-tertiary"
-            >
-                <div class="container-fluid">
-                    <span class="navbar-brand"
-                        >{{ title || "Quick Jump" }}:</span
-                    >
-                    <button
-                        class="navbar-toggler"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#quick-jump-content"
-                    >
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div
-                        id="quick-jump-content"
-                        class="collapse navbar-collapse"
-                    >
-                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                            <li
-                                v-for="item in navList"
-                                :key="item.navId"
-                                class="nav-item"
-                            >
-                                <a
-                                    class="nav-link pointer"
-                                    :class="{
-                                        active: item.navId === currentSection,
-                                    }"
-                                    @click="scrollToElement(item.navId)"
-                                >
-                                    {{ item.name }}
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
-        </div>
-        <slot />
-    </div>
-</template>
-
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from "vue";
+import BaseButton from "./Buttons/BaseButton.vue";
+import Card from "./Card.vue";
+import { ref } from "vue";
+import { Drawer } from "primevue";
 
+/*
+|-------------------------------------------------------------------------------
+| Local Types
+|-------------------------------------------------------------------------------
+*/
 interface navList {
     navId: string;
-    name: string;
+    label: string;
 }
-
-const currentSection = ref<string>();
-const sectionList = ref<NodeListOf<HTMLElement>>();
-
-onMounted(() => {
-    sectionList.value = document.querySelectorAll("section");
-    window.addEventListener("scroll", updateScroll);
-});
-onUnmounted(() => window.removeEventListener("scroll", updateScroll));
 
 defineProps<{
     navList: navList[];
     title?: string;
 }>();
 
-const scrollToElement = (elId: string) => {
-    currentSection.value = elId;
-    document.getElementById(elId)?.scrollIntoView({ behavior: "smooth" });
-};
+const showNav = ref<boolean>(false);
+const currentSection = ref<string>();
 
 /**
- * SpyScroll for active element in navbar
+ * Place the selected element at the center of the screen.
  */
-const updateScroll = () => {
-    sectionList.value?.forEach((sec) => {
-        let top = window.scrollY;
-        let offset = sec.offsetTop - 150;
-        let height = sec.offsetHeight;
-        let id = sec.getAttribute("id");
+const scrollToElement = (elId: string): void => {
+    currentSection.value = elId;
+    document
+        .getElementById(elId)
+        ?.scrollIntoView({ behavior: "smooth", block: "center" });
 
-        if (top >= offset && top < offset + height) {
-            currentSection.value = id?.toString();
-        }
-    });
+    if (showNav.value) {
+        showNav.value = false;
+    }
 };
 </script>
 
-<style lang="scss">
-@import "../../../scss/Layouts/appLayout.scss";
-
-#quick-jump-wrapper {
-    position: sticky;
-    top: $header-height;
-    z-index: 100;
-}
-
-section {
-    scroll-margin-top: calc($header-height + 45px);
-}
-</style>
+<template>
+    <Card class="duration-700 transition-all">
+        <div class="flex flex-row">
+            <div class="h-full grow md:grow-0">
+                <h3>{{ title ?? "Quick Jump" }}:</h3>
+            </div>
+            <div class="md:hidden">
+                <BaseButton
+                    icon="bars"
+                    variant="light"
+                    size="small"
+                    @click="showNav = !showNav"
+                />
+            </div>
+            <div
+                id="quick-jump-nav-list"
+                class="w-0 md:w-auto overflow-hidden h-0 md:h-auto md:grow md:ms-2 flex flex-wrap text-center"
+            >
+                <div
+                    v-for="(item, index) in navList"
+                    class="grow text-muted mx-2 mt-1"
+                    :class="{ 'md:border-e': index !== navList.length - 1 }"
+                >
+                    <a @click="scrollToElement(item.navId)" class="pointer">
+                        {{ item.label }}
+                    </a>
+                </div>
+            </div>
+        </div>
+        <Drawer
+            v-model:visible="showNav"
+            header="Quick Jump"
+            position="top"
+            class="h-auto!"
+        >
+            <div
+                v-for="(item, index) in navList"
+                class="text-muted mx-2 mt-1"
+                :class="{ 'md:border-e': index !== navList.length - 1 }"
+            >
+                <a @click="scrollToElement(item.navId)" class="pointer">
+                    {{ item.label }}
+                </a>
+            </div>
+        </Drawer>
+    </Card>
+</template>

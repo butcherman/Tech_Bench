@@ -2,38 +2,29 @@
 
 namespace App\Exceptions\Customer;
 
-use App\Http\Middleware\HandleInertiaRequests;
 use Exception;
-use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
-use Inertia\Inertia;
-use Inertia\Response;
 
-/**
- * Exception triggered when trying to access a customer that does not exist
- */
+/*
+|-------------------------------------------------------------------------------
+| Exception notes that a customer slug or customer ID does not exist in
+| the database.  A custom customer not found page will be rendered.
+|-------------------------------------------------------------------------------
+*/
+
 class CustomerNotFoundException extends Exception
 {
-    protected $request;
-
-    public function __construct(Request $request)
-    {
-        parent::__construct();
-        $this->request = $request;
-    }
-
     public function report(): void
     {
         Log::warning('Unable to find request customer page', [
-            'user' => $this->request->user()->username,
-            'path' => $this->request->path(),
+            'user' => request()->user()->username,
+            'path' => request()->path(),
         ]);
     }
 
-    public function render(): Response
+    public function render(): RedirectResponse
     {
-        $middlewareData = (new HandleInertiaRequests)->share($this->request);
-
-        return Inertia::render('Customer/NotFound', $middlewareData);
+        return redirect(route('customers.not-found'));
     }
 }

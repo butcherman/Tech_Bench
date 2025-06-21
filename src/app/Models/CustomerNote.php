@@ -5,12 +5,16 @@ namespace App\Models;
 use App\Observers\CustomerNoteObserver;
 use App\Traits\CustomerBroadcastingTrait;
 use Illuminate\Broadcasting\PrivateChannel;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\BroadcastableModelEventOccurred;
 use Illuminate\Database\Eloquent\BroadcastsEvents;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Prunable;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Log;
 
@@ -23,45 +27,87 @@ class CustomerNote extends Model
     use Prunable;
     use SoftDeletes;
 
+    /** @var string */
     protected $primaryKey = 'note_id';
 
+    /** @var array<int, string> */
     protected $guarded = ['note_id', 'updated_at', 'created_at'];
 
-    protected $appends = ['author', 'updated_author'];
-
+    /** @var array<int, string> */
     protected $with = ['CustomerEquipment'];
 
-    protected $casts = [
-        'created_at' => 'datetime:M d, Y',
-        'updated_at' => 'datetime:M d, Y',
-        'deleted_at' => 'datetime:M d, Y',
-        'urgent' => 'boolean',
-    ];
+    protected $appends = ['author', 'updated_author', 'note_type'];
 
-    /***************************************************************************
-     * Model Attributes
-     ***************************************************************************/
-    public function getAuthorAttribute()
+    /*
+    |---------------------------------------------------------------------------
+    | Model Casting
+    |---------------------------------------------------------------------------
+    */
+    protected function casts(): array
     {
-        return User::withTrashed()->find($this->created_by)->full_name ?? 'unknown';
+        return [
+            'created_at' => 'datetime:M d, Y',
+            'updated_at' => 'datetime:M d, Y',
+            'deleted_at' => 'datetime:M d, Y',
+            'urgent' => 'boolean',
+        ];
     }
 
-    public function getUpdatedAuthorAttribute()
+    /*
+    |---------------------------------------------------------------------------
+    | Model Attributes
+    |---------------------------------------------------------------------------
+    */
+    public function author(): Attribute
     {
-        if ($this->updated_by) {
-            return User::withTrashed()->find($this->updated_by)->full_name ?? 'unknown';
-        }
+        return Attribute::make(
+            get: fn () => User::withTrashed()
+                ->find($this->created_by)
+                ->full_name
+                ?? 'unknown'
+        );
     }
 
-    /***************************************************************************
-     * Model Relationships
-     ***************************************************************************/
-    public function Customer()
+    public function updatedAuthor(): ?Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->updated_by
+                ? User::withTrashed()
+                    ->find($this->updated_by)
+                    ->full_name
+                ?? 'unknown'
+                : null,
+        );
+    }
+
+    public function noteType(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                if ($this->cust_equip_id) {
+                    return 'Equipment';
+                }
+
+                if (count($this->Sites) > 0) {
+                    return 'Site';
+                }
+
+                return 'General';
+            }
+        );
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | Model Relationships
+    |---------------------------------------------------------------------------
+    */
+    public function Customer(): BelongsTo
     {
         return $this->belongsTo(Customer::class, 'cust_id', 'cust_id');
     }
 
-    public function CustomerSite()
+    public function Sites(): BelongsToMany
     {
         return $this->belongsToMany(
             CustomerSite::class,
@@ -71,7 +117,7 @@ class CustomerNote extends Model
         );
     }
 
-    public function CustomerEquipment()
+    public function CustomerEquipment(): BelongsTo
     {
         return $this->belongsTo(
             CustomerEquipment::class,
@@ -80,31 +126,26 @@ class CustomerNote extends Model
         );
     }
 
-    /***************************************************************************
-     * Model Broadcasting
-     ***************************************************************************/
-
-    /**
-     * @codeCoverageIgnore
-     */
+    /*
+    |---------------------------------------------------------------------------
+    | Model Broadcasting
+    |---------------------------------------------------------------------------
+    */
     public function broadcastOn(string $event): array
     {
         $siteChannels = $this->getSiteChannels(
-            $this->CustomerSite->pluck('site_slug')->toArray()
+            $this->Sites->pluck('site_slug')->toArray()
         );
 
-        if ($this->cust_equip_id) {
-            $siteChannels[] = new PrivateChannel('customer-equipment.'.$this->cust_equip_id);
+        if ($this->cust_equip_id || count($this->Sites) === 0) {
+            $siteChannels[] = new PrivateChannel(
+                'customer.equipment.'.$this->cust_equip_id
+            );
         }
 
         $allChannels = array_merge(
             $siteChannels,
             [new PrivateChannel('customer.'.$this->Customer->slug)]
-        );
-
-        Log::debug(
-            'Broadcasting Customer Equipment Event - Event Name - '.$event,
-            $allChannels
         );
 
         return match ($event) {
@@ -115,17 +156,18 @@ class CustomerNote extends Model
 
     public function newBroadcastableModelEvent(string $event): BroadcastableModelEventOccurred
     {
-        Log::debug('Calling Do Not Broadcast to Current User', $this->toArray());
-
         return (new BroadcastableModelEventOccurred(
-            $this, $event
+            $this,
+            $event
         ))->dontBroadcastToCurrentUser();
     }
 
-    /***************************************************************************
-     * Prune soft deleted models after 90 days
-     ***************************************************************************/
-    public function prunable()
+    /*
+    |---------------------------------------------------------------------------
+    | Prune soft deleted models after 90 days
+    |---------------------------------------------------------------------------
+    */
+    public function prunable(): Builder
     {
         Log::debug('Calling Prune Customer Notes');
 

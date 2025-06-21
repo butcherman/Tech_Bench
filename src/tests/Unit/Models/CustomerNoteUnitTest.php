@@ -6,6 +6,7 @@ use App\Models\Customer;
 use App\Models\CustomerEquipment;
 use App\Models\CustomerNote;
 use App\Models\CustomerSite;
+use App\Models\User;
 use Illuminate\Support\Facades\Artisan;
 use Tests\TestCase;
 
@@ -15,20 +16,23 @@ class CustomerNoteUnitTest extends TestCase
 
     protected $customer;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
         $this->customer = Customer::factory()->create();
         $this->model = CustomerNote::factory()
-            ->create(['cust_id' => $this->customer->cust_id]);
-        $this->model->CustomerSite()->sync([$this->customer->primary_site_id]);
+            ->create([
+                'cust_id' => $this->customer->cust_id,
+                'updated_by' => User::factory(),
+            ]);
+        $this->model->Sites()->sync([$this->customer->primary_site_id]);
     }
 
     /**
      * Model Attributes
      */
-    public function test_model_attributes()
+    public function test_model_attributes(): void
     {
         $this->assertArrayHasKey('author', $this->model->toArray());
         $this->assertArrayHasKey('updated_author', $this->model->toArray());
@@ -37,17 +41,17 @@ class CustomerNoteUnitTest extends TestCase
     /**
      * Model Relationships
      */
-    public function test_customer_site_relationship()
+    public function test_customer_site_relationship(): void
     {
         $data = CustomerSite::where('cust_id', $this->customer->cust_id)->get();
 
         $this->assertEquals(
             $data->toArray(),
-            $this->model->CustomerSite->toArray()
+            $this->model->Sites->toArray()
         );
     }
 
-    public function test_customer_equipment_relationship()
+    public function test_customer_equipment_relationship(): void
     {
         $data = CustomerEquipment::factory()
             ->create(['cust_id' => $this->customer->cust_id]);
@@ -62,7 +66,7 @@ class CustomerNoteUnitTest extends TestCase
     /**
      * Prunable Models
      */
-    public function test_prunable()
+    public function test_prunable(): void
     {
         $models = CustomerNote::factory()
             ->count(5)
@@ -83,6 +87,7 @@ class CustomerNoteUnitTest extends TestCase
         $models[4]->delete(); // now
 
         Artisan::call('model:prune', ['--model' => CustomerNote::class]);
+
         $totalContacts = CustomerNote::where('cust_id', $this->customer->cust_id)
             ->withTrashed()
             ->count();
@@ -90,7 +95,7 @@ class CustomerNoteUnitTest extends TestCase
         $this->assertEquals($totalContacts, 4);
     }
 
-    public function test_prunable_disabled()
+    public function test_prunable_disabled(): void
     {
         config(['customer.auto_purge' => false]);
 
@@ -113,6 +118,7 @@ class CustomerNoteUnitTest extends TestCase
         $models[4]->delete(); // now
 
         Artisan::call('model:prune', ['--model' => CustomerNote::class]);
+
         $totalContacts = CustomerNote::where('cust_id', $this->customer->cust_id)
             ->withTrashed()
             ->count();

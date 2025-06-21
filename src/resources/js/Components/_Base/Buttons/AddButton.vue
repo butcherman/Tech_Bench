@@ -1,18 +1,22 @@
-<template>
-    <button
-        type="button"
-        class="btn btn-info mx-1"
-        :class="{ 'rounded-5': pill, 'btn-sm': small }"
-    >
-        <fa-icon icon="fa-plus" class="me-1" />
-        <slot>{{ text || "Add" }}</slot>
-    </button>
-</template>
-
 <script setup lang="ts">
-defineProps<{
+import BaseButton from "./BaseButton.vue";
+
+const props = defineProps<{
+    flat?: boolean;
+    href?: string;
+    icon?: string;
     pill?: boolean;
-    small?: boolean;
+    size?: "small" | "normal" | "large";
     text?: string;
+    variant?: elementVariant;
 }>();
 </script>
+
+<template>
+    <BaseButton v-bind="props" :variant="variant ?? 'info'">
+        <slot>
+            <fa-icon :icon="icon ?? 'plus'" />
+            {{ text ?? "Add" }}
+        </slot>
+    </BaseButton>
+</template>

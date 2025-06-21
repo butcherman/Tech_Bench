@@ -6,12 +6,13 @@ use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
 
-/**
- * Generic exception created for when write to database fails.  Generic
- * response is returned, while additional data is logged for admin.
- *
- * @codeCoverageIgnore
- */
+/*
+|-------------------------------------------------------------------------------
+| Exception notes a catch-all database query has occurred.  The original
+| exception will be logged along with this current exception.
+|-------------------------------------------------------------------------------
+*/
+
 class GeneralQueryException extends Exception
 {
     public function report(): void

@@ -1,40 +1,43 @@
-<template>
-    <div class="row justify-content-center align-items-center h-100 p-3">
-        <Head title="Forgot Password" />
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-body h-100">
-                    <div class="card-title">Two Factor Authentication</div>
-                    <h5 class="text-center">
-                        A verification code has been sent to your email address.
-                    </h5>
-                    <p class="text-center">Please input the code below.</p>
-                    <TwoFactorForm :allow-remember="allowRemember" />
-                    <Link
-                        as="button"
-                        :href="$route('dashboard')"
-                        class="btn btn-info mt-3"
-                    >
-                        Send New Verification Code
-                    </Link>
-                </div>
-            </div>
-        </div>
-    </div>
-</template>
-
 <script setup lang="ts">
-import AuthLayout from "@/Layouts/AuthLayout.vue";
+import AuthLayout from "@/Layouts/Auth/AuthLayout.vue";
+import BaseButton from "@/Components/_Base/Buttons/BaseButton.vue";
+import Card from "@/Components/_Base/Card.vue";
 import TwoFactorForm from "@/Forms/Auth/TwoFactorForm.vue";
-import { useAppStore } from "@/Store/AppStore";
-
-const app = useAppStore();
 
 defineProps<{
     allowRemember: boolean;
+    via: "authenticator" | "email";
 }>();
 </script>
 
 <script lang="ts">
 export default { layout: AuthLayout };
 </script>
+
+<template>
+    <div class="flex items-center justify-center h-screen">
+        <Card class="tb-card" title="Two Factor Authentication">
+            <div v-if="via === 'email'">
+                <h5 class="text-center">
+                    A verification code has been sent to your email address.
+                </h5>
+                <p class="text-center">Please input the code below.</p>
+            </div>
+            <h5 v-if="via === 'authenticator'" class="text-center">
+                Input the code from your Authenticator App
+            </h5>
+            <div>
+                <TwoFactorForm :allow-remember="allowRemember" :via="via" />
+            </div>
+            <div v-if="via === 'email'" class="text-center mt-4">
+                <BaseButton
+                    :href="$route('dashboard')"
+                    class="w-3/4"
+                    variant="warning"
+                >
+                    Send New Verification Code
+                </BaseButton>
+            </div>
+        </Card>
+    </div>
+</template>

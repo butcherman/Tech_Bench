@@ -15,30 +15,30 @@ class CustomerContactUnitTest extends TestCase
 
     protected $customer;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
         $this->customer = Customer::factory()->createQuietly();
         $this->model = CustomerContact::factory()
             ->createQuietly(['cust_id' => $this->customer->cust_id]);
-        $this->model->CustomerSite()->sync([$this->customer->primary_site_id]);
+        $this->model->Sites()->sync([$this->customer->primary_site_id]);
     }
 
     /**
      * Model Relationships
      */
-    public function test_customer_site_relationship()
+    public function test_customer_site_relationship(): void
     {
         $data = CustomerSite::where('cust_id', $this->customer->cust_id)->get();
 
         $this->assertEquals(
             $data->toArray(),
-            $this->model->CustomerSite->toArray()
+            $this->model->Sites->toArray()
         );
     }
 
-    public function test_customer_contact_phone_relationship()
+    public function test_customer_contact_phone_relationship(): void
     {
         $data = CustomerContactPhone::factory()
             ->createQuietly(['cont_id' => $this->model->cont_id]);
@@ -55,7 +55,7 @@ class CustomerContactUnitTest extends TestCase
     /**
      * Prunable Models
      */
-    public function test_prunable()
+    public function test_prunable(): void
     {
         $models = CustomerContact::factory()
             ->count(5)
@@ -83,7 +83,7 @@ class CustomerContactUnitTest extends TestCase
         $this->assertEquals($totalContacts, 4);
     }
 
-    public function test_prunable_disabled()
+    public function test_prunable_disabled(): void
     {
         config(['customer.auto_purge' => false]);
 

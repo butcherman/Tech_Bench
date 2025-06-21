@@ -1,56 +1,14 @@
-<template>
-    <div>
-        <div class="row justify-content-center">
-            <Head title="Edit Equipment" />
-            <div class="col-md-10">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-title">Edit Equipment</div>
-                        <EquipmentForm
-                            :category-list="categoryList"
-                            :data-list="dataList"
-                            :equipment="equipment"
-                            :public-tips="publicTips"
-                        />
-                        <div class="text-center">
-                            Click the
-                            <fa-icon
-                                icon="circle-question"
-                                class="text-muted"
-                            />
-                            icon for detailed information on each field.
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row justify-content-center mt-4">
-            <div class="col-md-10">
-                <div class="card">
-                    <div class="card-body">
-                        <Link
-                            :href="$route('equipment.show', equipment.equip_id)"
-                            class="btn btn-info my-2"
-                            >Show References</Link
-                        >
-                        <DeleteButton class="my-2" @click="deleteEquipment" />
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</template>
-
 <script setup lang="ts">
-import AppLayout from "@/Layouts/AppLayout.vue";
-import EquipmentForm from "@/Forms/Equipment/EquipmentForm.vue";
+import AppLayout from "@/Layouts/App/AppLayout.vue";
+import Card from "@/Components/_Base/Card.vue";
 import DeleteButton from "@/Components/_Base/Buttons/DeleteButton.vue";
+import EquipmentForm from "@/Forms/Equipment/EquipmentForm.vue";
 import verifyModal from "@/Modules/verifyModal";
 import { router } from "@inertiajs/vue3";
 
 const props = defineProps<{
     equipment: equipment;
-    categoryList: categoryList[];
+    categoryList: equipmentCategory[];
     dataList: string[];
     publicTips: boolean;
 }>();
@@ -67,3 +25,25 @@ const deleteEquipment = () => {
 <script lang="ts">
 export default { layout: AppLayout };
 </script>
+
+<template>
+    <div class="flex justify-center">
+        <Card class="tb-card" title="Edit Equipment">
+            <div>
+                <EquipmentForm
+                    :category-list="categoryList"
+                    :data-list="dataList"
+                    :public-tips="publicTips"
+                    :equipment="equipment"
+                />
+                <div class="flex justify-center my-3">
+                    <DeleteButton
+                        class="w-3/4"
+                        text="Delete Equipment"
+                        @click="deleteEquipment"
+                    />
+                </div>
+            </div>
+        </Card>
+    </div>
+</template>

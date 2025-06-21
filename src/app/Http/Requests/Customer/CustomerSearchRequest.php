@@ -6,6 +6,8 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class CustomerSearchRequest extends FormRequest
 {
+    protected $errorBag = 'form_error';
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -20,10 +22,10 @@ class CustomerSearchRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'basic' => ['required', 'boolean'],
             'page' => ['required_if:basic,false', 'numeric'],
             'perPage' => ['required_if:basic,false', 'numeric'],
             'searchFor' => ['nullable', 'string'],
+            'cust_id' => ['nullable', 'numeric'],
         ];
     }
 }

@@ -1,34 +1,16 @@
-<template>
-    <div class="mb-3">
-        <label v-if="label" :for="id" class="form-label w-100">
-            {{ label }}:
-        </label>
-        <div id="editor-toolbar" class="p-0 my-2"></div>
-        <Editor
-            v-model="value"
-            :id="id"
-            class="form-control editor-input"
-            :class="{ 'is-valid': isValid, 'is-invalid': isInvalid }"
-            :disabled="disabled"
-            :init="editorInit"
-            @change="$emit('change', value)"
-        />
-        <span
-            v-if="errorMessage && (meta.dirty || meta.touched)"
-            class="text-danger"
-        >
-            {{ errorMessage }}
-        </span>
-    </div>
-</template>
-
 <script setup lang="ts">
 import "@/tinyMce";
 import Editor from "@tinymce/tinymce-vue";
-import { toRef, computed } from "vue";
+import { toRef, computed, ref } from "vue";
 import { useField } from "vee-validate";
+import { Message } from "primevue";
 
-defineEmits(["change"]);
+const emit = defineEmits<{
+    change: [unknown];
+    focus: [];
+    blur: [];
+}>();
+
 const props = defineProps<{
     id: string;
     name: string;
@@ -36,11 +18,31 @@ const props = defineProps<{
     disabled?: boolean;
     placeholder?: string;
     imageFolder?: string;
+    help?: string;
 }>();
 
-/**
- * Validation Data
- */
+/*
+|-------------------------------------------------------------------------------
+| Input Focus State
+|-------------------------------------------------------------------------------
+*/
+const hasFocus = ref<boolean>(false);
+
+const onFocus = (): void => {
+    hasFocus.value = true;
+    emit("focus");
+};
+
+const onBlur = (): void => {
+    hasFocus.value = false;
+    emit("blur");
+};
+
+/*
+|-------------------------------------------------------------------------------
+| Vee Validate
+|-------------------------------------------------------------------------------
+*/
 const isValid = computed<boolean>(() => {
     return meta.valid && meta.validated && !meta.pending;
 });
@@ -52,9 +54,11 @@ const isInvalid = computed<boolean>(() => {
 const nameRef = toRef(props, "name");
 const { errorMessage, value, meta } = useField(nameRef);
 
-/**
- * TinyMCE Initialization
- */
+/*
+|-------------------------------------------------------------------------------
+| TinyMCE Initialization
+|-------------------------------------------------------------------------------
+*/
 const editorInit = {
     /**
      * Basic Settings
@@ -125,9 +129,45 @@ const editorInit = {
 };
 </script>
 
-<style lang="scss">
+<template>
+    <div class="mb-3">
+        <label v-if="label" :for="id" class="w-full text-muted font-bold block">
+            {{ label }}:
+        </label>
+        <div id="editor-toolbar" class="p-0 my-2"></div>
+        <Editor
+            v-model="value"
+            :id="id"
+            class="editor-input border border-slate-200 rounded-lg p-3"
+            :class="{ 'is-valid': isValid, 'is-invalid': isInvalid }"
+            :disabled="disabled"
+            :init="editorInit"
+            license-key="gpl"
+            @change="$emit('change', value)"
+            @focus="onFocus"
+            @blur="onBlur"
+        />
+        <Message size="small" severity="error" variant="simple">
+            {{ errorMessage }}
+        </Message>
+        <Message
+            v-if="hasFocus"
+            size="small"
+            severity="secondary"
+            variant="simple"
+        >
+            {{ help }}
+        </Message>
+    </div>
+</template>
+
+<style>
 .editor-input {
     min-height: 500px;
+
+    &:focus-visible {
+        outline: none;
+    }
 }
 
 .tox-promotion {

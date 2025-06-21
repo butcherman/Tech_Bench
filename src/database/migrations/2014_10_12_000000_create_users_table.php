@@ -47,6 +47,8 @@ class CreateUsersTable extends Migration
             'email' => 'admin@em.com',
             'password' => bcrypt('password'),
             'password_expires' => '2000-01-01 00:00:00',
+            'created_at' => now(),
+            'updated_at' => now(),
         ];
 
         DB::table('users')->insert($default);

@@ -1,134 +1,23 @@
-<template>
-    <div>
-        <Head title="Backup Tech Bench" />
-        <div class="row justify-content-center my-4">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-body">
-                        <div v-if="inProgress">
-                            <button class="btn btn-danger w-100">
-                                A backup is currently running
-                            </button>
-                        </div>
-                        <Link
-                            v-else
-                            as="button"
-                            :href="$route('maint.backup.store')"
-                            method="post"
-                            class="btn btn-info w-100"
-                            :disabled="inProgress"
-                        >
-                            Run Backup
-                        </Link>
-                        <Link
-                            as="button"
-                            :href="$route('maint.backups.settings.show')"
-                            method="post"
-                            class="btn btn-info w-100 mt-4"
-                        >
-                            Backup Settings
-                        </Link>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div
-            v-if="backupMessages.length"
-            class="row justify-content-center"
-            id="process-output"
-        >
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-body">
-                        <p v-for="msg in backupMessages" class="p-0 m-0 mh-25">
-                            {{ msg }}
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row justify-content-center my-4">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-title">
-                            <span
-                                class="float-end pointer"
-                                title="Upload Backup"
-                                v-tooltip
-                                @click="uploadBackupModal?.show"
-                            >
-                                <fa-icon icon="cloud-arrow-up" />
-                            </span>
-                            <RefreshButton :only="['backup-list']" />
-                            Backup Files
-                        </div>
-                        <Table
-                            responsive
-                            :columns="tableCols"
-                            :rows="backupList"
-                        >
-                            <template #column="{ columnName, rowData }">
-                                <span v-if="columnName === 'size'">
-                                    {{ prettyBytes(rowData.size) }}
-                                </span>
-                            </template>
-                            <template #action="{ rowData }">
-                                <a
-                                    :href="
-                                        $route(
-                                            'maint.backup.show',
-                                            rowData.name
-                                        )
-                                    "
-                                    class="bg-info badge rounded-pill pointer mx-1"
-                                    title="Download Backup"
-                                    v-tooltip
-                                >
-                                    <fa-icon icon="download" />
-                                </a>
-                                <DeleteBadge
-                                    title="Delete Backup"
-                                    @click="deleteBackup(rowData.name)"
-                                />
-                            </template>
-                        </Table>
-                        <small class="text-center w-100">
-                            Backups can only be restored from the command line
-                        </small>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <Modal ref="uploadBackupModal" title="Upload Backup File">
-            <UploadBackupForm @success="reload" />
-        </Modal>
-    </div>
-</template>
-
 <script setup lang="ts">
-import AppLayout from "@/Layouts/AppLayout.vue";
-import UploadBackupForm from "@/Forms/Maintenance/UploadBackupForm.vue";
-import RefreshButton from "@/Components/_Base/Buttons/RefreshButton.vue";
-import Table from "@/Components/_Base/Table.vue";
+import AppLayout from "@/Layouts/App/AppLayout.vue";
+import BaseBadge from "@/Components/_Base/Badges/BaseBadge.vue";
+import BaseButton from "@/Components/_Base/Buttons/BaseButton.vue";
+import Card from "@/Components/_Base/Card.vue";
 import DeleteBadge from "@/Components/_Base/Badges/DeleteBadge.vue";
 import Modal from "@/Components/_Base/Modal.vue";
 import prettyBytes from "pretty-bytes";
-import verifyModal from "@/Modules/verifyModal";
+import ResourceList from "@/Components/_Base/ResourceList.vue";
+import UploadBackupForm from "@/Forms/Maintenance/UploadBackupForm.vue";
+import { onMounted, ref, useTemplateRef } from "vue";
 import { router } from "@inertiajs/vue3";
-import { onMounted, ref } from "vue";
 
-const props = defineProps<{
-    backupRunning: boolean;
+defineProps<{
     backupList: any[];
 }>();
 
-const uploadBackupModal = ref<InstanceType<typeof Modal> | null>(null);
-const inProgress = ref<boolean>(props.backupRunning);
-const reload = () => {
-    uploadBackupModal.value?.hide();
-    router.reload({ only: ["backup-list"] });
-};
+const uploadModal = useTemplateRef("upload-backup-modal");
+const backupIsRunning = ref<boolean>(false);
+const backupMessages = ref<string[]>([]);
 
 onMounted(() => {
     Echo.private("administration-channel").listen(
@@ -137,42 +26,102 @@ onMounted(() => {
             backupMessages.value.push(msg.msg);
 
             if (msg.msg === "Backup Process Called") {
-                inProgress.value = true;
-            } else if (msg.msg === "Backup completed!") {
-                inProgress.value = false;
+                backupIsRunning.value = true;
+            }
+
+            if (msg.msg == "Backup completed!") {
+                backupIsRunning.value = false;
+                handleBackupUploaded();
             }
         }
     );
 });
 
-const deleteBackup = (fileName: string) => {
-    verifyModal("This cannot be undone").then((res) => {
-        if (res) {
-            router.delete(route("maint.backup.destroy", fileName));
-        }
-    });
+/**
+ * Reload the page after a backup file is uploaded
+ */
+const handleBackupUploaded = () => {
+    uploadModal.value?.hide();
+    router.reload();
 };
-
-const backupMessages = ref<string[]>([]);
-
-const tableCols = [
-    {
-        label: "Filename",
-        field: "name",
-    },
-    {
-        label: "Backup Size",
-        field: "size",
-    },
-];
 </script>
 
 <script lang="ts">
 export default { layout: AppLayout };
 </script>
 
-<style scoped lang="scss">
-#process-output {
-    min-height: 250px;
-}
-</style>
+<template>
+    <div class="flex justify-center">
+        <Card class="tb-card text-center">
+            <BaseButton
+                class="w-3/4 my-1"
+                text="Run Backup"
+                :disabled="backupIsRunning"
+                :href="$route('maint.backups.run-backup')"
+                async
+            />
+            <BaseButton
+                class="w-3/4 my-1"
+                text="Backup Settings"
+                icon="cog"
+                :href="$route('maint.backups.settings.show')"
+            />
+        </Card>
+    </div>
+    <div class="flex justify-center">
+        <Card class="tb-card" title="Backup Messages">
+            <div class="bg-black text-white rounded-lg p-5 h-52 overflow-auto">
+                <div v-if="!backupMessages.length">
+                    <pre>$ No Messages</pre>
+                </div>
+                <div v-for="msg in backupMessages" class="px-5">
+                    <pre>{{ msg }}</pre>
+                </div>
+            </div>
+        </Card>
+    </div>
+    <div class="flex justify-center">
+        <Card class="tb-card" title="Backup Files">
+            <div>
+                <ResourceList
+                    :list="backupList"
+                    label-field="name"
+                    empty-text="No Backups Found"
+                >
+                    <template #list-item="{ item }">
+                        {{ item.name }}
+                        <span class="text-sm">
+                            ({{ prettyBytes(item.size) }})
+                        </span>
+                    </template>
+                    <template #actions="{ item }">
+                        <a
+                            :href="$route('maint.backups.download', item.name)"
+                            v-tooltip="'Download Backup'"
+                        >
+                            <BaseBadge icon="download" class="mx-1" />
+                        </a>
+                        <DeleteBadge
+                            class="mx-1"
+                            :href="$route('maint.backups.delete', item.name)"
+                            confirm
+                            delete-method
+                        />
+                    </template>
+                </ResourceList>
+                <div class="text-center">
+                    <BaseButton
+                        class="w-3/4 my-2"
+                        icon="upload"
+                        text="Upload Backup File"
+                        @click="uploadModal?.show()"
+                    />
+                </div>
+                <div class="text-center text-sm">Use CLI to Restore Backup</div>
+            </div>
+        </Card>
+        <Modal ref="upload-backup-modal" title="Upload Backup File">
+            <UploadBackupForm @success="handleBackupUploaded" />
+        </Modal>
+    </div>
+</template>

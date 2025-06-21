@@ -1,17 +1,18 @@
 #!/bin/bash
 
-UPGRADE_VERSION=dev7
+REPO_URL="https://github.com/butcherman/Tech_Bench.git"
+CURRENT_VERSION=0
+UPGRADE_VERSION=0
 FORCE=false
 
-# Get Arguments
-while [[ $# -gt 0 ]]
+while getopts v:f opts
 do
-    case $1 in
-        -f|--force)
-            FORCE=true
-            ;;
+    case ${opts} in
+        v) UPGRADE_VERSION=${OPTARG}
+        ;;
+        f) FORCE=true
+        ;;
     esac
-    shift
 done
 
 # Primary function for script
@@ -27,28 +28,7 @@ main()
     echo '##########################################################################'
     echo
 
-    # Verify JQ is installed
-    if ! command -v jq 2>&1 >/dev/null
-    then
-        echo "Missing JQ"
-        echo "Please install with command - sudo apt install jq"
-        exit 1 || return 1
-    fi
-
-    # Verify that the update script is in the same directory as the Docker Compose file
-    if [ ! -f docker-compose.yml ]
-    then
-        echo "docker-compose.yml not found"
-        echo "Please run this script from the root directory of the Tech Bench"
-        exit 1 || return 1
-    fi
-
-    # Verify that the .env file exists
-    if [ ! -f .env ]
-    then
-        echo "Tech Bench Environment file not found"
-        echo "Please run this script from the root direcotry of the Tech Bench "
-    fi
+    validateTechBench
 
     # Double check the user wants to continue
     if [ $FORCE == false ]
@@ -59,6 +39,28 @@ main()
         then
             [[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1
         fi
+    fi
+
+    CURRENT_VERSION=$(getVersion)
+
+    # If a version was not supplied, get the latest version number
+    if [ $UPGRADE_VERSION == 0 ]
+    then
+        # Get the latest tag using git ls-remote, sort by version, and extract the tag name
+        UPGRADE_VERSION=$(git -c 'versionsort.suffix=-' \
+        ls-remote --exit-code --refs --sort='version:refname' --tags "$REPO_URL" \
+            | tail --lines=1 \
+            | cut --delimiter='/' --fields=3)
+
+        # Print the latest tag
+        echo "Latest Tech Bench Version: $UPGRADE_VERSION"
+    fi
+
+    if(validateVersion $CURRENT_VERSION $UPGRADE_VERSION )
+    then
+        echo "Current Version $CURRENT_VERSION"
+        echo "Upgrade is not needed at this time"
+        exit 1 || return 1
     fi
 
     # Set the APP_VERSION variable in .env to the current App Version if it exists
@@ -83,11 +85,11 @@ main()
     docker compose down
 
     # Remove all Tech Bench Containers
-    echo "Removing Old Containers"
-    for SVC in "${NEEDED[@]}"
-    do
-        docker container rm $SVC -f
-    done
+    # echo "Removing Old Containers"
+    # for SVC in "${NEEDED[@]}"
+    # do
+    #     docker container rm $SVC -f
+    # done
 
     # Delete all Tech Bench Images
     echo "Removing Old Images"
@@ -98,9 +100,58 @@ main()
 
     echo '##########################################################################'
     echo '#                                                                        #'
-    echo '#                        Upgrade Commplete                               #'
+    echo '#                        Upgrade Complete                                #'
     echo '#                                                                        #'
     echo '##########################################################################'
+}
+
+# Verify that we are in the correct directory before continuing
+validateTechBench()
+{
+    # Verify JQ is installed
+    if ! command -v jq 2>&1 >/dev/null
+    then
+        echo "Missing JQ"
+        echo "Please install with command - sudo apt install jq"
+        exit 1 || return 1
+    fi
+
+    # Verify that the update script is in the same directory as the Docker Compose file
+    if [ ! -f docker-compose.yml ]
+    then
+        echo "docker-compose.yml not found"
+        echo "Please run this script from the root directory of the Tech Bench"
+        exit 1 || return 1
+    fi
+
+    # Verify that the .env file exists
+    if [ ! -f .env ]
+    then
+        echo "Tech Bench Environment file not found"
+        echo "Please run this script from the root Directory of the Tech Bench "
+        exit 1 || return 1
+    fi
+}
+
+# Get the current version of the Tech Bench Application
+getVersion()
+{
+    VER=$(docker exec tech_bench php artisan version)
+    echo "${VER#Tech Bench Version }"
+}
+
+# Verify that the version being installed is newer than the current version
+validateVersion() {
+    local v1="$1"
+    local v2="$2"
+
+    # Use printf to put each version on a new line, then sort them version-wise.
+    # If the first element after sorting is v2, it means v2 is smaller or equal to v1.
+    if [ "$(printf '%s\n' "$v1" "$v2" | sort -V | head -n1)" = "$v2" ]; then
+        return 0 # v1 is greater than or equal to v2
+    else
+        return 1 # v1 is less than v2
+    fi
 }
 
 # Determine which service is missing and run function to add it

@@ -3,35 +3,36 @@
 namespace App\Jobs\Customer;
 
 use App\Actions\Customer\ReAssignCustomerSite;
-use App\Models\User;
-use Illuminate\Bus\Queueable;
+use App\Models\Customer;
+use App\Models\CustomerSite;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Collection;
+use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Log;
 
 class ReAssignSiteJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Queueable;
 
     /**
-     * Create a new job instance.
+     * @codeCoverageIgnore
      */
-    public function __construct(protected Collection $request, User $user)
-    {
-        Log::notice(
-            'Re-Assign Customer job called by '.$user->username,
-            $request->toArray()
-        );
-    }
+    public function __construct(protected int $fromSite, protected int $toCustomer) {}
 
     /**
      * Execute the job.
      */
-    public function handle(ReAssignCustomerSite $action): void
+    public function handle(ReAssignCustomerSite $svc): void
     {
-        $action($this->request);
+        Log::notice('Starting Move Customer Site Job', [
+            'moving_site_id' => $this->fromSite,
+            'to_cust_id' => $this->toCustomer,
+        ]);
+
+        $movingSite = CustomerSite::find($this->fromSite);
+        $destination = Customer::find($this->toCustomer);
+
+        $svc($movingSite, $destination);
+
+        Log::notice('Move Customer Site Job Completed');
     }
 }
