@@ -43,7 +43,7 @@ const managementOptions = computed(() => {
     const options = [];
 
     if (
-        allowVpn &&
+        allowVpn.value &&
         permissions.value.equipment.create &&
         vpnData.value == null
     ) {

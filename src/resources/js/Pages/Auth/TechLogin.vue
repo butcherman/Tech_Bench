@@ -69,7 +69,7 @@ export default { layout: AuthLayout };
             class="flex items-center md:basis-80 bg-white m-3 md:m-0 rounded-lg md:rounded-none"
         >
             <div class="m-3 w-full">
-                <h3 class="text-center">Tech Login</h3>
+                <h3 class="text-center text-muted">Tech Login</h3>
                 <TechLoginForm />
                 <div v-if="allowOath" class="w-full text-center">
                     <div class="separator">or</div>
