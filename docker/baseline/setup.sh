@@ -1,11 +1,11 @@
 #!/bin/bash
 
-#################################################################################################
-#                                                                                               #
-#                                      Setup Script                                             #
-#                  If Tech Bench is not initialized, first time setup will occur                #
-#                                                                                               #
-#################################################################################################
+################################################################################
+#                                                                              #
+#                              Setup Script                                    #
+#          If Tech Bench is not initialized, first time setup will occur       #
+#                                                                              #
+################################################################################
 
 echo "New installation of Tech Bench detected"
 echo "Setting up the application for the first time"

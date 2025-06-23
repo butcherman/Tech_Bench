@@ -1,11 +1,11 @@
-#################################################################################################
-#                                                                                               #
-#            Baseline Tech Bench build does not have Tech Bench App, only                       #
-#                  basic install point in which to build app off of                             #
-#                all versions of Tech Bench start with this OS build                            #
-#                         scripts and app copied later                                          #
-#                                                                                               #
-#################################################################################################
+################################################################################
+#                                                                              #
+#    Baseline Tech Bench build does not have Tech Bench App, only              #
+#          basic install point in which to build app off of                    #
+#        all versions of Tech Bench start with this OS build                   #
+#                 scripts and app copied later                                 #
+#                                                                              #
+################################################################################
 
 FROM bitnami/php-fpm:8.2
 
@@ -18,22 +18,22 @@ RUN apt update && apt upgrade -y --no-install-recommends
 
 #  Install php modules
 RUN apt install -yq php-common \
-        php-curl \
-        php-dom \
-        php-gd \
-        php-json \
-        php-mbstring \
-        php-mysql \
-        php-pdo \
-        php-redis \
-        php-xml \
-        php-zip \
-        curl \
-        nano \
-        openssl \
-        unzip \
-        zip \
-        mariadb-client
+    php-curl \
+    php-dom \
+    php-gd \
+    php-json \
+    php-mbstring \
+    php-mysql \
+    php-pdo \
+    php-redis \
+    php-xml \
+    php-zip \
+    curl \
+    nano \
+    openssl \
+    unzip \
+    zip \
+    mariadb-client
 
 #  Entrypoint and update scripts along with any other necessary shell scripts will be copied here
 RUN mkdir /scripts

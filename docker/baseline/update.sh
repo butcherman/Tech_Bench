@@ -1,12 +1,12 @@
 #!/bin/bash
 
-#################################################################################################
-#                                                                                               #
-#                                       Update Script                                           #
-#                  Complete the update process by copying files in the staging                  #
-#                               directory to the app directory                                  #
-#                                                                                               #
-#################################################################################################
+################################################################################
+#                                                                              #
+#                               Update Script                                  #
+#          Complete the update process by copying files in the staging         #
+#                       directory to the app directory                         #
+#                                                                              #
+################################################################################
 
 echo "Starting Update"
 
