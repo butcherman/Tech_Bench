@@ -1,11 +1,11 @@
 #!/bin/bash
 
-#################################################################################################
-#                                                                                               #
-#                                      Download Script                                          #
-#                      Download and install the Tech Bench application                          #
-#                                                                                               #
-#################################################################################################
+################################################################################
+#                                                                              #
+#                              Download Script                                 #
+#              Download and install the Tech Bench application                 #
+#                                                                              #
+################################################################################
 
 #  Variables
 BRANCH=$1           #  If this argument is populated, the branch identified will be downloaded and installed
