@@ -59,7 +59,7 @@ class LogUtilitiesService
     public function validateLogFile(string $channel, string $filename): string|bool
     {
         $folder = $this->validateLogChannel($channel);
-        $relativePath = $folder.DIRECTORY_SEPARATOR.$filename.'.log';
+        $relativePath = $folder . DIRECTORY_SEPARATOR . $filename . '.log';
 
         if (! Storage::disk('logs')->exists($relativePath)) {
             return false;
@@ -84,11 +84,11 @@ class LogUtilitiesService
     public function updateLogSettings(Collection $settings): void
     {
         $this->saveSettings(
-            'logging.channels.daily.days',
+            'logging.channels.app.days',
             $settings->get('days')
         );
         $this->saveSettings(
-            'logging.channels.daily.level',
+            'logging.channels.app.level',
             $settings->get('log_level')
         );
 
