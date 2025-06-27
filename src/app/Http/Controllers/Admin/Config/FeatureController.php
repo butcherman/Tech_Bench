@@ -24,9 +24,10 @@ class FeatureController extends Controller
 
         return Inertia::render('Admin/Config/Features', [
             'feature-list' => [
-                'file_links' => fn () => config('file-link.feature_enabled'),
-                'public_tips' => fn () => config('tech-tips.allow_public'),
-                'tip_comments' => fn () => config('tech-tips.allow_comments'),
+                'file_links' => fn() => config('file-link.feature_enabled'),
+                'public_tips' => fn() => config('tech-tips.allow_public'),
+                'tip_comments' => fn() => config('tech-tips.allow_comments'),
+                'customer_workbook' => fn() => config('customer.enable_workbooks'),
             ],
         ]);
     }
@@ -38,7 +39,7 @@ class FeatureController extends Controller
     {
         $this->svc->updateFeatureSettings($request->safe()->collect());
 
-        Log::info('Application Features updated by '.$request->user()->username);
+        Log::info('Application Features updated by ' . $request->user()->username);
 
         return back()->with('success', 'Feature Settings Updated');
     }

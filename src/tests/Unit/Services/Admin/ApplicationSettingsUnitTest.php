@@ -256,6 +256,7 @@ class ApplicationSettingsUnitTest extends TestCase
             'file_links' => true,
             'public_tips' => true,
             'tip_comments' => false,
+            'customer_workbook' => true,
         ];
 
         $testObj = new ApplicationSettingsService;

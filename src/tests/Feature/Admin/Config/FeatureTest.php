@@ -44,9 +44,10 @@ class FeatureTest extends TestCase
             ->get(route('admin.features.edit'));
 
         $response->assertSuccessful()
-            ->assertInertia(fn (Assert $page) => $page
-                ->component('Admin/Config/Features')
-                ->has('feature-list')
+            ->assertInertia(
+                fn(Assert $page) => $page
+                    ->component('Admin/Config/Features')
+                    ->has('feature-list')
             );
     }
 
@@ -63,6 +64,7 @@ class FeatureTest extends TestCase
             'file_links' => true,
             'public_tips' => true,
             'tip_comments' => true,
+            'customer_workbook' => true,
         ];
 
         $response = $this->put(route('admin.features.update'), $data);
@@ -84,6 +86,7 @@ class FeatureTest extends TestCase
             'file_links' => true,
             'public_tips' => true,
             'tip_comments' => false,
+            'customer_workbook' => true,
         ];
 
         $response = $this->actingAs($user)
@@ -104,6 +107,7 @@ class FeatureTest extends TestCase
             'file_links' => true,
             'public_tips' => true,
             'tip_comments' => false,
+            'customer_workbook' => true,
         ];
 
         $response = $this->actingAs($user)
@@ -120,6 +124,9 @@ class FeatureTest extends TestCase
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'tech-tips.allow_comments',
+        ]);
+        $this->assertDatabaseHas('app_settings', [
+            'key' => 'customer.enable_workbooks',
         ]);
 
         Event::assertDispatched(FeatureChangedEvent::class);

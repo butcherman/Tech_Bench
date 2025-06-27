@@ -18,12 +18,14 @@ const initValues = {
     file_links: props.featureList.file_links,
     public_tips: props.featureList.public_tips,
     tip_comments: props.featureList.tip_comments,
+    customer_workbook: props.featureList.customer_workbook,
 };
 
 const schema = object({
     file_links: boolean().required(),
     public_tips: boolean().required(),
     tip_comments: boolean().required(),
+    customer_workbook: boolean().required(),
 });
 </script>
 
@@ -57,6 +59,12 @@ const schema = object({
                     name="tip_comments"
                     label="Tech Tip Comments"
                     help="Allow or disallow Commenting on internal Tech Tips."
+                />
+                <SwitchInput
+                    id="customer_workbook"
+                    name="customer_workbook"
+                    label="Enable Customer Workbooks"
+                    help="Customer Workbooks are to store configuration data for onboarding equipment"
                 />
             </div>
         </div>
