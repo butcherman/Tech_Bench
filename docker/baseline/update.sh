@@ -48,4 +48,10 @@ npm run build
 # Store the version information in the keystore volume
 echo $(php /app/artisan version --format=compact | sed -e 's/Tech Bench //g') > /app/keystore/version
 
+# Resync Scout and restart child containers
+php artisan scout:sync-index-settings
+php artisan scout:import "App\Models\TechTip"
+php artisan scout:import "App\Models\Customer"
+php artisan app:reboot --force
+
 echo 'Update Completed'
