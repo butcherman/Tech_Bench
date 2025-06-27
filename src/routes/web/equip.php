@@ -3,6 +3,7 @@
 use App\Http\Controllers\Equipment\EquipmentCategoryController;
 use App\Http\Controllers\Equipment\EquipmentDataTypeController;
 use App\Http\Controllers\Equipment\EquipmentTypeController;
+use App\Http\Controllers\Equipment\EquipmentWorkbookController;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 use Illuminate\Support\Facades\Route;
 
@@ -13,6 +14,24 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('auth.secure')->group(function () {
+    /*
+    |---------------------------------------------------------------------------
+    | Equipment Workbooks
+    | /equipment/workbooks
+    |---------------------------------------------------------------------------
+    */
+    Route::prefix('equipment/workbooks')->name('equipment.workbooks.')->group(function () {
+        // TODO - Cleanup
+        Route::controller(EquipmentWorkbookController::class)->group(function () {
+            Route::get('/', 'index')
+                ->name('index')
+                ->breadcrumb('Customer Equipment Workbooks', 'equipment.index');
+            Route::get('{equipment}/create', 'create')->name('create');
+            Route::get('{equipment}/edit', 'edit')->name('edit');
+        });
+    });
+
+
     /*
     |---------------------------------------------------------------------------
     | Equipment Type Administration

@@ -143,6 +143,11 @@ class BuildAdminMenu
                     'icon' => 'fas fa-database',
                     'route' => route('equipment-data.index'),
                 ],
+                [
+                    'name' => 'Customer Equipment Workbooks',
+                    'icon' => 'fas fa-table-list',
+                    'route' => route('equipment.workbooks.index'),
+                ],
             ];
         }
 
