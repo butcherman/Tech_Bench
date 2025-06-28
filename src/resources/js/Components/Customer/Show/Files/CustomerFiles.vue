@@ -23,6 +23,10 @@ import {
 } from "@/Composables/Customer/CustomerBroadcasting.module";
 import type { tableColumnProp } from "@/Components/_Base/DataTable/DataTable.vue";
 
+defineProps<{
+    equipment?: customerEquipment;
+}>();
+
 const addModal = useTemplateRef("new-file-modal");
 const detailsModal = useTemplateRef("file-details-modal");
 const editModal = useTemplateRef("edit-file-modal");
@@ -182,6 +186,7 @@ const tableColumns: tableColumnProp[] = [
         </Deferred>
         <NewFileModal
             ref="new-file-modal"
+            :equipment="equipment"
             @refresh-start="onRefreshStart"
             @refresh-end="onRefreshEnd"
         />

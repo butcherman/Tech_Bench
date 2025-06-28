@@ -28,15 +28,15 @@ const mapUrl = computed<string>(() => {
             </span>
             {{ currentSite.site_name }}
         </h3>
-        <address>
-            <div class="float-start me-1 text-muted">
+        <address class="flex">
+            <div class="me-1 text-muted">
                 <fa-icon icon="fa-map-marked" />
             </div>
             <a
                 id="addr-span"
                 :href="mapUrl"
                 target="_blank"
-                class="float-start ml-2 pointer text-muted"
+                class="ml-2 pointer text-muted"
                 title="Click for Map"
                 v-tooltip
             >

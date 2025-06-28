@@ -37,6 +37,7 @@ type customerPageProps = {
     allowVpn: boolean;
     vpnData: vpnData;
     allowShareVpn: boolean;
+    equipment: customerEquipment;
 } & pageProps;
 
 /*

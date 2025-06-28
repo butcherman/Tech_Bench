@@ -46,6 +46,10 @@ const checkNameField = (file: DropzoneFile) => {
 |-------------------------------------------------------------------------------
 */
 const getInitFileCategory = (): fileCategory => {
+    if (props.equipment) {
+        return "equipment";
+    }
+
     return "general";
 };
 
