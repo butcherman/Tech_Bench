@@ -42,7 +42,7 @@ class LogSettingsTest extends TestCase
             ->get(route('maint.logs.settings.show'));
 
         $response->assertSuccessful()
-            ->assertInertia(fn (Assert $page) => $page
+            ->assertInertia(fn(Assert $page) => $page
                 ->component('Maint/LogSettings')
                 ->has('days')
                 ->has('log-level')
@@ -101,13 +101,13 @@ class LogSettingsTest extends TestCase
             'key' => 'logging.channels.auth.level',
             'value' => 'critical',
         ])->assertDatabaseHas('app_settings', [
-            'key' => 'logging.channels.daily.level',
+            'key' => 'logging.channels.app.level',
             'value' => 'critical',
         ])->assertDatabaseHas('app_settings', [
             'key' => 'logging.channels.auth.days',
             'value' => '120',
         ])->assertDatabaseHas('app_settings', [
-            'key' => 'logging.channels.daily.days',
+            'key' => 'logging.channels.app.days',
             'value' => '120',
         ]);
     }

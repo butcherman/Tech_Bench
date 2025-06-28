@@ -12,7 +12,7 @@ const equipment = computed<customerEquipment>(
 </script>
 
 <template>
-    <div class="flex text-muted border-b border-b-slate-400">
+    <div class="flex text-slate-400 opacity-60 border-b border-b-slate-400">
         <div>Customer ID: {{ customer.cust_id }}</div>
         <div v-if="currentSite" class="mx-2 px-2 border-s border-s-slate-400">
             Site ID: {{ currentSite.cust_site_id }}
