@@ -1,8 +1,10 @@
 <script setup lang="ts">
+import { computed } from "vue";
 import PickListInput from "../_Base/PickListInput.vue";
 import SelectInput from "../_Base/SelectInput.vue";
 import VueForm from "@/Forms/_Base/VueForm.vue";
 import { object, number, array } from "yup";
+import { currentSite } from "@/Composables/Customer/CustomerData.module";
 
 defineEmits<{
     success: [];
@@ -18,7 +20,20 @@ const props = defineProps<{
     }[];
     customer: customer;
     siteList: customerSite[];
+    currentSite?: customerSite;
 }>();
+
+const getSiteDefault = computed<number[]>(() => {
+    if (props.currentSite) {
+        return [currentSite.value.cust_site_id];
+    }
+
+    if (!props.siteList.length) {
+        return [props.customer.sites[0].cust_site_id];
+    }
+
+    return [];
+});
 
 /*
 |-------------------------------------------------------------------------------
@@ -27,9 +42,7 @@ const props = defineProps<{
 */
 const initValues = {
     equip_id: null,
-    site_list: !props.siteList.length
-        ? [props.customer.sites[0].cust_site_id]
-        : [],
+    site_list: getSiteDefault.value,
 };
 const schema = object({
     equip_id: number().required().label("Equipment Type"),

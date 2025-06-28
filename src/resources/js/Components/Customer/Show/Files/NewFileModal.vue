@@ -15,6 +15,10 @@ const emit = defineEmits<{
     refreshEnd: [];
 }>();
 
+defineProps<{
+    equipment?: customerEquipment;
+}>();
+
 const modal = useTemplateRef("add-file-modal");
 
 const show = () => {
@@ -43,6 +47,7 @@ defineExpose({ show });
             :site-list="siteList ?? []"
             :equip-list="equipmentList"
             :file-types="fileTypes"
+            :equipment="equipment"
             @success="onUploadSuccess"
         />
     </Modal>

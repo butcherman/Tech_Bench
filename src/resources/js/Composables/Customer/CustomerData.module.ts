@@ -81,15 +81,6 @@ export const fileList = computed<customerFile[]>(() => page.props.fileList);
 */
 
 /**
- * Return the primary site belonging to this customer.
- */
-// const findPrimarySite = (customer: customer): customerSite | undefined => {
-//     return customer.customer_site.find(
-//         (cust) => cust.cust_id === customer.primary_site_id
-//     );
-// };
-
-/**
  * Sort the list of sites by putting the primary site on the top.
  */
 const sortCustSites = (

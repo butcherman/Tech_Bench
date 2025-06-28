@@ -6,6 +6,7 @@ import CustomerContact from "@/Components/Customer/Show/Contacts/CustomerContact
 import CustomerDetails from "@/Components/Customer/Show/CustomerDetails.vue";
 import CustomerEquipment from "@/Components/Customer/Show/Equipment/CustomerEquipment.vue";
 import CustomerFiles from "@/Components/Customer/Show/Files/CustomerFiles.vue";
+import CustomerInfo from "@/Components/Customer/Show/CustomerInfo.vue";
 import CustomerManagement from "@/Components/Customer/Show/ManageCustomer.vue";
 import CustomerNotes from "@/Components/Customer/Show/Notes/CustomerNotes.vue";
 import QuickJump from "@/Components/_Base/QuickJump.vue";
@@ -63,6 +64,7 @@ export default { layout: AppLayout };
                 <CustomerManagement />
             </div>
         </div>
+        <CustomerInfo />
         <CustomerAlerts />
         <QuickJump :nav-list="quickJumpList" class="tb-gap-y" />
         <div class="grid lg:grid-cols-2 tb-gap-y gap-3">
