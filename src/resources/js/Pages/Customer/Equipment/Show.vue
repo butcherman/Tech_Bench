@@ -3,6 +3,7 @@ import AppLayout from "@/Layouts/App/AppLayout.vue";
 import CustomerAlerts from "@/Components/Customer/Show/CustomerAlerts.vue";
 import CustomerDetails from "@/Components/Customer/Show/CustomerDetails.vue";
 import CustomerFiles from "@/Components/Customer/Show/Files/CustomerFiles.vue";
+import CustomerInfo from "@/Components/Customer/Show/CustomerInfo.vue";
 import CustomerNotes from "@/Components/Customer/Show/Notes/CustomerNotes.vue";
 import EquipmentData from "@/Components/Customer/Show/Equipment/EquipmentData.vue";
 import EquipmentSites from "@/Components/Customer/Show/Equipment/EquipmentSites.vue";
@@ -40,13 +41,14 @@ export default { layout: AppLayout };
 
 <template>
     <div>
-        <div class="flex gap-2 pb-2 mb-2 border-b border-slate-400">
+        <div class="flex gap-2 pb-2 border-b border-slate-400">
             <CustomerDetails class="grow" />
             <ManageEquipment
                 v-if="permissions.equipment.delete"
                 :equipment="equipment"
             />
         </div>
+        <CustomerInfo />
         <CustomerAlerts />
         <VpnData v-if="allowVpn" />
         <EquipmentData
