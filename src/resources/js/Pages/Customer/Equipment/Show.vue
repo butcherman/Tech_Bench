@@ -60,6 +60,6 @@ export default { layout: AppLayout };
             :equipment="equipment"
         />
         <CustomerNotes :equipment="equipment" />
-        <CustomerFiles class="my-3" />
+        <CustomerFiles class="my-3" :equipment="equipment" />
     </div>
 </template>
