@@ -118,6 +118,10 @@ class ApplicationSettingsService
             'tech-tips.allow_comments',
             $requestData->get('tip_comments')
         );
+        $this->saveSettings(
+            'customer.enable_workbooks',
+            $requestData->get('customer_workbooks')
+        );
 
         // Forget the feature settings to re-force checking
         event(new FeatureChangedEvent);

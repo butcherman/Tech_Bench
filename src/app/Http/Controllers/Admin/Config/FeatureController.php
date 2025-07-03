@@ -27,6 +27,7 @@ class FeatureController extends Controller
                 'file_links' => fn () => config('file-link.feature_enabled'),
                 'public_tips' => fn () => config('tech-tips.allow_public'),
                 'tip_comments' => fn () => config('tech-tips.allow_comments'),
+                'customer_workbooks' => fn() => config('customer.enable_workbooks'),
             ],
         ]);
     }

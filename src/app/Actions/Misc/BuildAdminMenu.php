@@ -144,6 +144,14 @@ class BuildAdminMenu
                     'route' => route('equipment-data.index'),
                 ],
             ];
+
+            if(config('customer.enable_workbooks')) {
+                $equipMenu[] = [
+                    'name' => 'Onboarding Workbooks',
+                    'icon' => 'fa-table',
+                    'route' => '#',
+                ];
+            }
         }
 
         $this->menu['Equipment'] = $equipMenu;
