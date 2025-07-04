@@ -3,6 +3,7 @@
 use App\Http\Controllers\Equipment\EquipmentCategoryController;
 use App\Http\Controllers\Equipment\EquipmentDataTypeController;
 use App\Http\Controllers\Equipment\EquipmentTypeController;
+use App\Http\Controllers\Equipment\EquipmentWorkbookController;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 use Illuminate\Support\Facades\Route;
 
@@ -49,4 +50,20 @@ Route::middleware('auth.secure')->group(function () {
                 ->create('Create Data Type', 'equipment-data.index')
                 ->edit('Edit Data Type', 'equipment-data.index');
         });
+
+    /*
+    |---------------------------------------------------------------------------
+    | Onboarding Workbooks Administration
+    | /onboarding-workbooks
+    |---------------------------------------------------------------------------
+    */
+    Route::prefix('onboarding-workbooks')->name('workbooks.')->group(function() {
+        Route::controller(EquipmentWorkbookController::class)->group(function() {
+            Route::get('/', 'index')
+                ->name('index')
+                ->breadcrumb('Onboarding Workbooks', 'equipment.index');
+            Route::get('{equipment_type}/create', 'create')->name('create');
+            Route::Get('{equipment_type}/edit', 'edit')->name('edit');
+        });
+    });
 });

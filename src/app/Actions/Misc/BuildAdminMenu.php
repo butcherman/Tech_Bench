@@ -149,7 +149,7 @@ class BuildAdminMenu
                 $equipMenu[] = [
                     'name' => 'Onboarding Workbooks',
                     'icon' => 'fa-table',
-                    'route' => '#',
+                    'route' => route('workbooks.index'),
                 ];
             }
         }

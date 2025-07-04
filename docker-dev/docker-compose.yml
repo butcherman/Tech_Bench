@@ -34,7 +34,7 @@ services:
             - ../src:/app
             - ./.env:/app/.env
             - /var/run/docker.sock:/var/run/docker.sock
-            - backupData:/app/storage/backups/tech-bench
+            # - backupData:/app/storage/backups/tech-bench
         environment:
             - SERVICE=app
             - TB_URL=${BASE_URL}
@@ -90,7 +90,7 @@ services:
         volumes:
             - ../src:/app
             - ./.env:/app/.env
-            - backupData:/app/storage/backups/tech-bench
+            # - backupData:/app/storage/backups/tech-bench
         environment:
             - SERVICE=horizon
         networks:
@@ -109,7 +109,7 @@ services:
         volumes:
             - ../src:/app
             - ./.env:/app/.env
-            - backupData:/app/storage/backups/tech-bench
+            # - backupData:/app/storage/backups/tech-bench
         environment:
             - SERVICE=scheduler
         networks:
