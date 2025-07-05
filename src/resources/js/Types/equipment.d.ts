@@ -40,7 +40,7 @@ type workbookPage = {
     page: string;
     title: string;
     canPublish: boolean;
-    data: any[];
+    container: any[];
 };
 
 type workbookEntry = {

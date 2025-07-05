@@ -2,15 +2,25 @@ import { computed } from "vue";
 
 export const elementList = computed(() => [
     {
-        index: 0,
-        label: "Header",
-        help: "Header text for workbook",
-        buttonText: "H1",
-        props: {
-            text: "Header",
+        type: "text",
+        tag: "h1",
+        text: "Header 1",
+        class: "text-center",
+        componentData: {
+            label: "Header",
+            help: "Header text for Workbook",
+            buttonText: "H1",
         },
-        get html() {
-            return `<h1 class="text-center">${this.props.text}</h1>`;
+    },
+    {
+        type: "text",
+        tag: "h3",
+        text: "Sub-Header",
+        class: "text-center",
+        componentData: {
+            label: "Sub Header",
+            help: "Sub-Header text for Workbook",
+            buttonText: "H3",
         },
     },
     // {

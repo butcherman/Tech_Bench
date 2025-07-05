@@ -2,21 +2,23 @@
 import { ref } from "vue";
 import Card from "@/Components/_Base/Card.vue";
 import { Tab, Tabs, TabList, TabPanel, TabPanels } from "primevue";
-import TextInput from "@/Forms/_Base/TextInput.vue";
 import ElementWrapper from "./ElementWrapper.vue";
 
 //
 const value = ref("0");
 
 const workbookData = ref({
+    lastIndex: 8,
     header: [
         {
+            index: 0,
             type: "text",
             tag: "h1",
             text: "Header 1",
             class: "text-center",
         },
         {
+            index: 1,
             type: "text",
             tag: "h3",
             text: "[ Customer Name ]",
@@ -30,21 +32,25 @@ const workbookData = ref({
             canPublish: true,
             container: [
                 {
+                    index: 2,
                     type: "wrapper",
                     tag: "div",
                     class: "grid grid-cols-2 gap-2",
                     container: [
                         {
+                            index: 3,
                             type: "wrapper",
                             tag: "fieldset",
                             class: "border border-slate-300 rounded-lg p-2",
                             container: [
                                 {
+                                    index: 4,
                                     type: "text",
                                     tag: "legend",
                                     text: "form legend",
                                 },
                                 {
+                                    index: 5,
                                     tag: "input",
                                     class: "w-full border border-slate-300",
                                     props: {
@@ -55,6 +61,7 @@ const workbookData = ref({
                                     },
                                 },
                                 {
+                                    index: 6,
                                     tag: "input",
                                     class: "w-full border border-slate-300",
                                     props: {
@@ -67,11 +74,13 @@ const workbookData = ref({
                             ],
                         },
                         {
+                            index: 7,
                             type: "wrapper",
                             tag: "fieldset",
                             class: "border border-slate-300 rounded-lg",
                             container: [
                                 {
+                                    index: 8,
                                     tag: "input",
                                     class: "w-full border border-slate-400 rounded-lg px-2",
                                     props: {
@@ -101,9 +110,6 @@ const workbookData = ref({
 <template>
     <Card class="h-full">
         <div>
-            <!-- <template v-for="el in workbookData.header">
-                <div v-html="el.html" />
-            </template> -->
             <ElementWrapper :component-list="workbookData.header" />
         </div>
         <div>
