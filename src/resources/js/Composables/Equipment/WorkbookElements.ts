@@ -1,7 +1,8 @@
 import { computed } from "vue";
 
-export const elementList = computed(() => [
+export const elementList = computed<workbookElement[]>(() => [
     {
+        index: "0",
         type: "text",
         tag: "h1",
         text: "Header 1",
@@ -13,6 +14,7 @@ export const elementList = computed(() => [
         },
     },
     {
+        index: "1",
         type: "text",
         tag: "h3",
         text: "Sub-Header",
@@ -23,62 +25,40 @@ export const elementList = computed(() => [
             buttonText: "H3",
         },
     },
-    // {
-    //     index: 1,
-    //     label: "SubHeader",
-    //     help: "Subheader text for workbook",
-    //     buttonText: "H3",
-    //     data: {
-    //         text: "Subheader {H3}",
-    //         editable: true,
-    //         get html(): string {
-    //             return `<h3 class="text-center">${this.text}</h3>`;
-    //         },
-    //     },
-    // },
-    // {
-    //     index: 2,
-    //     label: "Text Box",
-    //     help: "Text Box for workbook",
-    //     buttonIcon: "paragraph",
-    //     data: {
-    //         editable: true,
-    //         props: {
-    //             text: "Text Box {p}",
-    //         },
-    //         get html(): string {
-    //             return `<p class="text-center">${this.props.text}</p>`;
-    //         },
-    //     },
-    // },
-    // {
-    //     index: 3,
-    //     label: "Customer Name",
-    //     help: "Name of the Customer this WB is for",
-    //     buttonText: "CN",
-    //     data: {
-    //         editable: true,
-    //         props: {
-    //             text: "[ Customer Name ]",
-    //         },
-    //         get html(): string {
-    //             return `<h3 class="text-center" data="customer.name">${this.props.text}</h3>`;
-    //         },
-    //     },
-    // },
-    // {
-    //     index: 4,
-    //     label: "Equipment Name",
-    //     help: "WB Equipment Name",
-    //     buttonText: "EQ",
-    //     data: {
-    //         editable: true,
-    //         props: {
-    //             text: 'equipmentType.value?.name',
-    //         },
-    //         get html(): string {
-    //             return `<h5 class="text-center">${this.props.text}</h5>`;
-    //         },
-    //     },
-    // },
+    {
+        index: "2",
+        type: "text",
+        tag: "p",
+        text: "Text Box",
+        class: "text-center",
+        componentData: {
+            label: "Text Box",
+            help: "Text Box for paragraph style text",
+            buttonIcon: "paragraph",
+        },
+    },
+    {
+        index: "3",
+        type: "static",
+        tag: "h3",
+        text: "[ Customer Name ]",
+        class: "text-center",
+        componentData: {
+            label: "Customer Name",
+            help: "Name of the Customer this WB is for",
+            buttonText: "CN",
+        },
+    },
+    {
+        index: "4",
+        type: "static",
+        tag: "h3",
+        text: "[ Equipment Name ]",
+        class: "text-center",
+        componentData: {
+            label: "Equipment Name",
+            help: "WB Equipment Name",
+            buttonText: "EQ",
+        },
+    },
 ]);

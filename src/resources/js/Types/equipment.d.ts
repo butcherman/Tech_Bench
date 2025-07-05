@@ -45,15 +45,29 @@ type workbookPage = {
 
 type workbookEntry = {
     index: string;
-    props: {
-        [key: string]: string | boolean;
-    };
-    readonly html: string;
+    type: string;
+    tag: string;
+    text: string;
+    class: string;
 };
 
 type workbookElement = {
-    label: string;
-    help: string;
-    buttonText?: string;
-    buttonIcon?: string;
+    componentData?: {
+        label: string;
+        help: string;
+        buttonText?: string;
+        buttonIcon?: string;
+    };
 } & workbookEntry;
+
+type workbookDropEvent = {
+    added?: {
+        element: workbookEntry;
+        newIndex: number;
+    };
+    moved?: {
+        element: workbookEntry;
+        newIndex: number;
+        oldIndex: number;
+    };
+};

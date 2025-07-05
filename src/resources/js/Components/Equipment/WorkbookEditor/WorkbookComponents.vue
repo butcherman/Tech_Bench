@@ -1,7 +1,20 @@
 <script setup lang="ts">
 import Card from "@/Components/_Base/Card.vue";
-import { elementList } from "@/Composables/Equipment/WorkbookElements";
 import draggableComponent from "vuedraggable";
+import { elementList } from "@/Composables/Equipment/WorkbookElements";
+import { v4 } from "uuid";
+
+/**
+ * Make a copy of the pulled element with a unique ID attached.
+ */
+const cloneElement = (element: workbookElement): workbookEntry => {
+    let newElement = { ...element };
+    delete newElement.componentData;
+
+    newElement.index = v4();
+
+    return newElement;
+};
 </script>
 
 <template>
@@ -10,6 +23,8 @@ import draggableComponent from "vuedraggable";
         <draggableComponent
             :list="elementList"
             :group="{ name: 'workbook', pull: 'clone', put: false }"
+            item-key="index"
+            :clone="cloneElement"
         >
             <template #item="{ element }">
                 <div

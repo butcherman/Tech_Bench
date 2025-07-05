@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { ref } from "vue";
 import Card from "@/Components/_Base/Card.vue";
-import { Tab, Tabs, TabList, TabPanel, TabPanels } from "primevue";
+import draggableComponent from "vuedraggable";
 import ElementWrapper from "./ElementWrapper.vue";
+import okModal from "@/Modules/okModal";
+import { ref } from "vue";
+import { Tab, Tabs, TabList, TabPanel, TabPanels } from "primevue";
 
-//
-const value = ref("0");
+const allowedInHeader: string[] = ["text", "static"];
 
-const workbookData = ref({
-    lastIndex: 8,
+const workbookData = ref<workbookWrapper>({
     header: [
         {
             index: 0,
@@ -19,7 +19,7 @@ const workbookData = ref({
         },
         {
             index: 1,
-            type: "text",
+            type: "static",
             tag: "h3",
             text: "[ Customer Name ]",
             class: "text-center",
@@ -105,15 +105,47 @@ const workbookData = ref({
     ],
     footer: [],
 });
+
+const onHeaderDrop = (event: workbookDropEvent) => {
+    console.log(event);
+
+    if (event.added) {
+        console.log("added element");
+
+        if (!allowedInHeader.includes(event.added.element.type)) {
+            console.log(event.added.element.type);
+            okModal("Only Text Elements are Allowed in the Header");
+            workbookData.value.header.splice(event.added.newIndex, 1);
+        }
+    }
+
+    if (event.moved) {
+        console.log("moved element");
+    }
+};
 </script>
 
 <template>
     <Card class="h-full">
+        <draggableComponent
+            :list="workbookData.header"
+            :group="{ name: 'workbook', put: true }"
+            item-key="index"
+            @change="onHeaderDrop"
+        >
+            <template #item="{ element }">
+                <div class="hover:border hover:border-green-300">
+                    <component
+                        :is="element.tag"
+                        :class="element.class"
+                        v-bind="element.props"
+                        v-html="element.text"
+                    />
+                </div>
+            </template>
+        </draggableComponent>
         <div>
-            <ElementWrapper :component-list="workbookData.header" />
-        </div>
-        <div>
-            <Tabs v-model:value="value">
+            <Tabs value="0">
                 <TabList>
                     <template v-for="page in workbookData.body">
                         <Tab
