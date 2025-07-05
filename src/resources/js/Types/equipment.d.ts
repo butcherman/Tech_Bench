@@ -23,3 +23,37 @@ type dataTypes = {
     do_not_log_value: boolean;
     in_use: boolean;
 };
+
+/*
+|-------------------------------------------------------------------------------
+| Onboarding Workbook Types
+|-------------------------------------------------------------------------------
+*/
+
+type workbookWrapper = {
+    header: any[];
+    body: any[];
+    footer: any[];
+};
+
+type workbookPage = {
+    page: string;
+    title: string;
+    canPublish: boolean;
+    data: any[];
+};
+
+type workbookEntry = {
+    index: string;
+    props: {
+        [key: string]: string | boolean;
+    };
+    readonly html: string;
+};
+
+type workbookElement = {
+    label: string;
+    help: string;
+    buttonText?: string;
+    buttonIcon?: string;
+} & workbookEntry;

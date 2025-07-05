@@ -8,7 +8,7 @@ import LinkHeader from "./LinkHeader.vue";
     <div id="link-layout-wrapper" class="flex flex-col bg-gray-200">
         <LinkHeader />
         <FlashAlert />
-        <section id="link-content" class="mt-14 p-3 grow">
+        <section id="link-content" class="mt-14 p-3 grow flex flex-col">
             <slot />
         </section>
         <AppFooter />
