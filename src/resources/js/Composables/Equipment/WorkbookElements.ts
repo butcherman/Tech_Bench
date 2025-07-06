@@ -54,7 +54,7 @@ export const elementList = computed<workbookElement[]>(() => [
         index: "4",
         type: "static",
         tag: "h3",
-        text: equipmentType.value?.name,
+        text: equipmentType.value?.name ?? "[ Equipment Name ]",
         class: "text-center",
         componentData: {
             label: "Equipment Name",

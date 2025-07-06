@@ -31,9 +31,9 @@ type dataTypes = {
 */
 
 type workbookWrapper = {
-    header: any[];
-    body: any[];
-    footer: any[];
+    header: workbookEntry[];
+    body: workbookPage[];
+    footer: workbookEntry[];
 };
 
 type workbookPage = {

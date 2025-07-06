@@ -27,8 +27,14 @@ const defaultWorkbook: workbookWrapper = {
     ],
     body: [
         {
-            page: "0",
+            page: v4(),
             title: "Page 1",
+            canPublish: true,
+            container: [],
+        },
+        {
+            page: v4(),
+            title: "Page 2",
             canPublish: true,
             container: [],
         },

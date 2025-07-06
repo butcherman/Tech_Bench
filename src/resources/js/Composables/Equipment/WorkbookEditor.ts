@@ -1,4 +1,5 @@
-import { ref } from "vue";
+import { v4 } from "uuid";
+import { computed, ref } from "vue";
 
 /*
 |-------------------------------------------------------------------------------
@@ -19,6 +20,28 @@ export const setWorkbookData = (
     console.log(workbook, equipment);
     equipmentType.value = equipment;
     workbookData.value = { ...workbook };
+    activePage.value = workbookData.value.body[0].page;
+};
+
+/*
+|-------------------------------------------------------------------------------
+| Workbook Pages
+|-------------------------------------------------------------------------------
+*/
+export const activePage = ref("0");
+
+export const addBlankPage = () => {
+    console.log("add new page");
+
+    let newPage = {
+        page: v4(),
+        title: "New Page",
+        canPublish: true,
+        container: [],
+    };
+
+    workbookData.value.body.push(newPage);
+    activePage.value = newPage.page;
 };
 
 /*
