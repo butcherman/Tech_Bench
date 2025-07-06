@@ -6,6 +6,8 @@ import {
     workbookData,
     activePage,
 } from "@/Composables/Equipment/WorkbookEditor";
+import WorkbookBodyNested from "./WorkbookBodyNested.vue";
+import draggableComponent from "vuedraggable";
 </script>
 
 <template>
@@ -30,14 +32,17 @@ import {
         <TabPanels>
             <template v-for="page in workbookData.body">
                 <TabPanel :value="page.page">
-                    <div>
-                        {{ page }}
-                        <!-- <form>
-                                    <ElementWrapper
-                                    :component-list="page.container"
-                                    />
-                                </form> -->
-                    </div>
+                    <draggableComponent
+                        :list="page.container"
+                        :group="{ name: 'workbook', put: true }"
+                        item-key="index"
+                    >
+                        <template #item="{ element }">
+                            <div>
+                                <ElementWrapper :component="element" />
+                            </div>
+                        </template>
+                    </draggableComponent>
                 </TabPanel>
             </template>
         </TabPanels>

@@ -30,7 +30,69 @@ const defaultWorkbook: workbookWrapper = {
             page: v4(),
             title: "Page 1",
             canPublish: true,
-            container: [],
+            container: [
+                {
+                    index: v4(),
+                    type: "wrapper",
+                    tag: "div",
+                    class: "grid grid-cols-2 gap-2",
+                    container: [
+                        {
+                            index: v4(),
+                            type: "wrapper",
+                            tag: "fieldset",
+                            text: "fieldset text",
+                            class: "border border-slate-300 rounded-lg p-2",
+                            container: [
+                                {
+                                    index: v4(),
+                                    type: "input",
+                                    tag: "input",
+                                    class: "w-full border border-slate-300",
+                                    props: {
+                                        name: "test_input",
+                                        label: "This is a test input",
+                                        placeholder: "",
+                                        value: "",
+                                    },
+                                },
+                                {
+                                    index: v4(),
+                                    type: "input",
+                                    tag: "input",
+                                    class: "w-full border border-slate-300",
+                                    props: {
+                                        name: "test_input",
+                                        label: "This is a test input",
+                                        placeholder: "",
+                                        value: "",
+                                    },
+                                },
+                            ],
+                        },
+                        {
+                            index: v4(),
+                            type: "wrapper",
+                            tag: "fieldset",
+                            class: "border border-slate-300 rounded-lg",
+                            container: [
+                                {
+                                    index: v4(),
+                                    type: "input",
+                                    tag: "input",
+                                    class: "w-full border border-slate-400 rounded-lg px-2",
+                                    props: {
+                                        name: "test_input",
+                                        label: "This is a test input",
+                                        placeholder: "",
+                                        value: "",
+                                    },
+                                },
+                            ],
+                        },
+                    ],
+                },
+            ],
         },
         {
             page: v4(),

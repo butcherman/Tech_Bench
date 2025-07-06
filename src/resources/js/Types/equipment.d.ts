@@ -40,15 +40,7 @@ type workbookPage = {
     page: string;
     title: string;
     canPublish: boolean;
-    container: any[];
-};
-
-type workbookEntry = {
-    index: string;
-    type: string;
-    tag: string;
-    text: string;
-    class: string;
+    container: workbookEntry[];
 };
 
 type workbookElement = {
@@ -59,6 +51,16 @@ type workbookElement = {
         buttonIcon?: string;
     };
 } & workbookEntry;
+
+type workbookEntry = {
+    index: string;
+    type: "text" | "static" | "input" | "wrapper";
+    tag: string;
+    props?: { [key: string]: string };
+    text?: string;
+    class?: string;
+    container?: workbookEntry[];
+};
 
 type workbookDropEvent = {
     added?: {
