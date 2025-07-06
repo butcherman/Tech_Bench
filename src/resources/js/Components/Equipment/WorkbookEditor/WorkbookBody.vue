@@ -6,6 +6,8 @@ import {
     addBlankPage,
     workbookData,
     activePage,
+    editPageData,
+    deletePage,
 } from "@/Composables/Equipment/WorkbookEditor";
 </script>
 
@@ -17,7 +19,25 @@ import {
                     :value="page.page"
                     pt:root:class="border! border-slate-300! rounded-t-lg mx-1! p-1!"
                 >
-                    {{ page.title }}
+                    <div class="text-xs">
+                        <span
+                            class="text-warning pointer me-1"
+                            v-tooltip="'Edit Page Data'"
+                            @click="editPageData(page)"
+                        >
+                            <fa-icon icon="pencil" />
+                        </span>
+                        <span
+                            class="text-danger pointer"
+                            v-tooltip="'Delete Page'"
+                            @click="deletePage(page)"
+                        >
+                            <fa-icon icon="trash-alt" />
+                        </span>
+                    </div>
+                    <div>
+                        {{ page.title }}
+                    </div>
                 </Tab>
             </template>
             <Tab

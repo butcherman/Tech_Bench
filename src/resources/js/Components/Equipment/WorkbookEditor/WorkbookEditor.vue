@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageElement from "./ElementEditors/PageElement.vue";
 import TextElement from "./ElementEditors/TextElement.vue";
 import WorkbookCanvas from "./WorkbookCanvas.vue";
 import WorkbookComponents from "./WorkbookComponents.vue";
@@ -6,6 +7,7 @@ import { onMounted } from "vue";
 import { Drawer } from "primevue";
 import {
     editingElement,
+    editingPage,
     setWorkbookData,
     showEditor,
 } from "@/Composables/Equipment/WorkbookEditor";
@@ -28,6 +30,9 @@ onMounted(() => setWorkbookData(props.workbookData, props.equipmentType));
         </div>
     </div>
     <Drawer v-model:visible="showEditor" position="right" header="Edit Element">
+        <template v-if="editingPage">
+            <PageElement :page="editingPage" />
+        </template>
         <template v-if="editingElement">
             <div v-if="editingElement.type === 'text'">
                 <TextElement :element="editingElement" />

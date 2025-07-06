@@ -17,7 +17,6 @@ export const setWorkbookData = (
     workbook: workbookWrapper,
     equipment: equipment
 ): void => {
-    console.log(workbook, equipment);
     equipmentType.value = equipment;
     workbookData.value = { ...workbook };
     activePage.value = workbookData.value.body[0].page;
@@ -30,9 +29,10 @@ export const setWorkbookData = (
 */
 export const activePage = ref("0");
 
-export const addBlankPage = () => {
-    console.log("add new page");
-
+/**
+ * Create a new Blank Page
+ */
+export const addBlankPage = (): void => {
     let newPage = {
         page: v4(),
         title: "New Page",
@@ -42,6 +42,24 @@ export const addBlankPage = () => {
 
     workbookData.value.body.push(newPage);
     activePage.value = newPage.page;
+};
+
+/**
+ * Edit the data for an existing page
+ */
+export const editingPage = ref<workbookPage>();
+export const editPageData = (page: workbookPage): void => {
+    editingPage.value = page;
+    showEditor.value = true;
+};
+
+/**
+ * Destroy a page and all data inside.
+ */
+export const deletePage = (page: workbookPage): void => {
+    let pageIndex = workbookData.value.body.indexOf(page);
+
+    workbookData.value.body.splice(pageIndex, 1);
 };
 
 /*
