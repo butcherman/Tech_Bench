@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import draggableComponent from "vuedraggable";
 import okModal from "@/Modules/okModal";
-import { workbookData } from "@/Composables/Equipment/WorkbookEditor";
+import {
+    editElement,
+    workbookData,
+} from "@/Composables/Equipment/WorkbookEditor";
 
 /**
  * Only these element 'types' are allowed to be dropped in the header.
@@ -40,7 +43,12 @@ const deleteHeaderRow = (rowIndex: number): void => {
                 <div
                     class="hidden text-xs fixed end-8 group-hover:block pointer"
                 >
-                    <span class="text-warning me-2" v-tooltip="'Edit'">
+                    <span
+                        v-if="element.type !== 'static'"
+                        class="text-warning me-2"
+                        v-tooltip="'Edit'"
+                        @click="editElement(element)"
+                    >
                         <fa-icon icon="pencil" />
                     </span>
                     <span

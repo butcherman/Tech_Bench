@@ -98,6 +98,7 @@ services:
         depends_on:
             - tech_bench
             - nginx
+        entrypoint: php artisan horizon
 
     #  Scheduler Container
     scheduler:

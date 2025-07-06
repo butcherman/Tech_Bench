@@ -1,4 +1,5 @@
 import { computed } from "vue";
+import { equipmentType } from "./WorkbookEditor";
 
 export const elementList = computed<workbookElement[]>(() => [
     {
