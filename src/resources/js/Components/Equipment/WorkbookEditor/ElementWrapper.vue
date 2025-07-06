@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import draggableComponent from "vuedraggable";
+
 defineProps<{
     component: workbookEntry;
 }>();

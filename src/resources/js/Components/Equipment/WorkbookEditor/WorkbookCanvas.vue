@@ -6,7 +6,9 @@ import WorkbookHeader from "./WorkbookHeader.vue";
 
 <template>
     <Card class="h-full" title="Workbook Canvas">
-        <WorkbookHeader />
-        <WorkbookBody />
+        <div class="flex flex-col h-full">
+            <WorkbookHeader />
+            <WorkbookBody />
+        </div>
     </Card>
 </template>
