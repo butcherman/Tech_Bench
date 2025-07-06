@@ -4,7 +4,7 @@ import LinkLayout from "@/Layouts/FileLink/LinkLayout.vue";
 import WorkbookEditor from "@/Components/Equipment/WorkbookEditor/WorkbookEditor.vue";
 import { v4 } from "uuid";
 
-defineProps<{
+const props = defineProps<{
     equipmentType: equipment;
 }>();
 
@@ -12,16 +12,16 @@ const defaultWorkbook: workbookWrapper = {
     header: [
         {
             index: v4(),
-            type: "text",
-            tag: "h1",
-            text: "Header 1",
+            type: "static",
+            tag: "h3",
+            text: "[ Customer Name ]",
             class: "text-center",
         },
         {
             index: v4(),
             type: "static",
             tag: "h3",
-            text: "[ Customer Name ]",
+            text: props.equipmentType.name,
             class: "text-center",
         },
     ],

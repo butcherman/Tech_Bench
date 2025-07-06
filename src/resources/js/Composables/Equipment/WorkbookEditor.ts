@@ -16,8 +16,9 @@ export const setWorkbookData = (
     workbook: workbookWrapper,
     equipment: equipment
 ): void => {
+    console.log(workbook, equipment);
     equipmentType.value = equipment;
-    workbookData.value = workbook;
+    workbookData.value = { ...workbook };
 };
 
 /*

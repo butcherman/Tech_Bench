@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import TextElement from "./ElementEditors/TextElement.vue";
 import WorkbookCanvas from "./WorkbookCanvas.vue";
 import WorkbookComponents from "./WorkbookComponents.vue";
+import { onMounted } from "vue";
+import { Drawer } from "primevue";
 import {
     editingElement,
     setWorkbookData,
     showEditor,
 } from "@/Composables/Equipment/WorkbookEditor";
-import { Drawer } from "primevue";
-import TextElement from "./ElementEditors/TextElement.vue";
 
 const props = defineProps<{
     equipmentType: equipment;

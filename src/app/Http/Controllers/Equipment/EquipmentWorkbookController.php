@@ -24,10 +24,10 @@ class EquipmentWorkbookController extends Controller
     /**
      * Show the Workbook Editor to create a new workbook
      */
-    public function create(EquipmentType $equipiment_type): Response
+    public function create(EquipmentType $equipment_type): Response
     {
         return Inertia::render('Equipment/Workbook/Create', [
-            'equipment-type' => $equipiment_type,
+            'equipment-type' => $equipment_type,
         ]);
     }
 
