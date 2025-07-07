@@ -13,6 +13,11 @@ const cloneElement = (element: workbookElement): workbookEntry => {
 
     newElement.index = v4();
 
+    // If this is a grid wrapper, create unique ID's on the grid elements
+    if (element.type === "grid-wrapper") {
+        element.container?.forEach((elem) => (elem.index = v4()));
+    }
+
     return newElement;
 };
 </script>

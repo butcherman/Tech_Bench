@@ -62,4 +62,65 @@ export const elementList = computed<workbookElement[]>(() => [
             buttonText: "EQ",
         },
     },
+    {
+        index: "5",
+        type: "grid-wrapper",
+        tag: "div",
+        class: "grid grid-cols-2 min-h-20",
+        componentData: {
+            label: "Two Column Grid",
+            help: "Grid Row with two columns",
+            buttonIcon: "table-columns",
+        },
+        container: [
+            {
+                index: "50",
+                type: "wrapper",
+                tag: "div",
+                class: "min-h-20",
+                container: [],
+            },
+            {
+                index: "51",
+                type: "wrapper",
+                tag: "div",
+                class: "min-h-20",
+                container: [],
+            },
+        ],
+    },
+    {
+        index: "6",
+        type: "grid-wrapper",
+        tag: "div",
+        class: "grid grid-cols-3 min-h-20",
+        componentData: {
+            label: "Three Column Grid",
+            help: "Grid Row with three columns",
+            buttonIcon: "table-columns",
+        },
+        container: [
+            {
+                index: "60",
+                type: "wrapper",
+                tag: "div",
+                class: "min-h-20",
+                container: [],
+            },
+            {
+                index: "61",
+                type: "wrapper",
+                tag: "div",
+                class: "min-h-20",
+                container: [],
+            },
+            {
+                index: "62",
+                type: "wrapper",
+                tag: "div",
+                class: "min-h-20",
+                container: [],
+            },
+        ],
+    },
 ]);

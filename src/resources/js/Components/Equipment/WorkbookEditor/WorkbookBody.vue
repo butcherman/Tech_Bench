@@ -51,6 +51,11 @@ import {
         <TabPanels class="h-full border border-slate-300 rounded-sm">
             <template v-for="page in workbookData.body">
                 <TabPanel :value="page.page" class="h-full">
+                    <div v-if="!page.container.length">
+                        <h4 class="text-center text-muted opacity-50">
+                            Drag Element Here to Start Building Workbook
+                        </h4>
+                    </div>
                     <draggableComponent
                         :list="page.container"
                         :group="{ name: 'workbook', put: true }"
