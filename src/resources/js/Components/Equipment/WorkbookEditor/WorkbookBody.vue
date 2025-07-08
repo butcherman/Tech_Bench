@@ -68,8 +68,13 @@ import {
                                 <GridWrapper
                                     v-if="element.type === 'grid-wrapper'"
                                     :grid-row="element"
+                                    :container="page.container"
                                 />
-                                <ElementWrapper v-else :component="element" />
+                                <ElementWrapper
+                                    v-else
+                                    :component="element"
+                                    :container="page.container"
+                                />
                             </div>
                         </template>
                     </draggableComponent>

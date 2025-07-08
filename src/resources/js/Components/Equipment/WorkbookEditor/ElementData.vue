@@ -12,7 +12,7 @@ defineProps<{
 
 <template>
     <div class="group relative">
-        <div class="hidden text-xs fixed end-8 group-hover:block pointer">
+        <div class="hidden text-xs absolute end-0 group-hover:block pointer">
             <span
                 v-if="elem.type !== 'static'"
                 class="text-warning me-2"

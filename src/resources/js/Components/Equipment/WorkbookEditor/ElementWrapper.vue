@@ -1,14 +1,17 @@
 <script setup lang="ts">
 import draggableComponent from "vuedraggable";
+import ElementData from "./ElementData.vue";
 
 defineProps<{
     component: workbookEntry;
+    container: workbookEntry[];
 }>();
 </script>
 
 <template>
     <template v-if="component.type === 'wrapper' && component.container">
-        <component :is="component.tag" :class="component.class">
+        <h1>Is Wrapper</h1>
+        <!-- <component :is="component.tag" :class="component.class">
             <template v-for="comp in component.container">
                 <component :is="comp.tag" :class="comp.class">
                     <legend v-if="comp.tag === 'fieldset'">
@@ -21,20 +24,18 @@ defineProps<{
                     >
                         <template #item="{ element }">
                             <div>
-                                <ElementWrapper :component="element" />
+                                <ElementWrapper
+                                    :component="element"
+                                    :container="container"
+                                />
                             </div>
                         </template>
                     </draggableComponent>
                 </component>
             </template>
-        </component>
+        </component> -->
     </template>
     <template v-else>
-        <component
-            :is="component.tag"
-            :class="component.class"
-            v-bind="component.props"
-            v-html="component.text"
-        />
+        <ElementData :elem="component" :container="container" />
     </template>
 </template>
