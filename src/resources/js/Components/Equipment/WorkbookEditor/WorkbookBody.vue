@@ -13,7 +13,7 @@ import {
 </script>
 
 <template>
-    <Tabs v-bind:value="activePage" class="grow">
+    <Tabs v-bind:value="activePage">
         <TabList>
             <template v-for="page in workbookData.body">
                 <Tab
