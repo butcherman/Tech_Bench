@@ -1,10 +1,8 @@
 <script setup lang="ts">
 import draggableComponent from "vuedraggable";
+import ElementData from "./ElementData.vue";
 import okModal from "@/Modules/okModal";
-import {
-    editElement,
-    workbookData,
-} from "@/Composables/Equipment/WorkbookEditor";
+import { workbookData } from "@/Composables/Equipment/WorkbookEditor";
 
 /**
  * Only these element 'types' are allowed to be dropped in the header.
@@ -22,51 +20,32 @@ const onHeaderDrop = (event: workbookDropEvent) => {
         }
     }
 };
-
-/**
- * Delete a Header Row
- */
-const deleteHeaderRow = (rowIndex: number): void => {
-    workbookData.value.header.splice(rowIndex, 1);
-};
 </script>
 
 <template>
-    <draggableComponent
-        :list="workbookData.header"
-        :group="{ name: 'workbook', put: true }"
-        item-key="index"
-        @change="onHeaderDrop"
+    <div
+        class="border border-dashed border-slate-300 rounded-lg relative mb-2 hover:border-dotted group/header"
     >
-        <template #item="{ element, index }">
-            <div class="group relative">
-                <div
-                    class="hidden text-xs fixed end-8 group-hover:block pointer"
-                >
-                    <span
-                        v-if="element.type !== 'static'"
-                        class="text-warning me-2"
-                        v-tooltip="'Edit'"
-                        @click="editElement(element)"
-                    >
-                        <fa-icon icon="pencil" />
-                    </span>
-                    <span
-                        class="text-danger"
-                        v-tooltip="'Delete'"
-                        @click="deleteHeaderRow(index)"
-                    >
-                        <fa-icon icon="trash-alt" />
-                    </span>
-                </div>
-                <component
-                    :is="element.tag"
-                    :class="element.class"
-                    class="group-hover:border group-hover:border-green-300"
-                    v-bind="element.props"
-                    v-html="element.text"
-                />
-            </div>
-        </template>
-    </draggableComponent>
+        <div
+            class="hidden group-hover/header:block text-xs absolute -top-4 right-0 border-t border-s border-e border-slate-300 px-1 rounded-md text-muted"
+        >
+            Header
+        </div>
+        <div v-if="!workbookData.header.length">
+            <h4 class="text-center text-muted opacity-50">
+                Drag Element Here to Start Building Header
+            </h4>
+        </div>
+        <draggableComponent
+            :list="workbookData.header"
+            :group="{ name: 'workbook', put: true }"
+            class="min-h-20"
+            item-key="index"
+            @change="onHeaderDrop"
+        >
+            <template #item="{ element }">
+                <ElementData :elem="element" :container="workbookData.header" />
+            </template>
+        </draggableComponent>
+    </div>
 </template>

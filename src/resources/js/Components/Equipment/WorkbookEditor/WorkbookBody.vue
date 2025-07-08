@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import draggableComponent from "vuedraggable";
 import ElementWrapper from "./ElementWrapper.vue";
+import GridWrapper from "./GridWrapper.vue";
 import { Tab, Tabs, TabList, TabPanel, TabPanels } from "primevue";
 import {
     addBlankPage,
@@ -9,7 +10,6 @@ import {
     editPageData,
     deletePage,
 } from "@/Composables/Equipment/WorkbookEditor";
-import GridWrapper from "./GridWrapper.vue";
 </script>
 
 <template>

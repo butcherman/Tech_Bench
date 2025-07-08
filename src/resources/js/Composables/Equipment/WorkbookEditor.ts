@@ -79,3 +79,12 @@ export const closeEditor = () => {
     showEditor.value = false;
     editingElement.value = undefined;
 };
+
+export const deleteElement = (
+    element: workbookElement,
+    container: workbookElement[]
+): void => {
+    let index = container.indexOf(element);
+
+    container.splice(index, 1);
+};
