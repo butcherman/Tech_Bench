@@ -7,9 +7,12 @@ defineProps<{
     gridRow: workbookEntry;
 }>();
 
-const onListChange = (event: workbookDropEvent, container: workbookEntry[]) => {
+const onListChange = (
+    event: workbookDropEvent,
+    container?: workbookEntry[]
+) => {
     if (event.added) {
-        if (event.added.element.type === "grid-wrapper") {
+        if (event.added.element.type === "grid-wrapper" && container?.length) {
             okModal("Cannot Place Grid Element Inside Grid Element");
             container.splice(event.added.newIndex, 1);
         }
