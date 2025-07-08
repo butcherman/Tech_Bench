@@ -9,6 +9,7 @@ import {
     editPageData,
     deletePage,
 } from "@/Composables/Equipment/WorkbookEditor";
+import GridWrapper from "./GridWrapper.vue";
 </script>
 
 <template>
@@ -64,7 +65,11 @@ import {
                     >
                         <template #item="{ element }">
                             <div>
-                                <ElementWrapper :component="element" />
+                                <GridWrapper
+                                    v-if="element.type === 'grid-wrapper'"
+                                    :grid-row="element"
+                                />
+                                <ElementWrapper v-else :component="element" />
                             </div>
                         </template>
                     </draggableComponent>

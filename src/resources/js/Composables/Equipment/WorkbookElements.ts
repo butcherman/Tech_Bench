@@ -66,7 +66,7 @@ export const elementList = computed<workbookElement[]>(() => [
         index: "5",
         type: "grid-wrapper",
         tag: "div",
-        class: "grid grid-cols-2 min-h-20",
+        class: "grid grid-cols-2 gap-2 my-2 min-h-20",
         componentData: {
             label: "Two Column Grid",
             help: "Grid Row with two columns",
@@ -93,7 +93,7 @@ export const elementList = computed<workbookElement[]>(() => [
         index: "6",
         type: "grid-wrapper",
         tag: "div",
-        class: "grid grid-cols-3 min-h-20",
+        class: "grid grid-cols-3 gap-2 my-2 min-h-20",
         componentData: {
             label: "Three Column Grid",
             help: "Grid Row with three columns",
