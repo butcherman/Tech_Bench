@@ -123,4 +123,17 @@ export const elementList = computed<workbookElement[]>(() => [
             },
         ],
     },
+    {
+        index: "5",
+        type: "wrapper",
+        tag: "fieldset",
+        class: "border border-slate-300 min-h-20 rounded-lg p-2",
+        text: "",
+        componentData: {
+            label: "Fieldset",
+            help: "Bordered Container for Form Elements",
+            buttonIcon: "rectangle-list",
+        },
+        container: [],
+    },
 ]);

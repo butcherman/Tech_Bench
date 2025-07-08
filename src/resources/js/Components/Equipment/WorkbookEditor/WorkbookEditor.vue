@@ -11,6 +11,7 @@ import {
     setWorkbookData,
     showEditor,
 } from "@/Composables/Equipment/WorkbookEditor";
+import FieldsetElement from "./ElementEditors/FieldsetElement.vue";
 
 const props = defineProps<{
     equipmentType: equipment;
@@ -36,6 +37,9 @@ onMounted(() => setWorkbookData(props.workbookData, props.equipmentType));
         <template v-if="editingElement">
             <div v-if="editingElement.type === 'text'">
                 <TextElement :element="editingElement" />
+            </div>
+            <div v-if="editingElement.type === 'wrapper'">
+                <FieldsetElement :element="editingElement" />
             </div>
             <div v-else>
                 <p class="text-center text-muted">No Editable Fields</p>
