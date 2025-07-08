@@ -8,14 +8,16 @@ import { v4 } from "uuid";
  * Make a copy of the pulled element with a unique ID attached.
  */
 const cloneElement = (element: workbookElement): workbookEntry => {
-    let newElement = { ...element };
+    let newElement = JSON.parse(JSON.stringify(element));
     delete newElement.componentData;
 
     newElement.index = v4();
 
     // If this is a grid wrapper, create unique ID's on the grid elements
-    if (element.type === "grid-wrapper") {
-        element.container?.forEach((elem) => (elem.index = v4()));
+    if (newElement.type === "grid-wrapper") {
+        newElement.container?.forEach(
+            (elem: workbookEntry) => (elem.index = v4())
+        );
     }
 
     return newElement;
