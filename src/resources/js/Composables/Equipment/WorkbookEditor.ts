@@ -86,5 +86,7 @@ export const deleteElement = (
 ): void => {
     let index = container.indexOf(element);
 
+    console.log(element, container);
+
     container.splice(index, 1);
 };

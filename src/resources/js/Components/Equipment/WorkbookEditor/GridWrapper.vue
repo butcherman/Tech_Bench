@@ -43,7 +43,12 @@ const onListChange = (
             :class="col.class"
             class="border border-dashed border-slate-300 rounded-lg"
         >
-            <div v-if="col.container" class="h-full">
+            <div v-if="col.container" class="h-full relative">
+                <div v-if="!col.container.length" class="absolute top-5 w-full">
+                    <h4 class="text-center text-muted opacity-50">
+                        Drag Element Here
+                    </h4>
+                </div>
                 <draggableComponent
                     :list="col.container"
                     :group="{ name: 'workbook', put: true }"

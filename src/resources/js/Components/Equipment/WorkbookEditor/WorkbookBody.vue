@@ -51,8 +51,11 @@ import {
         </TabList>
         <TabPanels class="h-full border border-slate-300 rounded-sm">
             <template v-for="page in workbookData.body">
-                <TabPanel :value="page.page" class="h-full">
-                    <div v-if="!page.container.length">
+                <TabPanel :value="page.page" class="h-full relative">
+                    <div
+                        v-if="!page.container.length"
+                        class="absolute top-5 w-full"
+                    >
                         <h4 class="text-center text-muted opacity-50">
                             Drag Element Here to Start Building Workbook
                         </h4>

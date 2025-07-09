@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import FieldsetElement from "./ElementEditors/FieldsetElement.vue";
 import PageElement from "./ElementEditors/PageElement.vue";
 import TextElement from "./ElementEditors/TextElement.vue";
 import WorkbookCanvas from "./WorkbookCanvas.vue";
@@ -11,7 +12,6 @@ import {
     setWorkbookData,
     showEditor,
 } from "@/Composables/Equipment/WorkbookEditor";
-import FieldsetElement from "./ElementEditors/FieldsetElement.vue";
 
 const props = defineProps<{
     equipmentType: equipment;
@@ -38,7 +38,7 @@ onMounted(() => setWorkbookData(props.workbookData, props.equipmentType));
             <div v-if="editingElement.type === 'text'">
                 <TextElement :element="editingElement" />
             </div>
-            <div v-if="editingElement.type === 'wrapper'">
+            <div v-else-if="editingElement.type === 'wrapper'">
                 <FieldsetElement :element="editingElement" />
             </div>
             <div v-else>

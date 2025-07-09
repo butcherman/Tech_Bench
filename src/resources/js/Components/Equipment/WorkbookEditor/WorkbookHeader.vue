@@ -31,7 +31,7 @@ const onHeaderDrop = (event: workbookDropEvent) => {
         >
             Header
         </div>
-        <div v-if="!workbookData.header.length">
+        <div v-if="!workbookData.header.length" class="absolute top-5 w-full">
             <h4 class="text-center text-muted opacity-50">
                 Drag Element Here to Start Building Header
             </h4>

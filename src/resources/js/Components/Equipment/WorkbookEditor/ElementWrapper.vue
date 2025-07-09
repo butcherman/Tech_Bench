@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import draggableComponent from "vuedraggable";
 import ElementData from "./ElementData.vue";
+import GridWrapper from "./GridWrapper.vue";
 import {
     deleteElement,
     editElement,
@@ -17,11 +18,11 @@ defineProps<{
         <component
             :is="component.tag"
             :class="component.class"
-            class="relative"
+            class="relative group"
         >
             <legend>{{ component.text }}</legend>
             <div
-                class="text-xs absolute end-0 -top-4 group-hover:block pointer"
+                class="hidden text-xs absolute end-0 -top-4 group-hover:block pointer"
             >
                 <span
                     class="text-warning me-2"
@@ -38,9 +39,12 @@ defineProps<{
                     <fa-icon icon="trash-alt" />
                 </span>
             </div>
-            <div v-if="!component.container.length">
+            <div
+                v-if="!component.container.length"
+                class="absolute top-0 w-full"
+            >
                 <h4 class="text-center text-muted opacity-50">
-                    Drag Element Here to Start Building Workbook
+                    Drag Element Here
                 </h4>
             </div>
             <draggableComponent
@@ -50,9 +54,15 @@ defineProps<{
                 class="min-h-10"
             >
                 <template #item="{ element }">
-                    <ElementWrapper
-                        :component="element"
+                    <GridWrapper
+                        v-if="element.type === 'grid-wrapper'"
+                        :grid-row="element"
                         :container="container"
+                    />
+                    <ElementWrapper
+                        v-else
+                        :component="element"
+                        :container="component.container"
                     />
                 </template>
             </draggableComponent>

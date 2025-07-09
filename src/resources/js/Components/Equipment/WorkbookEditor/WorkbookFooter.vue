@@ -31,7 +31,7 @@ const onFooterDrop = (event: workbookDropEvent) => {
         >
             Footer
         </div>
-        <div v-if="!workbookData.footer.length">
+        <div v-if="!workbookData.footer.length" class="absolute top-5 w-full">
             <h4 class="text-center text-muted opacity-50">
                 Drag Element Here to Start Building Footer
             </h4>
