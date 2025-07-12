@@ -4,6 +4,7 @@ import TextInput from "@/Forms/_Base/TextInput.vue";
 import { closeEditor } from "@/Composables/Equipment/WorkbookEditor";
 import { object } from "yup";
 import { useForm } from "vee-validate";
+import SwitchInput from "@/Forms/_Base/SwitchInput.vue";
 
 const props = defineProps<{
     element: workbookElement;
@@ -62,6 +63,13 @@ const isTextInput = (type: string): boolean => {
                 :label="data.label"
                 :help="data.help"
                 :type="data.type"
+            />
+            <SwitchInput
+                v-else-if="data.type === 'boolean'"
+                :id="prop.toString()"
+                :name="prop.toString()"
+                :label="data.label"
+                :help="data.help"
             />
             <div v-else>other input type</div>
         </template>

@@ -346,4 +346,76 @@ export const elementList = computed<workbookElement[]>(() => [
             buttonIcon: "sliders",
         },
     },
+    {
+        index: "14",
+        type: "input",
+        tag: "input",
+        component: "SelectInput",
+        props: {
+            label: "",
+            placeholder: "",
+            list: ["option 1", "option 2"],
+            help: "",
+        },
+        assist: {
+            label: {
+                label: "Label",
+                help: "Label for Input Text",
+                type: "string",
+            },
+            placeholder: {
+                label: "Placeholder",
+                help: "Placeholder text for empty Input",
+                type: "string",
+            },
+            list: {
+                label: "List of Options",
+                help: "Comma separated list of available button options",
+                type: "array",
+            },
+            help: {
+                label: "Help Text",
+                help: "Helpful text to show when Input is active",
+                type: "string",
+            },
+        },
+        componentData: {
+            label: "Select Input",
+            help: "Drop Down Input",
+            buttonIcon: "caret-down",
+        },
+    },
+    {
+        index: "15",
+        type: "input",
+        tag: "input",
+        component: "SwitchInput",
+        props: {
+            label: "",
+            center: false,
+            help: "",
+        },
+        assist: {
+            label: {
+                label: "Label",
+                help: "Label for Input Text",
+                type: "string",
+            },
+            center: {
+                label: "Center",
+                help: "Center this switch",
+                type: "boolean",
+            },
+            help: {
+                label: "Help Text",
+                help: "Helpful text to show when Input is active",
+                type: "string",
+            },
+        },
+        componentData: {
+            label: "Switch Input",
+            help: "On/Off Toggle Switch",
+            buttonIcon: "toggle-on",
+        },
+    },
 ]);
