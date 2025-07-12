@@ -1,7 +1,5 @@
 import { v4 } from "uuid";
-import { ref, unref } from "vue";
-import { dataPut } from "../axiosWrapper.module";
-import okModal from "@/Modules/okModal";
+import { ref } from "vue";
 
 /*
 |-------------------------------------------------------------------------------
@@ -14,14 +12,24 @@ export const workbookData = ref<workbookWrapper>({
     body: [],
     footer: [],
 });
+const savedWorkbook = ref<workbookWrapper>();
 
 export const setWorkbookData = (
     workbook: workbookWrapper,
     equipment: equipment
 ): void => {
     equipmentType.value = equipment;
-    workbookData.value = { ...workbook };
+    workbookData.value = JSON.parse(JSON.stringify(workbook));
     activePage.value = workbookData.value.body[0].page;
+    updateSavedWorkbook();
+};
+
+export const updateSavedWorkbook = (): void => {
+    savedWorkbook.value = JSON.parse(JSON.stringify(workbookData.value));
+};
+
+export const resetWorkbookData = () => {
+    workbookData.value = JSON.parse(JSON.stringify(savedWorkbook.value));
 };
 
 export const isDirty = ref<boolean>(false);

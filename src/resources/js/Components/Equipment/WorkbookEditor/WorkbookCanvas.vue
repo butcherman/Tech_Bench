@@ -11,6 +11,8 @@ import { useAppStore } from "@/Stores/AppStore";
 import {
     equipmentType,
     isDirty,
+    resetWorkbookData,
+    updateSavedWorkbook,
     workbookData,
 } from "@/Composables/Equipment/WorkbookEditor";
 
@@ -36,6 +38,7 @@ const saveWorkbook = () => {
     }).then((res) => {
         if (res && res.data.success) {
             isDirty.value = false;
+            updateSavedWorkbook();
             appStore.pushFlashMsg({
                 id: "new",
                 type: "success",
@@ -44,17 +47,38 @@ const saveWorkbook = () => {
         }
     });
 };
+
+const resetWorkbook = () => {
+    if (isDirty.value) {
+        resetWorkbookData();
+        isDirty.value = false;
+        appStore.pushFlashMsg({
+            id: "new",
+            type: "warning",
+            message: "Changes Removed",
+        });
+    }
+};
 </script>
 
 <template>
     <Card class="h-full" title="Workbook Canvas">
         <template #append-title>
-            <BaseBadge
-                icon="save"
-                :variant="dirtyVariant"
-                v-tooltip="'Save Workbook'"
-                @click="saveWorkbook()"
-            />
+            <div class="flex gap-1">
+                <BaseBadge
+                    icon="rotate-left"
+                    variant="danger"
+                    v-tooltip.left="'Undo Changes Since Last Save'"
+                    :disabled="!isDirty"
+                    @click="resetWorkbook()"
+                />
+                <BaseBadge
+                    icon="save"
+                    :variant="dirtyVariant"
+                    v-tooltip.left="'Save Workbook'"
+                    @click="saveWorkbook()"
+                />
+            </div>
         </template>
         <div class="flex flex-col h-full gap-2">
             <WorkbookHeader />

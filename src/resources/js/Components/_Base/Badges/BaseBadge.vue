@@ -7,6 +7,7 @@ const props = defineProps<{
     icon?: string;
     text?: string;
     variant?: elementVariant;
+    disabled?: boolean;
 }>();
 
 /*
@@ -15,7 +16,7 @@ const props = defineProps<{
 |-------------------------------------------------------------------------------
 */
 const handleClick = (event: MouseEvent): void => {
-    if (props.href) {
+    if (props.href && !props.disabled) {
         handleLinkClick(event, props.href);
     }
 };
@@ -56,7 +57,7 @@ const variantClass = computed<string>(() => {
 <template>
     <span
         class="inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ring-1 ring-inset ring-gray-500/10 pointer"
-        :class="variantClass"
+        :class="[variantClass, { 'opacity-50': disabled }]"
         @click="handleClick"
     >
         <fa-icon v-if="icon" :icon="icon" />
