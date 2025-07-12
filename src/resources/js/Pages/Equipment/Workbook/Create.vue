@@ -44,7 +44,11 @@ export default { layout: LinkLayout };
 <template>
     <div class="grow flex flex-col gap-2">
         <div>
-            <BaseButton icon="arrow-left" text="Back to Tech Bench" />
+            <BaseButton
+                icon="arrow-left"
+                text="Back to Tech Bench"
+                :href="$route('workbooks.index')"
+            />
         </div>
         <div class="grow flex">
             <WorkbookEditor

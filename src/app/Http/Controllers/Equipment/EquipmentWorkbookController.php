@@ -4,7 +4,11 @@ namespace App\Http\Controllers\Equipment;
 
 use App\Facades\CacheData;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Equipment\EquipmentWorkbookRequest;
 use App\Models\EquipmentType;
+use App\Models\EquipmentWorkbook;
+use App\Services\Equipment\EquipmentWorkbookService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -16,6 +20,8 @@ class EquipmentWorkbookController extends Controller
      */
     public function index(): Response
     {
+        $this->authorize('viewAny', EquipmentType::class);
+
         return Inertia::render('Equipment/Workbook/Index', [
             'equipment-list' => CacheData::equipmentCategories(),
         ]);
@@ -26,18 +32,11 @@ class EquipmentWorkbookController extends Controller
      */
     public function create(EquipmentType $equipment_type): Response
     {
+        $this->authorize('viewAny', EquipmentType::class);
+
         return Inertia::render('Equipment/Workbook/Create', [
             'equipment-type' => $equipment_type,
         ]);
-    }
-
-    /**
-     *
-     */
-    public function store(Request $request)
-    {
-        //
-        return 'store';
     }
 
     /**
@@ -52,18 +51,27 @@ class EquipmentWorkbookController extends Controller
     /**
      *
      */
-    public function edit(string $id)
+    public function edit(EquipmentType $equipment_type): Response
     {
-        return Inertia::render('Equipment/Workbook/Edit');
+        $this->authorize('viewAny', EquipmentType::class);
+
+        return Inertia::render('Equipment/Workbook/Edit', [
+            'equipment-type' => $equipment_type,
+            'workbook_data' => EquipmentWorkbook::find($equipment_type->equip_id),
+        ]);
     }
 
     /**
-     *
+     * Save the workbook
      */
-    public function update(Request $request, string $id)
-    {
-        //
-        return 'update';
+    public function update(
+        EquipmentWorkbookRequest $request,
+        EquipmentWorkbookService $svc,
+        EquipmentType $equipment_type
+    ): JsonResponse {
+        $svc->updateWorkbookBuilder($request->safe()->collect(), $equipment_type);
+
+        return response()->json(['success' => true]);
     }
 
     /**
@@ -73,23 +81,5 @@ class EquipmentWorkbookController extends Controller
     {
         //
         return 'destroy';
-    }
-
-    /**
-    *
-    */
-    public function restore(string $id)
-    {
-        //
-        return 'restore';
-    }
-
-    /**
-    *
-    */
-    public function forceDelete(string $id)
-    {
-        //
-        return 'force delete';
     }
 }

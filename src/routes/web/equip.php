@@ -63,7 +63,8 @@ Route::middleware('auth.secure')->group(function () {
                 ->name('index')
                 ->breadcrumb('Onboarding Workbooks', 'equipment.index');
             Route::get('{equipment_type}/create', 'create')->name('create');
-            Route::Get('{equipment_type}/edit', 'edit')->name('edit');
+            Route::get('{equipment_type}/edit', 'edit')->name('edit');
+            Route::put('{equipment_type}/edit', 'update')->name('update');
         });
     });
 });

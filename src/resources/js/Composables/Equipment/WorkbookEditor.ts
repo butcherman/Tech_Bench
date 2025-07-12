@@ -1,5 +1,7 @@
 import { v4 } from "uuid";
-import { ref } from "vue";
+import { ref, unref } from "vue";
+import { dataPut } from "../axiosWrapper.module";
+import okModal from "@/Modules/okModal";
 
 /*
 |-------------------------------------------------------------------------------
@@ -31,7 +33,23 @@ export const isLoading = ref(false);
 export const saveWorkbook = () => {
     console.log("save workbook");
 
-    isDirty.value = false;
+    if (
+        workbookData.value.body.length == 1 &&
+        !workbookData.value.body[0].container.length
+    ) {
+        okModal(
+            "Cannot Save an Empty Workbook.  Please build Workbook Data First"
+        );
+        return;
+    }
+
+    dataPut(route("workbooks.update", equipmentType.value?.equip_id), {
+        workbook_data: unref(workbookData),
+    }).then((res) => {
+        if (res && res.data.success) {
+            isDirty.value = false;
+        }
+    });
 };
 
 /*
