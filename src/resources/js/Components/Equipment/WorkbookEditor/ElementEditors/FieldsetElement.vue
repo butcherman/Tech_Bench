@@ -4,6 +4,7 @@ import TextInput from "@/Forms/_Base/TextInput.vue";
 import { closeEditor } from "@/Composables/Equipment/WorkbookEditor";
 import { string, object } from "yup";
 import { useForm } from "vee-validate";
+import { imDirty } from "../../../../Composables/Equipment/WorkbookEditor";
 
 const props = defineProps<{
     element: workbookElement;
@@ -26,9 +27,10 @@ const { handleSubmit } = useForm({
  * Update the Text of the field being modified.
  */
 const saveData = handleSubmit((form) => {
-    console.log(form);
     props.element.text = form.text;
     closeEditor();
+
+    imDirty();
 });
 </script>
 

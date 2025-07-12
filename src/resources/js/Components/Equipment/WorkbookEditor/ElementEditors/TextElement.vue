@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import BaseButton from "@/Components/_Base/Buttons/BaseButton.vue";
 import TextAreaInput from "@/Forms/_Base/TextAreaInput.vue";
-import { closeEditor } from "@/Composables/Equipment/WorkbookEditor";
+import { closeEditor, imDirty } from "@/Composables/Equipment/WorkbookEditor";
 import { string, object } from "yup";
 import { useForm } from "vee-validate";
+import { isDirty } from "@/Composables/Equipment/WorkbookEditor";
 
 const props = defineProps<{
     element: workbookElement;
@@ -28,6 +29,8 @@ const { handleSubmit } = useForm({
 const saveData = handleSubmit((form) => {
     props.element.text = form.content;
     closeEditor();
+
+    imDirty();
 });
 </script>
 

@@ -22,12 +22,24 @@ export const setWorkbookData = (
     activePage.value = workbookData.value.body[0].page;
 };
 
+export const isDirty = ref<boolean>(false);
+export const imDirty = () => {
+    isDirty.value = true;
+};
+
+export const isLoading = ref(false);
+export const saveWorkbook = () => {
+    console.log("save workbook");
+
+    isDirty.value = false;
+};
+
 /*
 |-------------------------------------------------------------------------------
 | Workbook Pages
 |-------------------------------------------------------------------------------
 */
-export const activePage = ref("0");
+export const activePage = ref<string>("0");
 
 /**
  * Create a new Blank Page
@@ -42,6 +54,8 @@ export const addBlankPage = (): void => {
 
     workbookData.value.body.push(newPage);
     activePage.value = newPage.page;
+
+    imDirty();
 };
 
 /**
@@ -60,6 +74,8 @@ export const deletePage = (page: workbookPage): void => {
     let pageIndex = workbookData.value.body.indexOf(page);
 
     workbookData.value.body.splice(pageIndex, 1);
+
+    imDirty();
 };
 
 /*
@@ -86,7 +102,7 @@ export const deleteElement = (
 ): void => {
     let index = container.indexOf(element);
 
-    console.log(element, container);
-
     container.splice(index, 1);
+
+    imDirty();
 };

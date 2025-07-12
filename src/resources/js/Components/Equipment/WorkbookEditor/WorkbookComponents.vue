@@ -4,6 +4,7 @@ import draggableComponent from "vuedraggable";
 import { elementList } from "@/Composables/Equipment/WorkbookElements";
 import { v4 } from "uuid";
 import { ref } from "vue";
+import { imDirty } from "../../../Composables/Equipment/WorkbookEditor";
 
 /**
  * Make a copy of the pulled element with a unique ID attached.
@@ -16,6 +17,8 @@ const cloneElement = (element: workbookElement): workbookEntry => {
 
     // If this element has children, create unique ID's on the child elements
     newElement.container?.forEach((elem: workbookEntry) => (elem.index = v4()));
+
+    imDirty();
 
     return newElement;
 };

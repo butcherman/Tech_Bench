@@ -2,7 +2,7 @@
 import BaseButton from "@/Components/_Base/Buttons/BaseButton.vue";
 import SwitchInput from "@/Forms/_Base/SwitchInput.vue";
 import TextInput from "@/Forms/_Base/TextInput.vue";
-import { closeEditor } from "@/Composables/Equipment/WorkbookEditor";
+import { closeEditor, imDirty } from "@/Composables/Equipment/WorkbookEditor";
 import { string, object, boolean } from "yup";
 import { useForm } from "vee-validate";
 
@@ -32,6 +32,8 @@ const saveData = handleSubmit((form) => {
     props.page.title = form.title;
     props.page.canPublish = !form.internal_only;
     closeEditor();
+
+    imDirty();
 });
 </script>
 
