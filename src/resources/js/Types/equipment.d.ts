@@ -56,7 +56,15 @@ type workbookEntry = {
     index: string;
     type: "text" | "static" | "input" | "wrapper" | "grid-wrapper";
     tag: string;
-    props?: { [key: string]: string };
+    component?: string;
+    props?: { [key: string]: string | number | boolean };
+    assist?: {
+        [key: string]: {
+            label: string;
+            help: string;
+            type: "string" | "number" | "boolean";
+        };
+    };
     text?: string;
     class?: string;
     container?: workbookEntry[];

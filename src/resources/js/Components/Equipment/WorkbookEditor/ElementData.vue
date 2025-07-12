@@ -3,16 +3,29 @@ import {
     deleteElement,
     editElement,
 } from "@/Composables/Equipment/WorkbookEditor";
+import { computed, defineAsyncComponent } from "vue";
 
-defineProps<{
+const props = defineProps<{
     elem: workbookElement;
     container: workbookElement[];
 }>();
+
+const theComponent = computed(() => {
+    if (props.elem.component) {
+        return defineAsyncComponent(
+            () => import(`../../../Forms/_Base/${props.elem.component}.vue`)
+        );
+    }
+
+    return props.elem.tag;
+});
 </script>
 
 <template>
     <div class="group relative">
-        <div class="hidden text-xs absolute end-0 group-hover:block pointer">
+        <div
+            class="hidden text-xs absolute end-0 group-hover:block pointer z-20"
+        >
             <span
                 v-if="elem.type !== 'static'"
                 class="text-warning me-2"
@@ -30,7 +43,9 @@ defineProps<{
             </span>
         </div>
         <component
-            :is="elem.tag"
+            :is="theComponent"
+            :id="elem.index"
+            :name="elem.index"
             :class="elem.class"
             class="group-hover:border group-hover:border-green-300"
             v-bind="elem.props"

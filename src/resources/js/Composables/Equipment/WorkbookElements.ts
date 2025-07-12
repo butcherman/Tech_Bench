@@ -124,7 +124,7 @@ export const elementList = computed<workbookElement[]>(() => [
         ],
     },
     {
-        index: "5",
+        index: "7",
         type: "wrapper",
         tag: "fieldset",
         class: "border border-slate-300 min-h-20 rounded-lg p-2",
@@ -135,5 +135,77 @@ export const elementList = computed<workbookElement[]>(() => [
             buttonIcon: "rectangle-list",
         },
         container: [],
+    },
+    {
+        index: "8",
+        type: "input",
+        tag: "input",
+        component: "TextInput",
+        props: {
+            label: "",
+            placeholder: "",
+            help: "",
+        },
+        assist: {
+            label: {
+                label: "Label",
+                help: "Label for Input",
+                type: "string",
+            },
+            placeholder: {
+                label: "Placeholder",
+                help: "Placeholder text for empty Input",
+                type: "string",
+            },
+            help: {
+                label: "Help Text",
+                help: "Helpful text to show when Input is active",
+                type: "string",
+            },
+        },
+        componentData: {
+            label: "Text Input",
+            help: "One line input for text data",
+            buttonIcon: "font",
+        },
+    },
+    {
+        index: "9",
+        type: "input",
+        tag: "input",
+        component: "TextAreaInput",
+        props: {
+            label: "",
+            placeholder: "",
+            help: "",
+            rows: 5,
+        },
+        assist: {
+            label: {
+                label: "Label",
+                help: "Label for Input Text",
+                type: "string",
+            },
+            placeholder: {
+                label: "Placeholder",
+                help: "Placeholder text for empty Input",
+                type: "string",
+            },
+            help: {
+                label: "Help Text",
+                help: "Helpful text to show when Input is active",
+                type: "string",
+            },
+            rows: {
+                label: "Rows",
+                help: "Height of Input",
+                type: "number",
+            },
+        },
+        componentData: {
+            label: "Text Area Input",
+            help: "Multi line input for text data",
+            buttonIcon: "font",
+        },
     },
 ]);

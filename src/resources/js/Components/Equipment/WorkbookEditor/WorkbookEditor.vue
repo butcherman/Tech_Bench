@@ -12,6 +12,7 @@ import {
     setWorkbookData,
     showEditor,
 } from "@/Composables/Equipment/WorkbookEditor";
+import InputElement from "./ElementEditors/InputElement.vue";
 
 const props = defineProps<{
     equipmentType: equipment;
@@ -37,6 +38,9 @@ onMounted(() => setWorkbookData(props.workbookData, props.equipmentType));
         <template v-if="editingElement">
             <div v-if="editingElement.type === 'text'">
                 <TextElement :element="editingElement" />
+            </div>
+            <div v-else-if="editingElement.type === 'input'">
+                <InputElement :element="editingElement" />
             </div>
             <div v-else-if="editingElement.type === 'wrapper'">
                 <FieldsetElement :element="editingElement" />
