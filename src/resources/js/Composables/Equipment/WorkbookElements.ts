@@ -241,4 +241,31 @@ export const elementList = computed<workbookElement[]>(() => [
             buttonIcon: "calendar-days",
         },
     },
+    {
+        index: "11",
+        type: "input",
+        tag: "input",
+        component: "RadioGroupInput",
+        props: {
+            list: ["button 1", "button 2"],
+            help: "",
+        },
+        assist: {
+            list: {
+                label: "List of Options",
+                help: "Comma separated list of available button options",
+                type: "array",
+            },
+            help: {
+                label: "Help Text",
+                help: "Helpful text to show when Input is active",
+                type: "string",
+            },
+        },
+        componentData: {
+            label: "Radio Button Group",
+            help: "Multiple Choice Input",
+            buttonIcon: "circle-dot",
+        },
+    },
 ]);

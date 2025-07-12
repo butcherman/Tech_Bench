@@ -26,10 +26,17 @@ const saveData = handleSubmit((form) => {
 
     // Change the data type to the proper input type (number, bool, etc)
     keyList.forEach((input) => {
+        console.log(input);
         if (props.element.assist) {
             let dataType = props.element.assist[input].type;
+            console.log(dataType);
             if (dataType === "number") {
                 form[input] = Number(form[input]);
+            } else if (
+                dataType === "array" &&
+                typeof form[input] === "string"
+            ) {
+                form[input] = form[input].split(",").map((item) => item.trim());
             }
         }
     });
@@ -37,13 +44,19 @@ const saveData = handleSubmit((form) => {
     props.element.props = form;
     closeEditor();
 });
+
+const isTextInput = (type: string): boolean => {
+    let allowed = ["string", "number", "array"];
+
+    return allowed.includes(type);
+};
 </script>
 
 <template>
     <form novalidate v-focustrap @submit.prevent="saveData">
         <template v-for="(data, prop) in element.assist">
             <TextInput
-                v-if="data.type === 'string' || data.type === 'number'"
+                v-if="isTextInput(data.type)"
                 :id="prop.toString()"
                 :name="prop.toString()"
                 :label="data.label"

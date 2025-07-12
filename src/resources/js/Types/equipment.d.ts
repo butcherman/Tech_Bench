@@ -57,12 +57,12 @@ type workbookEntry = {
     type: "text" | "static" | "input" | "wrapper" | "grid-wrapper";
     tag: string;
     component?: string;
-    props?: { [key: string]: string | number | boolean };
+    props?: { [key: string]: string | string[] | number | boolean };
     assist?: {
         [key: string]: {
             label: string;
             help: string;
-            type: "string" | "number" | "boolean";
+            type: "string" | "number" | "boolean" | "array";
         };
     };
     text?: string;

@@ -1,9 +1,9 @@
 <script setup lang="ts">
+import { computed, defineAsyncComponent } from "vue";
 import {
     deleteElement,
     editElement,
 } from "@/Composables/Equipment/WorkbookEditor";
-import { computed, defineAsyncComponent } from "vue";
 
 const props = defineProps<{
     elem: workbookElement;
