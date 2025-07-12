@@ -208,4 +208,37 @@ export const elementList = computed<workbookElement[]>(() => [
             buttonIcon: "font",
         },
     },
+    {
+        index: "10",
+        type: "input",
+        tag: "input",
+        component: "DatePicker",
+        props: {
+            label: "",
+            placeholder: "",
+            help: "",
+        },
+        assist: {
+            label: {
+                label: "Label",
+                help: "Label for Input Text",
+                type: "string",
+            },
+            placeholder: {
+                label: "Placeholder",
+                help: "Placeholder text for empty Input",
+                type: "string",
+            },
+            help: {
+                label: "Help Text",
+                help: "Helpful text to show when Input is active",
+                type: "string",
+            },
+        },
+        componentData: {
+            label: "Date Picker Input",
+            help: "Input for selecting a date",
+            buttonIcon: "calendar-days",
+        },
+    },
 ]);
