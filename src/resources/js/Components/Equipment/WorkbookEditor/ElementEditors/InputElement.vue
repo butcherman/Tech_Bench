@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import BaseButton from "@/Components/_Base/Buttons/BaseButton.vue";
+import SwitchInput from "@/Forms/_Base/SwitchInput.vue";
 import TextInput from "@/Forms/_Base/TextInput.vue";
 import { closeEditor } from "@/Composables/Equipment/WorkbookEditor";
 import { object } from "yup";
 import { useForm } from "vee-validate";
-import SwitchInput from "@/Forms/_Base/SwitchInput.vue";
 
 const props = defineProps<{
     element: workbookElement;

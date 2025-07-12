@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import FieldsetElement from "./ElementEditors/FieldsetElement.vue";
+import InputElement from "./ElementEditors/InputElement.vue";
 import PageElement from "./ElementEditors/PageElement.vue";
 import TextElement from "./ElementEditors/TextElement.vue";
 import WorkbookCanvas from "./WorkbookCanvas.vue";
@@ -12,7 +13,6 @@ import {
     setWorkbookData,
     showEditor,
 } from "@/Composables/Equipment/WorkbookEditor";
-import InputElement from "./ElementEditors/InputElement.vue";
 
 const props = defineProps<{
     equipmentType: equipment;
