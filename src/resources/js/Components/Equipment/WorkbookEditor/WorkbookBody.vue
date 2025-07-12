@@ -15,32 +15,38 @@ import {
 <template>
     <Tabs v-bind:value="activePage">
         <TabList>
-            <template v-for="page in workbookData.body">
-                <Tab
-                    :value="page.page"
-                    pt:root:class="border! border-slate-300! rounded-t-lg mx-1! p-1!"
-                >
-                    <div class="text-xs">
-                        <span
-                            class="text-warning pointer me-1"
-                            v-tooltip="'Edit Page Data'"
-                            @click="editPageData(page)"
-                        >
-                            <fa-icon icon="pencil" />
-                        </span>
-                        <span
-                            class="text-danger pointer"
-                            v-tooltip="'Delete Page'"
-                            @click="deletePage(page)"
-                        >
-                            <fa-icon icon="trash-alt" />
-                        </span>
-                    </div>
-                    <div>
-                        {{ page.title }}
-                    </div>
-                </Tab>
-            </template>
+            <draggableComponent
+                :list="workbookData.body"
+                item-key="page"
+                :group="{ name: 'page-list', pull: false }"
+            >
+                <template #item="{ element }">
+                    <Tab
+                        :value="element.page"
+                        pt:root:class="border! border-slate-300! rounded-t-lg mx-1! p-1!"
+                    >
+                        <div class="text-xs">
+                            <span
+                                class="text-warning pointer me-1"
+                                v-tooltip="'Edit Page Data'"
+                                @click="editPageData(element)"
+                            >
+                                <fa-icon icon="pencil" />
+                            </span>
+                            <span
+                                class="text-danger pointer"
+                                v-tooltip="'Delete Page'"
+                                @click="deletePage(element)"
+                            >
+                                <fa-icon icon="trash-alt" />
+                            </span>
+                        </div>
+                        <div>
+                            {{ element.title }}
+                        </div>
+                    </Tab>
+                </template>
+            </draggableComponent>
             <Tab
                 value="9999"
                 pt:root:class="border! border-slate-300! rounded-t-lg p-1!"
