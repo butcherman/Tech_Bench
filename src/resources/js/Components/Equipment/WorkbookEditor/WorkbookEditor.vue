@@ -4,7 +4,7 @@ import PageElement from "./ElementEditors/PageElement.vue";
 import TextElement from "./ElementEditors/TextElement.vue";
 import WorkbookCanvas from "./WorkbookCanvas.vue";
 import WorkbookComponents from "./WorkbookComponents.vue";
-import { onMounted } from "vue";
+import { computed, onMounted } from "vue";
 import { Drawer } from "primevue";
 import {
     editingElement,
@@ -20,6 +20,19 @@ const props = defineProps<{
 }>();
 
 onMounted(() => setWorkbookData(props.workbookData, props.equipmentType));
+
+const editingComponent = computed(() => {
+    switch (editingElement.value?.type) {
+        case "text":
+            return TextElement;
+        case "input":
+            return InputElement;
+        case "wrapper":
+            return FieldsetElement;
+    }
+
+    return TextElement;
+});
 </script>
 
 <template>
@@ -32,22 +45,11 @@ onMounted(() => setWorkbookData(props.workbookData, props.equipmentType));
         </div>
     </div>
     <Drawer v-model:visible="showEditor" position="right" header="Edit Element">
-        <template v-if="editingPage">
-            <PageElement :page="editingPage" />
-        </template>
-        <template v-if="editingElement">
-            <div v-if="editingElement.type === 'text'">
-                <TextElement :element="editingElement" />
-            </div>
-            <div v-else-if="editingElement.type === 'input'">
-                <InputElement :element="editingElement" />
-            </div>
-            <div v-else-if="editingElement.type === 'wrapper'">
-                <FieldsetElement :element="editingElement" />
-            </div>
-            <div v-else>
-                <p class="text-center text-muted">No Editable Fields</p>
-            </div>
-        </template>
+        <PageElement v-if="editingPage" :page="editingPage" />
+        <component
+            v-if="editingElement"
+            :is="editingComponent"
+            :element="editingElement"
+        />
     </Drawer>
 </template>
