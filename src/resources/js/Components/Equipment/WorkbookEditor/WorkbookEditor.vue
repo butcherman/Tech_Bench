@@ -33,6 +33,11 @@ const editingComponent = computed(() => {
 
     return TextElement;
 });
+
+const onDrawerClose = () => {
+    editingPage.value = undefined;
+    editingElement.value = undefined;
+};
 </script>
 
 <template>
@@ -44,7 +49,12 @@ const editingComponent = computed(() => {
             <WorkbookCanvas />
         </div>
     </div>
-    <Drawer v-model:visible="showEditor" position="right" header="Edit Element">
+    <Drawer
+        v-model:visible="showEditor"
+        position="right"
+        header="Edit Element"
+        @after-hide="onDrawerClose()"
+    >
         <PageElement v-if="editingPage" :page="editingPage" />
         <component
             v-if="editingElement"
