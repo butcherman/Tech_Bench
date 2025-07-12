@@ -14,15 +14,15 @@ export default { layout: LinkLayout };
 </script>
 
 <template>
-    <div class="grow flex flex-col gap-2">
-        <div>
+    <div>
+        <div class="mb-2">
             <BaseButton
                 icon="arrow-left"
                 text="Back to Tech Bench"
                 :href="$route('workbooks.index')"
             />
         </div>
-        <div class="grow flex">
+        <div>
             <WorkbookEditor
                 :equipment-type="equipmentType"
                 :workbook-data="workbookData"
