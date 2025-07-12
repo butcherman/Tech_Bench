@@ -29,10 +29,12 @@ export default { layout: AppLayout };
                 >
                     <template #actions="{ item }">
                         <AddBadge
+                            v-if="!item.has_workbook"
                             :href="$route('workbooks.create', item.equip_id)"
                             v-tooltip="'Create Workbook'"
                         />
                         <EditBadge
+                            v-if="item.has_workbook"
                             :href="$route('workbooks.edit', item.equip_id)"
                             v-tooltip="'Edit Workbook'"
                         />

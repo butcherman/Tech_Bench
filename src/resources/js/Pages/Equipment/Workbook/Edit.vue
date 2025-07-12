@@ -1,20 +1,32 @@
 <script setup lang="ts">
-import AppLayout from "@/Layouts/App/AppLayout.vue";
-import Card from "@/Components/_Base/Card.vue";
-import { ref, reactive, onMounted } from "vue";
+import BaseButton from "@/Components/_Base/Buttons/BaseButton.vue";
+import LinkLayout from "@/Layouts/FileLink/LinkLayout.vue";
+import WorkbookEditor from "@/Components/Equipment/WorkbookEditor/WorkbookEditor.vue";
 
-// TODO - Add Page.
-const props = defineProps<{}>();
+defineProps<{
+    equipmentType: equipment;
+    workbookData: workbookWrapper;
+}>();
 </script>
 
 <script lang="ts">
-export default { layout: AppLayout };
+export default { layout: LinkLayout };
 </script>
 
 <template>
-    <div class="flex justify-center">
-        <Card class="tb-card">
-            <h4 class="text-center">Coming Soon</h4>
-        </Card>
+    <div class="grow flex flex-col gap-2">
+        <div>
+            <BaseButton
+                icon="arrow-left"
+                text="Back to Tech Bench"
+                :href="$route('workbooks.index')"
+            />
+        </div>
+        <div class="grow flex">
+            <WorkbookEditor
+                :equipment-type="equipmentType"
+                :workbook-data="workbookData"
+            />
+        </div>
     </div>
 </template>

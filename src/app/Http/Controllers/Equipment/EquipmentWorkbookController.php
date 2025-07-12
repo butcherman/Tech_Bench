@@ -57,7 +57,7 @@ class EquipmentWorkbookController extends Controller
 
         return Inertia::render('Equipment/Workbook/Edit', [
             'equipment-type' => $equipment_type,
-            'workbook_data' => EquipmentWorkbook::find($equipment_type->equip_id),
+            'workbook-data' => json_decode(EquipmentWorkbook::find($equipment_type->equip_id)->workbook_data),
         ]);
     }
 
