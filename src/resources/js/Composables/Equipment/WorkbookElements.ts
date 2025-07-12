@@ -268,4 +268,37 @@ export const elementList = computed<workbookElement[]>(() => [
             buttonIcon: "circle-dot",
         },
     },
+    {
+        index: "12",
+        type: "input",
+        tag: "input",
+        component: "PhoneNumberInput",
+        props: {
+            label: "",
+            placeholder: "",
+            help: "",
+        },
+        assist: {
+            label: {
+                label: "Label",
+                help: "Label for Input Text",
+                type: "string",
+            },
+            placeholder: {
+                label: "Placeholder",
+                help: "Placeholder text for empty Input",
+                type: "string",
+            },
+            help: {
+                label: "Help Text",
+                help: "Helpful text to show when Input is active",
+                type: "string",
+            },
+        },
+        componentData: {
+            label: "Phone Number Input",
+            help: "Formatted Input for Phone Number",
+            buttonIcon: "phone",
+        },
+    },
 ]);
