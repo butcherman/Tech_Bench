@@ -34,69 +34,71 @@ const setActive = (activeType: "formatting" | "textInput" | "specialInput") => {
 
 <template>
     <Card class="h-full" title="Workbook Elements">
-        <div class="text-center text-muted">Drag Element to Canvas</div>
-        <div class="grid grid-cols-3 gap-1">
-            <button
-                type="button"
-                class="border border-slate-300 rounded-sm bg-slate-200 pointer"
-                :class="{
-                    'bg-slate-400!': activeName === 'formatting',
-                }"
-                @click="setActive('formatting')"
-            >
-                Formatting
-            </button>
-            <button
-                type="button"
-                class="border border-slate-300 rounded-sm bg-slate-200 pointer"
-                :class="{
-                    'bg-slate-400': activeName === 'textInput',
-                }"
-                @click="setActive('textInput')"
-            >
-                Text Inputs
-            </button>
-            <button
-                type="button"
-                class="border border-slate-300 rounded-sm bg-slate-200 pointer"
-                :class="{
-                    'bg-slate-400': activeName === 'specialInput',
-                }"
-                @click="setActive('specialInput')"
-            >
-                Other Inputs
-            </button>
-        </div>
-        <draggableComponent
-            :list="activeList"
-            :group="{ name: 'workbook', pull: 'clone', put: false }"
-            item-key="index"
-            :clone="cloneElement"
-        >
-            <template #item="{ element }">
-                <div
-                    class="border border-slate-300 rounded-lg my-2 flex gap-2 pointer"
+        <div class="sticky top-14">
+            <div class="text-center text-muted">Drag Element to Canvas</div>
+            <div class="grid grid-cols-3 gap-1">
+                <button
+                    type="button"
+                    class="border border-slate-300 rounded-sm bg-slate-200 pointer"
+                    :class="{
+                        'bg-slate-400!': activeName === 'formatting',
+                    }"
+                    @click="setActive('formatting')"
                 >
-                    <div class="w-8 pt-2 ms-1">
-                        <button
-                            class="border border-slate-400 bg-slate-300 rounded-md w-full pointer"
-                        >
-                            <span v-if="element.componentData.buttonIcon">
-                                <fa-icon
-                                    :icon="element.componentData.buttonIcon"
-                                />
-                            </span>
-                            <span v-else>
-                                {{ element.componentData.buttonText }}
-                            </span>
-                        </button>
+                    Formatting
+                </button>
+                <button
+                    type="button"
+                    class="border border-slate-300 rounded-sm bg-slate-200 pointer"
+                    :class="{
+                        'bg-slate-400': activeName === 'textInput',
+                    }"
+                    @click="setActive('textInput')"
+                >
+                    Text Inputs
+                </button>
+                <button
+                    type="button"
+                    class="border border-slate-300 rounded-sm bg-slate-200 pointer"
+                    :class="{
+                        'bg-slate-400': activeName === 'specialInput',
+                    }"
+                    @click="setActive('specialInput')"
+                >
+                    Other Inputs
+                </button>
+            </div>
+            <draggableComponent
+                :list="activeList"
+                :group="{ name: 'workbook', pull: 'clone', put: false }"
+                item-key="index"
+                :clone="cloneElement"
+            >
+                <template #item="{ element }">
+                    <div
+                        class="border border-slate-300 rounded-lg my-2 flex gap-2 pointer"
+                    >
+                        <div class="w-8 pt-2 ms-1">
+                            <button
+                                class="border border-slate-400 bg-slate-300 rounded-md w-full pointer"
+                            >
+                                <span v-if="element.componentData.buttonIcon">
+                                    <fa-icon
+                                        :icon="element.componentData.buttonIcon"
+                                    />
+                                </span>
+                                <span v-else>
+                                    {{ element.componentData.buttonText }}
+                                </span>
+                            </button>
+                        </div>
+                        <div class="grow flex flex-col">
+                            <strong>{{ element.componentData.label }}</strong>
+                            <small>{{ element.componentData.help }}</small>
+                        </div>
                     </div>
-                    <div class="grow flex flex-col">
-                        <strong>{{ element.componentData.label }}</strong>
-                        <small>{{ element.componentData.help }}</small>
-                    </div>
-                </div>
-            </template>
-        </draggableComponent>
+                </template>
+            </draggableComponent>
+        </div>
     </Card>
 </template>
