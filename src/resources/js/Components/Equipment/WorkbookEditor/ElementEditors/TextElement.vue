@@ -4,7 +4,6 @@ import TextAreaInput from "@/Forms/_Base/TextAreaInput.vue";
 import { closeEditor, imDirty } from "@/Composables/Equipment/WorkbookEditor";
 import { string, object } from "yup";
 import { useForm } from "vee-validate";
-import { isDirty } from "@/Composables/Equipment/WorkbookEditor";
 
 const props = defineProps<{
     element: workbookElement;

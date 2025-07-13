@@ -5,6 +5,9 @@ const props = defineProps<{
     elem: workbookElement;
 }>();
 
+/**
+ * Import the Form Input component that should be displayed
+ */
 const theComponent = computed(() => {
     if (props.elem.component) {
         return defineAsyncComponent(

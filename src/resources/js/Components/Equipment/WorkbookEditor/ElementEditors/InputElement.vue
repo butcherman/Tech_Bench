@@ -27,10 +27,8 @@ const saveData = handleSubmit((form) => {
 
     // Change the data type to the proper input type (number, bool, etc)
     keyList.forEach((input) => {
-        console.log(input);
         if (props.element.assist) {
             let dataType = props.element.assist[input].type;
-            console.log(dataType);
             if (dataType === "number") {
                 form[input] = Number(form[input]);
             } else if (
@@ -48,6 +46,8 @@ const saveData = handleSubmit((form) => {
     imDirty();
 });
 
+/**Determine if this is an input that accepts text type data
+ */
 const isTextInput = (type: string): boolean => {
     let allowed = ["string", "number", "array"];
 

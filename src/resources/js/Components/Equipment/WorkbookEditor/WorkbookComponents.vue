@@ -23,10 +23,12 @@ const cloneElement = (element: workbookElement): workbookEntry => {
     return newElement;
 };
 
-const activeName = ref("formatting");
-const activeList = ref(elementList.value.formatting);
+const activeName = ref<string>("formatting");
+const activeList = ref<workbookElement[]>(elementList.value.formatting);
 
-const setActive = (activeType: "formatting" | "textInput" | "specialInput") => {
+const setActive = (
+    activeType: "formatting" | "textInput" | "specialInput"
+): void => {
     activeName.value = activeType;
     activeList.value = elementList.value[activeType];
 };

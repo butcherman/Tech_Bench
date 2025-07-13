@@ -43,11 +43,8 @@ export const imDirty = () => {
  * Sent changes to page to update live preview
  */
 export const updatePreview = () => {
-    console.log("updating live preview");
     dataPut(route("workbooks.update", equipmentType.value?.equip_id), {
         workbook_data: unref(workbookData),
-    }).then((res) => {
-        console.log(res);
     });
 };
 

@@ -1,9 +1,9 @@
 <script setup lang="ts">
+import AddBadge from "@/Components/_Base/Badges/AddBadge.vue";
 import AppLayout from "@/Layouts/App/AppLayout.vue";
 import Card from "@/Components/_Base/Card.vue";
-import ResourceList from "@/Components/_Base/ResourceList.vue";
-import AddBadge from "@/Components/_Base/Badges/AddBadge.vue";
 import EditBadge from "@/Components/_Base/Badges/EditBadge.vue";
+import ResourceList from "@/Components/_Base/ResourceList.vue";
 
 defineProps<{
     equipmentList: equipmentCategory[];

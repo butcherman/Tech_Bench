@@ -34,7 +34,7 @@ const editingComponent = computed(() => {
     return TextElement;
 });
 
-const onDrawerClose = () => {
+const onDrawerClose = (): void => {
     editingPage.value = undefined;
     editingElement.value = undefined;
 };

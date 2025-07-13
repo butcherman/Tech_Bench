@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Card from "@/Components/_Base/Card.vue";
-import WorkbookPreview from "@/Components/Equipment/WorkbookPreview/WorkbookPreview.vue";
 import LinkLayout from "@/Layouts/FileLink/LinkLayout.vue";
+import WorkbookPreview from "@/Components/Equipment/WorkbookPreview/WorkbookPreview.vue";
 import { onMounted, ref } from "vue";
 import { dataGet } from "@/Composables/axiosWrapper.module";
 
@@ -10,15 +10,14 @@ const props = defineProps<{
     customer: customer;
 }>();
 
-const workbookData = ref();
+const workbookData = ref<workbookWrapper>();
 
 /**
  * Get the current workbook data (includes unsaved changes)
  */
-const getWorkbook = () => {
+const getWorkbook = (): void => {
     dataGet(route("workbooks.edit", props.equipmentType.equip_id)).then(
         (res) => {
-            console.log(res);
             if (res) {
                 workbookData.value = JSON.parse(
                     JSON.stringify(res.data, (key, val) => {
@@ -43,10 +42,7 @@ onMounted(() => {
     getWorkbook();
     Echo.private(`workbook-canvas.${props.equipmentType.equip_id}`).listen(
         ".workbookCanvasEvent",
-        () => {
-            console.log("preview update triggered");
-            getWorkbook();
-        }
+        () => getWorkbook()
     );
 });
 </script>

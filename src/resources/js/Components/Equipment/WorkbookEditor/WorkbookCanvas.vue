@@ -18,12 +18,14 @@ import {
 } from "@/Composables/Equipment/WorkbookEditor";
 
 const appStore = useAppStore();
-const dirtyVariant = computed(() => (isDirty.value ? "warning" : "primary"));
+const dirtyVariant = computed<elementVariant>(() =>
+    isDirty.value ? "warning" : "primary"
+);
 
 /**
  * Update the Saved Data in the workbook database
  */
-const saveWorkbook = () => {
+const saveWorkbook = (): void => {
     if (
         workbookData.value.body.length == 1 &&
         !workbookData.value.body[0].container.length
@@ -50,7 +52,10 @@ const saveWorkbook = () => {
     });
 };
 
-const resetWorkbook = () => {
+/**
+ * Go back to most recent saved version of workbook
+ */
+const resetWorkbook = (): void => {
     if (isDirty.value) {
         resetWorkbookData();
         isDirty.value = false;
