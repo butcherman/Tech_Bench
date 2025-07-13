@@ -1,6 +1,7 @@
 <?php
 
 use App\Features\FileLinkFeature;
+use App\Models\EquipmentType;
 use App\Models\User;
 use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Gate;
@@ -14,7 +15,7 @@ use Illuminate\Support\Facades\Log;
 
 Broadcast::channel('App.Models.User.{id}', function (User $user, int $id) {
     Log::debug(
-        'User '.$user->username.' connecting to Notification Broadcast Channel'
+        'User ' . $user->username . ' connecting to Notification Broadcast Channel'
     );
 
     return (int) $user->user_id === (int) $id;
@@ -28,10 +29,23 @@ Broadcast::channel('App.Models.User.{id}', function (User $user, int $id) {
 
 Broadcast::channel('administration-channel', function (User $user) {
     Log::debug(
-        'User '.$user->username.' connecting to Administration Broadcast Channel'
+        'User ' . $user->username . ' connecting to Administration Broadcast Channel'
     );
 
     return Gate::allows('admin-link', $user);
+});
+
+/*
+|-------------------------------------------------------------------------------
+| Workbook Editor Channel for watching workbooks being built
+|-------------------------------------------------------------------------------
+*/
+Broadcast::channel('workbook-canvas.{equipment_type}', function (User $user) {
+    Log::debug(
+        'User ' . $user->username . ' connecting to Workbook Canvas Channel'
+    );
+
+    return $user->can('viewAny', EquipmentType::class);
 });
 
 /*
@@ -42,7 +56,7 @@ Broadcast::channel('administration-channel', function (User $user) {
 
 Broadcast::channel('customer.{slug}', function (User $user, string $slug) {
     Log::debug(
-        'User '.$user->username.' registering to Customer Channel - '.$slug
+        'User ' . $user->username . ' registering to Customer Channel - ' . $slug
     );
 
     return $user ? true : false;
@@ -64,8 +78,8 @@ Broadcast::channel(
     'customer.equipment.{custEquipId}',
     function (User $user, int $custEquipId) {
         Log::debug(
-            'User '.$user->username.' registering to Customer Equipment Channel - '.
-                $custEquipId
+            'User ' . $user->username . ' registering to Customer Equipment Channel - ' .
+            $custEquipId
         );
 
         return $user ? true : false;
@@ -80,8 +94,8 @@ Broadcast::channel(
 
 Broadcast::channel('tech-tips.{tip_id}', function (User $user, int $tip_id) {
     Log::debug(
-        'User '.$user->username.' registering to Tech Tip Channel for Tip '.
-            $tip_id
+        'User ' . $user->username . ' registering to Tech Tip Channel for Tip ' .
+        $tip_id
     );
 
     return $user ? true : false;

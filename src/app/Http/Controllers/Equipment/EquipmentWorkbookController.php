@@ -86,7 +86,7 @@ class EquipmentWorkbookController extends Controller
      */
     public function update(EquipmentWorkbookRequest $request, EquipmentType $equipment_type): JsonResponse
     {
-        WorkbookCanvasEvent::dispatch($equipment_type, json_encode($request->safe()));
+        WorkbookCanvasEvent::dispatch($equipment_type);
 
         return response()->json(['success' => true]);
     }

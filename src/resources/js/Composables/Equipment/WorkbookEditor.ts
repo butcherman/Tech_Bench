@@ -1,5 +1,6 @@
 import { v4 } from "uuid";
-import { ref } from "vue";
+import { ref, unref } from "vue";
+import { dataPut } from "../axiosWrapper.module";
 
 /*
 |-------------------------------------------------------------------------------
@@ -37,6 +38,18 @@ export const imDirty = () => {
     isDirty.value = true;
 };
 
+/**
+ * Sent changes to page to update live preview
+ */
+export const updatePreview = () => {
+    console.log("updating live preview");
+    dataPut(route("workbooks.update", equipmentType.value?.equip_id), {
+        workbook_data: unref(workbookData),
+    }).then((res) => {
+        console.log(res);
+    });
+};
+
 /*
 |-------------------------------------------------------------------------------
 | Workbook Pages
@@ -59,6 +72,7 @@ export const addBlankPage = (): void => {
     activePage.value = newPage.page;
 
     imDirty();
+    updatePreview();
 };
 
 /**
@@ -79,6 +93,7 @@ export const deletePage = (page: workbookPage): void => {
     workbookData.value.body.splice(pageIndex, 1);
 
     imDirty();
+    updatePreview();
 };
 
 /*
@@ -97,6 +112,7 @@ export const editElement = (el: workbookEntry): void => {
 export const closeEditor = () => {
     showEditor.value = false;
     editingElement.value = undefined;
+    updatePreview();
 };
 
 export const deleteElement = (
@@ -108,4 +124,5 @@ export const deleteElement = (
     container.splice(index, 1);
 
     imDirty();
+    updatePreview();
 };

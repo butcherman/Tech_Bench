@@ -2,13 +2,27 @@
 import Card from "@/Components/_Base/Card.vue";
 import WorkbookPreview from "@/Components/Equipment/WorkbookPreview/WorkbookPreview.vue";
 import LinkLayout from "@/Layouts/FileLink/LinkLayout.vue";
-import { computed } from "vue";
+import { computed, onMounted } from "vue";
+import { router } from "@inertiajs/vue3";
 
 const props = defineProps<{
     equipmentType: equipment;
     workbookData: workbookWrapper;
     customer: customer;
 }>();
+
+/**
+ * Listen to live changes to the Workbook Data
+ */
+onMounted(() =>
+    Echo.private(`workbook-canvas.${props.equipmentType.equip_id}`).listen(
+        ".workbookCanvasEvent",
+        () => {
+            router.reload();
+            console.log("preview update triggered");
+        }
+    )
+);
 
 /**
  * Refactor the Workbook Data to include any custom attributes.

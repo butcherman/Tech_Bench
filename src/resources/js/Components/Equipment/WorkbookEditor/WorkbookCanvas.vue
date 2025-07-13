@@ -6,12 +6,13 @@ import WorkbookBody from "./WorkbookBody.vue";
 import WorkbookHeader from "./WorkbookHeader.vue";
 import WorkbookFooter from "./WorkbookFooter.vue";
 import { computed, unref } from "vue";
-import { dataPost, dataPut } from "@/Composables/axiosWrapper.module";
+import { dataPost } from "@/Composables/axiosWrapper.module";
 import { useAppStore } from "@/Stores/AppStore";
 import {
     equipmentType,
     isDirty,
     resetWorkbookData,
+    updatePreview,
     updateSavedWorkbook,
     workbookData,
 } from "@/Composables/Equipment/WorkbookEditor";
@@ -39,6 +40,7 @@ const saveWorkbook = () => {
         if (res && res.data.success) {
             isDirty.value = false;
             updateSavedWorkbook();
+            updatePreview();
             appStore.pushFlashMsg({
                 id: "new",
                 type: "success",

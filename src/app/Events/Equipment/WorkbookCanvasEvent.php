@@ -11,16 +11,15 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class WorkbookCanvasEvent
+class WorkbookCanvasEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
      * Create a new event instance.
      */
-    public function __construct(public EquipmentType $equip, public string $workbookData)
+    public function __construct(public EquipmentType $equip)
     {
-
     }
 
     /**
@@ -31,5 +30,10 @@ class WorkbookCanvasEvent
         return [
             new PrivateChannel('workbook-canvas.' . $this->equip->equip_id),
         ];
+    }
+
+    public function broadcastAs(): string
+    {
+        return 'workbookCanvasEvent';
     }
 }
