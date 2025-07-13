@@ -5,6 +5,7 @@ import GridWrapper from "./GridWrapper.vue";
 import {
     deleteElement,
     editElement,
+    updatePreview,
 } from "@/Composables/Equipment/WorkbookEditor";
 
 defineProps<{
@@ -52,6 +53,7 @@ defineProps<{
                 :group="{ name: 'workbook', put: true }"
                 item-key="index"
                 class="min-h-10"
+                @change="updatePreview()"
             >
                 <template #item="{ element }">
                     <GridWrapper

@@ -54,6 +54,7 @@ const resetWorkbook = () => {
     if (isDirty.value) {
         resetWorkbookData();
         isDirty.value = false;
+        updatePreview();
         appStore.pushFlashMsg({
             id: "new",
             type: "warning",

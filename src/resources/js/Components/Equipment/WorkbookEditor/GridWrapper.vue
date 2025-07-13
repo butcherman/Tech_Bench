@@ -2,7 +2,10 @@
 import draggableComponent from "vuedraggable";
 import ElementWrapper from "./ElementWrapper.vue";
 import okModal from "@/Modules/okModal";
-import { deleteElement } from "@/Composables/Equipment/WorkbookEditor";
+import {
+    deleteElement,
+    updatePreview,
+} from "@/Composables/Equipment/WorkbookEditor";
 
 defineProps<{
     gridRow: workbookEntry;
@@ -18,6 +21,8 @@ const onListChange = (
             okModal("Cannot Place Grid Element Inside Grid Element");
             container.splice(event.added.newIndex, 1);
         }
+
+        updatePreview();
     }
 };
 </script>

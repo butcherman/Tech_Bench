@@ -58,10 +58,7 @@ export default { layout: LinkLayout };
 <template>
     <div class="grow flex flex-col h-full">
         <div class="mb-2">
-            <h3 class="text-center">
-                Preview Only. Changes made on this page will not be saved
-            </h3>
-            <h5 class="text-center">Save Workbook to Update Preview</h5>
+            <h3 class="text-center">Preview Mode Only</h3>
             <p class="text-center">Close Page to Exit</p>
         </div>
         <Card
@@ -69,7 +66,6 @@ export default { layout: LinkLayout };
             class="grow"
         >
             <div class="grow flex flex-col">
-                <!-- {{ workbookData }} -->
                 <WorkbookPreview
                     v-if="workbookData"
                     :workbook-data="workbookData"

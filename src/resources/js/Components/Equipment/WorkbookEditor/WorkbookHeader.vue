@@ -2,7 +2,10 @@
 import draggableComponent from "vuedraggable";
 import ElementData from "./ElementData.vue";
 import okModal from "@/Modules/okModal";
-import { workbookData } from "@/Composables/Equipment/WorkbookEditor";
+import {
+    updatePreview,
+    workbookData,
+} from "@/Composables/Equipment/WorkbookEditor";
 
 /**
  * Only these element 'types' are allowed to be dropped in the header.
@@ -18,6 +21,8 @@ const onHeaderDrop = (event: workbookDropEvent) => {
             okModal("Only Text Elements are Allowed in the Header");
             workbookData.value.header.splice(event.added.newIndex, 1);
         }
+
+        updatePreview();
     }
 };
 </script>

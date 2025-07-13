@@ -9,6 +9,7 @@ import {
     activePage,
     editPageData,
     deletePage,
+    updatePreview,
 } from "@/Composables/Equipment/WorkbookEditor";
 </script>
 
@@ -19,6 +20,7 @@ import {
                 :list="workbookData.body"
                 item-key="page"
                 :group="{ name: 'page-list', pull: false }"
+                @change="updatePreview()"
             >
                 <template #item="{ element }">
                     <Tab
@@ -71,6 +73,7 @@ import {
                         :group="{ name: 'workbook', put: true }"
                         item-key="index"
                         class="py-5 h-full"
+                        @change="updatePreview()"
                     >
                         <template #item="{ element }">
                             <div>
