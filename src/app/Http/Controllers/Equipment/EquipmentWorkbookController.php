@@ -32,12 +32,13 @@ class EquipmentWorkbookController extends Controller
     /**
      * Show the Workbook Editor to create a new workbook
      */
-    public function create(EquipmentType $equipment_type): Response
+    public function create(EquipmentWorkbookService $svc, EquipmentType $equipment_type): Response
     {
         $this->authorize('viewAny', EquipmentType::class);
 
         return Inertia::render('Equipment/Workbook/Create', [
             'equipment-type' => $equipment_type,
+            'workbook-data' => $svc->getWorkbook($equipment_type, true),
         ]);
     }
 

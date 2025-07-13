@@ -2,39 +2,11 @@
 import BaseButton from "@/Components/_Base/Buttons/BaseButton.vue";
 import LinkLayout from "@/Layouts/FileLink/LinkLayout.vue";
 import WorkbookEditor from "@/Components/Equipment/WorkbookEditor/WorkbookEditor.vue";
-import { v4 } from "uuid";
 
-const props = defineProps<{
+defineProps<{
     equipmentType: equipment;
+    workbookData: workbookWrapper;
 }>();
-
-const defaultWorkbook: workbookWrapper = {
-    header: [
-        {
-            index: v4(),
-            type: "static",
-            tag: "h3",
-            text: "[ Customer Name ]",
-            class: "text-center",
-        },
-        {
-            index: v4(),
-            type: "static",
-            tag: "h3",
-            text: props.equipmentType.name,
-            class: "text-center",
-        },
-    ],
-    body: [
-        {
-            page: v4(),
-            title: "Page 1",
-            canPublish: true,
-            container: [],
-        },
-    ],
-    footer: [],
-};
 </script>
 
 <script lang="ts">
@@ -53,7 +25,7 @@ export default { layout: LinkLayout };
         <div>
             <WorkbookEditor
                 :equipment-type="equipmentType"
-                :workbook-data="defaultWorkbook"
+                :workbook-data="workbookData"
             />
         </div>
     </div>

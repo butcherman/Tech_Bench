@@ -35,7 +35,7 @@ export default { layout: AppLayout };
                         />
                         <EditBadge
                             v-if="item.has_workbook"
-                            :href="$route('workbooks.edit', item.equip_id)"
+                            :href="$route('workbooks.create', item.equip_id)"
                             v-tooltip="'Edit Workbook'"
                         />
                     </template>
