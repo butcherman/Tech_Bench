@@ -6,7 +6,7 @@ import WorkbookBody from "./WorkbookBody.vue";
 import WorkbookHeader from "./WorkbookHeader.vue";
 import WorkbookFooter from "./WorkbookFooter.vue";
 import { computed, unref } from "vue";
-import { dataPut } from "@/Composables/axiosWrapper.module";
+import { dataPost, dataPut } from "@/Composables/axiosWrapper.module";
 import { useAppStore } from "@/Stores/AppStore";
 import {
     equipmentType,
@@ -33,7 +33,7 @@ const saveWorkbook = () => {
         return;
     }
 
-    dataPut(route("workbooks.update", equipmentType.value?.equip_id), {
+    dataPost(route("workbooks.store", equipmentType.value?.equip_id), {
         workbook_data: unref(workbookData),
     }).then((res) => {
         if (res && res.data.success) {

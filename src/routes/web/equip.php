@@ -64,6 +64,7 @@ Route::middleware('auth.secure')->group(function () {
                 ->breadcrumb('Onboarding Workbooks', 'equipment.index');
             Route::get('{equipment_type}/preview', 'show')->name('show');
             Route::get('{equipment_type}/create', 'create')->name('create');
+            Route::post('{equipment_type}/edit', 'store')->name('store');
             Route::get('{equipment_type}/edit', 'edit')->name('edit');
             Route::put('{equipment_type}/edit', 'update')->name('update');
         });

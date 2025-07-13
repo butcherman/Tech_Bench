@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Equipment;
 
+use App\Events\Equipment\WorkbookCanvasEvent;
 use App\Facades\CacheData;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Equipment\EquipmentWorkbookRequest;
@@ -41,6 +42,19 @@ class EquipmentWorkbookController extends Controller
     }
 
     /**
+     * Save the workbook
+     */
+    public function store(
+        EquipmentWorkbookRequest $request,
+        EquipmentWorkbookService $svc,
+        EquipmentType $equipment_type
+    ): JsonResponse {
+        $svc->updateWorkbookBuilder($request->safe()->collect(), $equipment_type);
+
+        return response()->json(['success' => true]);
+    }
+
+    /**
      *
      */
     public function show(EquipmentType $equipment_type): Response
@@ -70,12 +84,9 @@ class EquipmentWorkbookController extends Controller
     /**
      * Save the workbook
      */
-    public function update(
-        EquipmentWorkbookRequest $request,
-        EquipmentWorkbookService $svc,
-        EquipmentType $equipment_type
-    ): JsonResponse {
-        $svc->updateWorkbookBuilder($request->safe()->collect(), $equipment_type);
+    public function update(EquipmentWorkbookRequest $request, EquipmentType $equipment_type): JsonResponse
+    {
+        WorkbookCanvasEvent::dispatch($equipment_type, json_encode($request->safe()));
 
         return response()->json(['success' => true]);
     }
