@@ -23,6 +23,7 @@ export const setWorkbookData = (
     workbookData.value = JSON.parse(JSON.stringify(workbook));
     activePage.value = workbookData.value.body[0].page;
     updateSavedWorkbook();
+    updatePreview();
 };
 
 export const updateSavedWorkbook = (): void => {

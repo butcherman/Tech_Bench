@@ -2,43 +2,52 @@
 import Card from "@/Components/_Base/Card.vue";
 import WorkbookPreview from "@/Components/Equipment/WorkbookPreview/WorkbookPreview.vue";
 import LinkLayout from "@/Layouts/FileLink/LinkLayout.vue";
-import { computed, onMounted } from "vue";
-import { router } from "@inertiajs/vue3";
+import { onMounted, ref } from "vue";
+import { dataGet } from "@/Composables/axiosWrapper.module";
 
 const props = defineProps<{
     equipmentType: equipment;
-    workbookData: workbookWrapper;
     customer: customer;
 }>();
+
+const workbookData = ref();
+
+/**
+ * Get the current workbook data (includes unsaved changes)
+ */
+const getWorkbook = () => {
+    dataGet(route("workbooks.edit", props.equipmentType.equip_id)).then(
+        (res) => {
+            console.log(res);
+            if (res) {
+                workbookData.value = JSON.parse(
+                    JSON.stringify(res.data, (key, val) => {
+                        if (key === "text") {
+                            if (val === "[ Customer Name ]") {
+                                return props.customer.name;
+                            }
+                        }
+
+                        return val;
+                    })
+                );
+            }
+        }
+    );
+};
 
 /**
  * Listen to live changes to the Workbook Data
  */
-onMounted(() =>
+onMounted(() => {
+    getWorkbook();
     Echo.private(`workbook-canvas.${props.equipmentType.equip_id}`).listen(
         ".workbookCanvasEvent",
         () => {
-            router.reload();
             console.log("preview update triggered");
+            getWorkbook();
         }
-    )
-);
-
-/**
- * Refactor the Workbook Data to include any custom attributes.
- */
-const liveWorkbook = computed(() => {
-    let workbookCopy = JSON.stringify(props.workbookData, (key, val) => {
-        if (key === "text") {
-            if (val === "[ Customer Name ]") {
-                return props.customer.name;
-            }
-        }
-
-        return val;
-    });
-
-    return JSON.parse(workbookCopy);
+    );
 });
 </script>
 
@@ -60,7 +69,11 @@ export default { layout: LinkLayout };
             class="grow"
         >
             <div class="grow flex flex-col">
-                <WorkbookPreview :workbook-data="liveWorkbook" />
+                <!-- {{ workbookData }} -->
+                <WorkbookPreview
+                    v-if="workbookData"
+                    :workbook-data="workbookData"
+                />
             </div>
         </Card>
     </div>

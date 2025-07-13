@@ -36,9 +36,13 @@ class EquipmentWorkbookController extends Controller
     {
         $this->authorize('viewAny', EquipmentType::class);
 
+        $workbook = $svc->getWorkbook($equipment_type, true);
+
+        session()->put('workbookData-' . $equipment_type->equip_id, $workbook);
+
         return Inertia::render('Equipment/Workbook/Create', [
             'equipment-type' => $equipment_type,
-            'workbook-data' => $svc->getWorkbook($equipment_type, true),
+            'workbook-data' => $workbook,
         ]);
     }
 
@@ -58,35 +62,36 @@ class EquipmentWorkbookController extends Controller
     /**
      *
      */
-    public function show(EquipmentType $equipment_type): Response
+    public function show(EquipmentWorkbookService $svc, EquipmentType $equipment_type): Response
     {
         $this->authorize('viewAny', EquipmentType::class);
 
         return Inertia::render('Equipment/Workbook/Show', [
             'equipment-type' => $equipment_type,
-            'workbook-data' => json_decode(EquipmentWorkbook::find($equipment_type->equip_id)->workbook_data),
             'customer' => Customer::factory()->make(),
         ]);
     }
 
     /**
-     *
+     * Return the recent unsafed changes to the workbook
      */
-    public function edit(EquipmentType $equipment_type): Response
+    public function edit(EquipmentType $equipment_type): mixed
     {
-        $this->authorize('viewAny', EquipmentType::class);
+        $this->authorize('viewAny', $equipment_type);
 
-        return Inertia::render('Equipment/Workbook/Edit', [
-            'equipment-type' => $equipment_type,
-            'workbook-data' => json_decode(EquipmentWorkbook::find($equipment_type->equip_id)->workbook_data),
-        ]);
+        return session()->get('workbookData-' . $equipment_type->equip_id);
     }
 
     /**
-     * Save the workbook
+     * Store live changes in session to be shown on the preview page
      */
     public function update(EquipmentWorkbookRequest $request, EquipmentType $equipment_type): JsonResponse
     {
+        $request->session()->put(
+            'workbookData-' . $equipment_type->equip_id,
+            $request->safe()->collect()->get('workbook_data')
+        );
+
         WorkbookCanvasEvent::dispatch($equipment_type);
 
         return response()->json(['success' => true]);
