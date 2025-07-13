@@ -21,7 +21,7 @@ defineProps<{
                 </span>
             </div>
         </div>
-        <div class="grow">
+        <div class="grow flex flex-col">
             <slot />
         </div>
         <div v-if="$slots.footer" class="border-t mt-5 pt-1">

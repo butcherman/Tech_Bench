@@ -57,11 +57,12 @@ Route::middleware('auth.secure')->group(function () {
     | /onboarding-workbooks
     |---------------------------------------------------------------------------
     */
-    Route::prefix('onboarding-workbooks')->name('workbooks.')->group(function() {
-        Route::controller(EquipmentWorkbookController::class)->group(function() {
+    Route::prefix('onboarding-workbooks')->name('workbooks.')->group(function () {
+        Route::controller(EquipmentWorkbookController::class)->group(function () {
             Route::get('/', 'index')
                 ->name('index')
                 ->breadcrumb('Onboarding Workbooks', 'equipment.index');
+            Route::get('{equipment_type}/preview', 'show')->name('show');
             Route::get('{equipment_type}/create', 'create')->name('create');
             Route::get('{equipment_type}/edit', 'edit')->name('edit');
             Route::put('{equipment_type}/edit', 'update')->name('update');

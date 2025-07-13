@@ -65,6 +65,17 @@ const resetWorkbook = () => {
     <Card class="h-full" title="Workbook Canvas">
         <template #append-title>
             <div class="flex gap-1">
+                <a
+                    v-if="equipmentType"
+                    :href="$route('workbooks.show', equipmentType?.equip_id)"
+                    target="_blank"
+                >
+                    <BaseBadge
+                        icon="eye"
+                        variant="help"
+                        v-tooltip.left="'Preview'"
+                    />
+                </a>
                 <BaseBadge
                     icon="rotate-left"
                     variant="danger"

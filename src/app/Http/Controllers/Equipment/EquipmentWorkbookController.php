@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Equipment;
 use App\Facades\CacheData;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Equipment\EquipmentWorkbookRequest;
+use App\Models\Customer;
 use App\Models\EquipmentType;
 use App\Models\EquipmentWorkbook;
 use App\Services\Equipment\EquipmentWorkbookService;
@@ -42,10 +43,15 @@ class EquipmentWorkbookController extends Controller
     /**
      *
      */
-    public function show(string $id)
+    public function show(EquipmentType $equipment_type): Response
     {
-        //
-        return 'show';
+        $this->authorize('viewAny', EquipmentType::class);
+
+        return Inertia::render('Equipment/Workbook/Show', [
+            'equipment-type' => $equipment_type,
+            'workbook-data' => json_decode(EquipmentWorkbook::find($equipment_type->equip_id)->workbook_data),
+            'customer' => Customer::factory()->make(),
+        ]);
     }
 
     /**
