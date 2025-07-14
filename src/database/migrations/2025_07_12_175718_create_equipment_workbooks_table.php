@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('equipment_workbooks', function (Blueprint $table) {
             $table->unsignedBigInteger('equip_id');
             $table->json('workbook_data')->nullable();
+            $table->text('version_hash');
             $table->timestamps();
             $table->foreign('equip_id')
                 ->references('equip_id')

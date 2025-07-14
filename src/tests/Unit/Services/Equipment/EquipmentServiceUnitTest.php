@@ -209,7 +209,7 @@ class EquipmentServiceUnitTest extends TestCase
         $testObj = new EquipmentService;
         $testObj->destroyEquipmentType($equip);
 
-        $this->assertDatabaseMissing('equipment_types', $equip->toArray());
+        $this->assertDatabaseMissing('equipment_types', $equip->makeHidden(['has_workbook'])->toArray());
     }
 
     public function test_destroy_equipment_type_in_use(): void

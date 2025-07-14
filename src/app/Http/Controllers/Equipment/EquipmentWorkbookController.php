@@ -8,10 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Equipment\EquipmentWorkbookRequest;
 use App\Models\Customer;
 use App\Models\EquipmentType;
-use App\Models\EquipmentWorkbook;
 use App\Services\Equipment\EquipmentWorkbookService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -38,7 +36,7 @@ class EquipmentWorkbookController extends Controller
 
         $workbook = $svc->getWorkbook($equipment_type, true);
 
-        session()->put('workbookData-' . $equipment_type->equip_id, $workbook);
+        session()->put('workbookData-'.$equipment_type->equip_id, $workbook);
 
         return Inertia::render('Equipment/Workbook/Create', [
             'equipment-type' => $equipment_type,
@@ -59,9 +57,6 @@ class EquipmentWorkbookController extends Controller
         return response()->json(['success' => true]);
     }
 
-    /**
-     *
-     */
     public function show(EquipmentWorkbookService $svc, EquipmentType $equipment_type): Response
     {
         $this->authorize('viewAny', EquipmentType::class);
@@ -79,7 +74,7 @@ class EquipmentWorkbookController extends Controller
     {
         $this->authorize('viewAny', $equipment_type);
 
-        return session()->get('workbookData-' . $equipment_type->equip_id);
+        return session()->get('workbookData-'.$equipment_type->equip_id);
     }
 
     /**
@@ -88,7 +83,7 @@ class EquipmentWorkbookController extends Controller
     public function update(EquipmentWorkbookRequest $request, EquipmentType $equipment_type): JsonResponse
     {
         $request->session()->put(
-            'workbookData-' . $equipment_type->equip_id,
+            'workbookData-'.$equipment_type->equip_id,
             $request->safe()->collect()->get('workbook_data')
         );
 
@@ -97,9 +92,6 @@ class EquipmentWorkbookController extends Controller
         return response()->json(['success' => true]);
     }
 
-    /**
-     *
-     */
     public function destroy(string $id)
     {
         //

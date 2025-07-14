@@ -145,7 +145,7 @@ class BuildAdminMenu
                 ],
             ];
 
-            if(config('customer.enable_workbooks')) {
+            if (config('customer.enable_workbooks')) {
                 $equipMenu[] = [
                     'name' => 'Onboarding Workbooks',
                     'icon' => 'fa-table',

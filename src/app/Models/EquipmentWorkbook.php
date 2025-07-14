@@ -10,5 +10,5 @@ class EquipmentWorkbook extends Model
     protected $primaryKey = 'equip_id';
 
     /** @var array<int, string> */
-    protected $fillable = ['equip_id', 'workbook_data'];
+    protected $fillable = ['equip_id', 'workbook_data', 'version_hash'];
 }

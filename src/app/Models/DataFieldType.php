@@ -50,7 +50,7 @@ class DataFieldType extends Model
     public function inUse(): Attribute
     {
         return Attribute::make(
-            get: fn() => DataField::where('type_id', $this->type_id)
+            get: fn () => DataField::where('type_id', $this->type_id)
                 ->count() > 0,
         );
     }

@@ -42,7 +42,7 @@ class LogSettingsTest extends TestCase
             ->get(route('maint.logs.settings.show'));
 
         $response->assertSuccessful()
-            ->assertInertia(fn(Assert $page) => $page
+            ->assertInertia(fn (Assert $page) => $page
                 ->component('Maint/LogSettings')
                 ->has('days')
                 ->has('log-level')

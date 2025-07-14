@@ -2,8 +2,8 @@
 
 namespace App\Services\Equipment;
 
-use App\Models\EquipmentWorkbook;
 use App\Models\EquipmentType;
+use App\Models\EquipmentWorkbook;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
@@ -17,10 +17,12 @@ class EquipmentWorkbookService
         EquipmentWorkbook::firstOrCreate([
             'equip_id' => $equipment_type->equip_id,
         ], [
-            'workbook_data' => json_encode($requestData->get('workbook_data'))
+            'workbook_data' => json_encode($requestData->get('workbook_data')),
+            'version_hash' => Str::random(5),
         ])->update([
-                    'workbook_data' => json_encode($requestData->get('workbook_data')),
-                ]);
+            'workbook_data' => json_encode($requestData->get('workbook_data')),
+            'version_hash' => Str::random(5),
+        ]);
     }
 
     /**
@@ -30,11 +32,11 @@ class EquipmentWorkbookService
     {
         $workbookData = $equipment_type->EquipmentWorkbook;
 
-        if (!$workbookData && $getDefault) {
+        if (! $workbookData && $getDefault) {
             return $this->getDefaultWorkbook($equipment_type);
         }
 
-        if (!$workbookData) {
+        if (! $workbookData) {
             return false;
         }
 
@@ -50,23 +52,23 @@ class EquipmentWorkbookService
             'header' => [
                 [
                     'index' => Str::uuid(),
-                    'type' => "static",
-                    'tag' => "h3",
-                    'text' => "[ Customer Name ]",
-                    'class' => "text-center",
+                    'type' => 'static',
+                    'tag' => 'h3',
+                    'text' => '[ Customer Name ]',
+                    'class' => 'text-center',
                 ],
                 [
                     'index' => Str::uuid(),
-                    'type' => "static",
-                    'tag' => "h3",
+                    'type' => 'static',
+                    'tag' => 'h3',
                     'text' => $equipment_type->name,
-                    'class' => "text-center",
+                    'class' => 'text-center',
                 ],
             ],
             'body' => [
                 [
                     'page' => Str::uuid(),
-                    'title' => "Page 1",
+                    'title' => 'Page 1',
                     'canPublish' => true,
                     'container' => [],
                 ],
