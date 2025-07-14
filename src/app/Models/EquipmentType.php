@@ -51,7 +51,7 @@ class EquipmentType extends Model
     protected function hasWorkbook(): Attribute
     {
         return Attribute::make(
-            get: fn() => $this->EquipmentWorkbook ? true : false,
+            get: fn () => $this->EquipmentWorkbook ? true : false,
         );
     }
 

@@ -45,7 +45,7 @@ class FeatureTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('Admin/Config/Features')
                     ->has('feature-list')
             );

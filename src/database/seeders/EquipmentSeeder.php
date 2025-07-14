@@ -63,7 +63,7 @@ class EquipmentSeeder extends Seeder
         // Enable Workbook Feature
         AppSettings::create([
             'key' => 'customer.enable_workbooks',
-            'value' => true,
+            'value' => json_encode(true),
         ]);
     }
 }
