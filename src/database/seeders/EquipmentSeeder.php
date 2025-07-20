@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\AppSettings;
 use App\Models\DataField;
 use App\Models\EquipmentCategory;
 use App\Models\EquipmentType;
@@ -58,5 +59,11 @@ class EquipmentSeeder extends Seeder
                 ]);
             }
         }
+
+        // Enable Workbook Feature
+        AppSettings::create([
+            'key' => 'customer.enable_workbooks',
+            'value' => json_encode(true),
+        ]);
     }
 }
