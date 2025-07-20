@@ -1,18 +1,54 @@
 <script setup lang="ts">
 import BaseBadge from "@/Components/_Base/Badges/BaseBadge.vue";
+import CanvasBody from "./CanvasBody.vue";
+import CanvasHeader from "./CanvasHeader.vue";
 import Card from "@/Components/_Base/Card.vue";
+import okModal from "@/Modules/okModal";
+import { computed, unref } from "vue";
+import { dataPost } from "@/Composables/axiosWrapper.module";
+import { useAppStore } from "@/Stores/AppStore";
 import {
     equipmentType,
     isDirty,
     resetWorkbook,
-    saveWorkbook,
+    updateCleanWorkbook,
     workbookData,
 } from "@/Composables/Equipment/WorkbookEditor.module";
-import { computed } from "vue";
+
+const appStore = useAppStore();
 
 const dirtyVariant = computed<elementVariant>(() =>
     isDirty.value ? "warning" : "primary"
 );
+
+/**
+ * Save the WB to database
+ */
+const saveWorkbook = () => {
+    if (
+        workbookData.body.length == 1 &&
+        !workbookData.body[0].container.length
+    ) {
+        okModal(
+            "Cannot Save an Empty Workbook.  Please build Workbook Data First"
+        );
+        return;
+    }
+
+    dataPost(route("workbooks.store", equipmentType.value?.equip_id), {
+        workbook_data: unref(workbookData),
+    }).then((res) => {
+        if (res && res.data.success) {
+            isDirty.value = false;
+            updateCleanWorkbook();
+            appStore.pushFlashMsg({
+                id: "new",
+                type: "success",
+                message: "Workbook Saved",
+            });
+        }
+    });
+};
 </script>
 
 <template>
@@ -48,6 +84,10 @@ const dirtyVariant = computed<elementVariant>(() =>
                 />
             </div>
         </template>
-        <div>{{ workbookData }}</div>
+        <div class="h-full flex flex-col gap-4">
+            <CanvasHeader />
+            <CanvasBody class="grow" />
+            <CanvasHeader is-footer />
+        </div>
     </Card>
 </template>

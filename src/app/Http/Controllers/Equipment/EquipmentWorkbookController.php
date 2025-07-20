@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Equipment;
 
 use App\Facades\CacheData;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Equipment\EquipmentWorkbookRequest;
 use App\Models\EquipmentType;
 use App\Services\Equipment\EquipmentWorkbookService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -47,10 +49,11 @@ class EquipmentWorkbookController extends Controller
     /**
      *
      */
-    public function store(Request $request)
+    public function store(EquipmentWorkbookRequest $request, EquipmentType $equipment_type): JsonResponse
     {
-        //
-        return 'store';
+        $this->svc->updateWorkbookBuilder($request->safe()->collect(), $equipment_type);
+
+        return response()->json(['success' => true]);
     }
 
     /**

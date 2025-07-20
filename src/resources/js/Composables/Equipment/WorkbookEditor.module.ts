@@ -1,19 +1,27 @@
-import { ref, unref } from "vue";
+import { reactive, ref, watch } from "vue";
 import { v4 } from "uuid";
-import okModal from "@/Modules/okModal";
-import { dataPost } from "../axiosWrapper.module";
 
 export const equipmentType = ref<equipment>();
-export const workbookData = ref<workbookWrapper>();
 const cleanWorkbook = ref<workbookWrapper>();
+export const workbookData = reactive<workbookWrapper>({
+    header: [],
+    body: [],
+    footer: [],
+});
 
 export const initWorkbook = (
     equipType: equipment,
     workbook: workbookWrapper
 ): void => {
     equipmentType.value = equipType;
-    workbookData.value = copyWorkbook(workbook);
     cleanWorkbook.value = copyWorkbook(workbook);
+    workbookData.header = copyWorkbook(workbook.header);
+    workbookData.body = copyWorkbook(workbook.body);
+    workbookData.footer = copyWorkbook(workbook.footer);
+};
+
+export const updateCleanWorkbook = () => {
+    cleanWorkbook.value = copyWorkbook(workbookData);
 };
 
 /*
@@ -31,45 +39,25 @@ export const imDirty = () => {
 };
 
 /**
- * Save the WB to database
- */
-export const saveWorkbook = () => {
-    console.log("save workbook");
-
-    if (
-        workbookData.value?.body.length == 1 &&
-        !workbookData.value.body[0].container.length
-    ) {
-        okModal(
-            "Cannot Save an Empty Workbook.  Please build Workbook Data First"
-        );
-        return;
-    }
-
-    // dataPost(route("workbooks.store", equipmentType.value?.equip_id), {
-    //     workbook_data: unref(workbookData),
-    // }).then((res) => {
-    //     console.log(res);
-    //     if (res && res.data.success) {
-    //         isDirty.value = false;
-    //         updateSavedWorkbook();
-    //         updatePreview();
-    //         appStore.pushFlashMsg({
-    //             id: "new",
-    //             type: "success",
-    //             message: "Workbook Saved",
-    //         });
-    //     }
-    // });
-};
-
-/**
  * Undo all changes since last save
  */
 export const resetWorkbook = () => {
     console.log("reset workbook");
-    workbookData.value = copyWorkbook(cleanWorkbook.value);
+    if (cleanWorkbook.value) {
+        workbookData.header = copyWorkbook(cleanWorkbook.value.header);
+        workbookData.body = copyWorkbook(cleanWorkbook.value.body);
+        workbookData.footer = copyWorkbook(cleanWorkbook.value.footer);
+
+        isDirty.value = false;
+    }
 };
+
+/**
+ * Update the Dirty changes to show on the preview page
+ */
+watch(workbookData, (newWb) => {
+    console.log("update preview", newWb);
+});
 
 /*
 |-------------------------------------------------------------------------------
