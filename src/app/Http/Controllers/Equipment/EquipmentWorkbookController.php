@@ -34,7 +34,14 @@ class EquipmentWorkbookController extends Controller
     {
         $this->authorize('update', $equipment_type);
 
-        return Inertia::render('Equipment/Workbook/Create');
+        $workbook = $this->svc->getWorkbook($equipment_type, true);
+
+        session()->put('workbookData-' . $equipment_type->equip_id, $workbook);
+
+        return Inertia::render('Equipment/Workbook/Create', [
+            'equipment-type' => $equipment_type,
+            'workbook-data' => $workbook,
+        ]);
     }
 
     /**
