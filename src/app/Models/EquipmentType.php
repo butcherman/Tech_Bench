@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Observers\EquipmentTypeObserver;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -10,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 #[ObservedBy([EquipmentTypeObserver::class])]
 class EquipmentType extends Model
@@ -34,7 +36,20 @@ class EquipmentType extends Model
     {
         return [
             'allow_public_tip' => 'boolean',
+            'has_workbook' => 'boolean',
         ];
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | Model Attributes
+    |---------------------------------------------------------------------------
+    */
+    protected function hasWorkbook(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => $this->EquipmentWorkbook ? true : false,
+        );
     }
 
     /*
@@ -55,6 +70,11 @@ class EquipmentType extends Model
     public function EquipmentCategory(): BelongsTo
     {
         return $this->belongsTo(EquipmentCategory::class, 'cat_id', 'cat_id');
+    }
+
+    public function EquipmentWorkbook(): HasOne
+    {
+        return $this->hasOne(EquipmentWorkbook::class, 'equip_id', 'equip_id');
     }
 
     public function DataFieldType(): BelongsToMany

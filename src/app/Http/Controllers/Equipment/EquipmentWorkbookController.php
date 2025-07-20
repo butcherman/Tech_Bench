@@ -2,28 +2,39 @@
 
 namespace App\Http\Controllers\Equipment;
 
+use App\Facades\CacheData;
 use App\Http\Controllers\Controller;
+use App\Models\EquipmentType;
+use App\Services\Equipment\EquipmentWorkbookService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class EquipmentWorkbookController extends Controller
 {
-    /**
-     *
-     */
-    public function index()
+    public function __construct(protected EquipmentWorkbookService $svc)
     {
-        //
-        return 'index';
     }
 
     /**
-     *
+     * Show a list of equipment with link to edit workbook data
      */
-    public function create()
+    public function index()
     {
-        //
-        return 'create';
+        $this->authorize('create', EquipmentType::class);
+
+        return Inertia::render('Equipment/Workbook/Index', [
+            'equipment-list' => CacheData::equipmentCategories(),
+        ]);
+    }
+
+    /**
+     * Show Workbook Builder
+     */
+    public function create(EquipmentType $equipment_type)
+    {
+        $this->authorize('update', $equipment_type);
+
+        return Inertia::render('Equipment/Workbook/Create');
     }
 
     /**
@@ -38,10 +49,11 @@ class EquipmentWorkbookController extends Controller
     /**
      *
      */
-    public function show(string $id)
+    public function show(EquipmentType $equipment_type)
     {
-        //
-        return 'show';
+        $this->authorize('update', $equipment_type);
+
+        return Inertia::render('Equipment/Workbook/Show');
     }
 
     /**
@@ -72,8 +84,8 @@ class EquipmentWorkbookController extends Controller
     }
 
     /**
-    *
-    */
+     *
+     */
     public function restore(string $id)
     {
         //
@@ -81,8 +93,8 @@ class EquipmentWorkbookController extends Controller
     }
 
     /**
-    *
-    */
+     *
+     */
     public function forceDelete(string $id)
     {
         //
