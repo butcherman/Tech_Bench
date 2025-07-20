@@ -1,8 +1,10 @@
 import { reactive, ref, unref, watch } from "vue";
 import { v4 } from "uuid";
 import { dataPut } from "../axiosWrapper.module";
+import { Container } from "postcss";
 
 export const equipmentType = ref<equipment>();
+export const activePage = ref<string>("0");
 const cleanWorkbook = ref<workbookWrapper>();
 export const workbookData = reactive<workbookWrapper>({
     header: [],
@@ -19,10 +21,28 @@ export const initWorkbook = (
     workbookData.header = copyWorkbook(workbook.header);
     workbookData.body = copyWorkbook(workbook.body);
     workbookData.footer = copyWorkbook(workbook.footer);
+    activePage.value = workbookData.body[0].page;
 };
 
 export const updateCleanWorkbook = () => {
     cleanWorkbook.value = copyWorkbook(workbookData);
+};
+
+/**
+ * Create a new Blank Page
+ */
+export const addBlankPage = (): void => {
+    let newPage = {
+        page: v4(),
+        title: "New Page",
+        canPublish: true,
+        container: [],
+    };
+
+    workbookData.body.push(newPage);
+    activePage.value = newPage.page;
+
+    imDirty();
 };
 
 /*
@@ -43,7 +63,6 @@ export const imDirty = () => {
  * Undo all changes since last save
  */
 export const resetWorkbook = () => {
-    console.log("reset workbook");
     if (cleanWorkbook.value) {
         workbookData.header = copyWorkbook(cleanWorkbook.value.header);
         workbookData.body = copyWorkbook(cleanWorkbook.value.body);
@@ -102,6 +121,11 @@ export const cloneElement = (element: workbookElement): workbookEntry => {
 export const showWbEditor = ref<boolean>(false);
 export const editingComponent = ref<workbookEntry | workbookPage>();
 
+export const closeWbEditor = () => {
+    showWbEditor.value = false;
+    imDirty();
+};
+
 export const onWbEditorClose = (): void => {
     editingComponent.value = undefined;
 };
@@ -142,4 +166,17 @@ export const deleteComponent = (
     container.splice(index, 1);
 
     imDirty();
+};
+
+/**
+ * Delete a page from the canvas.
+ */
+export const deletePage = (page: workbookPage) => {
+    let index = workbookData.body.indexOf(page);
+
+    workbookData.body.splice(index, 1);
+
+    if (page.page === activePage.value) {
+        activePage.value = workbookData.body[0].page;
+    }
 };
