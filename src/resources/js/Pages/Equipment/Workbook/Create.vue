@@ -2,16 +2,21 @@
 import BaseButton from "@/Components/_Base/Buttons/BaseButton.vue";
 import CanvasComponents from "@/Components/Equipment/WorkbookEditor/CanvasComponents.vue";
 import PublicLayout from "@/Layouts/Public/PublicLayout.vue";
+import WorkbookCanvas from "@/Components/Equipment/WorkbookEditor/WorkbookCanvas.vue";
 import { Drawer } from "primevue";
+import { onMounted } from "vue";
 import {
+    initWorkbook,
     onWbEditorClose,
     showWbEditor,
 } from "@/Composables/Equipment/WorkbookEditor.module";
 
-defineProps<{
+const props = defineProps<{
     equipmentType: equipment;
     workbookData: workbookWrapper;
 }>();
+
+onMounted(() => initWorkbook(props.equipmentType, props.workbookData));
 </script>
 
 <script lang="ts">
@@ -31,8 +36,8 @@ export default { layout: PublicLayout };
             <div>
                 <CanvasComponents />
             </div>
-            <div class="md:col-span-3 h-full" style="border: 1px solid red">
-                workbook canvas
+            <div class="md:col-span-3 h-full">
+                <WorkbookCanvas />
             </div>
         </div>
         <Drawer
