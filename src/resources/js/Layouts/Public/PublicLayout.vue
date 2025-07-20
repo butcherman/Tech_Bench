@@ -8,7 +8,7 @@ import PublicHeader from "./PublicHeader.vue";
     <div id="kb-layout-wrapper" class="flex flex-col bg-gray-200 h-screen">
         <PublicHeader />
         <FlashAlert />
-        <section class="grow mt-14 p-3">
+        <section class="grow flex flex-col mt-14 p-3">
             <slot />
         </section>
         <AppFooter class="bg-slate-100" />
