@@ -100,17 +100,18 @@ export const cloneElement = (element: workbookElement): workbookEntry => {
 |-------------------------------------------------------------------------------
 */
 export const showWbEditor = ref<boolean>(false);
-export const editingComponent = ref<workbookEntry>();
+export const editingComponent = ref<workbookEntry | workbookPage>();
 
 export const onWbEditorClose = (): void => {
-    console.log("editor closed");
     editingComponent.value = undefined;
 };
 
 /**
  * Edit the meta data in the selected component
  */
-export const editComponent = (component: workbookElement): void => {
+export const editComponent = (
+    component: workbookElement | workbookPage
+): void => {
     console.log("edit ", component);
 
     editingComponent.value = component;

@@ -26,6 +26,7 @@ const component = computed(() => {
     <div class="hover:border hover:border-green-300 p-1 mx-4 relative group">
         <div class="absolute end-0 text-xs gap-1 hidden group-hover:flex">
             <span
+                v-if="element.type !== 'static'"
                 class="text-warning pointer"
                 v-tooltip.bottom="'Edit Component Data'"
                 @click="editComponent(element)"

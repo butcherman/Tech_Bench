@@ -10,6 +10,7 @@ import {
     onWbEditorClose,
     showWbEditor,
 } from "@/Composables/Equipment/WorkbookEditor.module";
+import ComponentEditor from "@/Components/Equipment/WorkbookEditor/ComponentEditor.vue";
 
 const props = defineProps<{
     equipmentType: equipment;
@@ -40,13 +41,6 @@ export default { layout: PublicLayout };
                 <WorkbookCanvas />
             </div>
         </div>
-        <Drawer
-            v-model:visible="showWbEditor"
-            position="right"
-            header="Edit Element Data"
-            @after-hide="onWbEditorClose"
-        >
-            Editing Component
-        </Drawer>
+        <ComponentEditor />
     </div>
 </template>

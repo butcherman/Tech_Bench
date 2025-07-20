@@ -1,6 +1,6 @@
 <script setup lang="ts">
+import ComponentData from "./ComponentData.vue";
 import draggableComponent from "vuedraggable";
-import ElementData from "./ElementData.vue";
 import okModal from "@/Modules/okModal";
 import { workbookData } from "@/Composables/Equipment/WorkbookEditor.module";
 import { computed } from "vue";
@@ -65,7 +65,7 @@ const onHeaderDrop = (event: workbookDropEvent) => {
             @change="onHeaderDrop"
         >
             <template #item="{ element }">
-                <ElementData
+                <ComponentData
                     :element="element"
                     :container="
                         isFooter ? workbookData.footer : workbookData.header
