@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import draggableComponent from "vuedraggable";
+import ElementData from "./ElementData.vue";
 import okModal from "@/Modules/okModal";
 import { workbookData } from "@/Composables/Equipment/WorkbookEditor.module";
 import { computed } from "vue";
@@ -59,12 +60,17 @@ const onHeaderDrop = (event: workbookDropEvent) => {
         <draggableComponent
             :list="isFooter ? workbookData.footer : workbookData.header"
             :group="{ name: 'workbook', put: true }"
-            class="min-h-20"
+            class="min-h-20 flex flex-col gap-3"
             item-key="index"
             @change="onHeaderDrop"
         >
             <template #item="{ element }">
-                {{ element }}
+                <ElementData
+                    :element="element"
+                    :container="
+                        isFooter ? workbookData.footer : workbookData.header
+                    "
+                />
             </template>
         </draggableComponent>
     </div>
