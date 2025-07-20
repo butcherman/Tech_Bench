@@ -26,6 +26,7 @@ class FeatureConfigRequest extends FormRequest
             'file_links' => ['required', 'boolean'],
             'public_tips' => ['required', 'boolean'],
             'tip_comments' => ['required', 'boolean'],
+            'customer_workbooks' => ['required', 'boolean'],
         ];
     }
 }

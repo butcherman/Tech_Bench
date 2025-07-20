@@ -47,7 +47,7 @@ class ApplicationSettingsService
             'app.company_name' => $requestData->get('company_name'),
             'app.schedule_timezone' => $requestData->get('timezone'),
             'filesystems.max_filesize' => $requestData->get('max_filesize'),
-            'services.azure.redirect' => 'https://'.$requestData->get('url').'/auth/callback',
+            'services.azure.redirect' => 'https://' . $requestData->get('url') . '/auth/callback',
         ];
 
         $this->saveSettingsArray($setArr);
@@ -102,6 +102,19 @@ class ApplicationSettingsService
     }
 
     /**
+     * Return a list of the application features and their status.
+     */
+    public function getFeatureSettings(): array
+    {
+        return [
+            'file_links' => fn() => config('file-link.feature_enabled'),
+            'public_tips' => fn() => config('tech-tips.allow_public'),
+            'tip_comments' => fn() => config('tech-tips.allow_comments'),
+            'customer_workbooks' => fn() => config('customer.enable_workbooks'),
+        ];
+    }
+
+    /**
      * Save the new Feature Settings
      */
     public function updateFeatureSettings(Collection $requestData): void
@@ -118,6 +131,10 @@ class ApplicationSettingsService
             'tech-tips.allow_comments',
             $requestData->get('tip_comments')
         );
+        $this->saveSettings(
+            'customer.enable_workbooks',
+            $requestData->get('customer_workbooks')
+        );
 
         // Forget the feature settings to re-force checking
         event(new FeatureChangedEvent);
@@ -132,7 +149,7 @@ class ApplicationSettingsService
         $storedFile = Storage::disk('public')
             ->putFile($path, new File($requestData->get('file')));
 
-        $this->saveSettings('app.logo', '/storage/'.$storedFile);
+        $this->saveSettings('app.logo', '/storage/' . $storedFile);
 
         CacheData::clearCache('appData');
 
