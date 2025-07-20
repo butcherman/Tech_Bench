@@ -41,26 +41,31 @@ import { Tab, Tabs, TabList, TabPanel, TabPanels } from "primevue";
                 <template #item="{ element }">
                     <Tab
                         :value="element.page"
-                        pt:root:class="border! border-slate-300! rounded-t-lg mx-1! p-1!"
+                        pt:root:class="border! border-slate-300! rounded-t-lg mx-1! p-0!"
                     >
-                        <div class="text-xs">
-                            <span
-                                class="text-warning pointer me-1"
-                                v-tooltip="'Edit Page Data'"
-                                @click="editComponent(element)"
-                            >
-                                <fa-icon icon="pencil" />
-                            </span>
-                            <span
-                                class="text-danger pointer"
-                                v-tooltip="'Delete Page'"
-                                @click="deletePage(element)"
-                            >
-                                <fa-icon icon="trash-alt" />
-                            </span>
-                        </div>
-                        <div>
-                            {{ element.title }}
+                        <div
+                            class="p-1"
+                            :class="{ 'bg-red-100': !element.canPublish }"
+                        >
+                            <div class="text-xs">
+                                <span
+                                    class="text-warning pointer me-1"
+                                    v-tooltip="'Edit Page Data'"
+                                    @click="editComponent(element)"
+                                >
+                                    <fa-icon icon="pencil" />
+                                </span>
+                                <span
+                                    class="text-danger pointer"
+                                    v-tooltip="'Delete Page'"
+                                    @click="deletePage(element)"
+                                >
+                                    <fa-icon icon="trash-alt" />
+                                </span>
+                            </div>
+                            <div>
+                                {{ element.title }}
+                            </div>
                         </div>
                     </Tab>
                 </template>

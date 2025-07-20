@@ -1,22 +1,23 @@
 <script setup lang="ts">
-import Card from "@/Components/_Base/Card.vue";
 import PublicLayout from "@/Layouts/Public/PublicLayout.vue";
-import { reactive, onMounted } from "vue";
-import { dataGet } from "@/Composables/axiosWrapper.module";
 import WorkbookBase from "@/Components/Workbook/WorkbookBase.vue";
+import { reactive, onMounted, ref } from "vue";
+import { dataGet } from "@/Composables/axiosWrapper.module";
 
 const props = defineProps<{
     equipmentType: equipment;
 }>();
 
-const workbookData = reactive({
+const workbookData = reactive<workbookWrapper>({
     header: [],
     body: [],
     footer: [],
 });
 
-const getWorkbook = () => {
-    dataGet(route("workbooks.edit", props.equipmentType.equip_id)).then(
+const activePage = ref("0");
+
+const getWorkbook = async () => {
+    await dataGet(route("workbooks.edit", props.equipmentType.equip_id)).then(
         (res) => {
             if (res) {
                 workbookData.header = res.data.header;
@@ -31,7 +32,7 @@ const getWorkbook = () => {
  * Listen to live changes to the Workbook Data
  */
 onMounted(() => {
-    getWorkbook();
+    getWorkbook().then(() => (activePage.value = workbookData.body[0].page));
     Echo.private(`workbook-canvas.${props.equipmentType.equip_id}`).listen(
         ".workbookCanvasEvent",
         () => getWorkbook()
@@ -49,6 +50,11 @@ export default { layout: PublicLayout };
             <h3 class="text-center">Preview Mode</h3>
             <p class="text-center">Close Page to Exit</p>
         </div>
-        <WorkbookBase class="grow" :workbook-data="workbookData" is-preview />
+        <WorkbookBase
+            class="grow"
+            :workbook-data="workbookData"
+            :active-page="activePage"
+            is-preview
+        />
     </div>
 </template>
