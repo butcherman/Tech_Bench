@@ -27,6 +27,9 @@ class EquipmentType extends Model
     /** @var array<int, string> */
     protected $hidden = ['created_at', 'updated_at', 'pivot'];
 
+    /** @var array<int, string> */
+    protected $appends = ['has_workbook'];
+
     /*
     |---------------------------------------------------------------------------
     | Model Casting

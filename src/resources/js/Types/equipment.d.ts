@@ -9,6 +9,7 @@ type equipment = {
     equip_id: number;
     name: string;
     allow_public_tip: boolean;
+    has_workbook: boolean;
     data_field_type?: dataTypes[];
 };
 
