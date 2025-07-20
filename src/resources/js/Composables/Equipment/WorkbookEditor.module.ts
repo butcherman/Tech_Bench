@@ -99,8 +99,46 @@ export const cloneElement = (element: workbookElement): workbookEntry => {
 | Element Data Editor
 |-------------------------------------------------------------------------------
 */
-export const showWbEditor = ref(false);
+export const showWbEditor = ref<boolean>(false);
+export const editingComponent = ref<workbookEntry>();
 
-export const onWbEditorClose = () => {
+export const onWbEditorClose = (): void => {
     console.log("editor closed");
+    editingComponent.value = undefined;
+};
+
+/**
+ * Edit the meta data in the selected component
+ */
+export const editComponent = (component: workbookElement): void => {
+    console.log("edit ", component);
+
+    editingComponent.value = component;
+    showWbEditor.value = true;
+};
+
+/**
+ * Create a copy of a component and place directly below selected component.
+ */
+export const cloneComponent = (
+    component: workbookElement,
+    container: workbookElement[]
+): void => {
+    let newComponent = cloneElement(component);
+    let index = container.indexOf(component);
+
+    container.splice(index, 0, newComponent);
+};
+
+/**
+ * Delete a component from the canvas.
+ */
+export const deleteComponent = (
+    component: workbookElement,
+    container: workbookElement[]
+): void => {
+    let index = container.indexOf(component);
+    container.splice(index, 1);
+
+    imDirty();
 };
