@@ -1,5 +1,6 @@
-import { reactive, ref, watch } from "vue";
+import { reactive, ref, unref, watch } from "vue";
 import { v4 } from "uuid";
+import { dataPut } from "../axiosWrapper.module";
 
 export const equipmentType = ref<equipment>();
 const cleanWorkbook = ref<workbookWrapper>();
@@ -57,6 +58,9 @@ export const resetWorkbook = () => {
  */
 watch(workbookData, (newWb) => {
     console.log("update preview", newWb);
+    dataPut(route("workbooks.update", equipmentType.value?.equip_id), {
+        workbook_data: unref(workbookData),
+    });
 });
 
 /*

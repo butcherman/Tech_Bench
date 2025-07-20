@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Equipment;
 
+use App\Events\Equipment\WorkbookCanvasEvent;
 use App\Facades\CacheData;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Equipment\EquipmentWorkbookRequest;
@@ -10,6 +11,7 @@ use App\Services\Equipment\EquipmentWorkbookService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class EquipmentWorkbookController extends Controller
 {
@@ -20,7 +22,7 @@ class EquipmentWorkbookController extends Controller
     /**
      * Show a list of equipment with link to edit workbook data
      */
-    public function index()
+    public function index(): Response
     {
         $this->authorize('create', EquipmentType::class);
 
@@ -32,12 +34,13 @@ class EquipmentWorkbookController extends Controller
     /**
      * Show Workbook Builder
      */
-    public function create(EquipmentType $equipment_type)
+    public function create(EquipmentType $equipment_type): Response
     {
         $this->authorize('update', $equipment_type);
 
         $workbook = $this->svc->getWorkbook($equipment_type, true);
 
+        // Update session data for the live preview
         session()->put('workbookData-' . $equipment_type->equip_id, $workbook);
 
         return Inertia::render('Equipment/Workbook/Create', [
@@ -47,7 +50,7 @@ class EquipmentWorkbookController extends Controller
     }
 
     /**
-     *
+     * Save workbook data to the database
      */
     public function store(EquipmentWorkbookRequest $request, EquipmentType $equipment_type): JsonResponse
     {
@@ -57,57 +60,39 @@ class EquipmentWorkbookController extends Controller
     }
 
     /**
-     *
+     * Live Preview page for the workbook
      */
-    public function show(EquipmentType $equipment_type)
+    public function show(EquipmentType $equipment_type): Response
     {
         $this->authorize('update', $equipment_type);
 
-        return Inertia::render('Equipment/Workbook/Show');
+        return Inertia::render('Equipment/Workbook/Show', [
+            'equipment-type' => $equipment_type,
+        ]);
     }
 
     /**
-     *
+     * Return the recent unsaved changes to the workbook.
      */
-    public function edit(string $id)
+    public function edit(EquipmentType $equipment_type): mixed
     {
-        //
-        return 'edit';
+        $this->authorize('update', $equipment_type);
+
+        return session()->get('workbookData-' . $equipment_type->equip_id);
     }
 
     /**
-     *
+     * Store any recent unsaved changes to the workbook for the live preview
      */
-    public function update(Request $request, string $id)
+    public function update(EquipmentWorkbookRequest $request, EquipmentType $equipment_type): JsonResponse
     {
-        //
-        return 'update';
-    }
+        $request->session()->put(
+            'workbookData-' . $equipment_type->equip_id,
+            $request->safe()->collect()->get('workbook_data')
+        );
 
-    /**
-     *
-     */
-    public function destroy(string $id)
-    {
-        //
-        return 'destroy';
-    }
+        WorkbookCanvasEvent::dispatch($equipment_type);
 
-    /**
-     *
-     */
-    public function restore(string $id)
-    {
-        //
-        return 'restore';
-    }
-
-    /**
-     *
-     */
-    public function forceDelete(string $id)
-    {
-        //
-        return 'force delete';
+        return response()->json(['success' => true]);
     }
 }
