@@ -53,7 +53,12 @@ const setActive = (type: "page" | "inputs"): void => {
             </p>
             <draggableComponent
                 :list="activeList"
-                :group="{ name: 'workbook', pull: 'clone', put: false }"
+                :group="{
+                    name: 'workbook',
+                    pull: 'clone',
+                    put: false,
+                }"
+                :sort="false"
                 item-key="index"
                 :clone="cloneElement"
             >
