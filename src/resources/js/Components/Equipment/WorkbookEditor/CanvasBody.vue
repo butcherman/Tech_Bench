@@ -1,9 +1,10 @@
 <script setup lang="ts">
+import ComponentListContainer from "./ComponentListContainer.vue";
 import draggableComponent from "vuedraggable";
+import EmptyContainer from "./EmptyContainer.vue";
 import {
     activePage,
     addBlankPage,
-    deleteComponent,
     deletePage,
     editComponent,
     workbookData,
@@ -12,25 +13,6 @@ import { Tab, Tabs, TabList, TabPanel, TabPanels } from "primevue";
 </script>
 
 <template>
-    <!-- <div
-        class="relative border border-dashed border-slate-400 rounded-lg hover:border-dotted group/body p-1"
-    >
-        <div
-            class="hidden text-xs absolute -top-4 right-4 border-t border-s border-e border-dashed border-slate-300 rounded-md px-1 text-muted group-hover/body:block"
-        >
-            Body
-        </div>
-        <draggableComponent
-            :list="workbookData.body"
-            :group="{ name: 'workbook', put: true }"
-            class="h-full"
-            item-key="index"
-        >
-            <template #item="{ element }">
-                {{ element }}
-            </template>
-        </draggableComponent>
-    </div> -->
     <Tabs v-bind:value="activePage">
         <TabList>
             <draggableComponent
@@ -78,5 +60,16 @@ import { Tab, Tabs, TabList, TabPanel, TabPanels } from "primevue";
                 <fa-icon icon="plus" v-tooltip="'New Page'" />
             </Tab>
         </TabList>
+        <TabPanels class="h-full border border-slate-300 rounded-sm p-1!">
+            <TabPanel
+                v-for="page in workbookData.body"
+                :key="page.page"
+                :value="page.page"
+                class="h-full relative"
+            >
+                <EmptyContainer :isEmpty="page.container.length === 0" />
+                <ComponentListContainer :component-list="page.container" />
+            </TabPanel>
+        </TabPanels>
     </Tabs>
 </template>

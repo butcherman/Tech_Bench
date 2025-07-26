@@ -65,7 +65,7 @@ export const pageElements: workbookElement[] = [
     },
     {
         index: v4(),
-        type: "wrapper",
+        type: "fieldset",
         tag: "fieldset",
         class: "border border-slate-300 min-h-20 rounded-lg p-2",
         text: "",

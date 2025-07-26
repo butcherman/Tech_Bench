@@ -55,7 +55,7 @@ type workbookElement = {
 
 type workbookEntry = {
     index: string;
-    type: "text" | "static" | "input" | "wrapper" | "grid-wrapper";
+    type: "text" | "static" | "input" | "fieldset" | "grid-wrapper" | "wrapper";
     tag: string;
     component?: string;
     props?: { [key: string]: string | string[] | number | boolean };
