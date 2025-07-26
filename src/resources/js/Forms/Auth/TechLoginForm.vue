@@ -52,6 +52,7 @@ const schema = object({
             <Link
                 :href="$route('password.request')"
                 class="text-xs text-blue-400"
+                tabindex="-1"
             >
                 Forgot Password
             </Link>
