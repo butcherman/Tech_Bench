@@ -27,7 +27,7 @@ const editingForm = computed(() => {
                 return TextForm;
             case "input":
                 return InputForm;
-            case "wrapper":
+            case "fieldset":
                 return FieldsetForm;
         }
     }

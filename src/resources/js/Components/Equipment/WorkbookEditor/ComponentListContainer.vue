@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import draggableComponent from "vuedraggable";
 import GridWrapper from "./GridWrapper.vue";
+import FieldsetWrapper from "./FieldsetWrapper.vue";
 
 defineProps<{
     componentList: workbookElement[];
@@ -18,6 +19,11 @@ defineProps<{
             <GridWrapper
                 v-if="element.type === 'grid-wrapper'"
                 :grid-wrapper="element"
+                :container="componentList"
+            />
+            <FieldsetWrapper
+                v-else-if="element.type === 'fieldset'"
+                :element="element"
                 :container="componentList"
             />
             <div v-else style="border: 1px solid red">
