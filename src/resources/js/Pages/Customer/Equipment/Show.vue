@@ -51,15 +51,15 @@ export default { layout: AppLayout };
         <CustomerInfo />
         <CustomerAlerts />
         <VpnData v-if="allowVpn" />
-        <EquipmentData
-            class="my-3"
-            :equipment="equipment"
-            :equipment-data="equipmentData"
-        />
         <EquipmentSites
             v-if="customer.site_count > 1"
             class="my-3"
             :equipment="equipment"
+        />
+        <EquipmentData
+            class="my-3"
+            :equipment="equipment"
+            :equipment-data="equipmentData"
         />
         <CustomerNotes :equipment="equipment" />
         <CustomerFiles class="my-3" :equipment="equipment" />
