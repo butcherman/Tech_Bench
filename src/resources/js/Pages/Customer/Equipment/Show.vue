@@ -43,10 +43,7 @@ export default { layout: AppLayout };
     <div>
         <div class="flex gap-2 pb-2 border-b border-slate-400">
             <CustomerDetails class="grow" />
-            <ManageEquipment
-                v-if="permissions.equipment.delete"
-                :equipment="equipment"
-            />
+            <ManageEquipment :equipment="equipment" />
         </div>
         <CustomerInfo />
         <CustomerAlerts />
