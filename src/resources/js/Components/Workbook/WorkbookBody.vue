@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Tab, Tabs, TabList, TabPanel, TabPanels } from "primevue";
 import { onMounted, ref } from "vue";
+import ComponentListContainer from "./ComponentListContainer.vue";
 
 const props = defineProps<{
     workbookData: workbookWrapper;
@@ -26,5 +27,15 @@ const props = defineProps<{
                 </Tab>
             </template>
         </TabList>
+        <TabPanels class="h-full border border-slate-300 rounded-sm p-1!">
+            <TabPanel
+                v-for="page in workbookData.body"
+                :key="page.page"
+                :value="page.page"
+                class="h-full relative"
+            >
+                <ComponentListContainer :component-list="page.container" />
+            </TabPanel>
+        </TabPanels>
     </Tabs>
 </template>
