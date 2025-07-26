@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import ComponentListContainer from "./ComponentListContainer.vue";
+
 defineProps<{
     gridWrapper: workbookElement;
 }>();
@@ -13,7 +15,7 @@ defineProps<{
             :class="grid.class"
         >
             <template v-if="grid.container">
-                {{ grid.container }}
+                <ComponentListContainer :component-list="grid.container" />
             </template>
         </component>
     </div>

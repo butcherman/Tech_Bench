@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import ComponentData from "./ComponentData.vue";
 import FieldsetWrapper from "./FieldsetWrapper.vue";
 import GridWrapper from "./GridWrapper.vue";
 
@@ -18,9 +19,7 @@ defineProps<{
                 v-else-if="element.type === 'fieldset'"
                 :element="element"
             />
-            <div v-else style="border: 1px solid red">
-                {{ element }}
-            </div>
+            <ComponentData v-else :element="element" />
         </template>
     </div>
 </template>
