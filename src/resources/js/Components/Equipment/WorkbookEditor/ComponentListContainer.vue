@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import ComponentData from "./ComponentData.vue";
 import draggableComponent from "vuedraggable";
 import GridWrapper from "./GridWrapper.vue";
 import FieldsetWrapper from "./FieldsetWrapper.vue";
@@ -26,9 +27,11 @@ defineProps<{
                 :element="element"
                 :container="componentList"
             />
-            <div v-else style="border: 1px solid red">
-                {{ element }}
-            </div>
+            <ComponentData
+                v-else
+                :element="element"
+                :container="componentList"
+            />
         </template>
     </draggableComponent>
 </template>

@@ -9,7 +9,6 @@ import {
 const props = defineProps<{
     component: workbookElement;
     container: workbookElement[];
-    group: string;
 }>();
 
 const noEdit = ["static", "grid-wrapper", "wrapper"];
@@ -18,9 +17,7 @@ const canEdit = computed(() => !noEdit.includes(props.component.type));
 </script>
 
 <template>
-    <div
-        :class="`absolute end-0 -top-1 text-xs gap-1 hidden group-hover/${group}:flex`"
-    >
+    <div class="absolute end-0 -top-1 text-xs gap-1">
         <span
             v-if="canEdit"
             class="text-warning pointer"

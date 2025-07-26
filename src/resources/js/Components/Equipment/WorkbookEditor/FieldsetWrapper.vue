@@ -14,7 +14,7 @@ defineProps<{
         <ComponentOptions
             :component="element"
             :container="container"
-            :group="'wrapper'"
+            class="hidden group-hover/wrapper:flex"
         />
         <component :is="element.tag" :class="element.class" class="relative">
             <legend>{{ element.text }}</legend>

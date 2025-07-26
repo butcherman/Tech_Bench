@@ -14,7 +14,7 @@ defineProps<{
         <ComponentOptions
             :component="gridWrapper"
             :container="container"
-            :group="'wrapper'"
+            class="hidden group-hover/wrapper:flex"
         />
         <component
             v-for="grid in gridWrapper.container"

@@ -1,10 +1,6 @@
 <script setup lang="ts">
+import ComponentOptions from "./ComponentOptions.vue";
 import { computed, defineAsyncComponent } from "vue";
-import {
-    cloneComponent,
-    deleteComponent,
-    editComponent,
-} from "@/Composables/Equipment/WorkbookEditor.module";
 
 const props = defineProps<{
     element: workbookElement;
@@ -23,31 +19,14 @@ const component = computed(() => {
 </script>
 
 <template>
-    <div class="hover:border hover:border-green-300 p-1 mx-4 relative group">
-        <div class="absolute end-0 text-xs gap-1 hidden group-hover:flex">
-            <span
-                v-if="element.type !== 'static'"
-                class="text-warning pointer"
-                v-tooltip.bottom="'Edit Component Data'"
-                @click="editComponent(element)"
-            >
-                <fa-icon icon="pencil" />
-            </span>
-            <span
-                class="text-primary pointer"
-                v-tooltip.bottom="'Clone Component'"
-                @click="cloneComponent(element, container)"
-            >
-                <fa-icon icon="clone" />
-            </span>
-            <span
-                class="text-danger pointer"
-                v-tooltip.bottom="'Delete Component'"
-                @click="deleteComponent(element, container)"
-            >
-                <fa-icon icon="trash-alt" />
-            </span>
-        </div>
+    <div
+        class="border border-dashed border-slate-200 hover:border-green-300 hover:border-solid p-1 my-1 relative group"
+    >
+        <ComponentOptions
+            :component="element"
+            :container="container"
+            class="hidden group-hover:flex"
+        />
         <component
             :is="component"
             :id="element.index"
