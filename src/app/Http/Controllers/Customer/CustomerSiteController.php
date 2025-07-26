@@ -22,11 +22,11 @@ class CustomerSiteController extends Controller
     public function index(Request $request, Customer $customer): Response
     {
         return Inertia::render('Customer/Site/Index', [
-            'alerts' => fn() => $customer->Alerts,
-            'customer' => fn() => $customer,
-            'permissions' => fn() => UserPermissions::customerPermissions($request->user()),
-            'siteList' => fn() => $customer->Sites->makeVisible(['href']),
-            'isFav' => fn() => $customer->isFav($request->user()),
+            'alerts' => fn () => $customer->Alerts,
+            'customer' => fn () => $customer,
+            'permissions' => fn () => UserPermissions::customerPermissions($request->user()),
+            'siteList' => fn () => $customer->Sites->makeVisible(['href']),
+            'isFav' => fn () => $customer->isFav($request->user()),
         ]);
     }
 
@@ -38,8 +38,8 @@ class CustomerSiteController extends Controller
         $this->authorize('create', CustomerSite::class);
 
         return Inertia::render('Customer/Site/Create', [
-            'default-state' => fn() => config('customer.default_state'),
-            'parent-customer' => fn() => $customer,
+            'default-state' => fn () => config('customer.default_state'),
+            'parent-customer' => fn () => $customer,
         ]);
     }
 
@@ -61,34 +61,34 @@ class CustomerSiteController extends Controller
     public function show(Request $request, Customer $customer, CustomerSite $site): Response
     {
         return Inertia::render('Customer/Site/Show', [
-            'alerts' => fn() => $customer->Alerts,
-            'allowShareVpn' => fn() => config('customer.allow_share_vpn_data'),
-            'allowVpn' => fn() => config('customer.allow_vpn_data'),
-            'availableEquipment' => fn() => CacheData::equipmentCategorySelectBox(),
-            'customer' => fn() => $customer,
-            'currentSite' => fn() => $site,
-            'fileTypes' => fn() => CacheData::fileTypes(),
-            'isFav' => fn() => $customer->isFav($request->user()),
-            'permissions' => fn() => UserPermissions::customerPermissions(
+            'alerts' => fn () => $customer->Alerts,
+            'allowShareVpn' => fn () => config('customer.allow_share_vpn_data'),
+            'allowVpn' => fn () => config('customer.allow_vpn_data'),
+            'availableEquipment' => fn () => CacheData::equipmentCategorySelectBox(),
+            'customer' => fn () => $customer,
+            'currentSite' => fn () => $site,
+            'fileTypes' => fn () => CacheData::fileTypes(),
+            'isFav' => fn () => $customer->isFav($request->user()),
+            'permissions' => fn () => UserPermissions::customerPermissions(
                 $request->user()
             ),
-            'phoneTypes' => fn() => CacheData::phoneTypes(),
-            'siteList' => fn() => $customer->Sites->makeVisible(['href']),
+            'phoneTypes' => fn () => CacheData::phoneTypes(),
+            'siteList' => fn () => $customer->Sites->makeVisible(['href']),
 
             /**
              * Deferred Props
              */
-            'contactList' => Inertia::defer(fn() => $site->SiteContact),
-            'equipmentList' => Inertia::defer(fn() => $site->SiteEquipment->load('Sites')),
-            'fileList' => Inertia::defer(fn() => $site->SiteFile->append('href')),
+            'contactList' => Inertia::defer(fn () => $site->SiteContact),
+            'equipmentList' => Inertia::defer(fn () => $site->SiteEquipment->load('Sites')),
+            'fileList' => Inertia::defer(fn () => $site->SiteFile->append('href')),
             'groupedEquipmentList' => Inertia::defer(
-                fn() => $site->SiteEquipment
+                fn () => $site->SiteEquipment
                     ->load('Sites')
                     ->groupBy('equip_name')
                     ->chunk(5)
             ),
-            'noteList' => Inertia::defer(fn() => $site->SiteNote),
-            'vpnData' => Inertia::defer(fn() => $customer->CustomerVpn),
+            'noteList' => Inertia::defer(fn () => $site->SiteNote),
+            'vpnData' => Inertia::defer(fn () => $customer->CustomerVpn),
         ]);
     }
 
@@ -97,9 +97,9 @@ class CustomerSiteController extends Controller
         $this->authorize('update', $site);
 
         return Inertia::render('Customer/Site/Edit', [
-            'default-state' => fn() => config('customer.default_state'),
-            'parent-customer' => fn() => $customer,
-            'site' => fn() => $site,
+            'default-state' => fn () => config('customer.default_state'),
+            'parent-customer' => fn () => $customer,
+            'site' => fn () => $site,
         ]);
     }
 

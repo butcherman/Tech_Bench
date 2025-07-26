@@ -37,7 +37,7 @@ const copyToClipboard = (): void => {
 </script>
 
 <template>
-    <span v-tooltip="tipText" @click="copyToClipboard">
+    <span v-tooltip.below="tipText" @click="copyToClipboard">
         <BaseBadge :icon="copyIcon" :variant="bgVariant" />
     </span>
 </template>
