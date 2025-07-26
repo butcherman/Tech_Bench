@@ -38,6 +38,7 @@ export default { layout: AppLayout };
             severity="error"
             size="large"
             pt:content:class="w-full text-center block"
+            pt:text:class="w-full"
         >
             <div class="flex px-4">
                 <fa-icon class="pt-1" icon="triangle-exclamation" />
