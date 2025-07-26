@@ -108,6 +108,12 @@ const addRoute = computed(() => {
 
     return route("customers.notes.create", customer.value.slug);
 });
+
+const getRowBg = (row: customerNote): string | void => {
+    if (row.urgent) {
+        return "bg-red-200";
+    }
+};
 </script>
 
 <template>
@@ -139,6 +145,7 @@ const addRoute = computed(() => {
                 <DataTable
                     :columns="columns"
                     :rows="noteList"
+                    :row-bg-fn="getRowBg"
                     no-results-text="No Notes"
                     paginate
                     allow-row-click

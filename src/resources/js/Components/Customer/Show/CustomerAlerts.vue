@@ -9,7 +9,7 @@ import { getStatusIcon, getStatusType } from "@/Composables/styleData.module";
         <ResourceList v-if="alerts.length" :list="alerts" compact>
             <template #list-item="{ item }">
                 <div
-                    class="flex grow rounded-lg opacity-75"
+                    class="flex grow rounded-lg opacity-65"
                     :class="getStatusType(item.type)"
                 >
                     <div class="px-3 py-2">
