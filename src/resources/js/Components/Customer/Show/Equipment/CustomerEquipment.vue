@@ -122,7 +122,7 @@ const onClickAction = (
                 </div>
             </template>
             <Overlay :loading="isLoading" class="h-full">
-                <VpnData v-if="allowVpn" />
+                <VpnData v-if="allowVpn" class="flex flex-row-reverse mb-1" />
                 <ul class="border rounded-lg border-collapse">
                     <li v-if="!groupedEquipmentList.length" class="text-muted">
                         <h4 class="text-center">No Equipment</h4>

@@ -7,6 +7,7 @@ defineProps<{
     workbookData: workbookWrapper;
     activePage: string;
     isPreview?: boolean;
+    values: { [index: string]: string };
 }>();
 </script>
 
@@ -18,6 +19,7 @@ defineProps<{
                 class="grow"
                 :workbook-data="workbookData"
                 :active-page="activePage"
+                :values="values"
                 is-preview
             />
             <WorkbookHeader :data="workbookData.footer" />

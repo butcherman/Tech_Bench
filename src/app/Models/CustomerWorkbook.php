@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class CustomerWorkbook extends Model
 {
@@ -11,4 +12,14 @@ class CustomerWorkbook extends Model
 
     /** @var array<int, string> */
     protected $guarded = ['wb_id', 'created_at', 'updated_at'];
+
+    /*
+    |---------------------------------------------------------------------------
+    | Relationships
+    |---------------------------------------------------------------------------
+    */
+    public function WorkbookValues(): HasMany
+    {
+        return $this->hasMany(CustomerWorkbookValue::class, 'wb_id', 'wb_id');
+    }
 }

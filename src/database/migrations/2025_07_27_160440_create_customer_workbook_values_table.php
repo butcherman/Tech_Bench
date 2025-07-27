@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->unsignedBigInteger('wb_id');
             $table->uuid('index');
-            $table->longText('value');
+            $table->longText('value')->nullable();
             $table->timestamps();
             $table->foreign('wb_id')
                 ->references('wb_id')

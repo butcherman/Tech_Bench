@@ -9,6 +9,7 @@ use App\Services\Customer\CustomerWorkbookService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class CustomerEquipmentWorkbookController extends Controller
 {
@@ -47,10 +48,18 @@ class CustomerEquipmentWorkbookController extends Controller
     /**
      * View the Equipment Workbook
      */
-    public function show(Customer $customer, CustomerEquipment $equipment)
+    public function show(Customer $customer, CustomerEquipment $equipment): Response
     {
-        //
-        return 'show';
+        $workbook = $this->svc->getWorkbook($equipment);
+
+        if (is_null($workbook)) {
+            abort(404, 'Workbook Not Found');
+        }
+
+        return Inertia::render('Customer/Equipment/Workbook', [
+            'workbookData' => $workbook->wb_data,
+            'values' => $this->svc->getWorkbookValues($workbook),
+        ]);
     }
 
     /**
