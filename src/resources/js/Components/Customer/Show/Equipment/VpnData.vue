@@ -64,7 +64,7 @@ const onDeleteData = (): void => {
 </script>
 
 <template>
-    <div v-if="vpnData" class="flex flex-row-reverse mb-2">
+    <div v-if="vpnData">
         <BaseButton
             text="VPN Data"
             size="small"

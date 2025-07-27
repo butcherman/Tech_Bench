@@ -37,6 +37,7 @@ type customerPageProps = {
     allowVpn: boolean;
     vpnData: vpnData;
     allowShareVpn: boolean;
+    allowWorkbook: boolean;
     equipment: customerEquipment;
 } & pageProps;
 
@@ -50,6 +51,7 @@ type customerEquipment = {
     equip_id: number;
     cust_equip_id: number;
     equip_name: string;
+    has_workbook: boolean;
     sites?: customerSite[];
 };
 

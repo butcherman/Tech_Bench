@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import AppLayout from "@/Layouts/App/AppLayout.vue";
+import BaseButton from "@/Components/_Base/Buttons/BaseButton.vue";
 import CustomerAlerts from "@/Components/Customer/Show/CustomerAlerts.vue";
 import CustomerDetails from "@/Components/Customer/Show/CustomerDetails.vue";
 import CustomerFiles from "@/Components/Customer/Show/Files/CustomerFiles.vue";
@@ -47,7 +48,20 @@ export default { layout: AppLayout };
         </div>
         <CustomerInfo />
         <CustomerAlerts />
-        <VpnData v-if="allowVpn" />
+        <div class="flex flex-row-reverse mb-2 gap-2">
+            <VpnData v-if="allowVpn" />
+            <BaseButton
+                :href="
+                    $route('customers.equipment.workbook.show', [
+                        customer.slug,
+                        equipment.cust_equip_id,
+                    ])
+                "
+                text="Show Workbook"
+                size="small"
+                pill
+            />
+        </div>
         <EquipmentSites
             v-if="customer.site_count > 1"
             class="my-3"
