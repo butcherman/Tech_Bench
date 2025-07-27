@@ -12,7 +12,7 @@ class CustomerFileType extends Model
 {
     use HasFactory;
 
-    /** @var array<int, string> */
+    /** @var string */
     protected $primaryKey = 'file_type_id';
 
     /** @var array<int, string> */
