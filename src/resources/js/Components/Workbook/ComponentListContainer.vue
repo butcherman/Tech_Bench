@@ -14,10 +14,12 @@ defineProps<{
             <GridWrapper
                 v-if="element.type === 'grid-wrapper'"
                 :grid-wrapper="element"
+                tabindex="-1"
             />
             <FieldsetWrapper
                 v-else-if="element.type === 'fieldset'"
                 :element="element"
+                tabindex="-1"
             />
             <ComponentData v-else :element="element" />
         </template>

@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Customer\CustomerWorkbookRequest;
 use App\Models\Customer;
 use App\Models\CustomerEquipment;
+use App\Models\CustomerWorkbook;
 use App\Services\Customer\CustomerWorkbookService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -57,6 +59,9 @@ class CustomerEquipmentWorkbookController extends Controller
         }
 
         return Inertia::render('Customer/Equipment/Workbook', [
+            'customer' => $customer,
+            'equipment' => $equipment,
+            'workbookHash' => $workbook->wb_hash,
             'workbookData' => $workbook->wb_data,
             'values' => $this->svc->getWorkbookValues($workbook),
         ]);
@@ -72,12 +77,13 @@ class CustomerEquipmentWorkbookController extends Controller
     }
 
     /**
-     *
+     * Update a field value for a workbook data entry.
      */
-    public function update(Request $request, string $id)
+    public function update(CustomerWorkbookRequest $request, CustomerWorkbook $workbook)
     {
-        //
-        return 'update';
+        $this->svc->setWorkbookValue($workbook, $request->safe()->collect());
+
+        return response()->json(['success' => true]);
     }
 
     /**

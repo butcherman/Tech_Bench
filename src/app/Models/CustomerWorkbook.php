@@ -13,6 +13,11 @@ class CustomerWorkbook extends Model
     /** @var array<int, string> */
     protected $guarded = ['wb_id', 'created_at', 'updated_at'];
 
+    public function getRouteKeyName(): string
+    {
+        return 'wb_hash';
+    }
+
     /*
     |---------------------------------------------------------------------------
     | Relationships

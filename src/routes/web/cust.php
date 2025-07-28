@@ -332,3 +332,14 @@ Route::middleware('auth.secure')->group(function () {
             ->except(['show']);
     });
 });
+
+/*
+|-------------------------------------------------------------------------------
+| Public Customer Workbook Routes
+|-------------------------------------------------------------------------------
+*/
+
+Route::prefix('workbooks')->controller(CustomerEquipmentWorkbookController::class)->name('customer-workbook.')->group(function () {
+    Route::get('{workbook}', 'edit')->name('edit');
+    Route::put('{workbook}', 'update')->name('update');
+});

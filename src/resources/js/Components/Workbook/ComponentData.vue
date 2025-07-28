@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, defineAsyncComponent } from "vue";
+import { computed, defineAsyncComponent, inject } from "vue";
 
 const props = defineProps<{
     element: workbookElement;
@@ -14,6 +14,10 @@ const component = computed(() => {
 
     return props.element.tag;
 });
+
+const triggerSave: (index: string) => void = inject("triggerSave", (index) =>
+    alert("Inject opteration failed for " + index)
+);
 </script>
 
 <template>
@@ -24,5 +28,6 @@ const component = computed(() => {
         :class="element.class"
         v-bind="element.props"
         v-html="element.text"
+        @blur="triggerSave(element.index)"
     />
 </template>

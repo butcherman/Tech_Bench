@@ -7,7 +7,8 @@ use App\Models\CustomerEquipment;
 use App\Models\CustomerWorkbook;
 use App\Models\CustomerWorkbookValue;
 use App\Models\EquipmentWorkbook;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 class CustomerWorkbookService
 {
@@ -20,6 +21,7 @@ class CustomerWorkbookService
             ->first();
 
         CustomerWorkbook::create([
+            'wb_hash' => Str::uuid(),
             'cust_id' => $customer->cust_id,
             'cust_equip_id' => $equipment->cust_equip_id,
             'wb_data' => $blankWorkbook->workbook_data,
@@ -42,5 +44,21 @@ class CustomerWorkbookService
         return $workbook->WorkbookValues->mapWithKeys(function ($item) {
             return [$item->index => $item->value];
         });
+    }
+
+    /**
+     * Set a workbook field value
+     */
+    public function setWorkbookValue(CustomerWorkbook $workbook, Collection $requestData)
+    {
+        CustomerWorkbookValue::updateOrCreate(
+            [
+                'wb_id' => $workbook->wb_id,
+                'index' => $requestData->get('index'),
+            ],
+            [
+                'value' => $requestData->get('fieldValue'),
+            ]
+        );
     }
 }

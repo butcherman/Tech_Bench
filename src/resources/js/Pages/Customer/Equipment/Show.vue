@@ -11,11 +11,7 @@ import EquipmentSites from "@/Components/Customer/Show/Equipment/EquipmentSites.
 import ManageEquipment from "@/Components/Customer/Show/Equipment/ManageEquipment.vue";
 import VpnData from "@/Components/Customer/Show/Equipment/VpnData.vue";
 import { onMounted, onUnmounted } from "vue";
-import {
-    allowVpn,
-    customer,
-    permissions,
-} from "@/Composables/Customer/CustomerData.module";
+import { allowVpn, customer } from "@/Composables/Customer/CustomerData.module";
 import {
     leaveEquipmentChannel,
     registerEquipmentChannel,
@@ -51,6 +47,7 @@ export default { layout: AppLayout };
         <div class="flex flex-row-reverse mb-2 gap-2">
             <VpnData v-if="allowVpn" />
             <BaseButton
+                v-if="equipment.has_workbook"
                 :href="
                     $route('customers.equipment.workbook.show', [
                         customer.slug,

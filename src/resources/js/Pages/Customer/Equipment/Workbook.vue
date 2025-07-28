@@ -1,12 +1,15 @@
 <script setup lang="ts">
-import PublicLayout from "@/Layouts/Public/PublicLayout.vue";
-import { computed } from "vue";
 import BaseButton from "@/Components/_Base/Buttons/BaseButton.vue";
+import PublicLayout from "@/Layouts/Public/PublicLayout.vue";
 import WorkbookBase from "@/Components/Workbook/WorkbookBase.vue";
+import { computed } from "vue";
+import { customer } from "@/Composables/Customer/CustomerData.module";
 
 const props = defineProps<{
-    workbookData: string;
+    equipment: customerEquipment;
     values: { [index: string]: string };
+    workbookData: string;
+    workbookHash: string;
 }>();
 
 const wbData = computed(() => JSON.parse(props.workbookData));
@@ -22,7 +25,12 @@ export default { layout: PublicLayout };
             <BaseButton
                 icon="arrow-left"
                 text="Back to Tech Bench"
-                :href="$route('workbooks.index')"
+                :href="
+                    $route('customers.equipment.show', [
+                        customer.slug,
+                        equipment.cust_equip_id,
+                    ])
+                "
             />
         </div>
         <WorkbookBase
@@ -30,6 +38,7 @@ export default { layout: PublicLayout };
             :workbook-data="wbData"
             :active-page="wbData.body[0].page"
             :values="values"
+            :workbook-hash="workbookHash"
         />
     </div>
 </template>

@@ -12,6 +12,7 @@ return new class extends Migration {
     {
         Schema::create('customer_workbooks', function (Blueprint $table) {
             $table->id('wb_id');
+            $table->uuid('wb_hash');
             $table->unsignedBigInteger('cust_id');
             $table->unsignedBigInteger('cust_equip_id');
             $table->json('wb_data');
