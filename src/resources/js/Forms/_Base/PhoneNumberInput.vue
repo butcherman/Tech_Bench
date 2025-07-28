@@ -6,7 +6,7 @@ import {
     InputText,
     Message,
 } from "primevue";
-import { computed, ref, toRef, watch } from "vue";
+import { computed, onMounted, ref, toRef, watch } from "vue";
 import { useField } from "vee-validate";
 import type { Ref } from "vue";
 
@@ -48,14 +48,26 @@ const inputPlaceholder = computed<string>(() => {
  */
 const formattedValue = ref<string | null>(null);
 watch(formattedValue, (newVal: string | null) => {
-    let cleaned = `${newVal}`.replace(/\D/g, "");
+    let cleaned = processNumber(newVal);
+
+    setValue(cleaned.replace(/^1/, ""));
+});
+
+const processNumber = (phNum: string | null) => {
+    let cleaned = `${phNum}`.replace(/\D/g, "");
     let parts = cleaned.match(/^(1|)?([2-9]{1}\d{2})(\d{3})(\d{4})$/);
 
     if (parts) {
         formattedValue.value = `+1 (${parts[2]}) ${parts[3]}-${parts[4]}`;
     }
 
-    setValue(cleaned.replace(/^1/, ""));
+    return cleaned;
+};
+
+onMounted(() => {
+    if (value.value) {
+        processNumber(value.value);
+    }
 });
 
 /*
@@ -84,9 +96,11 @@ const nameRef = toRef(props, "name");
 const {
     errorMessage,
     setValue,
+    value,
 }: {
     errorMessage: Ref<string | undefined, string | undefined>;
     setValue: (val: string) => void;
+    value: Ref<string | undefined>;
 } = useField(nameRef);
 </script>
 
