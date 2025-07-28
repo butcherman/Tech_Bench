@@ -10,8 +10,8 @@ const props = defineProps<{
     workbookData: workbookWrapper;
     activePage: string;
     isPreview?: boolean;
-    values: { [index: string]: string };
-    workbookHash: string;
+    values?: { [index: string]: string };
+    workbookHash?: string;
 }>();
 
 const { values } = useForm({
@@ -22,14 +22,16 @@ const { values } = useForm({
  * Save an individual field
  */
 const triggerSave = (index: string): void => {
-    let fieldValue = values[index];
+    if (props.workbookHash) {
+        let fieldValue = values[index];
 
-    dataPut(route("customer-workbook.update", props.workbookHash), {
-        index,
-        fieldValue,
-    }).then((res) => {
-        console.log(res);
-    });
+        dataPut(route("customer-workbook.update", props.workbookHash), {
+            index,
+            fieldValue,
+        }).then((res) => {
+            console.log(res);
+        });
+    }
 };
 
 provide("triggerSave", triggerSave);

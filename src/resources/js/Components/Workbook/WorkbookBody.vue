@@ -3,10 +3,10 @@ import ComponentListContainer from "./ComponentListContainer.vue";
 
 import { Tab, Tabs, TabList, TabPanel, TabPanels } from "primevue";
 
-const props = defineProps<{
+defineProps<{
     workbookData: workbookWrapper;
     activePage: string;
-    values: { [index: string]: string };
+    values?: { [index: string]: string };
 }>();
 </script>
 
@@ -27,7 +27,7 @@ const props = defineProps<{
                 </Tab>
             </template>
         </TabList>
-        <TabPanels class="h-full border border-slate-300 rounded-sm p-1!">
+        <TabPanels class="border border-slate-300 rounded-sm p-1!">
             <TabPanel
                 v-for="page in workbookData.body"
                 :key="page.page"

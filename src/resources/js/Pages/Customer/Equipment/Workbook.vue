@@ -7,9 +7,9 @@ import { customer } from "@/Composables/Customer/CustomerData.module";
 
 const props = defineProps<{
     equipment: customerEquipment;
-    values: { [index: string]: string };
     workbookData: string;
-    workbookHash: string;
+    values?: { [index: string]: string };
+    workbookHash?: string;
 }>();
 
 const wbData = computed(() => JSON.parse(props.workbookData));

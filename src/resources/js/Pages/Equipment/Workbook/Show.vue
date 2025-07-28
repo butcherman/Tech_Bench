@@ -54,7 +54,6 @@ export default { layout: PublicLayout };
             class="grow"
             :workbook-data="workbookData"
             :active-page="activePage"
-            is-preview
         />
     </div>
 </template>
