@@ -27,7 +27,7 @@ defineProps<{
                 </Tab>
             </template>
         </TabList>
-        <TabPanels class="border border-slate-300 rounded-sm p-1!">
+        <TabPanels class="border border-slate-300 rounded-sm p-1! h-full">
             <TabPanel
                 v-for="page in workbookData.body"
                 :key="page.page"

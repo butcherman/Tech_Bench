@@ -39,17 +39,15 @@ provide("triggerSave", triggerSave);
 
 <template>
     <Card>
-        <div class="h-full flex flex-col">
-            <form novalidate @submit.prevent class="h-full">
-                <WorkbookHeader :data="workbookData.header" />
-                <WorkbookBody
-                    class="grow"
-                    :workbook-data="workbookData"
-                    :active-page="activePage"
-                    :values="values"
-                />
-                <WorkbookHeader :data="workbookData.footer" />
-            </form>
-        </div>
+        <form novalidate @submit.prevent class="h-full flex flex-col">
+            <WorkbookHeader :data="workbookData.header" />
+            <WorkbookBody
+                class="grow"
+                :workbook-data="workbookData"
+                :active-page="activePage"
+                :values="values"
+            />
+            <WorkbookHeader :data="workbookData.footer" />
+        </form>
     </Card>
 </template>
