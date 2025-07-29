@@ -17,6 +17,7 @@ const props = defineProps<{
     disabled?: boolean;
     help?: string;
     label?: string;
+    reverse?: boolean;
 }>();
 
 /*
@@ -57,7 +58,10 @@ const {
 
 <template>
     <div class="my-2" :class="{ 'flex justify-center': center }">
-        <div class="flex gap-2">
+        <div
+            class="flex gap-2"
+            :class="{ 'flex-row-reverse text-end': reverse }"
+        >
             <ToggleSwitch
                 v-model="value"
                 :input-id="id"

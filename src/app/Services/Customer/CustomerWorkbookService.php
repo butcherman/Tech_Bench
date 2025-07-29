@@ -31,9 +31,14 @@ class CustomerWorkbookService
     /**
      * Get a Workbook for the Customer Equipment
      */
-    public function getWorkbook(CustomerEquipment $equipment): CustomerWorkbook|null
+    public function getWorkbook(Customer $customer, CustomerEquipment $equipment): CustomerWorkbook|null
     {
-        return CustomerWorkbook::where('cust_equip_id', $equipment->cust_equip_id)->first();
+        $workbook = CustomerWorkbook::where('cust_equip_id', $equipment->cust_equip_id)->first();
+
+        // Update the workbook with any editing changes that need to be made
+        $workbook->wb_data = str_replace('[ Customer Name ]', $customer->name, $workbook->wb_data);
+
+        return $workbook;
     }
 
     /**

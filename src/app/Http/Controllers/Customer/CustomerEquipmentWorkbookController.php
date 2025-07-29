@@ -52,7 +52,7 @@ class CustomerEquipmentWorkbookController extends Controller
      */
     public function show(Customer $customer, CustomerEquipment $equipment): Response
     {
-        $workbook = $this->svc->getWorkbook($equipment);
+        $workbook = $this->svc->getWorkbook($customer, $equipment);
 
         if (is_null($workbook)) {
             abort(404, 'Workbook Not Found');
