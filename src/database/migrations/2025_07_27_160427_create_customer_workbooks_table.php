@@ -16,6 +16,9 @@ return new class extends Migration {
             $table->unsignedBigInteger('cust_id');
             $table->unsignedBigInteger('cust_equip_id');
             $table->json('wb_data');
+            $table->boolean('published')->default(false);
+            $table->boolean('by_invite_only')->default(false);
+            $table->timestamp('publish_until')->nullable();
             $table->timestamps();
             $table->foreign('cust_id')
                 ->references('cust_id')

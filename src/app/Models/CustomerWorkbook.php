@@ -20,6 +20,22 @@ class CustomerWorkbook extends Model
 
     /*
     |---------------------------------------------------------------------------
+    | Model Casting
+    |---------------------------------------------------------------------------
+    */
+    protected function casts(): array
+    {
+        return [
+            'published' => 'boolean',
+            'by_invite_only' => 'boolean',
+            'publish_until' => 'datetime:M d, Y',
+            'created_at' => 'datetime:M d, Y',
+            'updated_at' => 'datetime:M d, Y',
+        ];
+    }
+
+    /*
+    |---------------------------------------------------------------------------
     | Relationships
     |---------------------------------------------------------------------------
     */

@@ -61,6 +61,7 @@ class CustomerEquipmentWorkbookController extends Controller
         return Inertia::render('Customer/Equipment/Workbook', [
             'customer' => $customer,
             'equipment' => $equipment,
+            'workbook' => $workbook->only(['wb_id', 'published', 'by_invite_only', 'publish_until']),
             'workbookHash' => $workbook->wb_hash,
             'workbookData' => $workbook->wb_data,
             'values' => $this->svc->getWorkbookValues($workbook),

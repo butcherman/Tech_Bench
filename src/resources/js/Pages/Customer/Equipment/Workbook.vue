@@ -2,19 +2,32 @@
 import BaseButton from "@/Components/_Base/Buttons/BaseButton.vue";
 import ClipboardCopy from "@/Components/_Base/ClipboardCopy.vue";
 import PublicLayout from "@/Layouts/Public/PublicLayout.vue";
-import SwitchInput from "@/Forms/_Base/SwitchInput.vue";
+import ToggleSwitch from "@/Components/_Base/ToggleSwitch.vue";
 import WorkbookBase from "@/Components/Workbook/WorkbookBase.vue";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { customer } from "@/Composables/Customer/CustomerData.module";
+
+interface workbookObject {
+    wb_id: number;
+    published: boolean;
+    by_invite_only: boolean;
+    publish_until: string | null;
+}
 
 const props = defineProps<{
     equipment: customerEquipment;
     workbookData: string;
     values?: { [index: string]: string };
     workbookHash?: string;
+    workbook: workbookObject;
 }>();
 
 const wbData = computed(() => JSON.parse(props.workbookData));
+const isPublished = ref(props.workbook.published);
+
+const publishWorkbook = () => {
+    console.log(isPublished.value);
+};
 </script>
 
 <script lang="ts">
@@ -51,15 +64,20 @@ export default { layout: PublicLayout };
                 />
             </div>
             <div>
-                <!-- <SwitchInput
+                <ToggleSwitch
+                    v-model="isPublished"
                     id="publish"
                     name="publish"
                     label="Publish Workbook"
                     reverse
+                    @change="publishWorkbook()"
                 />
-                <p class="text-end text-sm text-muted">
-                    Available until 07-23-2025
-                </p> -->
+                <p
+                    v-if="workbook.published && workbook.publish_until"
+                    class="text-end text-sm text-muted"
+                >
+                    Available until {{ workbook.publish_until }}
+                </p>
             </div>
         </div>
         <WorkbookBase
