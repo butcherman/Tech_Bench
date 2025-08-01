@@ -59,7 +59,7 @@ class LogUtilitiesService
     public function validateLogFile(string $channel, string $filename): string|bool
     {
         $folder = $this->validateLogChannel($channel);
-        $relativePath = $folder . DIRECTORY_SEPARATOR . $filename . '.log';
+        $relativePath = $folder.DIRECTORY_SEPARATOR.$filename.'.log';
 
         if (! Storage::disk('logs')->exists($relativePath)) {
             return false;

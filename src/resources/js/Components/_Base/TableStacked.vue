@@ -1,7 +1,7 @@
 <script setup lang="ts" generic="T">
 defineProps<{
     bordered?: boolean;
-    items: T;
+    items: T[];
     only?: string[];
     skip?: string[];
 }>();

@@ -1,15 +1,23 @@
 <script setup lang="ts">
+import Modal from "@/Components/_Base/Modal.vue";
 import verifyModal from "@/Modules/verifyModal";
-import { customer } from "@/Composables/Customer/CustomerData.module";
+import VpnDataForm from "@/Forms/Customer/VpnDataForm.vue";
+import { computed, useTemplateRef } from "vue";
 import { Menu } from "primevue";
 import { router } from "@inertiajs/vue3";
-import { useTemplateRef } from "vue";
+import {
+    allowVpn,
+    customer,
+    permissions,
+    vpnData,
+} from "@/Composables/Customer/CustomerData.module";
 
 const props = defineProps<{
     equipment: customerEquipment;
 }>();
 
 const menu = useTemplateRef("manage-equipment");
+const vpnModal = useTemplateRef("vpn-data-modal");
 
 /**
  * Verify user wants to delete the equipment and then process result.
@@ -30,16 +38,29 @@ const disableEquipment = () => {
 /**
  * Customer Equipment Management Options
  */
-const managementOptions = [
-    {
-        label: "Disable Equipment",
-        command: () => disableEquipment(),
-    },
-];
+const managementOptions = computed(() => {
+    const options = [];
+
+    if (allowVpn.value && vpnData.value === null) {
+        options.push({
+            label: "Add VPN Data",
+            command: () => vpnModal.value?.show(),
+        });
+    }
+
+    if (permissions.value.equipment.delete) {
+        options.push({
+            label: "Disable Equipment",
+            command: () => disableEquipment(),
+        });
+    }
+
+    return options;
+});
 </script>
 
 <template>
-    <div>
+    <div v-if="managementOptions.length">
         <button
             type="button"
             class="px-2"
@@ -49,5 +70,8 @@ const managementOptions = [
             <fa-icon icon="ellipsis-vertical" />
         </button>
         <Menu ref="manage-equipment" :model="managementOptions" popup />
+        <Modal ref="vpn-data-modal" title="Add VPN Data">
+            <VpnDataForm :customer="customer" @success="vpnModal?.hide()" />
+        </Modal>
     </div>
 </template>

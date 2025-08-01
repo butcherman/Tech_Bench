@@ -42,11 +42,7 @@ const isDisableSiteAllowed = (): boolean => {
 const managementOptions = computed(() => {
     const options = [];
 
-    if (
-        allowVpn.value &&
-        permissions.value.equipment.create &&
-        vpnData.value == null
-    ) {
+    if (allowVpn.value && vpnData.value == null) {
         options.push({
             label: "Add VPN Data",
             command: () => vpnModal.value?.show(),

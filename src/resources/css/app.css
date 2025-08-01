@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 @config '../../tailwind.config.js';
 
@@ -11,19 +11,22 @@
   color utility to any element that depends on these defaults.
 */
 @layer base {
-  *,
-  ::after,
-  ::before,
-  ::backdrop,
-  ::file-selector-button {
-    border-color: var(--color-gray-200, currentcolor);
-  }
+    *,
+    ::after,
+    ::before,
+    ::backdrop,
+    ::file-selector-button {
+        border-color: var(--color-gray-200, currentcolor);
+    }
 }
 
 .pointer {
     cursor: pointer;
 }
 
+.mask-field {
+    @apply blur-xs hover:blur-none;
+}
 
 /**
 * Classes to quickly set Card Component sizes
@@ -93,7 +96,7 @@
     }
 
     .text-warning {
-        @apply text-yellow-500
+        @apply text-yellow-500;
     }
 
     .text-muted {
@@ -107,7 +110,6 @@
     .text-danger {
         @apply text-red-600;
     }
-
 }
 
 /**

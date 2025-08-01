@@ -27,6 +27,9 @@ export default { layout: AuthLayout };
                 <h5 class="text-center">
                     Please check your email for additional instructions.
                 </h5>
+                <P class="text-center text-blue-400">
+                    <Link :href="$route('login')">Return to Login Page</Link>
+                </P>
             </div>
         </LogoImage>
     </div>
