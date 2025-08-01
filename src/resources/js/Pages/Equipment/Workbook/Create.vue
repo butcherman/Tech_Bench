@@ -3,13 +3,8 @@ import BaseButton from "@/Components/_Base/Buttons/BaseButton.vue";
 import CanvasComponents from "@/Components/Equipment/WorkbookEditor/CanvasComponents.vue";
 import PublicLayout from "@/Layouts/Public/PublicLayout.vue";
 import WorkbookCanvas from "@/Components/Equipment/WorkbookEditor/WorkbookCanvas.vue";
-import { Drawer } from "primevue";
 import { onMounted } from "vue";
-import {
-    initWorkbook,
-    onWbEditorClose,
-    showWbEditor,
-} from "@/Composables/Equipment/WorkbookEditor.module";
+import { initWorkbook } from "@/Composables/Equipment/WorkbookEditor.module";
 import ComponentEditor from "@/Components/Equipment/WorkbookEditor/ComponentEditor.vue";
 
 const props = defineProps<{
