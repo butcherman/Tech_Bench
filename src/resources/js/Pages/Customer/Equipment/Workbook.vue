@@ -20,6 +20,10 @@ const wbData = computed(() => JSON.parse(props.workbook.wb_data));
 const isPublished = ref(props.workbook.published);
 const modal = useTemplateRef("publish-modal");
 
+// Default expiration date for publish wb is 90 days from today
+let date = new Date();
+date.setDate(date.getDate() + 90);
+
 /**
  * Enable or Disable the public workbook link
  */
@@ -38,9 +42,6 @@ const publishWorkbook = () => {
         );
     }
 };
-
-let date = new Date();
-date.setDate(date.getDate() + 90);
 </script>
 
 <script lang="ts">
@@ -65,15 +66,15 @@ export default { layout: PublicLayout };
             <div class="text-center grow">
                 <p>Public Workbook Link</p>
                 <a
-                    :href="$route('customer-workbook.edit', workbook.wb_hash)"
+                    :href="$route('customer-workbook.show', workbook.wb_hash)"
                     target="_blank"
                     class="text-blue-600"
                 >
-                    {{ $route("customer-workbook.edit", workbook.wb_hash) }}
+                    {{ $route("customer-workbook.show", workbook.wb_hash) }}
                 </a>
                 <ClipboardCopy
                     class="ms-1"
-                    :value="$route('customer-workbook.edit', workbook.wb_hash)"
+                    :value="$route('customer-workbook.show', workbook.wb_hash)"
                 />
             </div>
             <div>

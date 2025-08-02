@@ -7,6 +7,7 @@ use App\Models\CustomerEquipment;
 use App\Models\CustomerWorkbook;
 use App\Models\CustomerWorkbookValue;
 use App\Models\EquipmentWorkbook;
+use Arr;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
@@ -26,6 +27,7 @@ class CustomerWorkbookService
             'cust_id' => $customer->cust_id,
             'cust_equip_id' => $equipment->cust_equip_id,
             'wb_data' => $blankWorkbook->workbook_data,
+            'wb_version' => $blankWorkbook->version_hash,
         ]);
     }
 
@@ -42,6 +44,22 @@ class CustomerWorkbookService
     }
 
     /**
+     * Determine if the workbook is available to be viewed publicly
+     */
+    public function validateWorkbook(CustomerWorkbook $workbook): bool
+    {
+        if (!$workbook->published || is_null($workbook->publish_until)) {
+            return false;
+        }
+
+        if (Carbon::now() > Carbon::parse($workbook->publish_until)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Get a Workbook for the Customer Equipment
      */
     public function getWorkbook(Customer $customer, CustomerEquipment $equipment): CustomerWorkbook|null
@@ -52,6 +70,25 @@ class CustomerWorkbookService
         $workbook->wb_data = str_replace('[ Customer Name ]', $customer->name, $workbook->wb_data);
 
         return $workbook;
+    }
+
+    /**
+     * Remove internal only pages from the workbook
+     */
+    public function getPublicWorkbookData(CustomerWorkbook $workbook): mixed
+    {
+        $wbData = json_decode($workbook->wb_data);
+        $body = $wbData->body;
+
+        foreach ($body as $key => $page) {
+            if (!$page->canPublish) {
+                unset($body[$key]);
+            }
+        }
+
+        $wbData->body = array_values($body);
+
+        return json_encode($wbData);
     }
 
     /**

@@ -22,7 +22,7 @@ class CustomerEquipmentWorkbookController extends Controller
     }
 
     /**
-     *
+     * Show the workbook
      */
     public function index(Customer $customer, CustomerEquipment $equipment): Response
     {
@@ -62,20 +62,31 @@ class CustomerEquipmentWorkbookController extends Controller
     }
 
     /**
-     * View the Equipment Workbook
+     * Show the public version of the workbook
      */
-    public function show(Customer $customer, CustomerEquipment $equipment)
+    public function show(CustomerWorkbook $workbook)
     {
-        return 'show';
+        if (!$this->svc->validateWorkbook($workbook)) {
+            return Inertia::render('Workbook/Invalid');
+        }
+
+        $this->svc->getPublicWorkbookData($workbook);
+
+        return Inertia::render('Workbook/Show', [
+            'wb-data' => $this->svc->getPublicWorkbookData($workbook),
+            'wb-hash' => $workbook->wb_hash,
+            'values' => $this->svc->getWorkbookValues($workbook),
+        ]);
+
+
     }
 
     /**
      *
      */
-    public function edit(string $id)
+    public function edit()
     {
-        //
-        return 'edit';
+
     }
 
     /**

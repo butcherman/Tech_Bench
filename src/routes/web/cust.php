@@ -341,6 +341,6 @@ Route::middleware('auth.secure')->group(function () {
 */
 
 Route::prefix('workbooks')->controller(CustomerEquipmentWorkbookController::class)->name('customer-workbook.')->group(function () {
-    Route::get('{workbook}', 'edit')->name('edit');
+    Route::get('{workbook}', 'show')->name('show');
     Route::put('{workbook}', 'update')->name('update');
 });
