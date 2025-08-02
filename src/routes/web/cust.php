@@ -265,8 +265,9 @@ Route::middleware('auth.secure')->group(function () {
         */
         Route::prefix('equipment/{equipment}')->name('equipment.')->group(function () {
             Route::controller(CustomerEquipmentWorkbookController::class)->prefix('workbook')->name('workbook.')->group(function () {
+                Route::get('/', 'index')->name('index');
                 Route::get('create', 'create')->name('create');
-                Route::get('show', 'show')->name('show');
+                Route::post('/', 'store')->name('store');
             });
 
             Route::resource('notes', CustomerEquipmentNoteController::class)

@@ -7,6 +7,7 @@ use App\Models\CustomerEquipment;
 use App\Models\CustomerWorkbook;
 use App\Models\CustomerWorkbookValue;
 use App\Models\EquipmentWorkbook;
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
@@ -29,6 +30,18 @@ class CustomerWorkbookService
     }
 
     /**
+     * Make a workbook avaialable via its public link
+     */
+    public function publishWorkbook(CustomerWorkbook $workbook, Collection $requestData): void
+    {
+        $expire = $requestData->get('expires');
+
+        $workbook->published = is_null($expire) ? false : true;
+        $workbook->publish_until = $expire ? Carbon::parse($requestData->get('expires')) : null;
+        $workbook->save();
+    }
+
+    /**
      * Get a Workbook for the Customer Equipment
      */
     public function getWorkbook(Customer $customer, CustomerEquipment $equipment): CustomerWorkbook|null
@@ -44,7 +57,7 @@ class CustomerWorkbookService
     /**
      * Get all value data for the selected workbook
      */
-    public function getWorkbookValues(CustomerWorkbook $workbook)
+    public function getWorkbookValues(CustomerWorkbook $workbook): mixed
     {
         return $workbook->WorkbookValues->mapWithKeys(function ($item) {
             return [$item->index => $item->value];
@@ -54,7 +67,7 @@ class CustomerWorkbookService
     /**
      * Set a workbook field value
      */
-    public function setWorkbookValue(CustomerWorkbook $workbook, Collection $requestData)
+    public function setWorkbookValue(CustomerWorkbook $workbook, Collection $requestData): void
     {
         CustomerWorkbookValue::updateOrCreate(
             [

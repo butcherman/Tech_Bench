@@ -49,7 +49,7 @@ export default { layout: AppLayout };
             <BaseButton
                 v-if="equipment.has_workbook"
                 :href="
-                    $route('customers.equipment.workbook.show', [
+                    $route('customers.equipment.workbook.index', [
                         customer.slug,
                         equipment.cust_equip_id,
                     ])

@@ -2,32 +2,45 @@
 import BaseButton from "@/Components/_Base/Buttons/BaseButton.vue";
 import ClipboardCopy from "@/Components/_Base/ClipboardCopy.vue";
 import PublicLayout from "@/Layouts/Public/PublicLayout.vue";
+import Modal from "@/Components/_Base/Modal.vue";
+import PublishWorkbookForm from "@/Forms/Customer/PublishWorkbookForm.vue";
 import ToggleSwitch from "@/Components/_Base/ToggleSwitch.vue";
 import WorkbookBase from "@/Components/Workbook/WorkbookBase.vue";
-import { computed, ref } from "vue";
+import { computed, ref, useTemplateRef } from "vue";
 import { customer } from "@/Composables/Customer/CustomerData.module";
-
-interface workbookObject {
-    wb_id: number;
-    published: boolean;
-    by_invite_only: boolean;
-    publish_until: string | null;
-}
+import { useForm } from "@inertiajs/vue3";
 
 const props = defineProps<{
     equipment: customerEquipment;
-    workbookData: string;
     values?: { [index: string]: string };
-    workbookHash?: string;
-    workbook: workbookObject;
+    workbook: customerWorkbook;
 }>();
 
-const wbData = computed(() => JSON.parse(props.workbookData));
+const wbData = computed(() => JSON.parse(props.workbook.wb_data));
 const isPublished = ref(props.workbook.published);
+const modal = useTemplateRef("publish-modal");
 
+/**
+ * Enable or Disable the public workbook link
+ */
 const publishWorkbook = () => {
     console.log(isPublished.value);
+    if (isPublished.value) {
+        modal.value?.show();
+    } else {
+        console.log("unpublish workbook");
+        let formData = useForm({ expires: null });
+        formData.post(
+            route("customers.equipment.workbook.store", [
+                customer.value.slug,
+                props.equipment.cust_equip_id,
+            ])
+        );
+    }
 };
+
+let date = new Date();
+date.setDate(date.getDate() + 90);
 </script>
 
 <script lang="ts">
@@ -52,15 +65,15 @@ export default { layout: PublicLayout };
             <div class="text-center grow">
                 <p>Public Workbook Link</p>
                 <a
-                    :href="$route('customer-workbook.edit', workbookHash)"
+                    :href="$route('customer-workbook.edit', workbook.wb_hash)"
                     target="_blank"
                     class="text-blue-600"
                 >
-                    {{ $route("customer-workbook.edit", workbookHash) }}
+                    {{ $route("customer-workbook.edit", workbook.wb_hash) }}
                 </a>
                 <ClipboardCopy
                     class="ms-1"
-                    :value="$route('customer-workbook.edit', workbookHash)"
+                    :value="$route('customer-workbook.edit', workbook.wb_hash)"
                 />
             </div>
             <div>
@@ -85,7 +98,19 @@ export default { layout: PublicLayout };
             :workbook-data="wbData"
             :active-page="wbData.body[0].page"
             :values="values"
-            :workbook-hash="workbookHash"
+            :workbook-hash="workbook.wb_hash"
         />
+        <Modal ref="publish-modal" title="Publish Workbook">
+            <p class="text-center">
+                Workbook will be available through the public link until the
+                date below.
+            </p>
+            <PublishWorkbookForm
+                :equipment="equipment"
+                :customer="customer"
+                :expires="workbook.publish_until ?? date"
+                @success="modal?.hide()"
+            />
+        </Modal>
     </div>
 </template>
