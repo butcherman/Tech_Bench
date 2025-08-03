@@ -47,7 +47,7 @@ class CustomerWorkbookService
      */
     public function validateWorkbook(CustomerWorkbook $workbook): bool
     {
-        if (! $workbook->published || is_null($workbook->publish_until)) {
+        if (!$workbook->published || is_null($workbook->publish_until)) {
             return false;
         }
 
@@ -80,7 +80,7 @@ class CustomerWorkbookService
         $body = $wbData->body;
 
         foreach ($body as $key => $page) {
-            if (! $page->canPublish) {
+            if (!$page->canPublish) {
                 unset($body[$key]);
             }
         }
@@ -95,6 +95,7 @@ class CustomerWorkbookService
      */
     public function getWorkbookValues(CustomerWorkbook $workbook): mixed
     {
+        // TODO - Return only public values
         return $workbook->WorkbookValues->mapWithKeys(function ($item) {
             return [$item->index => $item->value];
         });

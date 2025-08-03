@@ -76,7 +76,6 @@ export const resetWorkbook = () => {
  * Update the Dirty changes to show on the preview page
  */
 watch(workbookData, (newWb) => {
-    console.log("update preview", newWb);
     dataPut(route("workbooks.update", equipmentType.value?.equip_id), {
         workbook_data: unref(workbookData),
     });
@@ -136,8 +135,6 @@ export const onWbEditorClose = (): void => {
 export const editComponent = (
     component: workbookElement | workbookPage
 ): void => {
-    console.log("edit ", component);
-
     editingComponent.value = component;
     showWbEditor.value = true;
 };

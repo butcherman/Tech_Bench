@@ -19,6 +19,7 @@ const props = defineProps<{
 // TODO - Register to Broadcast Channel and monitor changes in value
 
 const wbData = computed(() => JSON.parse(props.workbook.wb_data));
+const wbValues = ref({ ...props.values });
 const isPublished = ref(props.workbook.published);
 const modal = useTemplateRef("publish-modal");
 
@@ -30,11 +31,9 @@ date.setDate(date.getDate() + 90);
  * Enable or Disable the public workbook link
  */
 const publishWorkbook = () => {
-    console.log(isPublished.value);
     if (isPublished.value) {
         modal.value?.show();
     } else {
-        console.log("unpublish workbook");
         let formData = useForm({ expires: null });
         formData.post(
             route("customers.equipment.workbook.store", [
@@ -100,7 +99,7 @@ export default { layout: PublicLayout };
             class="grow"
             :workbook-data="wbData"
             :active-page="wbData.body[0].page"
-            :values="values"
+            :values="wbValues"
             :workbook-hash="workbook.wb_hash"
         />
         <Modal ref="publish-modal" title="Publish Workbook">
