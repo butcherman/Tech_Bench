@@ -11,15 +11,12 @@ use App\Models\CustomerWorkbook;
 use App\Services\Customer\CustomerWorkbookService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class CustomerEquipmentWorkbookController extends Controller
 {
-    public function __construct(protected CustomerWorkbookService $svc)
-    {
-    }
+    public function __construct(protected CustomerWorkbookService $svc) {}
 
     /**
      * Show the workbook
@@ -66,7 +63,7 @@ class CustomerEquipmentWorkbookController extends Controller
      */
     public function show(CustomerWorkbook $workbook)
     {
-        if (!$this->svc->validateWorkbook($workbook)) {
+        if (! $this->svc->validateWorkbook($workbook)) {
             return Inertia::render('Workbook/Invalid');
         }
 
@@ -78,16 +75,9 @@ class CustomerEquipmentWorkbookController extends Controller
             'values' => $this->svc->getWorkbookValues($workbook),
         ]);
 
-
     }
 
-    /**
-     *
-     */
-    public function edit()
-    {
-
-    }
+    public function edit() {}
 
     /**
      * Update a field value for a workbook data entry.
@@ -99,9 +89,6 @@ class CustomerEquipmentWorkbookController extends Controller
         return response()->json(['success' => true]);
     }
 
-    /**
-     *
-     */
     public function destroy(string $id)
     {
         //

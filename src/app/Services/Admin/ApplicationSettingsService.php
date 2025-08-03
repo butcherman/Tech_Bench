@@ -47,7 +47,7 @@ class ApplicationSettingsService
             'app.company_name' => $requestData->get('company_name'),
             'app.schedule_timezone' => $requestData->get('timezone'),
             'filesystems.max_filesize' => $requestData->get('max_filesize'),
-            'services.azure.redirect' => 'https://' . $requestData->get('url') . '/auth/callback',
+            'services.azure.redirect' => 'https://'.$requestData->get('url').'/auth/callback',
         ];
 
         $this->saveSettingsArray($setArr);
@@ -107,10 +107,10 @@ class ApplicationSettingsService
     public function getFeatureSettings(): array
     {
         return [
-            'file_links' => fn() => config('file-link.feature_enabled'),
-            'public_tips' => fn() => config('tech-tips.allow_public'),
-            'tip_comments' => fn() => config('tech-tips.allow_comments'),
-            'customer_workbooks' => fn() => config('customer.enable_workbooks'),
+            'file_links' => fn () => config('file-link.feature_enabled'),
+            'public_tips' => fn () => config('tech-tips.allow_public'),
+            'tip_comments' => fn () => config('tech-tips.allow_comments'),
+            'customer_workbooks' => fn () => config('customer.enable_workbooks'),
         ];
     }
 
@@ -149,7 +149,7 @@ class ApplicationSettingsService
         $storedFile = Storage::disk('public')
             ->putFile($path, new File($requestData->get('file')));
 
-        $this->saveSettings('app.logo', '/storage/' . $storedFile);
+        $this->saveSettings('app.logo', '/storage/'.$storedFile);
 
         CacheData::clearCache('appData');
 

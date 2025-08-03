@@ -7,7 +7,6 @@ use App\Models\CustomerEquipment;
 use App\Models\CustomerWorkbook;
 use App\Models\CustomerWorkbookValue;
 use App\Models\EquipmentWorkbook;
-use Arr;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
@@ -48,7 +47,7 @@ class CustomerWorkbookService
      */
     public function validateWorkbook(CustomerWorkbook $workbook): bool
     {
-        if (!$workbook->published || is_null($workbook->publish_until)) {
+        if (! $workbook->published || is_null($workbook->publish_until)) {
             return false;
         }
 
@@ -62,7 +61,7 @@ class CustomerWorkbookService
     /**
      * Get a Workbook for the Customer Equipment
      */
-    public function getWorkbook(Customer $customer, CustomerEquipment $equipment): CustomerWorkbook|null
+    public function getWorkbook(Customer $customer, CustomerEquipment $equipment): ?CustomerWorkbook
     {
         $workbook = CustomerWorkbook::where('cust_equip_id', $equipment->cust_equip_id)->first();
 
@@ -81,7 +80,7 @@ class CustomerWorkbookService
         $body = $wbData->body;
 
         foreach ($body as $key => $page) {
-            if (!$page->canPublish) {
+            if (! $page->canPublish) {
                 unset($body[$key]);
             }
         }

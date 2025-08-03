@@ -9,15 +9,12 @@ use App\Http\Requests\Equipment\EquipmentWorkbookRequest;
 use App\Models\EquipmentType;
 use App\Services\Equipment\EquipmentWorkbookService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class EquipmentWorkbookController extends Controller
 {
-    public function __construct(protected EquipmentWorkbookService $svc)
-    {
-    }
+    public function __construct(protected EquipmentWorkbookService $svc) {}
 
     /**
      * Show a list of equipment with link to edit workbook data
@@ -41,7 +38,7 @@ class EquipmentWorkbookController extends Controller
         $workbook = $this->svc->getWorkbook($equipment_type, true);
 
         // Update session data for the live preview
-        session()->put('workbookData-' . $equipment_type->equip_id, $workbook);
+        session()->put('workbookData-'.$equipment_type->equip_id, $workbook);
 
         return Inertia::render('Equipment/Workbook/Create', [
             'equipment-type' => $equipment_type,
@@ -78,7 +75,7 @@ class EquipmentWorkbookController extends Controller
     {
         $this->authorize('update', $equipment_type);
 
-        return session()->get('workbookData-' . $equipment_type->equip_id);
+        return session()->get('workbookData-'.$equipment_type->equip_id);
     }
 
     /**
@@ -87,7 +84,7 @@ class EquipmentWorkbookController extends Controller
     public function update(EquipmentWorkbookRequest $request, EquipmentType $equipment_type): JsonResponse
     {
         $request->session()->put(
-            'workbookData-' . $equipment_type->equip_id,
+            'workbookData-'.$equipment_type->equip_id,
             $request->safe()->collect()->get('workbook_data')
         );
 

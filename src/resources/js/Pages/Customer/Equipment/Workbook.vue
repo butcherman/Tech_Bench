@@ -16,6 +16,8 @@ const props = defineProps<{
     workbook: customerWorkbook;
 }>();
 
+// TODO - Register to Broadcast Channel and monitor changes in value
+
 const wbData = computed(() => JSON.parse(props.workbook.wb_data));
 const isPublished = ref(props.workbook.published);
 const modal = useTemplateRef("publish-modal");

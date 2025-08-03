@@ -9,6 +9,8 @@ const props = defineProps<{
     wbHash: string;
 }>();
 
+// TODO - Register to Broadcast Channel and monitor changes in value
+
 const workbook = computed(() => JSON.parse(props.wbData));
 </script>
 
