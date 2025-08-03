@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import Card from "../_Base/Card.vue";
+import Modal from "../_Base/Modal.vue";
 import WorkbookBody from "./WorkbookBody.vue";
 import WorkbookHeader from "./WorkbookHeader.vue";
-import { provide } from "vue";
+import { provide, ref, useTemplateRef } from "vue";
 import { useForm } from "vee-validate";
 import { dataPut } from "@/Composables/axiosWrapper.module";
 
@@ -14,6 +15,9 @@ const props = defineProps<{
     workbookHash?: string;
 }>();
 
+const loading = ref(false);
+const errModal = useTemplateRef("error-modal");
+
 const { values } = useForm({
     initialValues: props.values,
 });
@@ -24,12 +28,17 @@ const { values } = useForm({
 const triggerSave = (index: string): void => {
     if (props.workbookHash) {
         let fieldValue = values[index];
+        loading.value = true;
 
         dataPut(route("customer-workbook.update", props.workbookHash), {
             index,
             fieldValue,
         }).then((res) => {
-            console.log(res);
+            loading.value = false;
+
+            if (!res || !res.data.success) {
+                errModal.value?.show();
+            }
         });
     }
 };
@@ -48,6 +57,12 @@ provide("triggerSave", triggerSave);
                 :values="values"
             />
             <WorkbookHeader :data="workbookData.footer" />
+            <Modal title="Error" ref="error-modal">
+                <h3 class="text-center text-danger">
+                    Connection to server lost. Changes not saved.
+                </h3>
+                <p class="text-center">Please refresh page and try again.</p>
+            </Modal>
         </form>
     </Card>
 </template>
