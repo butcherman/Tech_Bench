@@ -6,8 +6,7 @@ use App\Models\UserRolePermissionCategory;
 use App\Models\UserRolePermissionType;
 use Illuminate\Database\Migrations\Migration;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -41,9 +40,11 @@ return new class extends Migration
      */
     public function down(): void
     {
-        $permType = UserRolePermission::where('description', 'Add Public Tech Tip')
+        $permType = UserRolePermissionType::where('description', 'Add Public Tech Tip')
             ->first();
 
-        $permType->delete();
+        if ($permType) {
+            $permType->delete();
+        }
     }
 };

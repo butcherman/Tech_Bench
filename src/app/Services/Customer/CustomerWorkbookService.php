@@ -10,6 +10,7 @@ use App\Models\EquipmentWorkbook;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Log;
 
 class CustomerWorkbookService
 {
@@ -93,10 +94,11 @@ class CustomerWorkbookService
     /**
      * Get all value data for the selected workbook
      */
-    public function getWorkbookValues(CustomerWorkbook $workbook): mixed
+    public function getWorkbookValues(CustomerWorkbook $workbook, bool $onlyPublic = true): mixed
     {
-        // TODO - Return only public values
-        return $workbook->WorkbookValues->mapWithKeys(function ($item) {
+        return $workbook->WorkbookValues->when($onlyPublic, function ($q) {
+            return $q->where('can_publish', true);
+        })->mapWithKeys(function ($item) {
             return [$item->index => $item->value];
         });
     }
@@ -113,6 +115,7 @@ class CustomerWorkbookService
             ],
             [
                 'value' => $requestData->get('fieldValue'),
+                'can_publish' => $requestData->get('can_publish'),
             ]
         );
     }

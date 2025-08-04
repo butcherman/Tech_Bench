@@ -23,6 +23,7 @@ class CustomerWorkbookRequest extends FormRequest
         return [
             'index' => ['required', 'string'],
             'fieldValue' => ['nullable', 'string'],
+            'can_publish' => ['required', 'boolean'],
         ];
     }
 }

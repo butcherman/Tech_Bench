@@ -16,7 +16,9 @@ use Inertia\Response;
 
 class CustomerEquipmentWorkbookController extends Controller
 {
-    public function __construct(protected CustomerWorkbookService $svc) {}
+    public function __construct(protected CustomerWorkbookService $svc)
+    {
+    }
 
     /**
      * Show the workbook
@@ -33,7 +35,7 @@ class CustomerEquipmentWorkbookController extends Controller
             'customer' => $customer,
             'equipment' => $equipment,
             'workbook' => $workbook,
-            'values' => $this->svc->getWorkbookValues($workbook),
+            'values' => $this->svc->getWorkbookValues($workbook, false),
         ]);
     }
 
@@ -63,7 +65,7 @@ class CustomerEquipmentWorkbookController extends Controller
      */
     public function show(CustomerWorkbook $workbook)
     {
-        if (! $this->svc->validateWorkbook($workbook)) {
+        if (!$this->svc->validateWorkbook($workbook)) {
             return Inertia::render('Workbook/Invalid');
         }
 
@@ -72,12 +74,14 @@ class CustomerEquipmentWorkbookController extends Controller
         return Inertia::render('Workbook/Show', [
             'wb-data' => $this->svc->getPublicWorkbookData($workbook),
             'wb-hash' => $workbook->wb_hash,
-            'values' => $this->svc->getWorkbookValues($workbook),
+            'values' => $this->svc->getWorkbookValues($workbook, true),
         ]);
 
     }
 
-    public function edit() {}
+    public function edit()
+    {
+    }
 
     /**
      * Update a field value for a workbook data entry.

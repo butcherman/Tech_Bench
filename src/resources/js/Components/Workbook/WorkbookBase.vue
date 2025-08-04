@@ -11,7 +11,6 @@ import { computed } from "@vue/reactivity";
 const props = defineProps<{
     workbookData: workbookWrapper;
     activePage: string;
-    isPreview?: boolean;
     values?: { [index: string]: string };
     workbookHash?: string;
 }>();
@@ -57,9 +56,14 @@ const triggerSave = (index: string): void => {
         loading.value = true;
         hasError.value = false;
 
+        let page = props.workbookData.body.find(
+            (p) => p.page === props.activePage
+        );
+
         dataPut(route("customer-workbook.update", props.workbookHash), {
             index,
             fieldValue,
+            can_publish: page?.canPublish,
         }).then((res) => {
             loading.value = false;
 
