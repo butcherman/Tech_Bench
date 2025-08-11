@@ -27,7 +27,7 @@ return new class extends Migration {
         });
 
         // Add Workbook Permissions to User Roles
-        $category = UserRolePermissionCategory::where('category', 'Customers')
+        $category = UserRolePermissionCategory::where('category', 'Administration')
             ->first();
         $newPerm = UserRolePermissionType::create([
             'role_cat_id' => $category->role_cat_id,

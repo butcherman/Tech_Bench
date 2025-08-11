@@ -25,6 +25,7 @@ class CustomerAdministrationServiceUnitTest extends TestCase
             'auto_purge' => config('customer.auto_purge'),
             'allow_vpn_data' => config('customer.allow_vpn_data'),
             'allow_share_vpn_data' => config('customer.allow_share_vpn_data'),
+            'enable_workbooks' => config('customer.enable_workbooks'),
         ];
 
         $testObj = new CustomerAdministrationService;
@@ -45,6 +46,7 @@ class CustomerAdministrationServiceUnitTest extends TestCase
             'update_slug' => false,
             'default_state' => 'AZ',
             'auto_purge' => false,
+            // TODO - Add VPN data and workbook
         ];
 
         $testObj = new CustomerAdministrationService;
@@ -144,10 +146,12 @@ class CustomerAdministrationServiceUnitTest extends TestCase
         $testObj = new CustomerAdministrationService;
         $res = $testObj->verifyCustomerChildren();
 
-        $this->assertEquals($res, [[
-            'cust_id' => $lonely->cust_id,
-            'name' => $lonely->name,
-        ]]);
+        $this->assertEquals($res, [
+            [
+                'cust_id' => $lonely->cust_id,
+                'name' => $lonely->name,
+            ]
+        ]);
 
         $this->assertDatabaseHas('customers', ['cust_id' => $lonely->cust_id]);
     }
@@ -163,10 +167,12 @@ class CustomerAdministrationServiceUnitTest extends TestCase
         $testObj = new CustomerAdministrationService;
         $res = $testObj->verifyCustomerChildren(true);
 
-        $this->assertEquals($res, [[
-            'cust_id' => $lonely->cust_id,
-            'name' => $lonely->name,
-        ]]);
+        $this->assertEquals($res, [
+            [
+                'cust_id' => $lonely->cust_id,
+                'name' => $lonely->name,
+            ]
+        ]);
 
         $this->assertDatabaseMissing('customers', [
             'cust_id' => $lonely->cust_id,

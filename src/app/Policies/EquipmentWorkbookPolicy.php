@@ -4,10 +4,13 @@ namespace App\Policies;
 
 use App\Models\EquipmentWorkbook;
 use App\Models\User;
+use App\Traits\AllowTrait;
 use Illuminate\Auth\Access\Response;
 
 class EquipmentWorkbookPolicy
 {
+    use AllowTrait;
+
     /**
      * Determine whether the user can view any models.
      */
@@ -29,7 +32,7 @@ class EquipmentWorkbookPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return $this->checkPermission($user, 'Manage Equipment Workbooks');
     }
 
     /**
@@ -37,7 +40,7 @@ class EquipmentWorkbookPolicy
      */
     public function update(User $user, EquipmentWorkbook $equipmentWorkbook): bool
     {
-        return false;
+        return $this->checkPermission($user, 'Manage Equipment Workbooks');
     }
 
     /**
@@ -45,22 +48,6 @@ class EquipmentWorkbookPolicy
      */
     public function delete(User $user, EquipmentWorkbook $equipmentWorkbook): bool
     {
-        return false;
-    }
-
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, EquipmentWorkbook $equipmentWorkbook): bool
-    {
-        return false;
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, EquipmentWorkbook $equipmentWorkbook): bool
-    {
-        return false;
+        return $this->checkPermission($user, 'Manage Equipment Workbooks');
     }
 }

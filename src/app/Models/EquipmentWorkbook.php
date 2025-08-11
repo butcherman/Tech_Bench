@@ -2,8 +2,11 @@
 
 namespace App\Models;
 
+use App\Observers\EquipmentWorkbookObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Model;
 
+#[ObservedBy([EquipmentWorkbookObserver::class])]
 class EquipmentWorkbook extends Model
 {
     /** @var string */
