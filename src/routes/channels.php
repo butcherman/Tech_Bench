@@ -37,7 +37,7 @@ Broadcast::channel('administration-channel', function (User $user) {
 
 /*
 |-------------------------------------------------------------------------------
-| Workbook Editor Channel for watching workbooks being built
+| Workbook Channels
 |-------------------------------------------------------------------------------
 */
 Broadcast::channel('workbook-canvas.{equipment_type}', function (User $user) {

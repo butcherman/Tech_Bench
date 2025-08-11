@@ -5,7 +5,7 @@ import WorkbookBody from "./WorkbookBody.vue";
 import WorkbookHeader from "./WorkbookHeader.vue";
 import { provide, ref, useTemplateRef } from "vue";
 import { useForm } from "vee-validate";
-import { dataPut } from "@/Composables/axiosWrapper.module";
+import { dataGet, dataPut } from "@/Composables/axiosWrapper.module";
 import { computed } from "@vue/reactivity";
 
 const props = defineProps<{
@@ -18,6 +18,7 @@ const props = defineProps<{
 const loading = ref(false);
 const hasError = ref(false);
 const errModal = useTemplateRef("error-modal");
+const wbValues = ref({ ...props.values });
 
 const saveIcon = computed(() => {
     if (hasError.value) {
@@ -75,6 +76,18 @@ const triggerSave = (index: string): void => {
     }
 };
 
+/**
+ * Fetch a fresh set of values from DB
+ */
+const fetchValues = () => {
+    dataGet(route("customer-workbook.edit", props.workbookHash)).then((res) => {
+        if (res) {
+            console.log(res.data);
+            wbValues.value = res.data;
+        }
+    });
+};
+
 provide("triggerSave", triggerSave);
 </script>
 
@@ -86,7 +99,7 @@ provide("triggerSave", triggerSave);
                 class="grow"
                 :workbook-data="workbookData"
                 :active-page="activePage"
-                :values="values"
+                :values="wbValues"
             />
             <WorkbookHeader :data="workbookData.footer" />
         </form>

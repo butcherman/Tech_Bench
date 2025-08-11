@@ -11,6 +11,7 @@ use App\Models\CustomerWorkbook;
 use App\Services\Customer\CustomerWorkbookService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -79,8 +80,16 @@ class CustomerEquipmentWorkbookController extends Controller
 
     }
 
-    public function edit()
+    /**
+     * Get the Workbook Values
+     */
+    public function edit(Request $request, CustomerWorkbook $workbook)
     {
+        return $this->svc->getWorkbookValues(
+            $workbook,
+            !($request->user()
+                && $request->user()->can('viewProtectedValues', $workbook))
+        );
     }
 
     /**
@@ -91,11 +100,5 @@ class CustomerEquipmentWorkbookController extends Controller
         $this->svc->setWorkbookValue($workbook, $request->safe()->collect());
 
         return response()->json(['success' => true]);
-    }
-
-    public function destroy(string $id)
-    {
-        //
-        return 'destroy';
     }
 }
