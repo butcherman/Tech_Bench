@@ -146,6 +146,14 @@ class BuildAdminMenu
             ];
         }
 
+        if (config('customer.enable_workbooks')) {
+            $equipMenu[] = [
+                'name' => 'Equipment Workbooks',
+                'icon' => 'fa-table',
+                'route' => route('workbooks.index'),
+            ];
+        }
+
         $this->menu['Equipment'] = $equipMenu;
     }
 
