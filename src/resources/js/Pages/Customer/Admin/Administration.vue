@@ -10,6 +10,7 @@ const props = defineProps<{
     auto_purge: boolean;
     allow_vpn_data: boolean;
     allow_share_vpn_data: boolean;
+    enable_workbooks: boolean;
 }>();
 </script>
 
