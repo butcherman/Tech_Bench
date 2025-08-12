@@ -63,23 +63,23 @@ export const copyWorkbook = <T>(wbData: T): T => {
 /**
  * State of WB since last save
  */
-// export const isDirty = ref<boolean>(false);
-// export const imDirty = () => {
-//     isDirty.value = true;
-// };
+export const isDirty = ref<boolean>(false);
+export const imDirty = (): void => {
+    isDirty.value = true;
+};
 
 /**
  * Undo all changes since last save
  */
-// export const resetWorkbook = () => {
-//     if (cleanWorkbook.value) {
-//         workbookData.header = copyWorkbook(cleanWorkbook.value.header);
-//         workbookData.body = copyWorkbook(cleanWorkbook.value.body);
-//         workbookData.footer = copyWorkbook(cleanWorkbook.value.footer);
+export const resetWorkbook = () => {
+    if (cleanWorkbook.value) {
+        workbookData.header = copyWorkbook(cleanWorkbook.value.header);
+        workbookData.body = copyWorkbook(cleanWorkbook.value.body);
+        workbookData.footer = copyWorkbook(cleanWorkbook.value.footer);
 
-//         isDirty.value = false;
-//     }
-// };
+        isDirty.value = false;
+    }
+};
 
 /**
  * Update the Dirty changes to show on the preview page
@@ -153,17 +153,17 @@ export const cloneElement = (element: workbookElement): workbookEntry => {
 // };
 
 /**
- * Delete a component from the canvas.
+ * Delete an element from the canvas.
  */
-// export const deleteComponent = (
-//     component: workbookElement,
-//     container: workbookElement[]
-// ): void => {
-//     let index = container.indexOf(component);
-//     container.splice(index, 1);
+export const deleteElement = (
+    element: workbookElement,
+    container: workbookElement[]
+): void => {
+    let index = container.indexOf(element);
+    container.splice(index, 1);
 
-//     imDirty();
-// };
+    imDirty();
+};
 
 /**
  * Delete a page from the canvas.

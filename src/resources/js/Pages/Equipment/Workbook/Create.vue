@@ -3,7 +3,7 @@ import BaseButton from "@/Components/_Base/Buttons/BaseButton.vue";
 import CanvasElements from "@/Components/Equipment/WorkbookEditor/CanvasElements.vue";
 import ElementDataEditor from "@/Components/Equipment/WorkbookEditor/ElementDataEditor.vue";
 import PublicLayout from "@/Layouts/Public/PublicLayout.vue";
-import WorkbookCanvas from "@/Components/Equipment/WorkbookEditor/WorkbookCanvas.vue";
+import WorkbookCanvas from "@/Components/Equipment/WorkbookEditor/Canvas/WorkbookCanvas.vue";
 import { onMounted } from "vue";
 import { initWorkbook } from "@/Composables/Equipment/WorkbookEditor.module";
 
