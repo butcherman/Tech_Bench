@@ -11,6 +11,8 @@ export const workbookData = reactive<workbookWrapper>({
     footer: [],
 });
 
+export const noEditTypes: string[] = ["static", "grid-wrapper", "wrapper"];
+
 /**
  * Initialize the Workbook builder and related states
  */
@@ -40,10 +42,6 @@ export const onSuccessfulSave = () => {
 export const copyWorkbook = <T>(wbData: T): T => {
     return JSON.parse(JSON.stringify(wbData));
 };
-
-// export const updateCleanWorkbook = () => {
-//     cleanWorkbook.value = copyWorkbook(workbookData);
-// };
 
 /*
 |-------------------------------------------------------------------------------

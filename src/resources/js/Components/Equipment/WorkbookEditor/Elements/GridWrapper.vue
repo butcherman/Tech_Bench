@@ -5,7 +5,6 @@ import ListContainer from "./ListContainer.vue";
 import {
     cloneComponent,
     deleteElement,
-    editElement,
 } from "@/Composables/Equipment/WorkbookEditor.module";
 
 defineProps<{
