@@ -22,7 +22,6 @@ import {
                     <PageTab :tab-data="element" />
                 </template>
             </draggableComponent>
-
             <Tab
                 value="9999"
                 pt:root:class="border! border-slate-300! rounded-t-lg p-1!"

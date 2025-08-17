@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import PublicLayout from "@/Layouts/Public/PublicLayout.vue";
 import WorkbookBase from "@/Components/Workbook/WorkbookBase.vue";
+import { activePage } from "@/Composables/Equipment/WorkbookEditor.module";
 import { dataGet } from "@/Composables/axiosWrapper.module";
 import { ref, reactive, onMounted } from "vue";
 
@@ -13,8 +14,6 @@ const workbookData = reactive<workbookWrapper>({
     body: [],
     footer: [],
 });
-
-const activePage = ref("0");
 
 /**
  * Retrieve the live version of the workbook including unsaved changes.
@@ -35,9 +34,10 @@ const getWorkbook = async () => {
 
 onMounted(() => {
     getWorkbook().then(() => (activePage.value = workbookData.body[0].page));
-    Echo.private(`workbook-canvas.${props.equipmentType.equip_id}`)
-        .listen(".workbookCanvasEvent", () => getWorkbook())
-        .listenToAll((e) => console.log(e));
+    Echo.private(`workbook-canvas.${props.equipmentType.equip_id}`).listen(
+        ".workbookCanvasEvent",
+        () => getWorkbook()
+    );
 });
 </script>
 
