@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Equipment;
 
+use App\Events\Equipment\WorkbookCanvasEvent;
 use App\Facades\CacheData;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Equipment\EquipmentWorkbookRequest;
@@ -40,6 +41,9 @@ class EquipmentWorkbookController extends Controller
 
         $workbook = $this->svc->getWorkbook($equipment_type, true);
 
+        // Create session data for the live preview
+        session()->put('workbookData-' . $equipment_type->equip_id, $workbook);
+
         return Inertia::render('Equipment/Workbook/Create', [
             'equipment-type' => $equipment_type,
             'workbook-data' => $workbook,
@@ -57,56 +61,39 @@ class EquipmentWorkbookController extends Controller
     }
 
     /**
-     *
+     * Show a live preview of the workbook being edited.
      */
-    public function show(string $id)
+    public function show(EquipmentType $equipment_type): Response
     {
-        //
-        return 'show';
+        $this->authorize('create', EquipmentWorkbook::class);
+
+        return Inertia::render('Equipment/Workbook/Show', [
+            'equipment-type' => $equipment_type,
+        ]);
     }
 
     /**
-     *
+     * Get unsaved changes made to the Workbook for live update
      */
-    public function edit(string $id)
+    public function edit(EquipmentType $equipment_type): mixed
     {
-        //
-        return 'edit';
+        $this->authorize('create', EquipmentWorkbook::class);
+
+        return session()->get('workbookData-' . $equipment_type->equip_id);
     }
 
     /**
-     *
+     * Put unsaved changes for the live update
      */
-    public function update(Request $request, string $id)
+    public function update(EquipmentWorkbookRequest $request, EquipmentType $equipment_type): JsonResponse
     {
-        //
-        return 'update';
-    }
+        $request->session()->put(
+            'workbookData-' . $equipment_type->equip_id,
+            $request->safe()->collect()->get('workbook_data')
+        );
 
-    /**
-     *
-     */
-    public function destroy(string $id)
-    {
-        //
-        return 'destroy';
-    }
+        WorkbookCanvasEvent::dispatch($equipment_type);
 
-    /**
-     *
-     */
-    public function restore(string $id)
-    {
-        //
-        return 'restore';
-    }
-
-    /**
-     *
-     */
-    public function forceDelete(string $id)
-    {
-        //
-        return 'force delete';
+        return response()->json(['success' => true]);
     }
 }

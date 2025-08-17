@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import AppLayout from "@/Layouts/App/AppLayout.vue";
 import Card from "@/Components/_Base/Card.vue";
+import PublicLayout from "@/Layouts/Public/PublicLayout.vue";
 import { ref, reactive, onMounted } from "vue";
 
 // TODO - Add Page.
@@ -8,7 +9,7 @@ const props = defineProps<{}>();
 </script>
 
 <script lang="ts">
-export default { layout: AppLayout };
+export default { layout: PublicLayout };
 </script>
 
 <template>
