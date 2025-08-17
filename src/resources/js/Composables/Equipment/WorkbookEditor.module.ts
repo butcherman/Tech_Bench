@@ -171,15 +171,15 @@ export const editElement = (
 /**
  * Create a copy of a component and place directly below selected component.
  */
-// export const cloneComponent = (
-//     component: workbookElement,
-//     container: workbookElement[]
-// ): void => {
-//     let newComponent = cloneElement(component);
-//     let index = container.indexOf(component);
+export const cloneComponent = (
+    component: workbookElement,
+    container: workbookElement[]
+): void => {
+    let newComponent = cloneElement(component);
+    let index = container.indexOf(component);
 
-//     container.splice(index, 0, newComponent);
-// };
+    container.splice(index, 0, newComponent);
+};
 
 /**
  * Delete an element from the canvas.
