@@ -11,7 +11,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class WorkbookCanvasEvent
+class WorkbookCanvasEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -20,7 +20,6 @@ class WorkbookCanvasEvent
      */
     public function __construct(public EquipmentType $equip)
     {
-
     }
 
     /**

@@ -25,7 +25,7 @@ class EquipmentType extends Model
     protected $guarded = ['equip_id', 'created_at', 'updated_at'];
 
     /** @var array<int, string> */
-    protected $hidden = ['created_at', 'updated_at', 'pivot'];
+    protected $hidden = ['created_at', 'updated_at', 'pivot', 'EquipmentWorkbook'];
 
     /** @var array<int, string> */
     protected $appends = ['has_workbook'];

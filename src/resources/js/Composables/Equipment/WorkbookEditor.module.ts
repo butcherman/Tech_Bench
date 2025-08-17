@@ -1,6 +1,6 @@
 import { reactive, ref, unref, watch } from "vue";
 import { v4 } from "uuid";
-// import { dataPut } from "../axiosWrapper.module";
+import { dataPut } from "../axiosWrapper.module";
 
 const cleanWorkbook = ref<workbookWrapper>();
 export const equipmentType = ref<equipment>();
@@ -110,11 +110,12 @@ export const resetWorkbook = () => {
 /**
  * Update the Dirty changes to show on the preview page
  */
-// watch(workbookData, (newWb) => {
-//     dataPut(route("workbooks.update", equipmentType.value?.equip_id), {
-//         workbook_data: unref(workbookData),
-//     });
-// });
+watch(workbookData, (newWb) => {
+    console.log("wb updated");
+    dataPut(route("workbooks.update", equipmentType.value?.equip_id), {
+        workbook_data: unref(newWb),
+    });
+});
 
 /*
 |-------------------------------------------------------------------------------
