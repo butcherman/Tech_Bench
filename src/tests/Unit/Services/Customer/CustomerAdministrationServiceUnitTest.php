@@ -150,7 +150,7 @@ class CustomerAdministrationServiceUnitTest extends TestCase
             [
                 'cust_id' => $lonely->cust_id,
                 'name' => $lonely->name,
-            ]
+            ],
         ]);
 
         $this->assertDatabaseHas('customers', ['cust_id' => $lonely->cust_id]);
@@ -171,7 +171,7 @@ class CustomerAdministrationServiceUnitTest extends TestCase
             [
                 'cust_id' => $lonely->cust_id,
                 'name' => $lonely->name,
-            ]
+            ],
         ]);
 
         $this->assertDatabaseMissing('customers', [

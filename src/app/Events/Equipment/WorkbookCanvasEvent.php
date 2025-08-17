@@ -3,9 +3,7 @@
 namespace App\Events\Equipment;
 
 use App\Models\EquipmentType;
-use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
@@ -18,9 +16,7 @@ class WorkbookCanvasEvent implements ShouldBroadcast
     /**
      * Create a new event instance.
      */
-    public function __construct(public EquipmentType $equip)
-    {
-    }
+    public function __construct(public EquipmentType $equip) {}
 
     /**
      * Get the channels the event should broadcast on.
@@ -28,7 +24,7 @@ class WorkbookCanvasEvent implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('workbook-canvas.' . $this->equip->equip_id),
+            new PrivateChannel('workbook-canvas.'.$this->equip->equip_id),
         ];
     }
 

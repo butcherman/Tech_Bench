@@ -10,6 +10,7 @@ return new class extends Migration {
      */
     public function up(): void
     {
+        // TODO - Refactor
         Schema::create('customer_workbook_values', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('wb_id');

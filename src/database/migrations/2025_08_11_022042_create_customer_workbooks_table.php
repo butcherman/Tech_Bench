@@ -10,6 +10,7 @@ return new class extends Migration {
      */
     public function up(): void
     {
+        // TODO - Refactor
         Schema::create('customer_workbooks', function (Blueprint $table) {
             $table->id('wb_id');
             $table->uuid('wb_hash');

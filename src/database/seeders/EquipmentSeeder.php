@@ -37,12 +37,12 @@ class EquipmentSeeder extends Seeder
 
         //  Create the sample equipment
         foreach ($equip as $cat => $sys) {
-            if (!EquipmentCategory::where('name', $cat)->count()) {
+            if (! EquipmentCategory::where('name', $cat)->count()) {
                 $catID = EquipmentCategory::create(['name' => $cat])->cat_id;
             }
 
             foreach ($sys as $s) {
-                if (!EquipmentType::where('name', $s)->count()) {
+                if (! EquipmentType::where('name', $s)->count()) {
                     EquipmentType::create([
                         'cat_id' => $catID,
                         'name' => $s,

@@ -20,9 +20,9 @@ class EquipmentWorkbookService
             'workbook_data' => json_encode($requestData->get('workbook_data')),
             'version_hash' => Str::random(5),
         ])->update([
-                    'workbook_data' => json_encode($requestData->get('workbook_data')),
-                    'version_hash' => Str::random(5),
-                ]);
+            'workbook_data' => json_encode($requestData->get('workbook_data')),
+            'version_hash' => Str::random(5),
+        ]);
     }
 
     /**

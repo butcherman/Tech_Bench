@@ -17,6 +17,7 @@ class CustomerWorkbookObserver extends Observer
             $customerWorkbook->Customer->name . ' by ' . $this->user,
             [
                 'Customer ID' => $customerWorkbook->Customer->cust_id,
+                // TODO - Finish logging
                 // 'Customer Equipment ID' =>  //
                 // 'Customer Equipment Type' => //
                 // 'Workbook Version' => //

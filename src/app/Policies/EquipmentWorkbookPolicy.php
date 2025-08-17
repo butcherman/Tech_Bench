@@ -5,7 +5,6 @@ namespace App\Policies;
 use App\Models\EquipmentWorkbook;
 use App\Models\User;
 use App\Traits\AllowTrait;
-use Illuminate\Auth\Access\Response;
 
 class EquipmentWorkbookPolicy
 {
