@@ -39,6 +39,6 @@ export default { layout: PublicLayout };
                 <WorkbookCanvas />
             </div>
         </div>
-        <!-- <ElementDataEditor /> -->
+        <ElementDataEditor />
     </div>
 </template>

@@ -37,22 +37,42 @@ export const copyWorkbook = <T>(wbData: T): T => {
 //     cleanWorkbook.value = copyWorkbook(workbookData);
 // };
 
+/*
+|-------------------------------------------------------------------------------
+| Workbook Pages
+|-------------------------------------------------------------------------------
+*/
+
 /**
  * Create a new Blank Page
  */
-// export const addBlankPage = (): void => {
-//     let newPage = {
-//         page: v4(),
-//         title: "New Page",
-//         canPublish: true,
-//         container: [],
-//     };
+export const addBlankPage = (): void => {
+    let newPage = {
+        page: v4(),
+        title: "New Page",
+        canPublish: true,
+        container: [],
+    };
 
-//     workbookData.body.push(newPage);
-//     activePage.value = newPage.page;
+    workbookData.body.push(newPage);
+    activePage.value = newPage.page;
 
-//     imDirty();
-// };
+    imDirty();
+};
+
+/**
+ * Delete a page from the canvas.
+ */
+export const deletePage = (page: workbookPage) => {
+    let index = workbookData.body.indexOf(page);
+
+    workbookData.body.splice(index, 1);
+    imDirty();
+
+    if (page.page === activePage.value) {
+        activePage.value = workbookData.body[0].page;
+    }
+};
 
 /*
 |-------------------------------------------------------------------------------
@@ -92,7 +112,7 @@ export const resetWorkbook = () => {
 
 /*
 |-------------------------------------------------------------------------------
-| Workbook Components
+| Workbook Elements
 |-------------------------------------------------------------------------------
 */
 
@@ -105,6 +125,7 @@ export const cloneElement = (element: workbookElement): workbookEntry => {
     delete newElement.componentData;
 
     newElement.index = v4();
+    imDirty();
 
     // If this element has children, create unique ID's on the child elements
     newElement.container?.forEach((elem: workbookEntry) => (elem.index = v4()));
@@ -117,27 +138,27 @@ export const cloneElement = (element: workbookElement): workbookEntry => {
 | Element Data Editor
 |-------------------------------------------------------------------------------
 */
-// export const showWbEditor = ref<boolean>(false);
-// export const editingComponent = ref<workbookEntry | workbookPage>();
+export const showWbEditor = ref<boolean>(false);
+export const activeElement = ref<workbookEntry | workbookPage>();
 
-// export const closeWbEditor = () => {
-//     showWbEditor.value = false;
-//     imDirty();
-// };
+export const closeWbEditor = () => {
+    showWbEditor.value = false;
+    imDirty();
+};
 
-// export const onWbEditorClose = (): void => {
-//     editingComponent.value = undefined;
-// };
+export const clearActiveElement = (): void => {
+    activeElement.value = undefined;
+};
 
 /**
  * Edit the meta data in the selected component
  */
-// export const editComponent = (
-//     component: workbookElement | workbookPage
-// ): void => {
-//     editingComponent.value = component;
-//     showWbEditor.value = true;
-// };
+export const editElement = (
+    component: workbookElement | workbookPage
+): void => {
+    activeElement.value = component;
+    showWbEditor.value = true;
+};
 
 /**
  * Create a copy of a component and place directly below selected component.
@@ -164,16 +185,3 @@ export const deleteElement = (
 
     imDirty();
 };
-
-/**
- * Delete a page from the canvas.
- */
-// export const deletePage = (page: workbookPage) => {
-//     let index = workbookData.body.indexOf(page);
-
-//     workbookData.body.splice(index, 1);
-
-//     if (page.page === activePage.value) {
-//         activePage.value = workbookData.body[0].page;
-//     }
-// };

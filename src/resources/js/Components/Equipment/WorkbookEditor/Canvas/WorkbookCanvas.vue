@@ -55,7 +55,7 @@ const saveWorkbook = () => {
                 />
             </div>
         </template>
-        <div class="h-full flex flex-col gap-4">
+        <div class="h-full flex flex-col gap-5">
             <CanvasHeader />
             <CanvasBody class="grow" />
             <CanvasHeader is-footer />
