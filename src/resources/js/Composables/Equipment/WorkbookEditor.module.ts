@@ -127,7 +127,7 @@ export const resetWorkbook = () => {
  */
 export const cloneElement = (element: workbookElement): workbookEntry => {
     // Make deep copy of element
-    let newElement = copyWorkbook(element);
+    let newElement = replaceText(copyWorkbook(element));
     delete newElement.componentData;
 
     newElement.index = v4();
@@ -190,4 +190,17 @@ export const deleteElement = (
     container.splice(index, 1);
 
     imDirty();
+};
+
+/*
+|-------------------------------------------------------------------------------
+| Make Modifications to an element
+|-------------------------------------------------------------------------------
+*/
+const replaceText = (element: workbookElement): workbookElement => {
+    if (element.text === "[ Equipment Name ]") {
+        element.text = equipmentType.value?.name;
+    }
+
+    return element;
 };

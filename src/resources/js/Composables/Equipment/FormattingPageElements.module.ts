@@ -92,7 +92,7 @@ export const pageElements: workbookElement[] = [
         index: v4(),
         type: "static",
         tag: "h3",
-        text: equipmentType.value?.name ?? "[ Equipment Name ]",
+        text: "[ Equipment Name ]",
         class: "text-center",
         componentData: {
             label: "Equipment Name",
