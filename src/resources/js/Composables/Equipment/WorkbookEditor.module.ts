@@ -27,6 +27,14 @@ export const initWorkbook = (
 };
 
 /**
+ * Change workbook state for a successful save event
+ */
+export const onSuccessfulSave = () => {
+    isDirty.value = false;
+    cleanWorkbook.value = copyWorkbook(workbookData);
+};
+
+/**
  * Make a deep copy duiplicate of the workbook.
  */
 export const copyWorkbook = <T>(wbData: T): T => {

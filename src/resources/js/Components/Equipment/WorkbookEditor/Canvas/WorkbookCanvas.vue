@@ -3,12 +3,18 @@ import BaseBadge from "@/Components/_Base/Badges/BaseBadge.vue";
 import CanvasBody from "./CanvasBody.vue";
 import CanvasHeader from "./CanvasHeader.vue";
 import Card from "@/Components/_Base/Card.vue";
-import { computed } from "vue";
+import { computed, unref } from "vue";
+import { dataPost } from "@/Composables/axiosWrapper.module";
+import { useAppStore } from "@/Stores/AppStore";
 import {
     equipmentType,
     isDirty,
+    onSuccessfulSave,
     resetWorkbook,
+    workbookData,
 } from "@/Composables/Equipment/WorkbookEditor.module";
+
+const appStore = useAppStore();
 
 const dirtyVariant = computed<elementVariant>(() =>
     isDirty.value ? "warning" : "primary"
@@ -18,7 +24,22 @@ const dirtyVariant = computed<elementVariant>(() =>
  * Save the WB to the Database
  */
 const saveWorkbook = () => {
-    console.log("save");
+    console.log("saving");
+
+    dataPost(route("workbooks.store", equipmentType.value?.equip_id), {
+        workbook_data: unref(workbookData),
+    }).then((res) => {
+        console.log(res);
+        if (res && res.data.success) {
+            console.log(res.data.success);
+            onSuccessfulSave();
+            appStore.pushFlashMsg({
+                id: "new",
+                type: "success",
+                message: "Workbook Saved",
+            });
+        }
+    });
 };
 </script>
 
