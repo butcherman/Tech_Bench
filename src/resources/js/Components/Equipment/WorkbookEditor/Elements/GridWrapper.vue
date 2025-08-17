@@ -19,7 +19,6 @@ defineProps<{
         <ElementOptions
             class="hidden group-hover/wrapper:flex"
             :can-edit="false"
-            @edit="editElement(gridWrapper)"
             @clone="cloneComponent(gridWrapper, container)"
             @delete="deleteElement(gridWrapper, container)"
         />

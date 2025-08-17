@@ -15,21 +15,21 @@ defineProps<{
         <span
             v-if="canEdit"
             class="text-warning pointer"
-            v-tooltip.bottom="'Edit Component Data'"
+            v-tooltip.bottom="'Edit Element Data'"
             @click="$emit('edit')"
         >
             <fa-icon icon="pencil" />
         </span>
         <span
             class="text-primary pointer"
-            v-tooltip.bottom="'Clone Component'"
+            v-tooltip.bottom="'Clone Element'"
             @click="$emit('clone')"
         >
             <fa-icon icon="clone" />
         </span>
         <span
             class="text-danger pointer"
-            v-tooltip.bottom="'Delete Component'"
+            v-tooltip.bottom="'Delete Element'"
             @click="$emit('delete')"
         >
             <fa-icon icon="trash-alt" />
