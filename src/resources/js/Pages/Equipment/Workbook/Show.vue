@@ -3,7 +3,8 @@ import PublicLayout from "@/Layouts/Public/PublicLayout.vue";
 import WorkbookBase from "@/Components/Workbook/WorkbookBase.vue";
 import { activePage } from "@/Composables/Equipment/WorkbookEditor.module";
 import { dataGet } from "@/Composables/axiosWrapper.module";
-import { ref, reactive, onMounted } from "vue";
+import { reactive, onMounted } from "vue";
+import { isPreview } from "@/Composables/Customer/CustomerWorkbook.module";
 
 const props = defineProps<{
     equipmentType: equipment;
@@ -33,6 +34,7 @@ const getWorkbook = async () => {
 };
 
 onMounted(() => {
+    isPreview.value = true;
     getWorkbook().then(() => (activePage.value = workbookData.body[0].page));
     Echo.private(`workbook-canvas.${props.equipmentType.equip_id}`).listen(
         ".workbookCanvasEvent",

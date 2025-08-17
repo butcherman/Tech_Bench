@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import ElementContainer from "./Elements/ElementContainer.vue";
 import { Tab, Tabs, TabList, TabPanel, TabPanels } from "primevue";
 
 defineProps<{
@@ -28,7 +29,11 @@ defineProps<{
                 :value="page.page"
                 class="h-full relative"
             >
-                {{ page.container }}
+                <ElementContainer
+                    :element-list="page.container"
+                    class="h-full"
+                    v-focustrap
+                />
             </TabPanel>
         </TabPanels>
     </Tabs>
