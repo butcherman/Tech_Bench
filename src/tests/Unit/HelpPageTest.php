@@ -43,6 +43,7 @@ class HelpPageTest extends TestCase
         'tech-tips.not-found',
         'telescope',
         'two-factor.*',
+        'workbooks.edit',
     ];
 
     /*
@@ -74,7 +75,7 @@ class HelpPageTest extends TestCase
             $path = str_replace('.', DIRECTORY_SEPARATOR, $route);
 
             $this->assertFileExists(
-                resource_path('js/Help/Routes/'.$path.'.vue')
+                resource_path('js/Help/Routes/' . $path . '.vue')
             );
         }
     }

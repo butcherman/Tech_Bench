@@ -13,8 +13,8 @@ class EquipmentWorkbookObserver extends Observer
     public function created(EquipmentWorkbook $equipmentWorkbook): void
     {
         Log::info(
-            'Equipment Workbook created for '.
-            $equipmentWorkbook->EquipmentType->name.' by '.$this->user
+            'Equipment Workbook created for ' .
+            $equipmentWorkbook->EquipmentType->name . ' by ' . $this->user
         );
     }
 
@@ -24,8 +24,8 @@ class EquipmentWorkbookObserver extends Observer
     public function updated(EquipmentWorkbook $equipmentWorkbook): void
     {
         Log::info(
-            'Equipment Workbook updated for '.
-            $equipmentWorkbook->EquipmentType->name.' by '.$this->user
+            'Equipment Workbook updated for ' .
+            $equipmentWorkbook->EquipmentType->name . ' by ' . $this->user
         );
     }
 
