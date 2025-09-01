@@ -4,7 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
@@ -14,7 +15,6 @@ return new class extends Migration {
         Schema::create('customer_workbooks', function (Blueprint $table) {
             $table->id('wb_id');
             $table->uuid('wb_hash');
-            $table->unsignedBigInteger('cust_id');
             $table->unsignedBigInteger('cust_equip_id');
             $table->json('wb_data');
             $table->text('wb_version');
@@ -22,11 +22,6 @@ return new class extends Migration {
             $table->boolean('by_invite_only')->default(false);
             $table->timestamp('publish_until')->nullable();
             $table->timestamps();
-            $table->foreign('cust_id')
-                ->references('cust_id')
-                ->on('customers')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
             $table->foreign('cust_equip_id')
                 ->references('cust_equip_id')
                 ->on('customer_equipment')
@@ -41,7 +36,6 @@ return new class extends Migration {
     public function down(): void
     {
         Schema::table('customer_workbooks', function (Blueprint $table) {
-            $table->dropForeign(['cust_id']);
             $table->dropForeign(['cust_equip_id']);
         });
         Schema::dropIfExists('customer_workbooks');

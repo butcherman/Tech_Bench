@@ -33,7 +33,7 @@ class BackupRestoreCommandTest extends TestCase
     public function test_handle(): void
     {
         Process::fake([
-            'docker ps' => Process::result(true)
+            'docker ps' => Process::result(true),
         ]);
 
         $this->createTestBackup();
@@ -89,7 +89,7 @@ class BackupRestoreCommandTest extends TestCase
 
         $zip = new Zip;
 
-        $zip->create(Storage::disk('backups')->path('tech-bench') . '/test_backup.zip');
+        $zip->create(Storage::disk('backups')->path('tech-bench').'/test_backup.zip');
         $zip->addFromString('db-dumps/mysql-tech-bench.sql', 'test sql file');
         $zip->addFromString('app/.env', 'test env file');
         $zip->addFromString('app/keystore/version', '7.0.0');

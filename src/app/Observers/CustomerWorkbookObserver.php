@@ -13,15 +13,15 @@ class CustomerWorkbookObserver extends Observer
     public function created(CustomerWorkbook $customerWorkbook): void
     {
         Log::info(
-            'Customer Workbook created for ' .
-            $customerWorkbook->Customer->name . ' by ' . $this->user,
-            [
-                'Customer ID' => $customerWorkbook->Customer->cust_id,
-                // TODO - Finish logging
-                // 'Customer Equipment ID' =>  //
-                // 'Customer Equipment Type' => //
-                // 'Workbook Version' => //
-            ]
+            'Customer Workbook created for '
+            // $customerWorkbook->Customer->name . ' by ' . $this->user,
+            // [
+            //     'Customer ID' => $customerWorkbook->Customer->cust_id,
+            //     // TODO - Finish logging
+            //     // 'Customer Equipment ID' =>  //
+            //     // 'Customer Equipment Type' => //
+            //     // 'Workbook Version' => //
+            // ]
         );
     }
 

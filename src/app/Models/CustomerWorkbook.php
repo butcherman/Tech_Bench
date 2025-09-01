@@ -4,12 +4,15 @@ namespace App\Models;
 
 use App\Observers\CustomerWorkbookObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 #[ObservedBy([CustomerWorkbookObserver::class])]
 class CustomerWorkbook extends Model
 {
+    use HasFactory;
+
     /** @var string */
     protected $primaryKey = 'wb_id';
 

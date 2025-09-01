@@ -42,7 +42,7 @@ class CustomerAdministrationTest extends TestCase
             ->get(route('customers.settings.edit'));
 
         $response->assertSuccessful()->assertInertia(
-            fn(Assert $page) => $page
+            fn (Assert $page) => $page
                 ->component('Customer/Admin/Administration')
                 ->has('select_id')
                 ->has('update_slug')

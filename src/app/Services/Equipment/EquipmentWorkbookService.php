@@ -30,7 +30,8 @@ class EquipmentWorkbookService
      */
     public function getWorkbook(EquipmentType $equipment_type, bool $allowDefault = false): mixed
     {
-        $workbookData = $equipment_type->EquipmentWorkbook;
+        // $workbookData = $equipment_type->EquipmentWorkbook;
+        $workbookData = EquipmentWorkbook::find($equipment_type->equip_id);
 
         // If workbook is null, determine if we should return a default workbook
         if (is_null($workbookData)) {

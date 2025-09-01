@@ -15,6 +15,8 @@ class BuildAdminMenuUnitTest extends TestCase
     */
     public function test_build_admin_menu_installer(): void
     {
+        config(['customer.enable_workbooks' => true]);
+
         $user = User::factory()->create(['role_id' => 1]);
         $shouldBe = $this->getBaseMenu();
         $shouldBe['File Links'] = [];
@@ -28,6 +30,7 @@ class BuildAdminMenuUnitTest extends TestCase
     public function test_build_admin_menu_installer_file_links_enabled(): void
     {
         config(['file-link.feature_enabled' => true]);
+        config(['customer.enable_workbooks' => true]);
 
         $user = User::factory()->create(['role_id' => 1]);
         $shouldBe = $this->getBaseMenu();
@@ -40,6 +43,8 @@ class BuildAdminMenuUnitTest extends TestCase
 
     public function test_build_admin_menu_as_admin(): void
     {
+        config(['customer.enable_workbooks' => true]);
+
         $user = User::factory()->create(['role_id' => 2]);
         $shouldBe = $this->getBaseMenu();
         $shouldBe['Settings'] = [];
@@ -54,6 +59,8 @@ class BuildAdminMenuUnitTest extends TestCase
 
     public function test_build_admin_menu_no_access(): void
     {
+        config(['customer.enable_workbooks' => true]);
+
         $user = User::factory()->create();
         $shouldBe = [
             'Users' => [],
@@ -73,6 +80,8 @@ class BuildAdminMenuUnitTest extends TestCase
 
     public function test_build_no_user_access(): void
     {
+        config(['customer.enable_workbooks' => true]);
+
         $this->changeRolePermission(1, 'Manage Users', false);
         $this->changeRolePermission(1, 'Manage Permissions', false);
 
@@ -89,6 +98,8 @@ class BuildAdminMenuUnitTest extends TestCase
 
     public function test_build_no_customer_access(): void
     {
+        config(['customer.enable_workbooks' => true]);
+
         $this->changeRolePermission(1, 'Manage Customers', false);
 
         $user = User::factory()->create(['role_id' => 1]);
@@ -104,6 +115,8 @@ class BuildAdminMenuUnitTest extends TestCase
 
     public function test_build_no_tech_tip_access(): void
     {
+        config(['customer.enable_workbooks' => true]);
+
         $this->changeRolePermission(1, 'Manage Tech Tips', false);
 
         $user = User::factory()->create(['role_id' => 1]);
@@ -192,6 +205,11 @@ class BuildAdminMenuUnitTest extends TestCase
                     'name' => 'Customer Equipment Data',
                     'icon' => 'fas fa-database',
                     'route' => route('equipment-data.index'),
+                ],
+                [
+                    'name' => 'Equipment Workbooks',
+                    'icon' => 'fa-table',
+                    'route' => route('workbooks.index'),
                 ],
             ],
             'Tech Tips' => [

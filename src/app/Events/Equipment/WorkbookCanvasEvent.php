@@ -20,6 +20,8 @@ class WorkbookCanvasEvent implements ShouldBroadcast
 
     /**
      * Get the channels the event should broadcast on.
+     *
+     * @codeCoverageIgnore
      */
     public function broadcastOn(): array
     {
@@ -30,6 +32,8 @@ class WorkbookCanvasEvent implements ShouldBroadcast
 
     /**
      * Broadcast Event Name.
+     *
+     * @codeCoverageIgnore
      */
     public function broadcastAs(): string
     {

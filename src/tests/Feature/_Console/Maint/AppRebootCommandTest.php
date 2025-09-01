@@ -15,7 +15,7 @@ class AppRebootCommandTest extends TestCase
     public function test_handle(): void
     {
         Process::fake([
-            'docker ps' => Process::result(true)
+            'docker ps' => Process::result(true),
         ]);
 
         $this->artisan('app:reboot')
@@ -26,7 +26,7 @@ class AppRebootCommandTest extends TestCase
     public function test_handle_no_confirmation(): void
     {
         Process::fake([
-            'docker ps' => Process::result(true)
+            'docker ps' => Process::result(true),
         ]);
 
         $this->artisan('app:reboot')
@@ -37,7 +37,7 @@ class AppRebootCommandTest extends TestCase
     public function test_handle_force(): void
     {
         Process::fake([
-            'docker ps' => Process::result(true)
+            'docker ps' => Process::result(true),
         ]);
 
         $this->artisan('app:reboot --force')

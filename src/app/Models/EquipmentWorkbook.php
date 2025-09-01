@@ -21,8 +21,9 @@ class EquipmentWorkbook extends Model
     | Model Relationships
     |---------------------------------------------------------------------------
     */
-    public function EquipmentType(): BelongsTo
-    {
-        return $this->belongsTo(EquipmentType::class, 'equip_id', 'equip_id');
-    }
+    // FIXME: why doesn't this relationship work?
+    // public function EquipmentType(): BelongsTo
+    // {
+    //     return $this->belongsTo(EquipmentType::class, 'equip_id', 'equip_id');
+    // }
 }
