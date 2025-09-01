@@ -20,11 +20,9 @@ class CustomerWorkbookFactory extends Factory
 
         return [
             'wb_hash' => Str::uuid(),
-            'cust_equip_id' => CustomerEquipment::factory(),
-            'wb_data' => $wbData,
+            'wb_skeleton' => $wbData,
             'wb_version' => 'factory',
-            'published' => false,
-            'by_invite_only' => false,
+            'cust_equip_id' => CustomerEquipment::factory(),
             'publish_until' => null,
         ];
     }

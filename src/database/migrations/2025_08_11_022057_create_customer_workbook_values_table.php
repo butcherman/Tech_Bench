@@ -4,20 +4,18 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        // TODO - Refactor
         Schema::create('customer_workbook_values', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('wb_id');
             $table->uuid('index');
             $table->longText('value')->nullable();
-            $table->boolean('can_publish')->default(false);
+            $table->boolean('protected');
             $table->timestamps();
             $table->foreign('wb_id')
                 ->references('wb_id')
@@ -32,6 +30,9 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::table('customer_workbook_values', function (Blueprint $table) {
+            $table->dropForeign(['wb_id']);
+        });
         Schema::dropIfExists('customer_workbook_values');
     }
 };
