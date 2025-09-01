@@ -10,15 +10,14 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('customer_workbook_values', function (Blueprint $table) {
-            $table->id();
+        Schema::create('guest_workbooks', function (Blueprint $table) {
+            $table->unsignedBigInteger('guest_id');
             $table->unsignedBigInteger('wb_id');
-            $table->uuid('index');
-            $table->longText('value')->nullable();
-            $table->boolean('protected');
-            $table->unsignedBigInteger('updated_by');
-            $table->boolean('is_guest');
             $table->timestamps();
+            $table->foreign('guest_id')
+                ->references('guest_id')
+                ->on('guest_users')
+                ->onUpdate('cascade');
             $table->foreign('wb_id')
                 ->references('wb_id')
                 ->on('customer_workbooks')
@@ -32,9 +31,11 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::table('customer_workbook_values', function (Blueprint $table) {
+        Schema::table('guest_workbooks', function (Blueprint $table) {
+            $table->dropForeign(['guest_id']);
             $table->dropForeign(['wb_id']);
         });
-        Schema::dropIfExists('customer_workbook_values');
+
+        Schema::dropIfExists('guest_workbooks');
     }
 };

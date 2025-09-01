@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\AppSettings;
 use App\Models\DeviceToken;
+use App\Models\GuestUser;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Database\Seeder;
@@ -40,7 +41,7 @@ class UserSeeder extends Seeder
         ], 'id');
 
         // Create a tech user if it does not already exist
-        if (! User::where('username', 'tech')->first()) {
+        if (!User::where('username', 'tech')->first()) {
             User::factory()->create(
                 [
                     'username' => 'tech',
@@ -67,5 +68,9 @@ class UserSeeder extends Seeder
 
         //  Create 10 users and disable them
         User::factory()->count(5)->trashed()->create();
+
+        // Create 10 Guest Users
+        GuestUser::factory()->create(['email' => 'guest@noem.com']);
+        GuestUser::factory()->count(9)->create();
     }
 }
