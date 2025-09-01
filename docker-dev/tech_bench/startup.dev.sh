@@ -39,7 +39,7 @@ then
     php-fpm -F --pid /opt/bitnami/php/tmp/php-fpm.pid -y /opt/bitnami/php/etc/php-fpm.conf
 elif [ $SERVICE = "horizon" ]
 then
-    php /app/artisan horizon:watch --without-tty
+    php /app/artisan horizon  # :watch --without-tty
 elif [ $SERVICE = "scheduler" ]
 then
     /scripts/scheduler.sh

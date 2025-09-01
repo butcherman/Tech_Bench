@@ -7,6 +7,7 @@ import { Menu } from "primevue";
 import { router } from "@inertiajs/vue3";
 import {
     allowVpn,
+    allowWorkbook,
     customer,
     permissions,
     vpnData,
@@ -45,6 +46,19 @@ const managementOptions = computed(() => {
         options.push({
             label: "Add VPN Data",
             command: () => vpnModal.value?.show(),
+        });
+    }
+
+    if (allowWorkbook.value && !props.equipment.has_workbook) {
+        options.push({
+            label: "Add Workbook",
+            command: () =>
+                router.get(
+                    route("customers.equipment.workbook.create", [
+                        customer.value.slug,
+                        props.equipment.cust_equip_id,
+                    ])
+                ),
         });
     }
 

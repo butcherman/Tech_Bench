@@ -10,6 +10,7 @@ use App\Http\Controllers\Customer\CustomerDeletedItemsController;
 use App\Http\Controllers\Customer\CustomerEquipmentController;
 use App\Http\Controllers\Customer\CustomerEquipmentDataController;
 use App\Http\Controllers\Customer\CustomerEquipmentNoteController;
+use App\Http\Controllers\Customer\CustomerEquipmentWorkbookController;
 use App\Http\Controllers\Customer\CustomerFileController;
 use App\Http\Controllers\Customer\CustomerNoteController;
 use App\Http\Controllers\Customer\CustomerSearchController;
@@ -120,9 +121,9 @@ Route::middleware('auth.secure')->group(function () {
         ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
             $breadcrumbs->index('Customers')
                 ->show(
-                    fn (Customer|string $customer) => gettype($customer) === 'object'
-                        ? $customer->name
-                        : $customer
+                    fn(Customer|string $customer) => gettype($customer) === 'object'
+                    ? $customer->name
+                    : $customer
                 )
                 ->create('Create New Customer')
                 ->edit('Edit Customer Details');
@@ -248,9 +249,9 @@ Route::middleware('auth.secure')->group(function () {
                 $breadcrumbs->index('Sites', 'customers.show')
                     ->create('New Customer Site')
                     ->show(
-                        fn (Customer $customer, CustomerSite|string $site) => gettype($site) === 'object'
-                            ? $site->site_name
-                            : $site
+                        fn(Customer $customer, CustomerSite|string $site) => gettype($site) === 'object'
+                        ? $site->site_name
+                        : $site
                     )->edit('Edit Site');
             })->missing(function () {
                 throw new CustomerNotFoundException;
@@ -263,6 +264,12 @@ Route::middleware('auth.secure')->group(function () {
         |-----------------------------------------------------------------------
         */
         Route::prefix('equipment/{equipment}')->name('equipment.')->group(function () {
+            Route::controller(CustomerEquipmentWorkbookController::class)->prefix('workbook')->name('workbook.')->group(function () {
+                Route::get('/', 'index')->name('index');
+                Route::get('create', 'create')->name('create');
+                Route::post('/', 'store')->name('store');
+            });
+
             Route::resource('notes', CustomerEquipmentNoteController::class)
                 ->scoped(['equipment' => 'cust_equip_id'])
                 ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
@@ -278,7 +285,7 @@ Route::middleware('auth.secure')->group(function () {
             ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
                 $breadcrumbs->index('Equipment', 'customers.show')
                     ->show(
-                        fn (Customer $customer, CustomerEquipment $equipment) => $equipment->equip_name
+                        fn(Customer $customer, CustomerEquipment $equipment) => $equipment->equip_name
                     );
             });
 

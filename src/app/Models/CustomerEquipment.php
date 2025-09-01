@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Prunable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Log;
 
@@ -70,7 +71,17 @@ class CustomerEquipment extends Model
     public function equipName(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->EquipmentType->name
+            get: fn() => $this->EquipmentType->name
+        );
+    }
+
+    public function hasWorkbook(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => CustomerWorkbook::where(
+                'cust_equip_id',
+                $this->cust_equip_id
+            )->count() > 0
         );
     }
 
@@ -126,6 +137,11 @@ class CustomerEquipment extends Model
         );
     }
 
+    public function EquipmentWorkbook(): HasOne
+    {
+        return $this->hasOne(CustomerWorkbook::class, 'cust_equip_id', 'cust_equip_id');
+    }
+
     /*
     |---------------------------------------------------------------------------
     | Model Broadcasting
@@ -140,8 +156,8 @@ class CustomerEquipment extends Model
         $allChannels = array_merge(
             $siteChannels,
             [
-                new PrivateChannel('customer.'.$this->Customer->slug),
-                new PrivateChannel('customer-equipment.'.$this->cust_equip_id),
+                new PrivateChannel('customer.' . $this->Customer->slug),
+                new PrivateChannel('customer-equipment.' . $this->cust_equip_id),
             ]
         );
 

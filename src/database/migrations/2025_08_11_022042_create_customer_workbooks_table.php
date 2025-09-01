@@ -4,22 +4,18 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        // TODO - Refactor
         Schema::create('customer_workbooks', function (Blueprint $table) {
             $table->id('wb_id');
             $table->uuid('wb_hash');
-            $table->unsignedBigInteger('cust_equip_id');
-            $table->json('wb_data');
+            $table->json('wb_skeleton');
             $table->text('wb_version');
-            $table->boolean('published')->default(false);
-            $table->boolean('by_invite_only')->default(false);
+            $table->unsignedBigInteger('cust_equip_id');
             $table->timestamp('publish_until')->nullable();
             $table->timestamps();
             $table->foreign('cust_equip_id')
