@@ -3,6 +3,7 @@
 namespace Tests\Feature\_Console\Maint;
 
 use App\Services\Maintenance\BackupRestoreService;
+use Illuminate\Support\Facades\Process;
 use Illuminate\Support\Facades\Storage;
 use Mockery\MockInterface;
 use Tests\TestCase;
@@ -31,6 +32,10 @@ class BackupRestoreCommandTest extends TestCase
 
     public function test_handle(): void
     {
+        Process::fake([
+            'docker ps' => Process::result(true),
+        ]);
+
         $this->createTestBackup();
 
         $this->mock(BackupRestoreService::class, function (MockInterface $mock) {

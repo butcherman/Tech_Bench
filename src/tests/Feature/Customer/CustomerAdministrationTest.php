@@ -67,6 +67,7 @@ class CustomerAdministrationTest extends TestCase
             'auto_purge' => false,
             'allow_vpn_data' => true,
             'allow_share_vpn_data' => true,
+            'enable_workbooks' => true,
         ];
 
         $response = $this->put(route('customers.settings.update'), $data);
@@ -87,6 +88,7 @@ class CustomerAdministrationTest extends TestCase
             'auto_purge' => false,
             'allow_vpn_data' => true,
             'allow_share_vpn_data' => true,
+            'enable_workbooks' => true,
         ];
 
         $response = $this->actingAs($user)
@@ -106,6 +108,7 @@ class CustomerAdministrationTest extends TestCase
             'auto_purge' => false,
             'allow_vpn_data' => true,
             'allow_share_vpn_data' => true,
+            'enable_workbooks' => true,
         ];
 
         $response = $this->actingAs($user)

@@ -43,6 +43,7 @@ class HelpPageTest extends TestCase
         'tech-tips.not-found',
         'telescope',
         'two-factor.*',
+        'workbooks.edit',
     ];
 
     /*

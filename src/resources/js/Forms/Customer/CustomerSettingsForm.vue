@@ -14,6 +14,7 @@ const props = defineProps<{
     auto_purge: boolean;
     allow_vpn_data: boolean;
     allow_share_vpn_data: boolean;
+    enable_workbooks: boolean;
 }>();
 
 const vpnAllowed = ref<boolean>(props.allow_vpn_data);
@@ -30,6 +31,7 @@ const initValues = {
     auto_purge: props.auto_purge,
     allow_vpn_data: props.allow_vpn_data,
     allow_share_vpn_data: props.allow_share_vpn_data,
+    enable_workbooks: props.enable_workbooks,
 };
 
 const schema = object({
@@ -39,6 +41,7 @@ const schema = object({
     auto_purge: boolean().required(),
     allow_vpn_data: boolean().required(),
     allow_share_vpn_data: boolean().required(),
+    enable_workbooks: boolean().required(),
 });
 </script>
 
@@ -56,6 +59,12 @@ const schema = object({
             name="select_id"
             label="Allow Users To Manually Input Customer ID when Creating New Customer"
             help="When creating a customer, should the user be able to manually enter the Customer ID?"
+        />
+        <SwitchInput
+            id="enable_workbooks"
+            name="enable_workbooks"
+            label="Enable Customer Equipment Onboarding Workbooks"
+            help="Customizable workbooks to help gather data from the customer for installing and configuring new equipment"
         />
         <SwitchInput
             id="allow-vpn-data"

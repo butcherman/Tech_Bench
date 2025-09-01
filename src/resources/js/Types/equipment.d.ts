@@ -9,6 +9,7 @@ type equipment = {
     equip_id: number;
     name: string;
     allow_public_tip: boolean;
+    has_workbook: boolean;
     data_field_type?: dataTypes[];
 };
 
@@ -22,4 +23,62 @@ type dataTypes = {
     allow_copy: boolean;
     do_not_log_value: boolean;
     in_use: boolean;
+};
+
+/*
+|-------------------------------------------------------------------------------
+| Onboarding Workbook Types
+|-------------------------------------------------------------------------------
+*/
+
+type workbookWrapper = {
+    header: workbookEntry[];
+    body: workbookPage[];
+    footer: workbookEntry[];
+};
+
+type workbookPage = {
+    page: string;
+    title: string;
+    canPublish: boolean;
+    container: workbookEntry[];
+};
+
+type workbookElement = {
+    componentData?: {
+        label: string;
+        help: string;
+        buttonText?: string;
+        buttonIcon?: string;
+    };
+} & workbookEntry;
+
+type workbookEntry = {
+    index: string;
+    type: "text" | "static" | "input" | "fieldset" | "grid-wrapper" | "wrapper";
+    tag: string;
+    component?: string;
+    props?: { [key: string]: string | string[] | number | boolean };
+    assist?: {
+        [key: string]: {
+            label: string;
+            help: string;
+            type: "string" | "number" | "boolean" | "array";
+        };
+    };
+    text?: string;
+    class?: string;
+    container?: workbookEntry[];
+};
+
+type workbookDropEvent = {
+    added?: {
+        element: workbookEntry;
+        newIndex: number;
+    };
+    moved?: {
+        element: workbookEntry;
+        newIndex: number;
+        oldIndex: number;
+    };
 };
