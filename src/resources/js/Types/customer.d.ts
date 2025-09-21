@@ -72,6 +72,18 @@ type vpnData = {
     notes: string | null;
 };
 
+type customerWorkbook = {
+    wb_id: number;
+    wb_hash: string;
+    wb_skeleton: string;
+    wb_version: string;
+    cust_equip_id: number;
+    published: boolean;
+    publish_until: string | Date | null;
+    created_at: string;
+    updated_at: string;
+};
+
 /*
 |-------------------------------------------------------------------------------
 | Customer Contacts

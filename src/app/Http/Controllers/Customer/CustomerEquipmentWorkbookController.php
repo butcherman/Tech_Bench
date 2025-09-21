@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Customer;
 
+use App\Exceptions\Customer\EquipmentWorkbookNotFoundException;
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\CustomerEquipment;
@@ -17,12 +18,19 @@ class CustomerEquipmentWorkbookController extends Controller
     }
 
     /**
-     *
+     * Show the Customer Equipment Workbook
      */
-    public function index()
+    public function index(Customer $customer, CustomerEquipment $equipment)
     {
-        //
-        return 'index';
+        if (!$equipment->has_workbook) {
+            throw new EquipmentWorkbookNotFoundException;
+        }
+
+        return Inertia::render('Customer/Equipment/Workbook', [
+            'customer' => $customer,
+            'equipment' => $equipment,
+            'workbook' => $equipment->EquipmentWorkbook,
+        ]);
     }
 
     /**

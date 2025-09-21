@@ -333,3 +333,14 @@ Route::middleware('auth.secure')->group(function () {
             ->except(['show']);
     });
 });
+
+/*
+|-------------------------------------------------------------------------------
+| Public Workbook Links
+|-------------------------------------------------------------------------------
+*/
+Route::prefix('workbook')->name('cust-workbook.')->group(function () {
+    Route::get('{workbook}', function () {
+        return 'show workbook';
+    })->name('show');
+});

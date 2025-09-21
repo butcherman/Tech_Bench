@@ -41,6 +41,7 @@ class CustomerEquipment extends Model
         'created_at',
         'updated_at',
         'EquipmentType',
+        'EquipmentWorkbook',
     ];
 
     /** @var array<int, string> */
@@ -78,10 +79,7 @@ class CustomerEquipment extends Model
     public function hasWorkbook(): Attribute
     {
         return Attribute::make(
-            get: fn() => CustomerWorkbook::where(
-                'cust_equip_id',
-                $this->cust_equip_id
-            )->count() > 0
+            get: fn() => $this->EquipmentWorkbook !== null
         );
     }
 
