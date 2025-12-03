@@ -259,7 +259,7 @@ Route::middleware('auth.secure')->group(function () {
 
         /*
         |-----------------------------------------------------------------------
-        | Customer Equipment Routes
+        | Customer Equipment & Workbook routes Routes
         | /customers/{customer-slug|customer-id}/equipment
         |-----------------------------------------------------------------------
         */
@@ -341,6 +341,7 @@ Route::middleware('auth.secure')->group(function () {
 */
 Route::prefix('workbook')->name('cust-workbook.')->group(function () {
     Route::get('{workbook}', function () {
-        return 'show workbook';
+        return 'show workbook - define controller please....';
     })->name('show');
+    Route::get('{workbook}/values', [CustomerEquipmentWorkbookController::class, 'edit'])->name('edit');
 });

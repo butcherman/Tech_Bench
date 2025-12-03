@@ -3,7 +3,11 @@ import BaseButton from "@/Components/_Base/Buttons/BaseButton.vue";
 import PublicLayout from "@/Layouts/Public/PublicLayout.vue";
 import WorkbookBase from "@/Components/Workbook/WorkbookBase.vue";
 import { customer } from "@/Composables/Customer/CustomerData.module";
-import { computed } from "vue";
+import {
+    fetchWbValues,
+    setWbHash,
+} from "@/Composables/Customer/CustomerWorkbook.module";
+import { computed, onMounted } from "vue";
 
 const props = defineProps<{
     equipment: customerEquipment;
@@ -11,6 +15,12 @@ const props = defineProps<{
 }>();
 
 const wbData = computed(() => JSON.parse(props.workbook.wb_skeleton));
+
+onMounted(() => {
+    if (setWbHash(props.workbook.wb_hash)) {
+        fetchWbValues();
+    }
+});
 </script>
 
 <script lang="ts">

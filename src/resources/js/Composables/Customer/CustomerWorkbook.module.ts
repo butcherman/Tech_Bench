@@ -1,11 +1,17 @@
 import { computed, ref } from "vue";
-import { isLoading } from "../axiosWrapper.module";
+import { dataGet, isLoading } from "../axiosWrapper.module";
 
 export const activePage = ref<string>("0");
 export const isPreview = ref<boolean>(false);
+export const setWbHash = (hash: string): boolean => {
+    wbHash.value = hash;
+
+    return true;
+};
 
 const localLoad = ref<boolean>(false);
 const hasError = ref<boolean>(false);
+const wbHash = ref<string>();
 
 /*
 |-------------------------------------------------------------------------------
@@ -37,3 +43,16 @@ export const saveClass = computed<string>(() => {
 
     return "text-success";
 });
+
+/*
+|-------------------------------------------------------------------------------
+| Fetch and Save Workbook Values
+|-------------------------------------------------------------------------------
+*/
+export const fetchWbValues = () => {
+    if (!isPreview.value && wbHash.value) {
+        dataGet(route("cust-workbook.edit", wbHash.value)).then((res) =>
+            console.log(res)
+        );
+    }
+};

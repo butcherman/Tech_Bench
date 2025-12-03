@@ -20,7 +20,7 @@ class CustomerWorkbookPolicy
      */
     public function view(User $user, CustomerWorkbook $customerWorkbook): bool
     {
-        return false;
+        return $user->role_id && $user->role_id !== 0;
     }
 
     /**

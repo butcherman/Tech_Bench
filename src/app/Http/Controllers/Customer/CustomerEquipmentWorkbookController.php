@@ -6,7 +6,9 @@ use App\Exceptions\Customer\EquipmentWorkbookNotFoundException;
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\CustomerEquipment;
+use App\Models\CustomerWorkbook;
 use App\Services\Customer\CustomerWorkbookService;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -58,16 +60,20 @@ class CustomerEquipmentWorkbookController extends Controller
     public function show(string $id)
     {
         //
-        return 'show';
+        return 'show ' . $id;
     }
 
     /**
-     *
+     * Get the values attached to the workbook.  Only return unprotected values
+     * if not an authorized user.
      */
-    public function edit(string $id)
+    public function edit(Request $request, CustomerWorkbook $workbook)
     {
-        //
-        return 'edit';
+        if ($request->user()->can('view', $workbook)) {
+            return $this->svc->getWorkbookValuees($workbook);
+        }
+
+        return $this->svc->getPublicWorkbookValues($workbook);
     }
 
     /**
