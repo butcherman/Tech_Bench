@@ -10,6 +10,7 @@ use App\Models\PhoneNumberType;
 use App\Models\TechTipType;
 use App\Models\UserRole;
 use App\Models\UserSettingType;
+use Illuminate\Cache\TCacheValue;
 use Illuminate\Support\Facades\Cache;
 use PragmaRX\Version\Package\Version;
 
@@ -32,7 +33,7 @@ class CacheFacadeHelper
     /**
      * Build the password rules for users
      *
-     * @return \Illuminate\Cache\TCacheValue
+     * @return TCacheValue
      */
     public function passwordRules()
     {
@@ -66,7 +67,7 @@ class CacheFacadeHelper
     /**
      * Get the version of the Tech Bench Application
      *
-     * @return \Illuminate\Cache\TCacheValue
+     * @return TCacheValue
      */
     public function appData()
     {
@@ -97,7 +98,7 @@ class CacheFacadeHelper
     /**
      * Get a list of User Roles
      *
-     * @return \Illuminate\Cache\TCacheValue
+     * @return TCacheValue
      */
     public function userRoles()
     {
@@ -109,7 +110,7 @@ class CacheFacadeHelper
     /**
      * Get a list of all the possible User Settings Types
      *
-     * @return \Illuminate\Cache\TCacheValue
+     * @return TCacheValue
      */
     public function userSettingsType()
     {
@@ -121,7 +122,7 @@ class CacheFacadeHelper
     /**
      * Get a list of all Equipment Categories with their Equipment Types.
      *
-     * @return \Illuminate\Cache\TCacheValue
+     * @return TCacheValue
      */
     public function equipmentCategories()
     {
@@ -133,7 +134,7 @@ class CacheFacadeHelper
     /**
      * Get a list of all equipment categories prepped for a select box.
      *
-     * @return \Illuminate\Cache\TCacheValue
+     * @return TCacheValue
      */
     public function equipmentCategorySelectBox()
     {
@@ -165,7 +166,7 @@ class CacheFacadeHelper
      * Get a list of all Equipment Categories with their Equipment Types that
      * are allowed to have Public Tech Tips tied to them.
      *
-     * @return \Illuminate\Cache\TCacheValue
+     * @return TCacheValue
      */
     public function publicEquipmentCategories()
     {
@@ -177,7 +178,7 @@ class CacheFacadeHelper
     /**
      * Get a list of all Equipment Types.
      *
-     * @return \Illuminate\Cache\TCacheValue
+     * @return TCacheValue
      */
     public function equipmentTypes()
     {
@@ -189,7 +190,7 @@ class CacheFacadeHelper
     /**
      * Get a list of all Data Field Types for Equipment
      *
-     * @return \Illuminate\Cache\TCacheValue
+     * @return TCacheValue
      */
     public function dataFieldTypes()
     {
@@ -201,7 +202,7 @@ class CacheFacadeHelper
     /**
      * Get a list of all Customer File Types for uploaded files.
      *
-     * @return \Illuminate\Cache\TCacheValue
+     * @return TCacheValue
      */
     public function fileTypes()
     {
@@ -213,7 +214,7 @@ class CacheFacadeHelper
     /**
      * Get a list of all phone types for contact phone numbers
      *
-     * @return \Illuminate\Cache\TCacheValue
+     * @return TCacheValue
      */
     public function phoneTypes()
     {
@@ -225,7 +226,7 @@ class CacheFacadeHelper
     /**
      * Get a list of all Tech Tip Types that can be assigned to a Tech Tip.
      *
-     * @return \Illuminate\Cache\TCacheValue
+     * @return TCacheValue
      */
     public function techTipTypes()
     {

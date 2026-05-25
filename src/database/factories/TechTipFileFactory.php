@@ -4,10 +4,11 @@ namespace Database\Factories;
 
 use App\Models\FileUpload;
 use App\Models\TechTip;
+use App\Models\TechTipFile;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\TechTipFile>
+ * @extends Factory<TechTipFile>
  */
 class TechTipFileFactory extends Factory
 {

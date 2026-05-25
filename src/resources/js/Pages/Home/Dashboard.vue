@@ -22,7 +22,7 @@ export default { layout: AppLayout };
 
 <template>
     <div class="flex flex-col items-center gap-3">
-        <Card class="tb-card-lg" title="Bookmarks">
+        <Card class="tb-card-lg min-h-60" title="Bookmarks">
             <Deferred data="bookmarks">
                 <template #fallback>
                     <AtomLoader />
@@ -55,7 +55,7 @@ export default { layout: AppLayout };
                 </div>
             </Deferred>
         </Card>
-        <Card class="tb-card-lg" title="Recent Visits">
+        <Card class="tb-card-lg min-h-60" title="Recent Visits">
             <Deferred data="recent">
                 <template #fallback>
                     <AtomLoader />

@@ -2,10 +2,11 @@
 
 namespace Database\Factories;
 
+use App\Models\DataFieldType;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\DataFieldType>
+ * @extends Factory<DataFieldType>
  */
 class DataFieldTypeFactory extends Factory
 {

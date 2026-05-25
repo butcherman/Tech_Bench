@@ -5,6 +5,7 @@ namespace App\Actions\Fortify;
 use App\Models\DeviceToken;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Karmendra\LaravelAgentDetector\AgentDetector;
 use Laravel\Fortify\Contracts\TwoFactorLoginResponse as TwoFactorLoginResponseContract;
@@ -15,7 +16,7 @@ class TwoFactorLoginResponse implements TwoFactorLoginResponseContract
     /**
      * If the "Remember Device" flag is set, create a cookie to bypass 2fa.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      */
     public function toResponse($request)
     {

@@ -4,18 +4,18 @@ current:
   label: v
   major: 8
   minor: 0
-  patch: 4
+  patch: 5
   prerelease: null
   buildmetadata: null
-  commit: 92b
+  commit: '930'
   timestamp:
-    year: 2025
-    month: 7
-    day: 28
-    hour: 2
-    minute: 0
-    second: 23
-    timezone: UTC
+    year: 2026
+    month: 5
+    day: 25
+    hour: 13
+    minute: 56
+    second: 57
+    timezone: America/Los_Angeles
 commit:
   mode: git-local
   length: 6

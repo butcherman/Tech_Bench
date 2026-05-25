@@ -125,7 +125,7 @@ services:
         restart: unless-stopped
         volumes:
             - dbDevData:/bitnami/mysql/data
-            - ./database/testDatabase.sql:/docker-entrypoint-initdb.d/testDatabase.sql
+            # - ./database/testDatabase.sql:/docker-entrypoint-initdb.d/testDatabase.sql
         networks:
             - app-tier
         ports:

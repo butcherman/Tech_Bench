@@ -36,7 +36,7 @@ class CertificateService
     /**
      * Shortcut to the Storage Facade for easy disk access
      *
-     * @var \Illuminate\Support\Facades\Storage
+     * @var Storage
      */
     protected $storage;
 

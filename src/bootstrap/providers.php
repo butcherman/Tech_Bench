@@ -1,12 +1,21 @@
 <?php
 
+use App\Providers\AppServiceProvider;
+use App\Providers\AppSettingsServiceProvider;
+use App\Providers\FortifyServiceProvider;
+use App\Providers\HorizonServiceProvider;
+use App\Providers\ReportServiceProvider;
+use App\Providers\TelescopeServiceProvider;
+use SocialiteProviders\Manager\ServiceProvider;
+use ZanySoft\Zip\ZipServiceProvider;
+
 return [
-    App\Providers\AppServiceProvider::class,
-    App\Providers\AppSettingsServiceProvider::class,
-    App\Providers\FortifyServiceProvider::class,
-    App\Providers\HorizonServiceProvider::class,
-    App\Providers\ReportServiceProvider::class,
-    App\Providers\TelescopeServiceProvider::class,
-    SocialiteProviders\Manager\ServiceProvider::class,
-    ZanySoft\Zip\ZipServiceProvider::class,
+    AppServiceProvider::class,
+    AppSettingsServiceProvider::class,
+    FortifyServiceProvider::class,
+    HorizonServiceProvider::class,
+    ReportServiceProvider::class,
+    TelescopeServiceProvider::class,
+    ServiceProvider::class,
+    ZipServiceProvider::class,
 ];

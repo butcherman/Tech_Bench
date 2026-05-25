@@ -3,11 +3,12 @@
 namespace Database\Factories;
 
 use App\Models\CustomerEquipment;
+use App\Models\CustomerEquipmentData;
 use App\Models\DataField;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\CustomerEquipmentData>
+ * @extends Factory<CustomerEquipmentData>
  */
 class CustomerEquipmentDataFactory extends Factory
 {
