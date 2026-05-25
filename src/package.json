@@ -45,7 +45,7 @@
         "tailwindcss-primeui": "^0.6",
         "tinymce": "^7.9",
         "typescript": "^5.8",
-        "uuid": "^11.1",
+        "uuid": "^14.0",
         "vee-validate": "^4.15",
         "vue": "^3.5",
         "vue3-loading-overlay": "^0.0.0",
