@@ -3,12 +3,13 @@
 namespace Database\Factories;
 
 use App\Models\FileLink;
+use App\Models\FileLinkFile;
 use App\Models\FileLinkTimeline;
 use App\Models\FileUpload;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\FileLinkFile>
+ * @extends Factory<FileLinkFile>
  */
 class FileLinkFileFactory extends Factory
 {

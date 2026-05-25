@@ -2,6 +2,7 @@
 
 namespace App\Actions\Fortify;
 
+use Illuminate\Http\Request;
 use Laravel\Fortify\Actions\RedirectIfTwoFactorAuthenticatable as BaseRedirectIfTwoFactorAuthenticatable;
 
 class RedirectIfTwoFactorAuthenticatable extends BaseRedirectIfTwoFactorAuthenticatable
@@ -10,7 +11,7 @@ class RedirectIfTwoFactorAuthenticatable extends BaseRedirectIfTwoFactorAuthenti
      * Override the default Two Factor check to look for a save device code and
      * allow for email as an option to get the 2FA code.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @param  callable  $next
      */
     public function handle($request, $next): mixed

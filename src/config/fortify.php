@@ -1,5 +1,8 @@
 <?php
 
+use App\Actions\Fortify\RedirectIfTwoFactorAuthenticatable;
+use Laravel\Fortify\Actions\AttemptToAuthenticate;
+use Laravel\Fortify\Actions\PrepareAuthenticatedSession;
 use Laravel\Fortify\Features;
 
 return [
@@ -166,9 +169,9 @@ return [
 
     'pipelines' => [
         'login' => [
-            App\Actions\Fortify\RedirectIfTwoFactorAuthenticatable::class,
-            Laravel\Fortify\Actions\AttemptToAuthenticate::class,
-            Laravel\Fortify\Actions\PrepareAuthenticatedSession::class,
+            RedirectIfTwoFactorAuthenticatable::class,
+            AttemptToAuthenticate::class,
+            PrepareAuthenticatedSession::class,
         ],
     ],
 

@@ -3,10 +3,11 @@
 namespace Database\Factories;
 
 use App\Models\User;
+use App\Models\UserLogin;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\UserLogin>
+ * @extends Factory<UserLogin>
  */
 class UserLoginFactory extends Factory
 {

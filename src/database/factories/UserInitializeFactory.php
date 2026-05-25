@@ -3,11 +3,12 @@
 namespace Database\Factories;
 
 use App\Models\User;
+use App\Models\UserInitialize;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\UserInitialize>
+ * @extends Factory<UserInitialize>
  */
 class UserInitializeFactory extends Factory
 {

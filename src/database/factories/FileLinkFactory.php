@@ -2,13 +2,14 @@
 
 namespace Database\Factories;
 
+use App\Models\FileLink;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\FileLink>
+ * @extends Factory<FileLink>
  */
 class FileLinkFactory extends Factory
 {

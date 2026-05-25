@@ -4,10 +4,11 @@ namespace Database\Factories;
 
 use App\Models\EquipmentType;
 use App\Models\TechTip;
+use App\Models\TechTipEquipment;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\TechTipEquipment>
+ * @extends Factory<TechTipEquipment>
  */
 class TechTipEquipmentFactory extends Factory
 {

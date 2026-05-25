@@ -3,11 +3,12 @@
 namespace Database\Factories;
 
 use App\Models\Customer;
+use App\Models\CustomerEquipment;
 use App\Models\EquipmentType;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\CustomerEquipment>
+ * @extends Factory<CustomerEquipment>
  */
 class CustomerEquipmentFactory extends Factory
 {

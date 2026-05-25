@@ -1,6 +1,15 @@
 <?php
 
+use App\Notifications\Maintenance\Backup\BackupHasFailedNotification;
 use App\Notifications\Maintenance\Backup\BackupNotifiable;
+use App\Notifications\Maintenance\Backup\BackupWasSuccessfulNotification;
+use App\Notifications\Maintenance\Backup\CleanupHasFailedNotification;
+use App\Notifications\Maintenance\Backup\CleanupWasSuccessfulNotification;
+use App\Notifications\Maintenance\Backup\HealthyBackupWasFoundNotification;
+use App\Notifications\Maintenance\Backup\UnhealthyBackupWasFoundNotification;
+use Spatie\Backup\Tasks\Cleanup\Strategies\DefaultStrategy;
+use Spatie\Backup\Tasks\Monitor\HealthChecks\MaximumAgeInDays;
+use Spatie\Backup\Tasks\Monitor\HealthChecks\MaximumStorageInMegabytes;
 
 return [
     'nightly_backup' => true,
@@ -212,12 +221,12 @@ return [
      */
     'notifications' => [
         'notifications' => [
-            \App\Notifications\Maintenance\Backup\BackupHasFailedNotification::class => ['mail'],
-            \App\Notifications\Maintenance\Backup\BackupWasSuccessfulNotification::class => ['mail'],
-            \App\Notifications\Maintenance\Backup\CleanupHasFailedNotification::class => ['mail'],
-            \App\Notifications\Maintenance\Backup\CleanupWasSuccessfulNotification::class => ['mail'],
-            \App\Notifications\Maintenance\Backup\HealthyBackupWasFoundNotification::class => ['mail'],
-            \App\Notifications\Maintenance\Backup\UnhealthyBackupWasFoundNotification::class => ['mail'],
+            BackupHasFailedNotification::class => ['mail'],
+            BackupWasSuccessfulNotification::class => ['mail'],
+            CleanupHasFailedNotification::class => ['mail'],
+            CleanupWasSuccessfulNotification::class => ['mail'],
+            HealthyBackupWasFoundNotification::class => ['mail'],
+            UnhealthyBackupWasFoundNotification::class => ['mail'],
         ],
 
         /*
@@ -237,8 +246,8 @@ return [
             'name' => env('APP_NAME', 'tech-bench'),
             'disks' => ['backups'],
             'health_checks' => [
-                \Spatie\Backup\Tasks\Monitor\HealthChecks\MaximumAgeInDays::class => 1,
-                \Spatie\Backup\Tasks\Monitor\HealthChecks\MaximumStorageInMegabytes::class => 5000,
+                MaximumAgeInDays::class => 1,
+                MaximumStorageInMegabytes::class => 5000,
             ],
         ],
     ],
@@ -253,7 +262,7 @@ return [
          * No matter how you configure it the default strategy will never
          * delete the newest backup.
          */
-        'strategy' => \Spatie\Backup\Tasks\Cleanup\Strategies\DefaultStrategy::class,
+        'strategy' => DefaultStrategy::class,
 
         'default_strategy' => [
             /*

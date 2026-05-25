@@ -11,6 +11,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
+use SocialiteProviders\Azure\Provider;
+use SocialiteProviders\Manager\SocialiteWasCalled;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -49,8 +51,8 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('is-installer', [GatePolicy::class, 'isInstaller']);
 
         // Listen to Socialite Events
-        Event::listen(function (\SocialiteProviders\Manager\SocialiteWasCalled $event) {
-            $event->extendSocialite('azure', \SocialiteProviders\Azure\Provider::class);
+        Event::listen(function (SocialiteWasCalled $event) {
+            $event->extendSocialite('azure', Provider::class);
         });
 
         // Remove Data Wrapping from Resources
