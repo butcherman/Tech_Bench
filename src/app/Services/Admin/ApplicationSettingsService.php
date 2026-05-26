@@ -46,8 +46,9 @@ class ApplicationSettingsService
             'app.timezone' => $requestData->get('timezone'),
             'app.company_name' => $requestData->get('company_name'),
             'app.schedule_timezone' => $requestData->get('timezone'),
+            'app.home_links' => $requestData->get('home_links'),
             'filesystems.max_filesize' => $requestData->get('max_filesize'),
-            'services.azure.redirect' => 'https://'.$requestData->get('url').'/auth/callback',
+            'services.azure.redirect' => 'https://' . $requestData->get('url') . '/auth/callback',
         ];
 
         $this->saveSettingsArray($setArr);
@@ -132,7 +133,7 @@ class ApplicationSettingsService
         $storedFile = Storage::disk('public')
             ->putFile($path, new File($requestData->get('file')));
 
-        $this->saveSettings('app.logo', '/storage/'.$storedFile);
+        $this->saveSettings('app.logo', '/storage/' . $storedFile);
 
         CacheData::clearCache('appData');
 
