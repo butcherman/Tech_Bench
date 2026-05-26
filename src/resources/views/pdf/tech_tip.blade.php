@@ -3,51 +3,56 @@
 @section('title', 'Tech Tip')
 
 @section('content')
-    <h2>{{ $tipData->subject }}</h2>
-    <div
-        class="tip-details"
-        style="color: #999999; border-bottom: 1px solid #999999;"
-    >
-        <span>
+    <div class="text-faded">
+        <div class="float-start">
             <strong>ID: </strong>
             {{ $tipData->tip_id }}
-        </span>
-        <span>|</span>
-        <span>
-            <strong>Created: </strong>
-            {{ $tipData->created_at }}
-        </span>
-        @if ($tipData->updated_id)
-            <span>|</span>
-            <span>
-                <strong>Last Updated: </strong>
-                {{ $tipData->updated_at }}
-            </span>
-        @endif
-        <div style="border-top: 1px solid #999999;">
-            <div style="margin-bottom: 0.5em">For Equipment:</div>
+        </div>
+        <div class="float-end">
+            <table>
+                <tbody>
+                    <tr>
+                        <td>
+                            <strong>Created:</strong>
+                        </td>
+                        <td>
+                            {{ Illuminate\Support\Carbon::parse($tipData->created_at)->toFormattedDateString() }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>Updated:</strong>
+                        </td>
+                        @if ($tipData->updated_id)
+                            <td>
+                                {{ Illuminate\Support\Carbon::parse($tipData->updated_at)->toFormattedDateString() }}
+                            </td>
+                        @endif
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="clear-fix light-border-bottom">
+            <strong>For Equipment:</strong>
             @foreach ($tipData->Equipment as $equip)
-                <span>
-                    {{ $equip->name }}
-                </span>
-                <span>|</span>
+                {{ $equip->name }}
+                @if(!$loop->last)
+                    |
+                @endif
             @endforeach
         </div>
     </div>
-    <div class="row">
-        <div class="col">
-            <div class="mt-4">
-                {!! $tipData->details !!}
-            </div>
-        </div>
+    <h2 class="text-center">{{ $tipData->subject }}</h2>
+    <div style="margin-bottom: 5em">
+        {!! $tipData->details !!}
     </div>
-    @if ($tipData->FileUpload)
-        <div class="row">
-            <div class="col">
-                <h3>Attachments:</h3>
-                <ul class="list-group">
+    @if(count($tipData->Files) > 0)
+        <div class="light-border-top">
+            <h3 class="text-center">Attachments:</h3>
+            <div class="center three-quarter-width">
+                <ul style="list-style: none;">
                     @foreach ($tipData->Files as $fileUpload)
-                        <li class="list-group-item">
+                        <li class="text-center">
                             <a href="{{ route('download', [$fileUpload->file_id, $fileUpload->file_name]) }}">
                                 {{ $fileUpload->file_name }}
                             </a>
@@ -57,5 +62,4 @@
             </div>
         </div>
     @endif
-
 @endsection
