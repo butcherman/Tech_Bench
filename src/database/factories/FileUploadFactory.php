@@ -21,7 +21,8 @@ class FileUploadFactory extends Factory
         return [
             'disk' => 'local',
             'folder' => 'randomFolder',
-            'file_name' => Str::random(5).'.jpg',
+            'file_name' => Str::random(5) . '.jpg',
+            'hash_name' => Str::random(20) . '.jpg',
             'file_size' => 1,
             'public' => $this->faker->boolean(),
         ];
@@ -37,7 +38,7 @@ class FileUploadFactory extends Factory
                 ->putFileAs(
                     $file->folder,
                     UploadedFile::fake()->image($file->file_name),
-                    $file->file_name
+                    $file->hash_name
                 );
         });
     }
