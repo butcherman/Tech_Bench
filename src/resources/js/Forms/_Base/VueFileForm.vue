@@ -55,6 +55,12 @@ const isSubmitting = ref<boolean>(false);
 const submitText = computed<string>(() => props.submitText ?? "Submit");
 const isDirty = computed<boolean>(() => meta.value.dirty);
 
+const resetFileForm = () => {
+    isSubmitting.value = false;
+    resetForm();
+    dropzoneInput.value?.reset();
+};
+
 /*
 |-------------------------------------------------------------------------------
 | Dropzone File Data/Events
@@ -161,6 +167,7 @@ defineExpose({
     setFieldValue,
     setFieldError,
     resetForm,
+    resetFileForm,
     handleReset,
     isDirty,
     isSubmitting,
