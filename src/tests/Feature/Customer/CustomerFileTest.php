@@ -115,7 +115,7 @@ class CustomerFileTest extends TestCase
                 ->file_type_id,
             'cust_equip_id' => json_encode(null),
             'site_list' => json_encode([]),
-            'file' => UploadedFile::fake()->image('randomImage.png'),
+            'file' => $uploaded = UploadedFile::fake()->image('randomImage.png'),
         ];
 
         $response = $this->actingAs($user)
@@ -132,11 +132,12 @@ class CustomerFileTest extends TestCase
             'disk' => 'customers',
             'folder' => $customer->cust_id,
             'file_name' => 'randomImage.png',
+            'hash_name' => $uploaded->hashName(),
         ]);
 
         Storage::disk('customers')
             ->assertExists(
-                $customer->cust_id.DIRECTORY_SEPARATOR.'randomImage.png'
+                $customer->cust_id . DIRECTORY_SEPARATOR . $uploaded->hashName()
             );
     }
 
@@ -158,7 +159,7 @@ class CustomerFileTest extends TestCase
                 ->create(['cust_id' => $customer->cust_id])
                 ->cust_equip_id,
             'site_list' => json_encode([]),
-            'file' => UploadedFile::fake()->image('randomImage.png'),
+            'file' => $uploaded = UploadedFile::fake()->image('randomImage.png'),
         ];
 
         $response = $this->actingAs($user)
@@ -175,11 +176,12 @@ class CustomerFileTest extends TestCase
             'disk' => 'customers',
             'folder' => $customer->cust_id,
             'file_name' => 'randomImage.png',
+            'hash_name' => $uploaded->hashName(),
         ]);
 
         Storage::disk('customers')
             ->assertExists(
-                $customer->cust_id.DIRECTORY_SEPARATOR.'randomImage.png'
+                $customer->cust_id . DIRECTORY_SEPARATOR . $uploaded->hashName()
             );
     }
 
@@ -200,7 +202,7 @@ class CustomerFileTest extends TestCase
             'file_type_id' => CustomerFileType::inRandomOrder()->first()->file_type_id,
             'cust_equip_id' => json_encode(null),
             'site_list' => json_encode($sites->pluck('cust_site_id')),
-            'file' => UploadedFile::fake()->image('randomImage.png'),
+            'file' => $uploaded = UploadedFile::fake()->image('randomImage.png'),
         ];
 
         $response = $this->actingAs($user)
@@ -217,6 +219,7 @@ class CustomerFileTest extends TestCase
             'disk' => 'customers',
             'folder' => $customer->cust_id,
             'file_name' => 'randomImage.png',
+            'hash_name' => $uploaded->hashName(),
         ]);
 
         $this->assertDatabaseHas('customer_site_files', [
@@ -232,7 +235,7 @@ class CustomerFileTest extends TestCase
         ]);
 
         Storage::disk('customers')
-            ->assertExists($customer->cust_id.DIRECTORY_SEPARATOR.'randomImage.png');
+            ->assertExists($customer->cust_id . DIRECTORY_SEPARATOR . $uploaded->hashName());
     }
 
     public function test_store_chunked_file(): void
