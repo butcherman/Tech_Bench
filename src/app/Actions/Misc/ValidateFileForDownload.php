@@ -35,6 +35,8 @@ class ValidateFileForDownload
      */
     protected function verifyFileName(FileUpload $fileData, string $providedName): void
     {
+        Log::debug('Verifying File Name');
+
         throw_if(
             $fileData->file_name !== $providedName,
             fn() => new IncorrectFilenameException($providedName, $fileData)

@@ -20,7 +20,6 @@ class DownloadFileController extends Controller
 
         // @codeCoverageIgnoreStart
         $path = $file->getFilePath();
-        $fileName = basename($path);
 
         Log::info('File being downloaded', [
             'path' => $path,
@@ -34,17 +33,17 @@ class DownloadFileController extends Controller
         //  Prepare header information for file download
         header('Content-Description:  File Transfer');
         header('Content-Type: application/octet-stream');
-        header('Content-Disposition: attachment; filename='.basename($fileName));
+        header('Content-Disposition: attachment; filename=' . basename($fileName));
         header('Content-Transfer-Encoding:  binary');
         header('Expires:  0');
         header('Cache-Control:  must-revalidate, post-check=0, pre-check=0');
         header('Pragma:  public');
-        header('Content-Length:  '.filesize($path));
+        header('Content-Length:  ' . filesize($path));
 
         //  Begin the file download.  File is streamed in chunks for smoother download
         set_time_limit(0);
         $file = fopen($path, 'rb');
-        while (! feof($file)) {
+        while (!feof($file)) {
             echo @fread($file, 1024 * 8);
             ob_flush();
             flush();

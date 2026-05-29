@@ -97,6 +97,7 @@ abstract class FileUploadController extends Controller
             'disk' => $this->disk,
             'folder' => $this->folder,
             'file_name' => $fileName,
+            'hash_name' => $completedFile->hashName(),
             'file_size' => $completedFile->getSize(),
             'public' => $this->isPublic,
         ]);
@@ -110,14 +111,9 @@ abstract class FileUploadController extends Controller
     public function saveFileToDisk(UploadedFile $file): string
     {
         $properName = $this->cleanFilename($file->getClientOriginalName());
-        $fileName = $this->checkForDuplicate(
-            $this->disk,
-            $this->folder,
-            $properName
-        );
 
-        $file->storeAs($this->folder, $fileName, $this->disk);
+        $file->store($this->folder, $this->disk);
 
-        return $fileName;
+        return $properName;
     }
 }
