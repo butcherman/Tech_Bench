@@ -83,7 +83,7 @@ class FileLinkFileTest extends TestCase
         $user = User::factory()->createQuietly();
         $link = FileLink::factory()->create(['user_id' => $user->user_id]);
         $data = [
-            'file' => UploadedFile::fake()->image('testPhoto.png'),
+            'file' => $upload = UploadedFile::fake()->image('testPhoto.png'),
         ];
 
         $response = $this->actingAs($user)
@@ -96,7 +96,7 @@ class FileLinkFileTest extends TestCase
         ]);
 
         Storage::disk('fileLinks')
-            ->assertExists($link->link_id.'/testPhoto.png');
+            ->assertExists($link->link_id . DIRECTORY_SEPARATOR . $upload->hashName());
     }
 
     /*
@@ -248,7 +248,7 @@ class FileLinkFileTest extends TestCase
 
         Storage::disk('fileLinks')
             ->put(
-                $file->folder.DIRECTORY_SEPARATOR.$file->file_name,
+                $file->folder . DIRECTORY_SEPARATOR . $file->hash_name,
                 'Test file contents'
             );
 
@@ -294,13 +294,14 @@ class FileLinkFileTest extends TestCase
             'disk' => 'customers',
             'folder' => $customer->cust_id,
             'file_name' => $file->file_name,
+            'hash_name' => $file->hash_name,
         ]);
 
         Storage::disk('fileLinks')
-            ->assertMissing($file->folder.DIRECTORY_SEPARATOR.$file->file_name);
+            ->assertMissing($file->folder . DIRECTORY_SEPARATOR . $file->hash_name);
 
         Storage::disk('customers')
-            ->assertExists($customer->cust_id.DIRECTORY_SEPARATOR.$file->file_name);
+            ->assertExists($customer->cust_id . DIRECTORY_SEPARATOR . $file->hash_name);
     }
 
     /*

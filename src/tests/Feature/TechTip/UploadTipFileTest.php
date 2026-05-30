@@ -89,44 +89,7 @@ class UploadTipFileTest extends TestCase
         ]);
 
         Storage::disk('tips')
-            ->assertExists('tmp'.DIRECTORY_SEPARATOR.'testPhoto.png');
-    }
-
-    public function test_invoke_duplicate_file(): void
-    {
-        Storage::fake('tips');
-        Storage::disk('tips')
-            ->putFileAs(
-                'tmp/testPhoto.png',
-                UploadedFile::fake()->image('testPhoto.png'),
-                'testPhoto.png'
-            );
-
-        /** @var User $user */
-        $user = User::factory()->createQuietly(['role_id' => 1]);
-        $data = TechTip::factory()
-            ->make(['public' => false])
-            ->makeVisible(['tip_type_id'])
-            ->makeHidden('views');
-        $dataArr = $data->toArray();
-        $equipList = EquipmentType::factory()->count(2)->create();
-        $dataArr['suppress'] = false;
-        $dataArr['equipList'] = $equipList->pluck('equip_id')->toArray();
-        $dataArr['file'] = UploadedFile::fake()->image('testPhoto.png');
-
-        $response = $this->actingAs($user)
-            ->post(route('tech-tips.upload-file'), $dataArr);
-
-        $response->assertSuccessful();
-
-        $this->assertDatabaseHas('file_uploads', [
-            'folder' => 'tmp',
-            'file_name' => 'testPhoto(1).png',
-            'public' => false,
-        ]);
-
-        Storage::disk('tips')
-            ->assertExists('tmp'.DIRECTORY_SEPARATOR.'testPhoto(1).png');
+            ->assertExists('tmp' . DIRECTORY_SEPARATOR . $dataArr['file']->hashName());
     }
 
     public function test_invoke_public_file(): void
@@ -137,7 +100,7 @@ class UploadTipFileTest extends TestCase
         Storage::disk('tips')
             ->putFileAs(
                 'tmp/testPhoto.png',
-                UploadedFile::fake()->image('testPhoto.png'),
+                $upload = UploadedFile::fake()->image('testPhoto.png'),
                 'testPhoto.png'
             );
 
@@ -151,7 +114,7 @@ class UploadTipFileTest extends TestCase
         $equipList = EquipmentType::factory()->count(2)->create();
         $dataArr['suppress'] = false;
         $dataArr['equipList'] = $equipList->pluck('equip_id')->toArray();
-        $dataArr['file'] = UploadedFile::fake()->image('testPhoto.png');
+        $dataArr['file'] = $upload;
 
         $response = $this->actingAs($user)
             ->post(route('tech-tips.upload-file'), $dataArr);
@@ -160,11 +123,12 @@ class UploadTipFileTest extends TestCase
 
         $this->assertDatabaseHas('file_uploads', [
             'folder' => 'tmp',
-            'file_name' => 'testPhoto(1).png',
+            'file_name' => $upload->getFilename(),
+            'hash_name' => $upload->hashName(),
             'public' => true,
         ]);
 
         Storage::disk('tips')
-            ->assertExists('tmp'.DIRECTORY_SEPARATOR.'testPhoto(1).png');
+            ->assertExists('tmp' . DIRECTORY_SEPARATOR . $upload->hashName());
     }
 }
