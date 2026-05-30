@@ -48,7 +48,8 @@ class DownloadTipTest extends TestCase
         $user = User::factory()->createQuietly();
         $tip = TechTip::factory()->create();
 
-        // $this->expectException(DownloadTipNotAllowedException::class);
+        $this->withoutExceptionHandling();
+        $this->expectException(DownloadTipNotAllowedException::class);
 
         $response = $this->actingAs($user)
             ->get(route('tech-tips.download', $tip->slug));

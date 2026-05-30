@@ -123,7 +123,7 @@ class UploadTipFileTest extends TestCase
 
         $this->assertDatabaseHas('file_uploads', [
             'folder' => 'tmp',
-            'file_name' => $upload->getFilename(),
+            'file_name' => 'testPhoto.png',
             'hash_name' => $upload->hashName(),
             'public' => true,
         ]);

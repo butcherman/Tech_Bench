@@ -127,6 +127,7 @@ class AppMaintenanceTest extends TestCase
             'disk' => 'local',
             'folder' => 'test_one',
             'file_name' => 'valid.txt',
+            'hash_name' => 'valid.txt',
             'file_size' => 0,
             'public' => 0,
         ]);
@@ -134,6 +135,7 @@ class AppMaintenanceTest extends TestCase
             'disk' => 'local',
             'folder' => 'test_one',
             'file_name' => 'invalid.txt',
+            'hash_name' => 'invalid.txt',
             'file_size' => 0,
             'public' => 0,
         ]);
