@@ -44,20 +44,29 @@ export const copyWorkbook = <T>(wbData: T): T => {
 export const isDirty = ref<boolean>(false);
 export const imDirty = (): void => {
     isDirty.value = true;
+    console.log("I am dirty");
 };
 
 /**
  * Undo all changes since last save
  */
-// export const resetWorkbook = () => {
-//     if (cleanWorkbook.value) {
-//         workbookData.header = copyWorkbook(cleanWorkbook.value.header);
-//         workbookData.body = copyWorkbook(cleanWorkbook.value.body);
-//         workbookData.footer = copyWorkbook(cleanWorkbook.value.footer);
+export const resetWorkbook = () => {
+    if (cleanWorkbook.value) {
+        workbookData.header = copyWorkbook(cleanWorkbook.value.header);
+        workbookData.body = copyWorkbook(cleanWorkbook.value.body);
+        workbookData.footer = copyWorkbook(cleanWorkbook.value.footer);
 
-//         isDirty.value = false;
-//     }
-// };
+        isDirty.value = false;
+    }
+};
+
+/**
+ * Change workbook state for a successful save event
+ */
+export const onSuccessfulSave = () => {
+    isDirty.value = false;
+    cleanWorkbook.value = copyWorkbook(workbookData);
+};
 
 /**
  * Update the Dirty changes to show on the preview page

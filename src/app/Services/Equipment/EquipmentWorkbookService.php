@@ -3,10 +3,29 @@
 namespace App\Services\Equipment;
 
 use App\Models\EquipmentType;
+use App\Models\EquipmentWorkbook;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 class EquipmentWorkbookService
 {
+    /**
+     * Create or Update a workbook for equipment
+     */
+    public function updateWorkbookBuilder(Collection $requestData, EquipmentType $equipment_type): void
+    {
+        // TODO - Remove unnecessary builder data
+        EquipmentWorkbook::firstOrCreate([
+            'equip_id' => $equipment_type->equip_id,
+        ], [
+            'workbook_data' => json_encode($requestData->get('workbook_data')),
+            'version_hash' => Str::random(5),
+        ])->update([
+            'workbook_data' => json_encode($requestData->get('workbook_data')),
+            'version_hash' => Str::random(5),
+        ]);
+    }
+
     /**
      * Return the Workbook for the selected equipment, or default blank workbook
      */
