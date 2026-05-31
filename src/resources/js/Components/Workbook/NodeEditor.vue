@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import FormError from "./NodeForms/FormError.vue";
-import PageForm from "./NodeForms/PageForm.vue";
+import FormError from "./Canvas/NodeForms/FormError.vue";
+import PageForm from "./Canvas/NodeForms/PageForm.vue";
+import { computed } from "vue";
 import { Drawer } from "primevue";
 import {
     activeNode,
     clearActiveNode,
     showNodeEditor,
 } from "@/Composables/Workbook/Canvas/WorkbookEditor.module";
-import { computed } from "vue";
 
 const editorHeader = computed(() => {
     if (!activeNode.value) {

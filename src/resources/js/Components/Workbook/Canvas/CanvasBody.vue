@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import WorkbookPageTabs from "./WorkbookPageTabs.vue";
+import CanvasBodyPages from "./CanvasBodyPages.vue";
+import CanvasBodyPageTabs from "./CanvasBodyPageTabs.vue";
 import { activePage } from "@/Composables/Workbook/Canvas/WorkbookEditor.module";
 import { Tabs } from "primevue";
 </script>
 
 <template>
     <Tabs v-model:value="activePage">
-        <WorkbookPageTabs />
+        <CanvasBodyPageTabs />
+        <CanvasBodyPages />
     </Tabs>
 </template>

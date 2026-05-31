@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import BaseButton from "@/Components/_Base/Buttons/BaseButton.vue";
-import CanvasNodeEditor from "@/Components/Workbook/Canvas/CanvasNodeEditor.vue";
-import CanvasNodes from "@/Components/Workbook/Canvas/CanvasNodes.vue";
+import NodeEditor from "@/Components/Workbook/NodeEditor.vue";
+import NodeSelection from "@/Components/Workbook/NodeSelection.vue";
 import PublicLayout from "@/Layouts/Public/PublicLayout.vue";
 import WorkbookCanvas from "@/Components/Workbook/Canvas/WorkbookCanvas.vue";
 import { onMounted } from "vue";
@@ -33,12 +33,12 @@ export default { layout: PublicLayout };
         </div>
         <div class="grid grid-cols-1 md:grid-cols-4 gap-2 grow">
             <div>
-                <CanvasNodes />
+                <NodeSelection />
             </div>
             <div class="md:col-span-3 h-full">
                 <WorkbookCanvas />
             </div>
         </div>
-        <CanvasNodeEditor />
+        <NodeEditor />
     </div>
 </template>
