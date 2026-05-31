@@ -21,7 +21,7 @@ import { workbookData } from "@/Composables/Workbook/Canvas/WorkbookEditor.modul
             class="h-full relative"
         >
             <EmptyContainer :is-empty="page.contents.length === 0" />
-            <CanvasBodyPage />
+            <CanvasBodyPage :node-list="page.contents" />
         </TabPanel>
     </TabPanels>
 </template>

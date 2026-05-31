@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import BaseButton from "@/Components/_Base/Buttons/BaseButton.vue";
-import NodeEditor from "@/Components/Workbook/NodeEditor.vue";
+import NodeDataEditor from "@/Components/Workbook/NodeDataEditor.vue";
 import NodeSelection from "@/Components/Workbook/NodeSelection.vue";
 import PublicLayout from "@/Layouts/Public/PublicLayout.vue";
 import WorkbookCanvas from "@/Components/Workbook/Canvas/WorkbookCanvas.vue";
@@ -39,6 +39,6 @@ export default { layout: PublicLayout };
                 <WorkbookCanvas />
             </div>
         </div>
-        <NodeEditor />
+        <NodeDataEditor />
     </div>
 </template>

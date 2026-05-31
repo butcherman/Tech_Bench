@@ -6,7 +6,14 @@ export const equipmentType = ref<equipment>();
 export const activePage = ref<string>("0");
 export const workbookData = reactive<workbookWrapper>({
     header: [],
-    body: [],
+    body: [
+        {
+            page: "0",
+            title: "Page 1",
+            canPublish: true,
+            contents: [],
+        },
+    ],
     footer: [],
 });
 

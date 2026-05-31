@@ -41,10 +41,10 @@ const cloneElement = () => {
             Drag Element to Workbook Canvas
         </p>
         <draggableComponent
+            item-key="index"
             :list="activeList"
             :group="{ name: 'workbook', pull: 'clone', put: 'false' }"
             :sort="false"
-            item-key="index"
             :clone="cloneElement"
         >
             <template #item="{ element }">

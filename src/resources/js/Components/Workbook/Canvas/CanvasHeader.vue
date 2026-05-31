@@ -1,9 +1,10 @@
 <script setup lang="ts">
+import CanvasNode from "./CanvasNode.vue";
 import draggableComponent from "vuedraggable";
+import EmptyContainer from "./EmptyContainer.vue";
 import okModal from "@/Modules/okModal";
 import { computed } from "vue";
 import { workbookData } from "@/Composables/Workbook/Canvas/WorkbookEditor.module";
-import EmptyContainer from "./EmptyContainer.vue";
 
 const props = defineProps<{
     isFooter?: boolean;
@@ -20,6 +21,7 @@ const list = computed(() =>
 const allowedInHeader: string[] = ["text", "static"];
 const onHeaderDrop = (event: workbookDropEvent): void => {
     console.log("dropped", event);
+    console.log(list.value);
     // if (event.added) {
     //     if (!allowedInHeader.includes(event.added.element.type)) {
     //         okModal(`Only Text Elements are allowed in the ${name.value}`);
@@ -46,10 +48,10 @@ const onHeaderDrop = (event: workbookDropEvent): void => {
             :group="{ name: 'workbook', put: true }"
             class="min-h-20 flex flex-col gap-3"
             item-key="index"
-            @change="onHeaderDrop"
+            @add="onHeaderDrop"
         >
             <template #item="{ element }">
-                {{ element }}
+                <CanvasNode :node="element" :node-wrapper="list" />
             </template>
         </draggableComponent>
     </div>
