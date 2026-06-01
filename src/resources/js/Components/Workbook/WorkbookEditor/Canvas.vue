@@ -69,20 +69,6 @@ const saveWorkbook = () => {
         </template>
         <div class="h-full flex flex-col gap-5">
             <CanvasHeader />
-            <!-- <draggableComponent
-                class="grow"
-                :list="workbookData.body"
-                :group="{
-                    name: 'workbook',
-                    put: true,
-                }"
-                item-key="index"
-                style="border: 1px solid red"
-            >
-                <template #item="{ element }">
-                    <div>{{ element }}</div>
-                </template>
-            </draggableComponent> -->
             <CanvasBody class="grow" />
             <CanvasHeader is-footer />
         </div>

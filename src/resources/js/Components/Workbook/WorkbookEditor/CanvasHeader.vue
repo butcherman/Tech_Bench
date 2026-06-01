@@ -2,6 +2,7 @@
 import draggableComponent from "vuedraggable";
 import EmptyContainer from "./EmptyContainer.vue";
 import okModal from "@/Modules/okModal/index.js";
+import NodeWrapper from "./NodeWrapper.vue";
 import { computed } from "vue";
 import {
     deleteNode,
@@ -53,7 +54,7 @@ const onHeaderDrop = (event: workbookDropEvent): void => {
             @change="onHeaderDrop"
         >
             <template #item="{ element }">
-                <div>{{ element }}</div>
+                <NodeWrapper :node="element" />
             </template>
         </draggableComponent>
     </div>
