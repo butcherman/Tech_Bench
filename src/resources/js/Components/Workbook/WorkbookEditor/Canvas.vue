@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import BaseBadge from "@/Components/_Base/Badges/BaseBadge.vue";
 import Card from "@/Components/_Base/Card.vue";
+import CanvasBody from "./CanvasBody.vue";
 import CanvasHeader from "./CanvasHeader.vue";
-import draggableComponent from "vuedraggable";
 import { dataPost } from "@/Composables/axiosWrapper.module.js";
 import { ref, unref } from "vue";
 import { useAppStore } from "@/Stores/AppStore.js";
@@ -68,8 +68,8 @@ const saveWorkbook = () => {
             </div>
         </template>
         <div class="h-full flex flex-col gap-5">
-            <CanvasHeader :contents="workbookData.header" />
-            <draggableComponent
+            <CanvasHeader />
+            <!-- <draggableComponent
                 class="grow"
                 :list="workbookData.body"
                 :group="{
@@ -82,8 +82,9 @@ const saveWorkbook = () => {
                 <template #item="{ element }">
                     <div>{{ element }}</div>
                 </template>
-            </draggableComponent>
-            <CanvasHeader :contents="workbookData.footer" is-footer />
+            </draggableComponent> -->
+            <CanvasBody class="grow" />
+            <CanvasHeader is-footer />
         </div>
     </Card>
 </template>

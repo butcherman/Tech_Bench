@@ -1,3 +1,4 @@
+import { v4 } from "uuid";
 import { reactive, ref } from "vue";
 
 /*
@@ -32,7 +33,7 @@ export const initWorkbook = (
 /**
  * Change workbook state for a successful save event
  */
-export const onSuccessfulSave = () => {
+export const onSuccessfulSave = (): void => {
     isDirty.value = false;
     cleanWorkbook.value = copyWorkbook(workbookData);
 };
@@ -40,7 +41,7 @@ export const onSuccessfulSave = () => {
 /**
  * Undo all changes since last save
  */
-export const resetWorkbook = () => {
+export const resetWorkbook = (): void => {
     if (cleanWorkbook.value) {
         workbookData.header = copyWorkbook(cleanWorkbook.value.header);
         workbookData.body = copyWorkbook(cleanWorkbook.value.body);
@@ -67,10 +68,66 @@ export const imDirty = (): void => {
 
 /*
 |-------------------------------------------------------------------------------
+| Workbook Pages
+|-------------------------------------------------------------------------------
+*/
+
+/**
+ * Create a new Blank Page
+ */
+export const addBlankPage = (): void => {
+    let newPage: workbookPage = {
+        page: v4(),
+        title: "New Page",
+        canPublish: true,
+        contents: [],
+    };
+
+    workbookData.body.push(newPage);
+    activePage.value = newPage.page;
+
+    imDirty();
+};
+
+/**
+ * Delete a page from the canvas.
+ */
+export const deletePage = (page: workbookPage): void => {
+    console.log("delete page");
+    let index = workbookData.body.indexOf(page);
+
+    workbookData.body.splice(index, 1);
+    imDirty();
+
+    if (page.page === activePage.value) {
+        activePage.value = workbookData.body[0].page;
+    }
+};
+
+/*
+|-------------------------------------------------------------------------------
 | Node Data Editor
 |-------------------------------------------------------------------------------
 */
+export const showNodeEditor = ref<boolean>(false);
 export const activeNode = ref<workbookNode | workbookPage>();
+
+/**
+ * Close the Editor Window
+ */
+export const closeNodeEditor = (): void => {
+    showNodeEditor.value = false;
+    imDirty();
+};
+
+/**
+ * Edit data attached to a Node
+ */
+export const editNode = (node: workbookNode): void => {
+    console.log("edit node");
+    activeNode.value = node;
+    showNodeEditor.value = true;
+};
 
 /**
  * Delete a Node from the canvas.

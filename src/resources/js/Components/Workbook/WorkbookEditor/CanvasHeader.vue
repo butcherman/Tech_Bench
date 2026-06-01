@@ -6,14 +6,17 @@ import { computed } from "vue";
 import {
     deleteNode,
     imDirty,
+    workbookData,
 } from "@/Composables/Workbook/Canvas/WorkbookEditor.module.js";
 
 const props = defineProps<{
-    contents: workbookNode[];
     isFooter?: boolean;
 }>();
 
 const name = computed(() => (props.isFooter ? "Footer" : "Header"));
+const contents = computed(() =>
+    props.isFooter ? workbookData.footer : workbookData.header,
+);
 
 // Only specific types are allowed to be dropped in the Header
 const allowedInHeader: string[] = ["text", "static"];
@@ -21,7 +24,7 @@ const onHeaderDrop = (event: workbookDropEvent): void => {
     if (event.added) {
         if (!allowedInHeader.includes(event.added.element.type)) {
             okModal(`Only Text Elements are allowed in the ${name.value}`);
-            deleteNode(event.added.element, props.contents);
+            deleteNode(event.added.element, contents.value);
         } else {
             imDirty();
         }

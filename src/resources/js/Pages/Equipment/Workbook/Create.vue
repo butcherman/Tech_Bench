@@ -32,8 +32,8 @@ export default { layout: PublicLayout };
             />
         </div>
         <div class="grid grid-cols-1 md:grid-cols-4 gap-2 grow">
-            <div><NodeSelector /></div>
-            <div class="md:col-span-3 h-full"><Canvas /></div>
+            <NodeSelector />
+            <Canvas class="md:col-span-3 h-full" />
         </div>
         <NodeDataEditor />
     </div>
