@@ -5,11 +5,7 @@ import { computed, ref } from "vue";
 import { designNodes } from "@/Composables/Workbook/Canvas/DesignNodes";
 import { formNodes } from "@/Composables/Workbook/Canvas/FormNodes";
 import { tableNodes } from "@/Composables/Workbook/Canvas/TableNodes";
-import {
-    copyWorkbook,
-    imDirty,
-} from "@/Composables/Workbook/Canvas/WorkbookEditor.module";
-import { v4 } from "uuid";
+import { getClonedNode } from "@/Composables/Workbook/Canvas/WorkbookEditor.module";
 
 type nodeType = "design" | "form" | "table";
 
@@ -24,23 +20,6 @@ const activeList = computed(() => {
             return tableNodes;
     }
 });
-
-/**
- * Make duiplcate copy of node with new ID
- */
-const cloneNode = (node: workbookNode): workbookNode => {
-    // Make deep copy of element
-    let newNode = copyWorkbook(node);
-    delete newNode.nodeLabel;
-
-    newNode.index = v4();
-    imDirty();
-
-    // If this element has children, create unique ID's on the child elements
-    newNode.contents?.forEach((nd: workbookNode) => (nd.index = v4()));
-
-    return newNode;
-};
 </script>
 
 <template>
@@ -60,7 +39,7 @@ const cloneNode = (node: workbookNode): workbookNode => {
         </p>
         <div>
             <draggableComponent
-                :clone="cloneNode"
+                :clone="getClonedNode"
                 :list="activeList"
                 :sort="false"
                 :group="{

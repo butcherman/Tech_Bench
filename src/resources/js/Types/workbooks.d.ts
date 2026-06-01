@@ -24,6 +24,7 @@ type workbookNode = {
     props: {
         tag?: string;
         class?: string;
+        cols?: number;
         text?: string;
         label?: string;
         placeholder?: string;

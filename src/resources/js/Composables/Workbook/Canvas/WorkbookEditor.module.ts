@@ -121,6 +121,23 @@ export const closeNodeEditor = (): void => {
 };
 
 /**
+ * Make duiplcate copy of node with new ID
+ */
+export const getClonedNode = (node: workbookNode): workbookNode => {
+    // Make deep copy of element
+    let newNode = copyWorkbook(node);
+    delete newNode.nodeLabel;
+
+    newNode.index = v4();
+    imDirty();
+
+    // If this element has children, create unique ID's on the child elements
+    newNode.contents?.forEach((nd: workbookNode) => (nd.index = v4()));
+
+    return newNode;
+};
+
+/**
  * Edit data attached to a Node
  */
 export const editNode = (node: workbookNode): void => {
@@ -141,3 +158,15 @@ export const deleteNode = (
 
     imDirty();
 };
+
+/**
+ * Create a copy of a Node and place directly below selected node.
+ */
+// export const cloneNode = (node: workbookNode): void => {
+//     let newComponent = getClonedNode(node);
+//     // let index = container.indexOf(node);
+
+//     // container.splice(index, 0, newComponent);
+
+//     console.log(newComponent);
+// };

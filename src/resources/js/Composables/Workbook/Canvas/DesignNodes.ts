@@ -5,7 +5,6 @@ export const designNodes: workbookNode[] = [
         index: v4(),
         type: "grid-wrapper",
         props: {
-            tag: "div",
             class: "grid grid-cols-2 gap-2 my-2 min-h-20",
         },
         nodeLabel: {
@@ -19,7 +18,6 @@ export const designNodes: workbookNode[] = [
                 type: "wrapper",
                 contents: [],
                 props: {
-                    tag: "div",
                     class: "min-h-20",
                 },
             },
@@ -28,7 +26,6 @@ export const designNodes: workbookNode[] = [
                 type: "wrapper",
                 contents: [],
                 props: {
-                    tag: "div",
                     class: "min-h-20",
                 },
             },
