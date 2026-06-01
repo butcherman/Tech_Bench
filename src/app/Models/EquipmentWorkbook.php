@@ -2,12 +2,16 @@
 
 namespace App\Models;
 
+use App\Observers\EquipmentWorkbookObserver;
+use Database\Factories\EquipmentWorkbookFactory;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+#[ObservedBy([EquipmentWorkbookObserver::class])]
 class EquipmentWorkbook extends Model
 {
-    /** @use HasFactory<\Database\Factories\EquipmentWorkbookFactory> */
+    /** @use HasFactory<EquipmentWorkbookFactory> */
     use HasFactory;
 
     /** @var string */
