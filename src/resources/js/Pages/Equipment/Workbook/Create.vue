@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import BaseButton from "@/Components/_Base/Buttons/BaseButton.vue";
-import NodeDataEditor from "@/Components/Workbook/NodeDataEditor.vue";
-import NodeSelection from "@/Components/Workbook/NodeSelection.vue";
+import Canvas from "@/Components/Workbook/WorkbookEditor/Canvas.vue";
+import NodeDataEditor from "@/Components/Workbook/WorkbookEditor/NodeDataEditor.vue";
+import NodeSelector from "@/Components/Workbook/WorkbookEditor/NodeSelector.vue";
 import PublicLayout from "@/Layouts/Public/PublicLayout.vue";
-import WorkbookCanvas from "@/Components/Workbook/Canvas/WorkbookCanvas.vue";
-import { onMounted } from "vue";
 import { initWorkbook } from "@/Composables/Workbook/Canvas/WorkbookEditor.module";
+import { onMounted } from "vue";
 
 const props = defineProps<{
     equipmentType: equipment;
@@ -32,12 +32,8 @@ export default { layout: PublicLayout };
             />
         </div>
         <div class="grid grid-cols-1 md:grid-cols-4 gap-2 grow">
-            <div>
-                <NodeSelection />
-            </div>
-            <div class="md:col-span-3 h-full">
-                <WorkbookCanvas />
-            </div>
+            <div><NodeSelector /></div>
+            <div class="md:col-span-3 h-full"><Canvas /></div>
         </div>
         <NodeDataEditor />
     </div>

@@ -1,33 +1,27 @@
 <script setup lang="ts">
 import BaseBadge from "@/Components/_Base/Badges/BaseBadge.vue";
-import CanvasBody from "./CanvasBody.vue";
-import CanvasHeader from "./CanvasHeader.vue";
 import Card from "@/Components/_Base/Card.vue";
+import CanvasHeader from "./CanvasHeader.vue";
+import draggableComponent from "vuedraggable";
+import { dataPost } from "@/Composables/axiosWrapper.module.js";
+import { ref, unref } from "vue";
+import { useAppStore } from "@/Stores/AppStore.js";
 import {
     equipmentType,
+    isDirty,
     onSuccessfulSave,
     resetWorkbook,
     workbookData,
 } from "@/Composables/Workbook/Canvas/WorkbookEditor.module";
-import { isDirty } from "@/Composables/Workbook/Canvas/WorkbookEditor.module";
-import { computed, unref } from "vue";
-import { dataPost } from "@/Composables/axiosWrapper.module.js";
-import { useAppStore } from "@/Stores/AppStore.js";
 
 const appStore = useAppStore();
+const dirtyVariant = ref<elementVariant>("primary");
 
-const dirtyVariant = computed<elementVariant>(() =>
-    isDirty.value ? "warning" : "primary",
-);
-
-/**
- * Save the WB to the Database
- */
 const saveWorkbook = () => {
+    console.log("save workbook");
     dataPost(route("workbooks.store", equipmentType.value?.equip_id), {
         workbook_data: unref(workbookData),
     }).then((res) => {
-        console.log(res);
         if (res && res.data.success) {
             onSuccessfulSave();
             appStore.pushFlashMsg({
@@ -61,22 +55,35 @@ const saveWorkbook = () => {
                     variant="danger"
                     :class="{ 'opacity-50': !isDirty }"
                     :disabled="!isDirty"
-                    @click="resetWorkbook"
                     v-tooltip.left="'Undo Changes Since Last Save'"
+                    @click="resetWorkbook"
                 />
                 <BaseBadge
                     icon="save"
                     :class="{ 'opacity-50': !isDirty }"
                     :variant="dirtyVariant"
-                    @click="saveWorkbook"
                     v-tooltip.left="'Save Workbook'"
+                    @click="saveWorkbook"
                 />
             </div>
         </template>
         <div class="h-full flex flex-col gap-5">
-            <CanvasHeader />
-            <CanvasBody class="grow" />
-            <CanvasHeader is-footer />
+            <CanvasHeader :contents="workbookData.header" />
+            <draggableComponent
+                class="grow"
+                :list="workbookData.body"
+                :group="{
+                    name: 'workbook',
+                    put: true,
+                }"
+                item-key="index"
+                style="border: 1px solid red"
+            >
+                <template #item="{ element }">
+                    <div>{{ element }}</div>
+                </template>
+            </draggableComponent>
+            <CanvasHeader :contents="workbookData.footer" is-footer />
         </div>
     </Card>
 </template>

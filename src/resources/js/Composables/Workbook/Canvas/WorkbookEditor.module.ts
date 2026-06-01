@@ -1,19 +1,16 @@
 import { reactive, ref } from "vue";
-import { v4 } from "uuid";
 
+/*
+|-------------------------------------------------------------------------------
+| Base Workbook Information & Workbook State
+|-------------------------------------------------------------------------------
+*/
 const cleanWorkbook = ref<workbookWrapper>();
 export const equipmentType = ref<equipment>();
 export const activePage = ref<string>("0");
 export const workbookData = reactive<workbookWrapper>({
     header: [],
-    body: [
-        {
-            page: "0",
-            title: "Page 1",
-            canPublish: true,
-            contents: [],
-        },
-    ],
+    body: [],
     footer: [],
 });
 
@@ -33,25 +30,11 @@ export const initWorkbook = (
 };
 
 /**
- * Make a deep copy duiplicate of the workbook.
+ * Change workbook state for a successful save event
  */
-export const copyWorkbook = <T>(wbData: T): T => {
-    return JSON.parse(JSON.stringify(wbData));
-};
-
-/*
-|-------------------------------------------------------------------------------
-| WB and WB Save state
-|-------------------------------------------------------------------------------
-*/
-
-/**
- * State of WB since last save
- */
-export const isDirty = ref<boolean>(false);
-export const imDirty = (): void => {
-    isDirty.value = true;
-    console.log("I am dirty");
+export const onSuccessfulSave = () => {
+    isDirty.value = false;
+    cleanWorkbook.value = copyWorkbook(workbookData);
 };
 
 /**
@@ -68,57 +51,18 @@ export const resetWorkbook = () => {
 };
 
 /**
- * Change workbook state for a successful save event
+ * Make a deep copy duiplicate of the workbook or Node.
  */
-export const onSuccessfulSave = () => {
-    isDirty.value = false;
-    cleanWorkbook.value = copyWorkbook(workbookData);
+export const copyWorkbook = <T>(wbData: T): T => {
+    return JSON.parse(JSON.stringify(wbData));
 };
 
 /**
- * Update the Dirty changes to show on the preview page
+ * State of WB since last save
  */
-// watch(workbookData, (newWb) => {
-//     dataPut(route("workbooks.update", equipmentType.value?.equip_id), {
-//         workbook_data: unref(newWb),
-//     });
-// });
-
-/*
-|-------------------------------------------------------------------------------
-| Workbook Pages
-|-------------------------------------------------------------------------------
-*/
-
-/**
- * Create a new Blank Page
- */
-export const addBlankPage = (): void => {
-    let newPage = {
-        page: v4(),
-        title: "New Page",
-        canPublish: true,
-        contents: [],
-    };
-
-    workbookData.body.push(newPage);
-    activePage.value = newPage.page;
-
-    imDirty();
-};
-
-/**
- * Delete a page from the canvas.
- */
-export const deletePage = (page: workbookPage) => {
-    let index = workbookData.body.indexOf(page);
-
-    workbookData.body.splice(index, 1);
-    imDirty();
-
-    if (page.page === activePage.value) {
-        activePage.value = workbookData.body[0].page;
-    }
+export const isDirty = ref<boolean>(false);
+export const imDirty = (): void => {
+    isDirty.value = true;
 };
 
 /*
@@ -126,47 +70,17 @@ export const deletePage = (page: workbookPage) => {
 | Node Data Editor
 |-------------------------------------------------------------------------------
 */
-export const showNodeEditor = ref<boolean>(false);
 export const activeNode = ref<workbookNode | workbookPage>();
 
-export const closeNodeEditor = () => {
-    showNodeEditor.value = false;
-};
-
-export const clearActiveNode = (): void => {
-    activeNode.value = undefined;
-};
-
 /**
- * Edit the meta data in the selected component
+ * Delete a Node from the canvas.
  */
-export const editNode = (component: workbookNode | workbookPage): void => {
-    activeNode.value = component;
-    showNodeEditor.value = true;
+export const deleteNode = (
+    element: workbookNode,
+    container: workbookNode[],
+): void => {
+    let index = container.indexOf(element);
+    container.splice(index, 1);
+
+    imDirty();
 };
-
-/**
- * Create a copy of a component and place directly below selected component.
- */
-// export const cloneComponent = (
-//     component: workbookNode,
-//     container: workbookNode[],
-// ): void => {
-//     let newComponent = cloneElement(component);
-//     let index = container.indexOf(component);
-
-//     container.splice(index, 0, newComponent);
-// };
-
-/**
- * Delete an element from the canvas.
- */
-// export const deleteElement = (
-//     element: workbookNode,
-//     container: workbookNode[],
-// ): void => {
-//     let index = container.indexOf(element);
-//     container.splice(index, 1);
-
-//     // imDirty();
-// };

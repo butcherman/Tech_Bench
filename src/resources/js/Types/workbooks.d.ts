@@ -64,13 +64,13 @@ type workbookNode = {
 };
 
 type workbookDropEvent = {
-    // added?: {
-    //     element: workbookEntry;
-    //     newIndex: number;
-    // };
-    // moved?: {
-    //     element: workbookEntry;
-    //     newIndex: number;
-    //     oldIndex: number;
-    // };
+    added?: {
+        element: workbookNode;
+        newIndex: number;
+    };
+    moved?: {
+        element: workbookNode;
+        newIndex: number;
+        oldIndex: number;
+    };
 };
