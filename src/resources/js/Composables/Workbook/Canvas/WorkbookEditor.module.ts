@@ -158,15 +158,3 @@ export const deleteNode = (
 
     imDirty();
 };
-
-/**
- * Create a copy of a Node and place directly below selected node.
- */
-// export const cloneNode = (node: workbookNode): void => {
-//     let newComponent = getClonedNode(node);
-//     // let index = container.indexOf(node);
-
-//     // container.splice(index, 0, newComponent);
-
-//     console.log(newComponent);
-// };

@@ -44,7 +44,7 @@ const onHeaderDrop = (event: workbookDropEvent): void => {
         </div>
         <EmptyContainer :is-empty="contents.length === 0" />
         <draggableComponent
-            class="grow"
+            class="h-full"
             :list="contents"
             :group="{
                 name: 'workbook',

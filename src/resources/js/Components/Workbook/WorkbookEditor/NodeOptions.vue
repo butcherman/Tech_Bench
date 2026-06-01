@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {
     deleteNode,
+    editNode,
     getClonedNode,
     workbookData,
 } from "@/Composables/Workbook/Canvas/WorkbookEditor.module";
@@ -45,6 +46,21 @@ const getParentNode = (): workbookPage | workbookNode | false => {
 };
 
 /**
+ * Edit the data of the current node being worked on
+ */
+const editNodeData = () => {
+    const parent = getParentNode();
+
+    if (parent && parent.contents) {
+        const node = parent.contents.find(
+            (child) => child.index === props.nodeIndex,
+        );
+
+        editNode(node);
+    }
+};
+
+/**
  * Make a duplicate of the node being worked on and place it below.
  */
 const duplicateNode = () => {
@@ -83,6 +99,7 @@ const removeNode = () => {
             v-if="canEdit"
             class="text-warning pointer"
             v-tooltip.bottom="'Edit Element Data'"
+            @click="editNodeData"
         >
             <fa-icon icon="pencil" />
         </span>

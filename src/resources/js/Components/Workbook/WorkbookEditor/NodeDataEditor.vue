@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import FieldsetForm from "./NodeForms/FieldsetForm.vue";
 import FormError from "./NodeForms/FormError.vue";
 import PageForm from "./NodeForms/PageForm.vue";
 import { computed } from "vue";
@@ -33,6 +34,11 @@ const editingForm = computed(() => {
 
     if ("page" in activeNode.value) {
         return PageForm;
+    }
+
+    switch (activeNode.value.type) {
+        case "fieldset":
+            return FieldsetForm;
     }
 
     return FormError;

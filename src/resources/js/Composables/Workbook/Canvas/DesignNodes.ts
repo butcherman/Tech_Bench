@@ -35,7 +35,6 @@ export const designNodes: workbookNode[] = [
         index: v4(),
         type: "grid-wrapper",
         props: {
-            tag: "div",
             class: "grid grid-cols-3 gap-2 my-2 min-h-20",
         },
         nodeLabel: {
@@ -48,7 +47,6 @@ export const designNodes: workbookNode[] = [
                 index: v4(),
                 type: "wrapper",
                 props: {
-                    tag: "div",
                     class: "min-h-20",
                 },
                 contents: [],
@@ -57,7 +55,6 @@ export const designNodes: workbookNode[] = [
                 index: v4(),
                 type: "wrapper",
                 props: {
-                    tag: "div",
                     class: "min-h-20",
                 },
                 contents: [],
@@ -66,7 +63,6 @@ export const designNodes: workbookNode[] = [
                 index: v4(),
                 type: "wrapper",
                 props: {
-                    tag: "div",
                     class: "min-h-20",
                 },
                 contents: [],
@@ -77,8 +73,7 @@ export const designNodes: workbookNode[] = [
         index: v4(),
         type: "fieldset",
         props: {
-            tag: "fieldset",
-            class: "border border-slate-300 min-h-20 rounded-lg p-2",
+            class: "border border-slate-300 min-h-20 rounded-lg p-2 my-2",
             text: "",
         },
         nodeLabel: {

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import FieldsetWrapper from "./Nodes/FieldsetWrapper.vue";
 import GridWrapper from "./Nodes/GridWrapper.vue";
 import UnknownNode from "./Nodes/UnknownNode.vue";
 import { computed } from "vue";
@@ -12,6 +13,8 @@ const component = computed(() => {
         case "grid-wrapper":
         case "wrapper":
             return GridWrapper;
+        case "fieldset":
+            return FieldsetWrapper;
     }
 
     return UnknownNode;
