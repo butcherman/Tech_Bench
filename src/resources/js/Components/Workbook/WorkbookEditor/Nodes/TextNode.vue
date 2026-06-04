@@ -13,7 +13,7 @@ const props = defineProps<{
     <div class="relative group/static">
         <NodeOptions
             class="hidden group-hover/static:flex"
-            :can-edit="false"
+            :can-edit="true"
             :node-index="index"
         />
         <component :is="tag" :class="class">{{ text }}</component>

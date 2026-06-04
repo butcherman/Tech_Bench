@@ -2,6 +2,7 @@
 import FieldsetWrapper from "./Nodes/FieldsetWrapper.vue";
 import GridWrapper from "./Nodes/GridWrapper.vue";
 import StaticNode from "./Nodes/StaticNode.vue";
+import TextNode from "./Nodes/TextNode.vue";
 import UnknownNode from "./Nodes/UnknownNode.vue";
 import { computed } from "vue";
 
@@ -18,6 +19,8 @@ const component = computed(() => {
             return FieldsetWrapper;
         case "static":
             return StaticNode;
+        case "text":
+            return TextNode;
     }
 
     return UnknownNode;

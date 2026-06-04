@@ -22,6 +22,7 @@ const props = defineProps<{
             <legend>{{ text }}</legend>
             <draggableComponent
                 item-key="page"
+                class="h-full min-h-20"
                 :list="contents"
                 :group="{ name: 'workbook', put: true }"
             >

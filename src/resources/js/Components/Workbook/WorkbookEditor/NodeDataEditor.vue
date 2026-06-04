@@ -2,6 +2,7 @@
 import FieldsetForm from "./NodeForms/FieldsetForm.vue";
 import FormError from "./NodeForms/FormError.vue";
 import PageForm from "./NodeForms/PageForm.vue";
+import TextForm from "./NodeForms/TextForm.vue";
 import { computed } from "vue";
 import { Drawer } from "primevue";
 import {
@@ -39,6 +40,8 @@ const editingForm = computed(() => {
     switch (activeNode.value.type) {
         case "fieldset":
             return FieldsetForm;
+        case "text":
+            return TextForm;
     }
 
     return FormError;
