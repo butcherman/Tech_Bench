@@ -8,7 +8,7 @@ type workbookPage = {
     page: string;
     title: string;
     canPublish: boolean;
-    contents: any[];
+    contents: workbookNode[];
 };
 
 type workbookNode = {

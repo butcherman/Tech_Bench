@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { isArray } from "lodash";
 import {
     deleteNode,
     editNode,
@@ -14,31 +15,24 @@ const props = defineProps<{
 /**
  * Find the parent of the Node being worked on.
  */
-const getParentNode = (): workbookPage | workbookNode | false => {
-    for (const node of workbookData.body) {
-        if (
-            node.contents &&
-            node.contents.some((child) => child.index === props.nodeIndex)
-        ) {
-            return node;
-        }
+const getParentNode = ():
+    | workbookNode
+    | workbookPage
+    | workbookNode[]
+    | false => {
+    // Look in the Header and Footer sections first
+    if (workbookData.header.some((child) => child.index === props.nodeIndex)) {
+        return workbookData.header;
     }
 
-    for (const node of workbookData.header) {
-        if (
-            node.contents &&
-            node.contents.some((child) => child.index === props.nodeIndex)
-        ) {
-            return node;
-        }
+    if (workbookData.footer.some((child) => child.index === props.nodeIndex)) {
+        return workbookData.footer;
     }
 
-    for (const node of workbookData.footer) {
-        if (
-            node.contents &&
-            node.contents.some((child) => child.index === props.nodeIndex)
-        ) {
-            return node;
+    for (let page of workbookData.body) {
+        let parent = searchContentForParent(page);
+        if (parent) {
+            return parent;
         }
     }
 
@@ -46,18 +40,34 @@ const getParentNode = (): workbookPage | workbookNode | false => {
 };
 
 /**
- * Edit the data of the current node being worked on
+ * Perform a recursive/deep search for the node and return its parent array
  */
-const editNodeData = () => {
-    const parent = getParentNode();
-
-    if (parent && parent.contents) {
-        const node = parent.contents.find(
-            (child) => child.index === props.nodeIndex,
-        );
-
-        editNode(node);
+const searchContentForParent = (
+    node: workbookNode | workbookPage,
+): workbookNode | workbookPage | false => {
+    // Perform surface level search
+    if (
+        node.contents &&
+        node.contents.some((child) => {
+            return child.index === props.nodeIndex;
+        })
+    ) {
+        return node;
     }
+
+    // Perform recursive deep search
+    if (node.contents) {
+        for (let section of node.contents) {
+            if (section.contents) {
+                let parent = searchContentForParent(section);
+                if (parent) {
+                    return parent;
+                }
+            }
+        }
+    }
+
+    return false;
 };
 
 /**
@@ -65,41 +75,34 @@ const editNodeData = () => {
  */
 const duplicateNode = () => {
     const parent = getParentNode();
+    console.log(parent);
 
-    if (parent && parent.contents) {
-        const node = parent.contents?.find(
+    if (parent) {
+        let parentContents = isArray(parent) ? parent : parent.contents;
+        let originalNode = parentContents?.find(
             (child) => child.index === props.nodeIndex,
         );
+        console.log(originalNode);
 
-        let clonedIndex = parent.contents.indexOf(node);
-        let newNode = getClonedNode(node);
-        parent.contents.splice(clonedIndex, 0, newNode);
-    }
-};
+        if (originalNode) {
+            let originalIndex = parentContents?.indexOf(originalNode);
+            let newNode = getClonedNode(originalNode);
+            console.log(originalIndex);
 
-/**
- * Find the Node and its parent being worked on and remove it from the Workbook.
- */
-const removeNode = () => {
-    const parent = getParentNode();
-
-    if (parent && parent.contents) {
-        const node = parent.contents?.find(
-            (child) => child.index === props.nodeIndex,
-        );
-
-        deleteNode(node, parent.contents);
+            if (originalIndex !== undefined) {
+                parentContents?.splice(originalIndex, 0, newNode);
+            }
+        }
     }
 };
 </script>
 
 <template>
-    <div class="absolute end-0 -top-1 text-xs gap-1">
+    <div class="absolute end-0 -top-1 text-xs gap-1 z-999">
         <span
             v-if="canEdit"
             class="text-warning pointer"
             v-tooltip.bottom="'Edit Element Data'"
-            @click="editNodeData"
         >
             <fa-icon icon="pencil" />
         </span>
@@ -110,11 +113,7 @@ const removeNode = () => {
         >
             <fa-icon icon="clone" />
         </span>
-        <span
-            class="text-danger pointer"
-            v-tooltip.bottom="'Delete Element'"
-            @click="removeNode"
-        >
+        <span class="text-danger pointer" v-tooltip.bottom="'Delete Element'">
             <fa-icon icon="trash-alt" />
         </span>
     </div>
