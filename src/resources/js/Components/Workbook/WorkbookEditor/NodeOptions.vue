@@ -82,16 +82,50 @@ const duplicateNode = () => {
         let originalNode = parentContents?.find(
             (child) => child.index === props.nodeIndex,
         );
-        console.log(originalNode);
 
         if (originalNode) {
             let originalIndex = parentContents?.indexOf(originalNode);
             let newNode = getClonedNode(originalNode);
-            console.log(originalIndex);
 
             if (originalIndex !== undefined) {
                 parentContents?.splice(originalIndex, 0, newNode);
             }
+        }
+    }
+};
+
+/**
+ * Edit the data of the current node being worked on
+ */
+const editNodeData = () => {
+    const parent = getParentNode();
+
+    if (parent) {
+        let parentContents = isArray(parent) ? parent : parent.contents;
+        let originalNode = parentContents?.find(
+            (child) => child.index === props.nodeIndex,
+        );
+
+        if (originalNode) {
+            editNode(originalNode);
+        }
+    }
+};
+
+/**
+ * Find the Node and its parent being worked on and remove it from the Workbook.
+ */
+const removeNode = () => {
+    const parent = getParentNode();
+
+    if (parent) {
+        let parentContents = isArray(parent) ? parent : parent.contents;
+        let originalNode = parentContents?.find(
+            (child) => child.index === props.nodeIndex,
+        );
+
+        if (originalNode && parentContents) {
+            deleteNode(originalNode, parentContents);
         }
     }
 };
@@ -103,6 +137,7 @@ const duplicateNode = () => {
             v-if="canEdit"
             class="text-warning pointer"
             v-tooltip.bottom="'Edit Element Data'"
+            @click="editNodeData"
         >
             <fa-icon icon="pencil" />
         </span>
@@ -113,7 +148,11 @@ const duplicateNode = () => {
         >
             <fa-icon icon="clone" />
         </span>
-        <span class="text-danger pointer" v-tooltip.bottom="'Delete Element'">
+        <span
+            class="text-danger pointer"
+            v-tooltip.bottom="'Delete Element'"
+            @click="removeNode"
+        >
             <fa-icon icon="trash-alt" />
         </span>
     </div>
