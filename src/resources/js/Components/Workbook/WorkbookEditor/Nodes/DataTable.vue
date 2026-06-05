@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import AddButton from "@/Components/_Base/Buttons/AddButton.vue";
+import BaseButton from "@/Components/_Base/Buttons/BaseButton.vue";
 import DeleteBadge from "@/Components/_Base/Badges/DeleteBadge.vue";
 import NodeOptions from "../NodeOptions.vue";
+import okModal from "@/Modules/okModal/index.js";
 import { computed, ref } from "vue";
 import { v4 } from "uuid";
-import BaseButton from "@/Components/_Base/Buttons/BaseButton.vue";
-import okModal from "@/Modules/okModal/index.js";
 
 const props = defineProps<{
     allowAddRow: boolean;

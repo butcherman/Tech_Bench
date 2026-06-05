@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import PublicLayout from "@/Layouts/Public/PublicLayout.vue";
 import WorkbookWrapper from "@/Components/Workbook/WorkbookWrapper.vue";
-import { reactive, onMounted } from "vue";
-import { isPreviewMode } from "@/Composables/Workbook/CustomerWorkbook.module";
 import { dataGet } from "@/Composables/axiosWrapper.module";
+import { reactive, onMounted } from "vue";
+import {
+    activePage,
+    isPreviewMode,
+} from "@/Composables/Workbook/CustomerWorkbook.module";
 
 const props = defineProps<{
     equipmentType: equipment;
@@ -35,7 +38,9 @@ const getWorkbookSkeleton = async () => {
  */
 onMounted(() => {
     isPreviewMode.value = true;
-    getWorkbookSkeleton();
+    getWorkbookSkeleton().then(
+        () => (activePage.value = workbookSkeleton.body[0].page),
+    );
 
     Echo.private(`workbook-canvas.${props.equipmentType.equip_id}`).listen(
         ".workbookCanvasEvent",

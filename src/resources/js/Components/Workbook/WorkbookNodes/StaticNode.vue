@@ -1,7 +1,12 @@
 <script setup lang="ts">
-//
+const props = defineProps<{
+    class: string;
+    text: string;
+    tag: string;
+    index: string;
+}>();
 </script>
 
 <template>
-    <h1>Static Node</h1>
+    <component :is="tag" :class="class">{{ text }}</component>
 </template>
