@@ -10,9 +10,9 @@ const props = defineProps<{
 </script>
 
 <template>
-    <div class="relative group/static">
+    <div class="relative group/text">
         <NodeOptions
-            class="hidden group-hover/static:flex"
+            class="hidden group-hover/text:flex"
             :can-edit="true"
             :node-index="index"
         />

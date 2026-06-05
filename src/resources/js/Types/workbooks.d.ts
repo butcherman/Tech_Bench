@@ -20,7 +20,7 @@ type workbookNode = {
         | "fieldset"
         | "text"
         | "input"
-        | "table";
+        | "data-table";
     props: {
         tag?: string;
         class?: string;
@@ -41,11 +41,8 @@ type workbookNode = {
         allowDeleteRow?: boolean;
         allowImport?: boolean;
         allowExport?: boolean;
-        columns?: {
-            name: string;
-            type: string;
-        }[];
-        // [key: string]: string;
+        numberRows?: boolean;
+        columns?: workbookTableColumn[];
     };
     contents?: workbookNode[];
     component?: string;
@@ -62,6 +59,14 @@ type workbookNode = {
             type: string;
         };
     };
+};
+
+type workbookTableColumnTypes = "Text" | "Number" | "Checkbox" | "Drop List";
+
+type workbookTableColumn = {
+    name: string;
+    type: workbookTableColumnTypes;
+    list: string;
 };
 
 type workbookDropEvent = {

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import DataTableForm from "./NodeForms/DataTableForm.vue";
 import FieldsetForm from "./NodeForms/FieldsetForm.vue";
 import FormError from "./NodeForms/FormError.vue";
 import PageForm from "./NodeForms/PageForm.vue";
@@ -42,6 +43,8 @@ const editingForm = computed(() => {
             return FieldsetForm;
         case "text":
             return TextForm;
+        case "data-table":
+            return DataTableForm;
     }
 
     return FormError;

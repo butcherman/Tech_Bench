@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import DataTable from "./Nodes/DataTable.vue";
 import FieldsetWrapper from "./Nodes/FieldsetWrapper.vue";
 import GridWrapper from "./Nodes/GridWrapper.vue";
 import StaticNode from "./Nodes/StaticNode.vue";
@@ -21,6 +22,8 @@ const component = computed(() => {
             return StaticNode;
         case "text":
             return TextNode;
+        case "data-table":
+            return DataTable;
     }
 
     return UnknownNode;

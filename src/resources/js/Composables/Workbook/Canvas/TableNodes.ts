@@ -3,28 +3,32 @@ import { v4 } from "uuid";
 export const tableNodes: workbookNode[] = [
     {
         index: v4(),
-        type: "table",
+        type: "data-table",
         props: {
             columns: [
                 {
                     name: "Col 1",
-                    type: "text",
+                    type: "Text",
+                    list: "",
                 },
                 {
                     name: "Col 2",
-                    type: "text",
+                    type: "Text",
+                    list: "",
                 },
                 {
                     name: "Col 3",
-                    type: "text",
+                    type: "Text",
+                    list: "",
                 },
             ],
-            defaultRows: 10,
-            hideBorders: false,
             allowAddRow: true,
             allowDeleteRow: true,
-            allowImport: true,
             allowExport: true,
+            allowImport: true,
+            defaultRows: 10,
+            hideBorders: false,
+            numberRows: false,
         },
         nodeLabel: {
             label: "Data Table",
