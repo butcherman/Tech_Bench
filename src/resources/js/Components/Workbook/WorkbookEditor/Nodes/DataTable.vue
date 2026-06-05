@@ -37,8 +37,6 @@ const getInputType = (column: workbookTableColumn): string => {
  * Add a new row to the table
  */
 const addRow = () => {
-    console.log("add row");
-
     tableData.value.push({
         index: v4(),
     });
@@ -48,8 +46,6 @@ const addRow = () => {
  * Delete the selected row
  */
 const deleteRow = (rowIndex: number): void => {
-    console.log("delete", rowIndex);
-
     tableData.value.splice(rowIndex, 1);
 };
 

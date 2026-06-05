@@ -2,6 +2,7 @@
 import DataTable from "./Nodes/DataTable.vue";
 import FieldsetWrapper from "./Nodes/FieldsetWrapper.vue";
 import GridWrapper from "./Nodes/GridWrapper.vue";
+import InputNode from "./Nodes/InputNode.vue";
 import StaticNode from "./Nodes/StaticNode.vue";
 import TextNode from "./Nodes/TextNode.vue";
 import UnknownNode from "./Nodes/UnknownNode.vue";
@@ -24,9 +25,11 @@ const component = computed(() => {
             return TextNode;
         case "data-table":
             return DataTable;
+        case "input":
+            return InputNode;
+        default:
+            return UnknownNode;
     }
-
-    return UnknownNode;
 });
 </script>
 

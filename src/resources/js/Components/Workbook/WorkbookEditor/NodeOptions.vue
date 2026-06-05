@@ -75,7 +75,6 @@ const searchContentForParent = (
  */
 const duplicateNode = () => {
     const parent = getParentNode();
-    console.log(parent);
 
     if (parent) {
         let parentContents = isArray(parent) ? parent : parent.contents;

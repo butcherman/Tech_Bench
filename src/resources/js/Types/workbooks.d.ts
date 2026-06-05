@@ -21,31 +21,8 @@ type workbookNode = {
         | "text"
         | "input"
         | "data-table";
-    props: {
-        tag?: string;
-        class?: string;
-        cols?: number;
-        text?: string;
-        label?: string;
-        placeholder?: string;
-        help?: string;
-        rows?: number;
-        list?: string[];
-        valueText?: string;
-        min?: number;
-        max?: number;
-        center?: boolean;
-        defaultRows?: number;
-        hideBorders?: boolean;
-        allowAddRow?: boolean;
-        allowDeleteRow?: boolean;
-        allowImport?: boolean;
-        allowExport?: boolean;
-        numberRows?: boolean;
-        columns?: workbookTableColumn[];
-    };
+    props: workbookNodeProps;
     contents?: workbookNode[];
-    component?: string;
     nodeLabel?: {
         label: string;
         help: string;
@@ -59,6 +36,32 @@ type workbookNode = {
             type: string;
         };
     };
+};
+
+type workbookNodeProps = {
+    tag?: string;
+    class?: string;
+    cols?: number;
+    text?: string;
+    label?: string;
+    placeholder?: string;
+    help?: string;
+    rows?: number;
+    list?: string[];
+    valueText?: string;
+    min?: number;
+    max?: number;
+    center?: boolean;
+    defaultRows?: number;
+    hideBorders?: boolean;
+    allowAddRow?: boolean;
+    allowDeleteRow?: boolean;
+    allowImport?: boolean;
+    allowExport?: boolean;
+    numberRows?: boolean;
+    columns?: workbookTableColumn[];
+    component?: string;
+    [key: string]: any;
 };
 
 type workbookTableColumnTypes = "Text" | "Number" | "Checkbox" | "Drop List";

@@ -4,8 +4,8 @@ export const formNodes: workbookNode[] = [
     {
         index: v4(),
         type: "input",
-        component: "TextInput",
         props: {
+            component: "TextInput",
             label: "",
             placeholder: "",
             help: "",
@@ -36,8 +36,8 @@ export const formNodes: workbookNode[] = [
     {
         index: v4(),
         type: "input",
-        component: "TextAreaInput",
         props: {
+            component: "TextAreaInput",
             label: "",
             placeholder: "",
             help: "",
@@ -74,8 +74,8 @@ export const formNodes: workbookNode[] = [
     {
         index: v4(),
         type: "input",
-        component: "DatePicker",
         props: {
+            component: "DatePicker",
             label: "",
             placeholder: "",
             help: "",
@@ -106,8 +106,8 @@ export const formNodes: workbookNode[] = [
     {
         index: v4(),
         type: "input",
-        component: "PhoneNumberInput",
         props: {
+            component: "PhoneNumberInput",
             label: "",
             placeholder: "",
             help: "",
@@ -138,8 +138,8 @@ export const formNodes: workbookNode[] = [
     {
         index: v4(),
         type: "input",
-        component: "SelectInput",
         props: {
+            component: "SelectInput",
             label: "",
             placeholder: "",
             list: ["option 1", "option 2"],
@@ -176,8 +176,8 @@ export const formNodes: workbookNode[] = [
     {
         index: v4(),
         type: "input",
-        component: "RadioGroupInput",
         props: {
+            component: "RadioGroupInput",
             list: ["button 1", "button 2"],
             help: "",
         },
@@ -202,8 +202,8 @@ export const formNodes: workbookNode[] = [
     {
         index: v4(),
         type: "input",
-        component: "RangeInput",
         props: {
+            component: "RangeInput",
             label: "Range Input",
             valueText: "",
             min: 0,
@@ -246,8 +246,8 @@ export const formNodes: workbookNode[] = [
     {
         index: v4(),
         type: "input",
-        component: "SwitchInput",
         props: {
+            component: "SwitchInput",
             label: "",
             center: false,
             help: "",

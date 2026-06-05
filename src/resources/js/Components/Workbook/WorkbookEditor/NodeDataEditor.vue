@@ -2,6 +2,7 @@
 import DataTableForm from "./NodeForms/DataTableForm.vue";
 import FieldsetForm from "./NodeForms/FieldsetForm.vue";
 import FormError from "./NodeForms/FormError.vue";
+import InputForm from "./NodeForms/InputForm.vue";
 import PageForm from "./NodeForms/PageForm.vue";
 import TextForm from "./NodeForms/TextForm.vue";
 import { computed } from "vue";
@@ -45,6 +46,8 @@ const editingForm = computed(() => {
             return TextForm;
         case "data-table":
             return DataTableForm;
+        case "input":
+            return InputForm;
     }
 
     return FormError;

@@ -93,7 +93,6 @@ export const addBlankPage = (): void => {
  * Delete a page from the canvas.
  */
 export const deletePage = (page: workbookPage): void => {
-    console.log("delete page");
     let index = workbookData.body.indexOf(page);
 
     workbookData.body.splice(index, 1);
@@ -141,7 +140,6 @@ export const getClonedNode = (node: workbookNode): workbookNode => {
  * Edit data attached to a Node
  */
 export const editNode = (node: workbookNode): void => {
-    console.log("edit node");
     activeNode.value = node;
     showNodeEditor.value = true;
 };
