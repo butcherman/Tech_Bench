@@ -4,6 +4,8 @@ import DeleteBadge from "@/Components/_Base/Badges/DeleteBadge.vue";
 import NodeOptions from "../NodeOptions.vue";
 import { computed, ref } from "vue";
 import { v4 } from "uuid";
+import BaseButton from "@/Components/_Base/Buttons/BaseButton.vue";
+import okModal from "@/Modules/okModal/index.js";
 
 const props = defineProps<{
     allowAddRow: boolean;
@@ -67,6 +69,13 @@ const buildTableData = () => {
 };
 
 const tableData = ref(buildTableData());
+
+/**
+ * Show a pop-up that import or export was clicked
+ */
+const importPopUp = (type: "Import" | "Export") => {
+    okModal(`${type} Process Triggered`);
+};
 </script>
 
 <template>
@@ -143,7 +152,27 @@ const tableData = ref(buildTableData());
             </tbody>
         </table>
         <div class="flex flex-row-reverse my-2">
-            <AddButton class="mx-2" size="small" pill @click="addRow" />
+            <AddButton class="mx-1" size="small" pill @click="addRow" />
+            <BaseButton
+                v-if="allowImport"
+                class="mx-1"
+                size="small"
+                text="Import"
+                icon="upload"
+                variant="info"
+                pill
+                @click="importPopUp('Import')"
+            />
+            <BaseButton
+                v-if="allowExport"
+                class="mx-1"
+                size="small"
+                text="Export"
+                icon="download"
+                variant="info"
+                pill
+                @click="importPopUp('Export')"
+            />
         </div>
     </div>
 </template>
