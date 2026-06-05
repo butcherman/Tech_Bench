@@ -1,6 +1,6 @@
 import { v4 } from "uuid";
 
-export const tableNodes: workbookNode[] = [
+export const dataNodes: workbookNode[] = [
     {
         index: v4(),
         type: "data-table",

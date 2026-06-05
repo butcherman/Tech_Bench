@@ -4,10 +4,10 @@ import draggableComponent from "vuedraggable";
 import { computed, ref } from "vue";
 import { designNodes } from "@/Composables/Workbook/Canvas/DesignNodes";
 import { formNodes } from "@/Composables/Workbook/Canvas/FormNodes";
-import { tableNodes } from "@/Composables/Workbook/Canvas/TableNodes";
+import { dataNodes } from "@/Composables/Workbook/Canvas/DataNodes";
 import { getClonedNode } from "@/Composables/Workbook/WorkbookEditor.module";
 
-type nodeType = "design" | "form" | "table";
+type nodeType = "design" | "form" | "data";
 
 const activeListName = ref<nodeType>("design");
 const activeList = computed(() => {
@@ -16,8 +16,8 @@ const activeList = computed(() => {
             return designNodes;
         case "form":
             return formNodes;
-        case "table":
-            return tableNodes;
+        case "data":
+            return dataNodes;
     }
 });
 </script>
@@ -31,7 +31,7 @@ const activeList = computed(() => {
             >
                 <option value="design">Design Elements</option>
                 <option value="form">Form Elements</option>
-                <option value="table">Data Table Elements</option>
+                <option value="data">Data Gathering Elements</option>
             </select>
         </div>
         <p class="text-center text-muted py-2">
