@@ -12,7 +12,7 @@ import {
     onSuccessfulSave,
     resetWorkbook,
     workbookData,
-} from "@/Composables/Workbook/Canvas/WorkbookEditor.module";
+} from "@/Composables/Workbook/WorkbookEditor.module.js";
 
 const appStore = useAppStore();
 const dirtyVariant = ref<elementVariant>("primary");

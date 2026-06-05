@@ -4,7 +4,7 @@ import Canvas from "@/Components/Workbook/WorkbookEditor/Canvas.vue";
 import NodeDataEditor from "@/Components/Workbook/WorkbookEditor/NodeDataEditor.vue";
 import NodeSelector from "@/Components/Workbook/WorkbookEditor/NodeSelector.vue";
 import PublicLayout from "@/Layouts/Public/PublicLayout.vue";
-import { initWorkbook } from "@/Composables/Workbook/Canvas/WorkbookEditor.module";
+import { initWorkbook } from "@/Composables/Workbook/WorkbookEditor.module";
 import { onMounted } from "vue";
 
 const props = defineProps<{

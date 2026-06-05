@@ -7,7 +7,7 @@ import TextInput from "@/Forms/_Base/TextInput.vue";
 import { ref } from "vue";
 import { useFieldArray, useForm } from "vee-validate";
 import { object, number, boolean, array, string } from "yup";
-import { closeNodeEditor } from "@/Composables/Workbook/Canvas/WorkbookEditor.module";
+import { closeNodeEditor } from "@/Composables/Workbook/WorkbookEditor.module";
 
 import type { DropdownChangeEvent } from "primevue";
 

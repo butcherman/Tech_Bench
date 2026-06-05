@@ -2,7 +2,7 @@
 import BaseButton from "@/Components/_Base/Buttons/BaseButton.vue";
 import SwitchInput from "@/Forms/_Base/SwitchInput.vue";
 import TextAreaInput from "@/Forms/_Base/TextAreaInput.vue";
-import { closeNodeEditor } from "@/Composables/Workbook/Canvas/WorkbookEditor.module";
+import { closeNodeEditor } from "@/Composables/Workbook/WorkbookEditor.module";
 import { string, object, boolean } from "yup";
 import { useForm } from "vee-validate";
 

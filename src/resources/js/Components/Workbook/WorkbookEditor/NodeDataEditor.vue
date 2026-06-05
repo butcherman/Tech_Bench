@@ -10,7 +10,7 @@ import { Drawer } from "primevue";
 import {
     activeNode,
     showNodeEditor,
-} from "@/Composables/Workbook/Canvas/WorkbookEditor.module";
+} from "@/Composables/Workbook/WorkbookEditor.module.js";
 
 /**
  * Title of the Editor Page

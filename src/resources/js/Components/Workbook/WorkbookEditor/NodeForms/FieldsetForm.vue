@@ -3,7 +3,7 @@ import BaseButton from "@/Components/_Base/Buttons/BaseButton.vue";
 import TextInput from "@/Forms/_Base/TextInput.vue";
 import { string, object } from "yup";
 import { useForm } from "vee-validate";
-import { closeNodeEditor } from "@/Composables/Workbook/Canvas/WorkbookEditor.module";
+import { closeNodeEditor } from "@/Composables/Workbook/WorkbookEditor.module";
 
 const props = defineProps<{
     node: workbookNode;

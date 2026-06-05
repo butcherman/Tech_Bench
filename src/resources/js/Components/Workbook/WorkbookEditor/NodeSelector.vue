@@ -5,7 +5,7 @@ import { computed, ref } from "vue";
 import { designNodes } from "@/Composables/Workbook/Canvas/DesignNodes";
 import { formNodes } from "@/Composables/Workbook/Canvas/FormNodes";
 import { tableNodes } from "@/Composables/Workbook/Canvas/TableNodes";
-import { getClonedNode } from "@/Composables/Workbook/Canvas/WorkbookEditor.module";
+import { getClonedNode } from "@/Composables/Workbook/WorkbookEditor.module";
 
 type nodeType = "design" | "form" | "table";
 

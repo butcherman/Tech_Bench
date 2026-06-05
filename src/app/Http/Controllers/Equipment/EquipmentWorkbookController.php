@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Equipment;
 
+use App\Events\Equipment\WorkbookCanvasEvent;
 use App\Facades\CacheData;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Equipment\EquipmentWorkbookRequest;
 use App\Models\EquipmentType;
 use App\Models\EquipmentWorkbook;
 use App\Services\Equipment\EquipmentWorkbookService;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -49,7 +50,7 @@ class EquipmentWorkbookController extends Controller
     /**
      * Save the workbook template in the database.
      */
-    public function store(EquipmentWorkbookRequest $request, EquipmentType $equipment_type)
+    public function store(EquipmentWorkbookRequest $request, EquipmentType $equipment_type): JsonResponse
     {
         $this->svc->updateWorkbookBuilder($request->safe()->collect(), $equipment_type);
 
@@ -59,28 +60,39 @@ class EquipmentWorkbookController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(EquipmentType $equipment_type): Response
     {
-        //
-        return 'show';
+        $this->authorize('manage', EquipmentWorkbook::class);
+
+        return Inertia::render('Equipment/Workbook/Show', [
+            'equipment-type' => $equipment_type,
+        ]);
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Pull unsaved changes from the session to send to preview mode
      */
-    public function edit(string $id)
+    public function edit(EquipmentWorkbook $equipment_type): JsonResponse
     {
-        //
-        return 'edit';
+        $this->authorize('manage', EquipmentWorkbook::class);
+
+        return response()
+            ->json(session()->get('workbookData-'.$equipment_type->equip_id));
     }
 
     /**
-     * Update the specified resource in storage.
+     * Put unsaved changes into the session to be sent to preview mode
      */
-    public function update(Request $request, string $id)
+    public function update(EquipmentWorkbookRequest $request, EquipmentType $equipment_type): JsonResponse
     {
-        //
-        return 'update';
+        $request->session()->put(
+            'workbookData-'.$equipment_type->equip_id,
+            $request->safe()->collect()->get('workbook_data')
+        );
+
+        WorkbookCanvasEvent::dispatch($equipment_type);
+
+        return response()->json(['success' => true]);
     }
 
     /**

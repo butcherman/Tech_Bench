@@ -1,5 +1,7 @@
 import { v4 } from "uuid";
-import { reactive, ref } from "vue";
+import { reactive, ref, unref, watch } from "vue";
+import { activePage } from "./CustomerWorkbook.module";
+import { dataPut } from "../axiosWrapper.module";
 
 /*
 |-------------------------------------------------------------------------------
@@ -8,11 +10,19 @@ import { reactive, ref } from "vue";
 */
 const cleanWorkbook = ref<workbookWrapper>();
 export const equipmentType = ref<equipment>();
-export const activePage = ref<string>("0");
 export const workbookData = reactive<workbookWrapper>({
     header: [],
     body: [],
     footer: [],
+});
+
+/**
+ * Watch for changes in the workbook structure and update the preview
+ */
+watch(workbookData, (newWb) => {
+    dataPut(route("workbooks.update", equipmentType.value?.equip_id), {
+        workbook_data: unref(newWb),
+    });
 });
 
 /**

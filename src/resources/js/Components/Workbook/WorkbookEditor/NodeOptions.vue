@@ -5,7 +5,7 @@ import {
     editNode,
     getClonedNode,
     workbookData,
-} from "@/Composables/Workbook/Canvas/WorkbookEditor.module";
+} from "@/Composables/Workbook/WorkbookEditor.module";
 
 const props = defineProps<{
     canEdit: boolean;

@@ -8,7 +8,7 @@ import {
     deleteNode,
     imDirty,
     workbookData,
-} from "@/Composables/Workbook/Canvas/WorkbookEditor.module.js";
+} from "@/Composables/Workbook/WorkbookEditor.module.js";
 
 const props = defineProps<{
     isFooter?: boolean;

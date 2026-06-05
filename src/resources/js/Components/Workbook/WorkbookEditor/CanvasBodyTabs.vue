@@ -6,7 +6,7 @@ import {
     deletePage,
     editNode,
     workbookData,
-} from "@/Composables/Workbook/Canvas/WorkbookEditor.module";
+} from "@/Composables/Workbook/WorkbookEditor.module";
 </script>
 
 <template>

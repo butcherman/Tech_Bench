@@ -3,7 +3,7 @@ import draggableComponent from "vuedraggable";
 import EmptyContainer from "./EmptyContainer.vue";
 import NodeWrapper from "./NodeWrapper.vue";
 import { TabPanels, TabPanel } from "primevue";
-import { workbookData } from "@/Composables/Workbook/Canvas/WorkbookEditor.module";
+import { workbookData } from "@/Composables/Workbook/WorkbookEditor.module.js";
 </script>
 
 <template>
