@@ -80,3 +80,8 @@ type workbookDropEvent = {
         oldIndex: number;
     };
 };
+
+type workbookTableValue = {
+    index: string;
+    [key: string]: string | number | boolean;
+};
