@@ -1,6 +1,7 @@
 <script setup lang="ts">
+import InputNode from "../../WorkbookNodes/InputNode.vue";
 import NodeOptions from "../NodeOptions.vue";
-import { computed, defineAsyncComponent, useAttrs } from "vue";
+import { useAttrs } from "vue";
 
 const props = defineProps<{
     component: string;
@@ -9,17 +10,6 @@ const props = defineProps<{
 
 // Additional props for component
 const attrs = useAttrs();
-
-/**
- * Download the Async Component
- */
-const nodeType = computed(() => {
-    if (props.component) {
-        return defineAsyncComponent(
-            () => import(`../../../../Forms/_Base/${props.component}.vue`),
-        );
-    }
-});
 </script>
 
 <template>
@@ -29,6 +19,6 @@ const nodeType = computed(() => {
             :can-edit="true"
             :node-index="index"
         />
-        <component :is="nodeType" :id="index" :name="index" v-bind="attrs" />
+        <InputNode :component="component" :index="index" v-bind="attrs" />
     </div>
 </template>

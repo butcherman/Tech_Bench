@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import DataTable from "./Nodes/DataTable.vue";
-import FieldsetWrapper from "./Nodes/FieldsetWrapper.vue";
-import GridWrapper from "./Nodes/GridWrapper.vue";
-import InputNode from "./Nodes/InputNode.vue";
-import StaticNode from "./Nodes/StaticNode.vue";
-import TextNode from "./Nodes/TextNode.vue";
-import UnknownNode from "./Nodes/UnknownNode.vue";
 import { computed } from "vue";
+import DataTableEditor from "./Nodes/DataTableEditor.vue";
+import FieldsetWrapperEditor from "./Nodes/FieldsetWrapperEditor.vue";
+import GridWrapperEditor from "./Nodes/GridWrapperEditor.vue";
+import InputNodeEditor from "./Nodes/InputNodeEditor.vue";
+import StaticNodeEditor from "./Nodes/StaticNodeEditor.vue";
+import TextNodeEditor from "./Nodes/TextNodeEditor.vue";
+import UnknownNode from "../WorkbookNodes/UnknownNode.vue";
 
 const props = defineProps<{
     node: workbookNode;
@@ -16,17 +16,17 @@ const component = computed(() => {
     switch (props.node.type) {
         case "grid-wrapper":
         case "wrapper":
-            return GridWrapper;
+            return GridWrapperEditor;
         case "fieldset":
-            return FieldsetWrapper;
+            return FieldsetWrapperEditor;
         case "static":
-            return StaticNode;
+            return StaticNodeEditor;
         case "text":
-            return TextNode;
+            return TextNodeEditor;
         case "data-table":
-            return DataTable;
+            return DataTableEditor;
         case "input":
-            return InputNode;
+            return InputNodeEditor;
         default:
             return UnknownNode;
     }

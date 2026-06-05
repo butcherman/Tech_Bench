@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import NodeOptions from "../NodeOptions.vue";
+import StaticNode from "../../WorkbookNodes/StaticNode.vue";
 
 const props = defineProps<{
     class: string;
@@ -10,12 +11,12 @@ const props = defineProps<{
 </script>
 
 <template>
-    <div class="relative group/text">
+    <div class="relative group/static">
         <NodeOptions
-            class="hidden group-hover/text:flex"
-            :can-edit="true"
+            class="hidden group-hover/static:flex"
+            :can-edit="false"
             :node-index="index"
         />
-        <component :is="tag" :class="class">{{ text }}</component>
+        <StaticNode v-bind="props" />
     </div>
 </template>
