@@ -9,7 +9,7 @@ defineProps<{
 </script>
 
 <template>
-    <Card>
+    <Card class="h-full">
         <div class="flex flex-col h-full">
             <WorkbookHeader :header-skeleton="workbookSkeleton.header" />
             <form class="grow" novalidate v-focustrap @submit.prevent>

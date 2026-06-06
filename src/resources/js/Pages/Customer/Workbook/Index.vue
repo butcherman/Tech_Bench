@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import BaseButton from "@/Components/_Base/Buttons/BaseButton.vue";
 import ClipboardCopy from "@/Components/_Base/ClipboardCopy.vue";
-import PublishWorkbook from "@/Components/Workbook/PublishWorkbook.vue";
 import PublicLayout from "@/Layouts/Public/PublicLayout.vue";
+import PublishWorkbook from "@/Components/Workbook/PublishWorkbook.vue";
+import WorkbookWrapper from "@/Components/Workbook/WorkbookWrapper.vue";
+import { activePage } from "@/Composables/Workbook/CustomerWorkbook.module";
+import { onMounted } from "vue";
 
 const props = defineProps<{
     customer: customer;
@@ -10,6 +13,10 @@ const props = defineProps<{
     workbook: customerWorkbook;
     // wbValues?: { [key: string]: string };
 }>();
+
+onMounted(() => {
+    activePage.value = props.workbook.wb_skeleton.body[0].page;
+});
 </script>
 
 <script lang="ts">
@@ -66,6 +73,9 @@ export default { layout: PublicLayout };
             <div>
                 <PublishWorkbook :equipment="equipment" :workbook="workbook" />
             </div>
+        </div>
+        <div class="grow">
+            <WorkbookWrapper :workbook-skeleton="workbook.wb_skeleton" />
         </div>
     </div>
 </template>
