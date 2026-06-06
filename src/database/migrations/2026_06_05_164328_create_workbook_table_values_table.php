@@ -18,7 +18,7 @@ return new class extends Migration
             $table->uuid('row_index');
             $table->text('column_name');
             $table->longText('value')->nullable();
-            $table->boolean('protected')->default(false);
+            $table->boolean('public')->default(false);
             $table->timestamps();
             $table->foreign('wb_id')
                 ->references('wb_id')

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('wb_id');
             $table->uuid('index');
             $table->longText('value')->nullable();
-            $table->boolean('protected')->default(false);
+            $table->boolean('public')->default(false);
             $table->timestamps();
             $table->foreign('wb_id')
                 ->references('wb_id')
