@@ -17,8 +17,6 @@ const props = defineProps<{
 
 onMounted(() => {
     initWorkbook(props.workbook);
-
-    console.log(props.workbook);
 });
 </script>
 

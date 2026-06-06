@@ -98,6 +98,16 @@ type workbookDropEvent = {
     };
 };
 
+type workbookValueEvent = {
+    model: workbookValue;
+};
+
+type workbookValue = {
+    index: string;
+    value: string;
+    updated_at: string;
+};
+
 type workbookTableValue = {
     index: string;
     [key: string]: string | number | boolean;

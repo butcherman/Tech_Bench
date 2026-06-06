@@ -3,8 +3,8 @@ import { dataPut } from "../axiosWrapper.module";
 
 export const isPreviewMode = ref<boolean>(false);
 export const activePage = ref<string>("0");
+export const wbHash = ref<string>();
 
-const wbHash = ref<string>();
 const bodyCopy = ref<workbookPage[]>();
 const isPagePublic = computed(() => {
     let currentPage = bodyCopy.value?.find(

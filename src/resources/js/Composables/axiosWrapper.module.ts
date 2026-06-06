@@ -7,6 +7,12 @@ interface errorMessage {
     message: laravelValidationErrors | string;
 }
 
+const axiosConfig = {
+    headers: {
+        "X-Socket-Id": Echo.socketId(),
+    },
+};
+
 export const isLoading = ref<boolean>(false);
 
 export async function dataGet(
@@ -28,7 +34,7 @@ export async function dataPost(
     isLoading.value = true;
 
     return await axios
-        .post(url, args)
+        .post(url, args, axiosConfig)
         .then((res) => res)
         .catch((err) => {
             if (err.status === 422) {
@@ -54,7 +60,7 @@ export async function dataPut(
     isLoading.value = true;
 
     return await axios
-        .put(url, args)
+        .put(url, args, axiosConfig)
         .then((res) => res)
         .catch((err) => {
             if (err.status === 422 || !handleError) {

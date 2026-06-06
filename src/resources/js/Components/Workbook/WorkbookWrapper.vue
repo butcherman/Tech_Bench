@@ -1,17 +1,28 @@
 <script setup lang="ts">
-import { useForm } from "vee-validate";
 import Card from "../_Base/Card.vue";
 import WorkbookBody from "./WorkbookBody.vue";
 import WorkbookHeader from "./WorkbookHeader.vue";
+import { onMounted } from "vue";
+import { useForm } from "vee-validate";
+import { wbHash } from "@/Composables/Workbook/CustomerWorkbook.module.js";
 
 const props = defineProps<{
     workbookSkeleton: workbookWrapper;
     workbookValues: { [key: string]: string };
 }>();
 
-const { values, setFieldValue } = useForm({
+const { setFieldValue } = useForm({
     name: "workbook",
     initialValues: props.workbookValues,
+});
+
+onMounted(() => {
+    Echo.channel(`equipment-workbook.${wbHash.value}`)
+        .listen(".WorkbookValueUpdated", (valData: workbookValueEvent) => {
+            setFieldValue(valData.model.index, valData.model.value);
+            console.log(valData.model.index, valData.model.value);
+        })
+        .listenToAll((event) => console.log(event));
 });
 </script>
 

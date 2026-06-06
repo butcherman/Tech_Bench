@@ -21,12 +21,12 @@ class WorkbookValue extends Model
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
     /** @var array<int, string> */
-    protected $hidden = ['id', 'wb_id', 'CustomerWorkbook', 'protected', 'created_at'];
+    protected $hidden = ['id', 'wb_id', 'CustomerWorkbook', 'public', 'created_at'];
 
     protected function casts(): array
     {
         return [
-            'protected' => 'boolean',
+            'public' => 'boolean',
             'created_at' => 'datetime:M d, Y',
             'updated_at' => 'datetime:M d, Y',
         ];
@@ -65,7 +65,6 @@ class WorkbookValue extends Model
 
     public function newBroadcastableModelEvent(string $event): BroadcastableModelEventOccurred
     {
-
         return (new BroadcastableModelEventOccurred(
             $this,
             $event
