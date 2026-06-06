@@ -1,9 +1,11 @@
+import errorModal from "@/Modules/errorModal";
 import { computed, ref } from "vue";
 import { dataPut } from "../axiosWrapper.module";
 
 export const isPreviewMode = ref<boolean>(false);
 export const activePage = ref<string>("0");
 export const wbHash = ref<string>();
+export const hasError = ref<boolean>(false);
 
 const bodyCopy = ref<workbookPage[]>();
 const isPagePublic = computed(() => {
@@ -43,6 +45,13 @@ export const saveWorkbookValue = (event: InputEvent, index: string): void => {
         dataPut(
             route("cust-workbook.save-value", [wbHash.value]),
             saveData,
-        ).then((res) => console.log(res));
+            false,
+        ).catch((err) => {
+            hasError.value = true;
+
+            let message =
+                "Unable to save data.  Please refresh page and try again.";
+            errorModal(err.status, message);
+        });
     }
 };

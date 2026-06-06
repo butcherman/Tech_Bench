@@ -2,14 +2,48 @@
 import Card from "../_Base/Card.vue";
 import WorkbookBody from "./WorkbookBody.vue";
 import WorkbookHeader from "./WorkbookHeader.vue";
-import { onMounted } from "vue";
+import { computed, onMounted } from "vue";
 import { useForm } from "vee-validate";
-import { wbHash } from "@/Composables/Workbook/CustomerWorkbook.module.js";
+import {
+    hasError,
+    wbHash,
+} from "@/Composables/Workbook/CustomerWorkbook.module.js";
+import { isLoading } from "@/Composables/axiosWrapper.module.js";
 
 const props = defineProps<{
     workbookSkeleton: workbookWrapper;
     workbookValues: { [key: string]: string };
 }>();
+
+/**
+ * Icon to show during loading and idle periods
+ */
+const saveIcon = computed<string>(() => {
+    if (hasError.value) {
+        return "triangle-exclamation";
+    }
+
+    if (isLoading.value) {
+        return "spinner";
+    }
+
+    return "circle-check";
+});
+
+/**
+ * Font color of icon during loading and idle periods
+ */
+const saveClass = computed<string>(() => {
+    if (hasError.value) {
+        return "text-danger";
+    }
+
+    if (isLoading.value) {
+        return "text-warning fa-spin";
+    }
+
+    return "text-success";
+});
 
 const { setFieldValue } = useForm({
     name: "workbook",
@@ -35,5 +69,12 @@ onMounted(() => {
             </form>
             <WorkbookHeader :header-skeleton="workbookSkeleton.footer" />
         </div>
+        <template #footer>
+            <div class="flex flex-row-reverse">
+                <span v-tooltip.left="'Loading Status'">
+                    <fa-icon :icon="saveIcon" :class="saveClass" />
+                </span>
+            </div>
+        </template>
     </Card>
 </template>
