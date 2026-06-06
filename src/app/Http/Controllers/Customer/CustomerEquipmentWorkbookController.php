@@ -6,7 +6,7 @@ use App\Exceptions\Customer\EquipmentWorkbookNotFoundException;
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\CustomerEquipment;
-use App\Service\Customer\CustomerWorkbookService;
+use App\Services\Customer\CustomerWorkbookService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -25,7 +25,11 @@ class CustomerEquipmentWorkbookController extends Controller
             throw new EquipmentWorkbookNotFoundException;
         }
 
-        return Inertia::render('Customer/Workbook/Index');
+        return Inertia::render('Customer/Workbook/Index', [
+            'customer' => $customer,
+            'equipment' => $equipment,
+            'workbook' => $equipment->EquipmentWorkbook,
+        ]);
     }
 
     /**

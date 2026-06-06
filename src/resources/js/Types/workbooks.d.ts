@@ -1,3 +1,17 @@
+type customerWorkbook = {
+    wb_id: number;
+    wb_hash: string;
+    cust_id: number;
+    cust_equip_id: number;
+    wb_skeleton: workbookWrapper;
+    wb_version: string;
+    publish_until: string;
+    publish_until_raw: string;
+    created_at: string;
+    updated_at: string;
+    published: boolean;
+};
+
 type workbookWrapper = {
     header: workbookNode[];
     body: workbookPage[];

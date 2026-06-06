@@ -18,6 +18,7 @@ use App\Http\Controllers\Customer\CustomerSiteController;
 use App\Http\Controllers\Customer\CustomerVpnController;
 use App\Http\Controllers\Customer\DisabledCustomerController;
 use App\Http\Controllers\Customer\DownloadNoteController;
+use App\Http\Controllers\Customer\PublishWorkbookController;
 use App\Http\Controllers\Customer\ReAssignCustomerController;
 use App\Http\Controllers\Customer\ShareVpnDataController;
 use App\Models\Customer;
@@ -264,13 +265,18 @@ Route::middleware('auth.secure')->group(function () {
         |-----------------------------------------------------------------------
         */
         Route::prefix('equipment/{equipment}')->name('equipment.')->group(function () {
-            Route::controller(CustomerEquipmentWorkbookController::class)
-                ->prefix('workbook')
-                ->name('workbook.')
-                ->group(function () {
-                    Route::get('index', 'index')->name('index');
-                    Route::get('create', 'create')->name('create');
+            Route::prefix('workbook')->name('workbook.')->group(function () {
+                Route::controller(PublishWorkbookController::class)->group(function () {
+                    Route::post('store', 'store')->name('publish');
+                    Route::delete('destroy', 'destroy')->name('unpublish');
                 });
+
+                Route::controller(CustomerEquipmentWorkbookController::class)
+                    ->group(function () {
+                        Route::get('index', 'index')->name('index');
+                        Route::get('create', 'create')->name('create');
+                    });
+            });
 
             Route::resource('notes', CustomerEquipmentNoteController::class)
                 ->scoped(['equipment' => 'cust_equip_id'])
@@ -335,3 +341,8 @@ Route::middleware('auth.secure')->group(function () {
             ->except(['show']);
     });
 });
+
+// TODO - Properly configure me
+Route::get('customer-workbook/{wb_hash}', function () {
+    return 'show public workbook';
+})->name('cust-workbook.show');
