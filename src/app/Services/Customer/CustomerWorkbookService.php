@@ -4,6 +4,10 @@ namespace App\Services\Customer;
 
 use App\Models\Customer;
 use App\Models\CustomerEquipment;
+use App\Models\CustomerEquipmentWorkbook;
+use App\Models\WorkbookTableValue;
+use App\Models\WorkbookValue;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 class CustomerWorkbookService
@@ -45,5 +49,34 @@ class CustomerWorkbookService
     {
         $equipment->EquipmentWorkbook->publish_until = null;
         $equipment->EquipmentWorkbook->save();
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | Workbook Values
+    |---------------------------------------------------------------------------
+    */
+    public function saveWorkbookValue(CustomerEquipmentWorkbook $workbook, Collection $requestData): void
+    {
+        if (! $requestData->get('isTable')) {
+            $updatable = WorkbookValue::create([
+                'wb_id' => $workbook->wb_id,
+                'index' => $requestData->get('index'),
+            ]);
+        }
+
+        if ($requestData->get('isTable')) {
+
+            $updatable = WorkbookTableValue::create([
+                'wb_id' => $workbook->wb_id,
+                'table_index' => $requestData->get('table_index'),
+                'row_index' => $requestData->get('row_index'),
+                'column_name' => $requestData->get('column_name'),
+            ]);
+        }
+
+        $updatable->value = $requestData->get('value');
+        $updatable->public = $requestData->get('public');
+        $updatable->save();
     }
 }

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { saveWorkbookValue } from "@/Composables/Workbook/CustomerWorkbook.module";
 import { computed, defineAsyncComponent, useAttrs } from "vue";
 
 const props = defineProps<{
@@ -22,5 +23,11 @@ const nodeType = computed(() => {
 </script>
 
 <template>
-    <component :is="nodeType" :id="index" :name="index" v-bind="attrs" />
+    <component
+        :is="nodeType"
+        :id="index"
+        :name="index"
+        v-bind="attrs"
+        @change="saveWorkbookValue($event, index)"
+    />
 </template>

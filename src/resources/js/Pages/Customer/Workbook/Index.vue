@@ -4,7 +4,7 @@ import ClipboardCopy from "@/Components/_Base/ClipboardCopy.vue";
 import PublicLayout from "@/Layouts/Public/PublicLayout.vue";
 import PublishWorkbook from "@/Components/Workbook/PublishWorkbook.vue";
 import WorkbookWrapper from "@/Components/Workbook/WorkbookWrapper.vue";
-import { activePage } from "@/Composables/Workbook/CustomerWorkbook.module";
+import { initWorkbook } from "@/Composables/Workbook/CustomerWorkbook.module";
 import { onMounted } from "vue";
 
 const props = defineProps<{
@@ -15,7 +15,9 @@ const props = defineProps<{
 }>();
 
 onMounted(() => {
-    activePage.value = props.workbook.wb_skeleton.body[0].page;
+    initWorkbook(props.workbook);
+
+    console.log(props.workbook);
 });
 </script>
 
