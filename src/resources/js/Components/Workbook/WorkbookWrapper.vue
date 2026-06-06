@@ -1,11 +1,18 @@
 <script setup lang="ts">
+import { useForm } from "vee-validate";
 import Card from "../_Base/Card.vue";
 import WorkbookBody from "./WorkbookBody.vue";
 import WorkbookHeader from "./WorkbookHeader.vue";
 
-defineProps<{
+const props = defineProps<{
     workbookSkeleton: workbookWrapper;
+    workbookValues: { [key: string]: string };
 }>();
+
+const { values, setFieldValue } = useForm({
+    name: "workbook",
+    initialValues: props.workbookValues,
+});
 </script>
 
 <template>

@@ -1,17 +1,20 @@
 <script setup lang="ts">
+import AtomLoader from "@/Components/_Base/Loaders/AtomLoader.vue";
 import BaseButton from "@/Components/_Base/Buttons/BaseButton.vue";
+import Card from "@/Components/_Base/Card.vue";
 import ClipboardCopy from "@/Components/_Base/ClipboardCopy.vue";
 import PublicLayout from "@/Layouts/Public/PublicLayout.vue";
 import PublishWorkbook from "@/Components/Workbook/PublishWorkbook.vue";
 import WorkbookWrapper from "@/Components/Workbook/WorkbookWrapper.vue";
 import { initWorkbook } from "@/Composables/Workbook/CustomerWorkbook.module";
 import { onMounted } from "vue";
+import { Deferred } from "@inertiajs/vue3";
 
 const props = defineProps<{
     customer: customer;
     equipment: customerEquipment;
     workbook: customerWorkbook;
-    // wbValues?: { [key: string]: string };
+    workbookValues?: { [key: string]: string };
 }>();
 
 onMounted(() => {
@@ -77,7 +80,20 @@ export default { layout: PublicLayout };
             </div>
         </div>
         <div class="grow">
-            <WorkbookWrapper :workbook-skeleton="workbook.wb_skeleton" />
+            <Deferred data="workbook-values">
+                <template #fallback>
+                    <Card class="h-full">
+                        <div class="flex flex-col justify-center h-full">
+                            <AtomLoader text="Loading Workbook" />
+                        </div>
+                    </Card>
+                </template>
+                <WorkbookWrapper
+                    v-if="workbookValues"
+                    :workbook-skeleton="workbook.wb_skeleton"
+                    :workbook-values="workbookValues"
+                />
+            </Deferred>
         </div>
     </div>
 </template>

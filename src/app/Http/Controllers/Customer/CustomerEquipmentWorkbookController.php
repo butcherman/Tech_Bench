@@ -29,6 +29,11 @@ class CustomerEquipmentWorkbookController extends Controller
             'customer' => $customer,
             'equipment' => $equipment,
             'workbook' => $equipment->EquipmentWorkbook,
+            'workbook-values' => Inertia::defer(
+                fn () => $equipment->EquipmentWorkbook
+                    ->WorkbookValues
+                    ->pluck('value', 'index')->all()
+            ),
         ]);
     }
 

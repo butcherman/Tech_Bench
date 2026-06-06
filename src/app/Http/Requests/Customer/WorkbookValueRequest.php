@@ -24,7 +24,7 @@ class WorkbookValueRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'value' => ['required', 'string'],
+            'value' => ['nullable'],
             'index' => ['required_if:isTable,false', 'string'],
             'public' => ['required', 'boolean'],
             'isTable' => ['required', 'boolean'],
