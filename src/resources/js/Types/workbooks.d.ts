@@ -84,7 +84,7 @@ type workbookTableColumnTypes = "Text" | "Number" | "Checkbox" | "Drop List";
 type workbookTableColumn = {
     name: string;
     type: workbookTableColumnTypes;
-    list?: string[];
+    list?: string[] | string;
 };
 
 type workbookDropEvent = {

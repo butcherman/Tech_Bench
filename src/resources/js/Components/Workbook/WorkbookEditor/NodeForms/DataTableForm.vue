@@ -21,7 +21,7 @@ const formData = JSON.parse(JSON.stringify(props.node.props));
 /**
  * Table Column Data
  */
-const tableColumnTypes = ["Text", "Number" /** "Checkbox", "Drop List"*/];
+const tableColumnTypes = ["Text", "Number", /** "Checkbox",*/ "Drop List"];
 const tableColumns = ref<workbookTableColumn[]>(formData.columns);
 const updateColumnData = (event: DropdownChangeEvent, index: number): void => {
     tableColumns.value[index].type = event.value;
@@ -97,6 +97,14 @@ const { remove, push, fields } = useFieldArray("columns");
  * Update the Data Table Settings
  */
 const saveData = handleSubmit((form) => {
+    // Any drop list column needs to have the list made to an array
+    form.columns.forEach((col: workbookTableColumn) => {
+        if (col.list && typeof col.list === "string") {
+            col.list = col.list.split(",").map((item) => item.trim());
+        }
+    });
+
+    // Save the full form
     props.node.props.allowAddRow = form.allow_add_row;
     props.node.props.allowDeleteRow = form.allow_delete_row;
     props.node.props.allowExport = form.allow_export;

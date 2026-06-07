@@ -23,11 +23,15 @@ const borderClass = computed(() => !props.hideBorders);
 /**
  * Inject save method
  */
-const saveTableCell = inject(
-    "saveTableCell",
-    (tableIndex: string, rowIndex: number, columnName: string) =>
-        alert("Fatal Error - Injection Failed"),
-);
+const saveTableCell = inject<
+    ((tableIndex: string, rowIndex: number, columnName: string) => void) | null
+>("saveTableCell", null);
+
+const saveCell = (rowIndex: number, columnName: string): void => {
+    if (saveTableCell) {
+        saveTableCell(props.index, rowIndex, columnName);
+    }
+};
 
 /**
  * Determine what type of input should be displayed
@@ -45,6 +49,7 @@ const getInputType = (column: workbookTableColumn): string => {
 
 // A blank row to add to the table
 const defaultRow = computed(() => {
+    console.log("getting default row");
     let rowData: { [key: string]: undefined | string } = {
         index: v4(),
     };
@@ -96,6 +101,7 @@ onMounted(() => {
                         :class="{ border: borderClass }"
                     >
                         {{ idx + 1 }}
+                        {{ field }}
                     </td>
                     <td
                         v-for="col in columns"
@@ -105,7 +111,7 @@ onMounted(() => {
                         <Field
                             :name="`${index}[${idx}].${col.name}`"
                             v-slot="{ field }"
-                            @change="saveTableCell(index, idx, col.name)"
+                            @change="saveCell(idx, col.name)"
                         >
                             <select
                                 v-if="col.type === 'Drop List'"
