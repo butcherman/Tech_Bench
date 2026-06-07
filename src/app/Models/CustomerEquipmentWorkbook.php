@@ -77,19 +77,19 @@ class CustomerEquipmentWorkbook extends Model
         return $this->hasMany(WorkbookValue::class, 'wb_id', 'wb_id');
     }
 
-    public function WorkbookTableValeus(): HasMany
+    public function WorkbookTableValues(): HasMany
     {
         return $this->hasMany(WorkbookTableValue::class, 'wb_id', 'wb_id');
     }
 
     public function PublicWorkbookValues(): HasMany
     {
-        return $this->WorkbookValues()->where('protected', false);
+        return $this->WorkbookValues()->where('public', true);
     }
 
     public function PublicWorkbookTableValeus(): HasMany
     {
-        return $this->WorkbookTableValues()->where('protected', false);
+        return $this->WorkbookTableValues()->where('public', true);
     }
 
     public function Customer(): BelongsTo

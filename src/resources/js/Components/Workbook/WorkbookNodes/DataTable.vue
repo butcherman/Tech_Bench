@@ -3,9 +3,14 @@ import AddButton from "@/Components/_Base/Buttons/AddButton.vue";
 import BaseButton from "@/Components/_Base/Buttons/BaseButton.vue";
 import DeleteBadge from "@/Components/_Base/Badges/DeleteBadge.vue";
 import okModal from "@/Modules/okModal/index.js";
-import { computed, ref } from "vue";
+import { computed, onMounted } from "vue";
+import { Field, useFieldArray } from "vee-validate";
 import { v4 } from "uuid";
-import { isPreviewMode } from "@/Composables/Workbook/CustomerWorkbook.module";
+import {
+    isPreviewMode,
+    saveTableCell,
+    saveWorkbookValue,
+} from "@/Composables/Workbook/CustomerWorkbook.module";
 
 const props = defineProps<{
     allowAddRow: boolean;
@@ -19,6 +24,7 @@ const props = defineProps<{
     numberRows: boolean;
 }>();
 
+const { remove, push, fields } = useFieldArray(props.index);
 const borderClass = computed(() => !props.hideBorders);
 
 /**
@@ -35,53 +41,22 @@ const getInputType = (column: workbookTableColumn): string => {
     }
 };
 
-/**
- * Add a new row to the table
- */
-const addRow = () => {
-    tableData.value.push({
+// A blank row to add to the table
+const defaultRow = computed(() => {
+    let rowData: { [key: string]: undefined | string } = {
         index: v4(),
-    });
-};
+    };
 
-/**
- * Delete the selected row
- */
-const deleteRow = (rowIndex: number): void => {
-    tableData.value.splice(rowIndex, 1);
-};
+    return rowData;
+});
 
-/**
- * Build some fake data rows for demo purposes
- * TODO - Build the real data
- */
-const buildTableData = () => {
-    let tableData: workbookTableValue[] = [];
-
-    for (let i: number = 0; i < props.defaultRows; i++) {
-        let dataRow: workbookTableValue = {
-            index: v4(),
-        };
-
-        tableData.push(dataRow);
+onMounted(() => {
+    if (!fields.value.length) {
+        for (let n = 0; n < props.defaultRows; n++) {
+            push(defaultRow.value);
+        }
     }
-
-    return tableData;
-};
-
-const tableData = ref(buildTableData());
-
-/**
- * Show a pop-up that import or export was clicked
- */
-const importPopUp = (type: "Import" | "Export") => {
-    if (isPreviewMode.value) {
-        okModal(`${type} Process Triggered`);
-        return;
-    }
-
-    alert("put something here...");
-};
+});
 </script>
 
 <template>
@@ -108,71 +83,62 @@ const importPopUp = (type: "Import" | "Export") => {
             </thead>
             <tbody>
                 <tr
-                    v-for="(row, index) in tableData"
+                    v-for="(field, idx) in fields"
+                    :key="field.key"
                     class="border-slate-200"
                     :class="{ border: borderClass }"
-                    :key="row.index"
                 >
-                    <td
-                        v-if="numberRows"
-                        class="border-slate-200 text-center"
-                        :class="{ border: borderClass }"
-                    >
-                        {{ index + 1 }}
-                    </td>
                     <td
                         v-for="col in columns"
                         class="border-slate-200 px-1"
                         :class="{ border: borderClass }"
                     >
-                        <select
-                            v-if="col.type === 'Drop List'"
-                            class="w-full m-0 py-0 px-2"
+                        <Field
+                            :name="`${index}[${idx}].${col.name}`"
+                            v-slot="{ field }"
+                            @change="
+                                saveTableCell($event, index, idx, col.name)
+                            "
                         >
-                            <option />
-                            <option v-for="opt in col.list.split(',')">
-                                {{ opt }}
-                            </option>
-                        </select>
-                        <input
-                            v-else
-                            :type="getInputType(col)"
-                            class="w-full m-0 px-2"
-                            v-model="tableData[index][col.name]"
-                        />
+                            <select
+                                v-if="col.type === 'Drop List'"
+                                class="w-full m-0 py-0 px-2"
+                                v-bind="field"
+                            >
+                                <option />
+                                <option
+                                    v-for="opt in col.list.split(',')"
+                                    :key="opt"
+                                    :value="opt"
+                                >
+                                    {{ opt }}
+                                </option>
+                            </select>
+                            <input
+                                v-else
+                                :type="getInputType(col)"
+                                class="w-full m-0 px-2"
+                                v-bind="field"
+                            />
+                        </Field>
                     </td>
                     <td v-if="allowDeleteRow" class="text-center">
                         <DeleteBadge
                             icon="circle-xmark"
                             v-tooltip.left="'Delete Row'"
                             confirm
-                            @accepted="deleteRow(index)"
+                            @accepted="remove(idx)"
                         />
                     </td>
                 </tr>
             </tbody>
         </table>
         <div class="flex flex-row-reverse my-2">
-            <AddButton class="mx-1" size="small" pill @click="addRow" />
-            <BaseButton
-                v-if="allowImport"
+            <AddButton
                 class="mx-1"
                 size="small"
-                text="Import"
-                icon="upload"
-                variant="info"
                 pill
-                @click="importPopUp('Import')"
-            />
-            <BaseButton
-                v-if="allowExport"
-                class="mx-1"
-                size="small"
-                text="Export"
-                icon="download"
-                variant="info"
-                pill
-                @click="importPopUp('Export')"
+                @click="push(defaultRow)"
             />
         </div>
     </div>

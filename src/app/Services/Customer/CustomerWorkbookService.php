@@ -56,6 +56,30 @@ class CustomerWorkbookService
     | Workbook Values
     |---------------------------------------------------------------------------
     */
+    public function getAllWorkbookValues(CustomerEquipmentWorkbook $workbook, bool $incPrivate = false)
+    {
+
+        $baseValues = $incPrivate ? $workbook->WorkbookValues : $workbook->PublicWorkbookValues;
+        $baseValues = $baseValues->pluck('value', 'index')->all();
+
+        $tableValues = $incPrivate ? $workbook->WorkbookTableValues : $workbook->PublicWorkbookTableValues;
+
+        // Group the results for easier sorting
+        $tableValues = $tableValues->groupBy('table_index', 'rowIndex');
+
+        // Build data matching expected format in page view
+        foreach ($tableValues as $tableIndex => $tableRow) {
+            $newTable = [];
+            foreach ($tableRow as $tableCol) {
+                $newTable[$tableCol->row_index][$tableCol->column_name] = $tableCol->value;
+            }
+
+            $baseValues[$tableIndex] = $newTable;
+        }
+
+        return $baseValues;
+    }
+
     public function saveWorkbookValue(CustomerEquipmentWorkbook $workbook, Collection $requestData): void
     {
         if (! $requestData->get('isTable')) {
