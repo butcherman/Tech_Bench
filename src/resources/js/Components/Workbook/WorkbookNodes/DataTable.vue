@@ -89,6 +89,13 @@ onMounted(() => {
                     :class="{ border: borderClass }"
                 >
                     <td
+                        v-if="numberRows"
+                        class="border-slate-200 text-center"
+                        :class="{ border: borderClass }"
+                    >
+                        {{ idx + 1 }}
+                    </td>
+                    <td
                         v-for="col in columns"
                         class="border-slate-200 px-1"
                         :class="{ border: borderClass }"
