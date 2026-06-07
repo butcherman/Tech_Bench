@@ -42,7 +42,7 @@ export default { layout: PublicLayout };
                 </template>
                 <WorkbookWrapper
                     v-if="workbookValues"
-                    :workbook-skeleton="workbook.wb_skeleton"
+                    :workbook-skeleton="workbook.parsed_workbook"
                     :workbook-values="workbookValues"
                 />
             </Deferred>

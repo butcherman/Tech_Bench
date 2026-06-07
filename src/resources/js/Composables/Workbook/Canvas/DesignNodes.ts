@@ -88,7 +88,7 @@ export const designNodes: workbookNode[] = [
         type: "static",
         props: {
             tag: "h3",
-            text: "[ Customer Name ]",
+            text: "{{customer_name}}",
             class: "text-center",
         },
         nodeLabel: {
@@ -102,7 +102,7 @@ export const designNodes: workbookNode[] = [
         type: "static",
         props: {
             tag: "h3",
-            text: "[ Equipment Name ]",
+            text: "{{equipment_name}}",
             class: "text-center",
         },
         nodeLabel: {

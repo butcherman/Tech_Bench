@@ -24,8 +24,8 @@ export const isPagePublic = computed(() => {
  * Set the necessary data for the workbook state
  */
 export const initWorkbook = (workbook: customerWorkbook): void => {
-    activePage.value = workbook.wb_skeleton.body[0].page;
-    bodyCopy.value = workbook.wb_skeleton.body;
+    activePage.value = workbook.parsed_workbook.body[0].page;
+    bodyCopy.value = workbook.parsed_workbook.body;
     wbHash.value = workbook.wb_hash;
 };
 

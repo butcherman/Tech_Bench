@@ -22,7 +22,10 @@ class CustomerEquipmentWorkbook extends Model
     protected $guarded = ['wb_id', 'created_at', 'updated_at'];
 
     /** @var array<int, string> */
-    protected $appends = ['published', 'publish_until_raw'];
+    protected $appends = ['published', 'publish_until_raw', 'parsed_workbook'];
+
+    /** @var array<int, string> */
+    protected $hidden = ['wb_id', 'cust_id', 'cust_equip_id', 'wb_skeleton'];
 
     public function getRouteKeyName(): string
     {
@@ -67,6 +70,22 @@ class CustomerEquipmentWorkbook extends Model
         );
     }
 
+    public function parsedWorkbook(): Attribute
+    {
+        $equip = CustomerEquipment::where('cust_equip_id', $this->cust_equip_id)
+            ->first();
+        $equipName = $equip->equipName;
+
+        $placeholders = [
+            'customer_name' => $this->Customer->name,
+            'equipment_name' => $equipName,
+        ];
+
+        return Attribute::make(
+            get: fn () => $this->replacePlaceholders($this->wb_skeleton, $placeholders),
+        );
+    }
+
     /*
     |---------------------------------------------------------------------------
     | Relationships
@@ -100,5 +119,35 @@ class CustomerEquipmentWorkbook extends Model
     public function CustomerEquipment(): BelongsTo
     {
         return $this->belongsTo(CustomerEquipment::class, 'cust_equip_id', 'cust_equip_id');
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | Additional Methods
+    |---------------------------------------------------------------------------
+    */
+
+    /**
+     * Replace any placeholder data in the Workbook Skeleton with the proper
+     * information.
+     */
+    protected function replacePlaceholders(mixed $value, array $data): mixed
+    {
+        if (is_array($value)) {
+            return array_map(
+                fn ($item) => $this->replacePlaceholders($item, $data),
+                $value
+            );
+        }
+
+        if (is_string($value)) {
+            return preg_replace_callback(
+                '/\{\{([^}]+)\}\}/',
+                fn ($matches) => $data[$matches[1]] ?? $matches[0],
+                $value
+            );
+        }
+
+        return $value;
     }
 }

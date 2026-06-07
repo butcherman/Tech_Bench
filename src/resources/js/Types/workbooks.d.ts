@@ -10,6 +10,7 @@ type customerWorkbook = {
     created_at: string;
     updated_at: string;
     published: boolean;
+    parsed_workbook: workbookWrapper;
 };
 
 type workbookWrapper = {
