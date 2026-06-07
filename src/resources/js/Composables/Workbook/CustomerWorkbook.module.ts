@@ -8,7 +8,7 @@ export const wbHash = ref<string>();
 export const hasError = ref<boolean>(false);
 
 const bodyCopy = ref<workbookPage[]>();
-const isPagePublic = computed(() => {
+export const isPagePublic = computed(() => {
     let currentPage = bodyCopy.value?.find(
         (page) => page.page === activePage.value,
     );
@@ -32,73 +32,20 @@ export const initWorkbook = (workbook: customerWorkbook): void => {
 /**
  * Save a single input value in to the database
  */
-export const saveWorkbookValue = (event: InputEvent, index: string): void => {
+export const saveWorkbookValue = (saveData: workbookSaveData): void => {
     if (isPreviewMode.value) {
         return;
     }
 
-    if (event.target) {
-        let target = event.target as HTMLInputElement;
+    dataPut(
+        route("cust-workbook.save-value", [wbHash.value]),
+        saveData,
+        false,
+    ).catch((err) => {
+        hasError.value = true;
 
-        console.log(index, target.value);
-
-        let saveData = {
-            index,
-            value: target.value,
-            public: isPagePublic.value,
-            isTable: false,
-        };
-
-        dataPut(
-            route("cust-workbook.save-value", [wbHash.value]),
-            saveData,
-            false,
-        ).catch((err) => {
-            hasError.value = true;
-
-            let message =
-                "Unable to save data.  Please refresh page and try again.";
-            errorModal(err.status, message);
-        });
-    }
-};
-
-/**
- * Save a single table call in to the database
- */
-export const saveTableCell = (
-    event: InputEvent,
-    tableIndex: string,
-    rowIndex: number,
-    columnName: string,
-): void => {
-    if (isPreviewMode.value) {
-        return;
-    }
-
-    if (event.target) {
-        let target = event.target as HTMLInputElement;
-
-        let saveData = {
-            table_index: tableIndex,
-            row_index: rowIndex,
-            column_name: columnName,
-            value: target.value,
-            public: isPagePublic.value,
-            isTable: true,
-        };
-
-        dataPut(
-            route("cust-workbook.save-value", [wbHash.value]),
-            saveData,
-            false,
-        ).catch((err) => {
-            hasError.value = true;
-            console.log(err);
-
-            let message =
-                "Unable to save data.  Please refresh page and try again.";
-            errorModal(err.status, message);
-        });
-    }
+        let message =
+            "Unable to save data.  Please refresh page and try again.";
+        errorModal(err.status, message);
+    });
 };

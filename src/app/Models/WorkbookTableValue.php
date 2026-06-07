@@ -26,6 +26,7 @@ class WorkbookTableValue extends Model
     protected function casts(): array
     {
         return [
+            'value' => 'array',
             'protected' => 'boolean',
             'created_at' => 'datetime:M d, Y',
             'updated_at' => 'datetime:M d, Y',

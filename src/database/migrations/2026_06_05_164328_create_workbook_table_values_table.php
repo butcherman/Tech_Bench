@@ -17,7 +17,7 @@ return new class extends Migration
             $table->uuid('table_index');
             $table->uuid('row_index');
             $table->text('column_name');
-            $table->longText('value')->nullable();
+            $table->json('value')->nullable();
             $table->boolean('public')->default(false);
             $table->timestamps();
             $table->foreign('wb_id')

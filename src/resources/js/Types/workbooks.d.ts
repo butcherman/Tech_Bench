@@ -109,12 +109,19 @@ type workbookTableValueEvent = {
 type workbookValue = {
     index: string;
     value: string;
-    updated_at: string;
+    public: boolean;
 };
 
 type workbookTableValue = {
     table_index: string;
-    row_index: number;
+    row_index: string | number;
     column_name: string;
+    public: boolean;
     value: string;
 };
+
+type workbookSaveData =
+    | ({
+          isTable: boolean;
+      } & workbookValue)
+    | workbookTableValue;

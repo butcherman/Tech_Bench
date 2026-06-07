@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('wb_id');
             $table->uuid('index');
-            $table->longText('value')->nullable();
+            $table->json('value')->nullable();
             $table->boolean('public')->default(false);
             $table->timestamps();
             $table->foreign('wb_id')

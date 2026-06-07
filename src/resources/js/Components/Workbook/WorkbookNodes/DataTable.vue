@@ -3,12 +3,12 @@ import AddButton from "@/Components/_Base/Buttons/AddButton.vue";
 import BaseButton from "@/Components/_Base/Buttons/BaseButton.vue";
 import DeleteBadge from "@/Components/_Base/Badges/DeleteBadge.vue";
 import okModal from "@/Modules/okModal/index.js";
-import { computed, onMounted } from "vue";
+import { computed, inject, onMounted } from "vue";
 import { Field, useFieldArray } from "vee-validate";
 import { v4 } from "uuid";
 import {
     isPreviewMode,
-    saveTableCell,
+    // saveTableCell,
     saveWorkbookValue,
 } from "@/Composables/Workbook/CustomerWorkbook.module";
 
@@ -26,6 +26,15 @@ const props = defineProps<{
 
 const { remove, push, fields } = useFieldArray(props.index);
 const borderClass = computed(() => !props.hideBorders);
+
+/**
+ * Inject save method
+ */
+const saveTableCell = inject(
+    "saveTableCell",
+    (tableIndex: string, rowIndex: string, columnName: string) =>
+        alert("Fatal Error - Injection Failed"),
+);
 
 /**
  * Determine what type of input should be displayed
@@ -103,9 +112,7 @@ onMounted(() => {
                         <Field
                             :name="`${index}[${idx}].${col.name}`"
                             v-slot="{ field }"
-                            @change="
-                                saveTableCell($event, index, idx, col.name)
-                            "
+                            @change="saveTableCell(index, idx, col.name)"
                         >
                             <select
                                 v-if="col.type === 'Drop List'"

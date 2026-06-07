@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { saveWorkbookValue } from "@/Composables/Workbook/CustomerWorkbook.module";
-import { computed, defineAsyncComponent, useAttrs } from "vue";
+import { computed, defineAsyncComponent, inject, useAttrs } from "vue";
 
 const props = defineProps<{
     component: string;
@@ -20,6 +19,13 @@ const nodeType = computed(() => {
         );
     }
 });
+
+/**
+ * Inject save method
+ */
+const saveFieldValue = inject("saveFieldValue", (index: string) =>
+    alert("Fatal Error - Injection Failed"),
+);
 </script>
 
 <template>
@@ -28,6 +34,6 @@ const nodeType = computed(() => {
         :id="index"
         :name="index"
         v-bind="attrs"
-        @change="saveWorkbookValue($event, index)"
+        @change="saveFieldValue(index)"
     />
 </template>

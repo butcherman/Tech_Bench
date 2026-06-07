@@ -2,13 +2,15 @@
 import Card from "../_Base/Card.vue";
 import WorkbookBody from "./WorkbookBody.vue";
 import WorkbookHeader from "./WorkbookHeader.vue";
-import { computed, onMounted } from "vue";
+import { isLoading } from "@/Composables/axiosWrapper.module.js";
+import { computed, onMounted, provide } from "vue";
 import { useForm } from "vee-validate";
 import {
     hasError,
+    isPagePublic,
+    saveWorkbookValue,
     wbHash,
 } from "@/Composables/Workbook/CustomerWorkbook.module.js";
-import { isLoading } from "@/Composables/axiosWrapper.module.js";
 
 const props = defineProps<{
     workbookSkeleton: workbookWrapper;
@@ -45,16 +47,52 @@ const saveClass = computed<string>(() => {
     return "text-success";
 });
 
+/**
+ * Vee-Validate functions and values
+ */
 const { values, setFieldValue } = useForm({
     name: "workbook",
     initialValues: props.workbookValues,
 });
 
+const saveFieldValue = (index: string): void => {
+    let saveData: workbookSaveData = {
+        index,
+        value: values[index],
+        public: isPagePublic.value,
+        isTable: false,
+    };
+
+    saveWorkbookValue(saveData);
+};
+
+const saveTableCell = (
+    tableIndex: string,
+    rowIndex: string,
+    columnName: string,
+): void => {
+    let saveData: workbookSaveData = {
+        table_index: tableIndex,
+        row_index: rowIndex,
+        column_name: columnName,
+        value: values[tableIndex][rowIndex][columnName],
+        public: isPagePublic.value,
+        isTable: true,
+    };
+
+    saveWorkbookValue(saveData);
+};
+
+provide("saveFieldValue", saveFieldValue);
+provide("saveTableCell", saveTableCell);
+
 onMounted(() => {
+    /**
+     * Register for live updates to the workbook data
+     */
     Echo.channel(`equipment-workbook.${wbHash.value}`)
         .listen(".WorkbookValueUpdated", (valData: workbookValueEvent) => {
             setFieldValue(valData.model.index, valData.model.value);
-            console.log(valData.model.index, valData.model.value);
         })
         .listen(
             ".WorkbookTableValueUpdated",
