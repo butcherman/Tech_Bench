@@ -23,17 +23,24 @@ const nodeType = computed(() => {
 /**
  * Inject save method
  */
-const saveFieldValue = inject("saveFieldValue", (index: string) =>
-    alert("Fatal Error - Injection Failed"),
+const saveFieldValue = inject<((index: string) => void) | null>(
+    "saveFieldValue",
+    null,
 );
+
+const saveField = () => {
+    if (saveFieldValue) {
+        saveFieldValue(props.index);
+    }
+};
 </script>
 
 <template>
     <component
+        v-bind="attrs"
         :is="nodeType"
         :id="index"
         :name="index"
-        v-bind="attrs"
-        @change="saveFieldValue(index)"
+        @change="saveField"
     />
 </template>

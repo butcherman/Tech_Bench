@@ -66,7 +66,7 @@ class EquipmentWorkbookService
                     'type' => 'static',
                     'props' => [
                         'tag' => 'h3',
-                        'text' => $equipment_type->name,
+                        'text' => '[ Equipment Name ]',
                         'class' => 'text-center',
                     ],
                 ],
