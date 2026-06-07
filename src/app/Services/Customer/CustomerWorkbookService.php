@@ -19,9 +19,11 @@ class CustomerWorkbookService
     {
         $equipWorkbook = $equip->EquipmentType->EquipmentWorkbook;
 
+        $wbData = $this->removeBuilderData($equipWorkbook->workbook_data);
+
         $equip->EquipmentWorkbook()->create([
             'wb_hash' => Str::uuid(),
-            'wb_skeleton' => $equipWorkbook->workbook_data,
+            'wb_skeleton' => $wbData,
             'wb_version' => $equipWorkbook->version_hash,
             'cust_id' => $equip->cust_id,
         ]);
@@ -102,5 +104,29 @@ class CustomerWorkbookService
         $updatable->value = $requestData->get('value');
         $updatable->public = $requestData->get('public');
         $updatable->save();
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | Cleanup Functions for Workbooks
+    |---------------------------------------------------------------------------
+    */
+
+    /**
+     * Remove workbook builder data from customer workbook
+     */
+    protected function removeBuilderData(array $workbookSkeleton)
+    {
+        $targetKey = 'nodeHelper';
+
+        foreach ($workbookSkeleton as $key => $value) {
+            if ($key === $targetKey) {
+                unset($workbookSkeleton[$key]);
+            } elseif (is_array($value)) {
+                $workbookSkeleton[$key] = $this->removeBuilderData($value);
+            }
+        }
+
+        return $workbookSkeleton;
     }
 }
