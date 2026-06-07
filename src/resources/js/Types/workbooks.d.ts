@@ -102,6 +102,10 @@ type workbookValueEvent = {
     model: workbookValue;
 };
 
+type workbookTableValueEvent = {
+    model: workbookTableValue;
+};
+
 type workbookValue = {
     index: string;
     value: string;
@@ -109,6 +113,8 @@ type workbookValue = {
 };
 
 type workbookTableValue = {
-    index: string;
-    [key: string]: string | number | boolean;
+    table_index: string;
+    row_index: number;
+    column_name: string;
+    value: string;
 };

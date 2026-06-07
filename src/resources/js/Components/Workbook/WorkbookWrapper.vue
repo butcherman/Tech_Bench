@@ -12,7 +12,7 @@ import { isLoading } from "@/Composables/axiosWrapper.module.js";
 
 const props = defineProps<{
     workbookSkeleton: workbookWrapper;
-    workbookValues: { [key: string]: string };
+    workbookValues: { [key: string]: any };
 }>();
 
 /**
@@ -45,7 +45,7 @@ const saveClass = computed<string>(() => {
     return "text-success";
 });
 
-const { setFieldValue } = useForm({
+const { values, setFieldValue } = useForm({
     name: "workbook",
     initialValues: props.workbookValues,
 });
@@ -56,7 +56,19 @@ onMounted(() => {
             setFieldValue(valData.model.index, valData.model.value);
             console.log(valData.model.index, valData.model.value);
         })
-        .listenToAll((event) => console.log(event));
+        .listen(
+            ".WorkbookTableValueUpdated",
+            (valData: workbookTableValueEvent) => {
+                let updatedModel = valData.model;
+                let table = { ...values[updatedModel.table_index] };
+
+                let rowCopy = { ...table[updatedModel.row_index] };
+                rowCopy[updatedModel.column_name] = updatedModel.value;
+                table[updatedModel.row_index] = rowCopy;
+
+                setFieldValue(updatedModel.table_index, table);
+            },
+        );
 });
 </script>
 
