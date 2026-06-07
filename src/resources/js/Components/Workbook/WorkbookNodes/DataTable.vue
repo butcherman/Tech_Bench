@@ -1,16 +1,9 @@
 <script setup lang="ts">
 import AddButton from "@/Components/_Base/Buttons/AddButton.vue";
-import BaseButton from "@/Components/_Base/Buttons/BaseButton.vue";
 import DeleteBadge from "@/Components/_Base/Badges/DeleteBadge.vue";
-import okModal from "@/Modules/okModal/index.js";
 import { computed, inject, onMounted } from "vue";
 import { Field, useFieldArray } from "vee-validate";
 import { v4 } from "uuid";
-import {
-    isPreviewMode,
-    // saveTableCell,
-    saveWorkbookValue,
-} from "@/Composables/Workbook/CustomerWorkbook.module";
 
 const props = defineProps<{
     allowAddRow: boolean;
@@ -32,7 +25,7 @@ const borderClass = computed(() => !props.hideBorders);
  */
 const saveTableCell = inject(
     "saveTableCell",
-    (tableIndex: string, rowIndex: string, columnName: string) =>
+    (tableIndex: string, rowIndex: number, columnName: string) =>
         alert("Fatal Error - Injection Failed"),
 );
 
@@ -121,7 +114,7 @@ onMounted(() => {
                             >
                                 <option />
                                 <option
-                                    v-for="opt in col.list.split(',')"
+                                    v-for="opt in col.list"
                                     :key="opt"
                                     :value="opt"
                                 >
@@ -133,6 +126,7 @@ onMounted(() => {
                                 :type="getInputType(col)"
                                 class="w-full m-0 px-2"
                                 v-bind="field"
+                                :unchecked-value="false"
                             />
                         </Field>
                     </td>

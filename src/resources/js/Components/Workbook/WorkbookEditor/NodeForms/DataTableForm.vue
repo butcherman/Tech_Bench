@@ -21,7 +21,7 @@ const formData = JSON.parse(JSON.stringify(props.node.props));
 /**
  * Table Column Data
  */
-const tableColumnTypes = ["Text", "Number", "Checkbox", "Drop List"];
+const tableColumnTypes = ["Text", "Number" /** "Checkbox", "Drop List"*/];
 const tableColumns = ref<workbookTableColumn[]>(formData.columns);
 const updateColumnData = (event: DropdownChangeEvent, index: number): void => {
     tableColumns.value[index].type = event.value;
@@ -34,7 +34,6 @@ const addColumn = () => {
     let defaultColumn: workbookTableColumn = {
         name: "New Column",
         type: "Text",
-        list: "",
     };
 
     tableColumns.value.push(defaultColumn);

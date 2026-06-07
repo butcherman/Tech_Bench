@@ -80,6 +80,8 @@ const saveTableCell = (
         isTable: true,
     };
 
+    console.log(saveData.value);
+
     saveWorkbookValue(saveData);
 };
 
