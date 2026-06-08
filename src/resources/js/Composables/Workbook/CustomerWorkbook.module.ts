@@ -44,6 +44,7 @@ export const saveWorkbookValue = (saveData: workbookSaveData): void => {
         saveData,
         false,
     ).catch((err) => {
+        console.log(err);
         hasError.value = true;
 
         let message =

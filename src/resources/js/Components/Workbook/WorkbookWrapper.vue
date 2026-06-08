@@ -67,6 +67,7 @@ const saveFieldValue = (index: string): void => {
 };
 
 const saveTableCell = (
+    arrayIndex: number,
     tableIndex: string,
     rowIndex: string,
     columnName: string,
@@ -75,14 +76,14 @@ const saveTableCell = (
         table_index: tableIndex,
         row_index: rowIndex,
         column_name: columnName,
-        value: values[tableIndex][rowIndex][columnName],
+        value: values[tableIndex][arrayIndex][columnName],
         public: isPagePublic.value,
         isTable: true,
     };
 
     console.log(saveData.value);
 
-    // saveWorkbookValue(saveData);
+    saveWorkbookValue(saveData);
 };
 
 provide("saveFieldValue", saveFieldValue);

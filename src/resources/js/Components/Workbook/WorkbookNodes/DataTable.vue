@@ -24,12 +24,22 @@ const borderClass = computed(() => !props.hideBorders);
  * Inject save method
  */
 const saveTableCell = inject<
-    ((tableIndex: string, rowIndex: number, columnName: string) => void) | null
+    | ((
+          arrayIndex: number,
+          tableIndex: string,
+          rowIndex: string,
+          columnName: string,
+      ) => void)
+    | null
 >("saveTableCell", null);
 
-const saveCell = (rowIndex: number, columnName: string): void => {
+const saveCell = (
+    arrayIndex: number,
+    columnName: string,
+    rowIndex: string,
+): void => {
     if (saveTableCell) {
-        saveTableCell(props.index, rowIndex, columnName);
+        saveTableCell(arrayIndex, props.index, rowIndex, columnName);
     }
 };
 
@@ -110,7 +120,7 @@ onMounted(() => {
                         <Field
                             :name="`${index}[${idx}].${col.name}`"
                             v-slot="{ field }"
-                            @change="saveCell(idx, col.name)"
+                            @change="saveCell(idx, col.name, row.value.index)"
                         >
                             <select
                                 v-if="col.type === 'Drop List'"

@@ -38,6 +38,7 @@ export async function dataPost(
         .then((res) => res)
         .catch((err) => {
             if (err.status === 422) {
+                console.log(err);
                 throw {
                     status: err.status,
                     message: {

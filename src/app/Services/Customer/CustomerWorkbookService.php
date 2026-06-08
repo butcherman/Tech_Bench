@@ -65,15 +65,23 @@ class CustomerWorkbookService
         $baseValues = $baseValues->pluck('value', 'index')->all();
 
         $tableValues = $incPrivate ? $workbook->WorkbookTableValues : $workbook->PublicWorkbookTableValues;
+        $tableValues = $tableValues->groupBy('table_index');
 
-        // Group the results for easier sorting
-        $tableValues = $tableValues->groupBy('table_index', 'rowIndex');
+        // Group and build the individual tables
+        foreach ($tableValues as $tableIndex => $table) {
 
-        // Build data matching expected format in page view
-        foreach ($tableValues as $tableIndex => $tableRow) {
+            // Group and build the individual rows
+            $rows = $table->groupBy('row_index');
             $newTable = [];
-            foreach ($tableRow as $tableCol) {
-                $newTable[$tableCol->row_index][$tableCol->column_name] = $tableCol->value;
+
+            foreach ($rows as $rowIndex => $rowValue) {
+                $newRow = [];
+                foreach ($rowValue as $value) {
+                    $newRow[$value->column_name] = $value->value;
+                }
+
+                $newRow['index'] = $rowIndex;
+                $newTable[] = $newRow;
             }
 
             $baseValues[$tableIndex] = $newTable;

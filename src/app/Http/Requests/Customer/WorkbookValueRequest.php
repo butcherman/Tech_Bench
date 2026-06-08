@@ -29,7 +29,7 @@ class WorkbookValueRequest extends FormRequest
             'public' => ['required', 'boolean'],
             'isTable' => ['required', 'boolean'],
             'table_index' => ['required_if:isTable,true', 'string'],
-            'row_index' => ['required_if:isTable,true', 'numeric'],
+            'row_index' => ['required_if:isTable,true', 'string'],
             'column_name' => ['required_if:isTable,true', 'string'],
         ];
     }
