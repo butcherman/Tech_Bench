@@ -87,6 +87,11 @@ type workbookTableColumn = {
     list?: string[] | string;
 };
 
+type workbookTableRow = {
+    index: string;
+    [key: string]: any;
+};
+
 type workbookDropEvent = {
     added?: {
         element: workbookNode;

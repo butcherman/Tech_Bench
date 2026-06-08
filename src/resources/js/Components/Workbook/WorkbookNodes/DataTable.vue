@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import AddButton from "@/Components/_Base/Buttons/AddButton.vue";
 import DeleteBadge from "@/Components/_Base/Badges/DeleteBadge.vue";
-import { computed, inject, onMounted } from "vue";
-import { Field, useFieldArray } from "vee-validate";
+import { computed, inject, onMounted, Ref } from "vue";
+import { Field, FieldEntry, useFieldArray } from "vee-validate";
 import { v4 } from "uuid";
 
 const props = defineProps<{
@@ -17,7 +17,15 @@ const props = defineProps<{
     numberRows: boolean;
 }>();
 
-const { remove, push, fields } = useFieldArray(props.index);
+const {
+    remove,
+    push,
+    fields,
+}: {
+    remove: (idx: number) => void;
+    push: (col: workbookTableRow) => void;
+    fields: Ref<FieldEntry<workbookTableRow>[], FieldEntry<workbookTableRow>[]>;
+} = useFieldArray(props.index);
 const borderClass = computed(() => !props.hideBorders);
 
 /**
@@ -58,9 +66,9 @@ const getInputType = (column: workbookTableColumn): string => {
 };
 
 // A blank row to add to the table
-const defaultRow = (): { [key: string]: undefined | string } => {
+const defaultRow = (): workbookTableRow => {
     console.log("getting default row");
-    let rowData: { [key: string]: undefined | string } = {
+    let rowData: workbookTableRow = {
         index: v4(),
     };
 
