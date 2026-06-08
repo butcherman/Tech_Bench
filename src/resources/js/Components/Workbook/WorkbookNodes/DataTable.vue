@@ -48,19 +48,19 @@ const getInputType = (column: workbookTableColumn): string => {
 };
 
 // A blank row to add to the table
-const defaultRow = computed(() => {
+const defaultRow = (): { [key: string]: undefined | string } => {
     console.log("getting default row");
     let rowData: { [key: string]: undefined | string } = {
         index: v4(),
     };
 
     return rowData;
-});
+};
 
 onMounted(() => {
     if (!fields.value.length) {
         for (let n = 0; n < props.defaultRows; n++) {
-            push(defaultRow.value);
+            push(defaultRow());
         }
     }
 });
@@ -90,8 +90,8 @@ onMounted(() => {
             </thead>
             <tbody>
                 <tr
-                    v-for="(field, idx) in fields"
-                    :key="field.key"
+                    v-for="(row, idx) in fields"
+                    :key="row.key"
                     class="border-slate-200"
                     :class="{ border: borderClass }"
                 >
@@ -101,7 +101,6 @@ onMounted(() => {
                         :class="{ border: borderClass }"
                     >
                         {{ idx + 1 }}
-                        {{ field }}
                     </td>
                     <td
                         v-for="col in columns"
@@ -152,7 +151,7 @@ onMounted(() => {
                 class="mx-1"
                 size="small"
                 pill
-                @click="push(defaultRow)"
+                @click="push(defaultRow())"
             />
         </div>
     </div>
