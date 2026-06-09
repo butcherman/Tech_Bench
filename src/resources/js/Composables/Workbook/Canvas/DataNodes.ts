@@ -9,17 +9,14 @@ export const dataNodes: workbookNode[] = [
                 {
                     name: "Col 1",
                     type: "Text",
-                    list: "",
                 },
                 {
                     name: "Col 2",
                     type: "Text",
-                    list: "",
                 },
                 {
                     name: "Col 3",
                     type: "Text",
-                    list: "",
                 },
             ],
             allowAddRow: true,

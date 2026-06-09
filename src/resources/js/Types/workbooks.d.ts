@@ -1,3 +1,19 @@
+type customerWorkbook = {
+    wb_id: number;
+    wb_hash: string;
+    cust_id: number;
+    cust_equip_id: number;
+    wb_skeleton: workbookWrapper;
+    wb_version: string;
+    publish_until: string;
+    publish_until_raw: string;
+    created_at: string;
+    updated_at: string;
+    published: boolean;
+    parsed_workbook: workbookWrapper;
+    up_to_date?: boolean;
+};
+
 type workbookWrapper = {
     header: workbookNode[];
     body: workbookPage[];
@@ -69,7 +85,12 @@ type workbookTableColumnTypes = "Text" | "Number" | "Checkbox" | "Drop List";
 type workbookTableColumn = {
     name: string;
     type: workbookTableColumnTypes;
-    list: string;
+    list?: string[] | string;
+};
+
+type workbookTableRow = {
+    index: string;
+    [key: string]: any;
 };
 
 type workbookDropEvent = {
@@ -84,7 +105,30 @@ type workbookDropEvent = {
     };
 };
 
-type workbookTableValue = {
-    index: string;
-    [key: string]: string | number | boolean;
+type workbookValueEvent = {
+    model: workbookValue;
 };
+
+type workbookTableValueEvent = {
+    model: workbookTableValue;
+};
+
+type workbookValue = {
+    index: string;
+    value: string;
+    public: boolean;
+};
+
+type workbookTableValue = {
+    table_index: string;
+    row_index: string | number;
+    column_name: string;
+    public: boolean;
+    value: string;
+};
+
+type workbookSaveData =
+    | ({
+          isTable: boolean;
+      } & workbookValue)
+    | workbookTableValue;

@@ -13,9 +13,14 @@ import {
     resetWorkbook,
     workbookData,
 } from "@/Composables/Workbook/WorkbookEditor.module.js";
+import { useForm } from "vee-validate";
 
 const appStore = useAppStore();
 const dirtyVariant = ref<elementVariant>("primary");
+
+useForm({
+    name: "workbook-builder",
+});
 
 const saveWorkbook = () => {
     console.log("save workbook");
@@ -69,7 +74,9 @@ const saveWorkbook = () => {
         </template>
         <div class="h-full flex flex-col gap-5">
             <CanvasHeader />
-            <CanvasBody class="grow" />
+            <form class="grow" novalidate @submit.prevent>
+                <CanvasBody class="h-full" />
+            </form>
             <CanvasHeader is-footer />
         </div>
     </Card>

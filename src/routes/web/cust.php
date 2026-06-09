@@ -10,6 +10,7 @@ use App\Http\Controllers\Customer\CustomerDeletedItemsController;
 use App\Http\Controllers\Customer\CustomerEquipmentController;
 use App\Http\Controllers\Customer\CustomerEquipmentDataController;
 use App\Http\Controllers\Customer\CustomerEquipmentNoteController;
+use App\Http\Controllers\Customer\CustomerEquipmentWorkbookController;
 use App\Http\Controllers\Customer\CustomerFileController;
 use App\Http\Controllers\Customer\CustomerNoteController;
 use App\Http\Controllers\Customer\CustomerSearchController;
@@ -17,8 +18,10 @@ use App\Http\Controllers\Customer\CustomerSiteController;
 use App\Http\Controllers\Customer\CustomerVpnController;
 use App\Http\Controllers\Customer\DisabledCustomerController;
 use App\Http\Controllers\Customer\DownloadNoteController;
+use App\Http\Controllers\Customer\PublishWorkbookController;
 use App\Http\Controllers\Customer\ReAssignCustomerController;
 use App\Http\Controllers\Customer\ShareVpnDataController;
+use App\Http\Controllers\Customer\WorkbookValueController;
 use App\Models\Customer;
 use App\Models\CustomerEquipment;
 use App\Models\CustomerSite;
@@ -258,11 +261,25 @@ Route::middleware('auth.secure')->group(function () {
 
         /*
         |-----------------------------------------------------------------------
-        | Customer Equipment Routes
+        | Customer Equipment & Workbook Routes
         | /customers/{customer-slug|customer-id}/equipment
         |-----------------------------------------------------------------------
         */
         Route::prefix('equipment/{equipment}')->name('equipment.')->group(function () {
+            Route::prefix('workbook')->name('workbook.')->group(function () {
+                Route::controller(PublishWorkbookController::class)->group(function () {
+                    Route::post('store', 'store')->name('publish');
+                    Route::delete('destroy', 'destroy')->name('unpublish');
+                });
+
+                Route::controller(CustomerEquipmentWorkbookController::class)
+                    ->group(function () {
+                        Route::get('index', 'index')->name('index');
+                        Route::get('create', 'create')->name('create');
+                        Route::put('update', 'update')->name('update');
+                    });
+            });
+
             Route::resource('notes', CustomerEquipmentNoteController::class)
                 ->scoped(['equipment' => 'cust_equip_id'])
                 ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
@@ -326,3 +343,27 @@ Route::middleware('auth.secure')->group(function () {
             ->except(['show']);
     });
 });
+
+// TODO - Properly configure me
+
+/*
+|-------------------------------------------------------------------------------
+| Public Workbook Links
+| /workbook/{workbook-hash}
+|-------------------------------------------------------------------------------
+*/
+Route::prefix('workbook')
+    ->name('cust-workbook.')
+    ->group(function () {
+        // Route::controller(WorkbookValueController::class)->group(function () {
+        //     // Route::get('{workbook:wb_hash}', 'show')->name('show');
+        //     Route::put('{workbook:wb_hash}', 'update')->name('update');
+        // });
+
+        Route::put('{workbook:wb_hash}', WorkbookValueController::class)->name('save-value');
+
+        Route::get('customer-workbook/{wb_hash}', function () {
+            return 'show public workbook';
+        })->name('show');
+
+    });

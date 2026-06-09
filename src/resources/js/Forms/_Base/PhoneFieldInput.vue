@@ -8,6 +8,7 @@ import { Message } from "primevue";
 const emit = defineEmits<{
     focus: [];
     blur: [];
+    change: [];
 }>();
 
 defineProps<{
@@ -57,6 +58,7 @@ const onBlur = (): void => {
                 :name="`${name}.type`"
                 @focus="onFocus"
                 @blur="onBlur"
+                @change="$emit('change')"
             />
             <PhoneNumberInput
                 class="grow mx-1"
@@ -70,6 +72,7 @@ const onBlur = (): void => {
                 :placeholder="placeholder"
                 @focus="onFocus"
                 @blur="onBlur"
+                @change="$emit('change')"
             />
             <TextInput
                 class="basis-28"
@@ -80,6 +83,7 @@ const onBlur = (): void => {
                 :name="`${name}.ext`"
                 @focus="onFocus"
                 @blur="onBlur"
+                @change="$emit('change')"
             />
         </fieldset>
         <Message

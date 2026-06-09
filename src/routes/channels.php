@@ -48,13 +48,13 @@ Broadcast::channel('workbook-canvas.{equipment_type}', function (User $user, str
     return $user->can('manage', EquipmentWorkbook::class);
 });
 
-// Broadcast::channel('equipment-workbook.{wb_hash}', function (string $wb_hash) {
-//     Log::debug(
-//         'User connecting to Workbook Channel for Workbook Hash '.$wb_hash
-//     );
+Broadcast::channel('equipment-workbook.{wb_hash}', function (string $wb_hash) {
+    Log::debug(
+        'User connecting to Workbook Channel for Workbook Hash '.$wb_hash
+    );
 
-//     return true;
-// });
+    return true;
+});
 
 /*
 |------------------------------------------------------------------------------

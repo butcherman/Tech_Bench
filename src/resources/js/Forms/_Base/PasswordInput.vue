@@ -7,6 +7,7 @@ import type { Ref } from "vue";
 const emit = defineEmits<{
     focus: [];
     blur: [];
+    change: [];
 }>();
 
 const props = defineProps<{
@@ -29,7 +30,7 @@ const props = defineProps<{
 const inputPlaceholder = computed<string>(() =>
     props.placeholder && (hasFocus.value || !props.label)
         ? props.placeholder
-        : ""
+        : "",
 );
 
 /*
@@ -86,6 +87,7 @@ const {
                 toggle-mask
                 @focus="onFocus"
                 @blur="onBlur"
+                @change="$emit('change')"
             />
             <label :for="id">{{ label }}</label>
             <Message size="small" severity="error" variant="simple">

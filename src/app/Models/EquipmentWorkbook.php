@@ -19,4 +19,16 @@ class EquipmentWorkbook extends Model
 
     /** @var array<int, string> */
     protected $guarded = ['created_at', 'updated_at'];
+
+    /*
+    |---------------------------------------------------------------------------
+    | Model Casting
+    |---------------------------------------------------------------------------
+    */
+    protected function casts(): array
+    {
+        return [
+            'workbook_data' => 'array',
+        ];
+    }
 }

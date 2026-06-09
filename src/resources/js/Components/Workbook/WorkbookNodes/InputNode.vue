@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, defineAsyncComponent, useAttrs } from "vue";
+import { computed, defineAsyncComponent, inject, useAttrs } from "vue";
 
 const props = defineProps<{
     component: string;
@@ -19,8 +19,28 @@ const nodeType = computed(() => {
         );
     }
 });
+
+/**
+ * Inject save method
+ */
+const saveFieldValue = inject<((index: string) => void) | null>(
+    "saveFieldValue",
+    null,
+);
+
+const saveField = () => {
+    if (saveFieldValue) {
+        saveFieldValue(props.index);
+    }
+};
 </script>
 
 <template>
-    <component :is="nodeType" :id="index" :name="index" v-bind="attrs" />
+    <component
+        v-bind="attrs"
+        :is="nodeType"
+        :id="index"
+        :name="index"
+        @change="saveField"
+    />
 </template>

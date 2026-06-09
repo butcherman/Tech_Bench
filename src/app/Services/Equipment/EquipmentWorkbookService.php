@@ -18,10 +18,10 @@ class EquipmentWorkbookService
         EquipmentWorkbook::firstOrCreate([
             'equip_id' => $equipment_type->equip_id,
         ], [
-            'workbook_data' => json_encode($requestData->get('workbook_data')),
+            'workbook_data' => $requestData->get('workbook_data'),
             'version_hash' => Str::random(5),
         ])->update([
-            'workbook_data' => json_encode($requestData->get('workbook_data')),
+            'workbook_data' => $requestData->get('workbook_data'),
             'version_hash' => Str::random(5),
         ]);
     }
@@ -42,7 +42,7 @@ class EquipmentWorkbookService
             return false;
         }
 
-        return json_decode($workbookData->workbook_data);
+        return $workbookData->workbook_data;
     }
 
     /**
@@ -66,7 +66,7 @@ class EquipmentWorkbookService
                     'type' => 'static',
                     'props' => [
                         'tag' => 'h3',
-                        'text' => $equipment_type->name,
+                        'text' => '[ Equipment Name ]',
                         'class' => 'text-center',
                     ],
                 ],

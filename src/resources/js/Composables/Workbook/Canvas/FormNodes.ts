@@ -71,70 +71,71 @@ export const formNodes: workbookNode[] = [
             },
         },
     },
-    {
-        index: v4(),
-        type: "input",
-        props: {
-            component: "DatePicker",
-            label: "",
-            placeholder: "",
-            help: "",
-        },
-        nodeLabel: {
-            label: "Date Picker Input",
-            help: "Input for selecting a date",
-            buttonIcon: "calendar-days",
-        },
-        nodeHelper: {
-            label: {
-                label: "Label",
-                help: "Label for Input Text",
-                type: "string",
-            },
-            placeholder: {
-                label: "Placeholder",
-                help: "Placeholder text for empty Input",
-                type: "string",
-            },
-            help: {
-                label: "Help Text",
-                help: "Helpful text to show when Input is active",
-                type: "string",
-            },
-        },
-    },
-    {
-        index: v4(),
-        type: "input",
-        props: {
-            component: "PhoneNumberInput",
-            label: "",
-            placeholder: "",
-            help: "",
-        },
-        nodeLabel: {
-            label: "Phone Number Input",
-            help: "Formatted Input for Phone Number",
-            buttonIcon: "phone",
-        },
-        nodeHelper: {
-            label: {
-                label: "Label",
-                help: "Label for Input Text",
-                type: "string",
-            },
-            placeholder: {
-                label: "Placeholder",
-                help: "Placeholder text for empty Input",
-                type: "string",
-            },
-            help: {
-                label: "Help Text",
-                help: "Helpful text to show when Input is active",
-                type: "string",
-            },
-        },
-    },
+    // TODO - Get these two to change live when event changes value
+    // {
+    //     index: v4(),
+    //     type: "input",
+    //     props: {
+    //         component: "DatePicker",
+    //         label: "",
+    //         placeholder: "",
+    //         help: "",
+    //     },
+    //     nodeLabel: {
+    //         label: "Date Picker Input",
+    //         help: "Input for selecting a date",
+    //         buttonIcon: "calendar-days",
+    //     },
+    //     nodeHelper: {
+    //         label: {
+    //             label: "Label",
+    //             help: "Label for Input Text",
+    //             type: "string",
+    //         },
+    //         placeholder: {
+    //             label: "Placeholder",
+    //             help: "Placeholder text for empty Input",
+    //             type: "string",
+    //         },
+    //         help: {
+    //             label: "Help Text",
+    //             help: "Helpful text to show when Input is active",
+    //             type: "string",
+    //         },
+    //     },
+    // },
+    // {
+    //     index: v4(),
+    //     type: "input",
+    //     props: {
+    //         component: "PhoneNumberInput",
+    //         label: "",
+    //         placeholder: "",
+    //         help: "",
+    //     },
+    //     nodeLabel: {
+    //         label: "Phone Number Input",
+    //         help: "Formatted Input for Phone Number",
+    //         buttonIcon: "phone",
+    //     },
+    //     nodeHelper: {
+    //         label: {
+    //             label: "Label",
+    //             help: "Label for Input Text",
+    //             type: "string",
+    //         },
+    //         placeholder: {
+    //             label: "Placeholder",
+    //             help: "Placeholder text for empty Input",
+    //             type: "string",
+    //         },
+    //         help: {
+    //             label: "Help Text",
+    //             help: "Helpful text to show when Input is active",
+    //             type: "string",
+    //         },
+    //     },
+    // },
     {
         index: v4(),
         type: "input",
@@ -199,50 +200,51 @@ export const formNodes: workbookNode[] = [
             },
         },
     },
-    {
-        index: v4(),
-        type: "input",
-        props: {
-            component: "RangeInput",
-            label: "Range Input",
-            valueText: "",
-            min: 0,
-            max: 100,
-            help: "",
-        },
-        nodeLabel: {
-            label: "Range Input",
-            help: "Slider to Pick A Number",
-            buttonIcon: "sliders",
-        },
-        nodeHelper: {
-            label: {
-                label: "Label",
-                help: "Label for Input Text",
-                type: "string",
-            },
-            valueText: {
-                label: "Value Text",
-                help: "Text to show next to the selected value",
-                type: "string",
-            },
-            min: {
-                label: "Minimum Value",
-                help: "Lowest Number in the Range",
-                type: "number",
-            },
-            max: {
-                label: "Maximum Value",
-                help: "Highest Number in the Range",
-                type: "number",
-            },
-            help: {
-                label: "Help Text",
-                help: "Helpful text to show when Input is active",
-                type: "string",
-            },
-        },
-    },
+    // TODO - This triggers too many change events and causes double entries
+    // {
+    //     index: v4(),
+    //     type: "input",
+    //     props: {
+    //         component: "RangeInput",
+    //         label: "Range Input",
+    //         valueText: "",
+    //         min: 0,
+    //         max: 100,
+    //         help: "",
+    //     },
+    //     nodeLabel: {
+    //         label: "Range Input",
+    //         help: "Slider to Pick A Number",
+    //         buttonIcon: "sliders",
+    //     },
+    //     nodeHelper: {
+    //         label: {
+    //             label: "Label",
+    //             help: "Label for Input Text",
+    //             type: "string",
+    //         },
+    //         valueText: {
+    //             label: "Value Text",
+    //             help: "Text to show next to the selected value",
+    //             type: "string",
+    //         },
+    //         min: {
+    //             label: "Minimum Value",
+    //             help: "Lowest Number in the Range",
+    //             type: "number",
+    //         },
+    //         max: {
+    //             label: "Maximum Value",
+    //             help: "Highest Number in the Range",
+    //             type: "number",
+    //         },
+    //         help: {
+    //             label: "Help Text",
+    //             help: "Helpful text to show when Input is active",
+    //             type: "string",
+    //         },
+    //     },
+    // },
     {
         index: v4(),
         type: "input",

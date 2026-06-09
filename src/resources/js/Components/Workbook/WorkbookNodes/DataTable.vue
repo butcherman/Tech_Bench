@@ -1,11 +1,9 @@
 <script setup lang="ts">
 import AddButton from "@/Components/_Base/Buttons/AddButton.vue";
-import BaseButton from "@/Components/_Base/Buttons/BaseButton.vue";
 import DeleteBadge from "@/Components/_Base/Badges/DeleteBadge.vue";
-import okModal from "@/Modules/okModal/index.js";
-import { computed, ref } from "vue";
+import { computed, inject, onMounted, Ref } from "vue";
+import { Field, FieldEntry, useFieldArray } from "vee-validate";
 import { v4 } from "uuid";
-import { isPreviewMode } from "@/Composables/Workbook/CustomerWorkbook.module";
 
 const props = defineProps<{
     allowAddRow: boolean;
@@ -19,7 +17,39 @@ const props = defineProps<{
     numberRows: boolean;
 }>();
 
+const {
+    remove,
+    push,
+    fields,
+}: {
+    remove: (idx: number) => void;
+    push: (col: workbookTableRow) => void;
+    fields: Ref<FieldEntry<workbookTableRow>[], FieldEntry<workbookTableRow>[]>;
+} = useFieldArray(props.index);
 const borderClass = computed(() => !props.hideBorders);
+
+/**
+ * Inject save method
+ */
+const saveTableCell = inject<
+    | ((
+          arrayIndex: number,
+          tableIndex: string,
+          rowIndex: string,
+          columnName: string,
+      ) => void)
+    | null
+>("saveTableCell", null);
+
+const saveCell = (
+    arrayIndex: number,
+    columnName: string,
+    rowIndex: string,
+): void => {
+    if (saveTableCell) {
+        saveTableCell(arrayIndex, props.index, rowIndex, columnName);
+    }
+};
 
 /**
  * Determine what type of input should be displayed
@@ -35,53 +65,23 @@ const getInputType = (column: workbookTableColumn): string => {
     }
 };
 
-/**
- * Add a new row to the table
- */
-const addRow = () => {
-    tableData.value.push({
+// A blank row to add to the table
+const defaultRow = (): workbookTableRow => {
+    console.log("getting default row");
+    let rowData: workbookTableRow = {
         index: v4(),
-    });
+    };
+
+    return rowData;
 };
 
-/**
- * Delete the selected row
- */
-const deleteRow = (rowIndex: number): void => {
-    tableData.value.splice(rowIndex, 1);
-};
-
-/**
- * Build some fake data rows for demo purposes
- * TODO - Build the real data
- */
-const buildTableData = () => {
-    let tableData: workbookTableValue[] = [];
-
-    for (let i: number = 0; i < props.defaultRows; i++) {
-        let dataRow: workbookTableValue = {
-            index: v4(),
-        };
-
-        tableData.push(dataRow);
+onMounted(() => {
+    if (!fields.value.length) {
+        for (let n = 0; n < props.defaultRows; n++) {
+            push(defaultRow());
+        }
     }
-
-    return tableData;
-};
-
-const tableData = ref(buildTableData());
-
-/**
- * Show a pop-up that import or export was clicked
- */
-const importPopUp = (type: "Import" | "Export") => {
-    if (isPreviewMode.value) {
-        okModal(`${type} Process Triggered`);
-        return;
-    }
-
-    alert("put something here...");
-};
+});
 </script>
 
 <template>
@@ -108,37 +108,54 @@ const importPopUp = (type: "Import" | "Export") => {
             </thead>
             <tbody>
                 <tr
-                    v-for="(row, index) in tableData"
+                    v-for="(row, idx) in fields"
+                    :key="row.key"
                     class="border-slate-200"
                     :class="{ border: borderClass }"
-                    :key="row.index"
                 >
                     <td
                         v-if="numberRows"
                         class="border-slate-200 text-center"
                         :class="{ border: borderClass }"
                     >
-                        {{ index + 1 }}
+                        {{ idx + 1 }}
                     </td>
                     <td
                         v-for="col in columns"
                         class="border-slate-200 px-1"
                         :class="{ border: borderClass }"
                     >
-                        <select
-                            v-if="col.type === 'Drop List'"
-                            class="w-full m-0 py-0 px-2"
+                        <Field
+                            v-if="col.type === 'Checkbox'"
+                            class="w-full m-0 px-2"
+                            :name="`${index}[${idx}].${col.name}`"
+                            type="checkbox"
+                            :value="true"
+                            :unchecked-value="false"
+                            @change="saveCell(idx, col.name, row.value.index)"
+                        />
+                        <Field
+                            v-else-if="col.type === 'Drop List'"
+                            as="select"
+                            class="w-full m-0 px-2"
+                            :name="`${index}[${idx}].${col.name}`"
+                            @change="saveCell(idx, col.name, row.value.index)"
                         >
                             <option />
-                            <option v-for="opt in col.list.split(',')">
+                            <option
+                                v-for="opt in col.list"
+                                :key="opt"
+                                :value="opt"
+                            >
                                 {{ opt }}
                             </option>
-                        </select>
-                        <input
+                        </Field>
+                        <Field
                             v-else
-                            :type="getInputType(col)"
                             class="w-full m-0 px-2"
-                            v-model="tableData[index][col.name]"
+                            :name="`${index}[${idx}].${col.name}`"
+                            :type="getInputType(col)"
+                            @change="saveCell(idx, col.name, row.value.index)"
                         />
                     </td>
                     <td v-if="allowDeleteRow" class="text-center">
@@ -146,33 +163,18 @@ const importPopUp = (type: "Import" | "Export") => {
                             icon="circle-xmark"
                             v-tooltip.left="'Delete Row'"
                             confirm
-                            @accepted="deleteRow(index)"
+                            @accepted="remove(idx)"
                         />
                     </td>
                 </tr>
             </tbody>
         </table>
         <div class="flex flex-row-reverse my-2">
-            <AddButton class="mx-1" size="small" pill @click="addRow" />
-            <BaseButton
-                v-if="allowImport"
+            <AddButton
                 class="mx-1"
                 size="small"
-                text="Import"
-                icon="upload"
-                variant="info"
                 pill
-                @click="importPopUp('Import')"
-            />
-            <BaseButton
-                v-if="allowExport"
-                class="mx-1"
-                size="small"
-                text="Export"
-                icon="download"
-                variant="info"
-                pill
-                @click="importPopUp('Export')"
+                @click="push(defaultRow())"
             />
         </div>
     </div>
