@@ -126,32 +126,37 @@ onMounted(() => {
                         :class="{ border: borderClass }"
                     >
                         <Field
+                            v-if="col.type === 'Checkbox'"
+                            class="w-full m-0 px-2"
                             :name="`${index}[${idx}].${col.name}`"
-                            v-slot="{ field }"
+                            type="checkbox"
+                            :value="true"
+                            :unchecked-value="false"
+                            @change="saveCell(idx, col.name, row.value.index)"
+                        />
+                        <Field
+                            v-else-if="col.type === 'Drop List'"
+                            as="select"
+                            class="w-full m-0 px-2"
+                            :name="`${index}[${idx}].${col.name}`"
                             @change="saveCell(idx, col.name, row.value.index)"
                         >
-                            <select
-                                v-if="col.type === 'Drop List'"
-                                class="w-full m-0 py-0 px-2"
-                                v-bind="field"
+                            <option />
+                            <option
+                                v-for="opt in col.list"
+                                :key="opt"
+                                :value="opt"
                             >
-                                <option />
-                                <option
-                                    v-for="opt in col.list"
-                                    :key="opt"
-                                    :value="opt"
-                                >
-                                    {{ opt }}
-                                </option>
-                            </select>
-                            <input
-                                v-else
-                                :type="getInputType(col)"
-                                class="w-full m-0 px-2"
-                                v-bind="field"
-                                :unchecked-value="false"
-                            />
+                                {{ opt }}
+                            </option>
                         </Field>
+                        <Field
+                            v-else
+                            class="w-full m-0 px-2"
+                            :name="`${index}[${idx}].${col.name}`"
+                            :type="getInputType(col)"
+                            @change="saveCell(idx, col.name, row.value.index)"
+                        />
                     </td>
                     <td v-if="allowDeleteRow" class="text-center">
                         <DeleteBadge
