@@ -29,6 +29,21 @@ class CustomerWorkbookService
         ]);
     }
 
+    /**
+     * Replace the workbook skeleton with the newer version
+     */
+    public function updateWorkbook(CustomerEquipment $equip): void
+    {
+        $currentWorkbook = $equip->EquipmentWorkbook;
+        $newWorkbook = $equip->EquipmentType->EquipmentWorkbook;
+
+        $wbData = $this->removeBuilderData($newWorkbook->workbook_data);
+
+        $currentWorkbook->wb_version = $newWorkbook->version_hash;
+        $currentWorkbook->wb_skeleton = $wbData;
+        $currentWorkbook->save();
+    }
+
     /*
     |---------------------------------------------------------------------------
     | Workbook Publishing

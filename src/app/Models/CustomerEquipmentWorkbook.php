@@ -86,6 +86,16 @@ class CustomerEquipmentWorkbook extends Model
         );
     }
 
+    public function upToDate(): Attribute
+    {
+        $equip = CustomerEquipment::where('cust_equip_id', $this->cust_equip_id)
+            ->first();
+
+        return Attribute::make(
+            get: fn () => $this->wb_version === $equip->EquipmentType->EquipmentWorkbook->version_hash,
+        );
+    }
+
     /*
     |---------------------------------------------------------------------------
     | Relationships

@@ -28,7 +28,7 @@ class CustomerEquipmentWorkbookController extends Controller
         return Inertia::render('Customer/Workbook/Index', [
             'customer' => $customer,
             'equipment' => $equipment,
-            'workbook' => $equipment->EquipmentWorkbook,
+            'workbook' => $equipment->EquipmentWorkbook->append('up_to_date'),
             'workbook-values' => Inertia::defer(
                 fn () => $this->svc->getAllWorkbookValues($equipment->EquipmentWorkbook, true),
             ),
@@ -65,10 +65,13 @@ class CustomerEquipmentWorkbookController extends Controller
         return 'edit';
     }
 
-    public function update(Request $request, string $id)
+    public function update(Customer $customer, CustomerEquipment $equipment): RedirectResponse
     {
-        //
-        return 'update';
+        $this->svc->updateWorkbook($equipment);
+
+        return redirect()->route('customers.equipment.workbook.index', [
+            $customer, $equipment,
+        ])->with('success', 'Workbook Updated');
     }
 
     public function destroy(string $id)

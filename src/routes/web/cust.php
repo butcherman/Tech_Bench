@@ -261,7 +261,7 @@ Route::middleware('auth.secure')->group(function () {
 
         /*
         |-----------------------------------------------------------------------
-        | Customer Equipment Routes
+        | Customer Equipment & Workbook Routes
         | /customers/{customer-slug|customer-id}/equipment
         |-----------------------------------------------------------------------
         */
@@ -276,6 +276,7 @@ Route::middleware('auth.secure')->group(function () {
                     ->group(function () {
                         Route::get('index', 'index')->name('index');
                         Route::get('create', 'create')->name('create');
+                        Route::put('update', 'update')->name('update');
                     });
             });
 
