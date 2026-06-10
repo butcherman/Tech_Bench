@@ -6,6 +6,7 @@ import NodeSelector from "@/Components/Workbook/WorkbookEditor/NodeSelector.vue"
 import PublicLayout from "@/Layouts/Public/PublicLayout.vue";
 import { initWorkbook } from "@/Composables/Workbook/WorkbookEditor.module";
 import { onMounted } from "vue";
+import { isPreviewMode } from "@/Composables/Workbook/CustomerWorkbook.module";
 
 const props = defineProps<{
     equipmentType: equipment;
@@ -15,7 +16,10 @@ const props = defineProps<{
 /**
  * Initialize the workbook canvas
  */
-onMounted(() => initWorkbook(props.equipmentType, props.workbookData));
+onMounted(() => {
+    initWorkbook(props.equipmentType, props.workbookData);
+    isPreviewMode.value = true;
+});
 </script>
 
 <script lang="ts">

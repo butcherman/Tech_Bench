@@ -8,7 +8,6 @@ use App\Models\Customer;
 use App\Models\CustomerEquipment;
 use App\Services\Customer\CustomerWorkbookService;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -47,24 +46,6 @@ class CustomerEquipmentWorkbookController extends Controller
         ]);
     }
 
-    public function store(Request $request)
-    {
-        //
-        return 'store';
-    }
-
-    public function show(string $id)
-    {
-        //
-        return 'show';
-    }
-
-    public function edit(string $id)
-    {
-        //
-        return 'edit';
-    }
-
     public function update(Customer $customer, CustomerEquipment $equipment): RedirectResponse
     {
         $this->svc->updateWorkbook($equipment);
@@ -72,23 +53,5 @@ class CustomerEquipmentWorkbookController extends Controller
         return redirect()->route('customers.equipment.workbook.index', [
             $customer, $equipment,
         ])->with('success', 'Workbook Updated');
-    }
-
-    public function destroy(string $id)
-    {
-        //
-        return 'destroy';
-    }
-
-    public function restore(string $id)
-    {
-        //
-        return 'restore';
-    }
-
-    public function forceDelete(string $id)
-    {
-        //
-        return 'force delete';
     }
 }

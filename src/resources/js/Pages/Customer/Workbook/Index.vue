@@ -7,9 +7,12 @@ import Modal from "@/Components/_Base/Modal.vue";
 import PublicLayout from "@/Layouts/Public/PublicLayout.vue";
 import ShowHeader from "@/Components/Workbook/ShowHeader.vue";
 import WorkbookWrapper from "@/Components/Workbook/WorkbookWrapper.vue";
-import { initWorkbook } from "@/Composables/Workbook/CustomerWorkbook.module";
 import { onMounted, useTemplateRef } from "vue";
 import { Deferred, router } from "@inertiajs/vue3";
+import {
+    initWorkbook,
+    isPreviewMode,
+} from "@/Composables/Workbook/CustomerWorkbook.module";
 
 const props = defineProps<{
     customer: customer;
@@ -19,6 +22,7 @@ const props = defineProps<{
 }>();
 
 onMounted(() => {
+    isPreviewMode.value = false;
     initWorkbook(props.workbook);
 });
 
