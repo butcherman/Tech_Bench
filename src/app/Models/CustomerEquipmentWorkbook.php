@@ -116,7 +116,7 @@ class CustomerEquipmentWorkbook extends Model
         return $this->WorkbookValues()->where('public', true);
     }
 
-    public function PublicWorkbookTableValeus(): HasMany
+    public function PublicWorkbookTableValues(): HasMany
     {
         return $this->WorkbookTableValues()->where('public', true);
     }
