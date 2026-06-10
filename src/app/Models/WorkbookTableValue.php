@@ -27,7 +27,7 @@ class WorkbookTableValue extends Model
     {
         return [
             'value' => 'array',
-            'protected' => 'boolean',
+            'public' => 'boolean',
             'created_at' => 'datetime:M d, Y',
             'updated_at' => 'datetime:M d, Y',
         ];
