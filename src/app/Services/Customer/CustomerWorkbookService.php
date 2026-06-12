@@ -7,6 +7,7 @@ use App\Models\CustomerEquipment;
 use App\Models\CustomerEquipmentWorkbook;
 use App\Models\WorkbookTableValue;
 use App\Models\WorkbookValue;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
@@ -73,7 +74,7 @@ class CustomerWorkbookService
     | Workbook Values
     |---------------------------------------------------------------------------
     */
-    public function getAllWorkbookValues(CustomerEquipmentWorkbook $workbook, bool $incPrivate = false)
+    public function getAllWorkbookValues(CustomerEquipmentWorkbook $workbook, bool $incPrivate = false): array
     {
 
         $baseValues = $incPrivate ? $workbook->WorkbookValues : $workbook->PublicWorkbookValues;
@@ -84,27 +85,37 @@ class CustomerWorkbookService
 
         // Group and build the individual tables
         foreach ($tableValues as $tableIndex => $table) {
-
-            // Group and build the individual rows
-            $rows = $table->groupBy('row_index');
-            $newTable = [];
-
-            foreach ($rows as $rowIndex => $rowValue) {
-                $newRow = [];
-                foreach ($rowValue as $value) {
-                    $newRow[$value->column_name] = $value->value;
-                }
-
-                $newRow['index'] = $rowIndex;
-                $newTable[] = $newRow;
-            }
-
-            $baseValues[$tableIndex] = $newTable;
+            $baseValues[$tableIndex] = $this->formatTableValues($table);
         }
 
         return $baseValues;
     }
 
+    /**
+     * Get the values for a specific table and fill in any missing columns
+     */
+    public function getWorkbookTableValues(CustomerEquipmentWorkbook $workbook, string $tableIndex): array
+    {
+        $table = $this->findTableByIndex($workbook->wb_skeleton, $tableIndex);
+        $tableValues = $workbook->WorkbookTableValues->where('table_index', $tableIndex);
+        $formattedValues = $this->formatTableValues($tableValues);
+
+        // Check formatted values for any missing columns
+        foreach ($formattedValues as $index => $row) {
+            // Go through each column and make sure it exists
+            foreach ($table['props']['columns'] as $col) {
+                if (! array_key_exists($col['name'], $row)) {
+                    $formattedValues[$index][$col['name']] = null;
+                }
+            }
+        }
+
+        return $formattedValues;
+    }
+
+    /**
+     * Save a workbook value or workbook table value by index into the database
+     */
     public function saveWorkbookValue(CustomerEquipmentWorkbook $workbook, Collection $requestData): void
     {
         if (! $requestData->get('isTable')) {
@@ -131,6 +142,34 @@ class CustomerWorkbookService
 
     /*
     |---------------------------------------------------------------------------
+    | Table methods
+    |---------------------------------------------------------------------------
+    */
+
+    /**
+     * Find a tables structure based on its index
+     */
+    protected function findTableByIndex(array $workbookSkeleton, string $tableIndex): ?array
+    {
+        if (isset($workbookSkeleton['index']) && $workbookSkeleton['index'] === $tableIndex) {
+            return $workbookSkeleton;
+        }
+
+        foreach ($workbookSkeleton as $value) {
+            if (is_array($value)) {
+                $result = $this->findTableByIndex($value, $tableIndex);
+
+                if ($result !== null) {
+                    return $result;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /*
+    |---------------------------------------------------------------------------
     | Cleanup Functions for Workbooks
     |---------------------------------------------------------------------------
     */
@@ -138,7 +177,7 @@ class CustomerWorkbookService
     /**
      * Remove workbook builder data from customer workbook
      */
-    protected function removeBuilderData(array $workbookSkeleton)
+    protected function removeBuilderData(array $workbookSkeleton): array
     {
         $targetKey = 'nodeHelper';
 
@@ -151,5 +190,28 @@ class CustomerWorkbookService
         }
 
         return $workbookSkeleton;
+    }
+
+    /**
+     * Format table values to be displayed by the UI
+     */
+    protected function formatTableValues(Collection|EloquentCollection $tableRows): array
+    {
+        // Group and build the individual rows
+        $rows = $tableRows->groupBy('row_index');
+        $newTable = [];
+
+        // Cycle through all rows and format to column_name => value
+        foreach ($rows as $rowIndex => $rowValue) {
+            $newRow = [];
+            foreach ($rowValue as $value) {
+                $newRow[$value->column_name] = $value->value;
+            }
+
+            $newRow['index'] = $rowIndex;
+            $newTable[] = $newRow;
+        }
+
+        return $newTable;
     }
 }

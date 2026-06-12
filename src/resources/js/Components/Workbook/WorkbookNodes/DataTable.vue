@@ -1,9 +1,15 @@
 <script setup lang="ts">
 import AddButton from "@/Components/_Base/Buttons/AddButton.vue";
+import BaseButton from "@/Components/_Base/Buttons/BaseButton.vue";
 import DeleteBadge from "@/Components/_Base/Badges/DeleteBadge.vue";
+import okModal from "@/Modules/okModal";
+import { v4 } from "uuid";
 import { computed, inject, onMounted, Ref } from "vue";
 import { Field, FieldEntry, useFieldArray } from "vee-validate";
-import { v4 } from "uuid";
+import {
+    isPreviewMode,
+    wbHash,
+} from "@/Composables/Workbook/CustomerWorkbook.module";
 
 const props = defineProps<{
     allowAddRow: boolean;
@@ -41,12 +47,15 @@ const saveTableCell = inject<
     | null
 >("saveTableCell", null);
 
+/**
+ * Save the value of a table cell in the database
+ */
 const saveCell = (
     arrayIndex: number,
     columnName: string,
     rowIndex: string,
 ): void => {
-    if (saveTableCell) {
+    if (saveTableCell && !isPreviewMode.value) {
         saveTableCell(arrayIndex, props.index, rowIndex, columnName);
     }
 };
@@ -63,6 +72,22 @@ const getInputType = (column: workbookTableColumn): string => {
         default:
             return "text";
     }
+};
+
+/**
+ * Export the data table information
+ */
+const exportTableData = () => {
+    console.log("export data table");
+    if (isPreviewMode.value) {
+        okModal("Export Data Confirmation");
+        return;
+    }
+
+    window.location.href = route("cust-workbook.export", [
+        wbHash.value,
+        props.index,
+    ]);
 };
 
 // A blank row to add to the table
@@ -175,6 +200,14 @@ onMounted(() => {
                 size="small"
                 pill
                 @click="push(defaultRow())"
+            />
+            <BaseButton
+                class="mx-2"
+                text="Export Data"
+                size="small"
+                variant="info"
+                pill
+                @click="exportTableData"
             />
         </div>
     </div>

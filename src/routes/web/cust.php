@@ -21,6 +21,7 @@ use App\Http\Controllers\Customer\DownloadNoteController;
 use App\Http\Controllers\Customer\PublishWorkbookController;
 use App\Http\Controllers\Customer\ReAssignCustomerController;
 use App\Http\Controllers\Customer\ShareVpnDataController;
+use App\Http\Controllers\Customer\WorkbookTableExportController;
 use App\Http\Controllers\Customer\WorkbookValueController;
 use App\Models\Customer;
 use App\Models\CustomerEquipment;
@@ -344,8 +345,6 @@ Route::middleware('auth.secure')->group(function () {
     });
 });
 
-// TODO - Properly configure me
-
 /*
 |-------------------------------------------------------------------------------
 | Public Workbook Links
@@ -355,11 +354,7 @@ Route::middleware('auth.secure')->group(function () {
 Route::prefix('workbook')
     ->name('cust-workbook.')
     ->group(function () {
-        // Route::controller(WorkbookValueController::class)->group(function () {
-        //     // Route::get('{workbook:wb_hash}', 'show')->name('show');
-        //     Route::put('{workbook:wb_hash}', 'update')->name('update');
-        // });
-
+        Route::get('{workbook:wb_hash}/export/{table}', WorkbookTableExportController::class)->name('export');
         Route::put('{workbook:wb_hash}', WorkbookValueController::class)->name('save-value');
 
         Route::get('customer-workbook/{wb_hash}', function () {
