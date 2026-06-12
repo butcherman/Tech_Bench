@@ -56,9 +56,9 @@ const saveCell = (
  */
 const getInputType = (column: workbookTableColumn): string => {
     switch (column.type) {
-        case "Number":
+        case "integer":
             return "number";
-        case "Checkbox":
+        case "boolean":
             return "checkbox";
         default:
             return "text";
@@ -126,7 +126,7 @@ onMounted(() => {
                         :class="{ border: borderClass }"
                     >
                         <Field
-                            v-if="col.type === 'Checkbox'"
+                            v-if="col.type === 'boolean'"
                             class="w-full m-0 px-2"
                             :name="`${index}[${idx}].${col.name}`"
                             type="checkbox"
@@ -135,7 +135,7 @@ onMounted(() => {
                             @change="saveCell(idx, col.name, row.value.index)"
                         />
                         <Field
-                            v-else-if="col.type === 'Drop List'"
+                            v-else-if="col.type === 'enum'"
                             as="select"
                             class="w-full m-0 px-2"
                             :name="`${index}[${idx}].${col.name}`"

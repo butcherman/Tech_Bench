@@ -4,12 +4,9 @@ import BaseButton from "@/Components/_Base/Buttons/BaseButton.vue";
 import SelectInput from "@/Forms/_Base/SelectInput.vue";
 import SwitchInput from "@/Forms/_Base/SwitchInput.vue";
 import TextInput from "@/Forms/_Base/TextInput.vue";
-import { ref } from "vue";
 import { useFieldArray, useForm } from "vee-validate";
 import { object, number, boolean, array, string } from "yup";
 import { closeNodeEditor } from "@/Composables/Workbook/WorkbookEditor.module";
-
-import type { DropdownChangeEvent } from "primevue";
 
 const props = defineProps<{
     node: workbookNode;
@@ -21,11 +18,25 @@ const formData = JSON.parse(JSON.stringify(props.node.props));
 /**
  * Table Column Data
  */
-const tableColumnTypes = ["Text", "Number", "Checkbox", "Drop List"];
-const tableColumns = ref<workbookTableColumn[]>(formData.columns);
-const updateColumnData = (event: DropdownChangeEvent, index: number): void => {
-    tableColumns.value[index].type = event.value;
-};
+// const tableColumnTypes = ["Text", "Number", "Checkbox", "Drop List"];
+const tableColumnTypes: { text: string; value: workbookTableColumnType }[] = [
+    {
+        text: "Text",
+        value: "string",
+    },
+    {
+        text: "Number",
+        value: "integer",
+    },
+    {
+        text: "Checkbox",
+        value: "boolean",
+    },
+    {
+        text: "Drop List",
+        value: "enum",
+    },
+];
 
 /**
  * Add/Remove Columns
@@ -33,15 +44,13 @@ const updateColumnData = (event: DropdownChangeEvent, index: number): void => {
 const addColumn = () => {
     let defaultColumn: workbookTableColumn = {
         name: "New Column",
-        type: "Text",
+        type: "string",
     };
 
-    tableColumns.value.push(defaultColumn);
     push(defaultColumn);
 };
 
 const removeColumn = (index: number): void => {
-    tableColumns.value.splice(index, 1);
     remove(index);
 };
 
@@ -56,7 +65,7 @@ const validationSchema = object({
             name: string().required("The Column Name is Required"),
             type: string().required(),
             list: string().when("type", {
-                is: "Drop List",
+                is: "enum",
                 then: (s) => s.required("List of Options Required"),
                 otherwise: (s) => s.nullable(),
             }),
@@ -86,7 +95,7 @@ const initialValues = {
     number_rows: formData.numberRows,
 };
 
-const { handleSubmit } = useForm({
+const { handleSubmit, values } = useForm({
     validationSchema: validationSchema,
     initialValues: initialValues,
 });
@@ -136,11 +145,12 @@ const saveData = handleSubmit((form) => {
                         :id="`col-name-${field.key}`"
                         :name="`columns[${index}].type`"
                         :list="tableColumnTypes"
-                        @change="updateColumnData($event, index)"
+                        value-field="value"
+                        text-field="text"
                     />
                     <div class="grow">
                         <TextInput
-                            v-if="tableColumns[index].type === 'Drop List'"
+                            v-if="values.columns[index].type === 'enum'"
                             :id="`col-name-${field.key}`"
                             :name="`columns[${index}].list`"
                             label="Dropdown Options (use comma to separate)"

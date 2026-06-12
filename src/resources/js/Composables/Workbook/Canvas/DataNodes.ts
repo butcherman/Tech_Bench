@@ -8,15 +8,15 @@ export const dataNodes: workbookNode[] = [
             columns: [
                 {
                     name: "Col 1",
-                    type: "Text",
+                    type: "string",
                 },
                 {
                     name: "Col 2",
-                    type: "Text",
+                    type: "string",
                 },
                 {
                     name: "Col 3",
-                    type: "Text",
+                    type: "string",
                 },
             ],
             allowAddRow: true,

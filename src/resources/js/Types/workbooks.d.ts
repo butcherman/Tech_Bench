@@ -80,11 +80,11 @@ type workbookNodeProps = {
     [key: string]: any;
 };
 
-type workbookTableColumnTypes = "Text" | "Number" | "Checkbox" | "Drop List";
+type workbookTableColumnType = "string" | "integer" | "boolean" | "enum";
 
 type workbookTableColumn = {
     name: string;
-    type: workbookTableColumnTypes;
+    type: workbookTableColumnType;
     list?: string[] | string;
 };
 
