@@ -97,6 +97,7 @@ class CustomerWorkbookService
     public function getWorkbookTableValues(CustomerEquipmentWorkbook $workbook, string $tableIndex): array
     {
         $table = $this->findTableByIndex($workbook->wb_skeleton, $tableIndex);
+        $headers = $this->getTableHeaders($workbook, $tableIndex);
         $tableValues = $workbook->WorkbookTableValues->where('table_index', $tableIndex);
         $formattedValues = $this->formatTableValues($tableValues);
 
@@ -105,9 +106,16 @@ class CustomerWorkbookService
             // Go through each column and make sure it exists
             foreach ($table['props']['columns'] as $col) {
                 if (! array_key_exists($col['name'], $row)) {
-                    $formattedValues[$index][$col['name']] = null;
+                    $row[$col['name']] = null;
                 }
             }
+
+            // Unset the Index field
+            unset($row['index']);
+
+            // Put the fields in the same order as the table
+            $formattedValues[$index] = array_replace(array_flip($headers), $row);
+
         }
 
         return $formattedValues;
@@ -145,6 +153,21 @@ class CustomerWorkbookService
     | Table methods
     |---------------------------------------------------------------------------
     */
+
+    /**
+     * Get the column names and order from the table
+     */
+    public function getTableHeaders(CustomerEquipmentWorkbook $workbook, string $tableIndex): array
+    {
+        $table = $this->findTableByIndex($workbook->wb_skeleton, $tableIndex);
+        $headers = [];
+
+        foreach ($table['props']['columns'] as $col) {
+            $headers[] = $col['name'];
+        }
+
+        return $headers;
+    }
 
     /**
      * Find a tables structure based on its index
