@@ -37,14 +37,11 @@ export const saveWorkbookValue = (saveData: workbookSaveData): void => {
         return;
     }
 
-    console.log(saveData);
-
     dataPut(
         route("cust-workbook.save-value", [wbHash.value]),
         saveData,
         false,
     ).catch((err) => {
-        console.log(err);
         hasError.value = true;
 
         let message =

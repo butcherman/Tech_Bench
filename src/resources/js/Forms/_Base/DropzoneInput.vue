@@ -20,19 +20,19 @@ const emit = defineEmits<{
             file?: DropzoneFile;
             status: number | undefined;
             message: laravelValidationErrors;
-        }
+        },
     ];
     fileAdded: [DropzoneFile];
     fileRemoved: [DropzoneFile];
     maxFilesReached: [];
     maxFilesExceeded: [];
     sending: [DropzoneFile, XMLHttpRequest, FormData];
-    success: [string | null];
+    success: [any | null];
     totalUploadProgress: [
-        { progress: number; totalBytes: number; bytesSent: number }
+        { progress: number; totalBytes: number; bytesSent: number },
     ];
     uploadProgress: [
-        { file: DropzoneFile; progress: number; bytesSent: number }
+        { file: DropzoneFile; progress: number; bytesSent: number },
     ];
 }>();
 
@@ -67,7 +67,7 @@ const completeMessage = ref<string | null>(null);
 const hasFile = ref<boolean>(false);
 
 const acceptedFiles = computed<string | undefined>(() =>
-    props.acceptedFiles ? props.acceptedFiles.join(", ") : undefined
+    props.acceptedFiles ? props.acceptedFiles.join(", ") : undefined,
 );
 
 /*
@@ -157,7 +157,7 @@ const buildEventListeners = (): void => {
             }
 
             emit("sending", file, xhr, formData);
-        }
+        },
     );
 
     // Bubble Upload Progress
@@ -165,7 +165,7 @@ const buildEventListeners = (): void => {
         "uploadprogress",
         (file: DropzoneFile, progress: number, bytesSent: number): void => {
             emit("uploadProgress", { file, progress, bytesSent });
-        }
+        },
     );
 
     // Bubble Total Upload Progress
@@ -173,7 +173,7 @@ const buildEventListeners = (): void => {
         "totaluploadprogress",
         (progress: number, totalBytes: number, bytesSent: number): void => {
             emit("totalUploadProgress", { progress, totalBytes, bytesSent });
-        }
+        },
     );
 
     // Bubble any Errors that occur with Dropzone
@@ -181,14 +181,14 @@ const buildEventListeners = (): void => {
         "error",
         (
             file: DropzoneFile,
-            message: laravelValidationErrors | string
+            message: laravelValidationErrors | string,
         ): void => {
             if (typeof message === "string") {
                 errMessage.value = message;
             } else {
                 emit("error", { file, status: file.xhr?.status, message });
             }
-        }
+        },
     );
 
     // When a file completes its upload, we will store the latest response

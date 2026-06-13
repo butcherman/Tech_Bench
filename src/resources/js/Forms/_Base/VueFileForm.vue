@@ -24,7 +24,7 @@ interface dropzoneError {
 
 const emit = defineEmits<{
     submitting: [formData];
-    success: [];
+    success: [any | null];
     hasErrors: dropzoneError[];
     canceled: [];
     fileAdded: [DropzoneFile];
@@ -41,7 +41,7 @@ const props = defineProps<{
     submitText?: string;
     fileRequired?: boolean;
     maxFiles?: number;
-    acceptedFiles?: [string];
+    acceptedFiles?: string[];
     hideFileInput?: boolean;
     uploadMessage?: string;
 }>();
@@ -238,7 +238,7 @@ defineExpose({
                         @error="handleErrors"
                         @file-added="$emit('fileAdded', $event)"
                         @file-removed="$emit('fileRemoved', $event)"
-                        @success="$emit('success')"
+                        @success="$emit('success', $event)"
                         @total-upload-progress="onTotalUploadProgress"
                     />
                 </Collapse>

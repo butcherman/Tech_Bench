@@ -81,8 +81,6 @@ const saveTableCell = (
         isTable: true,
     };
 
-    console.log(saveData.value);
-
     saveWorkbookValue(saveData);
 };
 
@@ -95,7 +93,6 @@ onMounted(() => {
      */
     Echo.channel(`equipment-workbook.${wbHash.value}`)
         .listen(".WorkbookValueUpdated", (valData: workbookValueEvent) => {
-            console.log(valData);
             setFieldValue(valData.model.index, valData.model.value);
         })
         .listen(

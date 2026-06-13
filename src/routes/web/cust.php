@@ -21,7 +21,9 @@ use App\Http\Controllers\Customer\DownloadNoteController;
 use App\Http\Controllers\Customer\PublishWorkbookController;
 use App\Http\Controllers\Customer\ReAssignCustomerController;
 use App\Http\Controllers\Customer\ShareVpnDataController;
+use App\Http\Controllers\Customer\WorkbookTableEmptyController;
 use App\Http\Controllers\Customer\WorkbookTableExportController;
+use App\Http\Controllers\Customer\WorkbookTableImportController;
 use App\Http\Controllers\Customer\WorkbookValueController;
 use App\Models\Customer;
 use App\Models\CustomerEquipment;
@@ -354,7 +356,9 @@ Route::middleware('auth.secure')->group(function () {
 Route::prefix('workbook')
     ->name('cust-workbook.')
     ->group(function () {
+        Route::post('{workbook:wb_hash}/impot/{table}', WorkbookTableImportController::class)->name('import');
         Route::get('{workbook:wb_hash}/export/{table}', WorkbookTableExportController::class)->name('export');
+        // Route::delete('wipe-table/{table}', WorkbookTableEmptyController::class)->name('wipe');
         Route::put('{workbook:wb_hash}', WorkbookValueController::class)->name('save-value');
 
         Route::get('customer-workbook/{wb_hash}', function () {

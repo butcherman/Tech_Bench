@@ -2,6 +2,7 @@
 import AddButton from "@/Components/_Base/Buttons/AddButton.vue";
 import BaseButton from "@/Components/_Base/Buttons/BaseButton.vue";
 import DeleteBadge from "@/Components/_Base/Badges/DeleteBadge.vue";
+import ImportWorkbookData from "../ImportWorkbookData.vue";
 import okModal from "@/Modules/okModal";
 import { v4 } from "uuid";
 import { computed, inject, onMounted, Ref } from "vue";
@@ -78,7 +79,6 @@ const getInputType = (column: workbookTableColumn): string => {
  * Export the data table information
  */
 const exportTableData = () => {
-    console.log("export data table");
     if (isPreviewMode.value) {
         okModal("Export Data Confirmation");
         return;
@@ -92,7 +92,6 @@ const exportTableData = () => {
 
 // A blank row to add to the table
 const defaultRow = (): workbookTableRow => {
-    console.log("getting default row");
     let rowData: workbookTableRow = {
         index: v4(),
     };
@@ -202,12 +201,18 @@ onMounted(() => {
                 @click="push(defaultRow())"
             />
             <BaseButton
+                v-if="allowExport"
                 class="mx-2"
                 text="Export Data"
                 size="small"
                 variant="info"
                 pill
                 @click="exportTableData"
+            />
+            <ImportWorkbookData
+                v-if="allowImport"
+                :table-index="index"
+                @push-row="push($event)"
             />
         </div>
     </div>

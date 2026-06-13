@@ -170,6 +170,16 @@ class CustomerWorkbookService
     }
 
     /**
+     * Get the column names and data types from the table
+     */
+    public function getTableHeaderData(CustomerEquipmentWorkbook $workbook, string $tableIndex): array
+    {
+        $table = $this->findTableByIndex($workbook->wb_skeleton, $tableIndex);
+
+        return $table['props']['columns'];
+    }
+
+    /**
      * Find a tables structure based on its index
      */
     protected function findTableByIndex(array $workbookSkeleton, string $tableIndex): ?array
