@@ -155,6 +155,17 @@ class CustomerWorkbookService
     */
 
     /**
+     * Delete a single row from the database
+     */
+    public function deleteTableRow(CustomerEquipmentWorkbook $workbook, string $tableIndex, string $rowIndex): void
+    {
+        $rowData = WorkbookTableValue::where('wb_id', $workbook->wb_id)
+            ->where('table_index', $tableIndex)
+            ->where('row_index', $rowIndex)
+            ->delete();
+    }
+
+    /**
      * Get the column names and order from the table
      */
     public function getTableHeaders(CustomerEquipmentWorkbook $workbook, string $tableIndex): array

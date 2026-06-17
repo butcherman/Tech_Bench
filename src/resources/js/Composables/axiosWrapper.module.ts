@@ -79,6 +79,18 @@ export async function dataPut(
         .finally(() => (isLoading.value = false));
 }
 
+export async function dataDelete(
+    url: string,
+): Promise<void | AxiosResponse<any, any>> {
+    isLoading.value = true;
+
+    return await axios
+        .delete(url)
+        .then((res) => res)
+        .catch((err) => handleAxiosError(err))
+        .finally(() => (isLoading.value = false));
+}
+
 export function handleAxiosError(errorData: errorMessage) {
     let errMessage: string;
 

@@ -5,6 +5,7 @@ import DeleteBadge from "@/Components/_Base/Badges/DeleteBadge.vue";
 import okModal from "@/Modules/okModal";
 import { v4 } from "uuid";
 import { computed, inject, onMounted, Ref } from "vue";
+import { dataDelete } from "@/Composables/axiosWrapper.module";
 import { Field, FieldEntry, useFieldArray } from "vee-validate";
 import {
     isPreviewMode,
@@ -32,7 +33,8 @@ const {
     push: (col: workbookTableRow) => void;
     fields: Ref<FieldEntry<workbookTableRow>[], FieldEntry<workbookTableRow>[]>;
 } = useFieldArray(props.index);
-const borderClass = computed(() => !props.hideBorders);
+
+const borderClass = computed<boolean>(() => !props.hideBorders);
 
 /**
  * Inject save method
@@ -61,6 +63,26 @@ const saveCell = (
 };
 
 /**
+ * Delete a row from the database and UI
+ */
+const deleteRow = (row: workbookTableRow, index: number) => {
+    console.log(row, index);
+
+    dataDelete(
+        route("cust-workbook.del-row", [
+            wbHash.value,
+            props.index,
+            row.value.index,
+        ]),
+    ).then((res) => {
+        if (res) {
+            console.log(res);
+            remove(index);
+        }
+    });
+};
+
+/**
  * Determine what type of input should be displayed
  */
 const getInputType = (column: workbookTableColumn): string => {
@@ -77,7 +99,7 @@ const getInputType = (column: workbookTableColumn): string => {
 /**
  * Export the data table information
  */
-const exportTableData = () => {
+const exportTableData = (): void => {
     console.log("export data table");
     if (isPreviewMode.value) {
         okModal("Export Data Confirmation");
@@ -188,7 +210,7 @@ onMounted(() => {
                             icon="circle-xmark"
                             v-tooltip.left="'Delete Row'"
                             confirm
-                            @accepted="remove(idx)"
+                            @accepted="deleteRow(row, idx)"
                         />
                     </td>
                 </tr>

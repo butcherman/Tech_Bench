@@ -21,6 +21,7 @@ use App\Http\Controllers\Customer\DownloadNoteController;
 use App\Http\Controllers\Customer\PublishWorkbookController;
 use App\Http\Controllers\Customer\ReAssignCustomerController;
 use App\Http\Controllers\Customer\ShareVpnDataController;
+use App\Http\Controllers\Customer\WorkbookTableDeleteRowController;
 use App\Http\Controllers\Customer\WorkbookTableExportController;
 use App\Http\Controllers\Customer\WorkbookValueController;
 use App\Models\Customer;
@@ -356,6 +357,7 @@ Route::prefix('workbook')
     ->group(function () {
         Route::get('{workbook:wb_hash}/export/{table}', WorkbookTableExportController::class)->name('export');
         Route::put('{workbook:wb_hash}', WorkbookValueController::class)->name('save-value');
+        Route::delete('{workbook:wb_hash}/del-row/{table}/{row}', WorkbookTableDeleteRowController::class)->name('del-row');
 
         Route::get('customer-workbook/{wb_hash}', function () {
             return 'show public workbook';
