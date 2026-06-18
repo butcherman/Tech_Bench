@@ -35,6 +35,20 @@ const {
 } = useFieldArray(props.index);
 
 const borderClass = computed<boolean>(() => !props.hideBorders);
+const tableIsEmpty = computed<boolean>(() => {
+    let empty = true;
+
+    fields.value.forEach((row) => {
+        let cols = Object.entries(row.value);
+        cols.forEach(([index, val]) => {
+            if (index !== "index" && val) {
+                empty = false;
+            }
+        });
+    });
+
+    return empty;
+});
 
 /**
  * Inject save method
@@ -65,7 +79,7 @@ const saveCell = (
 /**
  * Delete a row from the database and UI
  */
-const deleteRow = (row: workbookTableRow, index: number) => {
+const deleteRow = (row: workbookTableRow, index: number): void => {
     console.log(row, index);
 
     dataDelete(
@@ -76,7 +90,7 @@ const deleteRow = (row: workbookTableRow, index: number) => {
         ]),
     ).then((res) => {
         if (res) {
-            console.log(res);
+            // console.log(res);
             remove(index);
         }
     });
@@ -114,7 +128,6 @@ const exportTableData = (): void => {
 
 // A blank row to add to the table
 const defaultRow = (): workbookTableRow => {
-    console.log("getting default row");
     let rowData: workbookTableRow = {
         index: v4(),
     };
