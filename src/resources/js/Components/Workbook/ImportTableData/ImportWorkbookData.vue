@@ -3,6 +3,7 @@ import AtomLoader from "@/Components/_Base/Loaders/AtomLoader.vue";
 import BaseButton from "@/Components/_Base/Buttons/BaseButton.vue";
 import ImportTableDataForm from "@/Forms/Workbook/ImportTableDataForm.vue";
 import Modal from "@/Components/_Base/Modal.vue";
+import okModal from "@/Modules/okModal/index.js";
 import ValidationResults from "./ValidationResults.vue";
 import { wbHash } from "@/Composables/Workbook/CustomerWorkbook.module";
 import { computed, onMounted, ref, useTemplateRef } from "vue";
@@ -101,15 +102,17 @@ const importData = (): void => {
     dataPut(
         route("cust-workbook.import.update", [wbHash.value, props.tableIndex]),
         {},
-    ).then((res) => console.log(res));
+    ).then((res) => {
+        if (res && !res.data.success) {
+            okModal("Error, Unable to import file.  Please try again later");
+        }
+    });
 };
 
 /**
  * Import and replace the existing table data
  */
 const replaceData = (): void => {
-    console.log("replace");
-
     dataDelete(
         route("cust-workbook.import.destroy", [wbHash.value, props.tableIndex]),
     ).then((res) => {
@@ -141,7 +144,6 @@ onMounted(() => {
         .listen(
             ".WorkbookTableImportValidationEvent",
             (event: { tableIndex: string }) => {
-                console.log(event);
                 if (event.tableIndex) {
                     getValidationResults();
                 }
@@ -154,7 +156,6 @@ onMounted(() => {
                 tableIndex: string;
                 totalChunks: number;
             }) => {
-                console.log(event);
                 importedChunks.value++;
 
                 if (importedChunks.value === event.totalChunks) {
