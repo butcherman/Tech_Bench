@@ -96,7 +96,7 @@ class FileLinkFileTest extends TestCase
         ]);
 
         Storage::disk('fileLinks')
-            ->assertExists($link->link_id . DIRECTORY_SEPARATOR . $upload->hashName());
+            ->assertExists($link->link_id.DIRECTORY_SEPARATOR.$upload->hashName());
     }
 
     /*
@@ -248,7 +248,7 @@ class FileLinkFileTest extends TestCase
 
         Storage::disk('fileLinks')
             ->put(
-                $file->folder . DIRECTORY_SEPARATOR . $file->hash_name,
+                $file->folder.DIRECTORY_SEPARATOR.$file->hash_name,
                 'Test file contents'
             );
 
@@ -298,10 +298,10 @@ class FileLinkFileTest extends TestCase
         ]);
 
         Storage::disk('fileLinks')
-            ->assertMissing($file->folder . DIRECTORY_SEPARATOR . $file->hash_name);
+            ->assertMissing($file->folder.DIRECTORY_SEPARATOR.$file->hash_name);
 
         Storage::disk('customers')
-            ->assertExists($customer->cust_id . DIRECTORY_SEPARATOR . $file->hash_name);
+            ->assertExists($customer->cust_id.DIRECTORY_SEPARATOR.$file->hash_name);
     }
 
     /*

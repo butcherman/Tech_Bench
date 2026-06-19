@@ -17,13 +17,13 @@ class DownloadNoteController extends Controller
      */
     public function __invoke(Request $request, Customer $customer, CustomerNote $note): Response
     {
-        Log::info('Customer Note ID ' . $note->note_id . ' downloaded by ' .
+        Log::info('Customer Note ID '.$note->note_id.' downloaded by '.
             $request->user()->username);
 
         // Change all image tags to note the file location for the PDF to find
         $note->details = str_replace(
             'src="/storage/images',
-            'src="' . storage_path() .
+            'src="'.storage_path().
             '/app/public/images',
             $note->details
         );

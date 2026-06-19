@@ -30,7 +30,7 @@ class FileStorageService
             $newInfo['basename']
         );
 
-        $properPath = $newInfo['dirname'] . DIRECTORY_SEPARATOR . $fileName;
+        $properPath = $newInfo['dirname'].DIRECTORY_SEPARATOR.$fileName;
 
         if ($newDisk) {
             $currentFullPath = Storage::disk($disk)->path($currentPath);
@@ -62,7 +62,7 @@ class FileStorageService
     protected function checkForDiskFile(string $disk, string $path): void
     {
         if (Storage::disk($disk)->missing($path)) {
-            throw new FileMissingException($disk . DIRECTORY_SEPARATOR . $path);
+            throw new FileMissingException($disk.DIRECTORY_SEPARATOR.$path);
         }
     }
 }

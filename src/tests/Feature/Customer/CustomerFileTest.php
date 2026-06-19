@@ -137,7 +137,7 @@ class CustomerFileTest extends TestCase
 
         Storage::disk('customers')
             ->assertExists(
-                $customer->cust_id . DIRECTORY_SEPARATOR . $uploaded->hashName()
+                $customer->cust_id.DIRECTORY_SEPARATOR.$uploaded->hashName()
             );
     }
 
@@ -181,7 +181,7 @@ class CustomerFileTest extends TestCase
 
         Storage::disk('customers')
             ->assertExists(
-                $customer->cust_id . DIRECTORY_SEPARATOR . $uploaded->hashName()
+                $customer->cust_id.DIRECTORY_SEPARATOR.$uploaded->hashName()
             );
     }
 
@@ -235,7 +235,7 @@ class CustomerFileTest extends TestCase
         ]);
 
         Storage::disk('customers')
-            ->assertExists($customer->cust_id . DIRECTORY_SEPARATOR . $uploaded->hashName());
+            ->assertExists($customer->cust_id.DIRECTORY_SEPARATOR.$uploaded->hashName());
     }
 
     public function test_store_chunked_file(): void

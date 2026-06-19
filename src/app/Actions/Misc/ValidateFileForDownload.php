@@ -39,7 +39,7 @@ class ValidateFileForDownload
 
         throw_if(
             $fileData->file_name !== $providedName,
-            fn() => new IncorrectFilenameException($providedName, $fileData)
+            fn () => new IncorrectFilenameException($providedName, $fileData)
         );
 
         Log::debug('Verified File Name - true');
@@ -51,8 +51,8 @@ class ValidateFileForDownload
     protected function verifyPublicDownload(FileUpload $fileData, ?User $user = null): void
     {
         throw_if(
-            is_null($user) && !$fileData->public,
-            fn() => new PrivateFileException($fileData)
+            is_null($user) && ! $fileData->public,
+            fn () => new PrivateFileException($fileData)
         );
 
         Log::debug('Verified Public Download - true');
@@ -63,7 +63,7 @@ class ValidateFileForDownload
      */
     protected function verifyFileExists(FileUpload $fileData): void
     {
-        throw_if(!$fileData->fileExists(), fn() => new FileMissingException($fileData));
+        throw_if(! $fileData->fileExists(), fn () => new FileMissingException($fileData));
 
         Log::debug('Verified file exists - true');
     }
