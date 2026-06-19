@@ -5,8 +5,12 @@ import ImportTableDataForm from "@/Forms/Workbook/ImportTableDataForm.vue";
 import Modal from "@/Components/_Base/Modal.vue";
 import ValidationResults from "./ValidationResults.vue";
 import { wbHash } from "@/Composables/Workbook/CustomerWorkbook.module";
-import { dataGet, dataPut } from "@/Composables/axiosWrapper.module";
 import { computed, onMounted, ref, useTemplateRef } from "vue";
+import {
+    dataDelete,
+    dataGet,
+    dataPut,
+} from "@/Composables/axiosWrapper.module";
 import type { AxiosResponse } from "axios";
 
 const emit = defineEmits<{
@@ -15,6 +19,7 @@ const emit = defineEmits<{
 
 const props = defineProps<{
     tableIndex: string;
+    tableEmpty: boolean;
 }>();
 
 const importModal = useTemplateRef("import-data-modal");
@@ -58,8 +63,6 @@ const startImport = (): void => {
  * Show the loader and trigger the validation process
  */
 const validateImport = (): void => {
-    console.log("validate");
-
     showUploadForm.value = false;
     loadingMessage.value = "Validating File";
     isLoading.value = true;
@@ -69,8 +72,6 @@ const validateImport = (): void => {
  * Get the results of the validation
  */
 const getValidationResults = (): void => {
-    console.log("get results");
-
     dataGet(
         route("cust-workbook.import.show", [wbHash.value, props.tableIndex]),
     ).then(
@@ -80,7 +81,6 @@ const getValidationResults = (): void => {
                 workbookValidationData[]
             >,
         ) => {
-            console.log(res);
             if (res) {
                 validatedResults.value = res.data;
                 isLoading.value = false;
@@ -94,8 +94,6 @@ const getValidationResults = (): void => {
  * Trigger the import process
  */
 const importData = (): void => {
-    console.log("import data");
-
     loadingMessage.value = "Importing Data - Please Wait";
     showValidationResults.value = false;
     isLoading.value = true;
@@ -107,10 +105,25 @@ const importData = (): void => {
 };
 
 /**
+ * Import and replace the existing table data
+ */
+const replaceData = (): void => {
+    console.log("replace");
+
+    dataDelete(
+        route("cust-workbook.import.destroy", [wbHash.value, props.tableIndex]),
+    ).then((res) => {
+        if (res && res.data.success) {
+            importData();
+        }
+    });
+};
+
+/**
  * Cancel the import and validation process
  */
 const cancelImport = (): void => {
-    console.log("cancel Import");
+    importModal.value?.hide();
 };
 
 /**
@@ -181,14 +194,20 @@ onMounted(() => {
                         text="Append Current Data"
                         @click="importData"
                     />
+                    <BaseButton
+                        v-if="!tableEmpty"
+                        text="Replace Current Data"
+                        variant="warning"
+                        @click="replaceData"
+                    />
                 </div>
-                <!-- <div class="flex justify-center my-2">
+                <div class="flex justify-center my-2">
                     <BaseButton
                         text="Cancel"
                         variant="danger"
                         @click="cancelImport"
                     />
-                </div> -->
+                </div>
             </div>
         </Modal>
     </div>

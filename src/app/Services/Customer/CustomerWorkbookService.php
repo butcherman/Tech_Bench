@@ -218,6 +218,16 @@ class CustomerWorkbookService
     }
 
     /**
+     * Delete all of the data in a table
+     */
+    public function deleteTableData(CustomerEquipmentWorkbook $workbook, string $tableIndex): void
+    {
+        WorkbookTableValue::where('wb_id', $workbook->wb_id)
+            ->where('table_index', $tableIndex)
+            ->delete();
+    }
+
+    /**
      * Get the column names and order from the table
      */
     public function getTableHeaders(CustomerEquipmentWorkbook $workbook, string $tableIndex): array

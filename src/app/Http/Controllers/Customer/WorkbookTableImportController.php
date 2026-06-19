@@ -23,7 +23,8 @@ class WorkbookTableImportController extends FileUploadController
      */
     public function index(CustomerEquipmentWorkbook $workbook, string $tableIndex): JsonResponse
     {
-        $values = $this->svc->getWorkbookTableValues($workbook, $tableIndex, true);
+        $values = $this->svc
+            ->getWorkbookTableValues($workbook, $tableIndex, true);
 
         return response()->json($values);
     }
@@ -107,9 +108,10 @@ class WorkbookTableImportController extends FileUploadController
         return response()->json(['success' => true]);
     }
 
-    public function destroy(string $id)
+    public function destroy(CustomerEquipmentWorkbook $workbook, string $tableIndex): JsonResponse
     {
-        //
-        return 'destroy';
+        $this->svc->deleteTableData($workbook, $tableIndex);
+
+        return response()->json(['success' => true]);
     }
 }

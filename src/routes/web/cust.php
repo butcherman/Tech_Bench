@@ -377,6 +377,7 @@ Route::prefix('workbook')
                 Route::get('/get-results', 'show')->name('show');
                 Route::post('/save', 'store')->name('store');
                 Route::put('/import-data', 'update')->name('update');
+                Route::delete('/delete-data', 'destroy')->name('destroy');
             });
 
         Route::get('customer-workbook/{wb_hash}', function () {

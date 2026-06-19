@@ -134,7 +134,6 @@ const refreshTableData = () => {
         route("cust-workbook.import.index", [wbHash.value, props.index]),
     ).then(
         (res: AxiosResponse<workbookTableRow[], workbookTableRow[]> | void) => {
-            console.log(res);
             if (res) {
                 replace(res.data);
             }
@@ -157,8 +156,6 @@ onMounted(() => {
             push(defaultRow());
         }
     }
-
-    console.log(fields.value);
 });
 </script>
 
@@ -264,6 +261,7 @@ onMounted(() => {
             />
             <ImportWorkbookData
                 :table-index="index"
+                :table-empty="tableIsEmpty"
                 @import-success="refreshTableData"
             />
         </div>
