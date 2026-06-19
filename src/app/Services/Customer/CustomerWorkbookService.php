@@ -101,8 +101,11 @@ class CustomerWorkbookService
     /**
      * Get the values for a specific table and fill in any missing columns
      */
-    public function getWorkbookTableValues(CustomerEquipmentWorkbook $workbook, string $tableIndex): array
-    {
+    public function getWorkbookTableValues(
+        CustomerEquipmentWorkbook $workbook,
+        string $tableIndex,
+        bool $includeIndex = false
+    ): array {
         $table = $this->findTableByIndex($workbook->wb_skeleton, $tableIndex);
         $headers = $this->getTableHeaders($workbook, $tableIndex);
         $tableValues = $workbook->WorkbookTableValues
@@ -119,7 +122,9 @@ class CustomerWorkbookService
             }
 
             // Unset the Index field
-            unset($row['index']);
+            if (! $includeIndex) {
+                unset($row['index']);
+            }
 
             // Put the fields in the same order as the table
             $formattedValues[$index] = array_replace(array_flip($headers), $row);
@@ -174,22 +179,26 @@ class CustomerWorkbookService
             return false;
         }
 
-        // Import each row and column individually
+        // Cycle through each row
         foreach ($validatedResults as $row) {
             $rowIndex = Str::uuid();
 
+            // Cycle through each column in the row
             foreach ($row as $name => $col) {
-                $colData = WorkbookTableValue::createQuietly([
-                    'wb_id' => $workbook->wb_id,
-                    'table_index' => $tableIndex,
-                    'row_index' => $rowIndex,
-                    'column_name' => $name,
-                    'value' => $col['value'],
-                    // TODO - Get proper public setting
-                    'public' => false,
-                ]);
+                // If there is a value, save it
+                if ($col['value'] !== null && $col['value'] !== '') {
+                    $colData = WorkbookTableValue::createQuietly([
+                        'wb_id' => $workbook->wb_id,
+                        'table_index' => $tableIndex,
+                        'row_index' => $rowIndex,
+                        'column_name' => $name,
+                        'value' => $col['value'],
+                        // TODO - Get proper public setting
+                        'public' => false,
+                    ]);
 
-                Log::debug('Workbook Table Column Imported', $colData->toArray());
+                    Log::debug('Workbook Table Column Imported', $colData->toArray());
+                }
             }
         }
 

@@ -8,6 +8,7 @@ use App\Http\Requests\Customer\WorkbookTableImportRequest;
 use App\Jobs\Customer\ValidateWorkbookImportJob;
 use App\Jobs\Customer\WorkbookImportTableDataJob;
 use App\Models\CustomerEquipmentWorkbook;
+use App\Services\Customer\CustomerWorkbookService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cache;
@@ -15,16 +16,16 @@ use Illuminate\Support\Facades\Log;
 
 class WorkbookTableImportController extends FileUploadController
 {
-    public function index()
-    {
-        //
-        return 'index';
-    }
+    public function __construct(protected CustomerWorkbookService $svc) {}
 
-    public function create()
+    /**
+     * Get the values of a specific table
+     */
+    public function index(CustomerEquipmentWorkbook $workbook, string $tableIndex): JsonResponse
     {
-        //
-        return 'create';
+        $values = $this->svc->getWorkbookTableValues($workbook, $tableIndex, true);
+
+        return response()->json($values);
     }
 
     /**
@@ -55,6 +56,9 @@ class WorkbookTableImportController extends FileUploadController
         return response()->noContent();
     }
 
+    /**
+     * Get the Validated results of an upload
+     */
     public function show(CustomerEquipmentWorkbook $workbook, string $tableIndex): JsonResponse
     {
         $validated = Cache::get($workbook->wb_hash.$tableIndex);
@@ -62,12 +66,9 @@ class WorkbookTableImportController extends FileUploadController
         return response()->json($validated);
     }
 
-    public function edit(string $id)
-    {
-        //
-        return 'edit';
-    }
-
+    /**
+     * Import the validated file into the database
+     */
     public function update(CustomerEquipmentWorkbook $workbook, string $tableIndex): JsonResponse
     {
         $validated = collect(Cache::pull($workbook->wb_hash.$tableIndex));
@@ -110,17 +111,5 @@ class WorkbookTableImportController extends FileUploadController
     {
         //
         return 'destroy';
-    }
-
-    public function restore(string $id)
-    {
-        //
-        return 'restore';
-    }
-
-    public function forceDelete(string $id)
-    {
-        //
-        return 'force delete';
     }
 }

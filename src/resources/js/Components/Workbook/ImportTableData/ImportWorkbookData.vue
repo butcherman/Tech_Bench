@@ -9,12 +9,17 @@ import { dataGet, dataPut } from "@/Composables/axiosWrapper.module";
 import { computed, onMounted, ref, useTemplateRef } from "vue";
 import type { AxiosResponse } from "axios";
 
+const emit = defineEmits<{
+    importSuccess: [];
+}>();
+
 const props = defineProps<{
     tableIndex: string;
 }>();
 
 const importModal = useTemplateRef("import-data-modal");
 
+const importedChunks = ref<number>(0);
 const loadingMessage = ref<string>();
 const isLoading = ref<boolean>(false);
 const showUploadForm = ref<boolean>(false);
@@ -112,6 +117,7 @@ const cancelImport = (): void => {
  * Reset import data to be used again
  */
 const cleanUp = () => {
+    importedChunks.value = 0;
     isLoading.value = false;
     showUploadForm.value = false;
     validatedResults.value = undefined;
@@ -128,7 +134,22 @@ onMounted(() => {
                 }
             },
         )
-        .listenToAll((event) => console.log(event));
+        .listen(
+            ".WorkbookTableImportCompletedEvent",
+            (event: {
+                chunkNum: number;
+                tableIndex: string;
+                totalChunks: number;
+            }) => {
+                console.log(event);
+                importedChunks.value++;
+
+                if (importedChunks.value === event.totalChunks) {
+                    importModal.value?.hide();
+                    emit("importSuccess");
+                }
+            },
+        );
 });
 </script>
 

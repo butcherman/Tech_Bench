@@ -6,12 +6,13 @@ import ImportWorkbookData from "../ImportTableData/ImportWorkbookData.vue";
 import okModal from "@/Modules/okModal";
 import { v4 } from "uuid";
 import { computed, inject, onMounted, Ref } from "vue";
-import { dataDelete } from "@/Composables/axiosWrapper.module";
+import { dataDelete, dataGet } from "@/Composables/axiosWrapper.module";
 import { Field, FieldEntry, useFieldArray } from "vee-validate";
 import {
     isPreviewMode,
     wbHash,
 } from "@/Composables/Workbook/CustomerWorkbook.module";
+import type { AxiosResponse } from "axios";
 
 const props = defineProps<{
     allowAddRow: boolean;
@@ -29,10 +30,12 @@ const {
     remove,
     push,
     fields,
+    replace,
 }: {
     remove: (idx: number) => void;
     push: (col: workbookTableRow) => void;
     fields: Ref<FieldEntry<workbookTableRow>[], FieldEntry<workbookTableRow>[]>;
+    replace: (newArray: workbookTableRow[]) => void;
 } = useFieldArray(props.index);
 
 const borderClass = computed<boolean>(() => !props.hideBorders);
@@ -123,6 +126,22 @@ const exportTableData = (): void => {
     ]);
 };
 
+/**
+ * Refresh the table data
+ */
+const refreshTableData = () => {
+    dataGet(
+        route("cust-workbook.import.index", [wbHash.value, props.index]),
+    ).then(
+        (res: AxiosResponse<workbookTableRow[], workbookTableRow[]> | void) => {
+            console.log(res);
+            if (res) {
+                replace(res.data);
+            }
+        },
+    );
+};
+
 // A blank row to add to the table
 const defaultRow = (): workbookTableRow => {
     let rowData: workbookTableRow = {
@@ -138,6 +157,8 @@ onMounted(() => {
             push(defaultRow());
         }
     }
+
+    console.log(fields.value);
 });
 </script>
 
@@ -241,7 +262,10 @@ onMounted(() => {
                 pill
                 @click="exportTableData"
             />
-            <ImportWorkbookData :table-index="index" />
+            <ImportWorkbookData
+                :table-index="index"
+                @import-success="refreshTableData"
+            />
         </div>
     </div>
 </template>

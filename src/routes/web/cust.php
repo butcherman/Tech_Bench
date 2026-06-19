@@ -373,9 +373,10 @@ Route::prefix('workbook')
             ->controller(WorkbookTableImportController::class)
             ->name('import.')
             ->group(function () {
-                Route::get('/', 'show')->name('show');
-                Route::post('/', 'store')->name('store');
-                Route::put('/', 'update')->name('update');
+                Route::get('/', 'index')->name('index');
+                Route::get('/get-results', 'show')->name('show');
+                Route::post('/save', 'store')->name('store');
+                Route::put('/import-data', 'update')->name('update');
             });
 
         Route::get('customer-workbook/{wb_hash}', function () {
