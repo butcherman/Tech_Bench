@@ -132,3 +132,12 @@ type workbookSaveData =
           isTable: boolean;
       } & workbookValue)
     | workbookTableValue;
+
+type workbookValidationData = {
+    [key: string]: {
+        valid: boolean;
+        data_type: string;
+        value: any;
+        validation_error: string | null;
+    };
+};

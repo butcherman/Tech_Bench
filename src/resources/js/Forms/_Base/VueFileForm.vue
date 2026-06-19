@@ -24,7 +24,7 @@ interface dropzoneError {
 
 const emit = defineEmits<{
     submitting: [formData];
-    success: [];
+    success: [any];
     hasErrors: dropzoneError[];
     canceled: [];
     fileAdded: [DropzoneFile];

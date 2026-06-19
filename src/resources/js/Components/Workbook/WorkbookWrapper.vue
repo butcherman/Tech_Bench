@@ -81,8 +81,6 @@ const saveTableCell = (
         isTable: true,
     };
 
-    console.log(saveData.value);
-
     saveWorkbookValue(saveData);
 };
 
@@ -101,6 +99,8 @@ onMounted(() => {
         .listen(
             ".WorkbookTableValueUpdated",
             (valData: workbookTableValueEvent) => {
+                console.log(valData);
+                // TODO - Type these
                 let updatedModel = valData.model;
                 let table = { ...values[updatedModel.table_index] };
 

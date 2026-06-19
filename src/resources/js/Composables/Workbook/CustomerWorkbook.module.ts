@@ -2,13 +2,12 @@ import errorModal from "@/Modules/errorModal";
 import { computed, ref } from "vue";
 import { dataPut } from "../axiosWrapper.module";
 
+const bodyCopy = ref<workbookPage[]>();
 export const isPreviewMode = ref<boolean>(false);
 export const activePage = ref<string>("0");
 export const wbHash = ref<string>();
 export const hasError = ref<boolean>(false);
-
-const bodyCopy = ref<workbookPage[]>();
-export const isPagePublic = computed(() => {
+export const isPagePublic = computed<boolean>(() => {
     let currentPage = bodyCopy.value?.find(
         (page) => page.page === activePage.value,
     );
@@ -37,14 +36,11 @@ export const saveWorkbookValue = (saveData: workbookSaveData): void => {
         return;
     }
 
-    console.log(saveData);
-
     dataPut(
         route("cust-workbook.save-value", [wbHash.value]),
         saveData,
         false,
     ).catch((err) => {
-        console.log(err);
         hasError.value = true;
 
         let message =

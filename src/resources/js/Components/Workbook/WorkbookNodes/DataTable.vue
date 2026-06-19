@@ -2,6 +2,7 @@
 import AddButton from "@/Components/_Base/Buttons/AddButton.vue";
 import BaseButton from "@/Components/_Base/Buttons/BaseButton.vue";
 import DeleteBadge from "@/Components/_Base/Badges/DeleteBadge.vue";
+import ImportWorkbookData from "../ImportTableData/ImportWorkbookData.vue";
 import okModal from "@/Modules/okModal";
 import { v4 } from "uuid";
 import { computed, inject, onMounted, Ref } from "vue";
@@ -79,9 +80,7 @@ const saveCell = (
 /**
  * Delete a row from the database and UI
  */
-const deleteRow = (row: workbookTableRow, index: number): void => {
-    console.log(row, index);
-
+const deleteRow = (row: FieldEntry<workbookTableRow>, index: number): void => {
     dataDelete(
         route("cust-workbook.del-row", [
             wbHash.value,
@@ -90,7 +89,6 @@ const deleteRow = (row: workbookTableRow, index: number): void => {
         ]),
     ).then((res) => {
         if (res) {
-            // console.log(res);
             remove(index);
         }
     });
@@ -114,7 +112,6 @@ const getInputType = (column: workbookTableColumn): string => {
  * Export the data table information
  */
 const exportTableData = (): void => {
-    console.log("export data table");
     if (isPreviewMode.value) {
         okModal("Export Data Confirmation");
         return;
@@ -244,6 +241,7 @@ onMounted(() => {
                 pill
                 @click="exportTableData"
             />
+            <ImportWorkbookData :table-index="index" />
         </div>
     </div>
 </template>

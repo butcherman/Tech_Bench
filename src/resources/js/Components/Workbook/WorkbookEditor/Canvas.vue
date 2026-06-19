@@ -22,8 +22,7 @@ useForm({
     name: "workbook-builder",
 });
 
-const saveWorkbook = () => {
-    console.log("save workbook");
+const saveWorkbook = (): void => {
     dataPost(route("workbooks.store", equipmentType.value?.equip_id), {
         workbook_data: unref(workbookData),
     }).then((res) => {

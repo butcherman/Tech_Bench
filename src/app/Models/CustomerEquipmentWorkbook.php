@@ -74,15 +74,18 @@ class CustomerEquipmentWorkbook extends Model
     {
         $equip = CustomerEquipment::where('cust_equip_id', $this->cust_equip_id)
             ->first();
-        $equipName = $equip->equipName;
+        $equipName = $equip ? $equip->equipName : null;
 
         $placeholders = [
-            'customer_name' => $this->Customer->name,
+            'customer_name' => $this->Customer ? $this->Customer->name : null,
             'equipment_name' => $equipName,
         ];
 
         return Attribute::make(
-            get: fn () => $this->replacePlaceholders($this->wb_skeleton, $placeholders),
+            get: fn () => $this->replacePlaceholders(
+                $this->wb_skeleton,
+                $placeholders
+            ),
         );
     }
 
@@ -92,7 +95,9 @@ class CustomerEquipmentWorkbook extends Model
             ->first();
 
         return Attribute::make(
-            get: fn () => $this->wb_version === $equip->EquipmentType->EquipmentWorkbook->version_hash,
+            get: fn () => $this->wb_version === $equip->EquipmentType
+                ->EquipmentWorkbook
+                ->version_hash,
         );
     }
 
@@ -128,7 +133,11 @@ class CustomerEquipmentWorkbook extends Model
 
     public function CustomerEquipment(): BelongsTo
     {
-        return $this->belongsTo(CustomerEquipment::class, 'cust_equip_id', 'cust_equip_id');
+        return $this->belongsTo(
+            CustomerEquipment::class,
+            'cust_equip_id',
+            'cust_equip_id'
+        );
     }
 
     /*

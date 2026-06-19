@@ -9,6 +9,7 @@ use App\Models\WorkbookTableValue;
 use App\Models\WorkbookValue;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class CustomerWorkbookService
@@ -77,10 +78,16 @@ class CustomerWorkbookService
     public function getAllWorkbookValues(CustomerEquipmentWorkbook $workbook, bool $incPrivate = false): array
     {
 
-        $baseValues = $incPrivate ? $workbook->WorkbookValues : $workbook->PublicWorkbookValues;
+        $baseValues = $incPrivate ?
+            $workbook->WorkbookValues :
+            $workbook->PublicWorkbookValues;
+
         $baseValues = $baseValues->pluck('value', 'index')->all();
 
-        $tableValues = $incPrivate ? $workbook->WorkbookTableValues : $workbook->PublicWorkbookTableValues;
+        $tableValues = $incPrivate ?
+            $workbook->WorkbookTableValues :
+            $workbook->PublicWorkbookTableValues;
+
         $tableValues = $tableValues->groupBy('table_index');
 
         // Group and build the individual tables
@@ -98,7 +105,8 @@ class CustomerWorkbookService
     {
         $table = $this->findTableByIndex($workbook->wb_skeleton, $tableIndex);
         $headers = $this->getTableHeaders($workbook, $tableIndex);
-        $tableValues = $workbook->WorkbookTableValues->where('table_index', $tableIndex);
+        $tableValues = $workbook->WorkbookTableValues
+            ->where('table_index', $tableIndex);
         $formattedValues = $this->formatTableValues($tableValues);
 
         // Check formatted values for any missing columns
@@ -155,11 +163,46 @@ class CustomerWorkbookService
     */
 
     /**
+     * Import table data from a validated CSV file
+     */
+    public function importTableData(
+        CustomerEquipmentWorkbook $workbook,
+        string $tableIndex,
+        array $validatedResults
+    ): bool {
+        if (! $this->verifyTableValidation($validatedResults)) {
+            return false;
+        }
+
+        // Import each row and column individually
+        foreach ($validatedResults as $row) {
+            $rowIndex = Str::uuid();
+
+            foreach ($row as $name => $col) {
+                $colData = WorkbookTableValue::createQuietly([
+                    'wb_id' => $workbook->wb_id,
+                    'table_index' => $tableIndex,
+                    'row_index' => $rowIndex,
+                    'column_name' => $name,
+                    'value' => $col['value'],
+                    // TODO - Get proper public setting
+                    'public' => false,
+                ]);
+
+                Log::debug('Workbook Table Column Imported', $colData->toArray());
+            }
+        }
+
+        return true;
+
+    }
+
+    /**
      * Delete a single row from the database
      */
     public function deleteTableRow(CustomerEquipmentWorkbook $workbook, string $tableIndex, string $rowIndex): void
     {
-        $rowData = WorkbookTableValue::where('wb_id', $workbook->wb_id)
+        WorkbookTableValue::where('wb_id', $workbook->wb_id)
             ->where('table_index', $tableIndex)
             ->where('row_index', $rowIndex)
             ->delete();
@@ -181,11 +224,24 @@ class CustomerWorkbookService
     }
 
     /**
+     * Get the column names and data types from the table
+     */
+    public function getTableHeaderData(CustomerEquipmentWorkbook $workbook, string $tableIndex): array
+    {
+        $table = $this->findTableByIndex($workbook->wb_skeleton, $tableIndex);
+
+        return $table['props']['columns'];
+    }
+
+    /**
      * Find a tables structure based on its index
      */
     protected function findTableByIndex(array $workbookSkeleton, string $tableIndex): ?array
     {
-        if (isset($workbookSkeleton['index']) && $workbookSkeleton['index'] === $tableIndex) {
+        if (
+            isset($workbookSkeleton['index']) &&
+            $workbookSkeleton['index'] === $tableIndex
+        ) {
             return $workbookSkeleton;
         }
 
@@ -247,5 +303,23 @@ class CustomerWorkbookService
         }
 
         return $newTable;
+    }
+
+    /**
+     * Verify that a validated file does not have validation errors
+     */
+    protected function verifyTableValidation(array $validated)
+    {
+        // Verify there are no validation errors
+        $isValid = true;
+        foreach ($validated as $row) {
+            foreach ($row as $col) {
+                if (! $col['valid']) {
+                    $isValid = false;
+                }
+            }
+        }
+
+        return $isValid;
     }
 }

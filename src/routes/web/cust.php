@@ -23,6 +23,7 @@ use App\Http\Controllers\Customer\ReAssignCustomerController;
 use App\Http\Controllers\Customer\ShareVpnDataController;
 use App\Http\Controllers\Customer\WorkbookTableDeleteRowController;
 use App\Http\Controllers\Customer\WorkbookTableExportController;
+use App\Http\Controllers\Customer\WorkbookTableImportController;
 use App\Http\Controllers\Customer\WorkbookValueController;
 use App\Models\Customer;
 use App\Models\CustomerEquipment;
@@ -234,18 +235,20 @@ Route::middleware('auth.secure')->group(function () {
         | /customers/{customer-slug|customer-id}/sites
         |-----------------------------------------------------------------------
         */
-        Route::prefix('sites/{site:cust_site_id}')->controller(CustomerSiteController::class)->group(function () {
-            Route::get('restore', 'restore')
-                ->scopeBindings()
-                ->withTrashed()
-                ->name('sites.restore');
-            Route::delete('force-delete', 'forceDelete')
-                ->scopeBindings()
-                ->withTrashed()
-                ->name('sites.forceDelete');
-        })->missing(function () {
-            throw new CustomerNotFoundException;
-        });
+        Route::prefix('sites/{site:cust_site_id}')
+            ->controller(CustomerSiteController::class)
+            ->group(function () {
+                Route::get('restore', 'restore')
+                    ->scopeBindings()
+                    ->withTrashed()
+                    ->name('sites.restore');
+                Route::delete('force-delete', 'forceDelete')
+                    ->scopeBindings()
+                    ->withTrashed()
+                    ->name('sites.forceDelete');
+            })->missing(function () {
+                throw new CustomerNotFoundException;
+            });
 
         Route::resource('sites', CustomerSiteController::class)
             ->scoped(['sites' => 'cust_id'])
@@ -355,9 +358,25 @@ Route::middleware('auth.secure')->group(function () {
 Route::prefix('workbook')
     ->name('cust-workbook.')
     ->group(function () {
-        Route::get('{workbook:wb_hash}/export/{table}', WorkbookTableExportController::class)->name('export');
-        Route::put('{workbook:wb_hash}', WorkbookValueController::class)->name('save-value');
-        Route::delete('{workbook:wb_hash}/del-row/{table}/{row}', WorkbookTableDeleteRowController::class)->name('del-row');
+        Route::get(
+            '{workbook:wb_hash}/export/{table}',
+            WorkbookTableExportController::class
+        )->name('export');
+        Route::put('{workbook:wb_hash}', WorkbookValueController::class)
+            ->name('save-value');
+        Route::delete(
+            '{workbook:wb_hash}/del-row/{table}/{row}',
+            WorkbookTableDeleteRowController::class
+        )->name('del-row');
+
+        Route::prefix('{workbook:wb_hash}/import/{table}')
+            ->controller(WorkbookTableImportController::class)
+            ->name('import.')
+            ->group(function () {
+                Route::get('/', 'show')->name('show');
+                Route::post('/', 'store')->name('store');
+                Route::put('/', 'update')->name('update');
+            });
 
         Route::get('customer-workbook/{wb_hash}', function () {
             return 'show public workbook';
