@@ -60,13 +60,17 @@ class WorkbookTableValue extends Model
     public function broadcastOn(string $event): array
     {
         return [
-            new Channel('equipment-workbook.'.$this->CustomerWorkbook->wb_hash),
+            new Channel(
+                'equipment-workbook.'.
+                $this->CustomerWorkbook->wb_hash.
+                '.'.
+                $this->table_index
+            ),
         ];
     }
 
     public function newBroadcastableModelEvent(string $event): BroadcastableModelEventOccurred
     {
-
         return (new BroadcastableModelEventOccurred(
             $this,
             $event

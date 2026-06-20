@@ -2,6 +2,7 @@
 import Card from "../_Base/Card.vue";
 import WorkbookBody from "./WorkbookBody.vue";
 import WorkbookHeader from "./WorkbookHeader.vue";
+import { v4 } from "uuid";
 import { isLoading } from "@/Composables/axiosWrapper.module.js";
 import { computed, onMounted, provide } from "vue";
 import { useForm } from "vee-validate";
@@ -91,26 +92,13 @@ onMounted(() => {
     /**
      * Register for live updates to the workbook data
      */
-    Echo.channel(`equipment-workbook.${wbHash.value}`)
-        .listen(".WorkbookValueUpdated", (valData: workbookValueEvent) => {
+    Echo.channel(`equipment-workbook.${wbHash.value}`).listen(
+        ".WorkbookValueUpdated",
+        (valData: workbookValueEvent) => {
             console.log(valData);
             setFieldValue(valData.model.index, valData.model.value);
-        })
-        .listen(
-            ".WorkbookTableValueUpdated",
-            (valData: workbookTableValueEvent) => {
-                console.log(valData);
-                // TODO - Type these
-                let updatedModel = valData.model;
-                let table = { ...values[updatedModel.table_index] };
-
-                let rowCopy = { ...table[updatedModel.row_index] };
-                rowCopy[updatedModel.column_name] = updatedModel.value;
-                table[updatedModel.row_index] = rowCopy;
-
-                setFieldValue(updatedModel.table_index, table);
-            },
-        );
+        },
+    );
 });
 </script>
 

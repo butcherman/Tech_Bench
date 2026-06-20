@@ -31,11 +31,13 @@ const {
     push,
     fields,
     replace,
+    update,
 }: {
     remove: (idx: number) => void;
     push: (col: workbookTableRow) => void;
     fields: Ref<FieldEntry<workbookTableRow>[], FieldEntry<workbookTableRow>[]>;
     replace: (newArray: workbookTableRow[]) => void;
+    update: (idx: number, value: any) => void;
 } = useFieldArray(props.index);
 
 const borderClass = computed<boolean>(() => !props.hideBorders);
@@ -156,6 +158,32 @@ onMounted(() => {
             push(defaultRow());
         }
     }
+
+    Echo.channel(`equipment-workbook.${wbHash.value}.${props.index}`)
+        .listen(
+            ".WorkbookTableValueUpdated",
+            (valData: workbookTableValueEvent) => {
+                let updatedModel = valData.model;
+                let rowIdx = fields.value.findIndex(
+                    (row) => row.value.index === updatedModel.row_index,
+                );
+
+                if (rowIdx < 0) {
+                    // If this is a new row, push it to the array
+                    let newRow = defaultRow();
+                    newRow[updatedModel.column_name] = updatedModel.value;
+
+                    push(newRow);
+                } else {
+                    // If this is an existing row, update the data
+                    let rowCopy = { ...fields.value[rowIdx].value };
+                    rowCopy[updatedModel.column_name] = updatedModel.value;
+
+                    update(rowIdx, rowCopy);
+                }
+            },
+        )
+        .listenToAll((event) => console.log(event));
 });
 </script>
 
