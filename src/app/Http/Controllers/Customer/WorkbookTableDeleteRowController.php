@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Customer;
 
+use App\Events\Customer\WorkbookTableRowDeletedEvent;
 use App\Http\Controllers\Controller;
 use App\Models\CustomerEquipmentWorkbook;
 use App\Services\Customer\CustomerWorkbookService;
@@ -17,6 +18,8 @@ class WorkbookTableDeleteRowController extends Controller
     public function __invoke(CustomerEquipmentWorkbook $workbook, string $table, string $row): JsonResponse
     {
         $this->svc->deleteTableRow($workbook, $table, $row);
+
+        WorkbookTableRowDeletedEvent::dispatch($workbook, $table, $row);
 
         return response()->json(['success' => true]);
     }

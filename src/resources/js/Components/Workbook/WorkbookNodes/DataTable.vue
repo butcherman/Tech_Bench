@@ -183,6 +183,18 @@ onMounted(() => {
                 }
             },
         )
+        .listen(
+            ".WorkbookTableRowDeleted",
+            (event: { tableIndex: string; rowIndex: string }) => {
+                let rowIdx = fields.value.findIndex(
+                    (row) => row.value.index === event.rowIndex,
+                );
+
+                if (rowIdx >= 0) {
+                    remove(rowIdx);
+                }
+            },
+        )
         .listenToAll((event) => console.log(event));
 });
 </script>

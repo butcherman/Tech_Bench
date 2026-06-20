@@ -2,7 +2,6 @@
 import Card from "../_Base/Card.vue";
 import WorkbookBody from "./WorkbookBody.vue";
 import WorkbookHeader from "./WorkbookHeader.vue";
-import { v4 } from "uuid";
 import { isLoading } from "@/Composables/axiosWrapper.module.js";
 import { computed, onMounted, provide } from "vue";
 import { useForm } from "vee-validate";
