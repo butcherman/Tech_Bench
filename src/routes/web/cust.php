@@ -21,6 +21,7 @@ use App\Http\Controllers\Customer\DownloadNoteController;
 use App\Http\Controllers\Customer\PublishWorkbookController;
 use App\Http\Controllers\Customer\ReAssignCustomerController;
 use App\Http\Controllers\Customer\ShareVpnDataController;
+use App\Http\Controllers\Customer\WorkbookPublicViewController;
 use App\Http\Controllers\Customer\WorkbookTableDeleteRowController;
 use App\Http\Controllers\Customer\WorkbookTableExportController;
 use App\Http\Controllers\Customer\WorkbookTableImportController;
@@ -380,8 +381,7 @@ Route::prefix('workbook')
                 Route::delete('/delete-data', 'destroy')->name('destroy');
             });
 
-        Route::get('customer-workbook/{wb_hash}', function () {
-            return 'show public workbook';
-        })->name('show');
+        Route::get('customer-workbook/{workbook:wb_hash}', WorkbookPublicViewController::class)
+            ->name('show');
 
     });

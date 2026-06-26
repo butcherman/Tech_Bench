@@ -5,7 +5,10 @@ import ImportTableDataForm from "@/Forms/Workbook/ImportTableDataForm.vue";
 import Modal from "@/Components/_Base/Modal.vue";
 import okModal from "@/Modules/okModal/index.js";
 import ValidationResults from "./ValidationResults.vue";
-import { wbHash } from "@/Composables/Workbook/CustomerWorkbook.module";
+import {
+    isPagePublic,
+    wbHash,
+} from "@/Composables/Workbook/CustomerWorkbook.module";
 import { computed, onMounted, ref, useTemplateRef } from "vue";
 import {
     dataDelete,
@@ -186,6 +189,7 @@ onMounted(() => {
             <ImportTableDataForm
                 v-if="showUploadForm"
                 :table-index="tableIndex"
+                :is-page-public="isPagePublic"
                 @success="validateImport"
             />
             <div v-if="validatedResults && showValidationResults">
