@@ -89,6 +89,21 @@ class CustomerEquipmentWorkbook extends Model
         );
     }
 
+    public function publicWorkbook(): Attribute
+    {
+        $workbook = $this->parsedWorkbook;
+
+        foreach ($workbook['body'] as $key => $page) {
+            if (! $page['canPublish']) {
+                unset($workbook['body'][$key]);
+            }
+        }
+
+        return Attribute::make(
+            get: fn () => $workbook
+        );
+    }
+
     public function upToDate(): Attribute
     {
         $equip = CustomerEquipment::where('cust_equip_id', $this->cust_equip_id)

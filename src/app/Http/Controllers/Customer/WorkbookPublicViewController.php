@@ -18,7 +18,7 @@ class WorkbookPublicViewController extends Controller
     {
         return Inertia::render('Customer/Workbook/Public', [
             'customer' => $workbook->Customer->only(['name']),
-            'workbook' => $workbook->only(['wb_hash', 'parsed_workbook']),
+            'workbook' => $workbook->only(['wb_hash', 'public_workbook']),
             'workbook-values' => Inertia::defer(
                 fn () => $this->svc->getAllWorkbookValues($workbook, false),
             ),

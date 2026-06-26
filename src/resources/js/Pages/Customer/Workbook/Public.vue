@@ -14,7 +14,7 @@ const props = defineProps<{
 }>();
 
 onMounted(() => {
-    initWorkbook(props.workbook);
+    initWorkbook(props.workbook, true);
 });
 </script>
 
@@ -33,8 +33,8 @@ export default { layout: PublicLayout };
                 </Card>
             </template>
             <WorkbookWrapper
-                v-if="workbookValues"
-                :workbook-skeleton="workbook.parsed_workbook"
+                v-if="workbookValues && workbook.public_workbook"
+                :workbook-skeleton="workbook.public_workbook"
                 :workbook-values="workbookValues"
             />
         </Deferred>

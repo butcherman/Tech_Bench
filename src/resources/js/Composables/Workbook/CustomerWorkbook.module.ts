@@ -22,10 +22,19 @@ export const isPagePublic = computed<boolean>(() => {
 /**
  * Set the necessary data for the workbook state
  */
-export const initWorkbook = (workbook: customerWorkbook): void => {
-    activePage.value = workbook.parsed_workbook.body[0].page;
-    bodyCopy.value = workbook.parsed_workbook.body;
-    wbHash.value = workbook.wb_hash;
+export const initWorkbook = (
+    workbook: customerWorkbook,
+    isPublic?: boolean,
+): void => {
+    let wbType: "public_workbook" | "parsed_workbook" = isPublic
+        ? "public_workbook"
+        : "parsed_workbook";
+
+    if (workbook[wbType]) {
+        activePage.value = workbook[wbType].body[0].page;
+        bodyCopy.value = workbook[wbType].body;
+        wbHash.value = workbook.wb_hash;
+    }
 };
 
 /**

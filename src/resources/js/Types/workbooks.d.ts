@@ -11,6 +11,7 @@ type customerWorkbook = {
     updated_at: string;
     published: boolean;
     parsed_workbook: workbookWrapper;
+    public_workbook?: workbookWrapper;
     up_to_date?: boolean;
 };
 
