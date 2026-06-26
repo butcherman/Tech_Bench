@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Customer;
 
+use App\Exceptions\Customer\WorkbookNotPublishedException;
 use App\Http\Controllers\Controller;
 use App\Models\CustomerEquipmentWorkbook;
 use App\Services\Customer\CustomerWorkbookService;
@@ -16,6 +17,8 @@ class WorkbookPublicViewController extends Controller
      */
     public function __invoke(CustomerEquipmentWorkbook $workbook)
     {
+        throw_unless($workbook->published, WorkbookNotPublishedException::class);
+
         return Inertia::render('Customer/Workbook/Public', [
             'customer' => $workbook->Customer->only(['name']),
             'workbook' => $workbook->only(['wb_hash', 'public_workbook']),

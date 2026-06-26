@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Observers\CustomerEquipmentWorkbookObserver;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -56,7 +57,7 @@ class CustomerEquipmentWorkbook extends Model
     public function published(): Attribute
     {
         return Attribute::make(
-            get: fn () => is_null($this->publish_until) ? false : true,
+            get: fn () => Carbon::now() > $this->publish_until ? false : true
         );
     }
 
