@@ -4,8 +4,9 @@ import BaseButton from "@/Components/_Base/Buttons/BaseButton.vue";
 import DeleteBadge from "@/Components/_Base/Badges/DeleteBadge.vue";
 import ImportWorkbookData from "../ImportTableData/ImportWorkbookData.vue";
 import okModal from "@/Modules/okModal";
+import Overlay from "@/Components/_Base/Loaders/Overlay.vue";
 import { v4 } from "uuid";
-import { computed, inject, onMounted, Ref } from "vue";
+import { computed, inject, onMounted, ref, Ref } from "vue";
 import { dataDelete, dataGet } from "@/Composables/axiosWrapper.module";
 import { Field, FieldEntry, useFieldArray } from "vee-validate";
 import {
@@ -40,6 +41,7 @@ const {
     update: (idx: number, value: any) => void;
 } = useFieldArray(props.index);
 
+const tableIsLocked = ref<boolean>(false);
 const borderClass = computed<boolean>(() => !props.hideBorders);
 const tableIsEmpty = computed<boolean>(() => {
     let empty = true;
@@ -137,6 +139,7 @@ const refreshTableData = () => {
     ).then(
         (res: AxiosResponse<workbookTableRow[], workbookTableRow[]> | void) => {
             if (res) {
+                tableIsLocked.value = false;
                 replace(res.data);
             }
         },
@@ -195,115 +198,141 @@ onMounted(() => {
                 }
             },
         )
-        .listenToAll((event) => console.log(event));
+        .listen(
+            ".WorkbookTableLockEvent",
+            (event: { tableIndex: string; lockTable: boolean }) => {
+                tableIsLocked.value = event.lockTable;
+
+                if (!event.lockTable) {
+                    refreshTableData();
+                }
+            },
+        );
 });
 </script>
 
 <template>
     <div class="relative group/table">
-        <table
-            class="table-auto w-full border-slate-200"
-            :class="{ border: borderClass }"
-        >
-            <thead>
-                <tr class="border-slate-200" :class="{ border: borderClass }">
-                    <td
-                        v-if="numberRows"
+        <Overlay :loading="tableIsLocked">
+            <template #loader>
+                <div class="flex flex-col justify-center">
+                    <h2 class="text-center">Table Is Locked</h2>
+                    <h5 class="text-center">Please Wait</h5>
+                </div>
+            </template>
+            <table
+                class="table-auto w-full border-slate-200"
+                :class="{ border: borderClass }"
+            >
+                <thead>
+                    <tr
                         class="border-slate-200"
                         :class="{ border: borderClass }"
-                    ></td>
-                    <th
-                        v-for="col in columns"
-                        class="border-slate-200"
-                        :class="{ border: borderClass }"
                     >
-                        {{ col.name }}
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr
-                    v-for="(row, idx) in fields"
-                    :key="row.key"
-                    class="border-slate-200"
-                    :class="{ border: borderClass }"
-                >
-                    <td
-                        v-if="numberRows"
-                        class="border-slate-200 text-center"
-                        :class="{ border: borderClass }"
-                    >
-                        {{ idx + 1 }}
-                    </td>
-                    <td
-                        v-for="col in columns"
-                        class="border-slate-200 px-1"
-                        :class="{ border: borderClass }"
-                    >
-                        <Field
-                            v-if="col.type === 'boolean'"
-                            class="w-full m-0 px-2"
-                            :name="`${index}[${idx}].${col.name}`"
-                            type="checkbox"
-                            :value="true"
-                            :unchecked-value="false"
-                            @change="saveCell(idx, col.name, row.value.index)"
-                        />
-                        <Field
-                            v-else-if="col.type === 'enum'"
-                            as="select"
-                            class="w-full m-0 px-2"
-                            :name="`${index}[${idx}].${col.name}`"
-                            @change="saveCell(idx, col.name, row.value.index)"
+                        <td
+                            v-if="numberRows"
+                            class="border-slate-200"
+                            :class="{ border: borderClass }"
+                        ></td>
+                        <th
+                            v-for="col in columns"
+                            class="border-slate-200"
+                            :class="{ border: borderClass }"
                         >
-                            <option />
-                            <option
-                                v-for="opt in col.list"
-                                :key="opt"
-                                :value="opt"
+                            {{ col.name }}
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr
+                        v-for="(row, idx) in fields"
+                        :key="row.key"
+                        class="border-slate-200"
+                        :class="{ border: borderClass }"
+                    >
+                        <td
+                            v-if="numberRows"
+                            class="border-slate-200 text-center"
+                            :class="{ border: borderClass }"
+                        >
+                            {{ idx + 1 }}
+                        </td>
+                        <td
+                            v-for="col in columns"
+                            class="border-slate-200 px-1"
+                            :class="{ border: borderClass }"
+                        >
+                            <Field
+                                v-if="col.type === 'boolean'"
+                                class="w-full m-0 px-2"
+                                :name="`${index}[${idx}].${col.name}`"
+                                type="checkbox"
+                                :value="true"
+                                :unchecked-value="false"
+                                @change="
+                                    saveCell(idx, col.name, row.value.index)
+                                "
+                            />
+                            <Field
+                                v-else-if="col.type === 'enum'"
+                                as="select"
+                                class="w-full m-0 px-2"
+                                :name="`${index}[${idx}].${col.name}`"
+                                @change="
+                                    saveCell(idx, col.name, row.value.index)
+                                "
                             >
-                                {{ opt }}
-                            </option>
-                        </Field>
-                        <Field
-                            v-else
-                            class="w-full m-0 px-2"
-                            :name="`${index}[${idx}].${col.name}`"
-                            :type="getInputType(col)"
-                            @change="saveCell(idx, col.name, row.value.index)"
-                        />
-                    </td>
-                    <td v-if="allowDeleteRow" class="text-center">
-                        <DeleteBadge
-                            icon="circle-xmark"
-                            v-tooltip.left="'Delete Row'"
-                            confirm
-                            @accepted="deleteRow(row, idx)"
-                        />
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <div class="flex flex-row-reverse my-2">
-            <AddButton
-                class="mx-1"
-                size="small"
-                pill
-                @click="push(defaultRow())"
-            />
-            <BaseButton
-                class="mx-2"
-                text="Export Data"
-                size="small"
-                variant="info"
-                pill
-                @click="exportTableData"
-            />
-            <ImportWorkbookData
-                :table-index="index"
-                :table-empty="tableIsEmpty"
-                @import-success="refreshTableData"
-            />
-        </div>
+                                <option />
+                                <option
+                                    v-for="opt in col.list"
+                                    :key="opt"
+                                    :value="opt"
+                                >
+                                    {{ opt }}
+                                </option>
+                            </Field>
+                            <Field
+                                v-else
+                                class="w-full m-0 px-2"
+                                :name="`${index}[${idx}].${col.name}`"
+                                :type="getInputType(col)"
+                                @change="
+                                    saveCell(idx, col.name, row.value.index)
+                                "
+                            />
+                        </td>
+                        <td v-if="allowDeleteRow" class="text-center">
+                            <DeleteBadge
+                                icon="circle-xmark"
+                                v-tooltip.left="'Delete Row'"
+                                confirm
+                                @accepted="deleteRow(row, idx)"
+                            />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="flex flex-row-reverse my-2">
+                <AddButton
+                    class="mx-1"
+                    size="small"
+                    pill
+                    @click="push(defaultRow())"
+                />
+                <BaseButton
+                    class="mx-2"
+                    text="Export Data"
+                    size="small"
+                    variant="info"
+                    pill
+                    @click="exportTableData"
+                />
+                <ImportWorkbookData
+                    :table-index="index"
+                    :table-empty="tableIsEmpty"
+                    @import-success="refreshTableData"
+                />
+            </div>
+        </Overlay>
     </div>
 </template>

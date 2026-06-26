@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Enums\DiskEnum;
+use App\Events\Customer\WorkbookTableLockEvent;
 use App\Http\Controllers\FileUploadController;
 use App\Http\Requests\Customer\WorkbookTableImportRequest;
 use App\Jobs\Customer\ValidateWorkbookImportJob;
@@ -85,6 +86,10 @@ class WorkbookTableImportController extends FileUploadController
                 'error' => 'File Validation Data Not Found',
             ]);
         }
+
+        // Lock the table so it cannot be updated by another user during import.
+        broadcast(new WorkbookTableLockEvent($workbook, $tableIndex, true))
+            ->toOthers();
 
         $chunks = $validated->chunk(25);
 

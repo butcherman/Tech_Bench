@@ -157,9 +157,9 @@ onMounted(() => {
                 totalChunks: number;
             }) => {
                 importedChunks.value++;
-
                 if (importedChunks.value === event.totalChunks) {
                     importModal.value?.hide();
+                    importedChunks.value = 0;
                     emit("importSuccess");
                 }
             },
