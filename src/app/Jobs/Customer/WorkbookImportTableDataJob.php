@@ -20,7 +20,8 @@ class WorkbookImportTableDataJob implements ShouldQueue
         protected string $tableIndex,
         protected array $validatedResults,
         protected int $chunkNum,
-        protected int $totalChunks
+        protected int $totalChunks,
+        protected bool $isPagePublic
     ) {}
 
     /**
@@ -34,7 +35,8 @@ class WorkbookImportTableDataJob implements ShouldQueue
         $svc->importTableData(
             $this->workbook,
             $this->tableIndex,
-            $this->validatedResults
+            $this->validatedResults,
+            $this->isPagePublic
         );
 
         WorkbookTableImportCompletedEvent::dispatch(

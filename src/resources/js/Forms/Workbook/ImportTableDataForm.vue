@@ -8,12 +8,13 @@ defineEmits<{
 
 const props = defineProps<{
     tableIndex: string;
+    isPagePublic: boolean;
 }>();
 </script>
 
 <template>
     <VueFileForm
-        :initial-values="{}"
+        :initial-values="{ publicPage: isPagePublic }"
         :validation-schema="{}"
         :submit-route="
             $route('cust-workbook.import.store', [wbHash, tableIndex])

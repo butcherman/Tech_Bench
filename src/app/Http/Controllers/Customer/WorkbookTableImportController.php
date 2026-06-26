@@ -48,7 +48,8 @@ class WorkbookTableImportController extends FileUploadController
             ValidateWorkbookImportJob::dispatchAfterResponse(
                 $workbook,
                 $tableIndex,
-                $savedFile
+                $savedFile,
+                $request->input('publicPage')
             );
 
             return response()
@@ -65,7 +66,7 @@ class WorkbookTableImportController extends FileUploadController
     {
         $validated = Cache::get($workbook->wb_hash.$tableIndex);
 
-        return response()->json($validated);
+        return response()->json($validated['data']);
     }
 
     /**
@@ -73,7 +74,7 @@ class WorkbookTableImportController extends FileUploadController
      */
     public function update(CustomerEquipmentWorkbook $workbook, string $tableIndex): JsonResponse
     {
-        $validated = collect(Cache::pull($workbook->wb_hash.$tableIndex));
+        $validated = Cache::pull($workbook->wb_hash.$tableIndex);
 
         if (! $validated) {
             Log::error('Trying to import an invalid CSV file to a workbook table', [
@@ -91,7 +92,7 @@ class WorkbookTableImportController extends FileUploadController
         broadcast(new WorkbookTableLockEvent($workbook, $tableIndex, true))
             ->toOthers();
 
-        $chunks = $validated->chunk(25);
+        $chunks = collect($validated['data'])->chunk(25);
 
         foreach ($chunks as $key => $chunk) {
             Log::debug(
@@ -101,12 +102,14 @@ class WorkbookTableImportController extends FileUploadController
                 $chunks->count()
             );
 
+            // Process individual chunks so we don't time out
             WorkbookImportTableDataJob::dispatch(
                 $workbook,
                 $tableIndex,
                 $chunk->toArray(),
                 $key,
-                $chunks->count()
+                $chunks->count(),
+                $validated['public'],
             );
         }
 

@@ -173,7 +173,8 @@ class CustomerWorkbookService
     public function importTableData(
         CustomerEquipmentWorkbook $workbook,
         string $tableIndex,
-        array $validatedResults
+        array $validatedResults,
+        bool $isPagePublic
     ): bool {
         if (! $this->verifyTableValidation($validatedResults)) {
             return false;
@@ -193,8 +194,7 @@ class CustomerWorkbookService
                         'row_index' => $rowIndex,
                         'column_name' => $name,
                         'value' => $col['value'],
-                        // TODO - Get proper public setting
-                        'public' => false,
+                        'public' => $isPagePublic,
                     ]);
 
                     Log::debug('Workbook Table Column Imported', $colData->toArray());
@@ -203,7 +203,6 @@ class CustomerWorkbookService
         }
 
         return true;
-
     }
 
     /**

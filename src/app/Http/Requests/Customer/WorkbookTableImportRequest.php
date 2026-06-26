@@ -14,6 +14,7 @@ class WorkbookTableImportRequest extends FormRequest
     {
         return [
             'file' => ['required', File::types(['csv'])],
+            'publicPage' => ['required', 'string'],
         ];
     }
 }

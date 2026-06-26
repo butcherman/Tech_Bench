@@ -9,6 +9,7 @@ use App\Models\FileUpload;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 class ValidateWorkbookImportJob implements ShouldQueue
 {
@@ -20,7 +21,8 @@ class ValidateWorkbookImportJob implements ShouldQueue
     public function __construct(
         protected CustomerEquipmentWorkbook $workbook,
         protected string $tableIndex,
-        protected FileUpload $file
+        protected FileUpload $file,
+        protected bool $isPagePublic,
     ) {}
 
     /**
@@ -32,9 +34,14 @@ class ValidateWorkbookImportJob implements ShouldQueue
 
         $validated = $obj($this->workbook, $this->tableIndex, $this->file);
 
+        Log::critical('validated', $validated->toArray());
+
         Cache::put(
             $this->workbook->wb_hash.$this->tableIndex,
-            $validated->toArray(),
+            [
+                'data' => $validated->toArray(),
+                'public' => $this->isPagePublic,
+            ],
             86400
         );
 
