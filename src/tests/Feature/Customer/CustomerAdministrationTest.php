@@ -106,6 +106,7 @@ class CustomerAdministrationTest extends TestCase
             'auto_purge' => false,
             'allow_vpn_data' => true,
             'allow_share_vpn_data' => true,
+            'enable_workbooks' => true,
         ];
 
         $response = $this->actingAs($user)
@@ -126,6 +127,9 @@ class CustomerAdministrationTest extends TestCase
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => 'customer.auto_purge',
+        ]);
+        $this->assertDatabaseHas('app_settings', [
+            'key' => 'customer.enable_workbooks',
         ]);
     }
 }

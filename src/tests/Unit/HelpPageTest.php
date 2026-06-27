@@ -21,6 +21,8 @@ class HelpPageTest extends TestCase
         'customers.files.index',
         'customers.not-found',
         'customers.notes.download',
+        'customers.equipment.workbook.create',
+        'cust-workbook.*',
         'debugbar.*',
         'download',
         'dusk.*',
@@ -43,6 +45,7 @@ class HelpPageTest extends TestCase
         'tech-tips.not-found',
         'telescope',
         'two-factor.*',
+        'workbooks.edit',
     ];
 
     /*
