@@ -172,21 +172,21 @@ class CustomerEquipmentWorkbook extends Model
      */
     protected function replacePlaceholders(mixed $value, array $data): mixed
     {
-        // if (is_array($value)) {
-        //     return array_map(
-        //         fn ($item) => $this->replacePlaceholders($item, $data),
-        //         $value
-        //     );
-        // }
+        if (is_array($value)) {
+            return array_map(
+                fn ($item) => $this->replacePlaceholders($item, $data),
+                $value
+            );
+        }
 
-        // if (is_string($value)) {
-        return preg_replace_callback(
-            '/\{\{([^}]+)\}\}/',
-            fn ($matches) => $data[$matches[1]] ?? $matches[0],
-            $value
-        );
-        // }
+        if (is_string($value)) {
+            return preg_replace_callback(
+                '/\{\{([^}]+)\}\}/',
+                fn ($matches) => $data[$matches[1]] ?? $matches[0],
+                $value
+            );
+        }
 
-        // return $value;
+        return $value;
     }
 }
