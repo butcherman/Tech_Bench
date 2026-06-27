@@ -33,11 +33,6 @@ class WorkbookTableValue extends Model
         ];
     }
 
-    public function getRouteKeyName(): string
-    {
-        return 'index';
-    }
-
     /*
     |---------------------------------------------------------------------------
     | Relationships
@@ -53,10 +48,6 @@ class WorkbookTableValue extends Model
     | Model Broadcasting
     |---------------------------------------------------------------------------
     */
-
-    /**
-     * @codeCoverageIgnore
-     */
     public function broadcastOn(string $event): array
     {
         return [

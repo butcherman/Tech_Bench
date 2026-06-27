@@ -53,10 +53,6 @@ class WorkbookValue extends Model
     | Model Broadcasting
     |---------------------------------------------------------------------------
     */
-
-    /**
-     * @codeCoverageIgnore
-     */
     public function broadcastOn(string $event): array
     {
         return [

@@ -21,9 +21,11 @@ class WorkbookTableValueFactory extends Factory
     {
         return [
             'wb_id' => CustomerEquipmentWorkbook::factory(),
-            'index' => Str::uuid(),
-            'value' => $this->faker()->words(2),
-            'protected' => false,
+            'table_index' => Str::uuid(),
+            'row_index' => Str::uuid(),
+            'column_name' => $this->faker->word(),
+            'value' => $this->faker->words(2),
+            'public' => true,
         ];
     }
 }

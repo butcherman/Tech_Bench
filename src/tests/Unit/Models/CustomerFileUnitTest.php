@@ -15,8 +15,10 @@ use Tests\TestCase;
 
 class CustomerFileUnitTest extends TestCase
 {
+    /** @var CustomerFile */
     protected $model;
 
+    /** @var Customer */
     protected $customer;
 
     protected function setUp(): void
