@@ -14,7 +14,6 @@ class EquipmentWorkbookService
      */
     public function updateWorkbookBuilder(Collection $requestData, EquipmentType $equipment_type): void
     {
-        // TODO - Remove unnecessary builder data
         EquipmentWorkbook::firstOrCreate([
             'equip_id' => $equipment_type->equip_id,
         ], [
@@ -57,7 +56,7 @@ class EquipmentWorkbookService
                     'type' => 'static',
                     'props' => [
                         'tag' => 'h3',
-                        'text' => '[ Customer Name ]',
+                        'text' => '{{customer_name}}',
                         'class' => 'text-center',
                     ],
                 ],
@@ -66,7 +65,7 @@ class EquipmentWorkbookService
                     'type' => 'static',
                     'props' => [
                         'tag' => 'h3',
-                        'text' => '[ Equipment Name ]',
+                        'text' => '{{equipment_name}}',
                         'class' => 'text-center',
                     ],
                 ],
