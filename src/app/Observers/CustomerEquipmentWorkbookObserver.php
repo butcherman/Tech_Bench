@@ -15,36 +15,4 @@ class CustomerEquipmentWorkbookObserver extends Observer
     {
         Log::info('New Customer Equipment Workbook created', $customerEquipmentWorkbook->toArray());
     }
-
-    /**
-     * Handle the CustomerEquipmentWorkbook "updated" event.
-     */
-    public function updated(CustomerEquipmentWorkbook $customerEquipmentWorkbook): void
-    {
-        //
-    }
-
-    /**
-     * Handle the CustomerEquipmentWorkbook "deleted" event.
-     */
-    public function deleted(CustomerEquipmentWorkbook $customerEquipmentWorkbook): void
-    {
-        //
-    }
-
-    /**
-     * Handle the CustomerEquipmentWorkbook "restored" event.
-     */
-    public function restored(CustomerEquipmentWorkbook $customerEquipmentWorkbook): void
-    {
-        //
-    }
-
-    /**
-     * Handle the CustomerEquipmentWorkbook "force deleted" event.
-     */
-    public function forceDeleted(CustomerEquipmentWorkbook $customerEquipmentWorkbook): void
-    {
-        //
-    }
 }
