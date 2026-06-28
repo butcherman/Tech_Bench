@@ -25,6 +25,8 @@ class WorkbookTableImportCompletedEvent implements ShouldBroadcast
 
     /**
      * Get the channels the event should broadcast on.
+     *
+     * @codeCoverageIgnore
      */
     public function broadcastOn(): array
     {
@@ -35,6 +37,8 @@ class WorkbookTableImportCompletedEvent implements ShouldBroadcast
 
     /**
      * Get the name that the event will broadcast as.
+     *
+     * @codeCoverageIgnore
      */
     public function broadcastAs(): string
     {
