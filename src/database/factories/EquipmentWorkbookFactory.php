@@ -20,7 +20,7 @@ class EquipmentWorkbookFactory extends Factory
     {
         return [
             'equip_id' => EquipmentType::factory(),
-            'workbook_data' => $this->wbData,
+            'workbook_data' => json_decode($this->wbData),
             'version_hash' => 'factory',
         ];
     }

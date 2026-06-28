@@ -17,6 +17,9 @@ class EquipmentWorkbook extends Model
     /** @var string */
     protected $primaryKey = 'equip_id';
 
+    /** @var bool */
+    public $incrementing = false;
+
     /** @var array<int, string> */
     protected $guarded = ['created_at', 'updated_at'];
 

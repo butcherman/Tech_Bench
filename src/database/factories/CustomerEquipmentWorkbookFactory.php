@@ -32,7 +32,7 @@ class CustomerEquipmentWorkbookFactory extends Factory
             'wb_hash' => Str::uuid(),
             'cust_id' => $cust->cust_id,
             'cust_equip_id' => CustomerEquipment::factory(['cust_id' => $cust->cust_id]),
-            'wb_skeleton' => $wbData,
+            'wb_skeleton' => json_decode($wbData),
             'wb_version' => 'factory',
             'publish_until' => null,
         ];

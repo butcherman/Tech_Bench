@@ -7,6 +7,7 @@ use App\Models\CustomerEquipment;
 use App\Models\CustomerEquipmentWorkbook;
 use App\Models\WorkbookTableValue;
 use App\Models\WorkbookValue;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
@@ -39,7 +40,11 @@ class CustomerWorkbookService
         $currentWorkbook = $equip->EquipmentWorkbook;
         $newWorkbook = $equip->EquipmentType->EquipmentWorkbook;
 
+        // dd($newWorkbook);
+
         $wbData = $this->removeBuilderData($newWorkbook->workbook_data);
+
+        // dd($wbData);
 
         $currentWorkbook->wb_version = $newWorkbook->version_hash;
         $currentWorkbook->wb_skeleton = $wbData;
@@ -57,7 +62,10 @@ class CustomerWorkbookService
      */
     public function publishWorkbook(CustomerEquipment $equipment, string $publish_until): void
     {
-        $equipment->EquipmentWorkbook->publish_until = $publish_until.' 23:59:59';
+        // dd($publish_until);
+        $parsed = Carbon::parse($publish_until);
+
+        $equipment->EquipmentWorkbook->publish_until = $parsed;
         $equipment->EquipmentWorkbook->save();
     }
 
@@ -147,7 +155,6 @@ class CustomerWorkbookService
         }
 
         if ($requestData->get('isTable')) {
-
             $updatable = WorkbookTableValue::firstOrCreate([
                 'wb_id' => $workbook->wb_id,
                 'table_index' => $requestData->get('table_index'),
@@ -273,7 +280,9 @@ class CustomerWorkbookService
             }
         }
 
+        // @codeCoverageIgnoreStart
         return null;
+        // @codeCoverageIgnoreEnd
     }
 
     /*
