@@ -117,8 +117,6 @@ class ValidateWorkbookImportFileUnitTest extends TestCase
         $obj = new ValidateWorkbookImportFile;
         $res = $obj($workbook, $table, $dbFile);
 
-        // dd($res->toArray());
-
         // Testing Results
         $shouldBe = [
             [

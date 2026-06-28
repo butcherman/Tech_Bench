@@ -47,7 +47,7 @@ class EquipmentWorkbookService
     /**
      * Default Workbook Data
      */
-    protected function getDefaultWorkbook(EquipmentType $equipment_type): array
+    protected function getDefaultWorkbook(): array
     {
         return [
             'header' => [
