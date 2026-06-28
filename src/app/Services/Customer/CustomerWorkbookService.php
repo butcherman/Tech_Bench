@@ -2,7 +2,6 @@
 
 namespace App\Services\Customer;
 
-use App\Models\Customer;
 use App\Models\CustomerEquipment;
 use App\Models\CustomerEquipmentWorkbook;
 use App\Models\WorkbookTableValue;

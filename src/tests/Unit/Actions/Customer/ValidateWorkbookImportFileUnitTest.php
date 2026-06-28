@@ -34,11 +34,6 @@ class ValidateWorkbookImportFileUnitTest extends TestCase
         $workbook = CustomerEquipmentWorkbook::factory()->create();
         $table = '4e2eae40-b892-4509-818a-b03191dbc237';
 
-        $workbook->wb_skeleton = json_decode(
-            (string) $workbook->wb_skeleton,
-            true
-        );
-
         $obj = new ValidateWorkbookImportFile;
         $res = $obj($workbook, $table, $dbFile);
 
@@ -118,11 +113,6 @@ class ValidateWorkbookImportFileUnitTest extends TestCase
 
         $workbook = CustomerEquipmentWorkbook::factory()->create();
         $table = '4e2eae40-b892-4509-818a-b03191dbc237';
-
-        $workbook->wb_skeleton = json_decode(
-            (string) $workbook->wb_skeleton,
-            true
-        );
 
         $obj = new ValidateWorkbookImportFile;
         $res = $obj($workbook, $table, $dbFile);
