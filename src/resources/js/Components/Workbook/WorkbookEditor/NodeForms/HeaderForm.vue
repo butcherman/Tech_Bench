@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import BaseButton from "@/Components/_Base/Buttons/BaseButton.vue";
-import Editor from "@/Forms/_Base/Editor.vue";
 import SwitchInput from "@/Forms/_Base/SwitchInput.vue";
+import TextInput from "@/Forms/_Base/TextInput.vue";
 import { closeNodeEditor } from "@/Composables/Workbook/WorkbookEditor.module";
 import { string, object, boolean } from "yup";
 import { useForm } from "vee-validate";
@@ -37,7 +37,7 @@ const saveData = handleSubmit((form) => {
 
 <template>
     <form novalidate v-focustrap @submit.prevent="saveData">
-        <Editor :id="node.index" name="content" label="Content" />
+        <TextInput :id="node.index" name="content" label="Content" />
         <SwitchInput id="switch-input" name="center" label="Center Text" />
         <div class="flex-none text-center mt-4">
             <BaseButton class="w-3/4" type="submit" variant="primary">

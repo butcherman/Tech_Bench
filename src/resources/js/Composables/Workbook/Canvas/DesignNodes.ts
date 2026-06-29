@@ -113,7 +113,7 @@ export const designNodes: workbookNode[] = [
     },
     {
         index: v4(),
-        type: "text",
+        type: "header",
         props: {
             tag: "h1",
             text: "Header 1",
@@ -127,7 +127,7 @@ export const designNodes: workbookNode[] = [
     },
     {
         index: v4(),
-        type: "text",
+        type: "header",
         props: {
             tag: "h2",
             text: "Sub-Header",

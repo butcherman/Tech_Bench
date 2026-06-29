@@ -20,7 +20,7 @@ const contents = computed(() =>
 );
 
 // Only specific types are allowed to be dropped in the Header
-const allowedInHeader: string[] = ["text", "static"];
+const allowedInHeader: string[] = ["text", "static", "header"];
 const onHeaderDrop = (event: workbookDropEvent): void => {
     if (event.added) {
         if (!allowedInHeader.includes(event.added.element.type)) {

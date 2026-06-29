@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { computed } from "vue";
 import DataTableEditor from "./Nodes/DataTableEditor.vue";
 import FieldsetWrapperEditor from "./Nodes/FieldsetWrapperEditor.vue";
 import GridWrapperEditor from "./Nodes/GridWrapperEditor.vue";
@@ -7,6 +6,7 @@ import InputNodeEditor from "./Nodes/InputNodeEditor.vue";
 import StaticNodeEditor from "./Nodes/StaticNodeEditor.vue";
 import TextNodeEditor from "./Nodes/TextNodeEditor.vue";
 import UnknownNode from "../WorkbookNodes/UnknownNode.vue";
+import { computed } from "vue";
 
 const props = defineProps<{
     node: workbookNode;
@@ -22,6 +22,7 @@ const component = computed(() => {
         case "static":
             return StaticNodeEditor;
         case "text":
+        case "header":
             return TextNodeEditor;
         case "data-table":
             return DataTableEditor;

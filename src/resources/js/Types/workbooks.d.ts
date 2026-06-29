@@ -37,7 +37,8 @@ type workbookNode = {
         | "fieldset"
         | "text"
         | "input"
-        | "data-table";
+        | "data-table"
+        | "header";
     props: workbookNodeProps;
     contents?: workbookNode[];
     nodeLabel?: {

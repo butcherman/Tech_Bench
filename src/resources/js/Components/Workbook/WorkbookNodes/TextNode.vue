@@ -8,5 +8,5 @@ const props = defineProps<{
 </script>
 
 <template>
-    <component :is="tag" :class="class">{{ text }}</component>
+    <component :is="tag" :class="class" v-html="text" />
 </template>

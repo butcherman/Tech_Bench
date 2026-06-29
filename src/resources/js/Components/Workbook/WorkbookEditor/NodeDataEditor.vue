@@ -2,6 +2,7 @@
 import DataTableForm from "./NodeForms/DataTableForm.vue";
 import FieldsetForm from "./NodeForms/FieldsetForm.vue";
 import FormError from "./NodeForms/FormError.vue";
+import HeaderForm from "./NodeForms/HeaderForm.vue";
 import InputForm from "./NodeForms/InputForm.vue";
 import PageForm from "./NodeForms/PageForm.vue";
 import TextForm from "./NodeForms/TextForm.vue";
@@ -42,6 +43,8 @@ const editingForm = computed(() => {
     switch (activeNode.value.type) {
         case "fieldset":
             return FieldsetForm;
+        case "header":
+            return HeaderForm;
         case "text":
             return TextForm;
         case "data-table":

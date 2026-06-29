@@ -22,6 +22,7 @@ const component = computed(() => {
         case "static":
             return StaticNode;
         case "text":
+        case "header":
             return TextNode;
         case "data-table":
             return DataTable;
