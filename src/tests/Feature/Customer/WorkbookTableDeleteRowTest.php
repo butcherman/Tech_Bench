@@ -80,11 +80,14 @@ class WorkbookTableDeleteRowTest extends TestCase
             'row_index' => $rowIndex,
         ]);
 
-        $response = $this->delete(route('cust-workbook.del-row', [
-            $workbook,
-            $tableIndex,
-            $rowIndex,
-        ]));
+        $this->expectException(WorkbookNotPublishedException::class);
+
+        $response = $this->withoutExceptionHandling()
+            ->delete(route('cust-workbook.del-row', [
+                $workbook,
+                $tableIndex,
+                $rowIndex,
+            ]));
 
         $response->assertNotFound();
 
@@ -139,11 +142,14 @@ class WorkbookTableDeleteRowTest extends TestCase
             'row_index' => $rowIndex,
         ]);
 
-        $response = $this->delete(route('cust-workbook.del-row', [
-            $workbook,
-            $tableIndex,
-            $rowIndex,
-        ]));
+        $this->expectException(FeatureDisabledException::class);
+
+        $response = $this->withoutExceptionHandling()
+            ->delete(route('cust-workbook.del-row', [
+                $workbook,
+                $tableIndex,
+                $rowIndex,
+            ]));
 
         $response->assertNotFound();
 
@@ -240,7 +246,10 @@ class WorkbookTableDeleteRowTest extends TestCase
             'row_index' => $rowIndex,
         ]);
 
-        $response = $this->actingAs($user)
+        $this->expectException(FeatureDisabledException::class);
+
+        $response = $this->withoutExceptionHandling()
+            ->actingAs($user)
             ->delete(route('cust-workbook.del-row', [
                 $workbook,
                 $tableIndex,

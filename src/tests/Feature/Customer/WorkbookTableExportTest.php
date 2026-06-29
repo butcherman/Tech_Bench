@@ -97,10 +97,13 @@ class WorkbookTableExportTest extends TestCase
             }
         }
 
-        $response = $this->get(route('cust-workbook.export', [
-            $workbook,
-            $tableIndex,
-        ]));
+        $this->expectException(WorkbookNotPublishedException::class);
+
+        $response = $this->withoutExceptionHandling()
+            ->get(route('cust-workbook.export', [
+                $workbook,
+                $tableIndex,
+            ]));
 
         $response->assertNotFound();
 
@@ -158,10 +161,13 @@ class WorkbookTableExportTest extends TestCase
             }
         }
 
-        $response = $this->get(route('cust-workbook.export', [
-            $workbook,
-            $tableIndex,
-        ]));
+        $this->expectException(FeatureDisabledException::class);
+
+        $response = $this->withoutExceptionHandling()
+            ->get(route('cust-workbook.export', [
+                $workbook,
+                $tableIndex,
+            ]));
 
         $response->assertNotFound();
 

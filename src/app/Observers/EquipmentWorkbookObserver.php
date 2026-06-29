@@ -31,17 +31,4 @@ class EquipmentWorkbookObserver extends Observer
 
         CacheData::clearCache();
     }
-
-    /**
-     * Handle the EquipmentWorkbook "deleted" event.
-     */
-    public function deleted(EquipmentWorkbook $equipmentWorkbook): void
-    {
-        Log::info(
-            'Equipment Workbook deleted for Equip ID '.
-            $equipmentWorkbook->equip_id.' by '.$this->user
-        );
-
-        CacheData::clearCache();
-    }
 }

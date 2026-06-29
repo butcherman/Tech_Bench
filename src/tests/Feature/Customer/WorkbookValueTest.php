@@ -99,7 +99,10 @@ class WorkbookValueTest extends TestCase
             'isTable' => false,
         ];
 
-        $response = $this->put(route('cust-workbook.save-value', $workbook), $form);
+        $this->expectException(WorkbookNotPublishedException::class);
+
+        $response = $this->withoutExceptionHandling()
+            ->put(route('cust-workbook.save-value', $workbook), $form);
 
         $response->assertNotFound();
 
@@ -150,7 +153,10 @@ class WorkbookValueTest extends TestCase
             'isTable' => false,
         ];
 
-        $response = $this->put(route('cust-workbook.save-value', $workbook), $form);
+        $this->expectException(FeatureDisabledException::class);
+
+        $response = $this->withoutExceptionHandling()
+            ->put(route('cust-workbook.save-value', $workbook), $form);
 
         $response->assertNotFound();
 
@@ -272,7 +278,10 @@ class WorkbookValueTest extends TestCase
             'isTable' => false,
         ];
 
-        $response = $this->actingAs($user)
+        $this->expectException(FeatureDisabledException::class);
+
+        $response = $this->withoutExceptionHandling()
+            ->actingAs($user)
             ->put(route('cust-workbook.save-value', $workbook), $form);
 
         $response->assertNotFound();

@@ -35,7 +35,10 @@ class EquipmentWorkbookControllerTest extends TestCase
         /** @var User $user */
         $user = User::factory()->create();
 
-        $response = $this->actingAs($user)->get(route('workbooks.index'));
+        $this->expectException(FeatureDisabledException::class);
+
+        $response = $this->withoutExceptionHandling()
+            ->actingAs($user)->get(route('workbooks.index'));
         $response->assertStatus(404);
 
         Exceptions::assertReported(FeatureDisabledException::class);
@@ -95,7 +98,10 @@ class EquipmentWorkbookControllerTest extends TestCase
         $user = User::factory()->create();
         $equip = EquipmentType::factory()->create();
 
-        $response = $this->actingAs($user)
+        $this->expectException(FeatureDisabledException::class);
+
+        $response = $this->withoutExceptionHandling()
+            ->actingAs($user)
             ->get(route('workbooks.create', $equip));
         $response->assertStatus(404);
 
@@ -177,7 +183,10 @@ class EquipmentWorkbookControllerTest extends TestCase
             ],
         ];
 
-        $response = $this->actingAs($user)
+        $this->expectException(FeatureDisabledException::class);
+
+        $response = $this->withoutExceptionHandling()
+            ->actingAs($user)
             ->post(route('workbooks.store', $equip), $form);
         $response->assertStatus(404);
 
@@ -258,7 +267,10 @@ class EquipmentWorkbookControllerTest extends TestCase
 
         $equip = EquipmentType::factory()->create();
 
-        $response = $this->actingAs($user)
+        $this->expectException(FeatureDisabledException::class);
+
+        $response = $this->withoutExceptionHandling()
+            ->actingAs($user)
             ->get(route('workbooks.show', $equip));
         $response->assertStatus(404);
 
@@ -328,7 +340,10 @@ class EquipmentWorkbookControllerTest extends TestCase
         $equip = EquipmentType::factory()->create();
         EquipmentWorkbook::factory()->create(['equip_id' => $equip->equip_id]);
 
-        $response = $this->actingAs($user)
+        $this->expectException(FeatureDisabledException::class);
+
+        $response = $this->withoutExceptionHandling()
+            ->actingAs($user)
             ->get(route('workbooks.edit', $equip));
 
         $response->assertStatus(404);
@@ -407,7 +422,10 @@ class EquipmentWorkbookControllerTest extends TestCase
             ],
         ];
 
-        $response = $this->actingAs($user)
+        $this->expectException(FeatureDisabledException::class);
+
+        $response = $this->withoutExceptionHandling()
+            ->actingAs($user)
             ->put(route('workbooks.update', $equip), $form);
 
         $response->assertStatus(404);

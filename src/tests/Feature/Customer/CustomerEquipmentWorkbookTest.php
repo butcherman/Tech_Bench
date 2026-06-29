@@ -53,7 +53,10 @@ class CustomerEquipmentWorkbookTest extends TestCase
         $equipment = CustomerEquipment::factory()
             ->create(['cust_id' => $customer->cust_id]);
 
-        $response = $this->actingAs($user)
+        $this->expectException(FeatureDisabledException::class);
+
+        $response = $this->withoutExceptionHandling()
+            ->actingAs($user)
             ->get(route('customers.equipment.workbook.index', [
                 $customer,
                 $equipment,
@@ -75,7 +78,10 @@ class CustomerEquipmentWorkbookTest extends TestCase
         $equipment = CustomerEquipment::factory()
             ->create(['cust_id' => $customer->cust_id]);
 
-        $response = $this->actingAs($user)
+        $this->expectException(EquipmentWorkbookNotFoundException::class);
+
+        $response = $this->withoutExceptionHandling()
+            ->actingAs($user)
             ->get(route('customers.equipment.workbook.index', [
                 $customer,
                 $equipment,
@@ -155,7 +161,10 @@ class CustomerEquipmentWorkbookTest extends TestCase
         EquipmentWorkbook::factory()
             ->create(['equip_id' => $equipment->equip_id]);
 
-        $response = $this->actingAs($user)
+        $this->expectException(FeatureDisabledException::class);
+
+        $response = $this->withoutExceptionHandling()
+            ->actingAs($user)
             ->get(route('customers.equipment.workbook.create', [
                 $customer,
                 $equipment,
@@ -242,7 +251,10 @@ class CustomerEquipmentWorkbookTest extends TestCase
             'cust_equip_id' => $equipment->cust_equip_id,
         ]);
 
-        $response = $this->actingAs($user)
+        $this->expectException(FeatureDisabledException::class);
+
+        $response = $this->withoutExceptionHandling()
+            ->actingAs($user)
             ->put(route('customers.equipment.workbook.update', [
                 $customer,
                 $equipment,

@@ -84,10 +84,13 @@ class WorkbookTableImportTest extends TestCase
             }
         }
 
-        $response = $this->get(route('cust-workbook.import.index', [
-            $workbook,
-            $tableIndex,
-        ]));
+        $this->expectException(WorkbookNotPublishedException::class);
+
+        $response = $this->withoutExceptionHandling()
+            ->get(route('cust-workbook.import.index', [
+                $workbook,
+                $tableIndex,
+            ]));
 
         $response->assertNotFound();
 
@@ -152,10 +155,13 @@ class WorkbookTableImportTest extends TestCase
             }
         }
 
-        $response = $this->get(route('cust-workbook.import.index', [
-            $workbook,
-            $tableIndex,
-        ]));
+        $this->expectException(FeatureDisabledException::class);
+
+        $response = $this->withoutExceptionHandling()
+            ->get(route('cust-workbook.import.index', [
+                $workbook,
+                $tableIndex,
+            ]));
 
         $response->assertNotFound();
 
@@ -257,10 +263,13 @@ class WorkbookTableImportTest extends TestCase
             'publicPage' => 'true',
         ];
 
-        $response = $this->post(
-            route('cust-workbook.import.store', [$workbook, $tableIndex]),
-            $form
-        );
+        $this->expectException(WorkbookNotPublishedException::class);
+
+        $response = $this->withoutExceptionHandling()
+            ->post(
+                route('cust-workbook.import.store', [$workbook, $tableIndex]),
+                $form
+            );
 
         $response->assertNotFound();
 
@@ -319,10 +328,13 @@ class WorkbookTableImportTest extends TestCase
             'publicPage' => 'true',
         ];
 
-        $response = $this->post(
-            route('cust-workbook.import.store', [$workbook, $tableIndex]),
-            $form
-        );
+        $this->expectException(FeatureDisabledException::class);
+
+        $response = $this->withoutExceptionHandling()
+            ->post(
+                route('cust-workbook.import.store', [$workbook, $tableIndex]),
+                $form
+            );
 
         $response->assertNotFound();
 
@@ -365,10 +377,13 @@ class WorkbookTableImportTest extends TestCase
         Cache::tags(['data-import'])
             ->put($workbook->wb_hash.$tableIndex, $this->getValidatedData());
 
-        $response = $this->get(route('cust-workbook.import.show', [
-            $workbook,
-            $tableIndex,
-        ]));
+        $this->expectException(WorkbookNotPublishedException::class);
+
+        $response = $this->withoutExceptionHandling()
+            ->get(route('cust-workbook.import.show', [
+                $workbook,
+                $tableIndex,
+            ]));
 
         $response->assertNotFound();
 
@@ -407,10 +422,13 @@ class WorkbookTableImportTest extends TestCase
         Cache::tags(['data-import'])
             ->put($workbook->wb_hash.$tableIndex, $this->getValidatedData());
 
-        $response = $this->get(route('cust-workbook.import.show', [
-            $workbook,
-            $tableIndex,
-        ]));
+        $this->expectException(FeatureDisabledException::class);
+
+        $response = $this->withoutExceptionHandling()
+            ->get(route('cust-workbook.import.show', [
+                $workbook,
+                $tableIndex,
+            ]));
 
         $response->assertNotFound();
 
@@ -458,10 +476,13 @@ class WorkbookTableImportTest extends TestCase
         Cache::tags(['data-import'])
             ->put($workbook->wb_hash.$tableIndex, $this->getValidatedData());
 
-        $response = $this->put(route('cust-workbook.import.update', [
-            $workbook,
-            $tableIndex,
-        ]));
+        $this->expectException(WorkbookNotPublishedException::class);
+
+        $response = $this->withoutExceptionHandling()
+            ->put(route('cust-workbook.import.update', [
+                $workbook,
+                $tableIndex,
+            ]));
 
         $response->assertNotFound();
 
@@ -521,10 +542,13 @@ class WorkbookTableImportTest extends TestCase
         Cache::tags(['data-import'])
             ->put($workbook->wb_hash.$tableIndex, $this->getValidatedData());
 
-        $response = $this->put(route('cust-workbook.import.update', [
-            $workbook,
-            $tableIndex,
-        ]));
+        $this->expectException(FeatureDisabledException::class);
+
+        $response = $this->withoutExceptionHandling()
+            ->put(route('cust-workbook.import.update', [
+                $workbook,
+                $tableIndex,
+            ]));
 
         $response->assertNotFound();
 
@@ -590,10 +614,13 @@ class WorkbookTableImportTest extends TestCase
             }
         }
 
-        $response = $this->delete(route('cust-workbook.import.destroy', [
-            $workbook,
-            $tableIndex,
-        ]));
+        $this->expectException(WorkbookNotPublishedException::class);
+
+        $response = $this->withoutExceptionHandling()
+            ->delete(route('cust-workbook.import.destroy', [
+                $workbook,
+                $tableIndex,
+            ]));
 
         $response->assertNotFound();
 
@@ -652,10 +679,13 @@ class WorkbookTableImportTest extends TestCase
             }
         }
 
-        $response = $this->delete(route('cust-workbook.import.destroy', [
-            $workbook,
-            $tableIndex,
-        ]));
+        $this->expectException(FeatureDisabledException::class);
+
+        $response = $this->withoutExceptionHandling()
+            ->delete(route('cust-workbook.import.destroy', [
+                $workbook,
+                $tableIndex,
+            ]));
 
         $response->assertNotFound();
 

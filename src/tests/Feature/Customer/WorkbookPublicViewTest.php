@@ -56,7 +56,10 @@ class WorkbookPublicViewTest extends TestCase
             'cust_equip_id' => $equipment->cust_equip_id,
         ]);
 
-        $response = $this->get(route('cust-workbook.show', $workbook));
+        $this->expectException(WorkbookNotPublishedException::class);
+
+        $response = $this->withoutExceptionHandling()
+            ->get(route('cust-workbook.show', $workbook));
 
         $response->assertNotFound();
 
@@ -93,7 +96,10 @@ class WorkbookPublicViewTest extends TestCase
             'cust_equip_id' => $equipment->cust_equip_id,
         ]);
 
-        $response = $this->get(route('cust-workbook.show', $workbook));
+        $this->expectException(FeatureDisabledException::class);
+
+        $response = $this->withoutExceptionHandling()
+            ->get(route('cust-workbook.show', $workbook));
 
         $response->assertNotFound();
 
@@ -141,7 +147,10 @@ class WorkbookPublicViewTest extends TestCase
             'cust_equip_id' => $equipment->cust_equip_id,
         ]);
 
-        $response = $this->actingAs($user)
+        $this->expectException(WorkbookNotPublishedException::class);
+
+        $response = $this->withoutExceptionHandling()
+            ->actingAs($user)
             ->get(route('cust-workbook.show', $workbook));
 
         $response->assertNotFound();
@@ -184,7 +193,10 @@ class WorkbookPublicViewTest extends TestCase
             'cust_equip_id' => $equipment->cust_equip_id,
         ]);
 
-        $response = $this->actingAs($user)
+        $this->expectException(FeatureDisabledException::class);
+
+        $response = $this->withoutExceptionHandling()
+            ->actingAs($user)
             ->get(route('cust-workbook.show', $workbook));
 
         $response->assertNotFound();
