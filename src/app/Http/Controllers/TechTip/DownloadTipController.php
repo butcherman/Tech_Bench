@@ -19,22 +19,20 @@ class DownloadTipController extends Controller
     {
         // If download feature is disabled, abort
         // throw_if(!config('tech-tips.allow_download'), DownloadTipNotAllowedException::class);
-        if(!config('tech-tips.allow_download')) {
+        if (! config('tech-tips.allow_download')) {
             throw new DownloadTipNotAllowedException;
         }
 
-
-        Log::info('Tech Tip ID ' . $tech_tip->tip_id . ' is being downloaded by ' .
+        Log::info('Tech Tip ID '.$tech_tip->tip_id.' is being downloaded by '.
             $request->user()->username);
 
         // Change all image tags to note the file location for the PDF to find
         $tech_tip->details = str_replace(
             'src="/storage/images',
-            'src="' . storage_path() .
+            'src="'.storage_path().
             '/app/public/images',
             $tech_tip->details
         );
-
 
         return Pdf::loadView('pdf.tech_tip', [
             'tipData' => $tech_tip->load(['Equipment', 'Files']),

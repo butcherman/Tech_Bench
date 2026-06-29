@@ -54,7 +54,7 @@ class FileUploadUnitTest extends TestCase
     {
         Storage::fake();
         Storage::disk($this->model->disk)->delete(
-            $this->model->folder . DIRECTORY_SEPARATOR . $this->model->hash_name
+            $this->model->folder.DIRECTORY_SEPARATOR.$this->model->hash_name
         );
 
         $this->assertFalse($this->model->fileExists());
@@ -64,8 +64,8 @@ class FileUploadUnitTest extends TestCase
     {
         $this->assertEquals(
             storage_path(
-                'app' . DIRECTORY_SEPARATOR .
-                $this->model->folder . DIRECTORY_SEPARATOR .
+                'app'.DIRECTORY_SEPARATOR.
+                $this->model->folder.DIRECTORY_SEPARATOR.
                 $this->model->hash_name
             ),
             $this->model->getFilePath()

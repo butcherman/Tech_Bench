@@ -61,7 +61,7 @@ class PublicLinkTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('FileLink/Public/Show')
                     ->has('link')
                     ->has('files')
@@ -79,7 +79,7 @@ class PublicLinkTest extends TestCase
 
         $response->assertSuccessful()
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('FileLink/Public/Show')
                     ->has('link')
                     ->has('files')
@@ -162,11 +162,11 @@ class PublicLinkTest extends TestCase
         $this->assertDatabaseHas('file_uploads', [
             'folder' => $link->link_id,
             'file_name' => 'testPhoto.png',
-            'hash_name' => $upload->hashName()
+            'hash_name' => $upload->hashName(),
         ]);
 
         Storage::disk('fileLinks')
-            ->assertExists($link->link_id . DIRECTORY_SEPARATOR . $upload->hashName());
+            ->assertExists($link->link_id.DIRECTORY_SEPARATOR.$upload->hashName());
     }
 
     /*

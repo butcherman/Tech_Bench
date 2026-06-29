@@ -89,7 +89,7 @@ class UploadTipFileTest extends TestCase
         ]);
 
         Storage::disk('tips')
-            ->assertExists('tmp' . DIRECTORY_SEPARATOR . $dataArr['file']->hashName());
+            ->assertExists('tmp'.DIRECTORY_SEPARATOR.$dataArr['file']->hashName());
     }
 
     public function test_invoke_public_file(): void
@@ -129,6 +129,6 @@ class UploadTipFileTest extends TestCase
         ]);
 
         Storage::disk('tips')
-            ->assertExists('tmp' . DIRECTORY_SEPARATOR . $upload->hashName());
+            ->assertExists('tmp'.DIRECTORY_SEPARATOR.$upload->hashName());
     }
 }

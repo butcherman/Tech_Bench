@@ -1,6 +1,7 @@
 <?php
 
 use App\Features\FileLinkFeature;
+use App\Models\EquipmentWorkbook;
 use App\Models\User;
 use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Gate;
@@ -32,6 +33,27 @@ Broadcast::channel('administration-channel', function (User $user) {
     );
 
     return Gate::allows('admin-link', $user);
+});
+
+/*
+|-------------------------------------------------------------------------------
+| Workbook Channels
+|-------------------------------------------------------------------------------
+*/
+Broadcast::channel('workbook-canvas.{equipment_type}', function (User $user, string $equipment_type) {
+    Log::debug(
+        'User '.$user->username.' connecting to Workbook Canvas Channel for Equip ID '.$equipment_type
+    );
+
+    return $user->can('manage', EquipmentWorkbook::class);
+});
+
+Broadcast::channel('equipment-workbook.{wb_hash}', function (string $wb_hash) {
+    Log::debug(
+        'User connecting to Workbook Channel for Workbook Hash '.$wb_hash
+    );
+
+    return true;
 });
 
 /*

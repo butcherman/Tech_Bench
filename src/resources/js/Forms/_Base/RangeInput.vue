@@ -7,6 +7,7 @@ import type { Ref } from "vue";
 const emit = defineEmits<{
     focus: [];
     blur: [];
+    change: [];
 }>();
 
 const props = defineProps<{
@@ -64,6 +65,7 @@ const {
             :max="max"
             @focus="onFocus"
             @blur="onBlur"
+            @change="$emit('change')"
         />
         <div class="text-muted">
             <slot name="value-slot" :value="value">

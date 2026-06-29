@@ -16,9 +16,13 @@ class EquipmentTypeFactory extends Factory
      */
     public function definition(): array
     {
+        do {
+            $name = $this->faker->unique()->word();
+        } while (EquipmentType::where('name', $name)->first());
+
         return [
             'cat_id' => EquipmentCategory::factory(),
-            'name' => $this->faker->unique()->word(),
+            'name' => $name,
             'allow_public_tip' => true,
         ];
     }

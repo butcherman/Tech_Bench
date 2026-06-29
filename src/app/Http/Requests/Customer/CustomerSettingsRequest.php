@@ -29,6 +29,7 @@ class CustomerSettingsRequest extends FormRequest
             'auto_purge' => ['required', 'boolean'],
             'allow_vpn_data' => ['required', 'boolean'],
             'allow_share_vpn_data' => ['required', 'boolean'],
+            'enable_workbooks' => ['required', 'boolean'],
         ];
     }
 }

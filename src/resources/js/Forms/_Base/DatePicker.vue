@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { computed, ref, toRef } from "vue";
+import { useField } from "vee-validate";
 import {
     DatePicker,
     FloatLabel,
@@ -6,13 +8,12 @@ import {
     InputGroupAddon,
     Message,
 } from "primevue";
-import { computed, ref, toRef } from "vue";
-import { useField } from "vee-validate";
 import type { Ref } from "vue";
 
 const emit = defineEmits<{
     focus: [];
     blur: [];
+    change: [];
 }>();
 
 const props = defineProps<{
@@ -34,7 +35,7 @@ const props = defineProps<{
 const inputPlaceholder = computed<string>(() =>
     props.placeholder && (hasFocus.value || !props.label)
         ? props.placeholder
-        : ""
+        : "",
 );
 
 /*
@@ -93,6 +94,7 @@ const {
                     :type="type ?? 'text'"
                     @focus="onFocus"
                     @blur="onBlur"
+                    @change="$emit('change')"
                 />
                 <label :for="id">{{ label }}</label>
             </FloatLabel>

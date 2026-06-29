@@ -10,6 +10,7 @@ use App\Http\Controllers\Customer\CustomerDeletedItemsController;
 use App\Http\Controllers\Customer\CustomerEquipmentController;
 use App\Http\Controllers\Customer\CustomerEquipmentDataController;
 use App\Http\Controllers\Customer\CustomerEquipmentNoteController;
+use App\Http\Controllers\Customer\CustomerEquipmentWorkbookController;
 use App\Http\Controllers\Customer\CustomerFileController;
 use App\Http\Controllers\Customer\CustomerNoteController;
 use App\Http\Controllers\Customer\CustomerSearchController;
@@ -17,8 +18,14 @@ use App\Http\Controllers\Customer\CustomerSiteController;
 use App\Http\Controllers\Customer\CustomerVpnController;
 use App\Http\Controllers\Customer\DisabledCustomerController;
 use App\Http\Controllers\Customer\DownloadNoteController;
+use App\Http\Controllers\Customer\PublishWorkbookController;
 use App\Http\Controllers\Customer\ReAssignCustomerController;
 use App\Http\Controllers\Customer\ShareVpnDataController;
+use App\Http\Controllers\Customer\WorkbookPublicViewController;
+use App\Http\Controllers\Customer\WorkbookTableDeleteRowController;
+use App\Http\Controllers\Customer\WorkbookTableExportController;
+use App\Http\Controllers\Customer\WorkbookTableImportController;
+use App\Http\Controllers\Customer\WorkbookValueController;
 use App\Models\Customer;
 use App\Models\CustomerEquipment;
 use App\Models\CustomerSite;
@@ -229,18 +236,20 @@ Route::middleware('auth.secure')->group(function () {
         | /customers/{customer-slug|customer-id}/sites
         |-----------------------------------------------------------------------
         */
-        Route::prefix('sites/{site:cust_site_id}')->controller(CustomerSiteController::class)->group(function () {
-            Route::get('restore', 'restore')
-                ->scopeBindings()
-                ->withTrashed()
-                ->name('sites.restore');
-            Route::delete('force-delete', 'forceDelete')
-                ->scopeBindings()
-                ->withTrashed()
-                ->name('sites.forceDelete');
-        })->missing(function () {
-            throw new CustomerNotFoundException;
-        });
+        Route::prefix('sites/{site:cust_site_id}')
+            ->controller(CustomerSiteController::class)
+            ->group(function () {
+                Route::get('restore', 'restore')
+                    ->scopeBindings()
+                    ->withTrashed()
+                    ->name('sites.restore');
+                Route::delete('force-delete', 'forceDelete')
+                    ->scopeBindings()
+                    ->withTrashed()
+                    ->name('sites.forceDelete');
+            })->missing(function () {
+                throw new CustomerNotFoundException;
+            });
 
         Route::resource('sites', CustomerSiteController::class)
             ->scoped(['sites' => 'cust_id'])
@@ -258,11 +267,25 @@ Route::middleware('auth.secure')->group(function () {
 
         /*
         |-----------------------------------------------------------------------
-        | Customer Equipment Routes
+        | Customer Equipment & Workbook Routes
         | /customers/{customer-slug|customer-id}/equipment
         |-----------------------------------------------------------------------
         */
         Route::prefix('equipment/{equipment}')->name('equipment.')->group(function () {
+            Route::prefix('workbook')->name('workbook.')->group(function () {
+                Route::controller(PublishWorkbookController::class)->group(function () {
+                    Route::post('store', 'store')->name('publish');
+                    Route::delete('destroy', 'destroy')->name('unpublish');
+                });
+
+                Route::controller(CustomerEquipmentWorkbookController::class)
+                    ->group(function () {
+                        Route::get('index', 'index')->name('index');
+                        Route::get('create', 'create')->name('create');
+                        Route::put('update', 'update')->name('update');
+                    });
+            });
+
             Route::resource('notes', CustomerEquipmentNoteController::class)
                 ->scoped(['equipment' => 'cust_equip_id'])
                 ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
@@ -326,3 +349,39 @@ Route::middleware('auth.secure')->group(function () {
             ->except(['show']);
     });
 });
+
+/*
+|-------------------------------------------------------------------------------
+| Public Workbook Links
+| /workbook/{workbook-hash}
+|-------------------------------------------------------------------------------
+*/
+Route::prefix('workbook')
+    ->name('cust-workbook.')
+    ->group(function () {
+        Route::get(
+            '{workbook:wb_hash}/export/{table}',
+            WorkbookTableExportController::class
+        )->name('export');
+        Route::put('{workbook:wb_hash}', WorkbookValueController::class)
+            ->name('save-value');
+        Route::delete(
+            '{workbook:wb_hash}/del-row/{table}/{row}',
+            WorkbookTableDeleteRowController::class
+        )->name('del-row');
+
+        Route::prefix('{workbook:wb_hash}/import/{table}')
+            ->controller(WorkbookTableImportController::class)
+            ->name('import.')
+            ->group(function () {
+                Route::get('/', 'index')->name('index');
+                Route::get('/get-results', 'show')->name('show');
+                Route::post('/save', 'store')->name('store');
+                Route::put('/import-data', 'update')->name('update');
+                Route::delete('/delete-data', 'destroy')->name('destroy');
+            });
+
+        Route::get('customer-workbook/{workbook:wb_hash}', WorkbookPublicViewController::class)
+            ->name('show');
+
+    });

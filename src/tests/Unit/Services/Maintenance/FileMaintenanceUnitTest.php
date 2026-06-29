@@ -76,10 +76,11 @@ class FileMaintenanceUnitTest extends TestCase
         $fileList = ['.gitignore', 'testOne.txt', 'testTwo.txt'];
 
         foreach ($fileList as $file) {
-            Storage::put($file, 'Test File For ' . $file);
+            Storage::put($file, 'Test File For '.$file);
         }
 
-        $testObj = new class extends FileMaintenanceService {
+        $testObj = new class extends FileMaintenanceService
+        {
             public function __invoke(): array
             {
                 return $this->getFileList(Storage::disk('local')->path(''));
@@ -212,7 +213,8 @@ class FileMaintenanceUnitTest extends TestCase
         Storage::put('not_empty/test_file.txt', 'test file stuff');
         Storage::put('empty_two/.gitignore', 'git ignore file');
 
-        $testObj = new class extends FileMaintenanceService {
+        $testObj = new class extends FileMaintenanceService
+        {
             public function __invoke(): void
             {
                 $this->wipeDirectory(Storage::disk('local')->path(''));

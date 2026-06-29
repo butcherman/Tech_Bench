@@ -28,9 +28,15 @@ class BuildAdminMenuUnitTest extends TestCase
     public function test_build_admin_menu_installer_file_links_enabled(): void
     {
         config(['file-link.feature_enabled' => true]);
+        config(['customer.enable_workbooks' => true]);
 
         $user = User::factory()->create(['role_id' => 1]);
         $shouldBe = $this->getBaseMenu();
+        $shouldBe['Equipment'][] = [
+            'name' => 'Equipment Workbooks',
+            'icon' => 'fa-table',
+            'route' => route('workbooks.index'),
+        ];
 
         $testObj = new BuildAdminMenu;
         $menu = $testObj($user);

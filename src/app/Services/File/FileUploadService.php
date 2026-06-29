@@ -14,8 +14,8 @@ class FileUploadService extends FileStorageService
      */
     public function moveUploadedFile(FileUpload $file, string $newFolder, ?string $newDisk = null): void
     {
-        $currentPath = $file->folder . DIRECTORY_SEPARATOR . $file->hash_name;
-        $newPath = $newFolder . DIRECTORY_SEPARATOR . $file->hash_name;
+        $currentPath = $file->folder.DIRECTORY_SEPARATOR.$file->hash_name;
+        $newPath = $newFolder.DIRECTORY_SEPARATOR.$file->hash_name;
 
         $this->moveDiskFile($file->disk, $currentPath, $newPath, $newDisk);
 
@@ -40,7 +40,7 @@ class FileUploadService extends FileStorageService
 
         $this->deleteDiskFile(
             $file->disk,
-            $file->folder . DIRECTORY_SEPARATOR . $file->hash_name
+            $file->folder.DIRECTORY_SEPARATOR.$file->hash_name
         );
 
         return true;

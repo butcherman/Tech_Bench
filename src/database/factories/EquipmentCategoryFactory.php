@@ -15,8 +15,12 @@ class EquipmentCategoryFactory extends Factory
      */
     public function definition(): array
     {
+        do {
+            $name = $this->faker->unique()->word();
+        } while (EquipmentCategory::where('name', $name)->first());
+
         return [
-            'name' => $this->faker->unique()->word(),
+            'name' => $name,
         ];
     }
 }
