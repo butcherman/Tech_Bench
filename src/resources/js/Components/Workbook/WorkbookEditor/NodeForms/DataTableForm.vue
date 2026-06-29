@@ -8,17 +8,36 @@ import { useFieldArray, useForm } from "vee-validate";
 import { object, number, boolean, array, string } from "yup";
 import { closeNodeEditor } from "@/Composables/Workbook/WorkbookEditor.module";
 
+interface formDataInterface {
+    allowAddRow: boolean;
+    allowDeleteRow: boolean;
+    allowExport: boolean;
+    allowImport: boolean;
+    columns: workbookTableColumn[];
+    defaultRows: number;
+    hideBorders: boolean;
+    numberRows: boolean;
+}
+
 const props = defineProps<{
     node: workbookNode;
 }>();
 
 // Copy of Element data so we don't modify the original saved data
-const formData = JSON.parse(JSON.stringify(props.node.props));
+const formData: formDataInterface = JSON.parse(
+    JSON.stringify(props.node.props),
+);
+formData.columns?.map((col) => {
+    if (col.type === "enum" && Array.isArray(col.list)) {
+        col.list = col.list?.join(", ");
+    }
+});
+
+console.log(formData);
 
 /**
  * Table Column Data
  */
-// const tableColumnTypes = ["Text", "Number", "Checkbox", "Drop List"];
 const tableColumnTypes: { text: string; value: workbookTableColumnType }[] = [
     {
         text: "Text",
@@ -156,6 +175,11 @@ const saveData = handleSubmit((form) => {
                             label="Dropdown Options (use comma to separate)"
                         />
                     </div>
+                    <!-- <SwitchInput
+                        :id="`col-default-${field.key}`"
+                        :name="`columns[${index}].allow_default`"
+                        label="Allow Default Entry"
+                    /> -->
                     <div
                         class="flex flex-col justify-center ms-2 text-danger pointer"
                         v-tooltip="'Remove Column'"
