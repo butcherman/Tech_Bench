@@ -24,7 +24,7 @@ class WorkbookTableValueFactory extends Factory
             'table_index' => Str::uuid(),
             'row_index' => Str::uuid(),
             'column_name' => $this->faker->word(),
-            'value' => $this->faker->words(2),
+            'value' => $this->faker->word(),
             'public' => true,
         ];
     }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Exceptions\Customer\EquipmentWorkbookNotFoundException;
+use App\Exceptions\Misc\FeatureDisabledException;
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\CustomerEquipment;
@@ -13,7 +14,14 @@ use Inertia\Response;
 
 class CustomerEquipmentWorkbookController extends Controller
 {
-    public function __construct(protected CustomerWorkbookService $svc) {}
+    public function __construct(protected CustomerWorkbookService $svc)
+    {
+        throw_unless(
+            config('customer.enable_workbooks'),
+            FeatureDisabledException::class,
+            'Customer Equipment Workbooks'
+        );
+    }
 
     /**
      * Show the internal version of the workbook

@@ -39,11 +39,7 @@ class CustomerWorkbookService
         $currentWorkbook = $equip->EquipmentWorkbook;
         $newWorkbook = $equip->EquipmentType->EquipmentWorkbook;
 
-        // dd($newWorkbook);
-
         $wbData = $this->removeBuilderData($newWorkbook->workbook_data);
-
-        // dd($wbData);
 
         $currentWorkbook->wb_version = $newWorkbook->version_hash;
         $currentWorkbook->wb_skeleton = $wbData;
@@ -61,7 +57,6 @@ class CustomerWorkbookService
      */
     public function publishWorkbook(CustomerEquipment $equipment, string $publish_until): void
     {
-        // dd($publish_until);
         $parsed = Carbon::parse($publish_until);
 
         $equipment->EquipmentWorkbook->publish_until = $parsed;

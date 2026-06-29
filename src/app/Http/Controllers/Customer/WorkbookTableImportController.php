@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Customer;
 
 use App\Enums\DiskEnum;
 use App\Events\Customer\WorkbookTableLockEvent;
+use App\Exceptions\Customer\WorkbookNotPublishedException;
+use App\Exceptions\Misc\FeatureDisabledException;
 use App\Http\Controllers\FileUploadController;
 use App\Http\Requests\Customer\WorkbookTableImportRequest;
 use App\Jobs\Customer\ValidateWorkbookImportJob;
@@ -17,13 +19,27 @@ use Illuminate\Support\Facades\Log;
 
 class WorkbookTableImportController extends FileUploadController
 {
-    public function __construct(protected CustomerWorkbookService $svc) {}
+    public function __construct(protected CustomerWorkbookService $svc)
+    {
+        throw_unless(
+            config('customer.enable_workbooks'),
+            FeatureDisabledException::class,
+            'Customer Equipment Workbooks'
+        );
+    }
 
     /**
      * Get the values of a specific table
      */
     public function index(CustomerEquipmentWorkbook $workbook, string $tableIndex): JsonResponse
     {
+        if (! request()->user()) {
+            throw_unless(
+                $workbook->published,
+                WorkbookNotPublishedException::class
+            );
+        }
+
         $values = $this->svc
             ->getWorkbookTableValues($workbook, $tableIndex, true);
 
@@ -38,6 +54,13 @@ class WorkbookTableImportController extends FileUploadController
         CustomerEquipmentWorkbook $workbook,
         string $tableIndex
     ): JsonResponse|Response {
+        if (! request()->user()) {
+            throw_unless(
+                $workbook->published,
+                WorkbookNotPublishedException::class
+            );
+        }
+
         $this->setFileData(DiskEnum::customers, 'table_upload');
         $savedFile = $this->getChunk($request->file('file'), $request);
 
@@ -64,8 +87,17 @@ class WorkbookTableImportController extends FileUploadController
      */
     public function show(CustomerEquipmentWorkbook $workbook, string $tableIndex): JsonResponse
     {
-        $validated = Cache::get($workbook->wb_hash.$tableIndex);
+        if (! request()->user()) {
+            throw_unless(
+                $workbook->published,
+                WorkbookNotPublishedException::class
+            );
+        }
 
+        $validated = Cache::tags(['data-import'])
+            ->get($workbook->wb_hash.$tableIndex);
+
+        // TODO - Throw exception if validated data is missing
         return response()->json($validated['data']);
     }
 
@@ -74,7 +106,15 @@ class WorkbookTableImportController extends FileUploadController
      */
     public function update(CustomerEquipmentWorkbook $workbook, string $tableIndex): JsonResponse
     {
-        $validated = Cache::pull($workbook->wb_hash.$tableIndex);
+        if (! request()->user()) {
+            throw_unless(
+                $workbook->published,
+                WorkbookNotPublishedException::class
+            );
+        }
+
+        $validated = Cache::tags(['data-import'])
+            ->pull($workbook->wb_hash.$tableIndex);
 
         if (! $validated) {
             Log::error('Trying to import an invalid CSV file to a workbook table', [
@@ -116,8 +156,18 @@ class WorkbookTableImportController extends FileUploadController
         return response()->json(['success' => true]);
     }
 
+    /**
+     * Delete all data within a table
+     */
     public function destroy(CustomerEquipmentWorkbook $workbook, string $tableIndex): JsonResponse
     {
+        if (! request()->user()) {
+            throw_unless(
+                $workbook->published,
+                WorkbookNotPublishedException::class
+            );
+        }
+
         $this->svc->deleteTableData($workbook, $tableIndex);
 
         return response()->json(['success' => true]);

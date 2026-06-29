@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Equipment;
 
 use App\Events\Equipment\WorkbookCanvasEvent;
+use App\Exceptions\Misc\FeatureDisabledException;
 use App\Facades\CacheData;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Equipment\EquipmentWorkbookRequest;
@@ -15,7 +16,14 @@ use Inertia\Response;
 
 class EquipmentWorkbookController extends Controller
 {
-    public function __construct(protected EquipmentWorkbookService $svc) {}
+    public function __construct(protected EquipmentWorkbookService $svc)
+    {
+        throw_unless(
+            config('customer.enable_workbooks'),
+            FeatureDisabledException::class,
+            'Customer Equipment Workbooks'
+        );
+    }
 
     /**
      * Display a listing equipment with a link to create or edit workbook data.
@@ -93,14 +101,5 @@ class EquipmentWorkbookController extends Controller
         WorkbookCanvasEvent::dispatch($equipment_type);
 
         return response()->json(['success' => true]);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-        return 'destroy';
     }
 }
