@@ -152,6 +152,12 @@ const defaultRow = (): workbookTableRow => {
         index: v4(),
     };
 
+    props.columns.forEach((col) => {
+        if (col.allowDefault && col.defaultValue) {
+            rowData[col.name] = col.defaultValue;
+        }
+    });
+
     return rowData;
 };
 

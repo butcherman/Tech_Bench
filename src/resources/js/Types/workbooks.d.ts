@@ -87,6 +87,9 @@ type workbookTableColumnType = "string" | "integer" | "boolean" | "enum";
 type workbookTableColumn = {
     name: string;
     type: workbookTableColumnType;
+    allowDefault: boolean;
+    defaultValue: string;
+    hiddenColumn: boolean;
     list?: string[] | string;
 };
 

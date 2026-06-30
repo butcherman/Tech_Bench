@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import AddButton from "@/Components/_Base/Buttons/AddButton.vue";
 import BaseButton from "@/Components/_Base/Buttons/BaseButton.vue";
+import Modal from "@/Components/_Base/Modal.vue";
 import SelectInput from "@/Forms/_Base/SelectInput.vue";
 import SwitchInput from "@/Forms/_Base/SwitchInput.vue";
 import TextInput from "@/Forms/_Base/TextInput.vue";
-import { useFieldArray, useForm } from "vee-validate";
+import { FieldEntry, useFieldArray, useForm } from "vee-validate";
 import { object, number, boolean, array, string } from "yup";
 import { closeNodeEditor } from "@/Composables/Workbook/WorkbookEditor.module";
+import { ref, Ref, useTemplateRef } from "vue";
 
 interface formDataInterface {
     allowAddRow: boolean;
@@ -23,6 +25,9 @@ const props = defineProps<{
     node: workbookNode;
 }>();
 
+const optionsModal = useTemplateRef("advanced-col-options");
+const activeColIndex = ref<number | null>(null);
+
 // Copy of Element data so we don't modify the original saved data
 const formData: formDataInterface = JSON.parse(
     JSON.stringify(props.node.props),
@@ -32,8 +37,6 @@ formData.columns?.map((col) => {
         col.list = col.list?.join(", ");
     }
 });
-
-console.log(formData);
 
 /**
  * Table Column Data
@@ -64,6 +67,9 @@ const addColumn = () => {
     let defaultColumn: workbookTableColumn = {
         name: "New Column",
         type: "string",
+        allowDefault: false,
+        defaultValue: "",
+        hiddenColumn: false,
     };
 
     push(defaultColumn);
@@ -112,14 +118,69 @@ const initialValues = {
     default_rows: formData.defaultRows,
     hide_borders: formData.hideBorders,
     number_rows: formData.numberRows,
+    allow_default: false,
+    hidden_column: false,
+    default_value: "",
 };
 
-const { handleSubmit, values } = useForm({
+const { handleSubmit, values, setFieldValue } = useForm({
     validationSchema: validationSchema,
     initialValues: initialValues,
 });
 
-const { remove, push, fields } = useFieldArray("columns");
+const {
+    remove,
+    push,
+    fields,
+}: {
+    remove: (idx: number) => void;
+    push: (col: workbookTableColumn) => void;
+    fields: Ref<
+        FieldEntry<workbookTableColumn>[],
+        FieldEntry<workbookTableColumn>[]
+    >;
+} = useFieldArray("columns");
+
+/**
+ * Open the Advanced Settings for a column
+ */
+const openAdvancedSettings = (colIndex: number) => {
+    let fieldToModify: workbookTableColumn = fields.value[colIndex].value;
+
+    activeColIndex.value = colIndex;
+    setFieldValue("allow_default", fieldToModify.allowDefault ?? false);
+    setFieldValue("hidden_column", fieldToModify.hiddenColumn ?? false);
+    setFieldValue("default_value", fieldToModify.defaultValue ?? "");
+
+    optionsModal.value?.show();
+};
+
+/**
+ * Save and close the Advanced Settings for a Column
+ */
+const closeAdvancedSettings = () => {
+    if (activeColIndex.value !== null) {
+        console.log(activeColIndex.value);
+        fields.value[activeColIndex.value].value.allowDefault =
+            values.allow_default;
+        fields.value[activeColIndex.value].value.defaultValue =
+            values.default_value;
+        fields.value[activeColIndex.value].value.hiddenColumn =
+            values.hidden_column;
+
+        optionsModal.value?.hide();
+    }
+};
+
+/**
+ * Put the default Advanced Settings back in place
+ */
+const resetAdvancedSettings = () => {
+    activeColIndex.value = null;
+    setFieldValue("allow_default", false);
+    setFieldValue("hidden_column", false);
+    setFieldValue("default_value", "");
+};
 
 /**
  * Update the Data Table Settings
@@ -175,14 +236,17 @@ const saveData = handleSubmit((form) => {
                             label="Dropdown Options (use comma to separate)"
                         />
                     </div>
-                    <!-- <SwitchInput
-                        :id="`col-default-${field.key}`"
-                        :name="`columns[${index}].allow_default`"
-                        label="Allow Default Entry"
-                    /> -->
+                    <div
+                        class="flex flex-col justify-center ms-2 pointer"
+                        v-tooltip.left="'Advanced Options'"
+                        @click="openAdvancedSettings(index)"
+                    >
+                        <fa-icon icon="fa-sliders" />
+                    </div>
+
                     <div
                         class="flex flex-col justify-center ms-2 text-danger pointer"
-                        v-tooltip="'Remove Column'"
+                        v-tooltip.left="'Remove Column'"
                         @click="removeColumn(index)"
                     >
                         <fa-icon icon="circle-xmark" />
@@ -244,5 +308,31 @@ const saveData = handleSubmit((form) => {
                 Save
             </BaseButton>
         </div>
+        <Modal
+            ref="advanced-col-options"
+            title="Advanced Options"
+            @hidden="resetAdvancedSettings()"
+        >
+            <SwitchInput
+                id="allow-default"
+                name="allow_default"
+                label="Allow Default Value"
+            />
+            <TextInput
+                v-if="values.allow_default"
+                id="default-value"
+                name="default_value"
+                label="Default Value"
+                help="Optional"
+            />
+            <!-- <SwitchInput
+                id="hidden-column"
+                name="hidden_column"
+                label="Hidden From Public View"
+            /> -->
+            <div class="flex justify-center">
+                <BaseButton text="OK" @click="closeAdvancedSettings()" />
+            </div>
+        </Modal>
     </form>
 </template>
