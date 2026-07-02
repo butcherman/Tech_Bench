@@ -126,7 +126,7 @@ type workbookValue = {
 
 type workbookTableValue = {
     table_index: string;
-    row_index: string | number;
+    row_index: string;
     column_name: string;
     public: boolean;
     value: string;

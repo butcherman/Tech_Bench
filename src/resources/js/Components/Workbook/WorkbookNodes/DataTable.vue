@@ -173,14 +173,19 @@ onMounted(() => {
         .listen(
             ".WorkbookTableValueUpdated",
             (valData: workbookTableValueEvent) => {
+                console.log(valData);
+
                 let updatedModel = valData.model;
                 let rowIdx = fields.value.findIndex(
                     (row) => row.value.index === updatedModel.row_index,
                 );
 
+                console.log(rowIdx);
+
                 if (rowIdx < 0) {
                     // If this is a new row, push it to the array
                     let newRow = defaultRow();
+                    newRow.index = updatedModel.row_index;
                     newRow[updatedModel.column_name] = updatedModel.value;
 
                     push(newRow);
