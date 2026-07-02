@@ -104,6 +104,8 @@ class CustomerEquipmentWorkbook extends Model
             }
         }
 
+        $workbook['body'] = array_values($workbook['body']);
+
         return Attribute::make(
             get: fn () => $workbook
         );
