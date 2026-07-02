@@ -7,6 +7,7 @@ export const isPreviewMode = ref<boolean>(false);
 export const activePage = ref<string>("0");
 export const wbHash = ref<string>();
 export const hasError = ref<boolean>(false);
+export const isViewPublic = ref<boolean>(false);
 export const isPagePublic = computed<boolean>(() => {
     let currentPage = bodyCopy.value?.find(
         (page) => page.page === activePage.value,
@@ -29,6 +30,8 @@ export const initWorkbook = (
     let wbType: "public_workbook" | "parsed_workbook" = isPublic
         ? "public_workbook"
         : "parsed_workbook";
+
+    isViewPublic.value = isPublic ?? false;
 
     if (workbook[wbType]) {
         activePage.value = workbook[wbType].body[0].page;

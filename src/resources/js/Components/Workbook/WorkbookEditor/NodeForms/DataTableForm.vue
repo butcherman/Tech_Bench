@@ -325,11 +325,11 @@ const saveData = handleSubmit((form) => {
                 label="Default Value"
                 help="Optional"
             />
-            <!-- <SwitchInput
+            <SwitchInput
                 id="hidden-column"
                 name="hidden_column"
                 label="Hidden From Public View"
-            /> -->
+            />
             <div class="flex justify-center">
                 <BaseButton text="OK" @click="closeAdvancedSettings()" />
             </div>

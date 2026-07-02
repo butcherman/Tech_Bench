@@ -11,6 +11,7 @@ import { dataDelete, dataGet } from "@/Composables/axiosWrapper.module";
 import { Field, FieldEntry, useFieldArray } from "vee-validate";
 import {
     isPreviewMode,
+    isViewPublic,
     wbHash,
 } from "@/Composables/Workbook/CustomerWorkbook.module";
 import type { AxiosResponse } from "axios";
@@ -240,13 +241,18 @@ onMounted(() => {
                             class="border-slate-200"
                             :class="{ border: borderClass }"
                         ></td>
-                        <th
-                            v-for="col in columns"
-                            class="border-slate-200"
-                            :class="{ border: borderClass }"
-                        >
-                            {{ col.name }}
-                        </th>
+                        <template v-for="col in columns">
+                            <th
+                                v-if="
+                                    (isViewPublic && !col.hiddenColumn) ||
+                                    !isViewPublic
+                                "
+                                class="border-slate-200"
+                                :class="{ border: borderClass }"
+                            >
+                                {{ col.name }}
+                            </th>
+                        </template>
                     </tr>
                 </thead>
                 <tbody>
@@ -263,50 +269,55 @@ onMounted(() => {
                         >
                             {{ idx + 1 }}
                         </td>
-                        <td
-                            v-for="col in columns"
-                            class="border-slate-200 px-1"
-                            :class="{ border: borderClass }"
-                        >
-                            <Field
-                                v-if="col.type === 'boolean'"
-                                class="w-full m-0 px-2"
-                                :name="`${index}[${idx}].${col.name}`"
-                                type="checkbox"
-                                :value="true"
-                                :unchecked-value="false"
-                                @change="
-                                    saveCell(idx, col.name, row.value.index)
+                        <template v-for="col in columns">
+                            <td
+                                v-if="
+                                    (isViewPublic && !col.hiddenColumn) ||
+                                    !isViewPublic
                                 "
-                            />
-                            <Field
-                                v-else-if="col.type === 'enum'"
-                                as="select"
-                                class="w-full m-0 px-2"
-                                :name="`${index}[${idx}].${col.name}`"
-                                @change="
-                                    saveCell(idx, col.name, row.value.index)
-                                "
+                                class="border-slate-200 px-1"
+                                :class="{ border: borderClass }"
                             >
-                                <option />
-                                <option
-                                    v-for="opt in col.list"
-                                    :key="opt"
-                                    :value="opt"
+                                <Field
+                                    v-if="col.type === 'boolean'"
+                                    class="w-full m-0 px-2"
+                                    :name="`${index}[${idx}].${col.name}`"
+                                    type="checkbox"
+                                    :value="true"
+                                    :unchecked-value="false"
+                                    @change="
+                                        saveCell(idx, col.name, row.value.index)
+                                    "
+                                />
+                                <Field
+                                    v-else-if="col.type === 'enum'"
+                                    as="select"
+                                    class="w-full m-0 px-2"
+                                    :name="`${index}[${idx}].${col.name}`"
+                                    @change="
+                                        saveCell(idx, col.name, row.value.index)
+                                    "
                                 >
-                                    {{ opt }}
-                                </option>
-                            </Field>
-                            <Field
-                                v-else
-                                class="w-full m-0 px-2"
-                                :name="`${index}[${idx}].${col.name}`"
-                                :type="getInputType(col)"
-                                @change="
-                                    saveCell(idx, col.name, row.value.index)
-                                "
-                            />
-                        </td>
+                                    <option />
+                                    <option
+                                        v-for="opt in col.list"
+                                        :key="opt"
+                                        :value="opt"
+                                    >
+                                        {{ opt }}
+                                    </option>
+                                </Field>
+                                <Field
+                                    v-else
+                                    class="w-full m-0 px-2"
+                                    :name="`${index}[${idx}].${col.name}`"
+                                    :type="getInputType(col)"
+                                    @change="
+                                        saveCell(idx, col.name, row.value.index)
+                                    "
+                                />
+                            </td>
+                        </template>
                         <td v-if="allowDeleteRow" class="text-center">
                             <DeleteBadge
                                 icon="circle-xmark"
