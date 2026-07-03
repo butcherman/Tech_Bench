@@ -85,10 +85,13 @@ const getValidationResults = (): void => {
                 workbookValidationData[]
             >,
         ) => {
-            if (res) {
+            if (res && res.data && res.data.length) {
                 validatedResults.value = res.data;
                 isLoading.value = false;
                 showValidationResults.value = true;
+            } else {
+                alert("Import Process Failed.  Please try again");
+                isLoading.value = false;
             }
         },
     );

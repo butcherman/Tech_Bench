@@ -65,8 +65,8 @@ class WorkbookTableImportController extends FileUploadController
         $savedFile = $this->getChunk($request->file('file'), $request);
 
         if ($savedFile) {
-            Cache::tags(['data-import'])
-                ->put($workbook->wb_hash.$tableIndex, $savedFile, 86400);
+            Cache::tags(['data-import-files'])
+                ->put('imported-'.$workbook->wb_hash.$tableIndex, $savedFile, 172800);
 
             ValidateWorkbookImportJob::dispatchAfterResponse(
                 $workbook,
@@ -94,8 +94,7 @@ class WorkbookTableImportController extends FileUploadController
             );
         }
 
-        $validated = Cache::tags(['data-import'])
-            ->get($workbook->wb_hash.$tableIndex);
+        $validated = Cache::get($workbook->wb_hash.$tableIndex);
 
         // TODO - Throw exception if validated data is missing
         return response()->json($validated['data']);
@@ -113,8 +112,7 @@ class WorkbookTableImportController extends FileUploadController
             );
         }
 
-        $validated = Cache::tags(['data-import'])
-            ->pull($workbook->wb_hash.$tableIndex);
+        $validated = Cache::pull($workbook->wb_hash.$tableIndex);
 
         if (! $validated) {
             Log::error('Trying to import an invalid CSV file to a workbook table', [

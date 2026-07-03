@@ -8,7 +8,7 @@ const props = defineProps<{
     allowExport: boolean;
     allowImport: boolean;
     columns: workbookTableColumn[];
-    defaultRows: number;
+    defaultRows: number | string;
     hideBorders: boolean;
     index: string;
     numberRows: boolean;

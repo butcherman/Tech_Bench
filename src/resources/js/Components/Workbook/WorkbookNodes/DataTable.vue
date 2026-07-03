@@ -22,7 +22,7 @@ const props = defineProps<{
     allowExport: boolean;
     allowImport: boolean;
     columns: workbookTableColumn[];
-    defaultRows: number;
+    defaultRows: number | string;
     hideBorders: boolean;
     index: string;
     numberRows: boolean;
@@ -164,7 +164,7 @@ const defaultRow = (): workbookTableRow => {
 
 onMounted(() => {
     if (!fields.value.length) {
-        for (let n = 0; n < props.defaultRows; n++) {
+        for (let n = 0; n < Number(props.defaultRows); n++) {
             push(defaultRow());
         }
     }
@@ -173,14 +173,10 @@ onMounted(() => {
         .listen(
             ".WorkbookTableValueUpdated",
             (valData: workbookTableValueEvent) => {
-                console.log(valData);
-
                 let updatedModel = valData.model;
                 let rowIdx = fields.value.findIndex(
                     (row) => row.value.index === updatedModel.row_index,
                 );
-
-                console.log(rowIdx);
 
                 if (rowIdx < 0) {
                     // If this is a new row, push it to the array

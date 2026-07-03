@@ -93,6 +93,11 @@ class ValidateWorkbookImportFile
      */
     protected function castColumnValue(string $dataType, mixed $value): mixed
     {
+        // If there is no value, the value is null
+        if (is_null($value) || empty($value)) {
+            return null;
+        }
+
         return match ($dataType) {
             'boolean' => filter_var(
                 $value,
@@ -108,6 +113,12 @@ class ValidateWorkbookImportFile
      */
     protected function validateColumnValue(string $dataType, mixed $value, array $listVal = []): bool
     {
+
+        // If there is no value, the validation passes
+        if (is_null($value) || empty($value)) {
+            return true;
+        }
+
         return match ($dataType) {
             'boolean' => filter_var(
                 $value,

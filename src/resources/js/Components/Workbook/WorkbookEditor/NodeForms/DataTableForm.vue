@@ -160,7 +160,6 @@ const openAdvancedSettings = (colIndex: number) => {
  */
 const closeAdvancedSettings = () => {
     if (activeColIndex.value !== null) {
-        console.log(activeColIndex.value);
         fields.value[activeColIndex.value].value.allowDefault =
             values.allow_default;
         fields.value[activeColIndex.value].value.defaultValue =
