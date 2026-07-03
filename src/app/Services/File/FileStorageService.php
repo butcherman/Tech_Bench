@@ -56,6 +56,9 @@ class FileStorageService
         Storage::disk($disk)->delete($path);
     }
 
+    /**
+     * Verify if a file exists or not.  Throw exception if it is missing.
+     */
     protected function checkForDiskFile(string $disk, string $path): void
     {
         if (Storage::disk($disk)->missing($path)) {

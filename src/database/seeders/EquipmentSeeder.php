@@ -16,35 +16,40 @@ class EquipmentSeeder extends Seeder
     public function run(): void
     {
         $equip = collect([
-            'Cisco' => [
-                '1900 Series',
-                '1800 Series',
-                '1000 Series',
-                '2800 Series',
+            'Phones' => [
+                'NEC SV9100',
+                'NEC SV9300',
+                'Mitel MiVoice Connect',
+                'Mitel MiVoice Business',
             ],
-            'AdTran' => [
-                'NetVanta 1500 Series',
-                '900 Series',
-                'NetVanta 1200 Series',
+            'CCTV' => [
+                'Avivilon Unity',
+                'Pelco VXPro',
+                'Ava',
             ],
-            'Hewlett-Packard' => [
-                'HSR6800 Router Series',
-                'MSR2000 Router Series',
+            'Clocks & Bells' => [
+                'Valcom Class Connection',
+                'Bogen',
             ],
         ]);
 
         //  Create the sample equipment
         foreach ($equip as $cat => $sys) {
-            $catID = EquipmentCategory::create(['name' => $cat])->cat_id;
+            if (! EquipmentCategory::where('name', $cat)->count()) {
+                $catID = EquipmentCategory::create(['name' => $cat])->cat_id;
+            }
+
             foreach ($sys as $s) {
-                EquipmentType::create([
-                    'cat_id' => $catID,
-                    'name' => $s,
-                ]);
+                if (! EquipmentType::where('name', $s)->count()) {
+                    EquipmentType::create([
+                        'cat_id' => $catID,
+                        'name' => $s,
+                    ]);
+                }
             }
         }
 
-        // Update the Cisco equipment to allow Public Tips
+        // Update the Phones equipment to allow Public Tips
         EquipmentType::where('cat_id', 1)->update(['allow_public_tip' => true]);
 
         // Create the information to gather when adding a system mto a customer

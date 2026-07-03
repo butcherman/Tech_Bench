@@ -34,7 +34,7 @@ class ValidateFileForDownloadUnitTest extends TestCase
             ->putFileAs(
                 $fileUpload->folder,
                 UploadedFile::fake()->image('testPhoto.png'),
-                $fileUpload->file_name
+                $fileUpload->hash_name
             );
 
         $testObj = new ValidateFileForDownload;
@@ -58,7 +58,7 @@ class ValidateFileForDownloadUnitTest extends TestCase
             ->putFileAs(
                 $fileUpload->folder,
                 UploadedFile::fake()->image('testPhoto.png'),
-                $fileUpload->file_name
+                $fileUpload->hash_name
             );
 
         $this->expectException(IncorrectFilenameException::class);
@@ -75,6 +75,7 @@ class ValidateFileForDownloadUnitTest extends TestCase
         $fileUpload = FileUpload::create([
             'disk' => 'local',
             'file_name' => 'testRandomPhoto.png',
+            'hash_name' => 'ishkabibble.png',
             'folder' => 'random_folder',
             'file_size' => 1,
             'public' => false,
@@ -102,7 +103,7 @@ class ValidateFileForDownloadUnitTest extends TestCase
             ->putFileAs(
                 $fileUpload->folder,
                 UploadedFile::fake()->image('testPhoto.png'),
-                $fileUpload->file_name
+                $fileUpload->hash_name
             );
 
         $testObj = new ValidateFileForDownload;
@@ -126,7 +127,7 @@ class ValidateFileForDownloadUnitTest extends TestCase
             ->putFileAs(
                 $fileUpload->folder,
                 UploadedFile::fake()->image('testPhoto.png'),
-                $fileUpload->file_name
+                $fileUpload->hash_name
             );
 
         $this->expectException(PrivateFileException::class);
@@ -151,7 +152,7 @@ class ValidateFileForDownloadUnitTest extends TestCase
             ->putFileAs(
                 $fileUpload->folder,
                 UploadedFile::fake()->image('testPhoto.png'),
-                $fileUpload->file_name
+                $fileUpload->hash_name
             );
 
         $testObj = new ValidateFileForDownload;
@@ -175,7 +176,7 @@ class ValidateFileForDownloadUnitTest extends TestCase
             ->putFileAs(
                 $fileUpload->folder,
                 UploadedFile::fake()->image('testPhoto.png'),
-                $fileUpload->file_name
+                $fileUpload->hash_name
             );
 
         $testObj = new ValidateFileForDownload;

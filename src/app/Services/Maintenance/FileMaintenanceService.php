@@ -138,7 +138,7 @@ class FileMaintenanceService
                     '/'
                 ),
                 '/'
-            ).DIRECTORY_SEPARATOR.$file->file_name;
+            ).DIRECTORY_SEPARATOR.$file->hash_name;
 
             Log::debug('Checking for file at '.Storage::disk($file->disk)->path($filePath));
 
@@ -163,12 +163,14 @@ class FileMaintenanceService
      */
     public function getOrphanedFiles(): array
     {
+        // Get all files in the storage system root (includes all disks).
         $fileList = $this->getFileList(Storage::path(''));
 
         Log::debug('Checking for files without a database pointer', [
             'file_list' => $fileList,
         ]);
 
+        // Cycle through all files in the storage system
         foreach ($fileList as $key => $file) {
             $fileInfo = pathinfo($file);
 
@@ -177,6 +179,7 @@ class FileMaintenanceService
                 $fileInfo
             );
 
+            // If the file is tagged as public or private skip it
             if (Str::contains($fileInfo['dirname'], ['public', 'private'])) {
                 unset($fileList[$key]);
 
@@ -187,13 +190,15 @@ class FileMaintenanceService
                 continue;
             }
 
-            $dbFiles = FileUpload::whereFileName($fileInfo['basename'])->get();
+            // Try to find the file in the database
+            $dbFiles = FileUpload::whereHashName($fileInfo['basename'])->get();
 
+            // If the file is found, validate it is in the correct location
             if ($dbFiles->isNotEmpty()) {
+                // Cycle through all results to find the one we are looking for
                 foreach ($dbFiles as $dbFile) {
-
                     $databasePath = Storage::disk($dbFile->disk)
-                        ->path($dbFile->folder.DIRECTORY_SEPARATOR.$dbFile->file_name);
+                        ->path($dbFile->folder.DIRECTORY_SEPARATOR.$dbFile->hash_name);
                     $storagePath = $file->getRealPath();
 
                     Log::debug(

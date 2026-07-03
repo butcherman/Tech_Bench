@@ -65,6 +65,7 @@ class CustomerEquipmentController extends Controller
         return Inertia::render('Customer/Equipment/Show', [
             'alerts' => fn () => $customer->Alerts,
             'allowVpn' => fn () => config('customer.allow_vpn_data'),
+            'allowWorkbook' => fn () => config('customer.enable_workbooks') && $equipment->EquipmentType->hasWorkbook,
             'permissions' => fn () => UserPermissions::customerPermissions($request->user()),
             'customer' => fn () => $customer,
             'equipment' => fn () => $equipment,

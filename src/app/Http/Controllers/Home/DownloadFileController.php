@@ -20,7 +20,6 @@ class DownloadFileController extends Controller
 
         // @codeCoverageIgnoreStart
         $path = $file->getFilePath();
-        $fileName = basename($path);
 
         Log::info('File being downloaded', [
             'path' => $path,

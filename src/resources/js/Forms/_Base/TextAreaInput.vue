@@ -27,7 +27,7 @@ const props = defineProps<{
 const inputPlaceholder = computed<string>(() =>
     props.placeholder && (hasFocus.value || !props.label)
         ? props.placeholder
-        : ""
+        : "",
 );
 
 /*
@@ -74,6 +74,7 @@ const {
                 :rows="rows ?? 3"
                 @focus="onFocus"
                 @blur="onBlur"
+                @change="$emit('change')"
             />
             <label for="on_label">{{ label }}</label>
         </FloatLabel>

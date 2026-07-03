@@ -91,7 +91,7 @@ defineExpose({ show, hide, isOpen: readonly(modalOpen) });
             @after-enter="$emit('shown')"
             @after-leave="$emit('hidden')"
         >
-            <div v-show="modalOpen" class="relative z-50">
+            <div v-show="modalOpen" class="relative z-9999">
                 <div
                     v-if="!hideBackdrop"
                     class="fixed inset-0 bg-gray-500/75"

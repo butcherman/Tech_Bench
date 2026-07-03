@@ -24,7 +24,7 @@ interface dropzoneError {
 
 const emit = defineEmits<{
     submitting: [formData];
-    success: [];
+    success: [any];
     hasErrors: dropzoneError[];
     canceled: [];
     fileAdded: [DropzoneFile];
@@ -54,6 +54,12 @@ const props = defineProps<{
 const isSubmitting = ref<boolean>(false);
 const submitText = computed<string>(() => props.submitText ?? "Submit");
 const isDirty = computed<boolean>(() => meta.value.dirty);
+
+const resetFileForm = () => {
+    isSubmitting.value = false;
+    resetForm();
+    dropzoneInput.value?.reset();
+};
 
 /*
 |-------------------------------------------------------------------------------
@@ -161,6 +167,7 @@ defineExpose({
     setFieldValue,
     setFieldError,
     resetForm,
+    resetFileForm,
     handleReset,
     isDirty,
     isSubmitting,

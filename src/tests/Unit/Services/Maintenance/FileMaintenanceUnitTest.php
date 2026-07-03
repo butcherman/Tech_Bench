@@ -122,13 +122,14 @@ class FileMaintenanceUnitTest extends TestCase
     {
         Storage::fake('local');
         Storage::makeDirectory('test_dir');
-        Storage::put('test_dir/file_1.txt', 'test file one');
-        Storage::put('test_dir/file_2.txt', 'test file one');
+        Storage::put('test_dir/hash_1.txt', 'test file one');
+        Storage::put('test_dir/hash_2.txt', 'test file one');
 
         FileUpload::create([
             'disk' => 'local',
             'folder' => 'test_dir',
             'file_name' => 'file_1.txt',
+            'hash_name' => 'hash_1.txt',
             'file_size' => 0,
             'public' => false,
         ]);
@@ -136,6 +137,7 @@ class FileMaintenanceUnitTest extends TestCase
             'disk' => 'local',
             'folder' => 'test_dir',
             'file_name' => 'file_2.txt',
+            'hash_name' => 'hash_2.txt',
             'file_size' => 0,
             'public' => false,
         ]);
@@ -143,6 +145,7 @@ class FileMaintenanceUnitTest extends TestCase
             'disk' => 'local',
             'folder' => 'test_dir',
             'file_name' => 'file_3.txt',
+            'hash_name' => 'hash_3.txt',
             'file_size' => 0,
             'public' => false,
         ]);
@@ -150,6 +153,7 @@ class FileMaintenanceUnitTest extends TestCase
             'disk' => 'local',
             'folder' => 'test_dir',
             'file_name' => 'file_4.txt',
+            'hash_name' => 'hash_4.txt',
             'file_size' => 0,
             'public' => false,
         ]);
@@ -171,20 +175,22 @@ class FileMaintenanceUnitTest extends TestCase
         Storage::disk('local')->makeDirectory('test');
         Storage::disk('local')->makeDirectory('public/images');
         Storage::disk('local')->put('public/images/test.txt', 'test image');
-        Storage::disk('local')->put('test/file_1.txt', 'test file one');
-        Storage::disk('local')->put('test/file_2.txt', 'test file one');
-        Storage::disk('local')->put('test/file_3.txt', 'test file one');
-        Storage::disk('local')->put('test/file_4.txt', 'test file one');
+        Storage::disk('local')->put('test/hash_1.txt', 'test file one');
+        Storage::disk('local')->put('test/hash_2.txt', 'test file one');
+        Storage::disk('local')->put('test/hash_3.txt', 'test file one');
+        Storage::disk('local')->put('test/hash_4.txt', 'test file one');
 
         FileUpload::factory()->create([
             'disk' => 'local',
             'folder' => 'test',
             'file_name' => 'file_1.txt',
+            'hash_name' => 'hash_1.txt',
         ]);
         FileUpload::factory()->create([
             'disk' => 'local',
             'folder' => 'test',
             'file_name' => 'file_2.txt',
+            'hash_name' => 'hash_2.txt',
         ]);
 
         $testObj = new FileMaintenanceService;

@@ -49,6 +49,9 @@ class GarbageCollectionJob implements ShouldQueue
         // Clear out the Chunk folder removing any orphaned upload chunks
         Storage::deleteDirectory('chunks');
 
+        // Clear out any old Workbook Data Table Import files
+        Artisan::call('app:import-cleanup');
+
         Log::info('Garbage Collection Job Finished');
     }
 }

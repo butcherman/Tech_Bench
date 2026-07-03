@@ -1,16 +1,23 @@
 import errorModal from "@/Modules/errorModal";
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 import { ref } from "vue";
+import type { AxiosResponse } from "axios";
 
 interface errorMessage {
     status: number | undefined;
     message: laravelValidationErrors | string;
 }
 
+const axiosConfig = {
+    headers: {
+        "X-Socket-Id": Echo.socketId(),
+    },
+};
+
 export const isLoading = ref<boolean>(false);
 
 export async function dataGet(
-    url: string
+    url: string,
 ): Promise<void | AxiosResponse<any, any>> {
     isLoading.value = true;
 
@@ -23,12 +30,12 @@ export async function dataGet(
 
 export async function dataPost(
     url: string,
-    args: any
+    args: any,
 ): Promise<void | AxiosResponse<any, any>> {
     isLoading.value = true;
 
     return await axios
-        .post(url, args)
+        .post(url, args, axiosConfig)
         .then((res) => res)
         .catch((err) => {
             if (err.status === 422) {
@@ -43,6 +50,44 @@ export async function dataPost(
 
             handleAxiosError(err);
         })
+        .finally(() => (isLoading.value = false));
+}
+
+export async function dataPut(
+    url: string,
+    args: any,
+    handleError: boolean = true,
+): Promise<void | AxiosResponse<any, any>> {
+    isLoading.value = true;
+
+    return await axios
+        .put(url, args, axiosConfig)
+        .then((res) => res)
+        .catch((err) => {
+            if (err.status === 422 || !handleError) {
+                throw {
+                    status: err.status,
+                    message: {
+                        errors: err.response.data.errors,
+                        message: err.response.data.message,
+                    },
+                };
+            }
+
+            handleAxiosError(err);
+        })
+        .finally(() => (isLoading.value = false));
+}
+
+export async function dataDelete(
+    url: string,
+): Promise<void | AxiosResponse<any, any>> {
+    isLoading.value = true;
+
+    return await axios
+        .delete(url)
+        .then((res) => res)
+        .catch((err) => handleAxiosError(err))
         .finally(() => (isLoading.value = false));
 }
 
