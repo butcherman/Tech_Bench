@@ -26,7 +26,7 @@ class DeleteFileDataJob implements ShouldQueue
         $fileData = $this->fileUpload;
 
         try {
-            $path = $fileData->folder.DIRECTORY_SEPARATOR.$fileData->file_name;
+            $path = $fileData->folder.DIRECTORY_SEPARATOR.$fileData->hash_name;
 
             $fileData->delete();
             Storage::disk($fileData->disk)->delete($path);

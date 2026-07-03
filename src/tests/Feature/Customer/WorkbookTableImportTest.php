@@ -204,8 +204,8 @@ class WorkbookTableImportTest extends TestCase
             'file_name' => 'test_import.csv',
         ]);
 
-        $this->assertTrue(Cache::tags(['data-import'])
-            ->has($workbook->wb_hash.$tableIndex));
+        $this->assertTrue(Cache::tags(['data-import-files'])
+            ->has('imported-'.$workbook->wb_hash.$tableIndex));
 
         Bus::assertDispatched(ValidateWorkbookImportJob::class);
     }
@@ -308,8 +308,8 @@ class WorkbookTableImportTest extends TestCase
             'file_name' => 'test_import.csv',
         ]);
 
-        $this->assertTrue(Cache::tags(['data-import'])
-            ->has($workbook->wb_hash.$tableIndex));
+        $this->assertTrue(Cache::tags(['data-import-files'])
+            ->has('imported-'.$workbook->wb_hash.$tableIndex));
 
         Bus::assertDispatched(ValidateWorkbookImportJob::class);
     }
@@ -355,8 +355,7 @@ class WorkbookTableImportTest extends TestCase
         ]);
         $tableIndex = '4e2eae40-b892-4509-818a-b03191dbc237';
 
-        Cache::tags(['data-import'])
-            ->put($workbook->wb_hash.$tableIndex, $this->getValidatedData());
+        Cache::put($workbook->wb_hash.$tableIndex, $this->getValidatedData());
 
         $response = $this->get(route('cust-workbook.import.show', [
             $workbook,
@@ -374,8 +373,7 @@ class WorkbookTableImportTest extends TestCase
         $workbook = CustomerEquipmentWorkbook::factory()->create();
         $tableIndex = '4e2eae40-b892-4509-818a-b03191dbc237';
 
-        Cache::tags(['data-import'])
-            ->put($workbook->wb_hash.$tableIndex, $this->getValidatedData());
+        Cache::put($workbook->wb_hash.$tableIndex, $this->getValidatedData());
 
         $this->expectException(WorkbookNotPublishedException::class);
 
@@ -399,8 +397,7 @@ class WorkbookTableImportTest extends TestCase
         $workbook = CustomerEquipmentWorkbook::factory()->create();
         $tableIndex = '4e2eae40-b892-4509-818a-b03191dbc237';
 
-        Cache::tags(['data-import'])
-            ->put($workbook->wb_hash.$tableIndex, $this->getValidatedData());
+        Cache::put($workbook->wb_hash.$tableIndex, $this->getValidatedData());
 
         $response = $this->actingAs($user)
             ->get(route('cust-workbook.import.show', [
@@ -419,8 +416,7 @@ class WorkbookTableImportTest extends TestCase
         $workbook = CustomerEquipmentWorkbook::factory()->create();
         $tableIndex = '4e2eae40-b892-4509-818a-b03191dbc237';
 
-        Cache::tags(['data-import'])
-            ->put($workbook->wb_hash.$tableIndex, $this->getValidatedData());
+        Cache::put($workbook->wb_hash.$tableIndex, $this->getValidatedData());
 
         $this->expectException(FeatureDisabledException::class);
 
@@ -451,8 +447,7 @@ class WorkbookTableImportTest extends TestCase
         ]);
         $tableIndex = '4e2eae40-b892-4509-818a-b03191dbc237';
 
-        Cache::tags(['data-import'])
-            ->put($workbook->wb_hash.$tableIndex, $this->getValidatedData());
+        Cache::put($workbook->wb_hash.$tableIndex, $this->getValidatedData());
 
         $response = $this->put(route('cust-workbook.import.update', [
             $workbook,
@@ -473,8 +468,7 @@ class WorkbookTableImportTest extends TestCase
         $workbook = CustomerEquipmentWorkbook::factory()->create();
         $tableIndex = '4e2eae40-b892-4509-818a-b03191dbc237';
 
-        Cache::tags(['data-import'])
-            ->put($workbook->wb_hash.$tableIndex, $this->getValidatedData());
+        Cache::put($workbook->wb_hash.$tableIndex, $this->getValidatedData());
 
         $this->expectException(WorkbookNotPublishedException::class);
 
@@ -518,8 +512,7 @@ class WorkbookTableImportTest extends TestCase
         $workbook = CustomerEquipmentWorkbook::factory()->create();
         $tableIndex = '4e2eae40-b892-4509-818a-b03191dbc237';
 
-        Cache::tags(['data-import'])
-            ->put($workbook->wb_hash.$tableIndex, $this->getValidatedData());
+        Cache::put($workbook->wb_hash.$tableIndex, $this->getValidatedData());
 
         $response = $this->actingAs($user)->put(route('cust-workbook.import.update', [
             $workbook,
@@ -539,8 +532,7 @@ class WorkbookTableImportTest extends TestCase
         ]);
         $tableIndex = '4e2eae40-b892-4509-818a-b03191dbc237';
 
-        Cache::tags(['data-import'])
-            ->put($workbook->wb_hash.$tableIndex, $this->getValidatedData());
+        Cache::put($workbook->wb_hash.$tableIndex, $this->getValidatedData());
 
         $this->expectException(FeatureDisabledException::class);
 
