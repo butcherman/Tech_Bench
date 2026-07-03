@@ -332,12 +332,14 @@ onMounted(() => {
             </table>
             <div class="flex flex-row-reverse my-2">
                 <AddButton
+                    v-if="allowAddRow"
                     class="mx-1"
                     size="small"
                     pill
                     @click="push(defaultRow())"
                 />
                 <BaseButton
+                    v-if="allowExport"
                     class="mx-2"
                     text="Export Data"
                     size="small"
@@ -346,6 +348,7 @@ onMounted(() => {
                     @click="exportTableData"
                 />
                 <ImportWorkbookData
+                    v-if="allowImport"
                     :table-index="index"
                     :table-empty="tableIsEmpty"
                     @import-success="refreshTableData"
