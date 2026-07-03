@@ -28,6 +28,7 @@ class BasicSettingsRequest extends FormRequest
             'timezone' => ['required', 'string'],
             'max_filesize' => ['required', 'numeric'],
             'welcome_message' => ['nullable', 'string'],
+            'home_links' => ['array', 'nullable'],
         ];
     }
 }

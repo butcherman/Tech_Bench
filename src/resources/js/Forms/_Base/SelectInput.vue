@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Select, Message, FloatLabel } from "primevue";
+import { Select, Message, FloatLabel, DropdownChangeEvent } from "primevue";
 import { computed, ref, toRef } from "vue";
 import { useField } from "vee-validate";
 import type { Ref } from "vue";
@@ -7,6 +7,7 @@ import type { Ref } from "vue";
 const emit = defineEmits<{
     focus: [];
     blur: [];
+    change: [DropdownChangeEvent];
 }>();
 
 const props = defineProps<{
@@ -45,7 +46,7 @@ const optionValue = computed<string | undefined>(() => {
 |-------------------------------------------------------------------------------
 */
 const borderType = computed<string>(() =>
-    props.borderBottom ? "border-b rounded-none" : "border"
+    props.borderBottom ? "border-b rounded-none" : "border",
 );
 
 /*
@@ -96,6 +97,7 @@ const {
                 :option-group-children="groupChildrenField"
                 @focus="onFocus"
                 @blur="onBlur"
+                @change="$emit('change', $event)"
             >
                 <template #option="slotProps">
                     <slot name="option" v-bind="slotProps" />

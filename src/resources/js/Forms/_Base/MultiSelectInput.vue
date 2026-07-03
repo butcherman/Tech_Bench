@@ -7,6 +7,7 @@ import type { Ref } from "vue";
 const emit = defineEmits<{
     focus: [];
     blur: [];
+    change: [];
 }>();
 
 const props = defineProps<{
@@ -32,7 +33,7 @@ const props = defineProps<{
 const inputPlaceholder = computed<string>(() =>
     props.placeholder && (hasFocus.value || !props.label)
         ? props.placeholder
-        : ""
+        : "",
 );
 
 const optionLabel = computed<string | undefined>(() => {
@@ -110,6 +111,7 @@ const {
                 }"
                 @focus="onFocus"
                 @blur="onBlur"
+                @change="$emit('change')"
             >
                 <template #option="slotProps">
                     <slot name="option" v-bind="slotProps" />

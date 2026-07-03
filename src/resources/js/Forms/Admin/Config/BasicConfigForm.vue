@@ -4,7 +4,7 @@ import RangeInput from "@/Forms/_Base/RangeInput.vue";
 import SelectInput from "@/Forms/_Base/SelectInput.vue";
 import TextInput from "@/Forms/_Base/TextInput.vue";
 import VueForm from "@/Forms/_Base/VueForm.vue";
-import { object, string, number } from "yup";
+import { object, string, number, array } from "yup";
 import { computed } from "vue";
 
 defineEmits<{
@@ -19,6 +19,10 @@ const props = defineProps<{
     url: string;
     welcome_message?: string;
     init?: boolean;
+    home_links?: {
+        url: string;
+        text: string;
+    }[];
 }>();
 
 /*
@@ -29,11 +33,11 @@ const props = defineProps<{
 const submitRoute = computed(() =>
     props.init
         ? route("init.step-1.submit")
-        : route("admin.basic-settings.update")
+        : route("admin.basic-settings.update"),
 );
 
 const submitText = computed(() =>
-    props.init ? "Save and Continue" : "Update Application Configuration"
+    props.init ? "Save and Continue" : "Update Application Configuration",
 );
 
 /*
@@ -47,6 +51,7 @@ const initValues = {
     timezone: props.timezone,
     max_filesize: props.maxFilesize,
     welcome_message: props.welcome_message,
+    home_links: props.home_links,
 };
 const schema = object({
     url: string().required(),
@@ -54,6 +59,7 @@ const schema = object({
     timezone: string().required(),
     max_filesize: number().required(),
     welcome_message: string().nullable(),
+    home_links: array().nullable(),
 });
 </script>
 
@@ -115,6 +121,43 @@ const schema = object({
                 label="Welcome Message"
                 help="This message will show on the home page under the Company Logo"
             />
+            <fieldset class="border rounded-xl p-2 mt-4">
+                <legend class="text-muted">
+                    Additional Links for Home Page
+                </legend>
+                <div class="grid grid-cols-2 gap-1">
+                    <TextInput
+                        id="link-1"
+                        name="home_links[0].url"
+                        label="URL"
+                    />
+                    <TextInput
+                        id="text-1"
+                        name="home_links[0].text"
+                        label="Text to Display"
+                    />
+                    <TextInput
+                        id="link-2"
+                        name="home_links[1].url"
+                        label="URL"
+                    />
+                    <TextInput
+                        id="text-2"
+                        name="home_links[1].text"
+                        label="Text to Display"
+                    />
+                    <TextInput
+                        id="link-3"
+                        name="home_links[2].url"
+                        label="URL"
+                    />
+                    <TextInput
+                        id="text-3"
+                        name="home_links[2].text"
+                        label="Text to Display"
+                    />
+                </div>
+            </fieldset>
         </fieldset>
     </VueForm>
 </template>

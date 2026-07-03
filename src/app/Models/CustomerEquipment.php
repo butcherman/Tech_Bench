@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Prunable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Log;
 
@@ -43,7 +44,7 @@ class CustomerEquipment extends Model
     ];
 
     /** @var array<int, string> */
-    protected $appends = ['equip_name'];
+    protected $appends = ['equip_name', 'has_workbook'];
 
     public function getRouteKeyName(): string
     {
@@ -59,6 +60,7 @@ class CustomerEquipment extends Model
     {
         return [
             'deleted_at' => 'datetime:M d, Y',
+            'has_workbook' => 'boolean',
         ];
     }
 
@@ -71,6 +73,13 @@ class CustomerEquipment extends Model
     {
         return Attribute::make(
             get: fn () => $this->EquipmentType->name
+        );
+    }
+
+    public function hasWorkbook(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->EquipmentWorkbook !== null
         );
     }
 
@@ -124,6 +133,11 @@ class CustomerEquipment extends Model
             'cust_equip_id',
             'cust_equip_id'
         );
+    }
+
+    public function EquipmentWorkbook(): HasOne
+    {
+        return $this->hasOne(CustomerEquipmentWorkbook::class, 'cust_equip_id', 'cust_equip_id');
     }
 
     /*

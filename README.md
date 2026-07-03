@@ -4,75 +4,170 @@
 [![GitHub Release](https://img.shields.io/github/release/Butcherman/Tech_Bench)](https://GitHub.com/Butcherman/Tech_Bench/releases/)
 [![GitHub Issues](https://img.shields.io/github/issues/Butcherman/Tech_Bench)](https://GitHub.com/Butcherman/Tech_Bench/issues/)
 
-## About Tech Bench
+# Tech Bench
 
-Tech Bench is a custom Content Management System (CMS) designed specifically for service technicians working in the field.
-This application allows technicians to securely store and share important customer information such as contact names, equipment
-installed, equipment backups, and notes about the customer. The advantage to using this application is to allow any technician -
-even those unfamiliar with the customer - quick and centralized access to all of this information.
+Tech Bench is a Laravel-based Customer Information and Knowledge Management System built specifically for field service
+organizations.
 
-## Tech Bench consists of two major sections
+It provides a centralized location for technicians to store customer information, equipment details, documentation, backups,
+passwords, notes, and technical knowledge so that every technician has access to the information they need—whether or not
+they've ever worked with that customer before.
 
-### Customers
+---
 
-Customer accounts can be created as stand alone or with multiple attached sites. Customer specific information can then
-be stored and shared for quick centralized access. Information includes:
+## Why Tech Bench?
 
-- Equipment Types Installed
-- Equipment Specific Information (such as IP Addresses, login information, etc.)
-- Contacts, including onsite and offsite contacts
-- Notes for the customer, their specific site, or specific to the installed equipment
-- Files such as backups, site maps, etc.
+Service companies often struggle with information being scattered across notebooks, shared drives, emails, and individual
+technicians' computers.
 
-### Tech Tips (Knowledge Base) and Documentation
+Tech Bench solves this problem by creating a searchable, secure repository for customer information and technical documentation
+that can be accessed by your entire team.
 
-While working in the field, all service technicians run across tips and tricks that they use to make their jobs easier.
-Tech Tips allows for users to create and share these tips with coworkers. This creates a custom Knowledge Base for all
-registered users.
+Whether you're onboarding a new technician or responding to an emergency service call, the information you need is always
+available.
 
-An optional Public Knowledge Base is also available to give your customers an easy place to find information such as Quick
-Reference Guides, or custom documentation that has been put together for customers.
+---
 
-## Additional Features
+# Features
 
-### File Links
+## Customer Management
 
-Sometimes customers need access to files, or need to provide technicians with files that may be too large to email. File
-Links allows users to create a custom URL to deliver files, or have files uploaded to. Each File Link has an expiration
-dates and is only available for a limited time.
+Create customer records with one or more service locations.
 
-## Installation and Setup of Tech Bench
+Each customer can contain:
 
-Tech Bench is a Docker based application.  Follow the instructions in the [Installation Guide](INSTALLATION.md) for
-detailed instructions to setup the Tech Bench.
+- Equipment inventories
+- Equipment-specific information
+- IP addresses and network information
+- Login credentials
+- Contact information
+- Customer notes
+- Site notes
+- Equipment notes
+- Attached documents
+- Backup files
+- Site maps and drawings
 
-## Upgrading Tech Bench
+---
 
-Upgrading to the latest version can be done though a bash script.  Follow the instructions in the
-[Upgrade Guide](UPGRADING.md) for more information.
+## Equipment Tracking
 
-## Backing Up Tech Bench
+Organize equipment by type and store information specific to each device, including:
 
-In order to backup the Tech Bench to an off-server location, you will need to use
-a package such as [Samba](https://www.samba.org/) to mount a network shared drive.
-This package needs to be installed on the dedicated server.
+- Configuration information
+- Maintenance history
+- Documentation
+- Backup files
+- Custom fields
+- Notes
 
-Durning the installation process, you will create a folder called ***backupData***
-in the same directory as the Docker Compose file.  See the [Installation Guide](INSTALLATION.md)
-for more information.
+---
 
-This ***backupData*** folder can be mounted to a network share to store backups
-off-server.
+## Knowledge Base (Tech Tips)
 
-## Copyright © 2016-2025 Ron Butcher
+Allow technicians to document solutions, troubleshooting procedures, and best practices.
 
-This program is free software: you can redistribute it and/or modify it under the terms of the GNU
-General Public License as published by the Free Software Foundation, either version 2 of the License,
-or (at your option) any later version.
+Create an internal knowledge base that grows with your company and reduces duplicated effort.
 
-This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public
-License for more details.
+---
 
-You should have received a copy of the GNU General Public License along with this program. If not, see
-<www.gnu.org/licenses>.
+## Public Documentation
+
+Optionally publish documentation for customers, including:
+
+- Quick Reference Guides
+- User Documentation
+- Frequently Asked Questions
+- Custom Documentation
+
+---
+
+## Secure File Sharing
+
+Generate temporary download or upload links for customers.
+
+Features include:
+
+- Expiring links
+- Secure uploads
+- Large file transfers
+- Customer document delivery
+
+---
+
+## Built for Service Companies
+
+Tech Bench was designed with real-world service technicians in mind.
+
+Typical users include:
+
+- Low Voltage Contractors
+- Security Integrators
+- Access Control Companies
+- Network Installers
+- Audio/Visual Integrators
+- Fire Alarm Companies
+- IT Service Providers
+- Field Service Organizations
+
+---
+
+# Technology
+
+Tech Bench is built using:
+
+- PHP 8
+- Laravel
+- Vue.js
+- Inertia.js
+- Docker
+- MySQL / MariaDB
+
+---
+
+# Installation
+
+Tech Bench is designed to run as a Docker-based application.
+
+Detailed installation instructions are available in the Installation Guide included with the project.
+
+---
+
+# Upgrading
+
+Upgrades are performed using the included upgrade scripts.
+
+See the Upgrade Guide for step-by-step instructions.
+
+---
+
+# Backups
+
+Tech Bench includes support for automated backups.
+
+Backups can be written to local storage or redirected to a mounted network share for off-server protection.
+
+---
+
+# Documentation
+
+Additional documentation includes:
+
+- Installation Guide
+- Upgrade Guide
+- Backup Guide
+- Administrator Documentation
+
+---
+
+# License
+
+Copyright © 2016–2026 Ron Butcher
+
+Tech Bench is licensed under the GNU General Public License v2.0 or later (GPL-2.0-or-later).
+
+This program is free software: you may redistribute it and/or modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation, either version 2 of the License, or (at your option) any later version.
+
+This software is distributed in the hope that it will be useful, but **WITHOUT ANY WARRANTY**; without even the implied
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.

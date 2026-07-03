@@ -67,7 +67,7 @@ class FileUpload extends Model
     public function fileExists(): bool
     {
         return Storage::disk($this->disk)
-            ->exists($this->folder.DIRECTORY_SEPARATOR.$this->file_name);
+            ->exists($this->folder.DIRECTORY_SEPARATOR.$this->hash_name);
     }
 
     /**
@@ -76,6 +76,6 @@ class FileUpload extends Model
     public function getFilePath(): string
     {
         return Storage::disk($this->disk)
-            ->path($this->folder.DIRECTORY_SEPARATOR.$this->file_name);
+            ->path($this->folder.DIRECTORY_SEPARATOR.$this->hash_name);
     }
 }

@@ -76,6 +76,7 @@ class DownloadFileTest extends TestCase
         $file = FileUpload::create([
             'disk' => 'local',
             'file_name' => 'testRandomPhoto.png',
+            'hash_name' => 'randomHash.png',
             'folder' => 'random_folder',
             'file_size' => 1,
             'public' => true,
@@ -140,6 +141,7 @@ class DownloadFileTest extends TestCase
         $file = FileUpload::create([
             'disk' => 'local',
             'file_name' => 'testRandomPhoto.png',
+            'hash_name' => 'testRandomHash.png',
             'folder' => 'random_folder',
             'file_size' => 1,
             'public' => false,

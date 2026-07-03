@@ -10,15 +10,12 @@ import EquipmentSites from "@/Components/Customer/Show/Equipment/EquipmentSites.
 import ManageEquipment from "@/Components/Customer/Show/Equipment/ManageEquipment.vue";
 import VpnData from "@/Components/Customer/Show/Equipment/VpnData.vue";
 import { onMounted, onUnmounted } from "vue";
-import {
-    allowVpn,
-    customer,
-    permissions,
-} from "@/Composables/Customer/CustomerData.module";
+import { allowVpn, customer } from "@/Composables/Customer/CustomerData.module";
 import {
     leaveEquipmentChannel,
     registerEquipmentChannel,
 } from "@/Composables/Customer/CustomerBroadcasting.module";
+import BaseButton from "@/Components/_Base/Buttons/BaseButton.vue";
 
 const props = defineProps<{
     equipment: customerEquipment;
@@ -47,7 +44,22 @@ export default { layout: AppLayout };
         </div>
         <CustomerInfo />
         <CustomerAlerts />
-        <VpnData v-if="allowVpn" />
+        <div class="flex flex-row-reverse my-1 gap-2">
+            <VpnData v-if="allowVpn" />
+            <BaseButton
+                v-if="equipment.has_workbook"
+                class="mb-2"
+                text="Show Workbook"
+                size="small"
+                pill
+                :href="
+                    $route('customers.equipment.workbook.index', [
+                        customer.slug,
+                        equipment.cust_equip_id,
+                    ])
+                "
+            />
+        </div>
         <EquipmentSites
             v-if="customer.site_count > 1"
             class="my-3"

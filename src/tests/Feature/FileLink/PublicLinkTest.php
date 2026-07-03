@@ -145,7 +145,7 @@ class PublicLinkTest extends TestCase
         $data = [
             'name' => 'Billy Bob',
             'note' => 'This is a note',
-            'file' => UploadedFile::fake()->image('testPhoto.png'),
+            'file' => $upload = UploadedFile::fake()->image('testPhoto.png'),
         ];
 
         $response = $this->post(
@@ -162,10 +162,11 @@ class PublicLinkTest extends TestCase
         $this->assertDatabaseHas('file_uploads', [
             'folder' => $link->link_id,
             'file_name' => 'testPhoto.png',
+            'hash_name' => $upload->hashName(),
         ]);
 
         Storage::disk('fileLinks')
-            ->assertExists($link->link_id.DIRECTORY_SEPARATOR.'testPhoto.png');
+            ->assertExists($link->link_id.DIRECTORY_SEPARATOR.$upload->hashName());
     }
 
     /*

@@ -10,7 +10,7 @@ const page = usePage<customerPageProps>();
 */
 export const isFav = computed<boolean>(() => page.props.isFav);
 export const permissions = computed<customerPermissions>(
-    () => page.props.permissions
+    () => page.props.permissions,
 );
 
 /*
@@ -40,11 +40,12 @@ export const alerts = computed<customerAlert[]>(() => page.props.alerts);
 export const allowVpn = computed<boolean>(() => page.props.allowVpn);
 export const allowShareVpn = computed<boolean>(() => page.props.allowShareVpn);
 export const vpnData = computed<vpnData | null>(() => page.props.vpnData);
+export const allowWorkbook = computed<boolean>(() => page.props.allowWorkbook);
 export const groupedEquipmentList = computed<
     { [key: string]: customerEquipment[] }[]
 >(() => page.props.groupedEquipmentList);
 export const equipmentList = computed<customerEquipment[]>(
-    () => page.props.equipmentList
+    () => page.props.equipmentList,
 );
 
 /*
@@ -54,7 +55,7 @@ export const equipmentList = computed<customerEquipment[]>(
 */
 export const phoneTypes = computed<phoneType[]>(() => page.props.phoneTypes);
 export const contactList = computed<customerContact[]>(
-    () => page.props.contactList
+    () => page.props.contactList,
 );
 
 /*
@@ -70,7 +71,7 @@ export const noteList = computed<customerNote[][]>(() => page.props.noteList);
 |-------------------------------------------------------------------------------
 */
 export const fileTypes = computed<customerFileType[]>(
-    () => page.props.fileTypes
+    () => page.props.fileTypes,
 );
 export const fileList = computed<customerFile[]>(() => page.props.fileList);
 
@@ -85,7 +86,7 @@ export const fileList = computed<customerFile[]>(() => page.props.fileList);
  */
 const sortCustSites = (
     siteList: customerSite[],
-    primaryId: number
+    primaryId: number,
 ): customerSite[] => {
     return siteList.sort((x) => (x.cust_site_id === primaryId ? -1 : 1));
 };

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { computed, onMounted, ref, toRef, watch } from "vue";
+import { useField } from "vee-validate";
 import {
     FloatLabel,
     InputGroup,
@@ -6,13 +8,12 @@ import {
     InputText,
     Message,
 } from "primevue";
-import { computed, onMounted, ref, toRef, watch } from "vue";
-import { useField } from "vee-validate";
 import type { Ref } from "vue";
 
 const emit = defineEmits<{
     focus: [];
     blur: [];
+    change: [];
 }>();
 
 const props = defineProps<{
@@ -128,6 +129,7 @@ const {
                     type="tel"
                     @focus="onFocus"
                     @blur="onBlur"
+                    @change="$emit('change')"
                 />
                 <label :for="id">{{ label }}</label>
             </FloatLabel>

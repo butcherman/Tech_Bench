@@ -2,8 +2,10 @@
 
 namespace Tests\Feature\TechTip;
 
+use App\Exceptions\TechTip\DownloadTipNotAllowedException;
 use App\Models\TechTip;
 use App\Models\User;
+use Illuminate\Support\Facades\Exceptions;
 use Tests\TestCase;
 
 class DownloadTipTest extends TestCase
@@ -38,15 +40,22 @@ class DownloadTipTest extends TestCase
 
     public function test_invoke_feature_disabled(): void
     {
+        Exceptions::fake();
+
         config(['tech-tips.allow_download' => false]);
 
         /** @var User $user */
         $user = User::factory()->createQuietly();
         $tip = TechTip::factory()->create();
 
+        $this->withoutExceptionHandling();
+        $this->expectException(DownloadTipNotAllowedException::class);
+
         $response = $this->actingAs($user)
             ->get(route('tech-tips.download', $tip->slug));
 
         $response->assertStatus(404);
+
+        Exceptions::assertReported(DownloadTipNotAllowedException::class);
     }
 }
