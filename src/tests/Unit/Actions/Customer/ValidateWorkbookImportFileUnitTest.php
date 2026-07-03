@@ -221,7 +221,7 @@ class ValidateWorkbookImportFileUnitTest extends TestCase
                 'Invalid Col' => [
                     'valid' => false,
                     'data_type' => null,
-                    'value' => 'valid',
+                    'value' => null,
                     'validation_error' => 'Invalid Column',
                 ],
             ],
@@ -246,7 +246,7 @@ class ValidateWorkbookImportFileUnitTest extends TestCase
         if ($withErrors) {
             $csvData[0] = 'Public Col 1,Public Col 2,Public Col 3,Invalid Col';
             $csvData[] = 'Billy Bob,bbob@notValid.com,random';
-            $csvData[] = 'Too Many,columns,notatall,valid';
+            $csvData[] = 'Too Many,columns,notatall,';
         }
 
         return implode("\n", $csvData);

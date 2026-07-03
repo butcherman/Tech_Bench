@@ -30,6 +30,10 @@ class GarbageCollectionJobUnitTest extends TestCase
             ->once()
             ->with('queue:retry all')
             ->andReturn(null);
+        Artisan::shouldReceive('call')
+            ->once()
+            ->with('app:import-cleanup')
+            ->andReturn(null);
 
         GarbageCollectionJob::dispatch();
     }
