@@ -30,6 +30,13 @@ curl -LJO $URL
 
 # Extract package
 FILE_ROOT=(*)
+
+if [ ! -f $FILE_ROOT ]
+then
+    echo "Unable to download Tech Bench"
+    exit 0
+fi
+
 unzip -o $FILE_ROOT
 
 # Copy files to the /app directory

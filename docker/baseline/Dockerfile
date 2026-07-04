@@ -19,11 +19,12 @@ USER root
 RUN apt update && apt upgrade -y --no-install-recommends
 
 #  Install php modules
-RUN install-php-extensions gd yq
+RUN install-php-extensions gd intl
 
 RUN apt update
 
 RUN apt install -yq  \
+    yq \
     nano \
     mariadb-client
 
@@ -40,17 +41,21 @@ RUN composer self-update
 #  Basic scripts for Starting, Initializing and Updating Tech Bench App
 RUN mkdir /tb_data/scripts
 
-# TODO - Test each script
 COPY ./download_tb.sh /tb_data/scripts/
-COPY ./startup.sh /tb_data/scripts/
-COPY ./update.sh /tb_data/scripts/
+COPY ./install.sh /tb_data/scripts/
 COPY ./setup.sh /tb_data/scripts/
+COPY ./update.sh /tb_data/scripts/
+
+# TODO - Test each script
+COPY ./startup.sh /tb_data/scripts/
 COPY ./scheduler.sh /tb_data/scripts/
 
 #  Set permissions for the scripts to allow them to run
 RUN chown www-data:www-data -R /tb_data
 RUN chmod 775 /tb_data/scripts/*
-# RUN chmod 775 /app
+
+# Allow the composer cache file to be writable
+RUN chmod 777 -R /composer/cache
 
 USER www-data
 
