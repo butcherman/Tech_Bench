@@ -34,6 +34,7 @@ RUN mkdir /tb_data
 #  Update npm and composer
 RUN apt install -y nodejs npm
 RUN npm install -g npm@latest
+RUN npm config delete globalignorefile --global
 
 #  Update Composer
 RUN composer self-update

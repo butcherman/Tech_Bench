@@ -11,6 +11,11 @@ echo "New installation of Tech Bench detected"
 echo "Setting up the application for the first time"
 echo "Please wait...."
 
+# Install Composer and NPM dependencies
+cd /var/www/html
+composer install --no-dev --no-interaction --optimize-autoloader
+npm install --omit=dev
+
 #  Create Encryption Key
 echo "Creating Encryption Key"
 php /var/www/html/artisan key:generate --force

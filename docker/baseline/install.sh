@@ -38,8 +38,4 @@ fi
 # Create the Keystore directory for Certificates
 mkdir keystore
 
-# Install Composer and NPM Dependencies
-composer install --no-dev --no-interaction --optimize-autoloader
-npm install --omit=dev
-
 echo "TECH BENCH INSTALLATION COMPLETE"
