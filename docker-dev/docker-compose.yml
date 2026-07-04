@@ -33,8 +33,6 @@ services:
         volumes:
             - ../src:/var/www/html
             - ./.env:/var/www/html/.env
-            # - /var/run/docker.sock:/var/run/docker.sock
-            # - backupData:/app/storage/backups/tech-bench
         # environment:
         #     - SERVICE=app
         #     - TB_URL=${BASE_URL}
@@ -54,7 +52,7 @@ services:
         volumes:
             - ../src:/var/www/html
             - ./.env:/var/www/html/.env
-            # - ./nginx/http.conf:/etc/nginx/conf.d/default.conf
+            # - ../docker/nginx/generate_ssl.sh:/tb_data/scripts/generate_ssl.sh
         ports:
             - "80:80"
             - "443:443"

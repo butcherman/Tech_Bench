@@ -13,16 +13,15 @@ FROM serversideup/php:8.5-fpm
 # ENV ENABLE_HTTPS=true
 # ENV SERVICE=master
 
-# # Make sure image is up to date
 USER root
 
+# Make sure image is up to date
 RUN apt update && apt upgrade -y --no-install-recommends
 
 #  Install php modules
 RUN install-php-extensions gd intl
 
 RUN apt update
-
 RUN apt install -yq  \
     yq \
     nano \
@@ -59,6 +58,8 @@ RUN chmod 775 /tb_data/scripts/*
 RUN chmod 777 -R /composer/cache
 
 USER www-data
+
+WORKDIR /var/www/html
 
 
 # ENTRYPOINT [ "/scripts/startup.sh" ]
