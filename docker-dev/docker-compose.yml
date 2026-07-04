@@ -52,7 +52,6 @@ services:
         volumes:
             - ../src:/var/www/html
             - ./.env:/var/www/html/.env
-            # - ../docker/nginx/generate_ssl.sh:/tb_data/scripts/generate_ssl.sh
         ports:
             - "80:80"
             - "443:443"
