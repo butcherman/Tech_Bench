@@ -40,6 +40,8 @@ services:
         #     - TB_URL=${BASE_URL}
         networks:
             - app-tier
+        ports:
+            - "5173:5173"
         # depends_on:
         #     database:
         #         condition: service_healthy
