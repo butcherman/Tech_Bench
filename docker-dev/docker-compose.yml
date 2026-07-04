@@ -27,14 +27,12 @@ services:
     tech_bench:
         container_name: tech_bench
         restart: unless-stopped
-        image: butcherman/tech_bench_baseline:2.0
-        # build:
-        #     context: ./tech_bench
-        #     dockerfile: Dockerfile
+        build:
+            context: ./tech_bench
+            dockerfile: Dockerfile
         volumes:
-            - ../docker/baseline:/tb_data/scripts
-            # - ../src:/app
-            # - ./.env:/app/.env
+            - ../src:/var/www/html
+            - ./.env:/var/www/html/.env
             # - /var/run/docker.sock:/var/run/docker.sock
             # - backupData:/app/storage/backups/tech-bench
         # environment:
@@ -47,22 +45,23 @@ services:
         #         condition: service_healthy
 
     #  NGINX Web Server
-    # nginx:
-    #     image: butcherman/tech_bench_nginx:1.1
-    #     container_name: nginx
-    #     restart: unless-stopped
-    #     volumes:
-    #         - ../src:/app
-    #         - ./.env:/app/.env
-    #         - ./nginx/https.conf:/opt/bitnami/nginx/conf/server_blocks/tech_bench_https.conf
-    #     ports:
-    #         - "80:80"
-    #         - "443:443"
-    #     networks:
-    #         - app-tier
-    #     depends_on:
-    #         - tech_bench
-    #         - reverb
+    nginx:
+        image: nginx:alpine
+        container_name: nginx
+        restart: unless-stopped
+        volumes:
+            - ../src:/var/www/html
+            - ./.env:/var/www/html/.env
+            - ./nginx/http.conf:/etc/nginx/conf.d/default.conf
+            - ./nginx/https.conf:/etc/nginx/conf.d/https.conf
+        ports:
+            - "80:80"
+            - "443:443"
+        networks:
+            - app-tier
+        # depends_on:
+        #     - tech_bench
+        #     - reverb
 
     # #  Reverb Container for Websockets
     # reverb:
@@ -120,25 +119,25 @@ services:
     #         - tech_bench
     #         - nginx
 
-    # #  MySQL Database Container
-    # database:
-    #     image: butcherman/tech_bench_database:1.0
-    #     container_name: database
-    #     restart: unless-stopped
-    #     volumes:
-    #         - dbDevData:/bitnami/mysql/data
-    #         # - ./database/testDatabase.sql:/docker-entrypoint-initdb.d/testDatabase.sql
-    #     networks:
-    #         - app-tier
-    #     ports:
-    #         - "3306:3306"
-    #     healthcheck:
-    #         test: ['CMD', '/opt/bitnami/scripts/mysql/healthcheck.sh']
-    #         interval: 15s
-    #         timeout: 5s
-    #         retries: 6
+    #  MySQL Database Container
+    database:
+        image: butcherman/tech_bench_database:1.0
+        container_name: database
+        restart: unless-stopped
+        volumes:
+            - dbDevData:/bitnami/mysql/data
+            # - ./database/testDatabase.sql:/docker-entrypoint-initdb.d/testDatabase.sql
+        networks:
+            - app-tier
+        ports:
+            - "3306:3306"
+        healthcheck:
+            test: ['CMD', '/opt/bitnami/scripts/mysql/healthcheck.sh']
+            interval: 15s
+            timeout: 5s
+            retries: 6
 
-    # #  Redis Container for Cache, Job and Email Queuing
+    #  Redis Container for Cache, Job and Email Queuing
     # redis:
     #     image: butcherman/tech_bench_redis:1.0
     #     container_name: redis
@@ -150,7 +149,7 @@ services:
     #     ports:
     #         - "6379:6379"
 
-    # # Melisearch Container for Search Engine
+    # Melisearch Container for Search Engine
     # meilisearch:
     #     image: butcherman/tech_bench_meilisearch:1.0
     #     container_name: meilisearch

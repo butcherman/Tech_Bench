@@ -29,18 +29,12 @@ RUN usermod -a -G docker www-data
 #################### DEV SPECIFIC ##############################################
 
 #  Install troubleshooting php modules
-RUN install-php-extensions x-debug
+RUN install-php-extensions xdebug
 
 ################################################################################
 
 # Update npm and composer
 RUN npm install -g npm@latest
 RUN composer self-update
-
-# Set directory permissions
-RUN find /var/www/html/ -type f -exec chmod 644 {} \;
-RUN find /var/www/html/ -type d -exec chmod 755 {} \;
-RUN chmod -R 775 /var/www/html/storage
-RUN chmod -R 775 /var/www/html/keystore
 
 USER www-data
