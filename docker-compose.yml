@@ -24,17 +24,18 @@ services:
         image: butcherman/tech_bench_app:${APP_VERSION:-latest}
         volumes:
             - appData:/app
-            - ./.env:/app/.env
+            # - ./.env:/app/.env
             # - ./backupData:/app/storage/backups/tech-bench
             # - ./logData:/app/storage/logs
+            - ./docker/tech_bench/entrypoint.sh:/tb_data/scripts/entrypoint.sh
         environment:
             - SERVICE=app
             - TB_URL=${BASE_URL}
         networks:
             - app-tier
-        depends_on:
-            database:
-                condition: service_healthy
+        # depends_on:
+        #     database:
+        #         condition: service_healthy
 
     # NGINX Web Server
     # nginx:
@@ -54,6 +55,18 @@ services:
     #     depends_on:
     #         - tech_bench
     #         - reverb
+    nginx:
+        image: butcherman/tech_bench_nginx:2.0
+        container_name: nginx
+        restart: unless-stopped
+        volumes:
+            - appData:/app
+    #         - ./.env:/app/.env
+        ports:
+            - "80:80"
+            - "443:443"
+        networks:
+            - app-tier
 
     # #  Reverb Container for Websockets
     # reverb:
@@ -103,19 +116,19 @@ services:
     #         - nginx
 
     # # MySQL Database Container
-    # database:
-    #     image: butcherman/tech_bench_database:1.0
-    #     container_name: database
-    #     restart: unless-stopped
-    #     volumes:
-    #         - dbData:/bitnami/mysql/data
-    #     networks:
-    #         - app-tier
-    #     healthcheck:
-    #         test: ['CMD', '/opt/bitnami/scripts/mysql/healthcheck.sh']
-    #         interval: 15s
-    #         timeout: 5s
-    #         retries: 6
+    database:
+        image: butcherman/tech_bench_database:1.0
+        container_name: database
+        restart: unless-stopped
+        volumes:
+            - dbData:/bitnami/mysql/data
+        networks:
+            - app-tier
+        healthcheck:
+            test: ['CMD', '/opt/bitnami/scripts/mysql/healthcheck.sh']
+            interval: 15s
+            timeout: 5s
+            retries: 6
 
     # #  Redis Container for Cache, Job and Email Queuing
     # redis:

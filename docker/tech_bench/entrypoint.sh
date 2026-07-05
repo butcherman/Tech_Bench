@@ -19,9 +19,12 @@ main()
 {
     echo "Starting Tech Bench"
 
-    checkForSetup
-    checkForEnv
-    checkForInit
+    if [ $SERVICE = "master" ] || [ $SERVICE = "app" ]
+    then
+        checkForSetup
+        checkForEnv
+        checkForInit
+    fi
 }
 
 # Check that the Tech Bench files have been installed in the proper directory
@@ -52,6 +55,8 @@ checkForInit()
     then
         /tb_data/scripts/setup.sh
     fi
+
+    # TODO - Check for update
 }
 
 

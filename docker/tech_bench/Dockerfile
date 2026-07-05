@@ -14,6 +14,9 @@ USER root
 # Make sure image is up to date
 RUN apt update && apt upgrade -y --no-install-recommends
 
+# Copy the entrypoint script in to allow udpates and initial config
+COPY ./entrypoint.sh /etc/entrypoint.d/entrypoint.sh
+
 # Bring the docker file in to allow for internal reboot
 COPY ./docker /usr/local/bin/docker
 RUN chmod 775 /usr/local/bin/docker
