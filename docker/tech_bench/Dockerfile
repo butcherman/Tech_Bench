@@ -40,4 +40,6 @@ RUN find /var/www/html/ -type d -exec chmod 755 {} \;
 RUN chmod -R 775 /var/www/html/storage
 RUN chmod -R 775 /var/www/html/keystore
 
+WORKDIR /var/www/html
+
 USER www-data

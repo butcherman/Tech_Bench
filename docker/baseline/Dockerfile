@@ -9,10 +9,6 @@
 
 FROM serversideup/php:8.5-fpm
 
-# ENV TB_URL=localhost
-# ENV ENABLE_HTTPS=true
-# ENV SERVICE=master
-
 USER root
 
 # Make sure image is up to date
@@ -46,10 +42,6 @@ COPY ./install.sh /tb_data/scripts/
 COPY ./setup.sh /tb_data/scripts/
 COPY ./update.sh /tb_data/scripts/
 
-# TODO - Test each script
-COPY ./startup.sh /tb_data/scripts/
-COPY ./scheduler.sh /tb_data/scripts/
-
 #  Set permissions for the scripts to allow them to run
 RUN chown www-data:www-data -R /tb_data
 RUN chmod 775 /tb_data/scripts/*
@@ -60,6 +52,3 @@ RUN chmod 777 -R /composer/cache
 USER www-data
 
 WORKDIR /var/www/html
-
-
-# ENTRYPOINT [ "/scripts/startup.sh" ]

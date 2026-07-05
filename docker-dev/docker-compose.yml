@@ -23,34 +23,28 @@ volumes:
             device: './backupData'
 
 services:
-    #  Application Container
+    # Application Container
     tech_bench:
         container_name: tech_bench
-        image: butcherman/tech_bench_app:dev9
         restart: unless-stopped
-        # build:
-        #     context: ./tech_bench
-        #     dockerfile: Dockerfile
+        stop_signal: SIGTERM
+        build:
+            context: ./tech_bench
+            dockerfile: Dockerfile
         volumes:
-            # - ../src:/var/www/html
+            - ../src:/var/www/html
             - ./.env:/var/www/html/.env
-            - ../docker/tech_bench/entrypoint.sh:/tb_data/scripts/entrypoint.sh
-        # environment:
-        #     - SERVICE=app
-        #     - TB_URL=${BASE_URL}
+        environment:
+            - SERVICE=app
         networks:
             - app-tier
-        ports:
-            - "5173:5173"
-        # depends_on:
-        #     database:
-        #         condition: service_healthy
 
-    #  NGINX Web Server
+    # NGINX Web Server
     nginx:
         image: butcherman/tech_bench_nginx:2.0
         container_name: nginx
         restart: unless-stopped
+        stop_signal: SIGTERM
         volumes:
             - ../src:/var/www/html
             - ./.env:/var/www/html/.env
@@ -59,152 +53,122 @@ services:
             - "443:443"
         networks:
             - app-tier
-        # depends_on:
-        #     - tech_bench
-        #     - reverb
 
-    # #  Reverb Container for Websockets
-    # reverb:
-    #     container_name: reverb
-    #     restart: unless-stopped
-    #     build:
-    #         context: ./tech_bench
-    #         dockerfile: Dockerfile
-    #     volumes:
-    #         - ../src:/app
-    #         - ./.env:/app/.env
-    #     environment:
-    #         - SERVICE=reverb
-    #     networks:
-    #         - app-tier
-    #     depends_on:
-    #         - tech_bench
-    #     entrypoint: php artisan reverb:start --debug
+    # Reverb Container for Websockets
+    reverb:
+        container_name: reverb
+        restart: unless-stopped
+        stop_signal: SIGTERM
+        build:
+            context: ./tech_bench
+            dockerfile: Dockerfile
+        volumes:
+            - ../src:/var/www/html
+            - ./.env:/var/www/html/.env
+        networks:
+            - app-tier
+        command: ['php', '/var/www/html/artisan', 'reverb:start']
 
-    # #  Horizon Container to run background jobs
-    # horizon:
-    #     container_name: horizon
-    #     restart: unless-stopped
-    #     build:
-    #         context: ./tech_bench
-    #         dockerfile: Dockerfile
-    #     volumes:
-    #         - ../src:/app
-    #         - ./.env:/app/.env
-    #         - backupData:/app/storage/backups/tech-bench
-    #     environment:
-    #         - SERVICE=horizon
-    #     networks:
-    #         - app-tier
-    #     depends_on:
-    #         - tech_bench
-    #         - nginx
+    # Horizon Container to run background jobs
+    horizon:
+        container_name: horizon
+        restart: unless-stopped
+        stop_signal: SIGTERM
+        build:
+            context: ./tech_bench
+            dockerfile: Dockerfile
+        volumes:
+            - ../src:/var/www/html
+            - ./.env:/var/www/html/.env
+        networks:
+            - app-tier
+        command: ["php", "/var/www/html/artisan", "horizon"]
 
-    # #  Scheduler Container
-    # scheduler:
-    #     container_name: scheduler
-    #     restart: unless-stopped
-    #     build:
-    #         context: ./tech_bench
-    #         dockerfile: Dockerfile
-    #     volumes:
-    #         - ../src:/app
-    #         - ./.env:/app/.env
-    #         - backupData:/app/storage/backups/tech-bench
-    #     environment:
-    #         - SERVICE=scheduler
-    #     networks:
-    #         - app-tier
-    #     depends_on:
-    #         - tech_bench
-    #         - nginx
+    # Scheduler Container
+    scheduler:
+        container_name: scheduler
+        restart: unless-stopped
+        stop_signal: SIGTERM
+        build:
+            context: ./tech_bench
+            dockerfile: Dockerfile
+        volumes:
+            - ../src:/var/www/html
+            - ./.env:/var/www/html/.env
+        networks:
+            - app-tier
+        command: ["php", "/var/www/html/artisan", "schedule:work"]
 
-    #  MySQL Database Container
+    # MySQL Database Container
     database:
         image: butcherman/tech_bench_database:1.0
         container_name: database
         restart: unless-stopped
+        stop_signal: SIGTERM
         volumes:
             - dbDevData:/bitnami/mysql/data
-            # - ./database/testDatabase.sql:/docker-entrypoint-initdb.d/testDatabase.sql
         networks:
             - app-tier
         ports:
             - "3306:3306"
-        healthcheck:
-            test: ['CMD', '/opt/bitnami/scripts/mysql/healthcheck.sh']
-            interval: 15s
-            timeout: 5s
-            retries: 6
 
     #  Redis Container for Cache, Job and Email Queuing
-    # redis:
-    #     image: butcherman/tech_bench_redis:1.0
-    #     container_name: redis
-    #     restart: unless-stopped
-    #     volumes:
-    #         - redisDevData:/bitnami/redis/data
-    #     networks:
-    #         - app-tier
-    #     ports:
-    #         - "6379:6379"
+    redis:
+        image: butcherman/tech_bench_redis:1.0
+        container_name: redis
+        restart: unless-stopped
+        stop_signal: SIGTERM
+        volumes:
+            - redisDevData:/bitnami/redis/data
+        networks:
+            - app-tier
+        ports:
+            - "6379:6379"
 
     # Melisearch Container for Search Engine
-    # meilisearch:
-    #     image: butcherman/tech_bench_meilisearch:1.0
-    #     container_name: meilisearch
-    #     restart: unless-stopped
-    #     volumes:
-    #         - meilisearchDevData:/meili_data
-    #     networks:
-    #         - app-tier
-    #     ports:
-    #         - 7700:7700
+    meilisearch:
+        image: butcherman/tech_bench_meilisearch:1.0
+        container_name: meilisearch
+        restart: unless-stopped
+        stop_signal: SIGTERM
+        volumes:
+            - meilisearchDevData:/meili_data
+        networks:
+            - app-tier
+        ports:
+            - 7700:7700
 
-    ###########################################################################################
-    #                               Dev Specific Containers                                   #
-    ###########################################################################################
+    ############################################################################
+    #                       Dev Specific Containers                            #
+    ############################################################################
 
-    #  Mailpit for Email Traps
-    # mailpit:
-    #     image: axllent/mailpit:latest
-    #     container_name: mailpit
-    #     restart: unless-stopped
-    #     networks:
-    #         - app-tier
-    #     ports:
-    #         - "8025:8025"
-    #         - "1025:1025"
+    # Mailpit for Email Traps
+    mailpit:
+        image: axllent/mailpit:latest
+        container_name: mailpit
+        restart: unless-stopped
+        stop_signal: SIGTERM
+        networks:
+            - app-tier
+        ports:
+            - "8025:8025"
+            - "1025:1025"
 
-    #  NPM Container to run npm run dev
-    # npm:
-    #     container_name: npm
-    #     restart: unless-stopped
-    #     build:
-    #         context: ./tech_bench
-    #         dockerfile: Dockerfile
-    #     # user: root
-    #     volumes:
-    #         - ../src:/var/www/html
-    #         - ./.env:/var/www/html/.env
-    #     environment:
-    #         - SERVICE=app
-    #     networks:
-    #         - app-tier
-    #     ports:
-    #         - "5173:5173"
-    #     # depends_on:
-    #     #     - tech_bench
-    #     #     - nginx
-    #     entrypoint: npm run dev
-
-    # selenium:
-    #     container_name: selenium
-    #     image: selenium/standalone-chrome:4.3
-    #     volumes:
-    #         - ../src:/dev/shm
-    #     networks:
-    #         - app-tier
-    #     ports:
-    #         - "4444:4444"
-    #         - "7900:7900"
+    # NPM Container to run npm run dev
+    npm:
+        container_name: npm
+        restart: unless-stopped
+        stop_signal: SIGTERM
+        build:
+            context: ./tech_bench
+            dockerfile: Dockerfile
+        volumes:
+            - ../src:/var/www/html
+            - ./.env:/var/www/html/.env
+        environment:
+            - SERVICE=app
+        networks:
+            - app-tier
+        ports:
+            - "5173:5173"
+        command: npm run dev

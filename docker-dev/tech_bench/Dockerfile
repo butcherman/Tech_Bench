@@ -37,4 +37,6 @@ RUN install-php-extensions xdebug
 RUN npm install -g npm@latest
 RUN composer self-update
 
+WORKDIR /var/www/html
+
 USER www-data
