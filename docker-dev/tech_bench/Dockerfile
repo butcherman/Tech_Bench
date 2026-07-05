@@ -9,11 +9,15 @@ FROM butcherman/tech_bench_baseline:2.0
 ARG BRANCH=false
 ARG VERSION=latest
 
-# COPY ./php.ini /opt/bitnami/php/lib/
-# COPY ./startup.dev.sh /scripts/
-# COPY ./setup.dev.sh /scripts/
-
 USER root
+
+# Copy the entrypoint dev script in to allow udpates and initial config
+COPY ./entrypoint.dev.sh /etc/entrypoint.d/entrypoint.dev.sh
+
+# Copy other dev scripts
+COPY ./setup.dev.sh /tb_data/scripts/setup.dev.sh
+RUN chown www-data:www-data /tb_data/scripts/*
+RUN chmod 775 /tb_data/scripts/*
 
 # Make sure image is up to date
 RUN apt update && apt upgrade -y --no-install-recommends

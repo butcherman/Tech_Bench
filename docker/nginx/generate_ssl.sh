@@ -26,5 +26,10 @@ mkdir -p $KEYSTORE/private
 mv $TMPLOCATION/server.crt $KEYSTORE/server.crt
 mv $TMPLOCATION/server.key $KEYSTORE/private/server.key
 
+chown www-data:www-data $KEYSTORE/server.crt
+chown www-data:www-data $KEYSTORE/private/server.key
+chmod 755 $KEYSTORE/server.crt
+chmod 755 $KEYSTORE/private/server.key
+
 #  Cleanup unneeded files
 rm -rf $TMPLOCATION/server.csr $TMPLOCATION/server.key.org $TMPLOCATION/passphrase.txt
