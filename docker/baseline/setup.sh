@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 ################################################################################
 #                                                                              #
@@ -28,7 +28,7 @@ php /var/www/html/artisan reverb:generate --force
 php /var/www/html/artisan storage:link -q
 
 #  Create the database
-php /apvar/www/htmlp/artisan migrate --force
+php /var/www/html/artisan migrate --force
 
 #  Cache configuration files
 php /var/www/html/artisan optimize:clear

@@ -31,6 +31,7 @@ RUN /tb_data/scripts/download_tb.sh ${BRANCH} ${VERSION}
 RUN /tb_data/scripts/install.sh
 
 # Set directory permissions
+RUN chown -R www-data:www-data /var/www/html/*
 RUN find /var/www/html/ -type f -exec chmod 644 {} \;
 RUN find /var/www/html/ -type d -exec chmod 755 {} \;
 RUN chmod -R 775 /var/www/html/storage

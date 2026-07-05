@@ -26,13 +26,15 @@ services:
     #  Application Container
     tech_bench:
         container_name: tech_bench
+        image: butcherman/tech_bench_app:dev9
         restart: unless-stopped
-        build:
-            context: ./tech_bench
-            dockerfile: Dockerfile
+        # build:
+        #     context: ./tech_bench
+        #     dockerfile: Dockerfile
         volumes:
-            - ../src:/var/www/html
+            # - ../src:/var/www/html
             - ./.env:/var/www/html/.env
+            - ../docker/tech_bench/entrypoint.sh:/tb_data/scripts/entrypoint.sh
         # environment:
         #     - SERVICE=app
         #     - TB_URL=${BASE_URL}

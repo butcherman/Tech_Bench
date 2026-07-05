@@ -25,6 +25,7 @@ then
 fi
 
 # Copy the application files to the application root directory
+# TODO - Minimize this to only the necessary files
 cp -R /tb_data/staging/* /var/www/html/
 
 cd /var/www/html
