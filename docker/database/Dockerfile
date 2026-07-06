@@ -4,7 +4,7 @@
 #                                                                                               #
 #################################################################################################
 
-FROM bitnami/mysql:latest
+FROM mysql:9.4
 
 ENV MYSQL_ROOT_PASSWORD=tbRootPasswd
 ENV MYSQL_USER=tbUser

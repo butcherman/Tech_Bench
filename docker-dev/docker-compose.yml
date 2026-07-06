@@ -121,18 +121,18 @@ services:
 
     # MySQL Database Container
     database:
-        image: butcherman/tech_bench_database:1.0
+        image: butcherman/tech_bench_database:2.0
         container_name: database
         restart: unless-stopped
         stop_signal: SIGTERM
         volumes:
-            - dbDevData:/bitnami/mysql/data
+            - dbDevData:/var/lib/mysql
         networks:
             - app-tier
         ports:
             - "3306:3306"
         healthcheck:
-            test: ['CMD', '/opt/bitnami/scripts/mysql/healthcheck.sh']
+            test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
             interval: 15s
             timeout: 5s
             retries: 6
