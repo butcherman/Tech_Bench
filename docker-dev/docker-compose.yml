@@ -144,7 +144,7 @@ services:
         restart: unless-stopped
         stop_signal: SIGTERM
         volumes:
-            - redisDevData:/bitnami/redis/data
+            - redisDevData:/data
         networks:
             - app-tier
         ports:

@@ -23,7 +23,7 @@ RUN chmod 775 /tb_data/scripts/*
 RUN apt update && apt upgrade -y --no-install-recommends
 
 # Bring the docker file in to allow for internal reboot
-COPY ./docker /usr/local/bin/docker
+COPY ../../docker/tech_bench/docker /usr/local/bin/docker
 RUN chmod 775 /usr/local/bin/docker
 
 # Create a group and user to run the Docker file permissions

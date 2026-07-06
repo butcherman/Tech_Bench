@@ -34,6 +34,7 @@ cd /var/www/html
 if [ ! -f ".env" ]
 then
     cp /tb_data/staging/.env.example .env
+    chown www-data:www-data .env
 fi
 
 # Create the Keystore directory for Certificates
