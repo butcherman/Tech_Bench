@@ -38,5 +38,7 @@ fi
 
 # Create the Keystore directory for Certificates
 mkdir keystore
+chown www-data:www-data keystore
+chmod 775 keystore
 
 echo "TECH BENCH INSTALLATION COMPLETE"

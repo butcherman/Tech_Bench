@@ -18,14 +18,17 @@ INSTALL_BASE="/var/www/html"
 main()
 {
     echo "Starting Tech Bench"
-    echo $SERVICE
-    echo 'that was the service'
 
     if [ $SERVICE = "master" ] || [ $SERVICE = "app" ]
     then
         checkForSetup
         checkForEnv
         checkForInit
+
+        echo "Importing Meilisearch Data"
+        php artisan scout:sync-index-settings
+        php artisan scout:import "App\Models\TechTip"
+        php artisan scout:import "App\Models\Customer"
     fi
 }
 
