@@ -139,7 +139,7 @@ services:
 
     #  Redis Container for Cache, Job and Email Queuing
     redis:
-        image: butcherman/tech_bench_redis:1.0
+        image: butcherman/tech_bench_redis:2.0
         container_name: redis
         restart: unless-stopped
         stop_signal: SIGTERM
@@ -162,6 +162,9 @@ services:
             - app-tier
         ports:
             - 7700:7700
+        depends_on:
+            database:
+                condition: service_healthy
 
     ############################################################################
     #                       Dev Specific Containers                            #
