@@ -18,12 +18,12 @@ class CustomerSeeder extends Seeder
          * Create 150 new customers.  Assign them a random number of sub sites (up to five)
          */
         for ($i = 0; $i < 150; $i++) {
-            $newCust = Customer::factory()->create();
+            $newCust = Customer::factory()->createQuietly();
 
             // Pick a random number, if it has a factor of 7, assign sub sites
             $randomNum = rand(1, 50);
             if ($randomNum % 7 === 0) {
-                CustomerSite::factory()->count(rand(1, 5))->create([
+                CustomerSite::factory()->count(rand(1, 5))->createQuietly([
                     'cust_id' => $newCust->cust_id,
                 ]);
             }

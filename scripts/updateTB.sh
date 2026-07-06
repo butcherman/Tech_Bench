@@ -15,6 +15,8 @@ do
     esac
 done
 
+# TODO - Delete Meilisearch volume to have it be recreated
+
 # Primary function for script
 main()
 {

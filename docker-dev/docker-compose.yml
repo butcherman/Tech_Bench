@@ -152,7 +152,7 @@ services:
 
     # Melisearch Container for Search Engine
     meilisearch:
-        image: butcherman/tech_bench_meilisearch:1.0
+        image: butcherman/tech_bench_meilisearch:1.1
         container_name: meilisearch
         restart: unless-stopped
         stop_signal: SIGTERM
