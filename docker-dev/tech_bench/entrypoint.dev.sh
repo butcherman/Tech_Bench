@@ -58,6 +58,7 @@ checkForInit()
 {
     if [ ! -f $INSTALL_BASE/keystore/version ]
     then
+        mkdir -p $INSTALL_BASE/keystore
         /tb_data/scripts/setup.dev.sh
     fi
 }

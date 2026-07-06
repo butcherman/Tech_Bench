@@ -30,16 +30,16 @@ RUN chmod 775 /usr/local/bin/docker
 RUN addgroup --gid 999 docker
 RUN usermod -a -G docker www-data
 
-#################### DEV SPECIFIC ##############################################
-
-#  Install troubleshooting php modules
-RUN install-php-extensions xdebug
-
-################################################################################
-
 # Update npm and composer
 RUN npm install -g npm@latest
 RUN composer self-update
+
+#################### DEV SPECIFIC ##############################################
+
+# Install troubleshooting php modules
+RUN install-php-extensions xdebug
+
+################################################################################
 
 WORKDIR /var/www/html
 

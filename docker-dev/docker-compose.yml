@@ -41,8 +41,8 @@ services:
         healthcheck:
             test: ["CMD", "php-fpm-healthcheck"]
             interval: 30s
-            timeout: 5s
-            retries: 6
+            timeout: 10s
+            retries: 10
         depends_on:
             database:
                 condition: service_healthy
