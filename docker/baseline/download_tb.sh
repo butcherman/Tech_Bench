@@ -55,6 +55,8 @@ fi
 
 # Cleanup
 rm -rf /tb_data/tmp/downloads/
+rm -rf /tb_data/staging/tests
+rm /tb_data/staging/phpunit.xml
 
 # Write the version information into a file for the staging area
 VERSION_FILE="/tb_data/staging/config/version.yml"
