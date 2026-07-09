@@ -4,8 +4,7 @@
 #                                                                              #
 ################################################################################
 
-FROM getmeili/meilisearch:v1.9.0
+FROM getmeili/meilisearch:v1.49.0
 
 ENV MEILI_ENV=production
 ENV MEILI_MASTER_KEY=TechBenchMeilisearchMasterKey
-

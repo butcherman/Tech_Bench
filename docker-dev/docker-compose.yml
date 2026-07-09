@@ -15,12 +15,12 @@ volumes:
     dbDevData:
     redisDevData:
     meilisearchDevData:
-    backupData:
-        driver: local
-        driver_opts:
-            type: 'none'
-            o: 'bind'
-            device: './backupData'
+    # backupData:
+    #     driver: local
+    #     driver_opts:
+    #         type: 'none'
+    #         o: 'bind'
+    #         device: './backupData'
 
 services:
     #  Application Container
@@ -34,7 +34,7 @@ services:
             - ../src:/app
             - ./.env:/app/.env
             - /var/run/docker.sock:/var/run/docker.sock
-            - backupData:/app/storage/backups/tech-bench
+            # - backupData:/app/storage/backups/tech-bench
         environment:
             - SERVICE=app
             - TB_URL=${BASE_URL}
@@ -46,7 +46,7 @@ services:
 
     #  NGINX Web Server
     nginx:
-        image: butcherman/tech_bench_nginx:1.1
+        image: butcherman/tech_bench_nginx:2.0
         container_name: nginx
         restart: unless-stopped
         volumes:
@@ -90,7 +90,7 @@ services:
         volumes:
             - ../src:/app
             - ./.env:/app/.env
-            - backupData:/app/storage/backups/tech-bench
+            # - backupData:/app/storage/backups/tech-bench
         environment:
             - SERVICE=horizon
         networks:
@@ -109,7 +109,7 @@ services:
         volumes:
             - ../src:/app
             - ./.env:/app/.env
-            - backupData:/app/storage/backups/tech-bench
+            # - backupData:/app/storage/backups/tech-bench
         environment:
             - SERVICE=scheduler
         networks:
@@ -138,7 +138,7 @@ services:
 
     #  Redis Container for Cache, Job and Email Queuing
     redis:
-        image: butcherman/tech_bench_redis:1.0
+        image: butcherman/tech_bench_redis:2.0
         container_name: redis
         restart: unless-stopped
         volumes:
@@ -150,7 +150,7 @@ services:
 
     # Melisearch Container for Search Engine
     meilisearch:
-        image: butcherman/tech_bench_meilisearch:1.0
+        image: butcherman/tech_bench_meilisearch:1.1
         container_name: meilisearch
         restart: unless-stopped
         volumes:
@@ -196,14 +196,3 @@ services:
             - tech_bench
             - nginx
         entrypoint: npm run dev
-
-    # selenium:
-    #     container_name: selenium
-    #     image: selenium/standalone-chrome:4.3
-    #     volumes:
-    #         - ../src:/dev/shm
-    #     networks:
-    #         - app-tier
-    #     ports:
-    #         - "4444:4444"
-    #         - "7900:7900"
