@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 ################################################################################
 #                                                                              #
@@ -10,43 +10,55 @@
 
 echo "Starting Update"
 
-#  Move the existing application files to a tmp directory that will be deleted later
-mkdir /app/tmp
-mv /app/app /app/tmp/
-mv /app/config /app/tmp/
-mv /app/database /app/tmp/
-mv /app/resources /app/tmp/
-mv /app/routes /app/tmp/
+exit 0
 
-#  Copy all staged files to /app directory
-cp -R /staging/* /app/
+################################################################################
+################################################################################
+################################################################################
+
+# Check to make sure that the staging directory exists and is populated
+if [ ! -f "/tb_data/staging/version" ]
+then
+    bash /tb_data/scripts/download_tb.sh false latest
+fi
+
+#  Move the existing application files to a tmp directory
+mkdir -p /tb_data/tmp/old_version
+mv /var/www/html/app /tb_data/tmp/old_version/
+mv /var/www/html/config /tb_data/tmp/old_version/
+mv /var/www/html/database /tb_data/tmp/old_version/
+mv /var/www/html/resources /tb_data/tmp/old_version/
+mv /var/www/html/routes /tb_data/tmp/old_version/
+
+# Copy the application files to the application root directory
+cp -R /tb_data/staging/* /var/www/html/
 
 #  Delete the temporary directory
-rm -rf /app/tmp/
+# rm -rf /app/tmp/
+
+cd /var/www/html
 
 #  Update and compile all dependencies
-cd /app
-composer install --no-dev --no-interaction --optimize-autoloader  --no-ansi >> /dev/null 2>&1
-npm install >> /dev/null 2>&1
+composer install --no-dev --no-interaction --optimize-autoloader  --no-ansi
+npm install
 
 # Verify .env file is up to date
-php /app/artisan app:validate-env --force
+php artisan app:validate-env --force
 
 #  Update the database
-php /app/artisan migrate --force
+php artisan migrate --force
 
 #  Cache configuration files
-php /app/artisan optimize:clear
-php /app/artisan breadcrumbs:cache
-php /app/artisan optimize
+php artisan optimize:clear
+php artisan breadcrumbs:cache
+php artisan optimize
 
 # Install Composer and NPM dependencies
 echo "Building Application"
-cd /app
 npm run build
 
 # Store the version information in the keystore volume
-echo $(php /app/artisan version --format=compact | sed -e 's/Tech Bench //g') > /app/keystore/version
+echo $(php /var/www/html/artisan version --format=compact | sed -e 's/Tech Bench //g') > /var/www/html/keystore/version
 
 # Resync Scout and restart child containers
 php artisan scout:sync-index-settings

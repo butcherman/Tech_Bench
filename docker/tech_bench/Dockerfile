@@ -4,51 +4,27 @@
 #                                                                              #
 ################################################################################
 
-FROM butcherman/tech_bench_baseline:1.0
+FROM butcherman/tech_bench_baseline:2.0
 
 ARG BRANCH=false
 ARG VERSION=latest
 
+USER root
+
 # Make sure image is up to date
 RUN apt update && apt upgrade -y --no-install-recommends
 
-# Update npm and composer
-RUN npm install -g npm@latest
-RUN composer self-update
-
 # Download application files
-RUN /scripts/download_tb.sh ${BRANCH} ${VERSION}
-
-# Create a group and user to run the file permissions
-RUN addgroup --gid 1024 tbgroup
-RUN adduser --disabled-password --gecos "" --force-badname --ingroup tbgroup tbuser
-RUN usermod -a -G root tbuser
-RUN chmod 775 /var/log
+RUN /tb_data/scripts/download_tb.sh ${BRANCH} ${VERSION}
+RUN /tb_data/scripts/install.sh
 
 # Set directory permissions
-RUN chown -R tbuser:tbgroup /app
-RUN find /app/ -type f -exec chmod 644 {} \;
-RUN find /app/ -type d -exec chmod 755 {} \;
-RUN chmod -R 775 /app/storage
-RUN chmod -R 775 /app/keystore
+RUN chown -R www-data:www-data /var/www/html/*
+RUN find /var/www/html/ -type f -exec chmod 644 {} \;
+RUN find /var/www/html/ -type d -exec chmod 755 {} \;
+RUN chmod -R 775 /var/www/html/storage
+RUN chmod -R 775 /var/www/html/keystore
 
-RUN chown tbuser:tbgroup -R /app/keystore
-RUN chown tbuser:tbgroup -R /app/storage
+WORKDIR /var/www/html
 
-# Set same directory permissions for staging directory
-RUN chown -R tbuser:tbgroup /staging
-RUN find /staging/ -type f -exec chmod 644 {} \;
-RUN find /staging/ -type d -exec chmod 755 {} \;
-RUN chmod -R 777 /staging/storage
-
-USER tbuser
-
-# Install dependencies
-RUN composer install --no-dev --no-interaction --optimize-autoloader
-RUN npm install --omit=dev
-
-#  Place a version file in the staging directory to note what version this image is
-RUN echo $(php /app/artisan version --format=compact | sed -e 's/Tech Bench //g') > /staging/version
-
-# Finalize image
-WORKDIR /app
+USER www-data

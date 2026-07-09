@@ -7,58 +7,58 @@
 #                                                                              #
 ################################################################################
 
-FROM bitnami/php-fpm:8.2
+FROM serversideup/php:8.5-fpm
 
-ENV TB_URL=localhost
-ENV ENABLE_HTTPS=true
-ENV SERVICE=master
+USER root
 
 # Make sure image is up to date
 RUN apt update && apt upgrade -y --no-install-recommends
 
 #  Install php modules
-RUN apt install -yq php-common \
-    php-curl \
-    php-dom \
-    php-gd \
-    php-json \
-    php-mbstring \
-    php-mysql \
-    php-pdo \
-    php-redis \
-    php-xml \
-    php-zip \
-    curl \
+RUN install-php-extensions gd intl
+
+RUN apt update
+RUN apt install -yq  \
+    yq \
     nano \
-    openssl \
-    unzip \
-    zip \
     mariadb-client
 
-#  Entrypoint and update scripts along with any other necessary shell scripts will be copied here
-RUN mkdir /scripts
+# Bring the docker file in to allow for internal reboot
+COPY ./docker /usr/local/bin/docker
+RUN chmod 775 /usr/local/bin/docker
+
+# Create a group and user to run the Docker file permissions
+RUN addgroup --gid 999 docker
+RUN usermod -a -G docker www-data
+
+#  All Tech Bench related data other than the app itself will be stored here
+RUN mkdir /tb_data
 
 #  Update npm and composer
 RUN apt install -y nodejs npm
-RUN npm install -g n
-RUN n stable
-RUN npm install -g npm@latest
+RUN npm config delete globalignorefile --global
 
 #  Update Composer
-RUN composer self-update --2
+RUN composer self-update
+
+# Copy the entrypoint script in to allow udpates and initial config
+COPY ./entrypoint.sh /etc/entrypoint.d/entrypoint.sh
 
 #  Basic scripts for Starting, Initializing and Updating Tech Bench App
-COPY ./download_tb.sh /scripts/
-COPY ./startup.sh /scripts/
-COPY ./update.sh /scripts/
-COPY ./setup.sh /scripts/
-COPY ./scheduler.sh /scripts/
+RUN mkdir /tb_data/scripts
+
+COPY ./download_tb.sh /tb_data/scripts/
+COPY ./install.sh /tb_data/scripts/
+COPY ./setup.sh /tb_data/scripts/
+COPY ./update.sh /tb_data/scripts/
 
 #  Set permissions for the scripts to allow them to run
-RUN chmod 775 /scripts/*
-RUN chmod 775 /app
-RUN chmod 775 /opt/bitnami/php -R
+RUN chown www-data:www-data -R /tb_data
+RUN chmod 775 /tb_data/scripts/*
 
-WORKDIR /app
+# Allow the composer cache file to be writable
+RUN chmod 777 -R /composer/cache
 
-ENTRYPOINT [ "/scripts/startup.sh" ]
+USER www-data
+
+WORKDIR /var/www/html

@@ -1,20 +1,21 @@
-#!/bin/bash
+#!/bin/sh
 
 ################################################################################
 #                                                                              #
 #                              Download Script                                 #
-#              Download and install the Tech Bench application                 #
+#         Download the Tech Bench application and stage for install            #
 #                                                                              #
 ################################################################################
 
 #  Variables
-BRANCH=$1           #  If this argument is populated, the branch identified will be downloaded and installed
-VERSION=$2          #  If BRANCH is left to false, this version will be downloaded.  Default value is "latest"
+BRANCH=$1           # If this argument is populated, the branch identified will be downloaded and installed
+VERSION=$2          # If BRANCH is left to false, this version will be downloaded.  Default value is "latest"
 
-mkdir /tmp/downloads
-cd /tmp/downloads
+mkdir -p /tb_data/tmp/downloads
+mkdir -p /tb_data/staging
+cd /tb_data/tmp/downloads
 
-#  Determine if we are using a Github Branch, or downloading an official release
+# Determine if we are using a Github Branch, or downloading an official release
 if [ "${BRANCH}" != false ];
 then
     echo "Downloading Branch $BRANCH"
@@ -24,34 +25,44 @@ else
     URL=$(curl -s https://api.github.com/repos/butcherman/tech_bench/releases/$VERSION | grep zipball_url | cut -d : -f 2,3 | tr -d \" | tr -d \,)
 fi
 
-#  Download package
+# Download package
 curl -LJO $URL
 
-#  Extract package
+# Extract package
 FILE_ROOT=(*)
+
+if [ ! -f $FILE_ROOT ]
+then
+    echo "Unable to download Tech Bench"
+    exit 0
+fi
+
 unzip -o $FILE_ROOT
 
-#  Copy files to the /app directory
+# Copy files to the /app directory
 DIRNAME=$(zipinfo -1 $FILE_ROOT | grep -o "^[^/]\+[/]" | sort -u | tr -d \/)
 cd $DIRNAME
 
+# Move everything into a staging directory so it can be installed or updated
 if test -d src;
 then
-    cp -R src/* /app/
-    cp src/.env.example /app/.env.example
+    cp -R src/* /tb_data/staging/
+    cp src/.env.example /tb_data/staging/.env.example
 else
-    cp -R * /app/
-    cp .env.example /app/.env.example
+    cp -R * /tb_data/staging/
+    cp .env.example /tb_data/staging/.env.example
 fi
 
-#  Copy everything from this /app directory to the /staging directory
-#  This is done in case the user installs a newer Docker Image in to an existing volume
-mkdir /staging
-cp /app/* -R /staging/
+# Cleanup
+rm -rf /tb_data/tmp/downloads/
+rm -rf /tb_data/staging/tests
+rm /tb_data/staging/phpunit.xml
 
-#  Make a Keystore directory for SSL Certificates
-mkdir /app/keystore
-chmod 777 /app/keystore
+# Write the version information into a file for the staging area
+VERSION_FILE="/tb_data/staging/config/version.yml"
 
-# #  Cleanup
-rm -rf /tmp/downloads/
+MAJOR=$(yq '.current.major' "$VERSION_FILE")
+MINOR=$(yq '.current.minor' "$VERSION_FILE")
+PATCH=$(yq '.current.patch' "$VERSION_FILE")
+
+echo "$MAJOR.$MINOR.$PATCH" > /tb_data/staging/version

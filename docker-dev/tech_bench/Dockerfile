@@ -1,42 +1,34 @@
-#################################################################################################
-#                                                                                               #
-#                      Tech Bench build for main Tech Bench Application                         #
-#                                                                                               #
-#################################################################################################
+################################################################################
+#                                                                              #
+#              Tech Bench build for Dev env Tech Bench Application             #
+#                                                                              #
+################################################################################
 
-FROM butcherman/tech_bench_baseline:1.0
+FROM butcherman/tech_bench_baseline:2.0
 
-COPY ./php.ini /opt/bitnami/php/lib/
-COPY ./startup.dev.sh /scripts/
-COPY ./setup.dev.sh /scripts/
+ARG BRANCH=false
+ARG VERSION=latest
 
-COPY ./docker /usr/local/bin/docker
-RUN chmod 775 /usr/local/bin/docker
+USER root
 
-RUN chmod 775 /scripts/startup.dev.sh
-RUN chmod 775 /scripts/setup.dev.sh
+# Copy the entrypoint dev script in to allow udpates and initial config
+COPY ./entrypoint.dev.sh /etc/entrypoint.d/entrypoint.sh
 
-#  Make sure image is up to date
+# Copy other dev scripts
+COPY ./setup.dev.sh /tb_data/scripts/setup.dev.sh
+RUN chown www-data:www-data /tb_data/scripts/*
+RUN chmod 775 /tb_data/scripts/*
+
+# Make sure image is up to date
 RUN apt update && apt upgrade -y --no-install-recommends
 
-#  Install xDebug to allow PHPUnit Testing
-RUN apt install php-xdebug -y
-RUN apt install php-mysql -y
+#################### DEV SPECIFIC ##############################################
 
-#  Create a group and user to run the file permissions
-RUN addgroup --gid 1024 tbgroup
-RUN addgroup --gid 999 docker
-RUN adduser --disabled-password --gecos "" --force-badname --ingroup tbgroup tbuser
-RUN usermod -a -G root tbuser
-RUN usermod -a -G docker tbuser
-RUN chmod 775 /var/log
+# Install troubleshooting php modules
+RUN install-php-extensions xdebug
 
-#  Set directory permissions
-RUN chown -R tbuser:tbgroup /app
-RUN find /app/ -type f -exec chmod 777 {} \;
-RUN find /app/ -type d -exec chmod 777 {} \;
+################################################################################
 
-USER tbuser
-WORKDIR /app
+WORKDIR /var/www/html
 
-ENTRYPOINT [ "/scripts/startup.dev.sh" ]
+USER www-data
