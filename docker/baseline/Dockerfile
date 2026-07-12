@@ -70,4 +70,3 @@ RUN chown www-data:www-data -R /var/www
 # Finalize Image
 USER www-data
 WORKDIR /var/www/html
-
