@@ -121,6 +121,8 @@ services:
         container_name: database
         restart: unless-stopped
         stop_signal: SIGTERM
+        environment:
+            - MYSQL_ROOT_PASSWORD=tbRootPasswd
         volumes:
             - dbDevData:/var/lib/mysql
             - ./database/testDatabase.sql:/docker-entrypoint-initdb.d/testDatabase.sql
