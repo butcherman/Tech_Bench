@@ -114,11 +114,6 @@ services:
             - dbData:/var/lib/mysql
         networks:
             - app-tier
-        healthcheck:
-            test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
-            interval: 15s
-            timeout: 5s
-            retries: 6
 
     #  Redis Container for Cache, Job and Email Queuing
     redis:

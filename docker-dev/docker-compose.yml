@@ -128,11 +128,6 @@ services:
             - app-tier
         ports:
             - "3306:3306"
-        healthcheck:
-            test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
-            interval: 15s
-            timeout: 5s
-            retries: 6
 
     #  Redis Container for Cache, Job and Email Queuing
     redis:
