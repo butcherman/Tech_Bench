@@ -22,9 +22,11 @@ COPY ./entrypoint.sh /docker-entrypoint.d/entrypoint.sh
 RUN mkdir /tb_data
 
 # Basic scripts for maintaining NGINX Container
-RUN mkdir /tb_data/scripts
-
-COPY ./generate_ssl.sh /tb_data/scripts
+COPY ./generate_ssl.sh /tb_data/scripts/generate_ssl.sh
 
 #  Set permissions for the scripts to allow them to run
 RUN chmod 775 /tb_data/scripts/*
+
+# Build Healthcheck
+HEALTHCHECK  --interval=30s --timeout=10s --start-period=30s --retries=3 \
+    CMD wget --no-check-certificate --spider -q https://localhost/healthcheck || exit 1

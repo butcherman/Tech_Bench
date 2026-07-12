@@ -42,6 +42,7 @@ services:
         image: butcherman/tech_bench_nginx:2.0
         container_name: nginx
         restart: unless-stopped
+        stop_signal: SIGTERM
         volumes:
             - ../src:/var/www/html
             - ./.env:/var/www/html/.env
@@ -50,11 +51,10 @@ services:
             - "443:443"
         networks:
             - app-tier
-        # depends_on:
-        #     - tech_bench
-            # - reverb
         depends_on:
             database:
+                condition: service_healthy
+            reverb:
                 condition: service_healthy
 
     # Reverb Container for Websockets
@@ -92,6 +92,8 @@ services:
         depends_on:
             tech_bench:
                 condition: service_healthy
+            nginx:
+                condition: service_healthy
 
     # Scheduler Container
     scheduler:
@@ -110,12 +112,15 @@ services:
         depends_on:
             tech_bench:
                 condition: service_healthy
+            nginx:
+                condition: service_healthy
 
     #  MySQL Database Container
     database:
         image: butcherman/tech_bench_database:1.0
         container_name: database
         restart: unless-stopped
+        stop_signal: SIGTERM
         volumes:
             - dbDevData:/bitnami/mysql/data
             # - ./database/testDatabase.sql:/docker-entrypoint-initdb.d/testDatabase.sql
@@ -134,6 +139,7 @@ services:
         image: butcherman/tech_bench_redis:1.0
         container_name: redis
         restart: unless-stopped
+        stop_signal: SIGTERM
         volumes:
             - redisDevData:/bitnami/redis/data
         networks:
@@ -158,15 +164,16 @@ services:
     ###########################################################################################
 
     #  Mailpit for Email Traps
-    # mailpit:
-    #     image: axllent/mailpit:latest
-    #     container_name: mailpit
-    #     restart: unless-stopped
-    #     networks:
-    #         - app-tier
-    #     ports:
-    #         - "8025:8025"
-    #         - "1025:1025"
+    mailpit:
+        image: axllent/mailpit:latest
+        container_name: mailpit
+        restart: unless-stopped
+        stop_signal: SIGTERM
+        networks:
+            - app-tier
+        ports:
+            - "8025:8025"
+            - "1025:1025"
 
     #  NPM Container to run npm run dev
     npm:
@@ -186,4 +193,6 @@ services:
         command: npm run dev
         depends_on:
             tech_bench:
+                condition: service_healthy
+            nginx:
                 condition: service_healthy
