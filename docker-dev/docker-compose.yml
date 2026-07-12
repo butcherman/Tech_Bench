@@ -50,9 +50,12 @@ services:
             - "443:443"
         networks:
             - app-tier
-        depends_on:
-            - tech_bench
+        # depends_on:
+        #     - tech_bench
             # - reverb
+        depends_on:
+            database:
+                condition: service_healthy
 
     # Reverb Container for Websockets
     reverb:
@@ -68,9 +71,9 @@ services:
         networks:
             - app-tier
         command: ['php', '/var/www/html/artisan', 'reverb:start']
-        # depends_on:
-        #     tech_bench:
-        #         condition: service_healthy
+        depends_on:
+            tech_bench:
+                condition: service_healthy
 
     # Horizon Container to run background jobs
     horizon:
@@ -86,9 +89,9 @@ services:
         networks:
             - app-tier
         command: ["php", "/var/www/html/artisan", "horizon"]
-        # depends_on:
-        #     tech_bench:
-        #         condition: service_healthy
+        depends_on:
+            tech_bench:
+                condition: service_healthy
 
     # Scheduler Container
     scheduler:
@@ -104,9 +107,9 @@ services:
         networks:
             - app-tier
         command: ["php", "/var/www/html/artisan", "schedule:work"]
-        # depends_on:
-        #     tech_bench:
-        #         condition: service_healthy
+        depends_on:
+            tech_bench:
+                condition: service_healthy
 
     #  MySQL Database Container
     database:
@@ -181,6 +184,6 @@ services:
         ports:
             - "5173:5173"
         command: npm run dev
-        # depends_on:
-        #     tech_bench:
-        #         condition: service_healthy
+        depends_on:
+            tech_bench:
+                condition: service_healthy

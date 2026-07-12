@@ -56,6 +56,10 @@ RUN addgroup www-data docker
 # Use the default production configuration
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
+# Build Healthcheck
+HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
+    CMD php artisan health:check
+
 # Finalize Image
 USER www-data
 WORKDIR /var/www/html
