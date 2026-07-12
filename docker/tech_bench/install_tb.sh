@@ -33,12 +33,12 @@ cd /var/www/html
 if [ ! -f ".env" ]
 then
     cp /tb_data/staging/.env.example .env
-    chown www-data:www-data .env
+    chown tbuser:www-data .env
 fi
 
 # Create the Keystore directory for Certificates
 mkdir keystore
-chown www-data:www-data keystore
+chown tbuser:www-data keystore
 chmod 775 keystore
 
 echo "Tech Bench Installation Complete"

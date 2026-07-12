@@ -20,5 +20,5 @@ RUN chmod 775 /etc/entrypoint.d/entrypoint.sh
 RUN install-php-extensions xdebug
 
 # Finalize Image
-USER www-data
+USER tbuser
 WORKDIR /var/www/html

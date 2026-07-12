@@ -32,5 +32,4 @@ HEALTHCHECK  --interval=30s --timeout=10s --start-period=30s --retries=3 \
     CMD curl --fail --silent http://localhost/healthcheck || exit 1
 
 # Finalize Image
-# USER www-data
 WORKDIR /var/www/html

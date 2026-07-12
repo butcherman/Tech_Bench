@@ -13,6 +13,11 @@ FROM php:8.5-fpm
 # Make sure image is up to date
 RUN apt update && apt upgrade -y --no-install-recommends
 
+# Create the tbuser and tbgroup
+RUN addgroup --gid 1024 tbgroup
+RUN adduser-D -u 1024 -G tbgroup tbuser
+RUN usermod -a -G www-data tbuser
+
 # Add the docker-php-extension-installer script
 ADD --chmod=0755 \
     https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions \
@@ -50,7 +55,7 @@ RUN chmod 775 /usr/local/bin/docker
 
 # Create a group and user to run the Docker file permissions
 RUN addgroup --gid 999 docker
-RUN usermod -a -G docker www-data
+RUN usermod -a -G docker tbuser
 
 # Use the default production configuration
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
@@ -64,9 +69,9 @@ COPY --from=mysql /usr/bin/mysql /usr/bin/mysql
 COPY --from=mysql /usr/bin/mysqldump /usr/bin/mysqldump
 COPY --from=mysql /usr/bin/mysqladmin /usr/bin/mysqladmin
 
-# Change the owner of the /var/html folder to allow www-data to write to it
-RUN chown www-data:www-data -R /var/www
+# Change the owner of the /var/html folder to allow tbuser to write to it
+RUN chown tbuser:www-data -R /var/www
 
 # Finalize Image
-USER www-data
+USER tbuser
 WORKDIR /var/www/html
