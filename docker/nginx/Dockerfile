@@ -30,3 +30,7 @@ RUN chmod 775 /tb_data/scripts/*
 # Build Healthcheck
 HEALTHCHECK  --interval=30s --timeout=10s --start-period=30s --retries=3 \
     CMD wget --no-check-certificate --spider -q https://localhost/healthcheck || exit 1
+
+# Finalize Image
+# USER www-data
+WORKDIR /var/www/html

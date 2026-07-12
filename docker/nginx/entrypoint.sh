@@ -7,10 +7,11 @@
 #                                                                              #
 ################################################################################
 
-echo "Starting NGINX Setup Script"
+echo "Starting NGINX"
 
 # If the SSL file does not exist, create a self signed SSL cert
-if [ ! -f "/var/www/http/keystore/server.crt" ]
+if [ ! -f "/var/www/html/keystore/server.crt" ]
 then
+    echo 'SSL Certificate Missing'
     /tb_data/scripts/generate_ssl.sh
 fi
