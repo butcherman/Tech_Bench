@@ -7,10 +7,11 @@
 #                                                                              #
 ################################################################################
 
-FROM php:8.5-fpm-alpine3.24
+FROM mysql:9.4 AS mysql
+FROM php:8.5-fpm
 
 # Make sure image is up to date
-RUN apk update --no-cache
+RUN apt update && apt upgrade -y --no-install-recommends
 
 # Add the docker-php-extension-installer script
 ADD --chmod=0755 \
@@ -18,17 +19,15 @@ ADD --chmod=0755 \
     /usr/local/bin/
 
 # Install dependency packages
-RUN apk add \
+RUN apt install -yq \
     curl \
-    mysql-client \
     nano \
     nodejs \
     npm \
     openssl \
     unzip \
     yq \
-    zip \
-    --no-cache
+    zip
 
 # Install PHP Extensions
 RUN install-php-extensions \
@@ -50,8 +49,8 @@ COPY ./docker /usr/local/bin/docker
 RUN chmod 775 /usr/local/bin/docker
 
 # Create a group and user to run the Docker file permissions
-RUN addgroup docker
-RUN addgroup www-data docker
+RUN addgroup --gid 999 docker
+RUN usermod -a -G docker www-data
 
 # Use the default production configuration
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
@@ -59,6 +58,11 @@ RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 # Build Healthcheck
 HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
     CMD php artisan health:check
+
+# Copy the official MySQL client binaries
+COPY --from=mysql /usr/bin/mysql /usr/bin/mysql
+COPY --from=mysql /usr/bin/mysqldump /usr/bin/mysqldump
+COPY --from=mysql /usr/bin/mysqladmin /usr/bin/mysqladmin
 
 # Finalize Image
 USER www-data

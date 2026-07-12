@@ -12,7 +12,7 @@ ARG VERSION=latest
 USER root
 
 # Make sure image is up to date
-RUN apk update --no-cache
+RUN apt update && apt upgrade -y --no-install-recommends
 
 # Copy the entrypoint script in to allow udpates and initial config
 COPY ./entrypoint.sh /etc/entrypoint.d/entrypoint.sh

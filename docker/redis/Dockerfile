@@ -4,10 +4,10 @@
 #                                                                              #
 ################################################################################
 
-FROM redis:alpine
+FROM redis
 
 # REDIS Master Password
 ENV REDIS_PASSWORD=tbRootPassword
 
 # Make sure image is up to date
-RUN apk update && apk upgrade
+RUN apt update && apt upgrade -y --no-install-recommends
