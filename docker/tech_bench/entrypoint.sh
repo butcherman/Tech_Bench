@@ -24,6 +24,7 @@ main()
         checkForSetup
         checkForEnv
         checkForInit
+        syncScout
     fi
 }
 
@@ -59,7 +60,15 @@ checkForInit()
     # TODO - Check for update
 }
 
-
+# Sync Scout settings and database
+syncScout()
+{
+    # Import all Scout data
+    echo "Importing Meilisearch Data"
+    php artisan scout:sync-index-settings
+    php artisan scout:import "App\Models\TechTip"
+    php artisan scout:import "App\Models\Customer"
+}
 
 main
 exit 0

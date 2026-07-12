@@ -64,6 +64,9 @@ COPY --from=mysql /usr/bin/mysql /usr/bin/mysql
 COPY --from=mysql /usr/bin/mysqldump /usr/bin/mysqldump
 COPY --from=mysql /usr/bin/mysqladmin /usr/bin/mysqladmin
 
+# Change the owner of the /var/html folder to allow www-data to write to it
+RUN chown www-data:www-data -R /var/html
+
 # Finalize Image
 USER www-data
 WORKDIR /var/www/html
