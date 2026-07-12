@@ -27,10 +27,6 @@ COPY ./update_tb.sh /tb_data/scripts/
 RUN chmod 775 /tb_data/scripts/*
 RUN chown tbuser:www-data -R /tb_data
 
-# Update npm and composer
-RUN npm install -g npm@latest
-RUN composer self-update
-
 # Download application files
 RUN /tb_data/scripts/download_tb.sh ${BRANCH} ${VERSION}
 RUN /tb_data/scripts/install_tb.sh

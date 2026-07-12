@@ -53,9 +53,9 @@ services:
             - app-tier
         depends_on:
             database:
-                condition: service_healthy
+                condition: service_started
             reverb:
-                condition: service_healthy
+                condition: service_started
 
     # Reverb Container for Websockets
     reverb:
@@ -121,8 +121,6 @@ services:
         container_name: database
         restart: unless-stopped
         stop_signal: SIGTERM
-        environment:
-            - MYSQL_ROOT_PASSWORD=tbRootPasswd
         volumes:
             - dbDevData:/var/lib/mysql
             - ./database/testDatabase.sql:/docker-entrypoint-initdb.d/testDatabase.sql
