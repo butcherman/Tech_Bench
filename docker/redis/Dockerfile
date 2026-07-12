@@ -1,15 +1,13 @@
-#################################################################################################
-#                                                                                               #
-#            Redis Container holds the Redis Database for Tech Bench                            #
-#                                                                                               #
-#################################################################################################
+################################################################################
+#                                                                              #
+#        Redis Container holds the Redis Database for Tech Bench               #
+#                                                                              #
+################################################################################
 
-FROM bitnami/redis:latest
+FROM redis:alpine
 
+# REDIS Master Password
 ENV REDIS_PASSWORD=tbRootPassword
 
-USER root
-
-RUN apt update && apt upgrade -y --no-install-recommends
-
-WORKDIR /app
+# Make sure image is up to date
+RUN apk update && apk upgrade

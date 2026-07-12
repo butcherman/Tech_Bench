@@ -136,28 +136,32 @@ services:
 
     #  Redis Container for Cache, Job and Email Queuing
     redis:
-        image: butcherman/tech_bench_redis:1.0
+        image: butcherman/tech_bench_redis:2.0
         container_name: redis
         restart: unless-stopped
         stop_signal: SIGTERM
         volumes:
-            - redisDevData:/bitnami/redis/data
+            - redisDevData:/data
         networks:
             - app-tier
         ports:
             - "6379:6379"
 
     # Melisearch Container for Search Engine
-    # meilisearch:
-    #     image: butcherman/tech_bench_meilisearch:1.0
-    #     container_name: meilisearch
-    #     restart: unless-stopped
-    #     volumes:
-    #         - meilisearchDevData:/meili_data
-    #     networks:
-    #         - app-tier
-    #     ports:
-    #         - 7700:7700
+    meilisearch:
+        image: butcherman/tech_bench_meilisearch:1.1
+        container_name: meilisearch
+        restart: unless-stopped
+        stop_signal: SIGTERM
+        volumes:
+            - meilisearchDevData:/meili_data
+        networks:
+            - app-tier
+        ports:
+            - 7700:7700
+        depends_on:
+            database:
+                condition: service_healthy
 
     ###########################################################################################
     #                               Dev Specific Containers                                   #
