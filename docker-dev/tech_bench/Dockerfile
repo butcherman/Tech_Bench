@@ -1,6 +1,6 @@
 ################################################################################
 #                                                                              #
-#             Tech Bench build for main Tech Bench Application                 #
+#             Tech Bench build for dev Tech Bench Application                  #
 #                                                                              #
 ################################################################################
 
