@@ -15,7 +15,7 @@ RUN apt update && apt upgrade -y --no-install-recommends
 
 # Create the tbuser and tbgroup
 RUN addgroup --gid 1024 tbgroup
-RUN adduser-D -u 1024 -G tbgroup tbuser
+RUN adduser --disabled-password --gecos "" --force-badname --ingroup tbgroup tbuser
 RUN usermod -a -G www-data tbuser
 
 # Add the docker-php-extension-installer script
