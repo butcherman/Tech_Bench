@@ -1,10 +1,10 @@
-#################################################################################################
-#                                                                                               #
-#            Database Container holds the MySQL Database for Tech Bench                         #
-#                                                                                               #
-#################################################################################################
+################################################################################
+#                                                                              #
+#        Database Container holds the MySQL Database for Tech Bench            #
+#                                                                              #
+################################################################################
 
-FROM bitnami/mysql:latest
+FROM mysql:9.4
 
 ENV MYSQL_ROOT_PASSWORD=tbRootPasswd
 ENV MYSQL_USER=tbUser
