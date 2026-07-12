@@ -19,13 +19,14 @@ ADD --chmod=0755 \
 
 # Install dependency packages
 RUN apk add \
-    yq \
     curl \
     mysql-client \
-    nano nodejs \
+    nano \
+    nodejs \
     npm \
     openssl \
     unzip \
+    yq \
     zip \
     --no-cache
 
