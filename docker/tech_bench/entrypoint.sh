@@ -71,4 +71,5 @@ syncScout()
 }
 
 main
-exit 0
+
+exec "$@"

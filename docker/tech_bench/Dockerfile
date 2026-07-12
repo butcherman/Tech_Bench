@@ -15,9 +15,9 @@ USER root
 RUN apt update && apt upgrade -y --no-install-recommends
 
 # Copy the entrypoint script in to allow udpates and initial config
-COPY ./entrypoint.sh /etc/entrypoint.d/entrypoint.sh
-RUN chown tbuser:www-data /etc/entrypoint.d/entrypoint.sh
-RUN chmod 775 /etc/entrypoint.d/entrypoint.sh
+COPY ./entrypoint.sh /tb_data/entrypoint.d/entrypoint.sh
+RUN chown tbuser:www-data /tb_data/entrypoint.d/entrypoint.sh
+RUN chmod 775 /tb_data/entrypoint.d/entrypoint.sh
 
 # Bring the baseline scripts into the image
 COPY ./download_tb.sh /tb_data/scripts/
@@ -38,6 +38,10 @@ RUN find /var/www/html/ -type d -exec chmod 755 {} \;
 RUN chmod -R 775 /var/www/html/storage
 RUN chmod -R 775 /var/www/html/keystore
 
+# Finalize Image
 WORKDIR /var/www/html
-
 USER tbuser
+
+# Set entrypoint
+ENTRYPOINT [ "/tb_data/entrypoint.d/entrypoint.sh" ]
+CMD ["php-fpm"]
