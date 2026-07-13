@@ -12,6 +12,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Inertia\EncryptHistoryMiddleware;
 use Inertia\Inertia;
@@ -31,6 +32,11 @@ return Application::configure(basePath: dirname(__DIR__))
                         }
                     }
                 );
+            Route::get('/healthcheck', function () {
+                DB::select('SELECT 1');
+
+                return response()->json(['status' => 'ok']);
+            });
         }
     )
     ->withMiddleware(function (Middleware $middleware) {

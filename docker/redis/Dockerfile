@@ -1,15 +1,15 @@
-#################################################################################################
-#                                                                                               #
-#            Redis Container holds the Redis Database for Tech Bench                            #
-#                                                                                               #
-#################################################################################################
+################################################################################
+#                                                                              #
+#        Redis Container holds the Redis Database for Tech Bench               #
+#                                                                              #
+################################################################################
 
-FROM bitnami/redis:latest
+FROM redis
 
-ENV REDIS_PASSWORD=tbRootPassword
+# Bring in custom config file
+COPY redis.conf /usr/local/etc/redis/redis.conf
 
-USER root
-
+# Make sure image is up to date
 RUN apt update && apt upgrade -y --no-install-recommends
 
-WORKDIR /app
+CMD ["redis-server", "/usr/local/etc/redis/redis.conf"]

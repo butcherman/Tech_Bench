@@ -1,42 +1,35 @@
-#################################################################################################
-#                                                                                               #
-#            NGINX Container is the main web service for Tech Bench                             #
-#                                                                                               #
-#################################################################################################
+################################################################################
+#                                                                              #
+#            NGINX Container is the main web service for Tech Bench            #
+#                                                                              #
+################################################################################
 
-FROM bitnami/nginx:latest
-
-ENV TB_URL=localhost
-ENV ENABLE_HTTPS=true
-
-USER root 
+FROM nginx
 
 # Make sure image is up to date
 RUN apt update && apt upgrade -y --no-install-recommends
 
+# Install OpenSSL so we can generate a Self Signed Certificate
+RUN apt install openssl
+
 # Copy configuration files
-COPY ./http.conf /opt/bitnami/nginx/conf/server_blocks/tech_bench_http.conf
-COPY ./https.conf /opt/bitnami/nginx/conf/server_blocks/tech_bench_https.conf
+COPY ./default_http.conf /etc/nginx/conf.d/default.conf
 
-# Copy scripts
-COPY ./entrypoint.sh /docker-entrypoint-startdb.d/
-COPY ./entrypoint.sh /docker-entrypoint-initdb.d/
+# Copy the entrypoint script
+COPY ./entrypoint.sh /docker-entrypoint.d/entrypoint.sh
 
-# Create a group and user to run the file permissions
-RUN addgroup --gid 1024 tbgroup
-RUN adduser --disabled-password --gecos "" --force-badname --ingroup tbgroup tbuser
-RUN usermod -a -G root tbuser
+#  All Tech Bench related data other than the app itself will be stored here
+RUN mkdir /tb_data
 
-# Make directories for storage logs and SSL Cert
-RUN mkdir -p /app/storage/logs/nginx -m 775
-RUN mkdir -p /app/keystore/private -m 775
-RUN mkdir -p /app/public/build/assets -m 775
+# Basic scripts for maintaining NGINX Container
+COPY ./generate_ssl.sh /tb_data/scripts/generate_ssl.sh
 
-RUN chown tbuser:tbgroup -R /app
+#  Set permissions for the scripts to allow them to run
+RUN chmod 775 /tb_data/scripts/*
 
-# Remove default files
-RUN rm /app/50x.html
-RUN rm /app/index.html
+# Build Healthcheck
+HEALTHCHECK  --interval=30s --timeout=10s --start-period=30s --retries=3 \
+    CMD curl --fail --silent http://localhost/healthcheck || exit 1
 
-USER tbuser
-WORKDIR /app
+# Finalize Image
+WORKDIR /var/www/html
