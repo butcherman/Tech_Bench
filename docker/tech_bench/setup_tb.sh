@@ -14,7 +14,7 @@ echo "Please wait...."
 # Install Composer and NPM dependencies
 cd /var/www/html
 composer install --no-dev --no-interaction --optimize-autoloader
-npm install --omit=dev
+npm install
 
 #  Create Encryption Key
 echo "Creating Encryption Key"
