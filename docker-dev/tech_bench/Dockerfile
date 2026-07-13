@@ -19,10 +19,13 @@ RUN chmod 775 /tb_data/entrypoint.d/entrypoint.sh
 # Install xDebug to allow PHPUnit Testing
 RUN install-php-extensions xdebug
 
+# Copy the .ini file for additional debug configuration
+COPY ./php-dev.ini $PHP_INI_DIR/conf.d/php-dev.ini
+
 # Finalize Image
 USER tbuser
 WORKDIR /var/www/html
 
 # Set entrypoint
-ENTRYPOINT [ "/tb_data/entrypoint.d/entrypoints.sh" ]
+ENTRYPOINT [ "/tb_data/entrypoint.d/entrypoint.sh" ]
 CMD ["php-fpm"]
