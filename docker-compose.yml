@@ -65,6 +65,7 @@ services:
             - ./.env:/var/www/html/.env
         networks:
             - app-tier
+        command: ['php', '/var/www/html/artisan', 'reverb:start']
         depends_on:
             tech_bench:
                 condition: service_healthy
@@ -80,6 +81,7 @@ services:
             - ./.env:/var/www/html/.env
         networks:
             - app-tier
+        command: ["php", "/var/www/html/artisan", "horizon"]
         depends_on:
             tech_bench:
                 condition: service_healthy

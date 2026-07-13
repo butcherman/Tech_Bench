@@ -6,9 +6,10 @@
 
 FROM redis
 
-# Redis password can be configured from .env or left at default
-ARG REDIS_PASSWORD
-ENV REDIS_PASSWORD=${REDIS_PASSWORD}
+# Bring in custom config file
+COPY redis.conf /usr/local/etc/redis/redis.conf
 
 # Make sure image is up to date
 RUN apt update && apt upgrade -y --no-install-recommends
+
+CMD ["redis-server", "/usr/local/etc/redis/redis.conf"]
