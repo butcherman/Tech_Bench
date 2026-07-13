@@ -9,6 +9,8 @@ FROM butcherman/tech_bench_baseline:2.0
 ARG BRANCH=false
 ARG VERSION=latest
 
+ENV SERVICE=worker
+
 USER root
 
 # Make sure image is up to date
