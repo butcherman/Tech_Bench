@@ -8,9 +8,7 @@
 #                                                                              #
 ################################################################################
 
-# Color's for text
-RED='\033[0;31m'
-NC='\033[0m' # No Color
+source /tb_data/scripts/_functions.sh
 
 INSTALL_BASE="/var/www/html"
 
@@ -79,57 +77,6 @@ checkForUpdate()
         echo -e "${RED} PLEASE UPGRADE TO VERSION $APP_VERSION OR HIGHER TO CONTINUE ${NC}" 1>&2
         exit 1
     fi
-}
-
-# Sync Scout settings and database
-syncScout()
-{
-    # Import all Scout data
-    echo "Importing Meilisearch Data"
-    php $INSTALL_BASE/artisan scout:sync-index-settings
-    php $INSTALL_BASE/artisan scout:import "App\Models\TechTip"
-    php $INSTALL_BASE/artisan scout:import "App\Models\Customer"
-}
-
-# Function to compare version numbers
-versionCompare () {
-    # If version's match, no update is needed
-    if [[ $1 == $2 ]]
-    then
-        return 0
-    fi
-
-    local IFS=.
-    local i ver1=($1) ver2=($2)
-
-    # fill empty fields in ver1 with zeros
-    for ((i=${#ver1[@]}; i<${#ver2[@]}; i++))
-    do
-        ver1[i]=0
-    done
-
-    # Check each of the version fields and compare
-    for ((i=0; i<${#ver1[@]}; i++))
-    do
-        if [[ -z ${ver2[i]} ]]
-        then
-            # fill empty fields in ver2 with zeros
-            ver2[i]=0
-        fi
-
-        # A newer version is staged and ready to be deployed
-        if ((10#${ver1[i]} > 10#${ver2[i]}))
-        then
-            return 1
-        fi
-
-        # The staged version is older than the running version do not update
-        if ((10#${ver1[i]} < 10#${ver2[i]}))
-        then
-            return 2
-        fi
-    done
-    return 0
 }
 
 main
