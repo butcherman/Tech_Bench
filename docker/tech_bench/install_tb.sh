@@ -8,6 +8,11 @@
 #                                                                              #
 ################################################################################
 
+# Color's for text
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+NC='\033[0m' # No Color
+
 echo "Installing Tech Bench"
 
 # Check to make sure that the staging directory exists and is populated
@@ -19,9 +24,9 @@ fi
 # See if there are already files in the application directory
 if [ -f "/var/www/html/version" ]
 then
-    echo "A version of Tech Bench is already installed."
-    echo "Please run the Update script to update the current version."
-    exit 0
+    echo -e "${RED}A version of Tech Bench is already installed.${NC}" 1>&2
+    echo -e "${RED}Please run the Update script to update the current version.${NC}" 1>&2
+    exit 1
 fi
 
 # Copy the application files to the application root directory
@@ -41,4 +46,4 @@ mkdir keystore
 chown tbuser:www-data keystore
 chmod 775 keystore
 
-echo "Tech Bench Installation Complete"
+echo -e "${GREEN}Tech Bench Installation Complete${NC}"

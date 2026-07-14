@@ -34,9 +34,9 @@ checkForSetup()
 {
     if [ ! -f $INSTALL_BASE/public/index.php ]
     then
-        echo "${RED} ERROR:  TECH BENCH NOT INSTALLED ${NC}"
-        echo "${RED} PLEASE USE PROPER DOCKER TECH BENCH IMAGE ${NC}"
-        # exit 1 || return 1
+        echo "${RED} ERROR:  TECH BENCH NOT INSTALLED ${NC}" 1>&2
+        echo "${RED} PLEASE USE PROPER DOCKER TECH BENCH IMAGE ${NC}" 1>&2
+        exit 1
     fi
 }
 
@@ -74,10 +74,10 @@ checkForUpdate()
         /tb_data/scripts/update_tb.sh
     elif [ $NEED_UPDATE == 2 ]
     then
-        echo -e "${RED} ERROR: VERSION MISMATCH"
-        echo -e "${RED} RUNNING VERSION IS NEWER THAN STAGED VERSION"
-        echo -e "${RED} PLEASE UPGRADE TO VERSION $APP_VERSION OR HIGHER TO CONTINUE ${NC}"
-        exit 1 || return 1
+        echo -e "${RED} ERROR: VERSION MISMATCH ${NC}" 1>&2
+        echo -e "${RED} RUNNING VERSION IS NEWER THAN STAGED VERSION ${NC}" 1>&2
+        echo -e "${RED} PLEASE UPGRADE TO VERSION $APP_VERSION OR HIGHER TO CONTINUE ${NC}" 1>&2
+        exit 1
     fi
 }
 
@@ -133,5 +133,7 @@ versionCompare () {
 }
 
 main
+
+echo -e "${GREED}Tech Bench is now Running${NC}"
 
 exec "$@"
