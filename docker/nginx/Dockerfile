@@ -6,11 +6,8 @@
 
 FROM nginx
 
-# Make sure image is up to date
-RUN apt update && apt upgrade -y --no-install-recommends
-
 # Install OpenSSL so we can generate a Self Signed Certificate
-RUN apt install openssl
+RUN apt update && apt install openssl
 
 # Copy configuration files
 COPY ./default_http.conf /etc/nginx/conf.d/default.conf
