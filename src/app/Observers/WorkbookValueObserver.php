@@ -3,16 +3,16 @@
 namespace App\Observers;
 
 use App\Models\WorkbookValue;
+use Illuminate\Support\Facades\Log;
 
-class WorkbookValueObserver
+class WorkbookValueObserver extends Observer
 {
-    // TODO - Fill events
     /**
      * Handle the WorkbookValue "created" event.
      */
     public function created(WorkbookValue $workbookValue): void
     {
-        //
+        Log::info('Workbook Value created', $workbookValue->toArray());
     }
 
     /**
@@ -20,30 +20,6 @@ class WorkbookValueObserver
      */
     public function updated(WorkbookValue $workbookValue): void
     {
-        //
-    }
-
-    /**
-     * Handle the WorkbookValue "deleted" event.
-     */
-    public function deleted(WorkbookValue $workbookValue): void
-    {
-        //
-    }
-
-    /**
-     * Handle the WorkbookValue "restored" event.
-     */
-    public function restored(WorkbookValue $workbookValue): void
-    {
-        //
-    }
-
-    /**
-     * Handle the WorkbookValue "force deleted" event.
-     */
-    public function forceDeleted(WorkbookValue $workbookValue): void
-    {
-        //
+        Log::info('Workbook Value Updated', $workbookValue->toArray());
     }
 }

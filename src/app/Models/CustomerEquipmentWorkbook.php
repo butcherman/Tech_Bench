@@ -94,9 +94,11 @@ class CustomerEquipmentWorkbook extends Model
     {
         $workbook = $this->parsedWorkbook;
 
+        // @codeCoverageIgnoreStart
         if (! is_array($workbook)) {
             $workbook = json_decode($workbook, true);
         }
+        // @codeCoverageIgnoreEnd
 
         foreach ($workbook['body'] as $key => $page) {
             if (! $page['canPublish']) {

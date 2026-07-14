@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 ################################################################################
 #                                                                              #
@@ -21,24 +21,20 @@ main()
 
     if [ $SERVICE = "master" ] || [ $SERVICE = "app" ]
     then
-        checkForMigration
-        syncScout
+        checkForInit
+        # syncScout
     fi
 }
 
 # Check to see if the database is empty or not
-checkForMigration()
+checkForInit()
 {
-    echo 'Checking if Migration is needed'
+    echo 'Checking if Tech Bench is Initialized'
 
-    # Check if the table exists by counting records in information_schema
-    EXISTS=$(mysql -u"root" -p"$MYSQL_ROOT_PASSWORD" -e \
-        "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = `tech-bench` AND table_name = 'app_settings';" \
-        -sN 2>/dev/null)
-
-    if [ ! $EXISTS ]
+    if [ ! -f $INSTALL_BASE/keystore/version ]
     then
         php /var/www/html/artisan migrate:fresh --seed
+        echo $(php /var/www/html/artisan version --format=compact | sed -e 's/Tech Bench //g') > /var/www/html/keystore/version
     fi
 }
 

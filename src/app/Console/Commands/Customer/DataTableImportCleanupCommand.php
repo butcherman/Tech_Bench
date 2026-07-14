@@ -6,6 +6,7 @@ use App\Jobs\File\DeleteFileDataJob;
 use App\Models\FileUpload;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class DataTableImportCleanupCommand extends Command
 {
@@ -28,6 +29,8 @@ class DataTableImportCleanupCommand extends Command
      */
     public function handle(): void
     {
+        Log::info('Running Import File Clanup Job');
+
         $count = 0;
         $uploadList = FileUpload::where('disk', 'customers')
             ->where('folder', 'table_upload')
@@ -41,5 +44,7 @@ class DataTableImportCleanupCommand extends Command
         }
 
         $this->info('Deleted '.$count.' upload files');
+
+        Log::info('Deleted '.$count.' upload files');
     }
 }
