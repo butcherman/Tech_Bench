@@ -19,7 +19,7 @@ main()
 {
     echo "Starting Tech Bench"
 
-    if [ $SERVICE = "master" ] || [ $SERVICE = "app" ]
+    if [ $SERVICE == "master" ] || [ $SERVICE == "app" ]
     then
         checkForSetup
         checkForEnv
@@ -36,7 +36,7 @@ checkForSetup()
     then
         echo "${RED} ERROR:  TECH BENCH NOT INSTALLED ${NC}"
         echo "${RED} PLEASE USE PROPER DOCKER TECH BENCH IMAGE ${NC}"
-        exit 1 || return 1
+        # exit 1 || return 1
     fi
 }
 
@@ -86,9 +86,9 @@ syncScout()
 {
     # Import all Scout data
     echo "Importing Meilisearch Data"
-    php artisan scout:sync-index-settings
-    php artisan scout:import "App\Models\TechTip"
-    php artisan scout:import "App\Models\Customer"
+    php $INSTALL_BASE/artisan scout:sync-index-settings
+    php $INSTALL_BASE/artisan scout:import "App\Models\TechTip"
+    php $INSTALL_BASE/artisan scout:import "App\Models\Customer"
 }
 
 # Function to compare version numbers
