@@ -81,7 +81,7 @@ class ValidateWorkbookImportFileUnitTest extends TestCase
                 'Public Col 3' => [
                     'valid' => true,
                     'data_type' => 'boolean',
-                    'value' => true,
+                    'value' => null,
                     'validation_error' => null,
                 ],
                 'Public Col 4' => [
@@ -162,7 +162,7 @@ class ValidateWorkbookImportFileUnitTest extends TestCase
                 'Public Col 3' => [
                     'valid' => true,
                     'data_type' => 'boolean',
-                    'value' => true,
+                    'value' => null,
                     'validation_error' => null,
                 ],
                 'Invalid Col' => [
@@ -240,7 +240,7 @@ class ValidateWorkbookImportFileUnitTest extends TestCase
         $csvData = [
             'Public Col 1,Public Col 2,Public Col 3,Public Col 4',
             'John Doe,Pub 1,false,12345',
-            'Jane Doe,Pub 2,1,54321',
+            'Jane Doe,Pub 2,,54321',
         ];
 
         if ($withErrors) {
