@@ -7,10 +7,14 @@ NC='\033[0m' # No Color
 
 # Check for additional flags (Verbose)
 VERBOSE=false
+FORCE=false
 while [[ $# -gt 0 ]]; do
     case "$1" in
         -v|--verbose)
             VERBOSE=true
+            ;;
+        -f|--force)
+            FORCE=true
             ;;
         *)
             POSITIONAL_ARGS+=("$1")
@@ -51,6 +55,7 @@ versionCompare () {
     # If version's match, no update is needed
     if [[ $1 == $2 ]]
     then
+        echo 0
         return 0
     fi
 
@@ -75,15 +80,18 @@ versionCompare () {
         # A newer version is staged and ready to be deployed
         if ((10#${ver1[i]} > 10#${ver2[i]}))
         then
-            return 1
+            echo 1
+            return 0
         fi
 
         # The staged version is older than the running version do not update
         if ((10#${ver1[i]} < 10#${ver2[i]}))
         then
-            return 2
+            echo 2
+            return 0
         fi
     done
+    echo 0
     return 0
 }
 

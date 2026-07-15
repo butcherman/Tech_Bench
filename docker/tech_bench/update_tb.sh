@@ -10,40 +10,35 @@
 
 set -eE
 
-# Color's for text
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-NC='\033[0m' # No Color
+source /tb_data/scripts/_functions.sh
+trap 'catchError $? $LINENO' ERR
 
+ERROR_MSG="Upgrade Failed"
 APP_ROOT=/var/www/html
 TMP_ROOT=/tb_data/tmp
 
-# Catch any errors and revert to previous version
-catchError()
+# Roll back the update attempt
+handleError()
 {
-    EXIT_CODE=$1
-    ERROR_LINE=$2
+    echo -e "${RED}Rolling Back Update${NC}"
 
-    echo -e "${RED} Error Found on line ${ERROR_LINE} - Reverting Update ${NC}" 1>&2
-
+    # Move the backup files back into the primary folder
     cp -R $TMP_ROOT/* $APP_ROOT/
     buildDependencies
+    buildCache
+    cleanup
 
-    rm -rf $TMP_ROOT
-
-    exit 1
+    echo -e "${RED}Update Failed - Run with -v flag to locate error${NC}"
 }
 
-trap 'catchError $? $LINENO' ERR
-
-
+#Update Tech Bench
 main()
 {
     echo "Starting Update"
 
     cd $APP_ROOT
 
-    # checkForUpdate
+    checkForUpdate
     backupAppFiles
     moveAppFiles
 
@@ -52,71 +47,28 @@ main()
 
     # Verify .env file is up to date
     echo "Validating Environment"
-    php $APP_ROOT/artisan app:validate-env --force
+    run php $APP_ROOT/artisan app:validate-env --force
 
     buildCache
 
     # Update the database
     echo "Configuring Database"
-    php $APP_ROOT/artisan migrate --force
+    run php $APP_ROOT/artisan migrate --force
 
     # Store the version information in the keystore volume
     echo "Tidying up"
     echo $(php $APP_ROOT/artisan version --format=compact | sed -e 's/Tech Bench //g') > $APP_ROOT/keystore/version
     echo $(php $APP_ROOT/artisan version --format=compact | sed -e 's/Tech Bench //g') > $APP_ROOT/version
 
-    # Cleanup by remove the tmp files
-    rm -rf $TMP_ROOT
-
     # Resync Scout and restart child containers
-    php $APP_ROOT/artisan scout:sync-index-settings
-    php $APP_ROOT/artisan scout:import "App\Models\TechTip"
-    php $APP_ROOT/artisan scout:import "App\Models\Customer"
+    run php $APP_ROOT/artisan scout:sync-index-settings
+    run php $APP_ROOT/artisan scout:import "App\Models\TechTip"
+    run php $APP_ROOT/artisan scout:import "App\Models\Customer"
+
+    # Cleanup after upgrade
+    cleanup
 
     echo -e "${GREED}Update Successful${NC}"
-}
-
-# Make a backup of the existing app files in case of error
-backupAppFiles()
-{
-    if test -d $TMP_ROOT
-    then
-        mkdir -p $TMP_ROOT
-    fi
-
-    cp -R $APP_ROOT/app $TMP_ROOT/
-    cp -R $APP_ROOT/bootstrap $TMP_ROOT/
-    cp -R $APP_ROOT/config $TMP_ROOT/
-    cp -R $APP_ROOT/database $TMP_ROOT/
-    cp -R $APP_ROOT/lang $TMP_ROOT/
-    cp -R $APP_ROOT/resources $TMP_ROOT/
-    cp -R $APP_ROOT/routes $TMP_ROOT/
-}
-
-# Copy all of the staged files to the Application Directory
-moveAppFiles()
-{
-    cp -R /tb_data/staging/* $APP_ROOT/
-}
-
-# Update and compile Composer and NPM dependencies
-buildDependencies()
-{
-    cd $APP_ROOT
-    composer install --no-dev --no-interaction --optimize-autoloader  --no-ansi >> /dev/null 2>&1
-    npm install >> /dev/null 2>&1
-    npm run build
-}
-
-# Build the system Cache and clear out other app cache
-buildCache()
-{
-    # Cache configuration files
-    echo "Optimizing Installation"
-    php $APP_ROOT/artisan cache:clear
-    php $APP_ROOT/artisan optimize:clear
-    php $APP_ROOT/artisan breadcrumbs:cache
-    php $APP_ROOT/artisan optimize
 }
 
 # Check the staged version vs. the running version to see if update is needed
@@ -125,61 +77,71 @@ checkForUpdate()
     STAGED_VERSION=$(head -n 1 /tb_data/staging/version)
     APP_VERSION=$(head -n 1 /var/www/html/keystore/version)
 
-    versionCompare $STAGED_VERSION $APP_VERSION
-    NEED_UPDATE=$?
+    NEED_UPDATE=$(versionCompare $STAGED_VERSION $APP_VERSION)
 
     if [ $NEED_UPDATE == 1 ]
     then
-        echo -e "${RED} New Version $STAGED_VERSION found.  Please wait will we update ${NC}"
-        /tb_data/scripts/update_tb.sh
+        echo -e "${GREEN} New Version $STAGED_VERSION found.  Please wait will we update ${NC}"
     elif [ $NEED_UPDATE == 2 ]
     then
         echo -e "${RED} ERROR: VERSION MISMATCH ${NC}" 1>&2
         echo -e "${RED} RUNNING VERSION IS NEWER THAN STAGED VERSION ${NC}" 1>&2
         echo -e "${RED} PLEASE UPGRADE TO VERSION $APP_VERSION OR HIGHER TO CONTINUE ${NC}" 1>&2
         exit 1
+    elif [ $NEED_UPDATE == 0 ] && [ $FORCE == false ]
+    then
+        echo "Running and Staged Versions are the same.  No update needed"
+        exit 0
     fi
 }
 
-# Function to compare version numbers
-versionCompare () {
-    # If version's match, no update is needed
-    if [[ $1 == $2 ]]
+# Make a backup of the existing app files in case of error
+backupAppFiles()
+{
+    if test -d $TMP_ROOT
     then
-        return 0
+        run mkdir -p $TMP_ROOT
     fi
 
-    local IFS=.
-    local i ver1=($1) ver2=($2)
+    run cp -R $APP_ROOT/app $TMP_ROOT/
+    run cp -R $APP_ROOT/bootstrap $TMP_ROOT/
+    run cp -R $APP_ROOT/config $TMP_ROOT/
+    run cp -R $APP_ROOT/database $TMP_ROOT/
+    run cp -R $APP_ROOT/lang $TMP_ROOT/
+    run cp -R $APP_ROOT/resources $TMP_ROOT/
+    run cp -R $APP_ROOT/routes $TMP_ROOT/
+}
 
-    # fill empty fields in ver1 with zeros
-    for ((i=${#ver1[@]}; i<${#ver2[@]}; i++))
-    do
-        ver1[i]=0
-    done
+# Copy all of the staged files to the Application Directory
+moveAppFiles()
+{
+    run cp -R /tb_data/staging/* $APP_ROOT/
+}
 
-    # Check each of the version fields and compare
-    for ((i=0; i<${#ver1[@]}; i++))
-    do
-        if [[ -z ${ver2[i]} ]]
-        then
-            # fill empty fields in ver2 with zeros
-            ver2[i]=0
-        fi
+# Update and compile Composer and NPM dependencies
+buildDependencies()
+{
+    cd $APP_ROOT
+    run composer install --no-dev --no-interaction --optimize-autoloader  --no-ansi
+    run npm install
+    run npm run build
+}
 
-        # A newer version is staged and ready to be deployed
-        if ((10#${ver1[i]} > 10#${ver2[i]}))
-        then
-            return 1
-        fi
+# Build the system Cache and clear out other app cache
+buildCache()
+{
+    # Cache configuration files
+    echo "Optimizing Installation"
+    run php $APP_ROOT/artisan cache:clear
+    run php $APP_ROOT/artisan optimize:clear
+    run php $APP_ROOT/artisan breadcrumbs:cache
+    run php $APP_ROOT/artisan optimize
+}
 
-        # The staged version is older than the running version do not update
-        if ((10#${ver1[i]} < 10#${ver2[i]}))
-        then
-            return 2
-        fi
-    done
-    return 0
+# Delete the temporary files
+cleanup()
+{
+    run rm -rf $TMP_ROOT
 }
 
 main
