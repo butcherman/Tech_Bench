@@ -10,9 +10,6 @@
 FROM mysql:9.4 AS mysql
 FROM php:8.5-fpm
 
-# Make sure image is up to date
-RUN apt update && apt upgrade -y --no-install-recommends
-
 # Create the tbuser and tbgroup
 RUN addgroup --gid 1024 tbgroup
 RUN adduser --disabled-password --gecos "" --force-badname --ingroup tbgroup tbuser
@@ -24,7 +21,7 @@ ADD --chmod=0755 \
     /usr/local/bin/
 
 # Install dependency packages
-RUN apt install -yq \
+RUN apt update && apt install -yq \
     curl \
     nano \
     nodejs \

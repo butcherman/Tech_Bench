@@ -1,10 +1,32 @@
-#!/bin/sh
+#!/bin/bash
 
 ################################################################################
 #                                                                              #
 #                        Generate a Self Signed SSL Cert                       #
 #                                                                              #
 ################################################################################
+
+set -eE
+
+# Color's for text
+RED='\033[0;31m'
+NC='\033[0m' # No Color
+
+# Catch any errors and revert to previous version
+catchError()
+{
+    EXIT_CODE=$1
+    ERROR_LINE=$2
+
+    echo "${RED} Error Found - Unable to generate SSL Certificate ${NC}"
+
+    mv $TMP_ROOT/* $APP_ROOT/
+    buildDependencies
+
+    exit 1
+}
+
+trap 'catchError $? $LINENO' ERR
 
 TMPLOCATION="/tb_data/tmp"
 KEYSTORE="/var/www/html/keystore"
@@ -33,3 +55,5 @@ chmod 755 $KEYSTORE/private/server.key
 
 #  Cleanup unneeded files
 rm -rf $TMPLOCATION/server.csr $TMPLOCATION/server.key.org $TMPLOCATION/passphrase.txt
+
+exit 0

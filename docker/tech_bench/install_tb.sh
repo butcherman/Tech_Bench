@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 ################################################################################
 #                                                                              #
@@ -8,7 +8,9 @@
 #                                                                              #
 ################################################################################
 
-echo "Installing Tech Bench"
+source /tb_data/scripts/_functions.sh
+
+echo "Installing Tech Bench Files"
 
 # Check to make sure that the staging directory exists and is populated
 if [ ! -f "/tb_data/staging/version" ]
@@ -19,26 +21,26 @@ fi
 # See if there are already files in the application directory
 if [ -f "/var/www/html/version" ]
 then
-    echo "A version of Tech Bench is already installed."
-    echo "Please run the Update script to update the current version."
-    exit 0
+    echo -e "${RED}A version of Tech Bench is already installed.${NC}" 1>&2
+    echo -e "${RED}Please run the Update script to update the current version.${NC}" 1>&2
+    exit 1
 fi
 
 # Copy the application files to the application root directory
-cp -R /tb_data/staging/* /var/www/html/
+run cp -R /tb_data/staging/* /var/www/html/
 
-cd /var/www/html
+run cd /var/www/html
 
 # Add the .env file
 if [ ! -f ".env" ]
 then
-    cp /tb_data/staging/.env.example .env
-    chown tbuser:www-data .env
+    run cp /tb_data/staging/.env.example .env
+    run chown tbuser:www-data .env
 fi
 
 # Create the Keystore directory for Certificates
-mkdir keystore
-chown tbuser:www-data keystore
-chmod 775 keystore
+run mkdir keystore
+run chown tbuser:www-data keystore
+run chmod 775 keystore
 
-echo "Tech Bench Installation Complete"
+echo -e "${GREEN}Tech Bench Installation Complete${NC}"

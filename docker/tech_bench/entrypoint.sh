@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 ################################################################################
 #                                                                              #
@@ -8,9 +8,7 @@
 #                                                                              #
 ################################################################################
 
-# Color's for text
-RED='\033[0;31m'
-NC='\033[0m' # No Color
+source /tb_data/scripts/_functions.sh
 
 INSTALL_BASE="/var/www/html"
 
@@ -19,11 +17,12 @@ main()
 {
     echo "Starting Tech Bench"
 
-    if [ $SERVICE = "master" ] || [ $SERVICE = "app" ]
+    if [ $SERVICE == "master" ] || [ $SERVICE == "app" ]
     then
         checkForSetup
         checkForEnv
         checkForInit
+        checkForUpdate
         syncScout
     fi
 }
@@ -33,9 +32,9 @@ checkForSetup()
 {
     if [ ! -f $INSTALL_BASE/public/index.php ]
     then
-        echo "${RED} ERROR:  TECH BENCH NOT INSTALLED ${NC}"
-        echo "${RED} PLEASE USE PROPER DOCKER TECH BENCH IMAGE ${NC}"
-        exit 1 || return 1
+        echo "${RED} ERROR:  TECH BENCH NOT INSTALLED ${NC}" 1>&2
+        echo "${RED} PLEASE USE PROPER DOCKER TECH BENCH IMAGE ${NC}" 1>&2
+        exit 1
     fi
 }
 
@@ -56,20 +55,32 @@ checkForInit()
     then
         /tb_data/scripts/setup_tb.sh
     fi
-
-    # TODO - Check for update
 }
 
-# Sync Scout settings and database
-syncScout()
+# Check the staged version vs. the running version to see if update is needed
+checkForUpdate()
 {
-    # Import all Scout data
-    echo "Importing Meilisearch Data"
-    php artisan scout:sync-index-settings
-    php artisan scout:import "App\Models\TechTip"
-    php artisan scout:import "App\Models\Customer"
+    STAGED_VERSION=$(head -n 1 /tb_data/staging/version)
+    APP_VERSION=$(head -n 1 /var/www/html/keystore/version)
+
+    versionCompare $STAGED_VERSION $APP_VERSION
+    NEED_UPDATE=$?
+
+    if [ $NEED_UPDATE == 1 ]
+    then
+        echo -e "${RED} New Version $STAGED_VERSION found.  Please wait will we update ${NC}"
+        /tb_data/scripts/update_tb.sh
+    elif [ $NEED_UPDATE == 2 ]
+    then
+        echo -e "${RED} ERROR: VERSION MISMATCH ${NC}" 1>&2
+        echo -e "${RED} RUNNING VERSION IS NEWER THAN STAGED VERSION ${NC}" 1>&2
+        echo -e "${RED} PLEASE UPGRADE TO VERSION $APP_VERSION OR HIGHER TO CONTINUE ${NC}" 1>&2
+        exit 1
+    fi
 }
 
 main
+
+echo -e "${GREED}Tech Bench is now Running${NC}"
 
 exec "$@"

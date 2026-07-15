@@ -13,15 +13,13 @@ ENV SERVICE=worker
 
 USER root
 
-# Make sure image is up to date
-RUN apt update && apt upgrade -y --no-install-recommends
-
 # Copy the entrypoint script in to allow udpates and initial config
 COPY ./entrypoint.sh /tb_data/entrypoint.d/entrypoint.sh
 RUN chown tbuser:www-data /tb_data/entrypoint.d/entrypoint.sh
 RUN chmod 775 /tb_data/entrypoint.d/entrypoint.sh
 
 # Bring the baseline scripts into the image
+COPY ./_functions.sh /tb_data/scripts/
 COPY ./download_tb.sh /tb_data/scripts/
 COPY ./install_tb.sh /tb_data/scripts/
 COPY ./setup_tb.sh /tb_data/scripts/
