@@ -7,7 +7,7 @@
 #                                                                              #
 ################################################################################
 
-FROM bitnami/php-fpm:8.2
+FROM butcherman/tech_bench_baseline:1.0
 
 ENV TB_URL=localhost
 ENV ENABLE_HTTPS=true
@@ -32,11 +32,12 @@ RUN apt install -yq php-common \
     nano \
     openssl \
     unzip \
+    yq \
     zip \
     mariadb-client
 
 #  Entrypoint and update scripts along with any other necessary shell scripts will be copied here
-RUN mkdir /scripts
+RUN mkdir -p /scripts
 
 #  Update npm and composer
 RUN apt install -y nodejs npm
@@ -53,11 +54,17 @@ COPY ./startup.sh /scripts/
 COPY ./update.sh /scripts/
 COPY ./setup.sh /scripts/
 COPY ./scheduler.sh /scripts/
+COPY ./_functions.sh /scripts/
+COPY ./install.sh /scripts/
 
 #  Set permissions for the scripts to allow them to run
 RUN chmod 775 /scripts/*
 RUN chmod 775 /app
 RUN chmod 775 /opt/bitnami/php -R
+
+# Create the staging directory
+RUN mkdir /staging
+RUN chmod 777 /staging
 
 WORKDIR /app
 

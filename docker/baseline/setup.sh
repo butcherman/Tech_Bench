@@ -7,35 +7,44 @@
 #                                                                              #
 ################################################################################
 
+APP_ROOT=/app
+
+source /scripts/_functions.sh
+
 echo "New installation of Tech Bench detected"
 echo "Setting up the application for the first time"
 echo "Please wait...."
 
+# Install Composer and NPM dependencies
+run cd $APP_ROOT
+run composer install --no-dev --no-interaction --optimize-autoloader
+run npm install
+
 #  Create Encryption Key
 echo "Creating Encryption Key"
-php /app/artisan key:generate --force
+run php $APP_ROOT/artisan key:generate --force
 
 # Generate new Reverb Credentials
 echo "Generating Broadcasting Credentials"
-php /app/artisan reverb:generate --force
+run php $APP_ROOT/artisan reverb:generate --force
 
 #  Create symbolic link for public directory
-php /app/artisan storage:link -q
+run php $APP_ROOT/artisan storage:link -q
 
 #  Create the database
-php /app/artisan migrate --force
+run php $APP_ROOT/artisan migrate --force
 
 #  Cache configuration files
-php /app/artisan optimize:clear
-php /app/artisan breadcrumbs:cache
-php /app/artisan optimize
+run php $APP_ROOT/artisan optimize:clear
+run php $APP_ROOT/artisan breadcrumbs:cache
+run php $APP_ROOT/artisan optimize
 
 # Install Composer and NPM dependencies
 echo "Building Application"
-cd /app
-npm run build
+cd $APP_ROOT
+run npm run build
 
 # Store the version information in the keystore volume
-echo $(php /app/artisan version --format=compact | sed -e 's/Tech Bench //g') > /app/keystore/version
+echo $(php $APP_ROOT/artisan version --format=compact | sed -e 's/Tech Bench //g') > $APP_ROOT/keystore/version
 
 echo "Tech Bench Setup Complete"
