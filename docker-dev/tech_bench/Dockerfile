@@ -4,7 +4,7 @@
 #                                                                                               #
 #################################################################################################
 
-FROM butcherman/tech_bench_baseline:1.0
+FROM butcherman/tech_bench_baseline:1.1
 
 COPY ./php.ini /opt/bitnami/php/lib/
 COPY ./startup.dev.sh /scripts/
