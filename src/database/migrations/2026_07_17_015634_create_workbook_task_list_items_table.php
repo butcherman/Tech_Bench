@@ -16,9 +16,9 @@ return new class extends Migration
             $table->unsignedBigInteger('list_id');
             $table->text('list_item');
             $table->integer('order');
-            $table->timestamp('completed');
-            $table->text('completed_by');
-            $table->unsignedBigInteger('file_id');
+            $table->timestamp('completed')->nullable();
+            $table->text('completed_by')->nullable();
+            $table->unsignedBigInteger('file_id')->nullable();
             $table->softDeletes();
             $table->timestamps();
             $table->foreign('file_id')
