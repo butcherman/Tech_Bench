@@ -38,6 +38,7 @@ type workbookNode = {
         | "text"
         | "input"
         | "data-table"
+        | "task-list"
         | "header";
     props: workbookNodeProps;
     contents?: workbookNode[];
@@ -145,4 +146,16 @@ type workbookValidationData = {
         value: any;
         validation_error: string | null;
     };
+};
+
+type workbookTaskListEntry = {
+    id: string;
+    wb_id: number;
+    list_index: string;
+    list_item: string;
+    order: number;
+    completed: string;
+    completed_by: string;
+    file_id?: number;
+    deleted_at?: string;
 };
