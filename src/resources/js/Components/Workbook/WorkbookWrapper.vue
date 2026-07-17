@@ -7,6 +7,7 @@ import { computed, onMounted, provide } from "vue";
 import { useForm } from "vee-validate";
 import {
     hasError,
+    initTaskLists,
     isPagePublic,
     saveWorkbookValue,
     wbHash,
@@ -15,6 +16,7 @@ import {
 const props = defineProps<{
     workbookSkeleton: workbookWrapper;
     workbookValues: { [key: string]: any };
+    taskLists: workbookTaskList[];
 }>();
 
 /**
@@ -97,6 +99,11 @@ onMounted(() => {
             setFieldValue(valData.model.index, valData.model.value);
         },
     );
+
+    /**
+     * Populate the Task Lists
+     */
+    initTaskLists(props.taskLists);
 });
 </script>
 

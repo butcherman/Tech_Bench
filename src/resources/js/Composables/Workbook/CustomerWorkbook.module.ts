@@ -60,3 +60,13 @@ export const saveWorkbookValue = (saveData: workbookSaveData): void => {
         errorModal(err.status, message);
     });
 };
+
+/*
+|-------------------------------------------------------------------------------
+| Task Lists
+|-------------------------------------------------------------------------------
+*/
+export const taskLists = ref<workbookTaskList[]>([]);
+export const initTaskLists = (list: workbookTaskList[]): void => {
+    taskLists.value = list;
+};

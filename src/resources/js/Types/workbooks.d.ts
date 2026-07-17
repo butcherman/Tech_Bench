@@ -148,10 +148,14 @@ type workbookValidationData = {
     };
 };
 
-type workbookTaskListEntry = {
-    id: string;
-    wb_id: number;
+type workbookTaskList = {
     list_index: string;
+    locked: boolean;
+    updated_at: string;
+    workbook_task_list_item: workbookTaskListEntry[];
+};
+
+type workbookTaskListEntry = {
     list_item: string;
     order: number;
     completed: string;

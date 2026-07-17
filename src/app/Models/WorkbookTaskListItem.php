@@ -17,7 +17,7 @@ class WorkbookTaskListItem extends Model
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
     /** @var array<int, string> */
-    protected $hidden = ['id', 'wb_id', 'CustomerWorkbook', 'public', 'created_at'];
+    protected $hidden = ['id', 'list_id', 'CustomerWorkbook', 'public', 'created_at'];
 
     protected function casts(): array
     {

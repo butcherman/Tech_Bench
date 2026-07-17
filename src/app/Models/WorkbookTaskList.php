@@ -21,6 +21,9 @@ class WorkbookTaskList extends Model
     /** @var array<int, string> */
     protected $hidden = ['list_id', 'wb_id', 'CustomerWorkbook', 'public', 'created_at'];
 
+    /** @var array<int, string> */
+    protected $with = ['WorkbookTaskListItem'];
+
     protected function casts(): array
     {
         return [
