@@ -22,6 +22,8 @@ const thisTaskList = computed<workbookTaskListEntry[]>(() => {
 
     let blankList: workbookTaskListEntry[] = [];
     props.defaultList.forEach((item) => {
+        // TODO - Save to DB
+
         blankList.push({
             list_item: item,
             order: 0,

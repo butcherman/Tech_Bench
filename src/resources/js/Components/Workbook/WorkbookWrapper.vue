@@ -62,7 +62,7 @@ const saveFieldValue = (index: string): void => {
         index,
         value: values[index],
         public: isPagePublic.value,
-        isTable: false,
+        value_type: "input",
     };
 
     saveWorkbookValue(saveData);
@@ -80,7 +80,7 @@ const saveTableCell = (
         column_name: columnName,
         value: values[tableIndex][arrayIndex][columnName],
         public: isPagePublic.value,
-        isTable: true,
+        value_type: "data-table",
     };
 
     saveWorkbookValue(saveData);

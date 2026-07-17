@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\Customer;
 
+use App\Enums\WorkbookValueType;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class WorkbookValueRequest extends FormRequest
 {
@@ -27,10 +29,10 @@ class WorkbookValueRequest extends FormRequest
             'value' => ['nullable'],
             'index' => ['required_if:isTable,false', 'string'],
             'public' => ['required', 'boolean'],
-            'isTable' => ['required', 'boolean'],
             'table_index' => ['required_if:isTable,true', 'string'],
             'row_index' => ['required_if:isTable,true', 'string'],
             'column_name' => ['required_if:isTable,true', 'string'],
+            'value_type' => ['required', Rule::enum(WorkbookValueType::class)],
         ];
     }
 }

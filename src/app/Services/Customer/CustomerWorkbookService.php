@@ -141,14 +141,14 @@ class CustomerWorkbookService
      */
     public function saveWorkbookValue(CustomerEquipmentWorkbook $workbook, Collection $requestData): void
     {
-        if (! $requestData->get('isTable')) {
+        if ($requestData->get('value_type') === 'input') {
             $updatable = WorkbookValue::firstOrCreate([
                 'wb_id' => $workbook->wb_id,
                 'index' => $requestData->get('index'),
             ]);
         }
 
-        if ($requestData->get('isTable')) {
+        if ($requestData->get('value_type') === 'data-table') {
             $updatable = WorkbookTableValue::firstOrCreate([
                 'wb_id' => $workbook->wb_id,
                 'table_index' => $requestData->get('table_index'),

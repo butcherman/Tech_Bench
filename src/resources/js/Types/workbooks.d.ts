@@ -135,7 +135,7 @@ type workbookTableValue = {
 
 type workbookSaveData =
     | ({
-          isTable: boolean;
+          value_type: "data-table" | "input" | "task-list";
       } & workbookValue)
     | workbookTableValue;
 
