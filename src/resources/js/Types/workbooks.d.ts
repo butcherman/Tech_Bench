@@ -158,8 +158,8 @@ type workbookTaskList = {
 type workbookTaskListEntry = {
     list_item: string;
     order: number;
-    completed: string;
-    completed_by: string;
+    completed: string | null;
+    completed_by: string | null;
     file_id?: number;
     deleted_at?: string;
 };

@@ -11,19 +11,34 @@ const props = defineProps<{
     title: string;
 }>();
 
-const thisTaskList = computed(() =>
-    taskLists.value.find((list) => list.list_index === props.index),
-);
+const thisTaskList = computed<workbookTaskListEntry[]>(() => {
+    let list: workbookTaskList | undefined = taskLists.value.find(
+        (list) => list.list_index === props.index,
+    );
+
+    if (list) {
+        return list.workbook_task_list_item;
+    }
+
+    let blankList: workbookTaskListEntry[] = [];
+    props.defaultList.forEach((item) => {
+        blankList.push({
+            list_item: item,
+            order: 0,
+            completed: null,
+            completed_by: null,
+        });
+    });
+
+    return blankList;
+});
 </script>
 
 <template>
     <div>
         <h3 class="text-center">{{ title }}</h3>
         <div>
-            <template
-                v-for="item in thisTaskList?.workbook_task_list_item"
-                :key="item"
-            >
+            <template v-for="item in thisTaskList" :key="item">
                 <div class="bg-sky-300 my-2 p-2 rounded-lg">
                     <input type="checkbox" />
                     {{ item.list_item }}
