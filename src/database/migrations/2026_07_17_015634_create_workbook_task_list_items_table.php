@@ -21,6 +21,11 @@ return new class extends Migration
             $table->unsignedBigInteger('file_id')->nullable();
             $table->softDeletes();
             $table->timestamps();
+            $table->foreign('list_id')
+                ->references('list_id')
+                ->on('workbook_task_lists')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
             $table->foreign('file_id')
                 ->references('file_id')
                 ->on('file_uploads')
@@ -34,6 +39,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('workbook_task_list_items', function (Blueprint $table) {
+            $table->dropForeign(['list_id']);
             $table->dropForeign(['file_id']);
         });
         Schema::dropIfExists('workbook_task_list_items');
