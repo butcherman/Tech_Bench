@@ -12,25 +12,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('workbook_task_lists', function (Blueprint $table) {
-            $table->id();
+            $table->id('list_id');
             $table->unsignedBigInteger('wb_id');
             $table->uuid('list_index');
-            $table->text('list_item');
-            $table->integer('order');
-            $table->timestamp('completed');
-            $table->text('completed_by');
-            $table->unsignedBigInteger('file_id');
-            $table->softDeletes();
+            $table->boolean('locked')->default(false);
+            $table->boolean('public');
             $table->timestamps();
             $table->foreign('wb_id')
                 ->references('wb_id')
                 ->on('customer_equipment_workbooks')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
-            $table->foreign('file_id')
-                ->references('file_id')
-                ->on('file_uploads')
-                ->onUpdate('cascade');
         });
     }
 
@@ -41,7 +33,6 @@ return new class extends Migration
     {
         Schema::table('workbook_task_lists', function (Blueprint $table) {
             $table->dropForeign(['wb_id']);
-            $table->dropForeign(['file_id']);
         });
         Schema::dropIfExists('workbook_task_lists');
     }
