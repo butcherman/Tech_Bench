@@ -150,6 +150,16 @@ class CustomerEquipmentWorkbook extends Model
         return $this->WorkbookTableValues()->where('public', true);
     }
 
+    public function TaskLists(): HasMany
+    {
+        return $this->hasMany(WorkbookTaskList::class, 'wb_id', 'wb_id');
+    }
+
+    public function PublicTaskLists(): HasMany
+    {
+        return $this->TaskLists()->where('public', true);
+    }
+
     public function Customer(): BelongsTo
     {
         return $this->belongsTo(Customer::class, 'cust_id', 'cust_id');

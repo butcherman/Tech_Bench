@@ -4,7 +4,7 @@
 #                                                                              #
 ################################################################################
 
-FROM butcherman/tech_bench_baseline:2.0
+FROM butcherman/tech_bench_baseline:1.1
 
 ARG BRANCH=false
 ARG VERSION=latest
@@ -28,20 +28,38 @@ RUN chmod 775 /tb_data/scripts/*
 RUN chown tbuser:www-data -R /tb_data
 
 # Download application files
-RUN /tb_data/scripts/download_tb.sh ${BRANCH} ${VERSION}
-RUN /tb_data/scripts/install_tb.sh
+RUN /scripts/download_tb.sh ${BRANCH} ${VERSION}
 
-# Set file and directory permissions
-RUN chown -R tbuser:www-data /var/www/html/*
-RUN find /var/www/html/ -type f -exec chmod 644 {} \;
-RUN find /var/www/html/ -type d -exec chmod 755 {} \;
-RUN chmod -R 775 /var/www/html/storage
-RUN chmod -R 775 /var/www/html/keystore
+# Create a group and user to run the file permissions
+RUN addgroup --gid 1024 tbgroup
+RUN adduser --disabled-password --gecos "" --force-badname --ingroup tbgroup tbuser
+RUN usermod -a -G root tbuser
+RUN chmod 775 /var/log
 
-# Finalize Image
-WORKDIR /var/www/html
+# Set directory permissions
+RUN chown -R tbuser:tbgroup /app
+RUN find /app/ -type f -exec chmod 644 {} \;
+RUN find /app/ -type d -exec chmod 755 {} \;
+RUN chmod -R 775 /app/storage
+RUN chmod -R 775 /app/keystore
+
+RUN chown tbuser:tbgroup -R /app/keystore
+RUN chown tbuser:tbgroup -R /app/storage
+
+# Set same directory permissions for staging directory
+RUN chown -R tbuser:tbgroup /staging
+RUN find /staging/ -type f -exec chmod 644 {} \;
+RUN find /staging/ -type d -exec chmod 755 {} \;
+RUN chmod -R 777 /staging/storage
+
 USER tbuser
 
-# Set entrypoint
-ENTRYPOINT [ "/tb_data/entrypoint.d/entrypoint.sh" ]
-CMD ["php-fpm"]
+# Install dependencies
+RUN composer install --no-dev --no-interaction --optimize-autoloader
+RUN npm install --omit=dev
+
+#  Place a version file in the staging directory to note what version this image is
+RUN echo $(php /app/artisan version --format=compact | sed -e 's/Tech Bench //g') > /staging/version
+
+# Finalize image
+WORKDIR /app

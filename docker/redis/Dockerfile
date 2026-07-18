@@ -1,12 +1,13 @@
-################################################################################
-#                                                                              #
-#        Redis Container holds the Redis Database for Tech Bench               #
-#                                                                              #
-################################################################################
+#################################################################################################
+#                                                                                               #
+#            Redis Container holds the Redis Database for Tech Bench                            #
+#                                                                                               #
+#################################################################################################
 
-FROM redis
+FROM bitnami/redis:latest
 
-# Bring in custom config file
-COPY redis.conf /usr/local/etc/redis/redis.conf
+ENV REDIS_PASSWORD=tbRootPassword
+
+USER root
 
 CMD ["redis-server", "/usr/local/etc/redis/redis.conf"]
