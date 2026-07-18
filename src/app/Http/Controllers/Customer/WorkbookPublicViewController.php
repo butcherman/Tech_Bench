@@ -33,6 +33,9 @@ class WorkbookPublicViewController extends Controller
             'workbook-values' => Inertia::defer(
                 fn () => $this->svc->getAllWorkbookValues($workbook, false),
             ),
+            'task-lists' => Inertia::defer(
+                fn () => $workbook->PublicTaskLists,
+            ),
         ]);
     }
 }

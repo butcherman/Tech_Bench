@@ -38,6 +38,7 @@ type workbookNode = {
         | "text"
         | "input"
         | "data-table"
+        | "task-list"
         | "header";
     props: workbookNodeProps;
     contents?: workbookNode[];
@@ -134,9 +135,11 @@ type workbookTableValue = {
 
 type workbookSaveData =
     | ({
-          isTable: boolean;
+          value_type: "data-table" | "input" | "task-list" | "task-list-item";
       } & workbookValue)
-    | workbookTableValue;
+    | workbookTableValue
+    | workbookTaskList
+    | workbookTaskListEntry;
 
 type workbookValidationData = {
     [key: string]: {
@@ -145,4 +148,27 @@ type workbookValidationData = {
         value: any;
         validation_error: string | null;
     };
+};
+
+type workbookTaskList = {
+    list_index: string;
+    locked: boolean;
+    updated_at?: string;
+    public: boolean;
+    workbook_task_list_item?: workbookTaskListEntry[];
+};
+
+type workbookTaskListEntry = {
+    list_index?: string;
+    list_item: string;
+    order: number;
+    completed?: boolean | string | null;
+    completed_by: string | null;
+    file_id?: number;
+    deleted_at?: string;
+    delete_item?: true;
+};
+
+type workbookTaskListEvent = {
+    model: workbookTaskListEntry;
 };

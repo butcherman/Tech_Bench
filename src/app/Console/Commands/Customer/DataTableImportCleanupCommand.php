@@ -6,7 +6,6 @@ use App\Jobs\File\DeleteFileDataJob;
 use App\Models\FileUpload;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Log;
 
 class DataTableImportCleanupCommand extends Command
 {

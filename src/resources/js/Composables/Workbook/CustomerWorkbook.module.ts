@@ -3,6 +3,7 @@ import { computed, ref } from "vue";
 import { dataPut } from "../axiosWrapper.module";
 
 const bodyCopy = ref<workbookPage[]>();
+export const whoAmI = ref<string>();
 export const isPreviewMode = ref<boolean>(false);
 export const activePage = ref<string>("0");
 export const wbHash = ref<string>();
@@ -55,8 +56,22 @@ export const saveWorkbookValue = (saveData: workbookSaveData): void => {
     ).catch((err) => {
         hasError.value = true;
 
+        console.log(err);
+
         let message =
             "Unable to save data.  Please refresh page and try again.";
         errorModal(err.status, message);
     });
+};
+
+/*
+|-------------------------------------------------------------------------------
+| Task Lists
+|-------------------------------------------------------------------------------
+*/
+export const taskListInitComplete = ref<boolean>(false);
+export const taskLists = ref<workbookTaskList[]>([]);
+export const initTaskLists = (list: workbookTaskList[]): void => {
+    taskLists.value = list;
+    taskListInitComplete.value = true;
 };
