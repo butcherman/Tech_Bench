@@ -39,6 +39,9 @@ class CustomerEquipmentWorkbookController extends Controller
             'workbook-values' => Inertia::defer(
                 fn () => $this->svc->getAllWorkbookValues($equipment->EquipmentWorkbook, true),
             ),
+            'task-lists' => Inertia::defer(
+                fn () => $equipment->EquipmentWorkbook->TaskLists,
+            ),
         ]);
     }
 
