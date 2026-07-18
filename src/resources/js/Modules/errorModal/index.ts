@@ -1,4 +1,5 @@
 import ErrorModal from "./ErrorModal.vue";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { createApp, h } from "vue";
 
 export default (status: number | undefined, message: string) => {
@@ -18,7 +19,7 @@ const errorModal = (status: number | undefined, message: string) => {
                         onHidden: () => unmount(),
                     });
             },
-        });
+        }).component("fa-icon", FontAwesomeIcon);
 
         /**
          * Mount and show the new OK Modal

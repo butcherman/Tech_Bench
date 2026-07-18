@@ -5,7 +5,6 @@ import FormError from "./NodeForms/FormError.vue";
 import HeaderForm from "./NodeForms/HeaderForm.vue";
 import InputForm from "./NodeForms/InputForm.vue";
 import PageForm from "./NodeForms/PageForm.vue";
-import TaskListForm from "./NodeForms/TaskListForm.vue";
 import TextForm from "./NodeForms/TextForm.vue";
 import { computed } from "vue";
 import { Drawer } from "primevue";
@@ -52,8 +51,6 @@ const editingForm = computed(() => {
             return DataTableForm;
         case "input":
             return InputForm;
-        case "task-list":
-            return TaskListForm;
     }
 
     return FormError;

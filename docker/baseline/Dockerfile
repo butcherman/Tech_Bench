@@ -7,11 +7,8 @@
 #                                                                              #
 ################################################################################
 
-FROM butcherman/tech_bench_baseline:1.0
-
-ENV TB_URL=localhost
-ENV ENABLE_HTTPS=true
-ENV SERVICE=master
+FROM mysql:9.4 AS mysql
+FROM php:8.5-fpm
 
 # Create the tbuser and tbgroup
 RUN addgroup --gid 1024 tbgroup
@@ -27,42 +24,51 @@ ADD --chmod=0755 \
 RUN apt update && apt install -yq \
     curl \
     nano \
+    nodejs \
+    npm \
     openssl \
     unzip \
     yq \
-    zip \
-    mariadb-client
+    zip
 
-#  Entrypoint and update scripts along with any other necessary shell scripts will be copied here
-RUN mkdir -p /scripts
+# Install PHP Extensions
+RUN install-php-extensions \
+    bcmath \
+    exif \
+    fileinfo \
+    gd \
+    gmp \
+    intl \
+    pcntl \
+    pdo_mysql \
+    zip
 
-#  Update npm and composer
-RUN apt install -y nodejs npm
-RUN npm install -g n
-RUN n stable
-RUN npm install -g npm@latest
+# Install Composer
+COPY --from=composer:2 /usr/bin/composer /usr/local/bin/composer
 
-#  Update Composer
-RUN composer self-update --2
+# Bring the docker file in to allow for internal reboot
+COPY ./docker /usr/local/bin/docker
+RUN chmod 775 /usr/local/bin/docker
 
-#  Basic scripts for Starting, Initializing and Updating Tech Bench App
-COPY ./download_tb.sh /scripts/
-COPY ./startup.sh /scripts/
-COPY ./update.sh /scripts/
-COPY ./setup.sh /scripts/
-COPY ./scheduler.sh /scripts/
-COPY ./_functions.sh /scripts/
-COPY ./install.sh /scripts/
+# Create a group and user to run the Docker file permissions
+RUN addgroup --gid 999 docker
+RUN usermod -a -G docker tbuser
 
-#  Set permissions for the scripts to allow them to run
-RUN chmod 775 /scripts/*
-RUN chmod 775 /app
-RUN chmod 775 /opt/bitnami/php -R
+# Use the default production configuration
+RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
-# Create the staging directory
-RUN mkdir /staging
-RUN chmod 777 /staging
+# Build Healthcheck
+HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
+    CMD php artisan health:check
 
-WORKDIR /app
+# Copy the official MySQL client binaries
+COPY --from=mysql /usr/bin/mysql /usr/bin/mysql
+COPY --from=mysql /usr/bin/mysqldump /usr/bin/mysqldump
+COPY --from=mysql /usr/bin/mysqladmin /usr/bin/mysqladmin
 
-ENTRYPOINT [ "/scripts/startup.sh" ]
+# Change the owner of the /var/html folder to allow tbuser to write to it
+RUN chown tbuser:www-data -R /var/www
+
+# Finalize Image
+USER tbuser
+WORKDIR /var/www/html

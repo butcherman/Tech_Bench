@@ -4,7 +4,6 @@ import FieldsetWrapperEditor from "./Nodes/FieldsetWrapperEditor.vue";
 import GridWrapperEditor from "./Nodes/GridWrapperEditor.vue";
 import InputNodeEditor from "./Nodes/InputNodeEditor.vue";
 import StaticNodeEditor from "./Nodes/StaticNodeEditor.vue";
-import TaskListEditor from "./Nodes/TaskListEditor.vue";
 import TextNodeEditor from "./Nodes/TextNodeEditor.vue";
 import UnknownNode from "../WorkbookNodes/UnknownNode.vue";
 import { computed } from "vue";
@@ -29,8 +28,6 @@ const component = computed(() => {
             return DataTableEditor;
         case "input":
             return InputNodeEditor;
-        case "task-list":
-            return TaskListEditor;
         default:
             return UnknownNode;
     }
