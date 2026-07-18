@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-@config '../../tailwind.config.js';
+/* @config '../../tailwind.config.js'; */
 
 /*
   The default border color has changed to `currentcolor` in Tailwind CSS v4,
@@ -10,7 +10,7 @@
   If we ever want to remove these styles, we need to add an explicit border
   color utility to any element that depends on these defaults.
 */
-@layer base {
+/* @layer base {
     *,
     ::after,
     ::before,
@@ -18,20 +18,20 @@
     ::file-selector-button {
         border-color: var(--color-gray-200, currentcolor);
     }
-}
+} */
 
-.pointer {
+/* .pointer {
     cursor: pointer;
 }
 
 .mask-field {
     @apply blur-xs hover:blur-none;
-}
+} */
 
 /**
 * Classes to quickly set Card Component sizes
 */
-.tb-card {
+/* .tb-card {
     @apply w-full md:w-3/4 xl:w-1/2 my-3;
 }
 
@@ -45,12 +45,12 @@
 
 .tb-card-lg {
     @apply w-full;
-}
+} */
 
 /**
 * Standard margins for keeping spacing uniform
 */
-.tb-gap {
+/* .tb-gap {
     @apply my-3 mx-3;
 }
 
@@ -61,7 +61,11 @@
 .tb-gap-y {
     @apply my-3;
 }
+*/
 
+/**
+* Base styles applied to all pages
+*/
 @layer base {
     a {
         @apply hover:font-semibold;
@@ -115,7 +119,7 @@
 /**
 * Separation line with text in middle
 */
-div.separator {
+/* div.separator {
     display: flex;
     align-items: center;
     text-align: center;
@@ -136,4 +140,4 @@ div.separator {
     &:not(:empty)::after {
         margin-left: 0.25em;
     }
-}
+} */
