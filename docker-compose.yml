@@ -20,14 +20,16 @@ services:
     # Application Container
     tech_bench:
         container_name: tech_bench
-        image: butcherman/tech_bench_app:${APP_VERSION:-latest}
         restart: unless-stopped
-        stop_signal: SIGTERM
+        image: butcherman/tech_bench_app:${APP_VERSION:-latest}
         volumes:
-            - appData:/var/www/html
-            - ./.env:/var/www/html/.env
+            - appData:/app
+            - ./.env:/app/.env
+            # - ./backupData:/app/storage/backups/tech-bench
+            # - ./logData:/app/storage/logs
         environment:
             - SERVICE=app
+            - TB_URL=${BASE_URL}
         networks:
             - app-tier
         depends_on:
@@ -36,108 +38,101 @@ services:
 
     # NGINX Web Server
     nginx:
+        image: butcherman/tech_bench_nginx:1.1
         container_name: nginx
-        image: butcherman/tech_bench_nginx:2.0
         restart: unless-stopped
-        stop_signal: SIGTERM
         volumes:
-            - appData:/var/www/html
-            - ./.env:/var/www/html/.env
+            - appData:/app
+            - ./.env:/app/.env
+        environment:
+            - TB_URL=${BASE_URL}
         ports:
             - "80:80"
             - "443:443"
         networks:
             - app-tier
         depends_on:
-            database:
-                condition: service_started
-            reverb:
-                condition: service_started
+            - tech_bench
+            - reverb
 
     #  Reverb Container for Websockets
     reverb:
         container_name: reverb
-        image: butcherman/tech_bench_app:${APP_VERSION:-latest}
         restart: unless-stopped
-        stop_signal: SIGTERM
+        image: butcherman/tech_bench_app:${APP_VERSION:-latest}
         volumes:
-            - appData:/var/www/html
-            - ./.env:/var/www/html/.env
+            - appData:/app
+            - ./.env:/app/.env
+        environment:
+            - SERVICE=reverb
         networks:
             - app-tier
-        command: ['php', '/var/www/html/artisan', 'reverb:start']
         depends_on:
-            tech_bench:
-                condition: service_healthy
+            - tech_bench
 
     #  Horizon Container to run background jobs
     horizon:
         container_name: horizon
-        image: butcherman/tech_bench_app:${APP_VERSION:-latest}
         restart: unless-stopped
-        stop_signal: SIGTERM
+        image: butcherman/tech_bench_app:${APP_VERSION:-latest}
         volumes:
-            - appData:/var/www/html
-            - ./.env:/var/www/html/.env
+            - appData:/app
+            - ./.env:/app/.env
+        environment:
+            - SERVICE=horizon
         networks:
             - app-tier
-        command: ["php", "/var/www/html/artisan", "horizon"]
         depends_on:
-            tech_bench:
-                condition: service_healthy
-            nginx:
-                condition: service_healthy
+            - tech_bench
+            - nginx
 
     #  Scheduler Container
     scheduler:
         container_name: scheduler
-        image: butcherman/tech_bench_app:${APP_VERSION:-latest}
         restart: unless-stopped
-        stop_signal: SIGTERM
+        image: butcherman/tech_bench_app:${APP_VERSION:-latest}
         volumes:
-            - appData:/var/www/html
-            - ./.env:/var/www/html/.env
+            - appData:/app
+            - ./.env:/app/.env
+        environment:
+            - SERVICE=scheduler
         networks:
             - app-tier
-        command: ["php", "/var/www/html/artisan", "schedule:work"]
         depends_on:
-            tech_bench:
-                condition: service_healthy
-            nginx:
-                condition: service_healthy
+            - tech_bench
+            - nginx
 
     # MySQL Database Container
     database:
+        image: butcherman/tech_bench_database:1.0
         container_name: database
-        image: butcherman/tech_bench_database:2.0
         restart: unless-stopped
-        stop_signal: SIGTERM
         volumes:
-            - dbData:/var/lib/mysql
+            - dbData:/bitnami/mysql/data
         networks:
             - app-tier
+        healthcheck:
+            test: ['CMD', '/opt/bitnami/scripts/mysql/healthcheck.sh']
+            interval: 15s
+            timeout: 5s
+            retries: 6
 
     #  Redis Container for Cache, Job and Email Queuing
     redis:
+        image: butcherman/tech_bench_redis:1.0
         container_name: redis
-        image: butcherman/tech_bench_redis:2.0
         restart: unless-stopped
-        stop_signal: SIGTERM
         volumes:
-            - redisData:/data
+            - redisData:/bitnami/redis/data
         networks:
             - app-tier
 
     # Melisearch Container for Search Engine
     meilisearch:
+        image: butcherman/tech_bench_meilisearch:1.0
         container_name: meilisearch
-        image: butcherman/tech_bench_meilisearch:1.1
         restart: unless-stopped
-        stop_signal: SIGTERM
         volumes:
             - meilisearchData:/meili_data
         networks:
             - app-tier
-        depends_on:
-            database:
-                condition: service_healthy

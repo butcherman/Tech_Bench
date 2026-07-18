@@ -1,7 +1,7 @@
 {
     "name": "butcherman/tech_bench",
     "type": "project",
-    "description": "Tech Bench is a custom Content Management System (CMS) built to aid service technicians by allowing them to store and share information for the systems and customers they maintain.",
+    "description": "Tech Bench is a Laravel-based Customer Information and Knowledge Management System built specifically for field service organizations",
     "keywords": [
         "framework",
         "laravel",
