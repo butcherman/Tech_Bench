@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { InputText } from "primevue";
 import { onMounted, onUnmounted, ref, watch } from "vue";
 import {
     isPagePublic,
@@ -8,6 +9,7 @@ import {
     taskLists,
     whoAmI,
 } from "@/Composables/Workbook/CustomerWorkbook.module";
+import BaseBadge from "@/Components/_Base/Badges/BaseBadge.vue";
 
 const props = defineProps<{
     index: string;
@@ -19,6 +21,7 @@ const props = defineProps<{
 }>();
 
 const thisTaskList = ref<workbookTaskListEntry[]>([]);
+const newTask = ref<string>();
 
 /**
  * Initialize and populate the task list
@@ -85,6 +88,32 @@ const updateTaskItem = (event: Event, item: workbookTaskListEntry) => {
 
     item.completed = isComplete ? "now" : null;
     item.completed_by = "me";
+};
+
+/**
+ * Add a new Task List item
+ */
+const addItem = () => {
+    if (isPreviewMode.value) {
+        alert("Preview Mode - Use Item Form to add or remove items");
+    }
+
+    if (newTask.value?.length) {
+        let newItem = {
+            list_index: props.index,
+            list_item: newTask.value,
+            order: thisTaskList.value.length,
+            completed: null,
+            completed_by: null,
+            value_type: "task-list-item",
+            public: isPagePublic.value,
+        };
+
+        saveWorkbookValue(newItem);
+        thisTaskList.value.push(newItem);
+
+        newTask.value = undefined;
+    }
 };
 
 /**
@@ -186,6 +215,21 @@ onUnmounted(() => (taskListInitComplete.value = false));
                     </div>
                 </div>
             </template>
+            <div v-if="allowAddRow" class="relative w-full">
+                <InputText
+                    v-model="newTask"
+                    class="w-full"
+                    placeholder="Create New Task"
+                    @keyup.enter="addItem"
+                />
+                <div class="absolute inset-y-0 right-1 flex items-center">
+                    <BaseBadge
+                        icon="check"
+                        :variant="newTask?.length ? 'success' : 'light'"
+                        @click="addItem"
+                    />
+                </div>
+            </div>
         </div>
     </div>
 </template>
