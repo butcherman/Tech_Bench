@@ -1,6 +1,29 @@
-import { createInertiaApp } from "@inertiajs/vue3";
+import { createInertiaApp, Head, Link } from "@inertiajs/vue3";
 
-// CSS Styling provided by TailwindCSS
+/*
+|-------------------------------------------------------------------------------
+| CSS Style Sheets
+|-------------------------------------------------------------------------------
+*/
 import "../css/app.css";
 
-createInertiaApp();
+/*
+|-------------------------------------------------------------------------------
+| Font Awesome
+|-------------------------------------------------------------------------------
+*/
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { fas } from "@fortawesome/free-solid-svg-icons";
+import { far } from "@fortawesome/free-regular-svg-icons";
+
+library.add(fas);
+library.add(far);
+
+createInertiaApp({
+    withApp(app) {
+        app.component("fa-icon", FontAwesomeIcon)
+            .component("Link", Link)
+            .component("Head", Head);
+    },
+});
