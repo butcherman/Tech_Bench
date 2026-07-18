@@ -11,13 +11,17 @@ import {
     isPagePublic,
     saveWorkbookValue,
     wbHash,
+    whoAmI,
 } from "@/Composables/Workbook/CustomerWorkbook.module.js";
+import { useAuthStore } from "@/Stores/AuthStore.js";
 
 const props = defineProps<{
     workbookSkeleton: workbookWrapper;
     workbookValues: { [key: string]: any };
     taskLists: workbookTaskList[];
 }>();
+
+const authStore = useAuthStore();
 
 /**
  * Icon to show during loading and idle periods
@@ -104,6 +108,15 @@ onMounted(() => {
      * Populate the Task Lists
      */
     initTaskLists(props.taskLists);
+
+    /**
+     * Name the user
+     */
+    if (authStore.user) {
+        whoAmI.value = authStore.user.full_name;
+    } else {
+        console.log("who am i?");
+    }
 });
 </script>
 

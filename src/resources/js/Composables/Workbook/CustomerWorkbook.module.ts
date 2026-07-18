@@ -3,6 +3,7 @@ import { computed, ref } from "vue";
 import { dataPut } from "../axiosWrapper.module";
 
 const bodyCopy = ref<workbookPage[]>();
+export const whoAmI = ref<string>();
 export const isPreviewMode = ref<boolean>(false);
 export const activePage = ref<string>("0");
 export const wbHash = ref<string>();

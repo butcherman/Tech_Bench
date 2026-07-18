@@ -5,6 +5,7 @@ import {
     saveWorkbookValue,
     taskListInitComplete,
     taskLists,
+    whoAmI,
 } from "@/Composables/Workbook/CustomerWorkbook.module";
 
 const props = defineProps<{
@@ -76,11 +77,12 @@ const updateTaskItem = (event: Event, item: workbookTaskListEntry) => {
         list_item: item.list_item,
         order: item.order,
         completed: isComplete,
-        completed_by: "misc",
+        completed_by: whoAmI.value ?? "unknown",
         value_type: "task-list-item",
     });
 
     item.completed = isComplete ? "now" : null;
+    item.completed_by = "me";
 };
 
 watch(taskListInitComplete, (check) => {
@@ -130,7 +132,8 @@ onMounted(() => {
                         {{ item.list_item }}
                     </div>
                     <div v-if="item.completed !== null" class="text-slate-500">
-                        Completed {{ item.completed }}
+                        Completed {{ item.completed }} by
+                        {{ item.completed_by }}
                     </div>
                 </div>
             </template>
