@@ -1,24 +1,25 @@
-import ErrorModal from "./ErrorModal.vue";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import WhoAreYouModal from "./WhoAreYouModal.vue";
 import { createApp, h } from "vue";
 
-export default (status: number | undefined, message: string) => {
-    return errorModal(status, message);
+export default (): Promise<string> => {
+    return whoAreYou();
 };
 
-const errorModal = (status: number | undefined, message: string) => {
-    const promise = new Promise(function (resolve) {
-        let okClicked = false;
+const whoAreYou = (): Promise<string> => {
+    const promise: Promise<string> = new Promise(function (resolve) {
+        let myName = "";
+
         const newComp = createApp({
             setup() {
                 return () =>
-                    h(ErrorModal, {
-                        message: message,
-                        status: status,
-                        onHide: () => resolve(okClicked),
+                    h(WhoAreYouModal, {
+                        onSubmitted: (res) => (myName = res),
+                        onHide: () => resolve(myName),
                         onHidden: () => unmount(),
                     });
             },
-        });
+        }).component("fa-icon", FontAwesomeIcon);
 
         /**
          * Mount and show the new OK Modal

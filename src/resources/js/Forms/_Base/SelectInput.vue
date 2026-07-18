@@ -95,6 +95,12 @@ const {
                 :option-value="optionValue"
                 :option-group-label="groupTextField"
                 :option-group-children="groupChildrenField"
+                :pt="{
+                    overlay: {
+                        class: '!z-9999',
+                        style: 'border 1px solid red',
+                    },
+                }"
                 @focus="onFocus"
                 @blur="onBlur"
                 @change="$emit('change', $event)"
