@@ -56,6 +56,8 @@ export const saveWorkbookValue = (saveData: workbookSaveData): void => {
     ).catch((err) => {
         hasError.value = true;
 
+        console.log(err);
+
         let message =
             "Unable to save data.  Please refresh page and try again.";
         errorModal(err.status, message);

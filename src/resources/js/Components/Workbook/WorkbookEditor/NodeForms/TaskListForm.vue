@@ -91,7 +91,7 @@ const saveData = handleSubmit((form) => {
                 />
                 <SwitchInput
                     id="allow-add-row"
-                    name="allowAddrow"
+                    name="allowAddRow"
                     label="Allow Add New Items"
                 />
                 <SwitchInput

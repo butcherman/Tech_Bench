@@ -70,8 +70,6 @@ const buildTaskList = () => {
  * Update the completed status of a list item
  */
 const updateTaskItem = (event: Event, item: workbookTaskListEntry) => {
-    console.log("update", item, event);
-
     let target = event.target as HTMLInputElement;
     let isComplete: boolean = target.checked;
 
@@ -87,6 +85,28 @@ const updateTaskItem = (event: Event, item: workbookTaskListEntry) => {
 
     item.completed = isComplete ? "now" : null;
     item.completed_by = "me";
+};
+
+/**
+ * Delete a task list item
+ */
+const deleteItem = (item: workbookTaskListEntry) => {
+    if (isPreviewMode.value) {
+        alert("Preview Mode - Use Item Form to add or remove items");
+    }
+
+    saveWorkbookValue({
+        list_index: props.index,
+        list_item: item.list_item,
+        order: item.order,
+        completed_by: whoAmI.value ?? "unknown",
+        value_type: "task-list-item",
+        public: isPagePublic.value,
+        delete_item: true,
+    });
+
+    let index = thisTaskList.value.findIndex((listItem) => listItem === item);
+    thisTaskList.value.splice(index, 1);
 };
 
 watch(taskListInitComplete, (check) => {
@@ -144,6 +164,15 @@ onUnmounted(() => (taskListInitComplete.value = false));
                             }"
                         >
                             {{ item.list_item }}
+                        </div>
+                        <div v-if="allowDeleteRow">
+                            <span
+                                class="text-danger pointer"
+                                v-tooltip.left="'Delete Task'"
+                                @click="deleteItem(item)"
+                            >
+                                <fa-icon icon="trash-alt" />
+                            </span>
                         </div>
                     </div>
                     <div

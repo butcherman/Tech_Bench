@@ -54,6 +54,7 @@ class WorkbookValueRequest extends FormRequest
                 'list_index' => ['required', 'string'],
                 'list_item' => ['required', 'string'],
                 'order' => ['required', 'numeric'],
+                'delete_item' => ['nullable', 'boolean'],
                 'value_type' => ['required', Rule::enum(WorkbookValueType::class)],
             ],
             // TODO - Default throw exception

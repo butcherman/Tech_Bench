@@ -228,6 +228,10 @@ class CustomerWorkbookService
             'completed' => $requestData->get('completed') ? Carbon::now() : null,
             'completed_by' => $requestData->get('completed') ? $requestData->get('completed_by') : null,
         ]);
+
+        if ($requestData->get('delete_item')) {
+            $updatable->delete();
+        }
     }
 
     /*
