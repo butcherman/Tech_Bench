@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import Card from "../_Base/Card.vue";
+import whoAreYou from "@/Modules/whoAreYou/index.js";
 import WorkbookBody from "./WorkbookBody.vue";
 import WorkbookHeader from "./WorkbookHeader.vue";
 import { isLoading } from "@/Composables/axiosWrapper.module.js";
 import { computed, onMounted, provide } from "vue";
+import { useAuthStore } from "@/Stores/AuthStore.js";
 import { useForm } from "vee-validate";
 import {
     hasError,
@@ -13,7 +15,6 @@ import {
     wbHash,
     whoAmI,
 } from "@/Composables/Workbook/CustomerWorkbook.module.js";
-import { useAuthStore } from "@/Stores/AuthStore.js";
 
 const props = defineProps<{
     workbookSkeleton: workbookWrapper;
@@ -116,6 +117,11 @@ onMounted(() => {
         whoAmI.value = authStore.user.full_name;
     } else {
         console.log("who am i?");
+        whoAreYou().then((res: string) => {
+            if (res) {
+                whoAmI.value = res;
+            }
+        });
     }
 });
 </script>
