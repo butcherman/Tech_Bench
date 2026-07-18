@@ -2,12 +2,9 @@
 
 namespace App\Services\Customer;
 
-use App\Enums\WorkbookValueType;
 use App\Models\CustomerEquipment;
 use App\Models\CustomerEquipmentWorkbook;
 use App\Models\WorkbookTableValue;
-use App\Models\WorkbookTaskList;
-use App\Models\WorkbookTaskListItem;
 use App\Models\WorkbookValue;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
@@ -144,94 +141,25 @@ class CustomerWorkbookService
      */
     public function saveWorkbookValue(CustomerEquipmentWorkbook $workbook, Collection $requestData): void
     {
-        match ($requestData->get('value_type')) {
-            WorkbookValueType::input->value => $this->saveInputValue($workbook, $requestData),
-            WorkbookValueType::dataTable->value => $this->saveTableDataValue($workbook, $requestData),
-            WorkbookValueType::taskList->value => $this->saveTaskListValue($workbook, $requestData),
-            WorkbookValueType::taskListItem->value => $this->saveTaskListItemValue($workbook, $requestData),
-        };
-    }
-
-    /**
-     * Value for standard input
-     */
-    protected function saveInputValue(CustomerEquipmentWorkbook $workbook, Collection $requestData): void
-    {
-        $updatable = WorkbookValue::firstOrCreate([
-            'wb_id' => $workbook->wb_id,
-            'index' => $requestData->get('index'),
-        ]);
-
-        $updatable->update([
-            'value' => $requestData->get('value'),
-            'public' => $requestData->get('public'),
-        ]);
-    }
-
-    /**
-     * Value for a Data Table
-     */
-    protected function saveTableDataValue(CustomerEquipmentWorkbook $workbook, Collection $requestData): void
-    {
-        $updatable = WorkbookTableValue::firstOrCreate([
-            'wb_id' => $workbook->wb_id,
-            'table_index' => $requestData->get('table_index'),
-            'row_index' => $requestData->get('row_index'),
-            'column_name' => $requestData->get('column_name'),
-        ]);
-
-        $updatable->update([
-            'value' => $requestData->get('value'),
-            'public' => $requestData->get('public'),
-        ]);
-    }
-
-    /**
-     * Overall Task List values (admin values)
-     */
-    protected function saveTaskListValue(CustomerEquipmentWorkbook $workbook, Collection $requestData): void
-    {
-        $taskList = WorkbookTaskList::firstOrCreate([
-            'wb_id' => $workbook->wb_id,
-            'list_index' => $requestData->get('list_index'),
-        ]);
-
-        // If this list was just created, we need to add the default data
-        if ($taskList->wasRecentlyCreated) {
-            $defaultList = $requestData->get('workbook_task_list_item');
-
-            foreach ($defaultList as $item) {
-                $item['list_id'] = $taskList->list_id;
-                WorkbookTaskListItem::create($item);
-            }
+        if (! $requestData->get('isTable')) {
+            $updatable = WorkbookValue::firstOrCreate([
+                'wb_id' => $workbook->wb_id,
+                'index' => $requestData->get('index'),
+            ]);
         }
 
-        $taskList->update([
-            'public' => $requestData->get('public'),
-            'locked' => $requestData->get('locked'),
-        ]);
-    }
-
-    /**
-     * Value for Task List Item
-     */
-    protected function saveTaskListItemValue(CustomerEquipmentWorkbook $workbook, Collection $requestData): void
-    {
-        $taskList = WorkbookTaskList::where('wb_id', $workbook->wb_id)->first();
-
-        $updatable = WorkbookTaskListItem::firstOrCreate([
-            'list_id' => $taskList->list_id,
-            'list_item' => $requestData->get('list_item'),
-        ]);
-        $updatable->update([
-            'order' => $requestData->get('order'),
-            'completed' => $requestData->get('completed') ? Carbon::now() : null,
-            'completed_by' => $requestData->get('completed') ? $requestData->get('completed_by') : null,
-        ]);
-
-        if ($requestData->get('delete_item')) {
-            $updatable->delete();
+        if ($requestData->get('isTable')) {
+            $updatable = WorkbookTableValue::firstOrCreate([
+                'wb_id' => $workbook->wb_id,
+                'table_index' => $requestData->get('table_index'),
+                'row_index' => $requestData->get('row_index'),
+                'column_name' => $requestData->get('column_name'),
+            ]);
         }
+
+        $updatable->value = $requestData->get('value');
+        $updatable->public = $requestData->get('public');
+        $updatable->save();
     }
 
     /*

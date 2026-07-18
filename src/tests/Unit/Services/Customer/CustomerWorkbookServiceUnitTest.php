@@ -6,8 +6,6 @@ use App\Models\CustomerEquipment;
 use App\Models\CustomerEquipmentWorkbook;
 use App\Models\EquipmentWorkbook;
 use App\Models\WorkbookTableValue;
-use App\Models\WorkbookTaskList;
-use App\Models\WorkbookTaskListItem;
 use App\Models\WorkbookValue;
 use App\Services\Customer\CustomerWorkbookService;
 use Carbon\Carbon;
@@ -248,7 +246,7 @@ class CustomerWorkbookServiceUnitTest extends TestCase
             'value' => 'random val',
             'index' => Str::uuid(),
             'public' => false,
-            'value_type' => 'input',
+            'isTable' => false,
         ];
         $workbook = CustomerEquipmentWorkbook::factory()->create();
 
@@ -268,7 +266,7 @@ class CustomerWorkbookServiceUnitTest extends TestCase
         $data = [
             'value' => 'random val',
             'public' => false,
-            'value_type' => 'data-table',
+            'isTable' => true,
             'table_index' => Str::uuid(),
             'row_index' => Str::uuid(),
             'column_name' => 'Table Col',
@@ -285,98 +283,6 @@ class CustomerWorkbookServiceUnitTest extends TestCase
             'value' => $data['value'],
             'public' => $data['public'],
         ]);
-    }
-
-    public function test_save_workbook_value_task_list(): void
-    {
-        $data = [
-            'list_index' => $listIndex = Str::uuid(),
-            'locked' => false,
-            'public' => true,
-            'workbook_task_list_item' => [
-                [
-                    'list_index' => $listIndex,
-                    'list_item' => 'item 1',
-                    'order' => 0,
-                ],
-                [
-                    'list_index' => $listIndex,
-                    'list_item' => 'item 2',
-                    'order' => 1,
-                ],
-                [
-                    'list_index' => $listIndex,
-                    'list_item' => 'item 3',
-                    'order' => 2,
-                ],
-            ],
-            'value_type' => 'task-list',
-        ];
-
-        $workbook = CustomerEquipmentWorkbook::factory()->create();
-
-        $testObj = new CustomerWorkbookService;
-        $testObj->saveWorkbookValue($workbook, collect($data));
-
-        $this->assertDatabaseHas('workbook_task_lists', [
-            'wb_id' => $workbook->wb_id,
-            'list_index' => $data['list_index'],
-        ]);
-    }
-
-    public function test_save_workbook_value_task_list_item(): void
-    {
-        $workbook = CustomerEquipmentWorkbook::factory()->create();
-        $taskList = WorkbookTaskList::factory()
-            ->create(['wb_id' => $workbook->wb_id]);
-
-        $data = [
-            'completed' => true,
-            'completed_by' => 'Billy Bob',
-            'file_id' => null,
-            'list_index' => $taskList->list_index,
-            'list_item' => 'item 1',
-            'order' => 0,
-            'value_type' => 'task-list-item',
-        ];
-
-        $testObj = new CustomerWorkbookService;
-        $testObj->saveWorkbookValue($workbook, collect($data));
-
-        $this->assertDatabaseHas('workbook_task_list_items', [
-            'list_id' => $taskList->list_id,
-            'list_item' => $data['list_item'],
-            'order' => $data['order'],
-            'completed_by' => $data['completed_by'],
-        ]);
-    }
-
-    public function test_save_workbook_value_task_delete_list_item(): void
-    {
-        $workbook = CustomerEquipmentWorkbook::factory()->create();
-        $taskList = WorkbookTaskList::factory()
-            ->create(['wb_id' => $workbook->wb_id]);
-
-        $data = [
-            'completed' => true,
-            'completed_by' => 'Billy Bob',
-            'file_id' => null,
-            'list_index' => $taskList->list_index,
-            'list_item' => 'item 1',
-            'order' => 0,
-            'value_type' => 'task-list-item',
-            'delete_item' => true,
-        ];
-
-        $testObj = new CustomerWorkbookService;
-        $testObj->saveWorkbookValue($workbook, collect($data));
-
-        $res = WorkbookTaskListItem::where('list_id', $taskList->list_id)
-            ->where('list_item', $data['list_item'])
-            ->withTrashed()
-            ->get();
-
-        $this->assertSoftDeleted($res);
     }
 
     /*

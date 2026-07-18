@@ -4,7 +4,6 @@ import FieldsetWrapper from "./FieldsetWrapper.vue";
 import GridWrapper from "./GridWrapper.vue";
 import InputNode from "./InputNode.vue";
 import StaticNode from "./StaticNode.vue";
-import TaskList from "./TaskList.vue";
 import TextNode from "./TextNode.vue";
 import UnknownNode from "./UnknownNode.vue";
 import { computed } from "vue";
@@ -29,8 +28,6 @@ const component = computed(() => {
             return DataTable;
         case "input":
             return InputNode;
-        case "task-list":
-            return TaskList;
         default:
             return UnknownNode;
     }

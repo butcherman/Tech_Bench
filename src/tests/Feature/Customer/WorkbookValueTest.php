@@ -36,7 +36,7 @@ class WorkbookValueTest extends TestCase
             'value' => 'random val',
             'index' => (string) Str::uuid(),
             'public' => true,
-            'value_type' => 'input',
+            'isTable' => false,
         ];
 
         $response = $this->put(route('cust-workbook.save-value', $workbook), $form);
@@ -66,7 +66,7 @@ class WorkbookValueTest extends TestCase
             'value' => 'random val',
             'index' => (string) Str::uuid(),
             'public' => false,
-            'value_type' => 'input',
+            'isTable' => false,
         ];
 
         $response = $this->put(route('cust-workbook.save-value', $workbook), $form);
@@ -96,7 +96,7 @@ class WorkbookValueTest extends TestCase
             'value' => 'random val',
             'index' => (string) Str::uuid(),
             'public' => true,
-            'value_type' => 'input',
+            'isTable' => false,
         ];
 
         $this->expectException(WorkbookNotPublishedException::class);
@@ -125,7 +125,7 @@ class WorkbookValueTest extends TestCase
             'value' => 'random val',
             'index' => (string) Str::uuid(),
             'public' => true,
-            'value_type' => 'input',
+            'isTable' => false,
         ];
 
         $response = $this->put(route('cust-workbook.save-value', $workbook), $form);
@@ -150,7 +150,7 @@ class WorkbookValueTest extends TestCase
             'value' => 'random val',
             'index' => (string) Str::uuid(),
             'public' => true,
-            'value_type' => 'input',
+            'isTable' => false,
         ];
 
         $this->expectException(FeatureDisabledException::class);
@@ -181,7 +181,7 @@ class WorkbookValueTest extends TestCase
             'value' => 'random val',
             'index' => (string) Str::uuid(),
             'public' => true,
-            'value_type' => 'input',
+            'isTable' => false,
         ];
 
         $response = $this->actingAs($user)
@@ -214,7 +214,7 @@ class WorkbookValueTest extends TestCase
             'value' => 'random val',
             'index' => (string) Str::uuid(),
             'public' => false,
-            'value_type' => 'input',
+            'isTable' => false,
         ];
 
         $response = $this->actingAs($user)
@@ -247,7 +247,7 @@ class WorkbookValueTest extends TestCase
             'value' => 'random val',
             'index' => (string) Str::uuid(),
             'public' => true,
-            'value_type' => 'input',
+            'isTable' => false,
         ];
 
         $response = $this->actingAs($user)
@@ -275,7 +275,7 @@ class WorkbookValueTest extends TestCase
             'value' => 'random val',
             'index' => (string) Str::uuid(),
             'public' => true,
-            'value_type' => 'input',
+            'isTable' => false,
         ];
 
         $this->expectException(FeatureDisabledException::class);

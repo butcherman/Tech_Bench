@@ -1,28 +1,21 @@
 <script setup lang="ts">
 import Card from "../_Base/Card.vue";
-import whoAreYou from "@/Modules/whoAreYou/index.js";
 import WorkbookBody from "./WorkbookBody.vue";
 import WorkbookHeader from "./WorkbookHeader.vue";
 import { isLoading } from "@/Composables/axiosWrapper.module.js";
 import { computed, onMounted, provide } from "vue";
-import { useAuthStore } from "@/Stores/AuthStore.js";
 import { useForm } from "vee-validate";
 import {
     hasError,
-    initTaskLists,
     isPagePublic,
     saveWorkbookValue,
     wbHash,
-    whoAmI,
 } from "@/Composables/Workbook/CustomerWorkbook.module.js";
 
 const props = defineProps<{
     workbookSkeleton: workbookWrapper;
     workbookValues: { [key: string]: any };
-    taskLists: workbookTaskList[];
 }>();
-
-const authStore = useAuthStore();
 
 /**
  * Icon to show during loading and idle periods
@@ -67,7 +60,7 @@ const saveFieldValue = (index: string): void => {
         index,
         value: values[index],
         public: isPagePublic.value,
-        value_type: "input",
+        isTable: false,
     };
 
     saveWorkbookValue(saveData);
@@ -85,7 +78,7 @@ const saveTableCell = (
         column_name: columnName,
         value: values[tableIndex][arrayIndex][columnName],
         public: isPagePublic.value,
-        value_type: "data-table",
+        isTable: true,
     };
 
     saveWorkbookValue(saveData);
@@ -104,25 +97,6 @@ onMounted(() => {
             setFieldValue(valData.model.index, valData.model.value);
         },
     );
-
-    /**
-     * Populate the Task Lists
-     */
-    initTaskLists(props.taskLists);
-
-    /**
-     * Name the user
-     */
-    if (authStore.user) {
-        whoAmI.value = authStore.user.full_name;
-    } else {
-        console.log("who am i?");
-        whoAreYou().then((res: string) => {
-            if (res) {
-                whoAmI.value = res;
-            }
-        });
-    }
 });
 </script>
 

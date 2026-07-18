@@ -19,7 +19,6 @@ const props = defineProps<{
     equipment: customerEquipment;
     workbook: customerWorkbook;
     workbookValues?: { [key: string]: string };
-    taskLists?: workbookTaskList[];
 }>();
 
 onMounted(() => {
@@ -64,10 +63,9 @@ export default { layout: PublicLayout };
                     </Card>
                 </template>
                 <WorkbookWrapper
-                    v-if="workbookValues && taskLists"
+                    v-if="workbookValues"
                     :workbook-skeleton="workbook.parsed_workbook"
                     :workbook-values="workbookValues"
-                    :task-lists="taskLists"
                 />
             </Deferred>
         </div>
