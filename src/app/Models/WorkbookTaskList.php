@@ -2,9 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Broadcasting\Channel;
-use Illuminate\Database\Eloquent\BroadcastableModelEventOccurred;
-use Illuminate\Database\Eloquent\BroadcastsEvents;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -12,7 +9,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class WorkbookTaskList extends Model
 {
-    use BroadcastsEvents;
     use HasFactory;
 
     /** @var array<int, string> */
@@ -55,25 +51,5 @@ class WorkbookTaskList extends Model
     public function WorkbookTaskListItem(): HasMany
     {
         return $this->hasMany(WorkbookTaskListItem::class, 'list_id', 'list_id');
-    }
-
-    /*
-    |---------------------------------------------------------------------------
-    | Model Broadcasting
-    |---------------------------------------------------------------------------
-    */
-    public function broadcastOn(string $event): array
-    {
-        return [
-            new Channel('equipment-workbook.'.$this->CustomerWorkbook->wb_hash),
-        ];
-    }
-
-    public function newBroadcastableModelEvent(string $event): BroadcastableModelEventOccurred
-    {
-        return (new BroadcastableModelEventOccurred(
-            $this,
-            $event
-        ))->dontBroadcastToCurrentUser();
     }
 }

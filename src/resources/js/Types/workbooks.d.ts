@@ -167,3 +167,7 @@ type workbookTaskListEntry = {
     file_id?: number;
     deleted_at?: string;
 };
+
+type workbookTaskListEvent = {
+    model: workbookTaskListEntry;
+};

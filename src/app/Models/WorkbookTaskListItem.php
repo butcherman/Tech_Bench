@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\BroadcastableModelEventOccurred;
 use Illuminate\Database\Eloquent\BroadcastsEvents;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class WorkbookTaskListItem extends Model
@@ -19,8 +20,9 @@ class WorkbookTaskListItem extends Model
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
     /** @var array<int, string> */
-    protected $hidden = ['id', 'list_id', 'CustomerWorkbook', 'public', 'created_at'];
+    protected $hidden = ['id', 'list_id', 'CustomerWorkbook', 'WorkbookTaskList'];
 
+    /** @var array<int, string> */
     protected function casts(): array
     {
         return [
@@ -34,21 +36,31 @@ class WorkbookTaskListItem extends Model
 
     /*
     |---------------------------------------------------------------------------
+    | Relationships
+    |---------------------------------------------------------------------------
+    */
+    public function WorkbookTaskList(): BelongsTo
+    {
+        return $this->belongsTo(WorkbookTaskList::class, 'list_id', 'list_id');
+    }
+
+    /*
+    |---------------------------------------------------------------------------
     | Model Broadcasting
     |---------------------------------------------------------------------------
     */
-    // public function broadcastOn(string $event): array
-    // {
-    //     return [
-    //         new Channel('equipment-workbook.'.$this->CustomerWorkbook->wb_hash),
-    //     ];
-    // }
+    public function broadcastOn(string $event): array
+    {
+        return [
+            new Channel('workbook-task-list.'.$this->WorkbookTaskList->list_index),
+        ];
+    }
 
-    // public function newBroadcastableModelEvent(string $event): BroadcastableModelEventOccurred
-    // {
-    //     return (new BroadcastableModelEventOccurred(
-    //         $this,
-    //         $event
-    //     ))->dontBroadcastToCurrentUser();
-    // }
+    public function newBroadcastableModelEvent(string $event): BroadcastableModelEventOccurred
+    {
+        return (new BroadcastableModelEventOccurred(
+            $this,
+            $event
+        ))->dontBroadcastToCurrentUser();
+    }
 }

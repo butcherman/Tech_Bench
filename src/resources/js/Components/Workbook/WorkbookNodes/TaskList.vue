@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 import {
     isPagePublic,
     saveWorkbookValue,
@@ -87,6 +87,28 @@ watch(taskListInitComplete, (check) => {
     if (check) {
         initTaskList();
     }
+});
+
+onMounted(() => {
+    Echo.channel(`workbook-task-list.${props.index}`).listen(
+        ".WorkbookTaskListItemUpdated",
+        (updatedModel: workbookTaskListEvent) => {
+            let modifiedList = taskLists.value.find(
+                (lst) => lst.list_index === props.index,
+            );
+
+            if (modifiedList) {
+                let modifiedItem = modifiedList.workbook_task_list_item?.find(
+                    (item) => item.list_item === updatedModel.model.list_item,
+                );
+
+                if (modifiedItem) {
+                    modifiedItem.completed = updatedModel.model.completed;
+                    modifiedItem.completed_by = updatedModel.model.completed_by;
+                }
+            }
+        },
+    );
 });
 </script>
 
