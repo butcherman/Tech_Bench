@@ -137,7 +137,9 @@ type workbookSaveData =
     | ({
           value_type: "data-table" | "input" | "task-list";
       } & workbookValue)
-    | workbookTableValue;
+    | workbookTableValue
+    | workbookTaskList
+    | workbookTaskListEntry;
 
 type workbookValidationData = {
     [key: string]: {
@@ -151,11 +153,13 @@ type workbookValidationData = {
 type workbookTaskList = {
     list_index: string;
     locked: boolean;
-    updated_at: string;
-    workbook_task_list_item: workbookTaskListEntry[];
+    updated_at?: string;
+    public: boolean;
+    workbook_task_list_item?: workbookTaskListEntry[];
 };
 
 type workbookTaskListEntry = {
+    list_index?: string;
     list_item: string;
     order: number;
     completed: string | null;

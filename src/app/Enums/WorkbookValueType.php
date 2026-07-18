@@ -13,4 +13,5 @@ enum WorkbookValueType: string
     case input = 'input';
     case dataTable = 'data-table';
     case taskList = 'task-list';
+    case taskListItem = 'task-list-item';
 }

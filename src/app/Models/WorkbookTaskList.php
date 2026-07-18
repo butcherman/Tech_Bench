@@ -24,6 +24,9 @@ class WorkbookTaskList extends Model
     /** @var array<int, string> */
     protected $with = ['WorkbookTaskListItem'];
 
+    /** @var string */
+    protected $primaryKey = 'list_id';
+
     protected function casts(): array
     {
         return [

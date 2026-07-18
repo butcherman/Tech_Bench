@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('list_id');
             $table->text('list_item');
-            $table->integer('order');
+            $table->integer('order')->default(9999);
             $table->timestamp('completed')->nullable();
             $table->text('completed_by')->nullable();
             $table->unsignedBigInteger('file_id')->nullable();
