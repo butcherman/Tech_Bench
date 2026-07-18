@@ -48,15 +48,15 @@ class WorkbookValueRequest extends FormRequest
                 'value_type' => ['required', Rule::enum(WorkbookValueType::class)],
             ],
             WorkbookValueType::taskListItem->value => [
-                'completed' => ['nullable', 'string'],
+                'completed' => ['nullable', 'boolean'],
                 'completed_by' => ['nullable', 'string'],
                 'file_id' => ['nullable', 'numeric'],
                 'list_index' => ['required', 'string'],
                 'list_item' => ['required', 'string'],
                 'order' => ['required', 'numeric'],
-                'public' => ['required', 'boolean'],
                 'value_type' => ['required', Rule::enum(WorkbookValueType::class)],
             ],
+            // TODO - Default throw exception
         };
     }
 }

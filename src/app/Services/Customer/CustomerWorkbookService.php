@@ -225,8 +225,8 @@ class CustomerWorkbookService
         ]);
         $updatable->update([
             'order' => $requestData->get('order'),
-            'completed' => $requestData->get('completed'),
-            'completed_by' => $requestData->get('completed_by'),
+            'completed' => $requestData->get('completed') ? Carbon::now() : null,
+            'completed_by' => $requestData->get('completed') ? $requestData->get('completed_by') : null,
         ]);
     }
 

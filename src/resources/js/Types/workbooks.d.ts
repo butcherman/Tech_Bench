@@ -135,7 +135,7 @@ type workbookTableValue = {
 
 type workbookSaveData =
     | ({
-          value_type: "data-table" | "input" | "task-list";
+          value_type: "data-table" | "input" | "task-list" | "task-list-item";
       } & workbookValue)
     | workbookTableValue
     | workbookTaskList
@@ -162,7 +162,7 @@ type workbookTaskListEntry = {
     list_index?: string;
     list_item: string;
     order: number;
-    completed: string | null;
+    completed: boolean | string | null;
     completed_by: string | null;
     file_id?: number;
     deleted_at?: string;

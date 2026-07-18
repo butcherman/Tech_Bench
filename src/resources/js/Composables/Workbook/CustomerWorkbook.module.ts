@@ -66,7 +66,9 @@ export const saveWorkbookValue = (saveData: workbookSaveData): void => {
 | Task Lists
 |-------------------------------------------------------------------------------
 */
+export const taskListInitComplete = ref<boolean>(false);
 export const taskLists = ref<workbookTaskList[]>([]);
 export const initTaskLists = (list: workbookTaskList[]): void => {
     taskLists.value = list;
+    taskListInitComplete.value = true;
 };
