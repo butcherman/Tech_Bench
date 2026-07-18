@@ -79,6 +79,7 @@ const updateTaskItem = (event: Event, item: workbookTaskListEntry) => {
         completed: isComplete,
         completed_by: whoAmI.value ?? "unknown",
         value_type: "task-list-item",
+        public: isPagePublic.value,
     });
 
     item.completed = isComplete ? "now" : null;

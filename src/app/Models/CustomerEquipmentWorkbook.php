@@ -155,7 +155,7 @@ class CustomerEquipmentWorkbook extends Model
 
     public function PublicTaskLists(): HasMany
     {
-        return $this->TaskLists->where('public', true);
+        return $this->TaskLists()->where('public', true);
     }
 
     public function Customer(): BelongsTo
