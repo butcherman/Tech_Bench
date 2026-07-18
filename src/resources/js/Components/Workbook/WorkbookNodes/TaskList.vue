@@ -2,6 +2,7 @@
 import { onMounted, onUnmounted, ref, watch } from "vue";
 import {
     isPagePublic,
+    isPreviewMode,
     saveWorkbookValue,
     taskListInitComplete,
     taskLists,
@@ -54,13 +55,15 @@ const buildTaskList = () => {
     thisTaskList.value = listItems;
 
     // Save the new list to the database
-    saveWorkbookValue({
-        list_index: props.index,
-        public: isPagePublic.value,
-        locked: false,
-        value_type: "task-list",
-        workbook_task_list_item: listItems,
-    });
+    if (!isPreviewMode.value) {
+        saveWorkbookValue({
+            list_index: props.index,
+            public: isPagePublic.value,
+            locked: false,
+            value_type: "task-list",
+            workbook_task_list_item: listItems,
+        });
+    }
 };
 
 /**
@@ -112,6 +115,10 @@ onMounted(() => {
             }
         },
     );
+
+    if (isPreviewMode.value) {
+        initTaskList();
+    }
 });
 
 onUnmounted(() => (taskListInitComplete.value = false));
@@ -122,21 +129,31 @@ onUnmounted(() => (taskListInitComplete.value = false));
         <h3 class="text-center">{{ title }}</h3>
         <div>
             <template v-for="item in thisTaskList" :key="item">
-                <div class="flex gap-2 bg-sky-300 my-2 p-2 rounded-lg">
-                    <input
-                        type="checkbox"
-                        :checked="item.completed ? true : false"
-                        @change="updateTaskItem($event, item)"
-                    />
-                    <div
-                        class="text-lg grow"
-                        :class="{ 'line-through': item.completed }"
-                    >
-                        {{ item.list_item }}
+                <div class="bg-sky-300 my-2 p-2 rounded-lg">
+                    <div class="flex gap-2">
+                        <input
+                            type="checkbox"
+                            :checked="item.completed ? true : false"
+                            @change="updateTaskItem($event, item)"
+                        />
+                        <div
+                            class="text-lg grow"
+                            :class="{
+                                'line-through': item.completed,
+                                'text-center': centerList,
+                            }"
+                        >
+                            {{ item.list_item }}
+                        </div>
                     </div>
-                    <div v-if="item.completed !== null" class="text-slate-500">
-                        Completed {{ item.completed }} by
-                        {{ item.completed_by }}
+                    <div
+                        v-if="item.completed !== null"
+                        class="text-slate-500 flex flex-row-reverse"
+                    >
+                        <div class="text-xs">
+                            Completed {{ item.completed }} by
+                            {{ item.completed_by }}
+                        </div>
                     </div>
                 </div>
             </template>
