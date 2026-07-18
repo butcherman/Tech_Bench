@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from "vue";
+import { onMounted, onUnmounted, ref, watch } from "vue";
 import {
     isPagePublic,
     saveWorkbookValue,
@@ -113,6 +113,8 @@ onMounted(() => {
         },
     );
 });
+
+onUnmounted(() => (taskListInitComplete.value = false));
 </script>
 
 <template>
