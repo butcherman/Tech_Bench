@@ -1,8 +1,9 @@
-import { defineConfig, loadEnv } from "vite";
+import fs from "fs";
+import inertia from '@inertiajs/vite';
 import laravel from "laravel-vite-plugin";
 import tailwindcss from '@tailwindcss/vite';
 import vue from "@vitejs/plugin-vue";
-import fs from "fs";
+import { defineConfig, loadEnv } from "vite";
 
 export default defineConfig(({ mode }) => {
     process.env = { ...process.env, ...loadEnv(mode, process.cwd()) };
@@ -26,6 +27,7 @@ export default defineConfig(({ mode }) => {
                 },
             }),
             tailwindcss(),
+            inertia(),
         ],
         server: {
             https: {
