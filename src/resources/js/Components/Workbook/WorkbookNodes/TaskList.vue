@@ -79,6 +79,8 @@ const updateTaskItem = (event: Event, item: workbookTaskListEntry) => {
         completed_by: "misc",
         value_type: "task-list-item",
     });
+
+    item.completed = isComplete ? "now" : null;
 };
 
 watch(taskListInitComplete, (check) => {
@@ -93,12 +95,21 @@ watch(taskListInitComplete, (check) => {
         <h3 class="text-center">{{ title }}</h3>
         <div>
             <template v-for="item in thisTaskList" :key="item">
-                <div class="bg-sky-300 my-2 p-2 rounded-lg">
+                <div class="flex gap-2 bg-sky-300 my-2 p-2 rounded-lg">
                     <input
                         type="checkbox"
+                        :checked="item.completed ? true : false"
                         @change="updateTaskItem($event, item)"
                     />
-                    {{ item }}
+                    <div
+                        class="text-lg grow"
+                        :class="{ 'line-through': item.completed }"
+                    >
+                        {{ item.list_item }}
+                    </div>
+                    <div v-if="item.completed !== null" class="text-slate-500">
+                        Completed {{ item.completed }}
+                    </div>
                 </div>
             </template>
         </div>
