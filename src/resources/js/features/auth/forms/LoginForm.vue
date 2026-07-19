@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import PasswordInput from "@/core/forms/PasswordInput.vue";
+import SwitchInput from "@/core/forms/SwitchInput.vue";
 import TextInput from "@/core/forms/TextInput.vue";
 import VueForm from "@/core/forms/VueForm.vue";
 import { login } from "@/wayfinder/routes";
@@ -45,6 +46,12 @@ const validationSchema = object({
                 input-style="standard"
                 help="Enter your password"
                 hide-help
+            />
+            <SwitchInput
+                id="remember"
+                name="remember"
+                label="Remember Me"
+                center
             />
         </VueForm>
     </div>

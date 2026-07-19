@@ -5,6 +5,41 @@
 */
 
 export const useVariantHelper = () => {
+    /**
+     * Basic background color per variant
+     */
+    const getBackgroundClass = (variant: variantType): string => {
+        switch (variant) {
+            case "danger":
+                return "bg-rose-600";
+            case "dark":
+                return "bg-gray-900";
+            case "error":
+                return "bg-red-500";
+            case "help":
+                return "bg-violet-600";
+            case "info":
+                return "bg-blue-400";
+            case "light":
+                return "bg-neutral-300";
+            case "primary":
+                return "bg-blue-500";
+            case "secondary":
+                return "bg-blue-300";
+            case "success":
+                return "bg-green-500";
+            case "warning":
+                return "bg-yellow-400";
+            case "none":
+                return "";
+            default:
+                return "bg-blue-500";
+        }
+    };
+
+    /**
+     * Class information for buttons and other components
+     */
     const getVariantClass = (variant?: variantType): string => {
         switch (variant) {
             case "danger":
@@ -35,6 +70,7 @@ export const useVariantHelper = () => {
     };
 
     return {
+        getBackgroundClass,
         getVariantClass,
     };
 };

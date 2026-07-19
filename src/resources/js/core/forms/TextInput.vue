@@ -5,7 +5,7 @@ import { computed, Ref, ref, toRef } from "vue";
 const emit = defineEmits<{
     focus: [];
     blur: [];
-    change: [];
+    change: [string | undefined];
 }>();
 
 const props = defineProps<{
@@ -100,6 +100,7 @@ const {
                         :name="name"
                         @focus="onFocus"
                         @blur="onBlur"
+                        @change="$emit('change', value)"
                     />
                     <label :for="id">
                         {{ label }}
