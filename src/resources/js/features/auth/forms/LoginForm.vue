@@ -11,8 +11,8 @@ const initialValues = {
 };
 const validationSchema = object({
     username: string().required("Please enter your username or email"),
-    password: string().required("Please enter your password"),
-    remembrer: boolean().required(),
+    // password: string().required("Please enter your password"),
+    // remembrer: boolean().required(),
 });
 </script>
 
@@ -21,6 +21,8 @@ const validationSchema = object({
         <VueForm
             name="login-form"
             submit-method="post"
+            submit-text="Login"
+            submit-icon="user-check"
             :submit-route="login.url()"
             :validation-schema="validationSchema"
             :initial-values="initialValues"

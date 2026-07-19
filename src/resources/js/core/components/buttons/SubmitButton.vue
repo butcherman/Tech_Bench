@@ -46,7 +46,7 @@ const sizeClass = computed<string>(() => {
             variantClass,
             { 'rounded-full!': pill, 'shadow-xl': !flat },
         ]"
-        class="rounded-lg inline-block text-center pointer"
+        class="rounded-lg inline-block text-center pointer focus:ring-0"
     >
         <slot>
             <fa-icon v-if="icon" :icon="icon" />

@@ -3,7 +3,7 @@
 */
 .form-input-base input {
     @apply p-2 w-full bg-transparent  appearance-none placeholder:opacity-0;
-    @apply focus:outline-none focus:ring-0  focus:placeholder:opacity-100;
+    @apply focus:outline-none focus:ring-0  focus:placeholder:opacity-75;
 }
 
 .form-input-outlined input {

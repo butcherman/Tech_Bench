@@ -1,5 +1,12 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { useField } from "vee-validate";
+import { computed, Ref, ref, toRef } from "vue";
+
+const emit = defineEmits<{
+    focus: [];
+    blur: [];
+    change: [];
+}>();
 
 const props = defineProps<{
     id: string;
@@ -12,7 +19,7 @@ const props = defineProps<{
 /**
  * Variant styling for the input
  */
-const styleClass = computed(() => {
+const styleClass = computed<string>(() => {
     switch (props.inputStyle) {
         case "standard":
             return "form-input-standard";
@@ -22,24 +29,60 @@ const styleClass = computed(() => {
             return "form-input-outlined";
     }
 });
+
+/*
+|-------------------------------------------------------------------------------
+| Input State
+|-------------------------------------------------------------------------------
+*/
+const hasFocus = ref<boolean>(false);
+const onFocus = (): void => {
+    hasFocus.value = true;
+    emit("focus");
+};
+const onBlur = () => {
+    hasFocus.value = false;
+    emit("blur");
+};
+
+/*
+|-------------------------------------------------------------------------------
+| Vee-Validate
+|-------------------------------------------------------------------------------
+*/
+const nameRef = toRef(props, "name");
+
+const {
+    errorMessage,
+    value,
+}: {
+    errorMessage: Ref<string | undefined, string | undefined>;
+    value: Ref<string | undefined>;
+} = useField(nameRef);
 </script>
 
 <template>
-    <div class="flex my-2">
-        <!-- <div>append front</div> -->
-        <div class="grow">
-            <div class="relative form-input-base" :class="styleClass">
-                <input
-                    type="text"
-                    :id="id"
-                    class="block peer"
-                    :placeholder="placeholder"
-                />
-                <label :for="id">
-                    {{ label }}
-                </label>
+    <div class="my-2">
+        <div class="flex">
+            <!-- <div>append front</div> -->
+            <div class="grow">
+                <div class="relative form-input-base" :class="styleClass">
+                    <input
+                        v-model="value"
+                        type="text"
+                        :id="id"
+                        class="block peer"
+                        :placeholder="placeholder"
+                        @focus="onFocus"
+                        @blur="onBlur"
+                    />
+                    <label :for="id">
+                        {{ label }}
+                    </label>
+                </div>
             </div>
+            <!-- <div>append end</div> -->
         </div>
-        <!-- <div>append end</div> -->
+        <div class="text-xs text-danger">{{ errorMessage }}</div>
     </div>
 </template>
