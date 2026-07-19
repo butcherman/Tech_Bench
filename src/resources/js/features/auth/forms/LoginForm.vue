@@ -35,6 +35,7 @@ const validationSchema = object({
                 placeholder="Username"
                 input-style="standard"
                 help="Enter your username or email address"
+                hide-help
             />
             <PasswordInput
                 id="password"
@@ -43,6 +44,7 @@ const validationSchema = object({
                 placeholder="Password"
                 input-style="standard"
                 help="Enter your password"
+                hide-help
             />
         </VueForm>
     </div>

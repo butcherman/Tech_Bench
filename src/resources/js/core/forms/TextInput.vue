@@ -13,6 +13,7 @@ const props = defineProps<{
     name: string;
 
     help?: string;
+    hideHelp?: boolean;
     inputStyle?: "filled" | "standard" | "outlined";
     label?: string;
     placeholder?: string;
@@ -47,6 +48,13 @@ const onBlur = () => {
     hasFocus.value = false;
     emit("blur");
 };
+const showHelp = computed(() => {
+    if (!props.hideHelp) {
+        return true;
+    }
+
+    return hasFocus.value;
+});
 
 /*
 |-------------------------------------------------------------------------------
@@ -92,6 +100,6 @@ const {
             <!-- <div>append end</div> -->
         </div>
         <div class="text-xs text-danger">{{ errorMessage }}</div>
-        <div v-if="hasFocus" class="text-sm text-muted">{{ help }}</div>
+        <div v-if="showHelp" class="text-sm text-muted">{{ help }}</div>
     </div>
 </template>

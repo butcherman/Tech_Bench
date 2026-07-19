@@ -13,6 +13,8 @@ const props = defineProps<{
     name: string;
 
     help?: string;
+    hideHelp?: boolean;
+    hideUnmask?: boolean;
     inputStyle?: "filled" | "standard" | "outlined";
     label?: string;
     placeholder?: string;
@@ -37,16 +39,32 @@ const styleClass = computed<string>(() => {
 | Input State
 |-------------------------------------------------------------------------------
 */
-const hasError = computed(() => (errorMessage.value?.length ? true : false));
+const hasError = computed<boolean>(() =>
+    errorMessage.value?.length ? true : false,
+);
+
 const hasFocus = ref<boolean>(false);
 const onFocus = (): void => {
     hasFocus.value = true;
     emit("focus");
 };
-const onBlur = () => {
+
+const onBlur = (): void => {
     hasFocus.value = false;
     emit("blur");
 };
+
+const showHelp = computed<boolean>(() => {
+    if (!props.hideHelp) {
+        return true;
+    }
+
+    return hasFocus.value;
+});
+
+const showPass = ref<boolean>(false);
+const maskType = computed(() => (showPass.value ? "text" : "password"));
+const maskIcon = computed(() => (showPass.value ? "eye-slash" : "eye"));
 
 /*
 |-------------------------------------------------------------------------------
@@ -72,7 +90,7 @@ const {
                     <input
                         v-model="value"
                         class="block peer"
-                        type="password"
+                        :type="maskType"
                         :class="{
                             invalid: hasError,
                         }"
@@ -82,6 +100,13 @@ const {
                         @focus="onFocus"
                         @blur="onBlur"
                     />
+                    <div
+                        v-if="!hideUnmask"
+                        class="absolute inset-e-1.5 bottom-1.5 text-muted pointer"
+                        @click="showPass = !showPass"
+                    >
+                        <fa-icon :icon="maskIcon" />
+                    </div>
                     <label :for="id">
                         {{ label }}
                     </label>
@@ -89,6 +114,6 @@ const {
             </div>
         </div>
         <div class="text-xs text-danger">{{ errorMessage }}</div>
-        <div v-if="hasFocus" class="text-sm text-muted">{{ help }}</div>
+        <div v-if="showHelp" class="text-sm text-muted">{{ help }}</div>
     </div>
 </template>
