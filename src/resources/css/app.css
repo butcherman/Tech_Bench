@@ -5,6 +5,11 @@
 @import "tailwindcss/preflight.css" layer(base);
 @import "tailwindcss/utilities.css" layer(utilities);
 
+/**
+* Additional CSS Style Sheets
+*/
+@import "./form.css";
+
 /* @config '../../tailwind.config.js'; */
 
 /*
@@ -25,13 +30,13 @@
     }
 }
 
-/* .pointer {
+.pointer {
     cursor: pointer;
 }
 
 .mask-field {
     @apply blur-xs hover:blur-none;
-} */
+}
 
 /**
 * Classes to quickly set Card Component sizes

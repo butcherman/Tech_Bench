@@ -11,6 +11,9 @@ const props = defineProps<{
     variant?: variantType;
 }>();
 
+/**
+ * Background class of the button
+ */
 const { getVariantClass } = useVariantHelper();
 
 /**
