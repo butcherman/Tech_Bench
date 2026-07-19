@@ -67,14 +67,12 @@ const {
 <template>
     <div class="my-2">
         <div class="flex">
-            <!-- <div>append front</div> -->
             <div class="grow">
                 <div class="relative form-input-base" :class="styleClass">
                     <input
                         v-model="value"
                         class="block peer"
-                        type="text"
-                        :autocomplete="name"
+                        type="password"
                         :class="{
                             invalid: hasError,
                         }"
@@ -89,7 +87,6 @@ const {
                     </label>
                 </div>
             </div>
-            <!-- <div>append end</div> -->
         </div>
         <div class="text-xs text-danger">{{ errorMessage }}</div>
         <div v-if="hasFocus" class="text-sm text-muted">{{ help }}</div>

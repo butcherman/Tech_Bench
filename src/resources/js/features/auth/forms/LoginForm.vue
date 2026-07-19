@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PasswordInput from "@/core/forms/PasswordInput.vue";
 import TextInput from "@/core/forms/TextInput.vue";
 import VueForm from "@/core/forms/VueForm.vue";
 import { login } from "@/wayfinder/routes";
@@ -11,7 +12,7 @@ const initialValues = {
 };
 const validationSchema = object({
     username: string().required("Please enter your username or email"),
-    // password: string().required("Please enter your password"),
+    password: string().required("Please enter your password"),
     // remembrer: boolean().required(),
 });
 </script>
@@ -33,6 +34,15 @@ const validationSchema = object({
                 label="Username"
                 placeholder="Username"
                 input-style="standard"
+                help="Enter your username or email address"
+            />
+            <PasswordInput
+                id="password"
+                name="password"
+                label="Password"
+                placeholder="Password"
+                input-style="standard"
+                help="Enter your password"
             />
         </VueForm>
     </div>

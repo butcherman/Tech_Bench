@@ -9,16 +9,25 @@
 .form-input-outlined input {
     @apply rounded-lg border border-slate-300;
     @apply focus:border-blue-400;
+    &.invalid {
+        @apply border-pink-400;
+    }
 }
 
 .form-input-standard input {
     @apply border-0 border-b-2;
     @apply focus:border-b-blue-400;
+    &.invalid {
+        @apply border-b-pink-300;
+    }
 }
 
 .form-input-filled input {
     @apply border-0 border-b-2 border-b-slate-300 bg-slate-100;
     @apply focus:outline-none focus:ring-0 focus:border-b-blue-400;
+    &.invalid {
+        @apply border-b-pink-400;
+    }
 }
 
 .form-input-base label {
