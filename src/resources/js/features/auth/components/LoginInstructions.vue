@@ -6,7 +6,7 @@ import LoginForm from "../forms/LoginForm.vue";
 
 <template>
     <div>
-        <h1>Hello World</h1>
+        <h3 class="text-center text-muted">Login</h3>
         <LoginForm />
     </div>
 </template>

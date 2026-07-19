@@ -1,7 +1,22 @@
 <script setup lang="ts">
+import VueForm from "@/core/forms/VueForm.vue";
+
 //
+
+const initialValues = {};
+const validationSchema = {};
 </script>
 
 <template>
-    <h1>Login Form</h1>
+    <div>
+        <VueForm
+            name="login-form"
+            submit-method="post"
+            submit-route="#"
+            :validation-schema="{}"
+            :initial-values="{}"
+        >
+            slot...
+        </VueForm>
+    </div>
 </template>
