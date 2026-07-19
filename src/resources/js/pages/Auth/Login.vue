@@ -26,7 +26,7 @@ export default { layout: AuthLayout };
             class="flex items-center md:basis-80 bg-white m-3 md:m-0 rounded-lg md:rounded-none"
         >
             <div class="m-3 w-full">
-                <LoginInstructions />
+                <LoginInstructions :allow-oath="allowOath" />
             </div>
         </div>
     </div>

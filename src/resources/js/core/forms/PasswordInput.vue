@@ -89,6 +89,7 @@ const {
                 <div class="relative form-input-base" :class="styleClass">
                     <input
                         v-model="value"
+                        :autocomplete="`current-${name}`"
                         class="block peer"
                         :type="maskType"
                         :class="{
