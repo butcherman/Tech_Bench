@@ -13,6 +13,7 @@
         "@fortawesome/vue-fontawesome": "^3.3.2",
         "@inertiajs/vite": "^3.6.1",
         "@inertiajs/vue3": "^3.6.1",
+        "@laravel/vite-plugin-wayfinder": "^0.1.7",
         "@tailwindcss/vite": "^4.3.3",
         "@vitejs/plugin-vue": "^6.0.8",
         "concurrently": "^10.0.3",
