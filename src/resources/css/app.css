@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/preflight.css" layer(base);
+@import "tailwindcss/utilities.css" layer(utilities);
+
 /* @config '../../tailwind.config.js'; */
 
 /*
@@ -10,7 +15,7 @@
   If we ever want to remove these styles, we need to add an explicit border
   color utility to any element that depends on these defaults.
 */
-/* @layer base {
+@layer base {
     *,
     ::after,
     ::before,
@@ -18,7 +23,7 @@
     ::file-selector-button {
         border-color: var(--color-gray-200, currentcolor);
     }
-} */
+}
 
 /* .pointer {
     cursor: pointer;
@@ -72,27 +77,27 @@
     }
 
     h1 {
-        @apply text-3xl! font-bold!;
+        @apply text-3xl! font-bold;
     }
 
     h2 {
-        @apply text-2xl! font-bold!;
+        @apply text-2xl! font-bold;
     }
 
     h3 {
-        @apply text-xl! font-bold!;
+        @apply text-xl! font-bold;
     }
 
     h4 {
-        @apply text-lg! font-bold!;
+        @apply text-lg! font-bold;
     }
 
     h5 {
-        @apply font-bold!;
+        @apply font-bold;
     }
 
     h6 {
-        @apply text-sm! font-bold!;
+        @apply text-sm! font-bold;
     }
 
     .text-success {
@@ -119,7 +124,7 @@
 /**
 * Separation line with text in middle
 */
-/* div.separator {
+div.separator {
     display: flex;
     align-items: center;
     text-align: center;
@@ -140,4 +145,4 @@
     &:not(:empty)::after {
         margin-left: 0.25em;
     }
-} */
+}

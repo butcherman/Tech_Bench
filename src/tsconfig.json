@@ -28,7 +28,7 @@
         "strict": true,
         "target": "ES2020",
         "typeRoots": [
-            "./resources/js/Types/",
+            "./resources/js",
             "./node_modules/@types",
             "./node_modules/"
         ],
