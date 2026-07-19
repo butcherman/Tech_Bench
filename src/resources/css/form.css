@@ -2,15 +2,15 @@
 * Form Input Variants
 */
 .form-input-base input {
-    @apply p-2 w-full bg-transparent  appearance-none placeholder:opacity-0;
+    @apply p-2 w-full bg-transparent appearance-none placeholder:opacity-0;
     @apply focus:outline-none focus:ring-0  focus:placeholder:opacity-75;
 }
 
 .form-input-outlined input {
-    @apply rounded-lg border border-slate-300;
+    @apply rounded-lg border border-slate-300 border-collapse;
     @apply focus:border-blue-400;
     &.invalid {
-        @apply border-pink-400;
+        @apply border-pink-300;
     }
 }
 
@@ -26,7 +26,7 @@
     @apply border-0 border-b-2 border-b-slate-300 bg-slate-100;
     @apply focus:outline-none focus:ring-0 focus:border-b-blue-400;
     &.invalid {
-        @apply border-b-pink-400;
+        @apply border-b-pink-300;
     }
 }
 
@@ -38,4 +38,72 @@
 
 .form-input-outlined label {
     @apply bg-white;
+}
+
+/**
+* Prepend and append form inputs
+*/
+.form-input-prepend {
+    @apply py-2 px-1;
+    &.form-input-standard {
+        @apply border-0 border-b-2;
+        &.has-focus {
+            @apply border-b-blue-400;
+        }
+        &.invalid {
+            @apply border-b-pink-300;
+        }
+    }
+    &.form-input-filled {
+        @apply border-0 border-b-2 border-b-slate-300 bg-slate-100;
+        &.has-focus {
+            @apply border-b-blue-400;
+        }
+        &.invalid {
+            @apply border-b-pink-300;
+        }
+    }
+    &.form-input-outlined {
+        @apply rounded-s-lg border border-slate-300 border-collapse;
+        @apply focus:border-blue-400;
+        &.invalid {
+            @apply border-pink-300;
+        }
+        + div > div > input {
+            @apply rounded-s-none;
+        }
+    }
+}
+
+.form-input-append {
+    @apply py-2 px-1;
+    &.form-input-standard {
+        @apply border-0 border-b-2;
+        &.has-focus {
+            @apply border-b-blue-400;
+        }
+        &.invalid {
+            @apply border-b-pink-300;
+        }
+    }
+    &.form-input-filled {
+        @apply border-0 border-b-2 border-b-slate-300 bg-slate-100;
+        &.has-focus {
+            @apply border-b-blue-400;
+        }
+        &.invalid {
+            @apply border-b-pink-300;
+        }
+    }
+    &.form-input-outlined {
+        @apply rounded-e-lg border border-slate-300 border-collapse;
+        @apply focus:border-blue-400;
+        &.invalid {
+            @apply border-pink-300;
+        }
+    }
+}
+
+div:has(+ .form-input-append) input {
+    @apply rounded-e-none border-collapse;
 }

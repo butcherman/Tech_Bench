@@ -75,7 +75,16 @@ const {
 <template>
     <div class="my-2">
         <div class="flex">
-            <!-- <div>append front</div> -->
+            <div
+                v-if="$slots['prepend-input']"
+                class="form-input-prepend text-muted"
+                :class="[
+                    styleClass,
+                    { invalid: hasError, 'has-focus': hasFocus },
+                ]"
+            >
+                <slot name="prepend-input" />
+            </div>
             <div class="grow">
                 <div class="relative form-input-base" :class="styleClass">
                     <input
@@ -97,7 +106,16 @@ const {
                     </label>
                 </div>
             </div>
-            <!-- <div>append end</div> -->
+            <div
+                v-if="$slots['append-input']"
+                class="form-input-append text-muted"
+                :class="[
+                    styleClass,
+                    { invalid: hasError, 'has-focus': hasFocus },
+                ]"
+            >
+                <slot name="append-input" />
+            </div>
         </div>
         <div class="text-xs text-danger">{{ errorMessage }}</div>
         <div v-if="showHelp" class="text-sm text-muted">{{ help }}</div>
