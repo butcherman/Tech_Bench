@@ -40,7 +40,7 @@ const HelpComponent = computed(() => {
             icon="circle-question"
             variant="help"
             class="pointer"
-            size="small"
+            circle
             @click="showHelp = true"
         />
         <Drawer v-model="showHelp" title="Help">

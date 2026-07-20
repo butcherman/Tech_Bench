@@ -1,10 +1,11 @@
 <script setup lang="ts">
+import AppHelp from "./AppHelp.vue";
 import BaseBadge from "@/core/components/badges/BaseBadge.vue";
 import BaseButton from "@/core/components/buttons/BaseButton.vue";
+import UserAvatar from "./UserAvatar.vue";
 import { about } from "@/wayfinder/routes";
 import { dashboard } from "@/wayfinder/routes";
 import { useAppData } from "@/core/store/appData";
-import AppHelp from "./AppHelp.vue";
 
 defineEmits<{
     toggleNavbar: [];
@@ -29,9 +30,9 @@ const { logo, appName } = useAppData();
                 icon="circle-info"
                 :href="about.url()"
                 variant="info"
-                size="small"
+                circle
             />
-            <div>user avatar</div>
+            <UserAvatar />
             <BaseButton
                 class="lg:hidden"
                 icon="bars"

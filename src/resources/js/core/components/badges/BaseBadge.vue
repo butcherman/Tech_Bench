@@ -6,7 +6,8 @@ import { useVariantHelper } from "@/core/composables/variantHelper";
 const props = defineProps<{
     href?: string;
     icon?: string;
-    size?: componentSize;
+    circle?: boolean;
+    text?: string;
     variant?: variantType;
 }>();
 
@@ -21,27 +22,21 @@ const buttonType = computed<typeof Link | "button">(() =>
 );
 
 /**
- * Badge Size
+ * Determine if the badge should be rounded
  */
-const badgeSize = computed(() => {
-    switch (props.size) {
-        case "large":
-            return "w-15 h-15 text-4xl";
-        case "small":
-            return "w-5 h-5 text-sm";
-        default:
-            return "w-7 h-7";
-    }
-});
+const sizeClass = computed(() =>
+    props.circle ? "rounded-full p-1" : "rounded-md px-2 py-1 ",
+);
 </script>
 
 <template>
     <component
         :is="buttonType"
         :href="href"
-        :class="[getVariantClass(variant), badgeSize, { pointer: href }]"
-        class="dot rounded-full items-center justify-center inline-flex"
+        :class="[getVariantClass(variant), sizeClass]"
+        class="inline-flex items-center text-xs font-medium inset-ring inset-ring-green-600/20"
     >
         <fa-icon v-if="icon" :icon="icon" />
+        <span v-if="text">{{ text }}</span>
     </component>
 </template>
