@@ -96,7 +96,7 @@ const {
                             invalid: hasError,
                         }"
                         :id="id"
-                        :placeholder="placeholder"
+                        :placeholder="placeholder ?? ''"
                         :name="name"
                         @focus="onFocus"
                         @blur="onBlur"
