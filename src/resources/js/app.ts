@@ -1,4 +1,4 @@
-import { createInertiaApp, Head, Link } from "@inertiajs/vue3";
+import { createInertiaApp, Link } from "@inertiajs/vue3";
 
 /*
 |-------------------------------------------------------------------------------
@@ -22,8 +22,6 @@ library.add(far);
 
 createInertiaApp({
     withApp(app) {
-        app.component("fa-icon", FontAwesomeIcon)
-            .component("Link", Link)
-            .component("Head", Head);
+        app.component("fa-icon", FontAwesomeIcon).component("Link", Link);
     },
 });
