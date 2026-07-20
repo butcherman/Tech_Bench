@@ -15,7 +15,7 @@ const props = defineProps<{
     submitMethod: "post" | "put" | "delete";
     submitRoute: string;
     validationSchema: object;
-
+    // Optional
     fullPageOverlay?: boolean;
     hideOverlay?: boolean;
     only?: string[];
@@ -31,7 +31,7 @@ const uncaughtErrors = ref<string[]>([]);
 const handleErrors = (
     formData: InertiaFormData,
     formErrors: InertiaFormErrors,
-) => {
+): void => {
     const formKeys = Object.keys(formData);
     const errorList = Object.entries(formErrors);
 
@@ -69,8 +69,6 @@ const getFieldValue = (field: keyof InertiaFormData): any => {
 |-------------------------------------------------------------------------------
 */
 const onSubmit = handleSubmit((form: InertiaFormData): void => {
-    console.log("submitting");
-
     uncaughtErrors.value = [];
     isSubmitting.value = true;
     emit("submitting", form);
@@ -83,7 +81,7 @@ const onSubmit = handleSubmit((form: InertiaFormData): void => {
         onFinish: () => (isSubmitting.value = false),
         onSuccess: () => emit("success"),
         onError: () => handleErrors(form, formData.errors),
-        onFlash: (msg) => console.log(msg),
+        onFlash: (msg) => console.log(msg), // TODO - Make this work???
     });
 });
 
@@ -106,6 +104,7 @@ defineExpose({
     <div>
         <form
             class="h-full flex flex-col"
+            :name="name"
             novalidate
             @submit.prevent="onSubmit"
         >

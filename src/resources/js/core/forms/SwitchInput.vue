@@ -12,7 +12,7 @@ const emit = defineEmits<{
 const props = defineProps<{
     id: string;
     name: string;
-
+    // Optional
     center?: boolean;
     label?: string;
     size?: componentSize;
@@ -24,7 +24,7 @@ const { getBackgroundClass } = useVariantHelper();
 /**
  * Background of switch when checked.
  */
-const switchClass = computed(() => {
+const switchClass = computed<string>(() => {
     let vClass = getBackgroundClass(props.variant ?? "primary");
 
     return `peer-checked:${vClass}`;
@@ -33,7 +33,7 @@ const switchClass = computed(() => {
 /**
  * Size of the switch
  */
-const switchSizeClass = computed(() => {
+const switchSizeClass = computed<string>(() => {
     switch (props.size) {
         case "large":
             return "w-15 h-8";
@@ -44,7 +44,7 @@ const switchSizeClass = computed(() => {
     }
 });
 
-const toggleSizeClass = computed(() => {
+const toggleSizeClass = computed<string>(() => {
     switch (props.size) {
         case "large":
             return "w-6 h-6 peer-checked:translate-x-7";
@@ -60,7 +60,9 @@ const toggleSizeClass = computed(() => {
 | Input State
 |-------------------------------------------------------------------------------
 */
-const hasError = computed(() => (errorMessage.value?.length ? true : false));
+const hasError = computed<boolean>(() =>
+    errorMessage.value?.length ? true : false,
+);
 const hasFocus = ref<boolean>(false);
 const onFocus = (): void => {
     hasFocus.value = true;

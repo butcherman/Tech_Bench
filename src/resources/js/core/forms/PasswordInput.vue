@@ -11,7 +11,7 @@ const emit = defineEmits<{
 const props = defineProps<{
     id: string;
     name: string;
-
+    // Optional
     help?: string;
     hideHelp?: boolean;
     hideUnmask?: boolean;
@@ -63,8 +63,12 @@ const showHelp = computed<boolean>(() => {
 });
 
 const showPass = ref<boolean>(false);
-const maskType = computed(() => (showPass.value ? "text" : "password"));
-const maskIcon = computed(() => (showPass.value ? "eye-slash" : "eye"));
+const maskType = computed<"text" | "password">(() =>
+    showPass.value ? "text" : "password",
+);
+const maskIcon = computed<"eye-slash" | "eye">(() =>
+    showPass.value ? "eye-slash" : "eye",
+);
 
 /*
 |-------------------------------------------------------------------------------

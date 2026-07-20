@@ -11,7 +11,7 @@ const emit = defineEmits<{
 const props = defineProps<{
     id: string;
     name: string;
-
+    // Optional
     help?: string;
     hideHelp?: boolean;
     inputStyle?: "filled" | "standard" | "outlined";
@@ -38,17 +38,22 @@ const styleClass = computed<string>(() => {
 | Input State
 |-------------------------------------------------------------------------------
 */
-const hasError = computed(() => (errorMessage.value?.length ? true : false));
+const hasError = computed<boolean>(() =>
+    errorMessage.value?.length ? true : false,
+);
 const hasFocus = ref<boolean>(false);
+
 const onFocus = (): void => {
     hasFocus.value = true;
     emit("focus");
 };
-const onBlur = () => {
+
+const onBlur = (): void => {
     hasFocus.value = false;
     emit("blur");
 };
-const showHelp = computed(() => {
+
+const showHelp = computed<boolean>(() => {
     if (!props.hideHelp) {
         return true;
     }
