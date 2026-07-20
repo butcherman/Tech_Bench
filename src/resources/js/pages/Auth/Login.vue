@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import AuthLayout from "@/layouts/authLayout/AuthLayout.vue";
+import AuthLayout from "@/layouts/AuthLayout.vue";
 import LoginInstructions from "@/features/auth/components/LoginInstructions.vue";
 import LoginLogo from "@/features/auth/components/LoginLogo.vue";
 
