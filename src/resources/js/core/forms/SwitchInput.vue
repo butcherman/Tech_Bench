@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, Ref, ref, toRef } from "vue";
-import { useVariantHelper } from "../store/variantHelper";
 import { useField } from "vee-validate";
+import { useVariantHelper } from "../composables/variantHelper";
 
 const emit = defineEmits<{
     focus: [];

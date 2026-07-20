@@ -4,12 +4,8 @@ import { Link } from "@inertiajs/vue3";
 import { useVariantHelper } from "@/core/composables/variantHelper";
 
 const props = defineProps<{
-    async?: boolean;
-    flat?: boolean;
     href?: string;
     icon?: string;
-    pill?: boolean;
-    text?: string;
     size?: componentSize;
     variant?: variantType;
 }>();
@@ -25,22 +21,16 @@ const buttonType = computed<typeof Link | "button">(() =>
 );
 
 /**
- * Class and font color for the button
+ * Badge Size
  */
-const variantClass = computed(() => getVariantClass(props.variant));
-
-/**
- * Button Size
- */
-const sizeClass = computed<string>(() => {
+const badgeSize = computed(() => {
     switch (props.size) {
-        case "small":
-            return "px-2 py-1";
         case "large":
-            return "px-3 py-4";
-        case "normal":
+            return "w-15 h-15 text-4xl";
+        case "small":
+            return "w-5 h-5 text-sm";
         default:
-            return "px-3 py-2";
+            return "w-7 h-7";
     }
 });
 </script>
@@ -48,19 +38,10 @@ const sizeClass = computed<string>(() => {
 <template>
     <component
         :is="buttonType"
-        :async="async"
         :href="href"
-        :class="[
-            sizeClass,
-            variantClass,
-            { 'rounded-full!': pill, 'shadow-xl': !flat },
-        ]"
-        class="rounded-lg inline-block text-center pointer"
-        type="button"
+        :class="[getVariantClass(variant), badgeSize, { pointer: href }]"
+        class="dot rounded-full items-center justify-center inline-flex"
     >
-        <slot>
-            <fa-icon v-if="icon" :icon="icon" />
-            {{ text }}
-        </slot>
+        <fa-icon v-if="icon" :icon="icon" />
     </component>
 </template>

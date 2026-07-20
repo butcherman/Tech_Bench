@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { useVariantHelper } from "@/core/store/variantHelper";
+import { useVariantHelper } from "@/core/composables/variantHelper";
 
 const props = defineProps<{
     flat?: boolean;
