@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import BaseBadge from "./badges/BaseBadge.vue";
-import gsap from "gsap";
 
 const emit = defineEmits(["update:modelValue"]);
 
@@ -31,78 +30,139 @@ const isOpen = computed({
     get: () => props.modelValue,
     set: (value) => emit("update:modelValue", value),
 });
-
-/*
-|-------------------------------------------------------------------------------
-| Animations
-|-------------------------------------------------------------------------------
-*/
-const onEnter = (el: Element, done: () => void): void => {
-    if (props.position === "left" || props.position === "right") {
-        gsap.from(el, {
-            width: 0,
-            ease: "back.out",
-            duration: 0.5,
-            onComplete: done,
-        });
-        return;
-    }
-
-    gsap.from(el, {
-        height: 0,
-        ease: "back.out",
-        duration: 0.5,
-        onComplete: done,
-    });
-};
-
-const onLeave = (el: Element, done: () => void) => {
-    if (props.position === "left" || props.position === "right") {
-        gsap.to(el, {
-            width: 0,
-            ease: "back.out",
-            duration: 0.5,
-            onComplete: done,
-        });
-        return;
-    }
-
-    gsap.to(el, {
-        height: 0,
-        ease: "back.in",
-        duration: 0.5,
-        onComplete: done,
-    });
-};
 </script>
 
 <template>
     <Teleport to="body">
-        <Transition :css="false" @enter="onEnter" @leave="onLeave">
-            <div
-                v-if="isOpen"
-                id="drawer"
-                class="fixed p-4 overflow-y-auto bg-white border-slate-300 z-50"
-                :class="positionClass"
-                tabindex="-1"
-            >
+        <div v-if="isOpen" id="drawer-wrapper">
+            <Transition name="drawer-backdrop" appear>
                 <div
-                    class="border-b border-slate-200 pb-4 mb-5 flex flex-row-reverse"
+                    v-if="isOpen"
+                    class="fixed inset-0 bg-gray-500/75 z-40"
+                    @click="isOpen = false"
+                />
+            </Transition>
+            <Transition :name="`drawer-${position ?? 'bottom'}`" appear>
+                <div
+                    v-if="isOpen"
+                    id="drawer"
+                    class="fixed p-4 overflow-y-auto bg-white border-slate-300 z-50"
+                    :class="positionClass"
+                    tabindex="-1"
                 >
-                    <BaseBadge
-                        icon="xmark"
-                        variant="light"
-                        class="text-white pointer"
-                        @click="isOpen = false"
-                    />
-                    <h5 class="grow text-muted">
-                        {{ title }}
-                    </h5>
+                    <div
+                        class="border-b border-slate-200 pb-4 mb-5 flex flex-row-reverse"
+                    >
+                        <BaseBadge
+                            icon="xmark"
+                            variant="light"
+                            class="text-white pointer"
+                            @click="isOpen = false"
+                        />
+                        <h5 class="grow text-muted">
+                            {{ title }}
+                        </h5>
+                    </div>
+                    <div>
+                        <slot />
+                    </div>
                 </div>
-                <div>
-                    <slot />
-                </div>
-            </div>
-        </Transition>
+            </Transition>
+        </div>
     </Teleport>
 </template>
+
+<style scoped>
+/**
+* Backdrop
+*/
+.drawer-backdrop-enter-active,
+.drawer-backdrop-leave-active {
+    transition: opacity 250ms ease;
+}
+
+.drawer-backdrop-enter-from,
+.drawer-backdrop-leave-to {
+    opacity: 0;
+}
+
+/**
+* Right Drawer
+*/
+.drawer-right-enter-active,
+.drawer-right-leave-active {
+    transition:
+        transform 500ms ease,
+        opacity 500ms ease;
+}
+
+.drawer-right-enter-from,
+.drawer-right-leave-to {
+    transform: translateX(100%);
+    opacity: 0;
+}
+
+/**
+* Left Drawer
+*/
+.drawer-left-enter-from,
+.drawer-left-leave-to {
+    transform: translateX(-100%);
+    opacity: 0;
+}
+
+.drawer-left-enter-active,
+.drawer-left-leave-active {
+    transition:
+        transform 500ms ease,
+        opacity 500ms ease;
+}
+
+/**
+* Bottom Drawer
+*/
+.drawer-bottom-enter-from,
+.drawer-bottom-leave-to {
+    transform: translateY(100%);
+    opacity: 0;
+}
+
+.drawer-bottom-enter-active,
+.drawer-bottom-leave-active {
+    transition:
+        transform 500ms ease,
+        opacity 500ms ease;
+}
+
+/**
+* Top Drawer
+*/
+.drawer-top-enter-from,
+.drawer-top-leave-to {
+    transform: translateY(-100%);
+    opacity: 0;
+}
+
+.drawer-top-enter-active,
+.drawer-top-leave-active {
+    transition:
+        transform 500ms ease,
+        opacity 500ms ease;
+}
+
+/**
+* Queue drawer after backdrop loads
+*/
+.drawer-backdrop-enter-active {
+    transition: opacity 180ms ease;
+}
+
+.drawer-right-enter-active,
+.drawer-left-enter-active,
+.drawer-top-enter-active,
+.drawer-bottom-enter-active {
+    transition:
+        transform 280ms cubic-bezier(0.22, 1, 0.36, 1) 120ms,
+        opacity 280ms ease 120ms;
+}
+</style>
