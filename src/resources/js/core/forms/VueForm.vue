@@ -3,6 +3,7 @@ import SubmitButton from "../components/buttons/SubmitButton.vue";
 import { computed, ref } from "vue";
 import { useForm } from "vee-validate";
 import { useForm as useInertiaForm } from "@inertiajs/vue3";
+import Overlay from "../components/loaders/Overlay.vue";
 
 const emit = defineEmits<{
     submitting: [InertiaFormData];
@@ -101,7 +102,7 @@ defineExpose({
 </script>
 
 <template>
-    <div>
+    <Overlay :loading="isSubmitting" :full-page="fullPageOverlay">
         <form
             class="h-full flex flex-col"
             :name="name"
@@ -132,5 +133,5 @@ defineExpose({
                 </SubmitButton>
             </div>
         </form>
-    </div>
+    </Overlay>
 </template>

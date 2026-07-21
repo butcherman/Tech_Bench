@@ -39,6 +39,7 @@ const validationSchema = object({
             :submit-route="login.url()"
             :validation-schema="validationSchema"
             :initial-values="initialValues"
+            full-page-overlay
         >
             <TextInput
                 id="username"
