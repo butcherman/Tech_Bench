@@ -57,6 +57,7 @@ const isOpen = computed({
                             icon="xmark"
                             variant="light"
                             class="text-white pointer"
+                            circle
                             @click="isOpen = false"
                         />
                         <h5 class="grow text-muted">

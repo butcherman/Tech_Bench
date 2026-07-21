@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Card from "@/core/components/Card.vue";
 import LogoImage from "@/core/components/LogoImage.vue";
-import { useAppData } from "@/core/store/appData";
+import { useAppData } from "@/core/state/appData";
 
 const props = defineProps<{
     welcomeMessage?: string;

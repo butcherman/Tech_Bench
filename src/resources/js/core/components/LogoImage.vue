@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useAppData } from "../store/appData";
+import { useAppData } from "../state/appData";
 
 const { logo } = useAppData();
 </script>

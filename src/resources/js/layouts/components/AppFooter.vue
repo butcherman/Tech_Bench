@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useAppData } from "@/core/store/appData";
+import { useAppData } from "@/core/state/appData";
 
 const { copyright, version } = useAppData();
 </script>
