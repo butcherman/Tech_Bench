@@ -1,14 +1,11 @@
 import { usePage } from "@inertiajs/vue3";
 import { readonly } from "vue";
 
-const { props } = usePage();
-
 export const useUserAuth = () => {
-    // const user: User = props.current_user;
-    // const navBar = [];
-    const user = "test user";
+    const { props } = usePage();
 
-    console.log(props);
+    const user: User = props.current_user;
+    // const navBar = [];
 
     return {
         user: readonly(user),

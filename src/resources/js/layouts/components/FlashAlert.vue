@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { useAlertStyles } from "../composables/alertStyles";
-import { useFlashState } from "../state/flashState";
 import gsap from "gsap";
+import { useAlertStyles } from "../composables/alertStyles";
+import { useFlashState } from "../../core/state/flashState";
 
 const { getStatusType, getStatusIcon } = useAlertStyles();
 const { flashAlerts } = useFlashState();

@@ -5,7 +5,7 @@ import BaseButton from "@/core/components/buttons/BaseButton.vue";
 import UserAvatar from "./UserAvatar.vue";
 import { about } from "@/wayfinder/routes";
 import { dashboard } from "@/wayfinder/routes";
-import { useAppData } from "@/core/store/appData";
+import { useAppData } from "@/core/state/appData.js";
 
 defineEmits<{
     toggleNavbar: [];
@@ -24,7 +24,9 @@ const { logo, appName } = useAppData();
         <h1 class="hidden md:flex md:grow items-center justify-center">
             {{ appName }}
         </h1>
-        <div class="grow md:grow-0 flex items-center justify-end gap-2 me-2">
+        <div
+            class="relative grow md:grow-0 flex items-center justify-end gap-2 me-2"
+        >
             <AppHelp />
             <BaseBadge
                 icon="circle-info"
