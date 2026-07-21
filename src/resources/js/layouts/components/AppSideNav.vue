@@ -1,16 +1,24 @@
 <script setup lang="ts">
 import { computed } from "vue";
 
+const emit = defineEmits(["update:modelValue"]);
+
 const props = defineProps<{
-    navbarHidden: boolean;
+    modelValue: boolean;
 }>();
+
+/**
+ * Status of the Nav Menu - opened or closed
+ */
+const isOpen = computed({
+    get: () => props.modelValue,
+    set: (value) => emit("update:modelValue", value),
+});
 
 /**
  * On Mobile, determine width of navbar based on if hidden or not.
  */
-const hiddenClass = computed<string>(() =>
-    props.navbarHidden ? "w-0" : "w-64",
-);
+const hiddenClass = computed<string>(() => (isOpen.value ? "w-0" : "w-64"));
 </script>
 
 <template>

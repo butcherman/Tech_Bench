@@ -25,6 +25,6 @@ createInertiaApp({
     withApp(app) {
         app.component("fa-icon", FontAwesomeIcon)
             .component("Link", Link)
-            .directive("click-outside", vOnClickOutside);
+            .directive("on-click-outside", vOnClickOutside);
     },
 });

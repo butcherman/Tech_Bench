@@ -3,10 +3,10 @@ import AppHelp from "./AppHelp.vue";
 import BaseBadge from "@/core/components/badges/BaseBadge.vue";
 import BaseButton from "@/core/components/buttons/BaseButton.vue";
 import UserAvatar from "./UserAvatar.vue";
+import UserSettingsMenu from "@/features/user/components/UserSettingsMenu.vue";
 import { about } from "@/wayfinder/routes";
 import { dashboard } from "@/wayfinder/routes";
 import { useAppData } from "@/core/state/appData.js";
-import UserSettingsMenu from "@/features/user/components/UserSettingsMenu.vue";
 import { ref } from "vue";
 
 defineEmits<{
@@ -42,7 +42,7 @@ const settingsOpen = ref<boolean>(false);
             <UserSettingsMenu
                 class="fixed top-13 right-5 bg-white"
                 v-model="settingsOpen"
-                v-click-outside="() => (settingsOpen = false)"
+                v-on-click-outside="() => (settingsOpen = false)"
             />
             <BaseButton
                 class="lg:hidden"
