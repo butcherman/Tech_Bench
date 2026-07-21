@@ -6,9 +6,11 @@ declare module "@inertiajs/core" {
             current_user: User | null;
             csrf_token: string;
             navbar: menuItem[];
-            // bookmarks: any[];
-            // auth: { user: { id: number; name: string } | null };
-            // appName: string;
+            breadcrumbs: {
+                title: string;
+                url: string;
+                is_current_page: boolean;
+            }[];
         };
         // flashDataType: {
         //     toast?: { type: "success" | "error"; message: string };
