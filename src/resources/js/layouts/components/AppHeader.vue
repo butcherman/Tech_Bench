@@ -6,12 +6,16 @@ import UserAvatar from "./UserAvatar.vue";
 import { about } from "@/wayfinder/routes";
 import { dashboard } from "@/wayfinder/routes";
 import { useAppData } from "@/core/state/appData.js";
+import UserSettingsMenu from "@/features/user/components/UserSettingsMenu.vue";
+import { ref } from "vue";
 
 defineEmits<{
     toggleNavbar: [];
 }>();
 
 const { logo, appName } = useAppData();
+
+const settingsOpen = ref<boolean>(false);
 </script>
 
 <template>
@@ -34,7 +38,12 @@ const { logo, appName } = useAppData();
                 variant="info"
                 circle
             />
-            <UserAvatar />
+            <UserAvatar @click="settingsOpen = true" />
+            <UserSettingsMenu
+                class="fixed top-13 right-5 bg-white"
+                v-model="settingsOpen"
+                v-click-outside="() => (settingsOpen = false)"
+            />
             <BaseButton
                 class="lg:hidden"
                 icon="bars"

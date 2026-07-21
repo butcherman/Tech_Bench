@@ -7,7 +7,7 @@ const { user } = useUserAuth();
 <template>
     <div>
         <div
-            class="relative inline-flex items-center justify-center w-10 h-10 overflow-hidden bg-slate-100 rounded-full pointer"
+            class="relative inline-flex items-center justify-center w-10 h-10 overflow-hidden bg-slate-200 rounded-full pointer"
         >
             <span class="font-medium text-body">{{ user.initials }}</span>
         </div>
