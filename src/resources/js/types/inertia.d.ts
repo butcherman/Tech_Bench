@@ -3,8 +3,9 @@ import "@inertiajs/core";
 declare module "@inertiajs/core" {
     export interface InertiaConfig {
         sharedPageProps: {
-            current_user: User;
+            current_user: User | null;
             csrf_token: string;
+            navbar: menuItem[];
             // bookmarks: any[];
             // auth: { user: { id: number; name: string } | null };
             // appName: string;

@@ -4,6 +4,7 @@ import { computed, ref } from "vue";
 import { show as changePassword } from "@/wayfinder/routes/user/change-password";
 import { show as showSettings } from "@/wayfinder/routes/user/user-settings";
 import { logout } from "@/wayfinder/routes";
+import MenuList from "@/core/components/MenuList.vue";
 
 const emit = defineEmits(["update:modelValue"]);
 
@@ -41,24 +42,18 @@ const menuList = ref<menuItem[]>([
             <h6
                 class="text-center border-b border-b-slate-200 text-muted pb-2 mb-2"
             >
-                {{ user.full_name }}
+                {{ user?.full_name }}
             </h6>
-            <ul>
-                <li
-                    v-for="item in menuList"
-                    :key="item.label"
-                    class="py-2 px-2 hover:bg-slate-100 rounded-md"
-                >
-                    <Link :href="item.route">
-                        <fa-icon :icon="item.icon" />
-                        {{ item.label }}
-                    </Link>
-                </li>
-                <li class="border-t border-t-slate-200">
+            <MenuList :menu-list="menuList" />
+            <ul
+                class="flex flex-col gap-1 mt-2 me-2 border-t border-t-slate-200 w-full"
+            >
+                <li class="mt-2">
                     <Link
                         :href="logout.url()"
+                        as="div"
                         method="POST"
-                        class="w-full block py-2 px-4 pointer text-start hover:bg-slate-100 rounded-md"
+                        class="block p-2 w-full h-full hover:bg-slate-100 rounded-lg text-slate-700"
                     >
                         <fa-icon icon="sign-out-alt" />
                         Logout

@@ -50,17 +50,17 @@ class BuildUserNavbar
     {
         return [
             [
-                'name' => 'Dashboard',
+                'label' => 'Dashboard',
                 'route' => route('dashboard'),
                 'icon' => 'fas fa-tachometer-alt',
             ],
             [
-                'name' => 'Customers',
+                'label' => 'Customers',
                 'route' => route('customers.index'),
                 'icon' => 'fas fa-user-tie',
             ],
             [
-                'name' => 'Tech Tips',
+                'label' => 'Tech Tips',
                 'route' => route('tech-tips.index'),
                 'icon' => 'fas fa-tools',
             ],
@@ -77,7 +77,7 @@ class BuildUserNavbar
         }
 
         return [
-            'name' => 'Administration',
+            'label' => 'Administration',
             'route' => route('admin.index'),
             'icon' => 'fas fa-user-shield',
         ];
@@ -93,7 +93,7 @@ class BuildUserNavbar
         }
 
         return [
-            'name' => 'Reports',
+            'label' => 'Reports',
             'icon' => 'chart-bar',
             'route' => route('reports.index'),
         ];
@@ -109,7 +109,7 @@ class BuildUserNavbar
         }
 
         return [
-            'name' => 'File Links',
+            'label' => 'File Links',
             'icon' => 'link',
             'route' => route('links.index'),
         ];

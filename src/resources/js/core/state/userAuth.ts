@@ -1,13 +1,14 @@
-import { usePage } from "@inertiajs/vue3";
 import { readonly } from "vue";
+import { usePage } from "@inertiajs/vue3";
 
 export const useUserAuth = () => {
     const { props } = usePage();
 
-    const user: User = props.current_user;
-    // const navBar = [];
+    const user: User | undefined = props.current_user ?? undefined;
+    const navBar = props.navbar;
 
     return {
-        user: readonly(user),
+        user: user ? readonly(user) : undefined,
+        navBar,
     };
 };
