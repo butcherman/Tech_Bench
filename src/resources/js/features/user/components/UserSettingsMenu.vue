@@ -26,12 +26,12 @@ const menuList = ref<menuItem[]>([
     {
         label: "Settings",
         icon: "fa-cog",
-        route: changePassword.url(),
+        route: showSettings.url(),
     },
     {
         label: "Change Password",
         icon: "key",
-        route: showSettings.url(),
+        route: changePassword.url(),
     },
 ]);
 </script>

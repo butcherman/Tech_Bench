@@ -40,7 +40,13 @@ const handleErrors = (
         if (formKeys.includes(err[0])) {
             setFieldError(err[0], err[1]);
         } else {
-            uncaughtErrors.value.push(err[1]);
+            // If the value is an object, inspect the error bag again
+            if (typeof err[1] === "object") {
+                handleErrors(formData, err[1]);
+            } else {
+                console.log("uncaught", err);
+                uncaughtErrors.value.push(err[1]);
+            }
         }
     });
 };

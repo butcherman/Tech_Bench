@@ -33,10 +33,10 @@ const onClickOutsideHandler = [
             v-on-click-outside="onClickOutsideHandler"
         />
         <section class="mt-14 lg:ms-64 grow bg-gray-200 flex flex-col">
-            <div class="p-5 grow">
+            <div class="p-5 grow flex flex-col">
                 <Breadcumbs class="mb-2" />
                 <StaticAlert />
-                <div>
+                <div class="grow">
                     <slot />
                 </div>
             </div>
