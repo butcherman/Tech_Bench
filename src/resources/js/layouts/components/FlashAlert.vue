@@ -2,9 +2,11 @@
 import gsap from "gsap";
 import { useAlertStyles } from "../composables/alertStyles";
 import { useFlashState } from "../../core/state/flashState";
+import { onMounted, onUnmounted, ref } from "vue";
+import { router } from "@inertiajs/vue3";
 
 const { getStatusType, getStatusIcon } = useAlertStyles();
-const { flashAlerts } = useFlashState();
+const { flashAlerts, pushFlashAlert } = useFlashState();
 
 /*
 |-------------------------------------------------------------------------------
@@ -28,6 +30,24 @@ const onLeave = (el: Element, done: () => void): void => {
         onComplete: done,
     });
 };
+
+const flashListener = ref();
+
+/**
+ * Regester the event listener to monitor for flash messages
+ */
+onMounted(() => {
+    flashListener.value = router.on("flash", (event) => {
+        console.log(event.detail.flash);
+
+        let msg = event.detail.flash;
+        if (msg.banner) {
+            pushFlashAlert(msg.banner);
+        }
+    });
+});
+
+onUnmounted(() => flashListener.value());
 </script>
 
 <template>

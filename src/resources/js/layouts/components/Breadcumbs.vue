@@ -1,13 +1,16 @@
 <script setup lang="ts">
 import { usePage } from "@inertiajs/vue3";
+import { computed } from "vue";
 
 const { props } = usePage();
+
+const breadcrumbs = computed(() => props.breadcrumbs);
 </script>
 
 <template>
     <div class="bg-blue-300 rounded-lg opacity-85 p-4">
         <ul class="flex gap-2">
-            <li v-for="link in props.breadcrumbs" :key="link.url">
+            <li v-for="link in breadcrumbs" :key="link.url">
                 <div v-if="link.is_current_page">
                     {{ link.title }}
                 </div>

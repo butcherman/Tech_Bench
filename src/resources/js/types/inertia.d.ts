@@ -12,9 +12,9 @@ declare module "@inertiajs/core" {
                 is_current_page: boolean;
             }[];
         };
-        // flashDataType: {
-        //     toast?: { type: "success" | "error"; message: string };
-        // };
+        flashDataType: {
+            banner?: FlashAlert;
+        };
         // errorValueType: string[];
         // layoutProps: {
         //     title: string;

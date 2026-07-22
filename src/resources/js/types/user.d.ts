@@ -21,3 +21,9 @@ type UserRole = {
     description: string;
     allow_edit: boolean;
 };
+
+type UserSettings = {
+    setting_type_id: number;
+    value: boolean;
+    name: string;
+};

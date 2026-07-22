@@ -88,7 +88,6 @@ const onSubmit = handleSubmit((form: InertiaFormData): void => {
         onFinish: () => (isSubmitting.value = false),
         onSuccess: () => emit("success"),
         onError: () => handleErrors(form, formData.errors),
-        onFlash: (msg) => console.log(msg), // TODO - Make this work???
     });
 });
 
