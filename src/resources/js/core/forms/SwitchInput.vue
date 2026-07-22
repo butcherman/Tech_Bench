@@ -27,7 +27,7 @@ const { getBackgroundClass } = useVariantHelper();
 const switchClass = computed<string>(() => {
     let vClass = getBackgroundClass(props.variant ?? "primary");
 
-    return `peer-checked:${vClass}`;
+    return value.value ? vClass : "bg-slate-300";
 });
 
 /**
@@ -102,13 +102,14 @@ const {
                     invalid: hasError,
                 }"
                 :name="name"
+                :checked="value"
                 @focus="onFocus"
                 @blur="onBlur"
                 @change="$emit('change', value)"
             />
             <div
-                class="rounded-full peer bg-slate-300 transition-colors duration-200"
                 :class="[switchClass, switchSizeClass]"
+                class="rounded-full transition-colors duration-200"
             />
             <span
                 class="dot absolute left-1 top-1 bg-white rounded-full transition-transform duration-200 ease-in-out"

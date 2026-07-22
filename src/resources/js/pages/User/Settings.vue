@@ -2,6 +2,7 @@
 import AppLayout from "@/layouts/AppLayout.vue";
 import Card from "@/core/components/Card.vue";
 import UserAccountForm from "@/features/user/forms/UserAccountForm.vue";
+import UserSettingsForm from "@/features/user/forms/UserSettingsForm.vue";
 
 const props = defineProps<{
     current_user: User;
@@ -15,6 +16,8 @@ const props = defineProps<{
         enabled: boolean;
     };
 }>();
+
+// TODO - Finish 2FA
 </script>
 
 <script lang="ts">
@@ -27,10 +30,10 @@ export default { layout: AppLayout };
                 <UserAccountForm :user="current_user" />
             </Card>
             <Card class="flex-1" title="My Settings">
-                <!-- <UserSettingsForm :user="current_user" :settings="settings" /> -->
+                <UserSettingsForm :user="current_user" :settings="settings" />
             </Card>
         </div>
-        <div>
+        <div class="flex justify-center">
             <Card title="Two Factor Authentication">
                 <template #append-title>
                     <!-- <AuthenticatorRecoveryCodes /> -->

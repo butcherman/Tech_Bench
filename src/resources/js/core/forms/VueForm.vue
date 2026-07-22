@@ -107,7 +107,11 @@ defineExpose({
 </script>
 
 <template>
-    <Overlay :loading="isSubmitting" :full-page="fullPageOverlay">
+    <Overlay
+        :loading="isSubmitting"
+        :full-page="fullPageOverlay"
+        class="h-full"
+    >
         <form
             class="h-full flex flex-col"
             :name="name"

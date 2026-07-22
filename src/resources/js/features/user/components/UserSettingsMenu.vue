@@ -53,7 +53,7 @@ const menuList = ref<menuItem[]>([
                         :href="logout.url()"
                         as="div"
                         method="POST"
-                        class="block p-2 w-full h-full hover:bg-slate-100 rounded-lg text-slate-700"
+                        class="block p-2 w-full h-full hover:bg-slate-100 rounded-lg text-slate-700 pointer"
                     >
                         <fa-icon icon="sign-out-alt" />
                         Logout
