@@ -1,7 +1,7 @@
 <script setup lang="ts">
+import MenuList from "@/core/components/MenuList.vue";
 import { computed } from "vue";
 import { useUserAuth } from "@/core/state/userAuth";
-import MenuList from "@/core/components/MenuList.vue";
 
 const emit = defineEmits(["update:modelValue"]);
 

@@ -7,7 +7,8 @@ import { computed, defineAsyncComponent, ref } from "vue";
 import { usePage } from "@inertiajs/vue3";
 import type { AsyncComponentLoader } from "vue";
 
-const { url } = usePage();
+const page = usePage();
+const url = computed(() => page.url);
 
 const showHelp = ref<boolean>(false);
 const helpBase: string = "../../help/routes";

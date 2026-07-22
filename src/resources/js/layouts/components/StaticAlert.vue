@@ -2,13 +2,14 @@
 import { usePage } from "@inertiajs/vue3";
 
 // TODO - Format error messages properly
-const { props } = usePage();
+const page = usePage();
+const errors = page.props.errors;
 </script>
 
 <template>
     <div>
         <div
-            v-for="err in props.errors"
+            v-for="err in errors"
             class="bg-red-600 flex py-2 px-4 rounded-lg justify-between text-white"
         >
             <div><fa-icon icon="triangle-exclamation" /></div>

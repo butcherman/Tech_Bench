@@ -1,11 +1,13 @@
-import { readonly } from "vue";
+import { computed, readonly } from "vue";
 import { usePage } from "@inertiajs/vue3";
 
 export const useUserAuth = () => {
-    const { props } = usePage();
+    const page = usePage();
 
-    const user: User | undefined = props.current_user ?? undefined;
-    const navBar = props.navbar;
+    const user = computed<User | undefined>(
+        () => page.props.current_user ?? undefined,
+    );
+    const navBar = computed<menuItem[]>(() => page.props.navbar);
 
     return {
         user: user ? readonly(user) : undefined,

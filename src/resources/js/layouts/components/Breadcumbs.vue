@@ -2,9 +2,8 @@
 import { usePage } from "@inertiajs/vue3";
 import { computed } from "vue";
 
-const { props } = usePage();
-
-const breadcrumbs = computed(() => props.breadcrumbs);
+const page = usePage();
+const breadcrumbs = computed(() => page.props.breadcrumbs);
 </script>
 
 <template>
