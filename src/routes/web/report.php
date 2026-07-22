@@ -4,6 +4,7 @@ use App\Http\Controllers\Reports\ReportController;
 use App\Http\Controllers\Reports\ReportParametersController;
 use App\Http\Controllers\Reports\RunReportController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 
 /*
 |-------------------------------------------------------------------------------
