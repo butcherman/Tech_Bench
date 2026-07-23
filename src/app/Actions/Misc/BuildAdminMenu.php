@@ -46,27 +46,27 @@ class BuildAdminMenu
         if ($this->checkPermission($this->user, 'Manage Users')) {
             $userBuild = [
                 [
-                    'name' => 'Users',
+                    'label' => 'Users',
                     'icon' => 'fas fa-user-edit',
                     'route' => route('admin.user.index'),
                 ],
                 [
-                    'name' => 'Create User',
+                    'label' => 'Create User',
                     'icon' => 'fas fa-user-plus',
                     'route' => route('admin.user.create'),
                 ],
                 [
-                    'name' => 'List Disabled Users',
+                    'label' => 'List Disabled Users',
                     'icon' => 'fas fa-store-alt-slash',
                     'route' => route('admin.user.deactivated'),
                 ],
                 [
-                    'name' => 'Password Policy',
+                    'label' => 'Password Policy',
                     'icon' => 'fas fa-user-lock',
                     'route' => route('admin.user.password-policy.edit'),
                 ],
                 [
-                    'name' => 'User Settings',
+                    'label' => 'User Settings',
                     'icon' => 'cog',
                     'route' => route('admin.user.user-settings.edit'),
                 ],
@@ -75,7 +75,7 @@ class BuildAdminMenu
 
         if ($this->checkPermission($this->user, 'Manage Permissions')) {
             $userBuild[] = [
-                'name' => 'Roles and Permissions',
+                'label' => 'Roles and Permissions',
                 'icon' => 'fas fa-users-cog',
                 'route' => route('admin.user-roles.index'),
             ];
@@ -94,27 +94,27 @@ class BuildAdminMenu
         if ($this->checkPermission($this->user, 'Manage Customers')) {
             $custMenu = [
                 [
-                    'name' => 'Customer Settings',
+                    'label' => 'Customer Settings',
                     'icon' => 'cog',
                     'route' => route('customers.settings.edit'),
                 ],
                 [
-                    'name' => 'Disabled Customers',
+                    'label' => 'Disabled Customers',
                     'icon' => 'ban',
                     'route' => route('customers.disabled.index'),
                 ],
                 [
-                    'name' => 'Uploaded File Types',
+                    'label' => 'Uploaded File Types',
                     'icon' => 'file-import',
                     'route' => route('admin.file-types.index'),
                 ],
                 [
-                    'name' => 'Contact Phone Types',
+                    'label' => 'Contact Phone Types',
                     'icon' => 'phone',
                     'route' => route('admin.phone-types.index'),
                 ],
                 [
-                    'name' => 'Re-Assign Customer Site',
+                    'label' => 'Re-Assign Customer Site',
                     'icon' => 'truck-moving',
                     'route' => route('customers.re-assign.edit'),
                 ],
@@ -134,12 +134,12 @@ class BuildAdminMenu
         if ($this->checkPermission($this->user, 'Manage Equipment')) {
             $equipMenu = [
                 [
-                    'name' => 'Equipment Categories and Types',
+                    'label' => 'Equipment Categories and Types',
                     'icon' => 'fas fa-cogs',
                     'route' => route('equipment.index'),
                 ],
                 [
-                    'name' => 'Customer Equipment Data',
+                    'label' => 'Customer Equipment Data',
                     'icon' => 'fas fa-database',
                     'route' => route('equipment-data.index'),
                 ],
@@ -151,7 +151,7 @@ class BuildAdminMenu
             && $this->checkPermission($this->user, 'Manage Equipment Workbooks')
         ) {
             $equipMenu[] = [
-                'name' => 'Equipment Workbooks',
+                'label' => 'Equipment Workbooks',
                 'icon' => 'fa-table',
                 'route' => route('workbooks.index'),
             ];
@@ -170,17 +170,17 @@ class BuildAdminMenu
         if ($this->checkPermission($this->user, 'Manage Tech Tips')) {
             $techTipMenu = [
                 [
-                    'name' => 'Tech Tip Settings',
+                    'label' => 'Tech Tip Settings',
                     'icon' => 'cog',
                     'route' => route('admin.tech-tips.settings.edit'),
                 ],
                 [
-                    'name' => 'Tech Tip Types',
+                    'label' => 'Tech Tip Types',
                     'icon' => 'file-alt',
                     'route' => route('admin.tech-tips.tip-types.index'),
                 ],
                 [
-                    'name' => 'Disabled Tech Tips',
+                    'label' => 'Disabled Tech Tips',
                     'icon' => 'ban',
                     'route' => route('admin.tech-tips.deleted-tips'),
                 ],
@@ -188,7 +188,7 @@ class BuildAdminMenu
 
             if ($this->user->features()->active(TechTipCommentFeature::class)) {
                 $techTipMenu[] = [
-                    'name' => 'View Flagged Comments',
+                    'label' => 'View Flagged Comments',
                     'icon' => 'flag',
                     'route' => route('admin.tech-tips.flagged-comments.index'),
                 ];
@@ -208,27 +208,27 @@ class BuildAdminMenu
         if ($this->checkPermission($this->user, 'App Settings')) {
             $settingsMenu = [
                 [
-                    'name' => 'Application Logo',
+                    'label' => 'Application Logo',
                     'icon' => 'fa-image',
                     'route' => route('admin.logo.edit'),
                 ],
                 [
-                    'name' => 'Application Configuration',
+                    'label' => 'Application Configuration',
                     'icon' => 'fa-server',
                     'route' => route('admin.basic-settings.edit'),
                 ],
                 [
-                    'name' => 'Email Settings',
+                    'label' => 'Email Settings',
                     'icon' => 'fas fa-envelope',
                     'route' => route('admin.email-settings.edit'),
                 ],
                 [
-                    'name' => 'Security Settings',
+                    'label' => 'Security Settings',
                     'icon' => 'fa-lock',
                     'route' => route('admin.security.index'),
                 ],
                 [
-                    'name' => 'Enable/Disable Features',
+                    'label' => 'Enable/Disable Features',
                     'icon' => 'gears',
                     'route' => route('admin.features.edit'),
                 ],
@@ -248,22 +248,22 @@ class BuildAdminMenu
         if ($this->checkPermission($this->user, 'App Settings')) {
             $maintMenu = [
                 [
-                    'name' => 'Application Logs',
+                    'label' => 'Application Logs',
                     'icon' => 'fa-bug',
                     'route' => route('maint.logs.index'),
                 ],
                 [
-                    'name' => 'Log Settings',
+                    'label' => 'Log Settings',
                     'icon' => 'fa-sliders',
                     'route' => route('maint.logs.settings.show'),
                 ],
                 [
-                    'name' => 'Backups',
+                    'label' => 'Backups',
                     'icon' => 'fa-hdd',
                     'route' => route('maint.backups.index'),
                 ],
                 [
-                    'name' => 'Backup Settings',
+                    'label' => 'Backup Settings',
                     'icon' => 'fa-cog',
                     'route' => route('maint.backups.settings.show'),
                 ],
@@ -286,12 +286,12 @@ class BuildAdminMenu
         ) {
             $fileLinkMenu = [
                 [
-                    'name' => 'File Link Settings',
+                    'label' => 'File Link Settings',
                     'icon' => 'cog',
                     'route' => route('admin.links.settings.edit'),
                 ],
                 [
-                    'name' => 'Manage File Links',
+                    'label' => 'Manage File Links',
                     'icon' => 'tools',
                     'route' => route('admin.links.manage.index'),
                 ],
