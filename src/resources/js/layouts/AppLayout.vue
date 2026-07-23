@@ -5,10 +5,19 @@ import AppSideNav from "./components/AppSideNav.vue";
 import Breadcumbs from "./components/Breadcumbs.vue";
 import FlashAlert from "./components/FlashAlert.vue";
 import StaticAlert from "./components/StaticAlert.vue";
-import { Head } from "@inertiajs/vue3";
-import { ref, useTemplateRef } from "vue";
+import { Head, usePage } from "@inertiajs/vue3";
+import { computed, ref, useTemplateRef } from "vue";
 
 const appHeader = useTemplateRef("app-header");
+
+/**
+ * Set the Page Title to match Breadcrumbs title
+ */
+const pageTitle = computed<string | undefined>(
+    () =>
+        usePage().props.breadcrumbs.find((crumb) => crumb.is_current_page)
+            ?.title,
+);
 
 /**
  * Navbar control
@@ -26,7 +35,7 @@ const onClickOutsideHandler = [
 <template>
     <div class="h-screen flex flex-col">
         <FlashAlert />
-        <Head title="page title" />
+        <Head :title="pageTitle" />
         <AppHeader ref="app-header" @toggle-navbar="toggleNav" />
         <AppSideNav
             v-model="navbarHidden"

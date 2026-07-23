@@ -27,4 +27,6 @@ createInertiaApp({
             .component("Link", Link)
             .directive("on-click-outside", vOnClickOutside);
     },
+    title: (title: string) =>
+        title ? `${title} - ${appData.name}` : `${appData.name}`,
 });
