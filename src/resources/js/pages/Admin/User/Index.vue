@@ -3,7 +3,7 @@ import AddButton from "@/core/components/buttons/AddButton.vue";
 import AppLayout from "@/layouts/AppLayout.vue";
 import Card from "@/core/components/Card.vue";
 import ComponentLoader from "@/core/components/loaders/ComponentLoader.vue";
-import UserAdministration from "@/features/administration/user/components/UserAdministration.vue";
+import UserAdministration from "@/features/user/components/UserAdministration.vue";
 
 defineProps<{
     userList?: User[];

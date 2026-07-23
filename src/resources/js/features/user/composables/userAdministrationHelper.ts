@@ -1,6 +1,6 @@
 import { readonly } from "vue";
 
-export const useUserAdministration = () => {
+export const useUserAdministrationHelper = () => {
     /**
      * List of columns for any list of users
      */

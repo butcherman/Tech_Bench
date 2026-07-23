@@ -1,8 +1,4 @@
 <script setup lang="ts">
-import { useUserAdministration } from "../composables/userAdministration";
-
-const { userTableColumns } = useUserAdministration();
-
 defineProps<{
     userList: User[];
 }>();
