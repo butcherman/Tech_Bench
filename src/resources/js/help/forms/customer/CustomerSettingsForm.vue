@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import TableStacked from "@/core/components/TableStacked.vue";
+import TableStacked from "@/core/components/tables/TableStacked.vue";
 
 const tableData = {
     allow_users_to_manually_input_customer_id: `Determine if users can manually

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import TableStacked from "@/core/components/TableStacked.vue";
+import TableStacked from "@/core/components/tables/TableStacked.vue";
 
 const tableData = {
     from_email_address: "All emails will be sent from this address.",

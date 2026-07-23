@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import AddButton from "@/core/components/buttons/AddButton.vue";
 import AppLayout from "@/layouts/AppLayout.vue";
-import AtomLoader from "@/core/components/loaders/AtomLoader.vue";
 import Card from "@/core/components/Card.vue";
-import { Deferred } from "@inertiajs/vue3";
+import ComponentLoader from "@/core/components/loaders/ComponentLoader.vue";
+import UserAdministration from "@/features/administration/user/components/UserAdministration.vue";
 
 defineProps<{
     userList?: User[];
@@ -19,14 +19,9 @@ export default { layout: AppLayout };
             <template #append-title>
                 <AddButton text="New User" size="small" pill />
             </template>
-            <Deferred data="user-list">
-                <template #fallback>
-                    <div class="flex justify-center">
-                        <AtomLoader text="Loading Users" />
-                    </div>
-                </template>
-            </Deferred>
-            user list
+            <ComponentLoader data="user-list" loading-text="Loading Users">
+                <UserAdministration v-if="userList" :user-list="userList" />
+            </ComponentLoader>
         </Card>
     </div>
 </template>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import TableStacked from "@/core/components/TableStacked.vue";
+import TableStacked from "@/core/components/tables/TableStacked.vue";
 
 const tableData = {
     parent_customer_name: `Name of primary customer site will be created under.`,

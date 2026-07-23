@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import TableStacked from "@/core/components/TableStacked.vue";
+import TableStacked from "@/core/components/tables/TableStacked.vue";
 
 const tableData = {
     require_two_factor_authentication: `Turn on 2FA`,

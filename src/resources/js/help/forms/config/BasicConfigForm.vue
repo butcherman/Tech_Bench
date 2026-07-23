@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import TableStacked from "@/core/components/TableStacked.vue";
+import TableStacked from "@/core/components/tables/TableStacked.vue";
 
 const tableData = {
     site_url: `Enter the full URL to access this site. This URL will be used in
