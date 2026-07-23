@@ -1,9 +1,21 @@
-interface DataTableColumn {
-    label?: string;
-    field: string;
-    icon?: string;
-    filterable?: boolean;
-    filterPlaceholder?: string;
-    filterSelect?: boolean;
-    sort?: boolean;
+import type { RowData } from "@tanstack/vue-table";
+import type { AccessorFn, ColumnDef, Table } from "@tanstack/vue-table";
+
+declare module "@tanstack/table-core" {
+    export interface ColumnMeta<TData extends RowData, TValue> {
+        label?: string;
+        icon?: string;
+        filterSelect: boolean;
+        filterPlaceholder?: string;
+    }
+
+    export interface TableMeta<TData extends RowData> {
+        borderClass: string;
+        paddingClass: string;
+        paginate: boolean;
+        paginationArray: number[];
+        perPage: number;
+        pointerClass: string;
+        bgClass: (row: TData, index: number) => string | false;
+    }
 }
