@@ -1,4 +1,6 @@
 <script setup lang="ts" generic="TRow extends RowData">
+import DataTableBody from "./components/DataTableBody.vue";
+import DataTableFooter from "./components/DataTableFooter.vue";
 import DataTableHeader from "./components/DataTableHeader.vue";
 import { useDataTable } from "./composables/dataTable.js";
 import type { DataTableColumn } from "./types.js";
@@ -18,6 +20,7 @@ const props = defineProps<{
     compact?: boolean;
     striped?: boolean;
     gridLines?: boolean;
+    //
     allowRowClick?: boolean;
     noResultsText?: string;
     paginate?: boolean;
@@ -32,7 +35,23 @@ const table = useDataTable(props);
 <template>
     <div class="overflow-x-auto w-full">
         <table class="table-auto w-full">
-            <DataTableHeader :table="table" />
+            <DataTableHeader :table="table">
+                <template
+                    v-for="name of Object.keys($slots)"
+                    v-slot:[name]="data"
+                >
+                    <slot :name="name" v-bind="data" />
+                </template>
+            </DataTableHeader>
+            <DataTableBody :table="table" :no-results-text="noResultsText">
+                <template
+                    v-for="name of Object.keys($slots)"
+                    v-slot:[name]="data"
+                >
+                    <slot :name="name" v-bind="data" />
+                </template>
+            </DataTableBody>
+            <!-- <DataTableFooter /> -->
         </table>
     </div>
 </template>

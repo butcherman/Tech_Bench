@@ -1,7 +1,6 @@
-<script setup lang="ts" generic="TData">
-import { useTableStyles } from "../composables/tableStyles";
+<script setup lang="ts" generic="TData extends RowData">
 import { FlexRender } from "@tanstack/vue-table";
-import type { Table } from "@tanstack/vue-table";
+import type { RowData, Table } from "@tanstack/vue-table";
 
 defineSlots<{
     [key: string]: any;
@@ -11,7 +10,21 @@ const props = defineProps<{
     table: Table<TData>;
 }>();
 
-const { getSortingIcon } = useTableStyles();
+/**
+ * Get the Sort Icon for each column
+ */
+const getSortingIcon = (
+    col: false | "asc" | "desc",
+): "sort-down" | "sort-up" | "sort" => {
+    switch (col) {
+        case "asc":
+            return "sort-down";
+        case "desc":
+            return "sort-up";
+        default:
+            return "sort";
+    }
+};
 </script>
 
 <template>

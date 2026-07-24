@@ -39,6 +39,7 @@ declare module "@tanstack/table-core" {
         paginationArray: number[];
         perPage: number;
         pointerClass: string;
-        bgClass: (row: TData, index: number) => string | false;
+        stripedClass: string;
+        // bgClass: (row: TData, index: number) => string | false;
     }
 }

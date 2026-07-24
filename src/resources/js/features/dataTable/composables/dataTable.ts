@@ -1,3 +1,5 @@
+import { useTableColumns } from "./tableColumns";
+import { useTableStyles } from "./tableStyles";
 import {
     useVueTable,
     getCoreRowModel,
@@ -8,30 +10,33 @@ import {
     getFacetedUniqueValues,
     RowData,
 } from "@tanstack/vue-table";
-import { useTableColumns } from "./tableColumns";
 import type { DataTableProps } from "../types";
 
 export const useDataTable = <TRow extends RowData>(
     props: DataTableProps<TRow>,
 ) => {
+    const { pointerClass, borderClass, paddingClass, stripedClass } =
+        useTableStyles(props);
+
     return useVueTable({
         columns: useTableColumns(props.columns),
-        data: [],
+        data: props.data,
         initialState: {
-            // pagination: {
-            //     pageIndex: 0,
-            //     pageSize: perPage.value,
-            // },
+            pagination: {
+                pageIndex: 0,
+                // pageSize: perPage.value,
+            },
         },
-        // meta: {
-        //     borderClass: borderClass.value,
-        //     paddingClass: paddingClass.value,
-        //     paginate: props.paginate ?? false,
-        //     paginationArray: paginationArray.value,
-        //     perPage: perPage.value,
-        //     pointerClass: pointerClass.value,
-        //     bgClass,
-        // },
+        meta: {
+            borderClass: borderClass.value,
+            paddingClass: paddingClass.value,
+            paginate: props.paginate ?? false,
+            paginationArray: [], // paginationArray.value,
+            perPage: 25, //perPage.value,
+            pointerClass: pointerClass.value,
+            stripedClass: stripedClass.value,
+            // bgClass,
+        },
         getCoreRowModel: getCoreRowModel(),
         getFacetedRowModel: getFacetedRowModel(),
         getFacetedUniqueValues: getFacetedUniqueValues(),
