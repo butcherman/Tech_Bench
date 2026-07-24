@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import TableStacked from "@/core/components/tables/TableStacked.vue";
+import TableStacked from "@/features/dataTable/TableStacked.vue";
 
 const tableData = {
     enable_nightly_backups: `Backups will be run at daily at 3:00am in the

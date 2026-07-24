@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import TableStacked from "@/core/components/tables/TableStacked.vue";
+import TableStacked from "@/features/dataTable/TableStacked.vue";
 
 const tableData = {
     username: `Enter a username that the user will login with.`,

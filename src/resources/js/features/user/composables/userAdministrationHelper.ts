@@ -1,10 +1,10 @@
-import { readonly } from "vue";
+import type { DataTableColumn } from "@/features/dataTable/types";
 
 export const useUserAdministrationHelper = () => {
     /**
      * List of columns for any list of users
      */
-    const userTableColumns = [
+    const userTableColumns: DataTableColumn<User>[] = [
         {
             label: "Name",
             field: "full_name",
@@ -30,12 +30,9 @@ export const useUserAdministrationHelper = () => {
             filterable: true,
             filterSelect: true,
         },
-        {
-            field: "actions",
-        },
     ];
 
     return {
-        userTableColumns: readonly(userTableColumns),
+        userTableColumns,
     };
 };

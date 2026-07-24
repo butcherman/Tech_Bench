@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import TableStacked from "@/core/components/tables/TableStacked.vue";
+import TableStacked from "@/features/dataTable/TableStacked.vue";
 
 const tableData = {
     subject: `Enter a descriptive subject to let others know what this Tech Tip

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import TableStacked from "@/core/components/tables/TableStacked.vue";
+import TableStacked from "@/features/dataTable/TableStacked.vue";
 
 const tableData = {
     allow_comments: `Determine if other users can expand on a Tech Tip by leaving

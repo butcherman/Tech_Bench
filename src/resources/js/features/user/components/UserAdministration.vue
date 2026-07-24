@@ -1,11 +1,16 @@
 <script setup lang="ts">
+import DataTable from "@/features/dataTable/DataTable.vue";
+import { useUserAdministrationHelper } from "../composables/userAdministrationHelper";
+
 defineProps<{
     userList: User[];
 }>();
+
+const { userTableColumns } = useUserAdministrationHelper();
 </script>
 
 <template>
     <div>
-        <h3>user list goes here.</h3>
+        <DataTable :columns="userTableColumns" :data="userList" />
     </div>
 </template>
