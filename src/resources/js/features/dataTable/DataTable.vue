@@ -17,12 +17,15 @@ const emit = defineEmits<{
 const props = defineProps<{
     columns: DataTableColumn<TRow>[];
     data: TRow[];
+    // Optional
+    actionsSlot?: boolean;
     compact?: boolean;
     striped?: boolean;
     gridLines?: boolean;
+    noResultsText?: string;
+
     //
     allowRowClick?: boolean;
-    noResultsText?: string;
     paginate?: boolean;
     syncLoadingState?: boolean;
     rowBgFn?: (row: TRow) => string | false;

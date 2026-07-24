@@ -35,6 +35,7 @@ export const useDataTable = <TRow extends RowData>(
             perPage: 25, //perPage.value,
             pointerClass: pointerClass.value,
             stripedClass: stripedClass.value,
+            actionsSlot: props.actionsSlot,
             // bgClass,
         },
         getCoreRowModel: getCoreRowModel(),

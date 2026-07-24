@@ -15,7 +15,7 @@ export default { layout: AppLayout };
 </script>
 <template>
     <div class="flex justify-center">
-        <Card title="User Admistration">
+        <Card title="User Admistration" size="large">
             <template #append-title>
                 <AddButton text="New User" size="small" pill />
             </template>

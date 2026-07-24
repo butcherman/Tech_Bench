@@ -55,6 +55,15 @@ const getSortingIcon = (
                     />
                 </slot>
             </th>
+            <th
+                v-if="table.options.meta?.actionsSlot"
+                :class="[
+                    table.options.meta?.paddingClass,
+                    table.options.meta?.borderClass,
+                ]"
+            >
+                <slot :name="`header.actions`">Actions</slot>
+            </th>
         </tr>
     </thead>
 </template>

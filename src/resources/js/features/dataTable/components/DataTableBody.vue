@@ -36,5 +36,9 @@ const showComponent = computed(() => {
         :table="table"
         :no-results-text="noResultsText"
     />
-    <DataTableBodyData v-if="showComponent === 'body'" />
+    <DataTableBodyData v-if="showComponent === 'body'" :table="table">
+        <template v-for="name of Object.keys($slots)" v-slot:[name]="data">
+            <slot :name="name" v-bind="data" />
+        </template>
+    </DataTableBodyData>
 </template>
