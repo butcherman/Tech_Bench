@@ -1,3 +1,4 @@
+import { ref } from "vue";
 import { useTableColumns } from "./tableColumns";
 import { useTableStyles } from "./tableStyles";
 import {
@@ -18,21 +19,24 @@ export const useDataTable = <TRow extends RowData>(
     const { pointerClass, borderClass, paddingClass, stripedClass } =
         useTableStyles(props);
 
+    const perPage = ref(25);
+    const paginationArray = ref([10, 25, 50, 100]);
+
     return useVueTable({
         columns: useTableColumns(props.columns),
         data: props.data,
         initialState: {
             pagination: {
                 pageIndex: 0,
-                // pageSize: perPage.value,
+                pageSize: perPage.value,
             },
         },
         meta: {
             borderClass: borderClass.value,
             paddingClass: paddingClass.value,
             paginate: props.paginate ?? false,
-            paginationArray: [], // paginationArray.value,
-            perPage: 25, //perPage.value,
+            paginationArray: paginationArray.value,
+            perPage: perPage.value,
             pointerClass: pointerClass.value,
             stripedClass: stripedClass.value,
             actionsSlot: props.actionsSlot,

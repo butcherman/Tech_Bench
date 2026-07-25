@@ -23,12 +23,12 @@ const props = defineProps<{
     striped?: boolean;
     gridLines?: boolean;
     noResultsText?: string;
+    paginate?: boolean;
 
     rowClassFn?: (row: TRow) => string | false;
 
     //
     // allowRowClick?: boolean;
-    paginate?: boolean;
     // syncLoadingState?: boolean;
     rowClickLink?: (row: TRow) => string;
 }>();
@@ -55,7 +55,14 @@ const table = useDataTable(props);
                     <slot :name="name" v-bind="data" />
                 </template>
             </DataTableBody>
-            <!-- <DataTableFooter /> -->
+            <DataTableFooter :table="table">
+                <template
+                    v-for="name of Object.keys($slots)"
+                    v-slot:[name]="data"
+                >
+                    <slot :name="name" v-bind="data" />
+                </template>
+            </DataTableFooter>
         </table>
     </div>
 </template>

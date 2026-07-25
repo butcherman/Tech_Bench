@@ -19,6 +19,7 @@ const { userTableColumns } = useUserAdministrationHelper();
             striped
             grid-lines
             actions-slot
+            paginate
         >
             <template #header.actions>&nbsp;</template>
             <template #row.actions>
