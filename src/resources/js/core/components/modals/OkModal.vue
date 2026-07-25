@@ -4,30 +4,32 @@ import BaseModal from "./BaseModal.vue";
 import { ref } from "vue";
 
 const emit = defineEmits<{
-    yesClicked: [];
-    noClicked: [];
+    okClicked: [];
     hidden: [];
+    backdropClicked: [];
 }>();
 
 const props = defineProps<{
-    title: string;
     message: string;
+    title?: string;
+    forceOk?: boolean;
 }>();
 
 const isOpen = ref(true);
 
-const onYesClicked = () => {
-    emit("yesClicked");
-    isOpen.value = false;
-};
-
-const onNoClicked = () => {
-    emit("noClicked");
+const onOkClicked = () => {
+    emit("okClicked");
     isOpen.value = false;
 };
 
 const forceOption = () => {
-    console.log("tried to close");
+    if (props.forceOk) {
+        console.log("tried to close");
+        return;
+    }
+
+    emit("backdropClicked");
+    isOpen.value = false;
 };
 </script>
 
@@ -45,12 +47,7 @@ const forceOption = () => {
         {{ message }}
         <template #footer>
             <div class="flex flex-row-reverse gap-2">
-                <BaseButton text="No" variant="danger" @click="onNoClicked" />
-                <BaseButton
-                    text="Yes"
-                    variant="success"
-                    @click="onYesClicked"
-                />
+                <BaseButton text="OK" variant="success" @click="onOkClicked" />
             </div>
         </template>
     </BaseModal>

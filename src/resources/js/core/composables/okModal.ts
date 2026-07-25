@@ -1,21 +1,18 @@
-import VerifyModal from "../components/modals/VerifyModal.vue";
+import OkModal from "../components/modals/OkModal.vue";
 import { createApp, h } from "vue";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { vOnClickOutside } from "@vueuse/components";
 
-export default (
-    message: string = "Are You Sure",
-    title: string = "Please Verify",
-) => {
+export default (message: string, title: string | undefined = undefined) => {
     return new Promise(function (resolve) {
         const newComp = createApp({
             setup() {
                 return () =>
-                    h(VerifyModal, {
+                    h(OkModal, {
                         title: title,
                         message: message,
-                        onYesClicked: () => resolve(true),
-                        onNoClicked: () => resolve(false),
+                        onBackdropClicked: () => resolve("backdrop-clicked"),
+                        onOkClicked: () => resolve("ok-clicked"),
                         onHidden: () => unmount(),
                     });
             },

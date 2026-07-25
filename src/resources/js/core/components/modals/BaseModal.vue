@@ -45,7 +45,6 @@ const isOpen = computed({
  * Determine if the modal should close when the backdrop is clicked
  */
 const onBackgroundClicked = () => {
-    console.log("clicked");
     if (props.preventOutsideClick) {
         emit("hidePrevented");
         return;

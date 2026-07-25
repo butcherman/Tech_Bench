@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import BaseButton from "@/core/components/buttons/BaseButton.vue";
+import okModal from "@/core/composables/okModal";
 import verifyModal from "@/core/composables/verifyModal";
 import AppLayout from "@/layouts/AppLayout.vue";
 import { ref } from "vue";
@@ -20,6 +21,13 @@ export default { layout: AppLayout };
         <BaseButton
             text="verify"
             @click="verifyModal().then((res) => console.log(res))"
+        />
+
+        <BaseButton
+            text="ok"
+            @click="
+                okModal('This is a message').then((res) => console.log(res))
+            "
         />
     </div>
 </template>
