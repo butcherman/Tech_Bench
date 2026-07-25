@@ -1,13 +1,20 @@
-import type { DeepKeys, RowData } from "@tanstack/vue-table";
+import type { DeepKeys, RowData, CellContext } from "@tanstack/vue-table";
+import type { VNodeChild } from "vue";
 
-export interface DataTableColumn<TRow extends RowData> {
-    label?: string;
+export interface DataTableColumn<TRow extends RowData, TValue = unknown> {
     field: DeepKeys<TRow>;
-    icon?: string;
-    filterable?: boolean;
+    filterable: boolean;
     filterPlaceholder?: string;
-    filterSelect?: boolean;
-    sort?: boolean;
+    filterSelect: boolean;
+    label: string;
+    sort: boolean;
+
+    icon?: string;
+    width?: number;
+    align?: "start" | "center" | "end";
+
+    formatter?: (value: unknown, row: TRow) => unknown;
+    cell?: (info: CellContext<TRow, TValue>) => VNodeChild;
 }
 
 export interface DataTableProps<TRow extends RowData> {
@@ -30,6 +37,7 @@ declare module "@tanstack/table-core" {
     interface ColumnMeta<TData extends RowData, TValue> {
         label?: string;
         icon?: string;
+        align?: "start" | "center" | "end";
         filterSelect?: boolean;
         filterPlaceholder?: string;
     }

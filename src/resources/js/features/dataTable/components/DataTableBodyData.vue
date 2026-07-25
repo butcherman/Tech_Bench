@@ -9,7 +9,7 @@ const props = defineProps<{
 </script>
 
 <template>
-    <TransitionGroup name="data-table" as="tbody">
+    <tbody>
         <tr
             v-for="(row, index) in table.getRowModel().rows"
             :key="row.id"
@@ -27,24 +27,20 @@ const props = defineProps<{
                     table.options.meta?.borderClass,
                 ]"
             >
-                <slot :name="`row.${cell.column.id}`" :rowData="row.original">
-                    <div
-                        v-if="typeof cell.getValue() === 'boolean'"
-                        class="text-center"
+                <div
+                    class="flex"
+                    :class="`justify-${cell.column.columnDef.meta?.align}`"
+                >
+                    <slot
+                        :name="`row.${cell.column.id}`"
+                        :rowData="row.original"
                     >
-                        <fa-icon
-                            :icon="cell.getValue() ? 'check' : 'xmark'"
-                            :class="
-                                cell.getValue() ? 'text-success' : 'text-danger'
-                            "
+                        <FlexRender
+                            :render="cell.column.columnDef.cell"
+                            :props="cell.getContext()"
                         />
-                    </div>
-                    <FlexRender
-                        v-else
-                        :render="cell.column.columnDef.cell"
-                        :props="cell.getContext()"
-                    />
-                </slot>
+                    </slot>
+                </div>
             </td>
             <td
                 v-if="table.options.meta?.actionsSlot"
@@ -56,5 +52,5 @@ const props = defineProps<{
                 <slot :name="`row.actions`" :rowData="row.original" />
             </td>
         </tr>
-    </TransitionGroup>
+    </tbody>
 </template>
