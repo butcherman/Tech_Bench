@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import BaseButton from "@/core/components/buttons/BaseButton.vue";
-import BaseModal from "@/core/components/modals/BaseModal.vue";
+import verifyModal from "@/core/composables/verifyModal";
 import AppLayout from "@/layouts/AppLayout.vue";
 import { ref } from "vue";
 
@@ -15,15 +15,11 @@ export default { layout: AppLayout };
         <h2 class="pb-2">Dashboard</h2>
         <BaseButton text="open modal" @click="modalOpen = !modalOpen" />
         {{ modalOpen }}
-        <BaseModal
-            v-model:open="modalOpen"
-            title="Modal Title"
-            @show="console.log('show')"
-            @hide="console.log('hide')"
-            @shown="console.log('shown')"
-            @hidden="console.log('hidden')"
-        >
-            Modal stuff...
-        </BaseModal>
+        <!-- <VerifyModal title="Please Verify" message="Are You Sure?" /> -->
+
+        <BaseButton
+            text="verify"
+            @click="verifyModal().then((res) => console.log(res))"
+        />
     </div>
 </template>

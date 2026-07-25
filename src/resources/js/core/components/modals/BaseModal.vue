@@ -1,21 +1,37 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, watch } from "vue";
 
 const emit = defineEmits<{
     "update:open": [boolean];
     hidePrevented: [];
+    hide: [];
+    hidden: [];
+    show: [];
+    shown: [];
 }>();
 
 const props = defineProps<{
     open: boolean;
 
     hideBackdrop?: boolean;
+    hideClose?: boolean;
+    position?: "top" | "center" | "bottom";
     preventOutsideClick?: boolean;
     size?: componentSize;
-    position?: "top" | "center" | "bottom";
-    hideClose?: boolean;
     title?: string;
 }>();
+
+watch(props, (newProps) => {
+    if (newProps.open) {
+        emit("show");
+        return;
+    }
+
+    if (!newProps.open) {
+        emit("hide");
+        return;
+    }
+});
 
 /**
  * Modal visual state
@@ -72,7 +88,11 @@ const modalPosition = computed<string>(() => {
 
 <template>
     <Teleport to="body">
-        <Transition name="modal">
+        <Transition
+            name="modal"
+            @after-enter="$emit('shown')"
+            @after-leave="$emit('hidden')"
+        >
             <div
                 v-if="isOpen"
                 class="fixed inset-0 z-50 w-screen overflow-y-auto flex justify-center"
@@ -110,3 +130,15 @@ const modalPosition = computed<string>(() => {
         </Transition>
     </Teleport>
 </template>
+
+<style scoped>
+.modal-enter-active,
+.modal-leave-active {
+    transition: opacity 0.5s ease;
+}
+
+.modal-enter-from,
+.modal-leave-to {
+    opacity: 0;
+}
+</style>
