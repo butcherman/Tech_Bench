@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import PasswordInput from "@/core/forms/PasswordInput.vue";
-import VueForm from "@/core/forms/VueForm.vue";
+import PasswordInput from "@/core/forms/components/PasswordInput.vue";
+import VueForm from "@/core/forms/components/VueForm.vue";
 import { computed } from "vue";
 import { ref as reference, object, string } from "yup";
 import { submit } from "@/wayfinder/routes/init/step-4b";

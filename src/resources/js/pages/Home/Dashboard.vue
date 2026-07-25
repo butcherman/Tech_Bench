@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import AppLayout from "@/layouts/AppLayout.vue";
 import Card from "@/core/components/Card.vue";
-import TextInput from "@/core/forms/TextInput.vue";
-import VueForm from "@/core/forms/VueForm.vue";
+import VueForm from "@/core/forms/components/VueForm.vue";
+import TextInput from "@/core/forms/components/TextInput.vue";
 </script>
 
 <script lang="ts">

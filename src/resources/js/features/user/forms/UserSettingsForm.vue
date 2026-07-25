@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import SwitchInput from "@/core/forms/SwitchInput.vue";
-import VueForm from "@/core/forms/VueForm.vue";
+import SwitchInput from "@/core/forms/components/SwitchInput.vue";
+import VueForm from "@/core/forms/components/VueForm.vue";
 import { object, boolean } from "yup";
 import { update } from "@/wayfinder/routes/user/user-settings";
 
