@@ -15,7 +15,14 @@ export default { layout: AppLayout };
         <h2 class="pb-2">Dashboard</h2>
         <BaseButton text="open modal" @click="modalOpen = !modalOpen" />
         {{ modalOpen }}
-        <BaseModal v-model:open="modalOpen" title="Modal Title">
+        <BaseModal
+            v-model:open="modalOpen"
+            title="Modal Title"
+            @show="console.log('show')"
+            @hide="console.log('hide')"
+            @shown="console.log('shown')"
+            @hidden="console.log('hidden')"
+        >
             Modal stuff...
         </BaseModal>
     </div>
