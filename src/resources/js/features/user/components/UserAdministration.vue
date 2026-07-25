@@ -11,12 +11,22 @@ defineProps<{
 
 const { userTableColumns } = useUserAdministrationHelper();
 
+/**
+ * When a row is clicked on, go to that users profile
+ */
 const rowLink = (event: MouseEvent, userRow: User): void => {
     const linkInfo = {
         href: show.url(userRow.username),
     };
 
     useLinkHelper(event, linkInfo);
+};
+
+/**
+ * Disable a user
+ */
+const disableUser = (userRow: User): void => {
+    console.log(userRow);
 };
 </script>
 
@@ -25,16 +35,22 @@ const rowLink = (event: MouseEvent, userRow: User): void => {
         <DataTable
             :columns="userTableColumns"
             :data="userList"
+            :row-link-fn="rowLink"
             no-results-text="No Users Found"
             striped
             grid-lines
             actions-slot
             paginate
-            :row-link-fn="rowLink"
         >
             <template #header.actions>&nbsp;</template>
-            <template #row.actions>
-                <BaseBadge icon="user-slash" variant="danger" circle />
+            <template #row.actions="{ rowData }">
+                <BaseBadge
+                    icon="user-slash"
+                    variant="danger"
+                    pointer
+                    circle
+                    @click="disableUser(rowData)"
+                />
             </template>
         </DataTable>
     </div>

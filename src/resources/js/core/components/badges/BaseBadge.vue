@@ -9,6 +9,7 @@ const props = defineProps<{
     circle?: boolean;
     text?: string;
     variant?: variantType;
+    pointer?: boolean;
 }>();
 
 const { getVariantClass } = useVariantHelper();
@@ -33,7 +34,7 @@ const sizeClass = computed(() =>
     <component
         :is="buttonType"
         :href="href"
-        :class="[getVariantClass(variant), sizeClass]"
+        :class="[getVariantClass(variant), sizeClass, { pointer: pointer }]"
         class="inline-flex items-center text-xs font-medium inset-ring inset-ring-green-600/20"
     >
         <fa-icon v-if="icon" :icon="icon" />
