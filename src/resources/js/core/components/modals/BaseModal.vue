@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, watch } from "vue";
+import { computed, ref, watch } from "vue";
 
 const emit = defineEmits<{
     "update:open": [boolean];
@@ -47,6 +47,9 @@ const isOpen = computed({
 const onBackgroundClicked = () => {
     if (props.preventOutsideClick) {
         emit("hidePrevented");
+        attentionRequired.value = true;
+
+        setTimeout(() => (attentionRequired.value = false), 1000);
         return;
     }
 
@@ -83,6 +86,11 @@ const modalPosition = computed<string>(() => {
             return "items-center";
     }
 });
+
+/**
+ * Attention Status of the Modal
+ */
+const attentionRequired = ref<boolean>(false);
 </script>
 
 <template>
@@ -99,7 +107,7 @@ const modalPosition = computed<string>(() => {
             >
                 <div
                     class="bg-white min-w-96 m-4 min-h-32 rounded-lg p-5 flex flex-col relative"
-                    :class="modalSize"
+                    :class="[modalSize, { attention: attentionRequired }]"
                     v-on-click-outside="onBackgroundClicked"
                 >
                     <div
@@ -139,5 +147,30 @@ const modalPosition = computed<string>(() => {
 .modal-enter-from,
 .modal-leave-to {
     opacity: 0;
+}
+
+.attention {
+    animation: modal-attention 0.3s ease;
+}
+
+@keyframes modal-attention {
+    0% {
+        transform: translateX(0);
+    }
+    20% {
+        transform: translateX(-8px);
+    }
+    40% {
+        transform: translateX(8px);
+    }
+    60% {
+        transform: translateX(-6px);
+    }
+    80% {
+        transform: translateX(6px);
+    }
+    100% {
+        transform: translateX(0);
+    }
 }
 </style>

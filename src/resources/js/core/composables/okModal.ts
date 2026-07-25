@@ -3,7 +3,10 @@ import { createApp, h } from "vue";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { vOnClickOutside } from "@vueuse/components";
 
-export default (message: string, title: string | undefined = undefined) => {
+export default (
+    message: string,
+    { title = undefined, forceOk = false } = {},
+) => {
     return new Promise(function (resolve) {
         const newComp = createApp({
             setup() {
@@ -11,6 +14,7 @@ export default (message: string, title: string | undefined = undefined) => {
                     h(OkModal, {
                         title: title,
                         message: message,
+                        forceOk: forceOk,
                         onBackdropClicked: () => resolve("backdrop-clicked"),
                         onOkClicked: () => resolve("ok-clicked"),
                         onHidden: () => unmount(),

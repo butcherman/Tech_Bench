@@ -26,7 +26,9 @@ export default { layout: AppLayout };
         <BaseButton
             text="ok"
             @click="
-                okModal('This is a message').then((res) => console.log(res))
+                okModal('This is a message', { forceOk: true }).then((res) =>
+                    console.log(res),
+                )
             "
         />
     </div>
