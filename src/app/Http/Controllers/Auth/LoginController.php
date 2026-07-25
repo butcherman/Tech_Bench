@@ -12,7 +12,7 @@ class LoginController
      */
     public function __invoke(): Response
     {
-        return Inertia::render('Auth/TechLogin', [
+        return Inertia::render('Auth/Login', [
             'welcome-message' => fn () => config('app.welcome_message'),
             'home-links' => fn () => config('app.home_links'),
             'allow-oath' => fn () => config('services.azure.allow_login'),

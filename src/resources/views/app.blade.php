@@ -11,9 +11,9 @@
     <script type="text/javascript">
         let appData = {!! json_encode(\App\Facades\CacheData::appData()) !!}
     </script>
-    @routes()
+    {{-- @routes() --}}
     @vite('resources/js/app.ts')
-    @inertiaHead
+    <x-inertia::head />
 </head>
 
 <body>
@@ -26,7 +26,7 @@
             Please enable Javascript and reload page
         </p>
     </noscript>
-    @inertia
+    <x-inertia::app />
     @include('cookie-consent::index')
 </body>
 

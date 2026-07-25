@@ -10,7 +10,7 @@ use App\Models\PhoneNumberType;
 use App\Models\TechTipType;
 use App\Models\UserRole;
 use App\Models\UserSettingType;
-use Illuminate\Cache\TCacheValue;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Cache;
 use PragmaRX\Version\Package\Version;
 
@@ -32,10 +32,8 @@ class CacheFacadeHelper
 
     /**
      * Build the password rules for users
-     *
-     * @return TCacheValue
      */
-    public function passwordRules()
+    public function passwordRules(): array
     {
         return Cache::rememberForever('password_rules', function () {
             $passwordRules = [
@@ -66,10 +64,8 @@ class CacheFacadeHelper
 
     /**
      * Get the version of the Tech Bench Application
-     *
-     * @return TCacheValue
      */
-    public function appData()
+    public function appData(): array
     {
         return Cache::rememberForever('appData', function () {
             $version = new Version;
@@ -97,10 +93,8 @@ class CacheFacadeHelper
 
     /**
      * Get a list of User Roles
-     *
-     * @return TCacheValue
      */
-    public function userRoles()
+    public function userRoles(): Collection
     {
         return Cache::rememberForever('userRoles', function () {
             return UserRole::all();
@@ -109,10 +103,8 @@ class CacheFacadeHelper
 
     /**
      * Get a list of all the possible User Settings Types
-     *
-     * @return TCacheValue
      */
-    public function userSettingsType()
+    public function userSettingsType(): Collection
     {
         return Cache::rememberForever('userSettingsType', function () {
             return UserSettingType::all();
@@ -121,10 +113,8 @@ class CacheFacadeHelper
 
     /**
      * Get a list of all Equipment Categories with their Equipment Types.
-     *
-     * @return TCacheValue
      */
-    public function equipmentCategories()
+    public function equipmentCategories(): Collection
     {
         return Cache::rememberForever('equipmentCategories', function () {
             return EquipmentCategory::equipment()->get();
@@ -133,10 +123,8 @@ class CacheFacadeHelper
 
     /**
      * Get a list of all equipment categories prepped for a select box.
-     *
-     * @return TCacheValue
      */
-    public function equipmentCategorySelectBox()
+    public function equipmentCategorySelectBox(): array
     {
         return Cache::rememberForever('equipmentSelectBox', function () {
             $catBase = $this->equipmentCategories();
@@ -165,10 +153,8 @@ class CacheFacadeHelper
     /**
      * Get a list of all Equipment Categories with their Equipment Types that
      * are allowed to have Public Tech Tips tied to them.
-     *
-     * @return TCacheValue
      */
-    public function publicEquipmentCategories()
+    public function publicEquipmentCategories(): Collection
     {
         return Cache::rememberForever('publicEquipmentCategories', function () {
             return EquipmentCategory::publicEquipment()->get();
@@ -177,10 +163,8 @@ class CacheFacadeHelper
 
     /**
      * Get a list of all Equipment Types.
-     *
-     * @return TCacheValue
      */
-    public function equipmentTypes()
+    public function equipmentTypes(): Collection
     {
         return Cache::rememberForever('equipmentTypes', function () {
             return EquipmentType::all();
@@ -189,10 +173,8 @@ class CacheFacadeHelper
 
     /**
      * Get a list of all Data Field Types for Equipment
-     *
-     * @return TCacheValue
      */
-    public function dataFieldTypes()
+    public function dataFieldTypes(): Collection
     {
         return Cache::rememberForever('dataFieldTypes', function () {
             return DataFieldType::all();
@@ -201,10 +183,8 @@ class CacheFacadeHelper
 
     /**
      * Get a list of all Customer File Types for uploaded files.
-     *
-     * @return TCacheValue
      */
-    public function fileTypes()
+    public function fileTypes(): Collection
     {
         return Cache::rememberForever('fileTypes', function () {
             return CustomerFileType::all();
@@ -213,10 +193,8 @@ class CacheFacadeHelper
 
     /**
      * Get a list of all phone types for contact phone numbers
-     *
-     * @return TCacheValue
      */
-    public function phoneTypes()
+    public function phoneTypes(): Collection
     {
         return Cache::rememberForever('phoneTypes', function () {
             return PhoneNumberType::all();
@@ -225,10 +203,8 @@ class CacheFacadeHelper
 
     /**
      * Get a list of all Tech Tip Types that can be assigned to a Tech Tip.
-     *
-     * @return TCacheValue
      */
-    public function techTipTypes()
+    public function techTipTypes(): Collection
     {
         return Cache::rememberForever('techTipTypes', function () {
             return TechTipType::all();

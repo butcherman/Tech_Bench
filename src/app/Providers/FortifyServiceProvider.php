@@ -48,7 +48,7 @@ class FortifyServiceProvider extends ServiceProvider
 
         // Login Route
         Fortify::loginView(function () {
-            return Inertia::render('Auth/TechLogin', [
+            return Inertia::render('Auth/Login', [
                 'welcome-message' => config('app.welcome_message'),
                 'home-links' => config('app.home_links'),
                 'allow-oath' => config('services.azure.allow_login'),

@@ -11,12 +11,16 @@ class HandleInertiaRequests extends Middleware
     /**
      * The root template that's loaded on the first page visit.
      *
+     * @see https://inertiajs.com/server-side-setup#root-template
+     *
      * @var string
      */
     protected $rootView = 'app';
 
     /**
      * Determines the current asset version.
+     *
+     * @see https://inertiajs.com/asset-versioning
      */
     public function version(Request $request): ?string
     {
@@ -25,85 +29,23 @@ class HandleInertiaRequests extends Middleware
 
     /**
      * Define the props that are shared by default.
+     *
+     * @see https://inertiajs.com/shared-data
+     *
+     * @return array<string, mixed>
      */
     public function share(Request $request): array
     {
-        return array_merge(
-            parent::share($request),
-            $this->getPrimaryShare(),
-            $this->getUserShare($request),
-        );
-    }
+        $user = $request->user() ? $request->user() : null;
+        $navbar = $request->user() ?
+            new BuildUserNavbar($request->user())() :
+            [];
 
-    /**
-     * Get the primary share information (Application Data)
-     */
-    protected function getPrimaryShare(): array
-    {
         return [
-            //  Flash messages are used for success/failure messages on next page load
-            'flash' => $this->getFlashData(),
+            ...parent::share($request),
             'csrf_token' => fn () => csrf_token(),
+            'current_user' => fn () => $user,
+            'navbar' => fn () => $navbar,
         ];
-    }
-
-    /**
-     * Get the user share information if it exists
-     */
-    protected function getUserShare(Request $request): array
-    {
-        if (! $request->user()) {
-            return [];
-        }
-
-        $navbar = new BuildUserNavbar($request->user());
-
-        return [
-            //  Current logged in user
-            'current_user' => fn () => $request->user()->makeVisible('user_id'),
-
-            //  Dynamically built navigation menu
-            'navbar' => fn () => $navbar(),
-        ];
-    }
-
-    /**
-     * Put all flash data into an array to be gone over by front end
-     */
-    protected function getFlashData(): array
-    {
-        $flashArr = [];
-        $flash = session('_flash');
-        $allowedTypes = [
-            'primary',
-            'secondary',
-            'success',
-            'danger',
-            'warning',
-            'info',
-            'light',
-            'dark',
-            'status',
-        ];
-
-        if ($flash) {
-            foreach ($flash['new'] as $f) {
-                if (in_array($f, $allowedTypes)) {
-                    $flashArr[] = [
-                        $f,
-                    ];
-                }
-            }
-            foreach ($flash['old'] as $f) {
-                if (in_array($f, $allowedTypes)) {
-                    $flashArr[] = [
-                        'type' => $f,
-                        'message' => session()->get($f),
-                    ];
-                }
-            }
-        }
-
-        return $flashArr;
     }
 }

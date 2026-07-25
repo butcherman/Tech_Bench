@@ -43,6 +43,12 @@ RUN install-php-extensions \
     pdo_mysql \
     zip
 
+# Bring NodeJS and NPM up to the latest version
+RUN npm install -g n
+RUN n lts
+RUN npm install -g npm@12.0.1
+
+
 # Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/local/bin/composer
 
