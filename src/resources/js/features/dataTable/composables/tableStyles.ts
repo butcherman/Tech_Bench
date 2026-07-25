@@ -7,7 +7,7 @@ export const useTableStyles = <TRow extends RowData>(
 ) => {
     const pointerClass = computed<string>(() =>
         // props.allowRowClick || props.rowClickLink ? "pointer" : "",
-        props.allowRowClick ? "pointer" : "",
+        props.allowRowClick || props.rowLinkFn ? "pointer" : "",
     );
 
     const borderClass = computed<string>(() =>
@@ -22,21 +22,10 @@ export const useTableStyles = <TRow extends RowData>(
         props.striped ? "odd:bg-slate-100" : "",
     );
 
-    // const bgClass = (row: TRow, index: number): string | false => {
-    //     let bgClass = props.rowBgFn ? props.rowBgFn(row) : false;
-
-    //     if (props.striped && !bgClass) {
-    //         return index % 2 === 1 ? "bg-slate-100" : false;
-    //     }
-
-    //     return bgClass;
-    // };
-
     return {
         pointerClass,
         borderClass,
         paddingClass,
         stripedClass,
-        // bgClass,
     };
 };

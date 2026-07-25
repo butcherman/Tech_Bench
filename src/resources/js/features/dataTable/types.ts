@@ -31,10 +31,7 @@ export interface DataTableProps<TRow extends RowData> {
     striped?: boolean;
 
     rowClassFn?: (row: TRow) => string | false;
-
-    //
-    // syncLoadingState?: boolean;
-    // rowClickLink?: (row: TRow) => string;
+    rowLinkFn?: (event: MouseEvent, row: TRow) => void;
 }
 
 declare module "@tanstack/table-core" {
@@ -58,5 +55,6 @@ declare module "@tanstack/table-core" {
         allowRowClick?: boolean;
 
         rowClassFn?: (row: TData) => string | false;
+        rowLinkFn?: (event: MouseEvent, row: TData) => void;
     }
 }

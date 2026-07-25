@@ -49,3 +49,8 @@ interface menuItem {
     icon: string;
     route: string;
 }
+
+interface LinkHelper {
+    href: string;
+    external?: boolean;
+}

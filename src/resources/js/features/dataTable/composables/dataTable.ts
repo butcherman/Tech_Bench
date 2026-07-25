@@ -42,6 +42,7 @@ export const useDataTable = <TRow extends RowData>(
             actionsSlot: props.actionsSlot,
             allowRowClick: props.allowRowClick,
             rowClassFn: props.rowClassFn,
+            rowLinkFn: props.rowLinkFn,
         },
         getCoreRowModel: getCoreRowModel(),
         getFacetedRowModel: getFacetedRowModel(),

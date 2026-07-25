@@ -28,6 +28,7 @@ const props = defineProps<{
     paginate?: boolean;
 
     rowClassFn?: (row: TRow) => string | false;
+    rowLinkFn?: (event: MouseEvent, row: TRow) => void;
 }>();
 
 const table = useDataTable(props);
