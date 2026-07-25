@@ -8,7 +8,9 @@ export const useUserAdministrationHelper = () => {
         textColumn<User>("full_name", "Name"),
         textColumn<User>("username", "Username"),
         textColumn<User>("email", "Email"),
-        textColumn<User>("role_name", "Role"),
+        textColumn<User>("role_name", "Role", {
+            filterSelect: true,
+        }),
     ];
 
     return {

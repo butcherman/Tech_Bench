@@ -1,4 +1,6 @@
 <script setup lang="ts" generic="TData extends RowData">
+import DataTableHeaderFilter from "./DataTableHeaderFilter.vue";
+import { computed } from "vue";
 import { FlexRender } from "@tanstack/vue-table";
 import type { RowData, Table } from "@tanstack/vue-table";
 
@@ -25,6 +27,21 @@ const getSortingIcon = (
             return "sort";
     }
 };
+
+/**
+ * Determine if we need to show the filtering row.
+ */
+const showFilterRow = computed<boolean>(() => {
+    let show = false;
+
+    props.table.getAllColumns().forEach((col) => {
+        if (col.getCanFilter()) {
+            show = true;
+        }
+    });
+
+    return show;
+});
 </script>
 
 <template>
@@ -60,6 +77,17 @@ const getSortingIcon = (
                 :class="[table.options.meta?.paddingClass]"
             >
                 <slot :name="`header.actions`">Actions</slot>
+            </th>
+        </tr>
+        <tr v-if="showFilterRow">
+            <th
+                v-for="headerCell in table?.getHeaderGroups()[0].headers"
+                class="p-1 font-normal"
+            >
+                <DataTableHeaderFilter
+                    v-if="headerCell.column.getCanFilter()"
+                    :column="headerCell.getContext().column"
+                />
             </th>
         </tr>
     </thead>
