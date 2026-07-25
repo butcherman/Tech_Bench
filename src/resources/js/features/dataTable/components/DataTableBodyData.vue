@@ -11,12 +11,13 @@ const props = defineProps<{
 <template>
     <tbody>
         <tr
-            v-for="(row, index) in table.getRowModel().rows"
+            v-for="row in table.getRowModel().rows"
             :key="row.id"
             class="border-b border-slate-200 hover:bg-slate-300"
             :class="[
                 table.options.meta?.stripedClass,
                 table.options.meta?.pointerClass,
+                table.options.meta?.rowClassFn?.(row.original),
             ]"
         >
             <td

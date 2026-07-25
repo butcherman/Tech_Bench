@@ -24,11 +24,12 @@ const props = defineProps<{
     gridLines?: boolean;
     noResultsText?: string;
 
+    rowClassFn?: (row: TRow) => string | false;
+
     //
-    allowRowClick?: boolean;
+    // allowRowClick?: boolean;
     paginate?: boolean;
-    syncLoadingState?: boolean;
-    rowBgFn?: (row: TRow) => string | false;
+    // syncLoadingState?: boolean;
     rowClickLink?: (row: TRow) => string;
 }>();
 

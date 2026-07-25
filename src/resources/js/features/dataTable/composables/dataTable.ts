@@ -36,7 +36,7 @@ export const useDataTable = <TRow extends RowData>(
             pointerClass: pointerClass.value,
             stripedClass: stripedClass.value,
             actionsSlot: props.actionsSlot,
-            // bgClass,
+            rowClassFn: props.rowClassFn,
         },
         getCoreRowModel: getCoreRowModel(),
         getFacetedRowModel: getFacetedRowModel(),

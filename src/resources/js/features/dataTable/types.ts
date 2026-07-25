@@ -20,28 +20,30 @@ export interface DataTableColumn<TRow extends RowData, TValue = unknown> {
 export interface DataTableProps<TRow extends RowData> {
     columns: DataTableColumn<TRow>[];
     data: TRow[];
+
     // Optional
     actionsSlot?: boolean;
     compact?: boolean;
-    striped?: boolean;
     gridLines?: boolean;
     noResultsText?: string;
+    striped?: boolean;
+
+    rowClassFn?: (row: TRow) => string | false;
 
     //
     allowRowClick?: boolean;
     paginate?: boolean;
     syncLoadingState?: boolean;
-    rowBgFn?: (row: TRow) => string | false;
     rowClickLink?: (row: TRow) => string;
 }
 
 declare module "@tanstack/table-core" {
     interface ColumnMeta<TData extends RowData, TValue> {
-        label?: string;
-        icon?: string;
         align?: "start" | "center" | "end";
-        filterSelect?: boolean;
         filterPlaceholder?: string;
+        filterSelect?: boolean;
+        icon?: string;
+        label?: string;
     }
 
     interface TableMeta<TData extends RowData> {
@@ -53,6 +55,7 @@ declare module "@tanstack/table-core" {
         pointerClass: string;
         stripedClass: string;
         actionsSlot?: boolean;
-        // bgClass: (row: TData, index: number) => string | false;
+
+        rowClassFn?: (row: TData) => string | false;
     }
 }
