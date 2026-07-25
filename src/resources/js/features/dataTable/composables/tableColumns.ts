@@ -4,7 +4,7 @@ import type { ColumnDef, RowData } from "@tanstack/vue-table";
 import type { DataTableColumn } from "../types";
 
 export function useTableColumns<TRow extends RowData>(
-    columns: DataTableColumn<TRow>[],
+    columns: DataTableColumn<TRow, unknown>[],
 ) {
     return columns.map(
         (col): ColumnDef<TRow> => ({

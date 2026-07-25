@@ -20,13 +20,15 @@ export interface DataTableColumn<TRow extends RowData, TValue = unknown> {
 export interface DataTableProps<TRow extends RowData> {
     columns: DataTableColumn<TRow>[];
     data: TRow[];
+    // Optional
+    actionsSlot?: boolean;
     compact?: boolean;
     striped?: boolean;
     gridLines?: boolean;
-    actionsSlot?: boolean;
-    allowRowClick?: boolean;
-
     noResultsText?: string;
+
+    //
+    allowRowClick?: boolean;
     paginate?: boolean;
     syncLoadingState?: boolean;
     rowBgFn?: (row: TRow) => string | false;

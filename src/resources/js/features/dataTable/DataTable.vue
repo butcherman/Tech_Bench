@@ -15,7 +15,7 @@ const emit = defineEmits<{
 }>();
 
 const props = defineProps<{
-    columns: DataTableColumn<TRow>[];
+    columns: DataTableColumn<TRow, any>[];
     data: TRow[];
     // Optional
     actionsSlot?: boolean;

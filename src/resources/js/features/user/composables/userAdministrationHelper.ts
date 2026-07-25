@@ -1,35 +1,14 @@
-import type { DataTableColumn } from "@/features/dataTable/types";
+import { textColumn } from "@/features/dataTable/columns/textColumn";
 
 export const useUserAdministrationHelper = () => {
     /**
      * List of columns for any list of users
      */
-    const userTableColumns: DataTableColumn<User>[] = [
-        {
-            label: "Name",
-            field: "full_name",
-            sort: true,
-            filterable: true,
-        },
-        {
-            label: "Username",
-            field: "username",
-            sort: true,
-            filterable: true,
-        },
-        {
-            label: "Email",
-            field: "email",
-            sort: true,
-            filterable: true,
-        },
-        {
-            label: "Role",
-            field: "role_name",
-            sort: true,
-            filterable: true,
-            filterSelect: true,
-        },
+    const userTableColumns = [
+        textColumn<User>("full_name", "Name"),
+        textColumn<User>("username", "Username"),
+        textColumn<User>("email", "Email"),
+        textColumn<User>("role_name", "Role"),
     ];
 
     return {
