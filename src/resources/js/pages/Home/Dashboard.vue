@@ -1,35 +1,54 @@
 <script setup lang="ts">
-import BaseButton from "@/core/components/buttons/BaseButton.vue";
-import okModal from "@/core/composables/okModal";
-import verifyModal from "@/core/composables/verifyModal";
 import AppLayout from "@/layouts/AppLayout.vue";
-import { ref } from "vue";
-
-const modalOpen = ref(false);
+import Card from "@/core/components/Card.vue";
+import TextInput from "@/core/forms/TextInput.vue";
+import VueForm from "@/core/forms/VueForm.vue";
 </script>
 
 <script lang="ts">
 export default { layout: AppLayout };
 </script>
 <template>
-    <div class="flex gap-2">
+    <div class="flex flex-col items-center gap-2">
         <h2 class="pb-2">Dashboard</h2>
-        <BaseButton text="open modal" @click="modalOpen = !modalOpen" />
-        {{ modalOpen }}
-        <!-- <VerifyModal title="Please Verify" message="Are You Sure?" /> -->
-
-        <BaseButton
-            text="verify"
-            @click="verifyModal().then((res) => console.log(res))"
-        />
-
-        <BaseButton
-            text="ok"
-            @click="
-                okModal('This is a message', { forceOk: true }).then((res) =>
-                    console.log(res),
-                )
-            "
-        />
+        <Card>
+            <VueForm
+                name="test-form"
+                :initial-values="{}"
+                submit-method="post"
+                :validation-schema="{}"
+                submit-route="#"
+            >
+                <TextInput
+                    id="test-1"
+                    name="text_1"
+                    label="Test 1"
+                    input-style="filled"
+                >
+                    <template #prepend-input>https://</template>
+                    <template #append-input> <fa-icon icon="eye" /> </template>
+                </TextInput>
+                <TextInput
+                    id="test-2"
+                    name="text_2"
+                    label="Test 2"
+                    input-style="standard"
+                >
+                    <template #prepend-input>https://</template>
+                    <template #append-input> <fa-icon icon="eye" /> </template>
+                </TextInput>
+                <TextInput
+                    id="test-3"
+                    name="text_3"
+                    label="Test 3"
+                    input-style="outlined"
+                >
+                    <template #prepend-input>https://</template>
+                    <template #append-input>
+                        <fa-icon icon="eye" />
+                    </template>
+                </TextInput>
+            </VueForm>
+        </Card>
     </div>
 </template>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useField } from "vee-validate";
 import { computed, Ref, ref, toRef } from "vue";
+import { useFormInputHelper } from "../composables/formInputHelper";
 
 const emit = defineEmits<{
     focus: [];
@@ -11,6 +12,7 @@ const emit = defineEmits<{
 const props = defineProps<{
     id: string;
     name: string;
+
     // Optional
     help?: string;
     hideHelp?: boolean;
@@ -19,19 +21,8 @@ const props = defineProps<{
     placeholder?: string;
 }>();
 
-/**
- * Variant styling for the input
- */
-const styleClass = computed<string>(() => {
-    switch (props.inputStyle) {
-        case "standard":
-            return "form-input-standard";
-        case "filled":
-            return "form-input-filled";
-        default:
-            return "form-input-outlined";
-    }
-});
+const { inputStyleClass, prependStyleClass, appendStyleClass } =
+    useFormInputHelper(props);
 
 /*
 |-------------------------------------------------------------------------------
@@ -84,22 +75,25 @@ const {
                 v-if="$slots['prepend-input']"
                 class="form-input-prepend text-muted"
                 :class="[
-                    styleClass,
+                    prependStyleClass,
                     { invalid: hasError, 'has-focus': hasFocus },
                 ]"
             >
                 <slot name="prepend-input" />
             </div>
             <div class="grow">
-                <div class="relative form-input-base" :class="styleClass">
+                <div class="relative">
                     <input
                         v-model="value"
-                        class="block peer"
+                        class="block peer form-input-base"
                         type="text"
                         :autocomplete="name"
-                        :class="{
-                            invalid: hasError,
-                        }"
+                        :class="[
+                            inputStyleClass,
+                            {
+                                invalid: hasError,
+                            },
+                        ]"
                         :id="id"
                         :placeholder="placeholder ?? ''"
                         :name="name"
@@ -107,7 +101,13 @@ const {
                         @blur="onBlur"
                         @change="$emit('change', value)"
                     />
-                    <label :for="id">
+                    <label
+                        :for="id"
+                        class="form-label-base"
+                        :class="{
+                            'form-label-outlined': inputStyle === 'outlined',
+                        }"
+                    >
                         {{ label }}
                     </label>
                 </div>
@@ -116,7 +116,7 @@ const {
                 v-if="$slots['append-input']"
                 class="form-input-append text-muted"
                 :class="[
-                    styleClass,
+                    appendStyleClass,
                     { invalid: hasError, 'has-focus': hasFocus },
                 ]"
             >
