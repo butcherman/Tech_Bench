@@ -1,11 +1,20 @@
-<script setup lang="ts" generic="TData extends RowData">
+<script setup lang="ts" generic="TRow extends RowData">
 import { FlexRender } from "@tanstack/vue-table";
 import type { RowData, Table } from "@tanstack/vue-table";
 
-const props = defineProps<{
-    table: Table<TData>;
+const emit = defineEmits<{
+    "row-click": [TRow];
 }>();
-//
+
+const props = defineProps<{
+    table: Table<TRow>;
+}>();
+
+const onRowClick = (event: MouseEvent, row: TRow) => {
+    if (props.table.options.meta?.allowRowClick) {
+        emit("row-click", row);
+    }
+};
 </script>
 
 <template>
@@ -19,6 +28,7 @@ const props = defineProps<{
                 table.options.meta?.pointerClass,
                 table.options.meta?.rowClassFn?.(row.original),
             ]"
+            @click="onRowClick($event, row.original)"
         >
             <td
                 v-for="cell in row.getAllCells()"

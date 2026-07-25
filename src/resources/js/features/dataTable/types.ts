@@ -23,18 +23,18 @@ export interface DataTableProps<TRow extends RowData> {
 
     // Optional
     actionsSlot?: boolean;
+    allowRowClick?: boolean;
     compact?: boolean;
     gridLines?: boolean;
     noResultsText?: string;
+    paginate?: boolean;
     striped?: boolean;
 
     rowClassFn?: (row: TRow) => string | false;
 
     //
-    allowRowClick?: boolean;
-    paginate?: boolean;
-    syncLoadingState?: boolean;
-    rowClickLink?: (row: TRow) => string;
+    // syncLoadingState?: boolean;
+    // rowClickLink?: (row: TRow) => string;
 }
 
 declare module "@tanstack/table-core" {
@@ -55,6 +55,7 @@ declare module "@tanstack/table-core" {
         pointerClass: string;
         stripedClass: string;
         actionsSlot?: boolean;
+        allowRowClick?: boolean;
 
         rowClassFn?: (row: TData) => string | false;
     }

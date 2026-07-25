@@ -11,14 +11,16 @@ defineSlots<{
 }>();
 
 const emit = defineEmits<{
-    "row-click": TRow;
+    "row-click": [TRow];
 }>();
 
 const props = defineProps<{
     columns: DataTableColumn<TRow, any>[];
     data: TRow[];
+
     // Optional
     actionsSlot?: boolean;
+    allowRowClick?: boolean;
     compact?: boolean;
     striped?: boolean;
     gridLines?: boolean;
@@ -26,11 +28,6 @@ const props = defineProps<{
     paginate?: boolean;
 
     rowClassFn?: (row: TRow) => string | false;
-
-    //
-    // allowRowClick?: boolean;
-    // syncLoadingState?: boolean;
-    rowClickLink?: (row: TRow) => string;
 }>();
 
 const table = useDataTable(props);
@@ -47,7 +44,11 @@ const table = useDataTable(props);
                     <slot :name="name" v-bind="data" />
                 </template>
             </DataTableHeader>
-            <DataTableBody :table="table" :no-results-text="noResultsText">
+            <DataTableBody
+                :table="table"
+                :no-results-text="noResultsText"
+                @row-click="$emit('row-click', $event)"
+            >
                 <template
                     v-for="name of Object.keys($slots)"
                     v-slot:[name]="data"

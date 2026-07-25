@@ -20,6 +20,8 @@ const { userTableColumns } = useUserAdministrationHelper();
             grid-lines
             actions-slot
             paginate
+            allow-row-click
+            @row-click="($event) => console.log($event)"
         >
             <template #header.actions>&nbsp;</template>
             <template #row.actions>

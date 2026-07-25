@@ -1,4 +1,4 @@
-<script setup lang="ts" generic="TData extends RowData">
+<script setup lang="ts" generic="TRow extends RowData">
 import DataTableBodyData from "./DataTableBodyData.vue";
 import DataTableBodyEmpty from "./DataTableBodyEmpty.vue";
 import DataTableBodyLoading from "./DataTableBodyLoading.vue";
@@ -9,8 +9,12 @@ defineSlots<{
     [key: string]: any;
 }>();
 
+const emit = defineEmits<{
+    "row-click": [TRow];
+}>();
+
 const props = defineProps<{
-    table: Table<TData>;
+    table: Table<TRow>;
     noResultsText?: string;
 }>();
 
@@ -36,7 +40,11 @@ const showComponent = computed(() => {
         :table="table"
         :no-results-text="noResultsText"
     />
-    <DataTableBodyData v-if="showComponent === 'body'" :table="table">
+    <DataTableBodyData
+        v-if="showComponent === 'body'"
+        :table="table"
+        @row-click="$emit('row-click', $event)"
+    >
         <template v-for="name of Object.keys($slots)" v-slot:[name]="data">
             <slot :name="name" v-bind="data" />
         </template>
