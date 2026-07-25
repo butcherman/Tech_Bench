@@ -63,6 +63,8 @@ const onRowClick = (event: MouseEvent, row: TRow) => {
                     table.options.meta?.paddingClass,
                     table.options.meta?.borderClass,
                 ]"
+                class="cursor-default"
+                @click.stop
             >
                 <slot :name="`row.actions`" :rowData="row.original" />
             </td>
