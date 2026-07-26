@@ -5,6 +5,15 @@ import VueForm from "@/core/forms/components/VueForm.vue";
 import TextInput from "@/core/forms/components/TextInput.vue";
 import PasswordInput from "@/core/forms/components/PasswordInput.vue";
 import SwitchInput from "@/core/forms/components/SwitchInput.vue";
+import SelectInput from "@/core/forms/components/SelectInput.vue";
+
+const props = defineProps<{
+    bookmarks: {
+        techTips: any[];
+    };
+}>();
+
+const selectList = ["option 1", "option 2", "option 3", "option 4"];
 </script>
 
 <script lang="ts">
@@ -16,7 +25,7 @@ export default { layout: AppLayout };
         <Card>
             <VueForm
                 name="test-form"
-                :initial-values="{}"
+                :initial-values="{ select: null }"
                 submit-method="post"
                 :validation-schema="{}"
                 submit-route="#"
@@ -65,6 +74,26 @@ export default { layout: AppLayout };
                         disabled
                     />
                 </div>
+                <SelectInput
+                    name="select"
+                    label="Select Input"
+                    :list="selectList"
+                    variant="outlined"
+                />
+                <SelectInput
+                    name="select1"
+                    label="Select Input"
+                    :list="selectList"
+                    variant="filled"
+                />
+                <SelectInput
+                    name="select2"
+                    label="Select Input"
+                    :list="bookmarks.techTips"
+                    variant="standard"
+                    text-field="subject"
+                    value-field="tip_id"
+                />
             </VueForm>
         </Card>
     </div>

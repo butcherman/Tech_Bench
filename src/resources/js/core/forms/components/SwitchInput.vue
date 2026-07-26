@@ -8,7 +8,7 @@ import { useVariantHelper } from "@/core/composables/variantHelper";
 const emit = defineEmits<{
     focus: [];
     blur: [];
-    change: [unknown];
+    change: [any];
 }>();
 
 const props = defineProps<{
