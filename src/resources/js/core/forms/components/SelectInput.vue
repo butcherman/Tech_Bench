@@ -3,7 +3,7 @@
     lang="ts"
     generic="TOption extends string | Record<string, unknown>"
 >
-import InputWrapper from "./InputWrapper.vue";
+import InputWrapper from "./wrappers/InputWrapper.vue";
 import { useBaseInputHelper } from "../composables/baseInputHelper.js";
 import { useFormInputHelper } from "../composables/formInputHelper.js";
 import { useId } from "vue";

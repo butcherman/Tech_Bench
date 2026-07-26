@@ -7,12 +7,6 @@ import PasswordInput from "@/core/forms/components/PasswordInput.vue";
 import SwitchInput from "@/core/forms/components/SwitchInput.vue";
 import SelectInput from "@/core/forms/components/SelectInput.vue";
 
-const props = defineProps<{
-    bookmarks: {
-        techTips: any[];
-    };
-}>();
-
 const selectList = ["option 1", "option 2", "option 3", "option 4"];
 </script>
 
@@ -85,14 +79,6 @@ export default { layout: AppLayout };
                     label="Select Input"
                     :list="selectList"
                     variant="filled"
-                />
-                <SelectInput
-                    name="select2"
-                    label="Select Input"
-                    :list="bookmarks.techTips"
-                    variant="standard"
-                    text-field="subject"
-                    value-field="tip_id"
                 />
             </VueForm>
         </Card>
