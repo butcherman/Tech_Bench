@@ -46,20 +46,20 @@ const schema = object({
             id="email"
             name="email"
             label="Email Address"
-            variant="underlined"
+            variant="standard"
         />
         <PasswordInput
             id="password"
             name="password"
             label="New Password"
-            variant="underlined"
+            variant="standard"
             focus
         />
         <PasswordInput
             id="password-confirmation"
             name="password_confirmation"
             label="Confirm Password"
-            variant="underlined"
+            variant="standard"
         />
     </VueForm>
 </template>

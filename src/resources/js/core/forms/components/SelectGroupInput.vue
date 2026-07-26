@@ -31,7 +31,6 @@ const props = defineProps<{
     valueField?: TOption extends string ? never : keyof TOption;
     groupTextField: keyof TGroup;
     groupListField: ArrayProperty<TGroup, TOption>;
-    // groupIconField?: string;
 }>();
 
 const inputId = useId();

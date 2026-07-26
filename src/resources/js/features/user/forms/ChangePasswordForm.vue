@@ -56,14 +56,12 @@ const schema = object({
             id="password"
             name="password"
             label="New Password"
-            variant="underlined"
             focus
         />
         <PasswordInput
             id="password-confirmation"
             name="password_confirmation"
             label="Confirm Password"
-            variant="underlined"
         />
     </VueForm>
 </template>

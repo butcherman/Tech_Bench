@@ -48,6 +48,7 @@ const validationSchema = object({
                 placeholder="Username"
                 input-style="standard"
                 help="Enter your username or email address"
+                variant="standard"
                 hide-help
             />
             <PasswordInput
@@ -58,6 +59,7 @@ const validationSchema = object({
                 placeholder="Password"
                 input-style="standard"
                 help="Enter your password"
+                variant="standard"
                 hide-help
             />
             <div class="text-right">

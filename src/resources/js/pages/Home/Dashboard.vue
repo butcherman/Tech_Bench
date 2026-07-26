@@ -6,6 +6,7 @@ import TextInput from "@/core/forms/components/TextInput.vue";
 import PasswordInput from "@/core/forms/components/PasswordInput.vue";
 import SwitchInput from "@/core/forms/components/SwitchInput.vue";
 import SelectInput from "@/core/forms/components/SelectInput.vue";
+import AutoCompleteInput from "@/core/forms/components/AutoCompleteInput.vue";
 
 const selectList = ["option 1", "option 2", "option 3", "option 4"];
 </script>
@@ -49,6 +50,7 @@ export default { layout: AppLayout };
                         <fa-icon icon="eye" />
                     </template>
                 </TextInput>
+                <AutoCompleteInput name="autocomplete" :list="selectList" />
                 <PasswordInput name="password" label="Password" />
                 <PasswordInput
                     name="password1"

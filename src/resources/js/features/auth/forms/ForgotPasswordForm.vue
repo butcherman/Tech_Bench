@@ -31,6 +31,7 @@ const schema = object({
             name="email"
             label="Email Address"
             placeholder="Email Address"
+            variant="standard"
         />
     </VueForm>
 </template>
