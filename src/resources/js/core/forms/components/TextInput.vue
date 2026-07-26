@@ -1,82 +1,51 @@
 <script setup lang="ts">
-import { useField } from "vee-validate";
-import { computed, Ref, ref, toRef } from "vue";
-import { useFormInputHelper } from "../composables/formInputHelper";
+import InputWrapper from "./InputWrapper.vue";
+import { useBaseInputHelper } from "../composables/baseInputHelper.js";
+import { useFormInputHelper } from "../composables/formInputHelper.js";
+import { useId } from "vue";
 
 const emit = defineEmits<{
     focus: [];
     blur: [];
-    change: [string | undefined];
+    change: [unknown];
 }>();
 
 const props = defineProps<{
-    id: string;
     name: string;
 
-    // Optional
-    help?: string;
-    hideHelp?: boolean;
-    inputStyle?: "filled" | "standard" | "outlined";
     label?: string;
+    helpMessage?: string;
+    variant?: InputVariant;
     placeholder?: string;
+    helpVisible?: boolean;
+    autocomplete?: string;
+    disabled?: boolean;
 }>();
 
-const { inputStyleClass, prependStyleClass, appendStyleClass } =
-    useFormInputHelper(props);
+const inputId = useId();
 
-/*
-|-------------------------------------------------------------------------------
-| Input State
-|-------------------------------------------------------------------------------
-*/
-const hasError = computed<boolean>(() =>
-    errorMessage.value?.length ? true : false,
+const { hasFocus, onBlur, onFocus, errorMessage, value } = useBaseInputHelper(
+    props,
+    emit,
 );
-const hasFocus = ref<boolean>(false);
-
-const onFocus = (): void => {
-    hasFocus.value = true;
-    emit("focus");
-};
-
-const onBlur = (): void => {
-    hasFocus.value = false;
-    emit("blur");
-};
-
-const showHelp = computed<boolean>(() => {
-    if (!props.hideHelp) {
-        return true;
-    }
-
-    return hasFocus.value;
-});
-
-/*
-|-------------------------------------------------------------------------------
-| Vee-Validate
-|-------------------------------------------------------------------------------
-*/
-const nameRef = toRef(props, "name");
-
-const {
-    errorMessage,
-    value,
-}: {
-    errorMessage: Ref<string | undefined, string | undefined>;
-    value: Ref<string | undefined>;
-} = useField(nameRef);
+const { inputVariantStyle, appendVariantStyle, prependVariantStyle } =
+    useFormInputHelper(props);
 </script>
 
 <template>
-    <div class="my-2">
+    <InputWrapper
+        :error-message="errorMessage"
+        :help-message="helpMessage"
+        :has-focus="hasFocus"
+        :help-visible="helpVisible"
+    >
         <div class="flex">
             <div
                 v-if="$slots['prepend-input']"
                 class="form-input-prepend text-muted"
                 :class="[
-                    prependStyleClass,
-                    { invalid: hasError, 'has-focus': hasFocus },
+                    prependVariantStyle,
+                    { invalid: errorMessage?.length, 'has-focus': hasFocus },
                 ]"
             >
                 <slot name="prepend-input" />
@@ -88,13 +57,8 @@ const {
                         class="block peer form-input-base"
                         type="text"
                         :autocomplete="name"
-                        :class="[
-                            inputStyleClass,
-                            {
-                                invalid: hasError,
-                            },
-                        ]"
-                        :id="id"
+                        :class="[inputVariantStyle]"
+                        :id="inputId"
                         :placeholder="placeholder ?? ''"
                         :name="name"
                         @focus="onFocus"
@@ -102,11 +66,9 @@ const {
                         @change="$emit('change', value)"
                     />
                     <label
-                        :for="id"
+                        :for="inputId"
                         class="form-label-base"
-                        :class="{
-                            'form-label-outlined': inputStyle === 'outlined',
-                        }"
+                        :class="{ 'bg-white!': variant === 'outlined' }"
                     >
                         {{ label }}
                     </label>
@@ -116,14 +78,12 @@ const {
                 v-if="$slots['append-input']"
                 class="form-input-append text-muted"
                 :class="[
-                    appendStyleClass,
-                    { invalid: hasError, 'has-focus': hasFocus },
+                    appendVariantStyle,
+                    { invalid: errorMessage?.length, 'has-focus': hasFocus },
                 ]"
             >
                 <slot name="append-input" />
             </div>
         </div>
-        <div class="text-xs text-danger">{{ errorMessage }}</div>
-        <div v-if="showHelp" class="text-sm text-muted">{{ help }}</div>
-    </div>
+    </InputWrapper>
 </template>
