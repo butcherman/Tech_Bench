@@ -58,6 +58,7 @@ const { inputVariantStyle, appendVariantStyle, prependVariantStyle } =
                         type="text"
                         :autocomplete="name"
                         :class="[inputVariantStyle]"
+                        :disabled="disabled"
                         :id="inputId"
                         :placeholder="placeholder ?? ''"
                         :name="name"

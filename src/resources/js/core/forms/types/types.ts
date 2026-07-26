@@ -9,4 +9,6 @@ interface InputBaseProps {
     helpVisible?: boolean;
     autocomplete?: string;
     disabled?: boolean;
+    switchVariant?: variantType;
+    size?: componentSize;
 }

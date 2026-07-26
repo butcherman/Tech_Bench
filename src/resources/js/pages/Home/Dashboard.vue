@@ -4,6 +4,7 @@ import Card from "@/core/components/Card.vue";
 import VueForm from "@/core/forms/components/VueForm.vue";
 import TextInput from "@/core/forms/components/TextInput.vue";
 import PasswordInput from "@/core/forms/components/PasswordInput.vue";
+import SwitchInput from "@/core/forms/components/SwitchInput.vue";
 </script>
 
 <script lang="ts">
@@ -20,7 +21,12 @@ export default { layout: AppLayout };
                 :validation-schema="{}"
                 submit-route="#"
             >
-                <TextInput name="text_1" label="Test 1" variant="filled">
+                <TextInput
+                    name="text_1"
+                    label="Test 1"
+                    variant="filled"
+                    disabled
+                >
                     <template #prepend-input>https://</template>
                     <template #append-input> <fa-icon icon="eye" /> </template>
                 </TextInput>
@@ -51,6 +57,14 @@ export default { layout: AppLayout };
                     label="Password"
                     variant="filled"
                 />
+                <div class="flex justify-center">
+                    <SwitchInput
+                        name="switch"
+                        label="Switch Input"
+                        switch-variant="warning"
+                        disabled
+                    />
+                </div>
             </VueForm>
         </Card>
     </div>

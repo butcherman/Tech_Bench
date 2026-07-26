@@ -1,5 +1,5 @@
 import { useField } from "vee-validate";
-import { readonly, ref, toRef } from "vue";
+import { readonly, Ref, ref, toRef } from "vue";
 
 export const useBaseInputHelper = (props: InputBaseProps, emit: any) => {
     // TODO - type the emit variable
@@ -26,7 +26,13 @@ export const useBaseInputHelper = (props: InputBaseProps, emit: any) => {
     |-------------------------------------------------------------------------------
     */
     const nameRef = toRef(props, "name");
-    const { errorMessage, value } = useField(nameRef);
+    const {
+        errorMessage,
+        value,
+    }: {
+        errorMessage: Ref<string | undefined, string | undefined>;
+        value: Ref<any | any[]>;
+    } = useField(nameRef);
 
     return {
         hasFocus: readonly(hasFocus),

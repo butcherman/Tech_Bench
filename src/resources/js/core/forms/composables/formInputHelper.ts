@@ -2,7 +2,7 @@ export const useFormInputHelper = (props: InputBaseProps) => {
     const defaultVariant = "outlined";
 
     /**
-     * Variant styling for the input
+     * Variant styling for standard inputs
      */
     const inputVariantStyle = {
         filled: "form-input-filled",
@@ -22,9 +22,26 @@ export const useFormInputHelper = (props: InputBaseProps) => {
         outlined: "form-append-outlined",
     }[props.variant ?? defaultVariant];
 
+    /**
+     * Variant styling for switch inputs
+     */
+    const switchSize = {
+        large: "w-15 h-8",
+        normal: "w-10 h-6",
+        small: "w-8 h-4",
+    }[props.size ?? "normal"];
+
+    const switchInputSize = {
+        large: "w-6 h-6 peer-checked:translate-x-7",
+        normal: "w-4 h-4 peer-checked:translate-x-4",
+        small: "w-3 h-3 top-1.5 peer-checked:translate-x-3",
+    }[props.size ?? "normal"];
+
     return {
         inputVariantStyle,
         prependVariantStyle,
         appendVariantStyle,
+        switchSize,
+        switchInputSize,
     };
 };

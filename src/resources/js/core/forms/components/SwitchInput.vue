@@ -1,122 +1,80 @@
 <script setup lang="ts">
-import { computed, Ref, ref, toRef } from "vue";
-import { useField } from "vee-validate";
-import { useVariantHelper } from "../../composables/variantHelper";
+import InputWrapper from "./InputWrapper.vue";
+import { computed, useId } from "vue";
+import { useBaseInputHelper } from "../composables/baseInputHelper";
+import { useFormInputHelper } from "../composables/formInputHelper";
+import { useVariantHelper } from "@/core/composables/variantHelper";
 
 const emit = defineEmits<{
     focus: [];
     blur: [];
-    change: [boolean];
+    change: [unknown];
 }>();
 
 const props = defineProps<{
-    id: string;
     name: string;
-    // Optional
-    center?: boolean;
+
     label?: string;
-    size?: componentSize;
-    variant?: variantType;
+    helpMessage?: string;
+    switchVariant?: variantType;
+    helpVisible?: boolean;
+    disabled?: boolean;
 }>();
 
-const { getBackgroundClass } = useVariantHelper();
+const inputId = useId();
 
-/**
- * Background of switch when checked.
- */
-const switchClass = computed<string>(() => {
-    let vClass = getBackgroundClass(props.variant ?? "primary");
-
-    return value.value ? vClass : "bg-slate-300";
-});
-
-/**
- * Size of the switch
- */
-const switchSizeClass = computed<string>(() => {
-    switch (props.size) {
-        case "large":
-            return "w-15 h-8";
-        case "small":
-            return "w-8 h-4";
-        default:
-            return "w-10 h-6";
-    }
-});
-
-const toggleSizeClass = computed<string>(() => {
-    switch (props.size) {
-        case "large":
-            return "w-6 h-6 peer-checked:translate-x-7";
-        case "small":
-            return "w-3 h-3 top-1.5 peer-checked:translate-x-3";
-        default:
-            return "w-4 h-4 peer-checked:translate-x-4";
-    }
-});
-
-/*
-|-------------------------------------------------------------------------------
-| Input State
-|-------------------------------------------------------------------------------
-*/
-const hasError = computed<boolean>(() =>
-    errorMessage.value?.length ? true : false,
+const { hasFocus, onBlur, onFocus, errorMessage, value } = useBaseInputHelper(
+    props,
+    emit,
 );
-const hasFocus = ref<boolean>(false);
-const onFocus = (): void => {
-    hasFocus.value = true;
-    emit("focus");
-};
-const onBlur = () => {
-    hasFocus.value = false;
-    emit("blur");
-};
 
-/*
-|-------------------------------------------------------------------------------
-| Vee-Validate
-|-------------------------------------------------------------------------------
-*/
-const nameRef = toRef(props, "name");
-const {
-    errorMessage,
-    value,
-}: {
-    errorMessage: Ref<string | undefined, string | undefined>;
-    value: Ref<boolean>;
-} = useField(nameRef);
+const { getBackgroundClass } = useVariantHelper();
+const { switchSize, switchInputSize } = useFormInputHelper(props);
+
+const variantClass = computed(() => {
+    if (value.value) {
+        return getBackgroundClass(props.switchVariant ?? "primary");
+    }
+
+    return "bg-slate-300";
+});
 </script>
 
 <template>
-    <div
-        class="my-2 flex flex-wrap gap-12"
-        :class="{ 'items-center justify-center': center }"
+    <InputWrapper
+        :error-message="errorMessage"
+        :help-message="helpMessage"
+        :has-focus="hasFocus"
+        :help-visible="helpVisible"
     >
-        <label class="relative inline-flex items-center cursor-pointer gap-3">
+        <label
+            :for="inputId"
+            class="relative inline-flex items-center cursor-pointer gap-3"
+        >
             <input
                 v-model="value"
                 class="sr-only peer"
                 type="checkbox"
-                :class="{
-                    invalid: hasError,
-                }"
-                :name="name"
                 :checked="value"
+                :class="{
+                    invalid: errorMessage?.length,
+                }"
+                :disabled="disabled"
+                :id="inputId"
+                :name="name"
                 @focus="onFocus"
                 @blur="onBlur"
                 @change="$emit('change', value)"
             />
             <div
-                :class="[switchClass, switchSizeClass]"
                 class="rounded-full transition-colors duration-200"
+                :class="[variantClass, switchSize]"
             />
             <span
                 class="dot absolute left-1 top-1 bg-white rounded-full transition-transform duration-200 ease-in-out"
-                :class="toggleSizeClass"
+                :class="switchInputSize"
             />
             {{ label }}
         </label>
-        <div class="text-xs text-danger">{{ errorMessage }}</div>
-    </div>
+    </InputWrapper>
 </template>
