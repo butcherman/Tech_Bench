@@ -7,6 +7,7 @@ import PasswordInput from "@/core/forms/components/PasswordInput.vue";
 import SwitchInput from "@/core/forms/components/SwitchInput.vue";
 import SelectInput from "@/core/forms/components/SelectInput.vue";
 import AutoCompleteInput from "@/core/forms/components/AutoCompleteInput.vue";
+import DatePickerInput from "@/core/forms/components/DatePickerInput.vue";
 
 const selectList = ["option 1", "option 2", "option 3", "option 4"];
 </script>
@@ -25,61 +26,19 @@ export default { layout: AppLayout };
                 :validation-schema="{}"
                 submit-route="#"
             >
-                <TextInput
-                    name="text_1"
-                    label="Test 1"
-                    variant="filled"
-                    disabled
-                >
-                    <template #prepend-input>https://</template>
-                    <template #append-input> <fa-icon icon="eye" /> </template>
-                </TextInput>
-                <TextInput name="text_2" label="Test 2" variant="standard">
-                    <template #prepend-input>https://</template>
-                    <template #append-input> <fa-icon icon="eye" /> </template>
-                </TextInput>
-                <TextInput
-                    name="text_3"
-                    label="Test 3"
-                    variant="outlined"
-                    help-message="This is a help message"
-                    placeholder="Test Placeholder"
-                >
-                    <template #prepend-input>https://</template>
-                    <template #append-input>
-                        <fa-icon icon="eye" />
-                    </template>
-                </TextInput>
-                <AutoCompleteInput name="autocomplete" :list="selectList" />
-                <PasswordInput name="password" label="Password" />
-                <PasswordInput
-                    name="password1"
-                    label="Password"
+                <DatePickerInput
+                    name="datepicker"
+                    label="Datepicker"
                     variant="standard"
                 />
-                <PasswordInput
-                    name="password2"
-                    label="Password"
-                    variant="filled"
-                />
-                <div class="flex justify-center">
-                    <SwitchInput
-                        name="switch"
-                        label="Switch Input"
-                        switch-variant="warning"
-                        disabled
-                    />
-                </div>
-                <SelectInput
-                    name="select"
-                    label="Select Input"
-                    :list="selectList"
+                <DatePickerInput
+                    name="datepicker1"
+                    label="Datepicker"
                     variant="outlined"
                 />
-                <SelectInput
-                    name="select1"
-                    label="Select Input"
-                    :list="selectList"
+                <DatePickerInput
+                    name="datepicker2"
+                    label="Datepicker"
                     variant="filled"
                 />
             </VueForm>
