@@ -12,3 +12,7 @@ interface InputBaseProps {
     switchVariant?: variantType;
     size?: componentSize;
 }
+
+type ArrayProperty<T, TElement> = {
+    [K in keyof T]: T[K] extends readonly TElement[] ? K : never;
+}[keyof T];

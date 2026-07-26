@@ -1,7 +1,10 @@
 <script
     setup
     lang="ts"
-    generic="TOption extends string | Record<string, unknown>"
+    generic="
+        TGroup extends Record<string, unknown>,
+        TOption extends string | Record<string, unknown>
+    "
 >
 import InputWrapper from "./InputWrapper.vue";
 import { useBaseInputHelper } from "../composables/baseInputHelper.js";
@@ -16,7 +19,7 @@ const emit = defineEmits<{
 
 const props = defineProps<{
     name: string;
-    list: TOption[];
+    list: TGroup[];
 
     label?: string;
     helpMessage?: string;
@@ -26,6 +29,9 @@ const props = defineProps<{
     disabled?: boolean;
     textField?: TOption extends string ? never : keyof TOption;
     valueField?: TOption extends string ? never : keyof TOption;
+    groupTextField: keyof TGroup;
+    groupListField: ArrayProperty<TGroup, TOption>;
+    // groupIconField?: string;
 }>();
 
 const inputId = useId();
@@ -57,6 +63,20 @@ const getOptionText = (item: TOption): string => {
 
     return props.textField ? String(item[props.textField]) : String(item);
 };
+
+/**
+ * Get the label for the Option Group
+ */
+const getGroupText = (group: TGroup): string => {
+    return String(group[props.groupTextField]);
+};
+
+/**
+ * Get the list of grouped items for the Option Group
+ */
+const getGroupItems = (group: TGroup): readonly TOption[] => {
+    return group[props.groupListField] as readonly TOption[];
+};
 </script>
 
 <template>
@@ -80,13 +100,19 @@ const getOptionText = (item: TOption): string => {
                     @blur="onBlur"
                     @change="$emit('change', value)"
                 >
-                    <option
-                        v-for="opt in list"
-                        :key="getOptionText(opt)"
-                        :value="getValue(opt)"
+                    <optgroup
+                        v-for="group in list"
+                        :key="getGroupText(group)"
+                        :label="getGroupText(group)"
                     >
-                        {{ getOptionText(opt) }}
-                    </option>
+                        <option
+                            v-for="opt in getGroupItems(group)"
+                            :key="getOptionText(opt)"
+                            :value="getValue(opt)"
+                        >
+                            {{ getOptionText(opt) }}
+                        </option>
+                    </optgroup>
                 </select>
                 <div class="absolute inset-e-1.5 bottom-1.5 text-muted pointer">
                     <fa-icon icon="caret-down" />

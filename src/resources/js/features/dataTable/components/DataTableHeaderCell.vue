@@ -1,4 +1,4 @@
-<script setup lang="ts" generic="T">
+<script setup lang="ts">
 defineProps<{
     label?: string;
     meta?: {
