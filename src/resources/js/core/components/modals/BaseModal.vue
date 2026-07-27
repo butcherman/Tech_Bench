@@ -106,7 +106,7 @@ const attentionRequired = ref<boolean>(false);
                 :class="[modalPosition, { 'bg-gray-500/75': !hideBackdrop }]"
             >
                 <div
-                    class="bg-white min-w-96 m-4 min-h-32 rounded-lg p-5 flex flex-col relative"
+                    class="bg-white min-w-96 m-4 min-h-32 rounded-lg p-5 flex flex-col relative border border-slate-300"
                     :class="[modalSize, { attention: attentionRequired }]"
                     v-on-click-outside="onBackgroundClicked"
                 >

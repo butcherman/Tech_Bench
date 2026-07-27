@@ -5,7 +5,7 @@ import AppSideNav from "./components/AppSideNav.vue";
 import Breadcumbs from "./components/Breadcumbs.vue";
 import FlashAlert from "./components/FlashAlert.vue";
 import StaticAlert from "./components/StaticAlert.vue";
-import { Head, usePage } from "@inertiajs/vue3";
+import { Head, router, usePage } from "@inertiajs/vue3";
 import { computed, ref, useTemplateRef } from "vue";
 
 const appHeader = useTemplateRef("app-header");
@@ -30,6 +30,15 @@ const onClickOutsideHandler = [
         ignore: [appHeader],
     },
 ];
+
+/**
+ * When navigating, add the X-Socket-ID header and close Navbar
+ */
+router.on("before", (ev) => {
+    // TODO - Add Echo Socket
+    // ev.detail.visit.headers["X-Socket-ID"] = Echo.socketId() ?? "";
+    navbarHidden.value = true;
+});
 </script>
 
 <template>

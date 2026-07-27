@@ -16,6 +16,7 @@ const props = defineProps<{
     submitMethod: "post" | "put" | "delete";
     submitRoute: string;
     validationSchema: object;
+
     // Optional
     fullPageOverlay?: boolean;
     hideOverlay?: boolean;
@@ -86,10 +87,20 @@ const onSubmit = handleSubmit((form: InertiaFormData): void => {
         preserveScroll: true,
         only: props.only ?? [],
         onFinish: () => (isSubmitting.value = false),
-        onSuccess: () => emit("success"),
+        onSuccess: onSuccess,
         onError: () => handleErrors(form, formData.errors),
     });
 });
+
+/*
+|-------------------------------------------------------------------------------
+| Handle successful completion of the form
+|-------------------------------------------------------------------------------
+*/
+const onSuccess = () => {
+    resetForm();
+    emit("success");
+};
 
 /*
 |-------------------------------------------------------------------------------
