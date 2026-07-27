@@ -6,6 +6,25 @@
 
 export const useVariantHelper = () => {
     /**
+     * Get the base color of the variant
+     */
+    const getVariantBase = (variant: variantType): string => {
+        return {
+            danger: "rose-600",
+            dark: "gray-900",
+            error: "red-500",
+            help: "violet-600",
+            info: "blue-400",
+            light: "neutral-300",
+            primary: "blue-500",
+            secondary: "blue-300",
+            success: "green-500",
+            warning: "yellow-400",
+            none: "",
+        }[variant];
+    };
+
+    /**
      * Basic background color per variant
      */
     const getBackgroundClass = (variant: variantType): string => {
@@ -72,5 +91,6 @@ export const useVariantHelper = () => {
     return {
         getBackgroundClass,
         getVariantClass,
+        getVariantBase,
     };
 };

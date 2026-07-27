@@ -26,9 +26,9 @@ export const useFormInputHelper = (props: InputBaseProps) => {
      * Variant styling for switch inputs
      */
     const switchSize = {
-        large: "w-15 h-8",
-        normal: "w-10 h-6",
-        small: "w-8 h-4",
+        large: "min-w-15 w-15 h-8",
+        normal: "min-w-10 w-10 h-6",
+        small: "min-w-8 w-8 h-4",
     }[props.size ?? "normal"];
 
     const switchInputSize = {
