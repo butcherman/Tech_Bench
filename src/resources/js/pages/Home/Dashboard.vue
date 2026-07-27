@@ -40,6 +40,7 @@ export default { layout: AppLayout };
                 :validation-schema="{}"
                 submit-route="#"
             >
+                <DatePickerInput name="date-picker" label="Date Picker" />
                 <OtpInput
                     name="Otp"
                     help-message="Otp Input"

@@ -27,6 +27,7 @@ const props = defineProps<{
 
 const inputId = useId();
 const wrapperId = useId();
+const formattedValue = ref<string>();
 
 const { onBlur, onFocus, value } = useBaseInputHelper(props, emit);
 const { inputVariantStyle } = useFormInputHelper(props);
@@ -73,11 +74,31 @@ const onMonthSelected = (month: string): void => {
 };
 
 const onDaySelected = (day: number | null): void => {
-    console.log(day);
+    let rawDateValue = `${selectedMonth.value + 1}-${day}-${selectedYear.value}`;
+    let formatted = `${selectedMonthName.value} ${day}, ${selectedYear.value}`;
 
-    let dateValue = `${selectedMonth.value + 1}-${day}-${selectedYear.value}`;
-    value.value = dateValue;
+    value.value = rawDateValue;
+    formattedValue.value = formatted;
+
     showCal.value = false;
+    emit("change", value);
+};
+
+/**
+ * Check if something was manually typed
+ */
+const onChange = () => {
+    console.log("changed");
+    if (!formattedValue.value) {
+        value.value = undefined;
+        return;
+    }
+
+    let newDate = new Date(formattedValue.value);
+
+    selectYear(newDate.getFullYear());
+    selectMonth(monthNames[newDate.getMonth()]);
+    onDaySelected(newDate.getDate());
 };
 
 /**
@@ -97,7 +118,7 @@ const onClickOutsideCalHandler = [
             <slot :name="name" v-bind="data" />
         </template>
         <input
-            v-model="value"
+            v-model="formattedValue"
             class="block peer form-input-base"
             type="text"
             autocomplete="off"
@@ -108,9 +129,12 @@ const onClickOutsideCalHandler = [
             :name="name"
             @focus="triggerFocus"
             @blur="onBlur"
-            @change="$emit('change', value)"
+            @change="onChange"
         />
-        <div class="absolute inset-e-1.5 bottom-1.5 text-muted pointer">
+        <div
+            class="absolute inset-e-1.5 bottom-1.5 text-muted pointer"
+            @click="triggerFocus"
+        >
             <fa-icon icon="fa-calendar" />
         </div>
         <label
