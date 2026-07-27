@@ -9,8 +9,20 @@ import SelectInput from "@/core/forms/components/SelectInput.vue";
 import AutoCompleteInput from "@/core/forms/components/AutoCompleteInput.vue";
 import DatePickerInput from "@/core/forms/components/DatePickerInput.vue";
 import MultiSelectInput from "@/core/forms/components/MultiSelectInput.vue";
+import MultiSelectGroupInput from "@/core/forms/components/MultiSelectGroupInput.vue";
 
 const selectList = ["option 1", "option 2", "option 3", "option 4"];
+
+const groupList = [
+    {
+        label: "Group 1",
+        list: ["1-1", "1-2", "1-3"],
+    },
+    {
+        label: "Group 2",
+        list: ["2-1", "2-2", "2-3"],
+    },
+];
 </script>
 
 <script lang="ts">
@@ -27,38 +39,11 @@ export default { layout: AppLayout };
                 :validation-schema="{}"
                 submit-route="#"
             >
-                <MultiSelectInput
-                    name="multiselect"
-                    :list="selectList"
-                    label="multi"
-                    variant="filled"
-                />
-                <MultiSelectInput
-                    name="multiselect2"
-                    :list="selectList"
-                    label="multi"
-                    variant="standard"
-                />
-                <MultiSelectInput
-                    name="multiselect3"
-                    :list="selectList"
-                    label="multi"
-                    variant="outlined"
-                />
-                <DatePickerInput
-                    name="datepicker"
-                    label="Datepicker"
-                    variant="standard"
-                />
-                <DatePickerInput
-                    name="datepicker1"
-                    label="Datepicker"
-                    variant="outlined"
-                />
-                <DatePickerInput
-                    name="datepicker2"
-                    label="Datepicker"
-                    variant="filled"
+                <MultiSelectGroupInput
+                    name="multi_group"
+                    :list="groupList"
+                    group-text-field="label"
+                    group-list-field="list"
                 />
             </VueForm>
         </Card>
