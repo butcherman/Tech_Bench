@@ -8,7 +8,7 @@ type User = {
     initials: string;
     role_name: string;
     two_factor_confirmed_at: string | null;
-    // role_id: string;
+    role_id: string;
     // created_at: string;
     // updated_at: string;
     // deleted_at: string;
