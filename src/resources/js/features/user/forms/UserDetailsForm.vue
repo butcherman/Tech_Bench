@@ -60,12 +60,11 @@ const schema = object({
         :submit-method="submitMethod"
         :submit-text="submitText"
     >
-        <TextInput id="username" name="username" label="Username" focus />
-        <TextInput id="first-name" name="first_name" label="First Name" />
-        <TextInput id="last-name" name="last_name" label="Last Name" />
-        <TextInput id="email" name="email" type="email" label="Email Address" />
+        <TextInput name="username" label="Username" focus />
+        <TextInput name="first_name" label="First Name" />
+        <TextInput name="last_name" label="Last Name" />
+        <TextInput name="email" type="email" label="Email Address" />
         <SelectInput
-            id="role"
             label="Role"
             name="role_id"
             text-field="name"

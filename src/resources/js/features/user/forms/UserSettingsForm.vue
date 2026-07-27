@@ -55,7 +55,6 @@ const schema = () => {
     >
         <template v-for="(setting, key) in settings" :key="key">
             <SwitchInput
-                :id="`notification-${key}`"
                 :name="`settingList.type_id_${setting.setting_type_id}`"
                 :label="setting.name"
             />

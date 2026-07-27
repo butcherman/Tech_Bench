@@ -35,8 +35,8 @@ const schema = object({
         submit-method="put"
         submit-text="Update Account"
     >
-        <TextInput id="first-name" name="first_name" label="First Name" />
-        <TextInput id="last-name" name="last_name" label="Last Name" />
-        <TextInput id="email" name="email" label="Email Address" />
+        <TextInput name="first_name" label="First Name" />
+        <TextInput name="last_name" label="Last Name" />
+        <TextInput name="email" label="Email Address" />
     </VueForm>
 </template>

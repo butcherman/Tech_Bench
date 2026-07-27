@@ -11,6 +11,7 @@ import { useUserAuth } from "@/core/state/userAuth";
 
 defineProps<{
     userList: User[];
+    disabledList?: boolean;
 }>();
 
 const { userTableColumns } = useUserAdministrationHelper();
@@ -57,11 +58,11 @@ const disableUser = (userRow: User): void => {
             no-results-text="No Users Found"
             striped
             grid-lines
-            actions-slot
+            :actions-slot="!disabledList"
             paginate
         >
             <template #header.actions>&nbsp;</template>
-            <template #row.actions="{ rowData }">
+            <template v-if="!disabledList" #row.actions="{ rowData }">
                 <BaseBadge
                     v-if="rowData.username !== authorizedUser?.username"
                     icon="user-slash"

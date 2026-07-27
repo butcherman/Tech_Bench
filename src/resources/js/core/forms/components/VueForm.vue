@@ -18,6 +18,7 @@ const props = defineProps<{
     validationSchema: object;
 
     // Optional
+    doNotReset?: boolean;
     fullPageOverlay?: boolean;
     hideOverlay?: boolean;
     only?: string[];
@@ -98,7 +99,9 @@ const onSubmit = handleSubmit((form: InertiaFormData): void => {
 |-------------------------------------------------------------------------------
 */
 const onSuccess = () => {
-    resetForm();
+    if (!props.doNotReset) {
+        resetForm();
+    }
     emit("success");
 };
 

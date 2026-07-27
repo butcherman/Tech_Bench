@@ -46,22 +46,8 @@ const schema = object({
         submit-method="put"
         submit-text="Update Password"
     >
-        <PasswordInput
-            id="current-password"
-            name="current_password"
-            label="Current Password"
-            focus
-        />
-        <PasswordInput
-            id="password"
-            name="password"
-            label="New Password"
-            focus
-        />
-        <PasswordInput
-            id="password-confirmation"
-            name="password_confirmation"
-            label="Confirm Password"
-        />
+        <PasswordInput name="current_password" label="Current Password" focus />
+        <PasswordInput name="password" label="New Password" focus />
+        <PasswordInput name="password_confirmation" label="Confirm Password" />
     </VueForm>
 </template>

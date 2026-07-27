@@ -47,33 +47,33 @@ const variantClass = computed(() => {
         :has-focus="hasFocus"
         :help-visible="helpVisible"
     >
-        <label
-            :for="inputId"
-            class="relative inline-flex items-center cursor-pointer gap-3"
-        >
-            <input
-                v-model="value"
-                class="sr-only peer"
-                type="checkbox"
-                :checked="value"
-                :class="{
-                    invalid: errorMessage?.length,
-                }"
-                :disabled="disabled"
-                :id="inputId"
-                :name="name"
-                @focus="onFocus"
-                @blur="onBlur"
-                @change="$emit('change', value)"
-            />
-            <div
-                class="rounded-full transition-colors duration-200"
-                :class="[variantClass, switchSize]"
-            />
-            <span
-                class="dot absolute left-1 top-1 bg-white rounded-full transition-transform duration-200 ease-in-out"
-                :class="switchInputSize"
-            />
+        <label :for="inputId" class="inline-flex gap-2 pointer">
+            <div class="relative my-auto">
+                <input
+                    v-model="value"
+                    class="sr-only peer"
+                    type="checkbox"
+                    :checked="value"
+                    :disabled="disabled"
+                    :id="inputId"
+                    :name="name"
+                    @focus="onFocus"
+                    @blur="onBlur"
+                    @change="$emit('change', value)"
+                />
+                <div
+                    class="rounded-full transition-colors duration-200"
+                    :class="[
+                        variantClass,
+                        switchSize,
+                        { 'opacity-60': disabled },
+                    ]"
+                />
+                <span
+                    class="dot absolute left-1 top-1 bg-white rounded-full transition-transform duration-200 ease-in-out"
+                    :class="switchInputSize"
+                />
+            </div>
             {{ label }}
         </label>
     </InputWrapper>
