@@ -10,10 +10,9 @@ type User = {
     two_factor_confirmed_at: string | null;
     role_id: string;
     deleted_at?: string;
-
-    // created_at: string;
-    // updated_at: string;
-    // user_role: UserRole;
+    created_at?: string;
+    updated_at?: string;
+    user_role?: UserRole;
 };
 
 type UserRole = {

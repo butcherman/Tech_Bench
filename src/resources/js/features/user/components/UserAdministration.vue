@@ -14,7 +14,7 @@ defineProps<{
 }>();
 
 const { userTableColumns } = useUserAdministrationHelper();
-const { user } = useUserAuth();
+const { authorizedUser } = useUserAuth();
 
 /**
  * When a row is clicked on, go to that users profile
@@ -31,9 +31,7 @@ const rowLink = (event: MouseEvent, userRow: User): void => {
  * Disable a user
  */
 const disableUser = (userRow: User): void => {
-    console.log(userRow);
-
-    if (user && userRow.username === user.value?.username) {
+    if (authorizedUser && userRow.username === authorizedUser.value?.username) {
         alert("You cannot disable yourself");
         return;
     }
@@ -65,6 +63,7 @@ const disableUser = (userRow: User): void => {
             <template #header.actions>&nbsp;</template>
             <template #row.actions="{ rowData }">
                 <BaseBadge
+                    v-if="rowData.username !== authorizedUser?.username"
                     icon="user-slash"
                     variant="danger"
                     pointer
