@@ -9,6 +9,9 @@
 .form-input-outlined {
     @apply rounded-lg border border-slate-300 border-collapse;
     @apply focus:border-blue-400;
+    &.has-focus {
+        @apply border-blue-400!;
+    }
     &.invalid {
         @apply border-pink-300;
     }
@@ -17,6 +20,9 @@
 .form-input-standard {
     @apply border-0 border-b-2;
     @apply focus:border-b-blue-400;
+    &.has-focus {
+        @apply border-b-blue-400;
+    }
     &.invalid {
         @apply border-b-pink-300;
     }
@@ -25,6 +31,9 @@
 .form-input-filled {
     @apply border-0 border-b-2 border-b-slate-300 bg-slate-100;
     @apply focus:outline-none focus:ring-0 focus:border-b-blue-400;
+    &.has-focus {
+        @apply outline-none ring-0 border-b-blue-400;
+    }
     &.invalid {
         @apply border-b-pink-300;
     }

@@ -8,6 +8,7 @@ import SwitchInput from "@/core/forms/components/SwitchInput.vue";
 import SelectInput from "@/core/forms/components/SelectInput.vue";
 import AutoCompleteInput from "@/core/forms/components/AutoCompleteInput.vue";
 import DatePickerInput from "@/core/forms/components/DatePickerInput.vue";
+import MultiSelectInput from "@/core/forms/components/MultiSelectInput.vue";
 
 const selectList = ["option 1", "option 2", "option 3", "option 4"];
 </script>
@@ -26,6 +27,24 @@ export default { layout: AppLayout };
                 :validation-schema="{}"
                 submit-route="#"
             >
+                <MultiSelectInput
+                    name="multiselect"
+                    :list="selectList"
+                    label="multi"
+                    variant="filled"
+                />
+                <MultiSelectInput
+                    name="multiselect2"
+                    :list="selectList"
+                    label="multi"
+                    variant="standard"
+                />
+                <MultiSelectInput
+                    name="multiselect3"
+                    :list="selectList"
+                    label="multi"
+                    variant="outlined"
+                />
                 <DatePickerInput
                     name="datepicker"
                     label="Datepicker"

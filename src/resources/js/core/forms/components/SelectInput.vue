@@ -6,6 +6,7 @@
 import InputWrapper from "./wrappers/InputWrapper.vue";
 import { useBaseInputHelper } from "../composables/baseInputHelper.js";
 import { useFormInputHelper } from "../composables/formInputHelper.js";
+import { useSelectHelper } from "../composables/selectHelper.js";
 import { useId } from "vue";
 
 const emit = defineEmits<{
@@ -35,28 +36,7 @@ const { hasFocus, onBlur, onFocus, errorMessage, value } = useBaseInputHelper(
     emit,
 );
 const { inputVariantStyle } = useFormInputHelper(props);
-
-/**
- * Get the value of the list item
- */
-const getValue = (opt: TOption) => {
-    if (typeof opt === "string") {
-        return opt;
-    }
-
-    return props.valueField ? opt[props.valueField] : opt;
-};
-
-/**
- * Get the text to be displayed
- */
-const getOptionText = (item: TOption): string => {
-    if (typeof item === "string") {
-        return item;
-    }
-
-    return props.textField ? String(item[props.textField]) : String(item);
-};
+const { getValue, getOptionText } = useSelectHelper(props);
 </script>
 
 <template>

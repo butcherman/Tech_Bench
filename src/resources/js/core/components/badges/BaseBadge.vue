@@ -37,7 +37,9 @@ const sizeClass = computed(() =>
         :class="[getVariantClass(variant), sizeClass, { pointer: pointer }]"
         class="inline-flex items-center text-xs font-medium inset-ring inset-ring-green-600/20"
     >
-        <fa-icon v-if="icon" :icon="icon" />
-        <span v-if="text">{{ text }}</span>
+        <slot>
+            <fa-icon v-if="icon" :icon="icon" />
+            <span v-if="text">{{ text }}</span>
+        </slot>
     </component>
 </template>
