@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import PasswordInput from "@/core/forms/PasswordInput.vue";
-import SwitchInput from "@/core/forms/SwitchInput.vue";
-import TextInput from "@/core/forms/TextInput.vue";
-import VueForm from "@/core/forms/VueForm.vue";
+import PasswordInput from "@/core/forms/components/PasswordInput.vue";
+import SwitchInput from "@/core/forms/components/SwitchInput.vue";
+import VueForm from "@/core/forms/components/VueForm.vue";
+import TextInput from "@/core/forms/components/TextInput.vue";
 import { login } from "@/wayfinder/routes";
 import { request } from "@/wayfinder/routes/password";
 import { ref } from "vue";
@@ -48,6 +48,7 @@ const validationSchema = object({
                 placeholder="Username"
                 input-style="standard"
                 help="Enter your username or email address"
+                variant="standard"
                 hide-help
             />
             <PasswordInput
@@ -58,6 +59,7 @@ const validationSchema = object({
                 placeholder="Password"
                 input-style="standard"
                 help="Enter your password"
+                variant="standard"
                 hide-help
             />
             <div class="text-right">

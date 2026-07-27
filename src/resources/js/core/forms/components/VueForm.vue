@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import SubmitButton from "../components/buttons/SubmitButton.vue";
+import Overlay from "@/core/components/loaders/Overlay.vue";
+import SubmitButton from "@/core/components/buttons/SubmitButton.vue";
 import { computed, ref } from "vue";
 import { useForm } from "vee-validate";
 import { useForm as useInertiaForm } from "@inertiajs/vue3";
-import Overlay from "../components/loaders/Overlay.vue";
 
 const emit = defineEmits<{
     submitting: [InertiaFormData];

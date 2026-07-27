@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import PasswordInput from "@/core/forms/PasswordInput.vue";
-import TextInput from "@/core/forms/TextInput.vue";
-import VueForm from "@/core/forms/VueForm.vue";
+import PasswordInput from "@/core/forms/components/PasswordInput.vue";
+import VueForm from "@/core/forms/components/VueForm.vue";
+import TextInput from "@/core/forms/components/TextInput.vue";
 import { ref as reference, object, string } from "yup";
 import { update } from "@/wayfinder/routes/password";
 
@@ -46,20 +46,20 @@ const schema = object({
             id="email"
             name="email"
             label="Email Address"
-            variant="underlined"
+            variant="standard"
         />
         <PasswordInput
             id="password"
             name="password"
             label="New Password"
-            variant="underlined"
+            variant="standard"
             focus
         />
         <PasswordInput
             id="password-confirmation"
             name="password_confirmation"
             label="Confirm Password"
-            variant="underlined"
+            variant="standard"
         />
     </VueForm>
 </template>

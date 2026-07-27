@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import TextInput from "@/core/forms/TextInput.vue";
-import VueForm from "@/core/forms/VueForm.vue";
+import VueForm from "@/core/forms/components/VueForm.vue";
+import TextInput from "@/core/forms/components/TextInput.vue";
 import { object, string } from "yup";
 import { update } from "@/wayfinder/routes/user/user-account";
 

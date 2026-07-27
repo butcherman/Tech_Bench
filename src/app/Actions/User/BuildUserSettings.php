@@ -34,7 +34,7 @@ class BuildUserSettings
             }
         }
 
-        return $userSettings;
+        return $userSettings->values();
     }
 
     /**

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import TextInput from "@/core/forms/TextInput.vue";
-import VueForm from "@/core/forms/VueForm.vue";
+import VueForm from "@/core/forms/components/VueForm.vue";
+import TextInput from "@/core/forms/components/TextInput.vue";
 import { email } from "@/wayfinder/routes/password";
 import { object, string } from "yup";
 
@@ -31,6 +31,7 @@ const schema = object({
             name="email"
             label="Email Address"
             placeholder="Email Address"
+            variant="standard"
         />
     </VueForm>
 </template>
