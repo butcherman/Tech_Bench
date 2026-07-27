@@ -10,6 +10,7 @@ import AutoCompleteInput from "@/core/forms/components/AutoCompleteInput.vue";
 import DatePickerInput from "@/core/forms/components/DatePickerInput.vue";
 import MultiSelectInput from "@/core/forms/components/MultiSelectInput.vue";
 import MultiSelectGroupInput from "@/core/forms/components/MultiSelectGroupInput.vue";
+import OtpInput from "@/core/forms/components/OtpInput.vue";
 
 const selectList = ["option 1", "option 2", "option 3", "option 4"];
 
@@ -39,11 +40,20 @@ export default { layout: AppLayout };
                 :validation-schema="{}"
                 submit-route="#"
             >
-                <MultiSelectGroupInput
-                    name="multi_group"
-                    :list="groupList"
-                    group-text-field="label"
-                    group-list-field="list"
+                <OtpInput
+                    name="Otp"
+                    help-message="Otp Input"
+                    variant="standard"
+                />
+                <OtpInput
+                    name="Otp1"
+                    help-message="Otp Input"
+                    variant="filled"
+                />
+                <OtpInput
+                    name="Otp2"
+                    help-message="Otp Input"
+                    variant="outlined"
                 />
             </VueForm>
         </Card>
