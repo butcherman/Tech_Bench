@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Overlay from "@/core/components/loaders/Overlay.vue";
 import SubmitButton from "@/core/components/buttons/SubmitButton.vue";
-import { computed, ref } from "vue";
+import { computed, readonly, ref } from "vue";
 import { useForm } from "vee-validate";
 import { useForm as useInertiaForm } from "@inertiajs/vue3";
 
@@ -117,6 +117,7 @@ defineExpose({
     resetForm,
     isDirty,
     isSubmitting,
+    values: readonly(values),
 });
 </script>
 
@@ -127,7 +128,7 @@ defineExpose({
         class="h-full"
     >
         <form
-            class="h-full flex flex-col"
+            class="h-full flex flex-col gap-2"
             :name="name"
             novalidate
             @submit.prevent="onSubmit"
@@ -141,7 +142,7 @@ defineExpose({
                     {{ err }}
                 </div>
             </div>
-            <div class="grow">
+            <div class="grow flex flex-col gap-2">
                 <slot />
             </div>
             <div>

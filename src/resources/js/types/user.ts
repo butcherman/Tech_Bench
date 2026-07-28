@@ -1,4 +1,4 @@
-type User = {
+interface User {
     user_id: number;
     username: string;
     email: string;
@@ -13,22 +13,37 @@ type User = {
     created_at?: string;
     updated_at?: string;
     user_role?: UserRole;
-};
+}
 
-type UserRole = {
+interface UserRole {
     role_id: number;
     name: string;
     description: string;
     allow_edit: boolean;
-};
+}
 
-type UserSettings = {
+interface UserSettings {
     setting_type_id: number;
     value: boolean;
     name: string;
-};
+}
 
-type PasswordPolicy = {
+interface UserRole {
+    role_id: number;
+    name: string;
+    description: string;
+    allow_edit: boolean;
+}
+
+interface UserRolePermission {
+    perm_type_id: number;
+    description: string;
+    group: string;
+    allow: boolean;
+    feature_enabled: boolean;
+}
+
+interface PasswordPolicy {
     expire: number;
     min_length: number;
     contains_uppercase: boolean;
@@ -36,4 +51,33 @@ type PasswordPolicy = {
     contains_number: boolean;
     contains_special: boolean;
     disable_compromised: boolean;
-};
+}
+
+interface UserDevice {
+    device_id: number;
+    type: string;
+    os: string;
+    browser: string;
+    registered_ip_address: string;
+    updated_ip_address: string;
+    created_at: string;
+    updated_at: string;
+}
+
+interface TwoFaConfig {
+    required: boolean;
+    allow_save_device: boolean;
+    allow_via_email: boolean;
+    allow_via_authenticator: boolean;
+}
+
+interface OathConfig {
+    allow_login: boolean;
+    allow_register: boolean;
+    default_role_id: number;
+    tenant: string;
+    client_id: string;
+    client_secret: string;
+    secret_expires: string;
+    redirect: string;
+}
