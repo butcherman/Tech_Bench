@@ -39,7 +39,11 @@ const showComponent = computed(() => {
         v-if="showComponent === 'empty'"
         :table="table"
         :no-results-text="noResultsText"
-    />
+    >
+        <template v-for="name of Object.keys($slots)" v-slot:[name]="data">
+            <slot :name="name" v-bind="data" />
+        </template>
+    </DataTableBodyEmpty>
     <DataTableBodyData
         v-if="showComponent === 'body'"
         :table="table"
