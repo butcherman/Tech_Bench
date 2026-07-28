@@ -1,10 +1,11 @@
 <script setup lang="ts" generic="TData extends RowData">
-import Paginate from "@/core/components/Paginate.vue";
+import Paginate from "../../pagination/Paginate.vue";
 import { computed, ref, watch } from "vue";
 import type { RowData, Table } from "@tanstack/vue-table";
 
 const props = defineProps<{
     table: Table<TData>;
+    hasActionSlot?: boolean;
 }>();
 
 /*
@@ -20,14 +21,17 @@ watch(perPage, (newPerPage) => props.table.setPageSize(newPerPage));
 | Pagination Data
 |-------------------------------------------------------------------------------
 */
-const currentPage = computed(
+const currentPage = computed<number>(
     () => props.table.getState().pagination.pageIndex + 1,
 );
 
-const totalRecords = computed(() => props.table.getRowCount());
-const totalPages = computed(() =>
-    Math.ceil(totalRecords.value / perPage.value),
-);
+const totalRecords = computed<number>(() => props.table.getRowCount());
+
+const totalColumns = computed<number>(() => {
+    let baseCols = props.table.getAllColumns().length;
+
+    return props.hasActionSlot ? baseCols + 1 : baseCols;
+});
 
 /*
 |-------------------------------------------------------------------------------
@@ -44,17 +48,16 @@ const onGoToPage = (page: number): void => {
     <tfoot>
         <tr class="border-t border-slate-300 border-collapse">
             <td
-                :colspan="table.getAllColumns().length"
+                :colspan="totalColumns"
                 :class="table.options.meta?.paddingClass"
             >
                 <slot name="footer">
                     <Paginate
                         v-if="table.options.meta?.paginate"
                         v-model:per-page="perPage"
-                        :pagination-array="table.options.meta?.paginationArray"
+                        :per-page-array="table.options.meta?.paginationArray"
                         :current-page="currentPage"
                         :total-records="totalRecords"
-                        :total-pages="totalPages"
                         @go-to-page="onGoToPage"
                     />
                 </slot>

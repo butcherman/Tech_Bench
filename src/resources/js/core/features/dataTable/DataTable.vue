@@ -57,7 +57,10 @@ const table = useDataTable(props);
                     <slot :name="name" v-bind="data" />
                 </template>
             </DataTableBody>
-            <DataTableFooter :table="table">
+            <DataTableFooter
+                :table="table"
+                :has-action-slot="props.actionsSlot"
+            >
                 <template
                     v-for="name of Object.keys($slots)"
                     v-slot:[name]="data"

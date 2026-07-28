@@ -54,3 +54,8 @@ interface LinkHelper {
     href: string;
     external?: boolean;
 }
+
+interface IndexedData<TData> {
+    id: string;
+    data: TData;
+}

@@ -8,40 +8,8 @@ const emit = defineEmits<{
 const props = defineProps<{
     currentPage: number;
     totalPages: number;
+    paginationArray: number[];
 }>();
-
-/*
-|-------------------------------------------------------------------------------
-| Navigation go-to-page links for navigating to a specific page.
-| Only five pages will show with the active page in the middle if more
-| than five available.
-|-------------------------------------------------------------------------------
-*/
-const paginationArray = computed<number[]>(() => {
-    let pageArr: number[] = [];
-    let start: number = props.totalPages > 5 ? props.currentPage - 2 : 1;
-
-    //  If start was going to be a negative number, we change it to 1
-    if (start <= 0) {
-        start = 1;
-    }
-
-    let end = props.totalPages > 5 ? start + 4 : props.totalPages;
-    //  If end was going to be a higher number than the last page, we modify it
-    if (end > props.totalPages) {
-        end = props.totalPages;
-        //  Try to still get five links in the array
-        if (props.totalPages > 5) {
-            start = props.totalPages - 4;
-        }
-    }
-
-    for (let i = start; i <= end; i++) {
-        pageArr.push(i);
-    }
-
-    return pageArr;
-});
 
 /*
 |-------------------------------------------------------------------------------
@@ -72,7 +40,7 @@ const onPrevPage = (): void => {
 </script>
 
 <template>
-    <div>
+    <div class="flex justify-center">
         <ul class="flex flex-row">
             <li
                 class="border rounded-s-lg p-1"
