@@ -20,7 +20,7 @@ const isOpen = computed({
     set: (value) => emit("update:modelValue", value),
 });
 
-const { user } = useUserAuth();
+const { authorizedUser } = useUserAuth();
 
 const menuList = ref<menuItem[]>([
     {
@@ -42,7 +42,7 @@ const menuList = ref<menuItem[]>([
             <h6
                 class="text-center border-b border-b-slate-200 text-muted pb-2 mb-2"
             >
-                {{ user?.full_name }}
+                {{ authorizedUser?.full_name }}
             </h6>
             <MenuList :menu-list="menuList" />
             <ul

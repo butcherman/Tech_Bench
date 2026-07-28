@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import BaseBadge from "@/core/components/badges/BaseBadge.vue";
-import DataTable from "@/features/dataTable/DataTable.vue";
+import DataTable from "@/core/features/dataTable/DataTable.vue";
 import verifyModal from "@/core/composables/verifyModal";
 import { destroy } from "@/wayfinder/routes/admin/user";
 import { router } from "@inertiajs/vue3";

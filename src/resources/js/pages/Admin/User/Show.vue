@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import AppLayout from "@/layouts/AppLayout.vue";
 import Card from "@/core/components/Card.vue";
-import TableStacked from "@/features/dataTable/TableStacked.vue";
+import TableStacked from "@/core/features/dataTable/TableStacked.vue";
 import UserAdministrationActions from "@/features/user/components/UserAdministrationActions.vue";
 import { useUserAuth } from "@/core/state/userAuth";
 
