@@ -1,5 +1,5 @@
 import verifyModal from "@/core/composables/verifyModal.js";
-import { textColumn } from "@/features/dataTable/columns/textColumn";
+import { textColumn } from "@/core/features/dataTable/columns/textColumn";
 import { reset } from "@/wayfinder/routes/admin/user/two-factor/index.js";
 import { router } from "@inertiajs/vue3";
 import { useFlashState } from "@/core/state/flashState.js";
