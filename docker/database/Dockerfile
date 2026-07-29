@@ -6,6 +6,8 @@
 
 FROM butcherman/tech_bench_database:1.0
 
+USER root
+
 RUN apt install && apt upgrade -y --no-install-recommends
 
 ENV MYSQL_ROOT_PASSWORD=tbRootPasswd
@@ -14,3 +16,5 @@ ENV MYSQL_PASSWORD=techBenchDatabase
 ENV MYSQL_DATABASE=tech-bench
 
 COPY ./defaultDatabase.sql /docker-entrypoint-initdb.d/
+
+USER tbUser
