@@ -23,9 +23,9 @@ COPY ./entrypoint.sh /docker-entrypoint-startdb.d/
 COPY ./entrypoint.sh /docker-entrypoint-initdb.d/
 
 # Create a group and user to run the file permissions
-RUN addgroup --gid 1024 tbgroup
-RUN adduser --disabled-password --gecos "" --force-badname --ingroup tbgroup tbuser
-RUN usermod -a -G root tbuser
+# RUN addgroup --gid 1024 tbgroup
+# RUN adduser --disabled-password --gecos "" --force-badname --ingroup tbgroup tbuser
+# RUN usermod -a -G root tbuser
 
 # Make directories for storage logs and SSL Cert
 RUN mkdir -p /app/storage/logs/nginx -m 775
@@ -35,8 +35,8 @@ RUN mkdir -p /app/public/build/assets -m 775
 RUN chown tbuser:tbgroup -R /app
 
 # Remove default files
-RUN rm /app/50x.html
-RUN rm /app/index.html
+# RUN rm /app/50x.html
+# RUN rm /app/index.html
 
 USER tbuser
 WORKDIR /app
