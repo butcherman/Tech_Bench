@@ -4,12 +4,12 @@
 #                                                                                               #
 #################################################################################################
 
-FROM bitnami/nginx:latest
+FROM butcherman/tech_bench_nginx:1.1
 
 ENV TB_URL=localhost
 ENV ENABLE_HTTPS=true
 
-USER root 
+USER root
 
 # Make sure image is up to date
 RUN apt update && apt upgrade -y --no-install-recommends
