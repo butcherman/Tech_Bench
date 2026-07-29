@@ -4,7 +4,7 @@
 #                                                                                               #
 #################################################################################################
 
-FROM bitnami/redis:latest
+FROM butcherman/tech_bench_redis:1.0
 
 ENV REDIS_PASSWORD=tbRootPassword
 

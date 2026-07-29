@@ -4,7 +4,7 @@
 #                                                                              #
 ################################################################################
 
-FROM butcherman/tech_bench_baseline:1.1
+FROM butcherman/tech_bench_baseline:1.0
 
 ARG BRANCH=false
 ARG VERSION=latest
