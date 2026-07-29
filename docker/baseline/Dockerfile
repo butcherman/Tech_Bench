@@ -63,7 +63,7 @@ RUN chmod 775 /app
 RUN chmod 775 /opt/bitnami/php -R
 
 # Create the staging directory
-RUN mkdir /staging
+RUN mkdir -p /staging
 RUN chmod 777 /staging
 
 WORKDIR /app
