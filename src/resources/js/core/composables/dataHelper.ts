@@ -8,7 +8,7 @@ export const useDataHelper = () => {
         return originalData.map((data: TData) => {
             return {
                 id: useId(),
-                data: data,
+                data,
             };
         });
     };
