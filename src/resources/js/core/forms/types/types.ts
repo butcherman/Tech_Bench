@@ -1,5 +1,7 @@
 type InputVariant = "filled" | "standard" | "outlined";
 
+type FormSubmitMethod = "post" | "put";
+
 interface InputBaseProps {
     name: string;
     label?: string;
@@ -9,14 +11,17 @@ interface InputBaseProps {
     helpVisible?: boolean;
     autocomplete?: string;
     disabled?: boolean;
-    switchVariant?: variantType;
-    size?: componentSize;
+    switchVariant?: VariantType;
+    size?: ComponentSize;
 }
+
+type InputBaseEmit = (event: string) => unknown;
 
 interface InputSelectProps<
     TGroup extends Record<string, unknown>,
     TOption extends string | Record<string, unknown>,
 > extends InputBaseProps {
+    list: TGroup[] | TOption[];
     textField?: TOption extends string ? never : keyof TOption;
     valueField?: TOption extends string ? never : keyof TOption;
     groupTextField?: keyof TGroup;

@@ -2,19 +2,22 @@
 import { computed } from "vue";
 import { Link } from "@inertiajs/vue3";
 import { useVariantHelper } from "@/core/composables/variantHelper";
+import type { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 
 const props = defineProps<{
+    active?: boolean;
     async?: boolean;
+    disabled?: boolean;
     flat?: boolean;
     href?: string;
-    icon?: string;
+    icon?: string | IconDefinition;
     pill?: boolean;
     text?: string;
-    size?: componentSize;
-    variant?: variantType;
+    size?: ComponentSize;
+    variant?: VariantType;
 }>();
 
-const { getVariantClass } = useVariantHelper();
+const { getVariantClass, getActiveVariantClass } = useVariantHelper();
 
 /**
  * If the href prop is populated, treat click as link component to allow
@@ -27,21 +30,26 @@ const buttonType = computed<typeof Link | "button">(() =>
 /**
  * Class and font color for the button
  */
-const variantClass = computed(() => getVariantClass(props.variant));
+const variantClass = computed(() =>
+    getVariantClass(props.variant ?? "primary"),
+);
+
+/**
+ * Class and color when the button is active
+ */
+const activeClass = computed(() =>
+    props.active ? getActiveVariantClass(props.variant ?? "primary") : "",
+);
 
 /**
  * Button Size
  */
 const sizeClass = computed<string>(() => {
-    switch (props.size) {
-        case "small":
-            return "px-2 py-1";
-        case "large":
-            return "px-3 py-4";
-        case "normal":
-        default:
-            return "px-3 py-2";
-    }
+    return {
+        sm: "px-2 py-1",
+        md: "px-3 py-4",
+        lg: "px-3 py-6",
+    }[props.size ?? "md"];
 });
 </script>
 
@@ -53,9 +61,10 @@ const sizeClass = computed<string>(() => {
         :class="[
             sizeClass,
             variantClass,
-            { 'rounded-full!': pill, 'shadow-xl': !flat },
+            activeClass,
+            { 'rounded-full!': pill, 'shadow-xl': !flat, pointer: !disabled },
         ]"
-        class="rounded-lg inline-block text-center pointer"
+        class="rounded-lg inline-block text-center"
         type="button"
     >
         <slot>

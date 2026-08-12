@@ -8,7 +8,7 @@
 
 .form-input-outlined {
     @apply rounded-lg border border-slate-300 border-collapse;
-    @apply focus:border-blue-400;
+    @apply focus:border-blue-400!;
     &.has-focus {
         @apply border-blue-400!;
     }
@@ -19,9 +19,9 @@
 
 .form-input-standard {
     @apply border-0 border-b-2;
-    @apply focus:border-b-blue-400;
+    @apply focus:border-b-blue-400!;
     &.has-focus {
-        @apply border-b-blue-400;
+        @apply border-b-blue-400!;
     }
     &.invalid {
         @apply border-b-pink-300;
@@ -30,9 +30,9 @@
 
 .form-input-filled {
     @apply border-0 border-b-2 border-b-slate-300 bg-slate-100;
-    @apply focus:outline-none focus:ring-0 focus:border-b-blue-400;
+    @apply focus:outline-none focus:ring-0 focus:border-b-blue-400!;
     &.has-focus {
-        @apply outline-none ring-0 border-b-blue-400;
+        @apply outline-none ring-0 border-b-blue-400!;
     }
     &.invalid {
         @apply border-b-pink-300;
@@ -40,6 +40,12 @@
 }
 
 .form-label-base {
+    @apply absolute text-sm text-slate-700 bg-transparent px-2;
+    @apply transform duration-300 -translate-y-4 scale-75 top-2 z-10 origin-left inset-s-1;
+    @apply peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto;
+}
+
+.form-label-text-area {
     @apply absolute text-sm text-slate-700 bg-transparent px-2;
     @apply transform duration-300 -translate-y-4 scale-75 top-2 z-10 origin-left inset-s-1;
     @apply peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto;
@@ -53,7 +59,7 @@
 * Prepend and append form inputs
 */
 .form-input-prepend {
-    @apply py-2 px-1;
+    @apply py-2 px-1 bg-slate-200/50;
     &.form-prepend-standard {
         @apply border-0 border-b-2;
         &.has-focus {
@@ -88,7 +94,7 @@
 }
 
 .form-input-append {
-    @apply py-2 px-1;
+    @apply py-2 px-1 bg-slate-200/50;
     &.form-append-standard {
         @apply border-0 border-b-2;
         &.has-focus {

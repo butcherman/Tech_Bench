@@ -2,13 +2,14 @@
 import BaseButton from "./BaseButton.vue";
 
 const props = defineProps<{
+    async?: boolean;
     flat?: boolean;
     href?: string;
     icon?: string;
     pill?: boolean;
     text?: string;
-    size?: componentSize;
-    variant?: variantType;
+    size?: ComponentSize;
+    variant?: VariantType;
 }>();
 </script>
 

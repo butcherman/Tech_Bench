@@ -3,20 +3,15 @@ import { computed } from "vue";
 
 const props = defineProps<{
     title?: string;
-    size?: componentSize;
+    size?: ComponentSize;
 }>();
 
 const cardSize = computed(() => {
-    switch (props.size) {
-        case "small":
-            return "w-full md:w-1/3 xl:w-1/4 my-3";
-        case "normal":
-            return "w-full md:w-1/2 xl:w-1/3 my-3";
-        case "large":
-            return "w-full";
-        default:
-            return "w-full md:w-3/4 xl:w-1/2 my-3";
-    }
+    return {
+        sm: "w-full md:w-1/3 xl:w-1/4",
+        md: "w-full lg:w-1/2 xl:w-1/3",
+        lg: "w-full",
+    }[props.size ?? "lg"];
 });
 </script>
 

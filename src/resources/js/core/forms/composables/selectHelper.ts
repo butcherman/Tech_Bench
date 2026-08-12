@@ -1,18 +1,42 @@
+import { computed } from "vue";
+
 export const useSelectHelper = <
-    TOption extends string | Record<string, unknown>,
     TGroup extends Record<string, unknown>,
+    TOption extends string | Record<string, unknown>,
 >(
     props: InputSelectProps<TGroup, TOption>,
 ) => {
+    const optionLookup = computed(() => {
+        const map = new Map<unknown, string>();
+
+        if (props.groupListField) {
+            for (const group of props.list as TGroup[]) {
+                for (const option of getGroupItems(group)) {
+                    map.set(getValue(option), getOptionText(option));
+                }
+            }
+        } else {
+            for (const option of props.list as TOption[]) {
+                map.set(getValue(option), getOptionText(option));
+            }
+        }
+
+        return map;
+    });
+
     /**
      * Get the value of the list item
      */
-    const getValue = (opt: TOption) => {
+    const getValue = (opt: TOption): string => {
         if (typeof opt === "string") {
             return opt;
         }
 
-        return props.valueField ? opt[props.valueField] : opt;
+        if (props.valueField) {
+            return String(opt[props.valueField]);
+        }
+
+        return String(opt);
     };
 
     /**
@@ -23,7 +47,18 @@ export const useSelectHelper = <
             return item;
         }
 
-        return props.textField ? String(item[props.textField]) : String(item);
+        if (props.textField) {
+            return String(item[props.textField]);
+        }
+
+        return String(item);
+    };
+
+    /**
+     * Get the text to be displayed, based on the value
+     */
+    const getOptionTextFromValue = (value: unknown): string | undefined => {
+        return optionLookup.value.get(value);
     };
 
     /**
@@ -51,6 +86,7 @@ export const useSelectHelper = <
     return {
         getValue,
         getOptionText,
+        getOptionTextFromValue,
         getGroupText,
         getGroupItems,
     };

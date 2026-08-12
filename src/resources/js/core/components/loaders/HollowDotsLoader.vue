@@ -3,13 +3,21 @@
  * Note:  Hollow Dots Spinner code compliments of Epic Spinners
  * https://epic-spinners.epicmax.co/
  */
+defineProps<{
+    text?: string;
+}>();
 </script>
 
 <template>
-    <div class="hollow-dots-spinner">
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
+    <div>
+        <div class="flex justify-center">
+            <div class="hollow-dots-spinner">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+        </div>
+        <h5 v-if="text" class="text-center text-muted">{{ text }}</h5>
     </div>
 </template>
 

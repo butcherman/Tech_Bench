@@ -7,50 +7,44 @@ const props = defineProps<{
     icon?: string;
     pill?: boolean;
     text?: string;
-    size?: componentSize;
-    variant?: variantType;
+    size?: ComponentSize;
+    variant?: VariantType;
 }>();
 
-/**
- * Background class of the button
- */
 const { getVariantClass } = useVariantHelper();
 
 /**
- * Styling and other button data
+ * Class and font color for the button
  */
-const variantClass = computed(() => getVariantClass(props.variant));
-const buttonText = computed(() => props.text ?? "Submit");
+const variantClass = computed(() =>
+    getVariantClass(props.variant ?? "primary"),
+);
 
 /**
  * Button Size
  */
 const sizeClass = computed<string>(() => {
-    switch (props.size) {
-        case "small":
-            return "px-2 py-1";
-        case "large":
-            return "px-3 py-4";
-        case "normal":
-        default:
-            return "px-3 py-2";
-    }
+    return {
+        sm: "px-2 py-1",
+        md: "px-3 py-4",
+        lg: "px-3 py-6",
+    }[props.size ?? "md"];
 });
 </script>
 
 <template>
     <button
-        type="submit"
         :class="[
             sizeClass,
             variantClass,
             { 'rounded-full!': pill, 'shadow-xl': !flat },
         ]"
-        class="rounded-lg inline-block text-center pointer focus:ring-0"
+        class="rounded-lg inline-block text-center pointer"
+        type="submit"
     >
         <slot>
             <fa-icon v-if="icon" :icon="icon" />
-            {{ buttonText }}
+            {{ text }}
         </slot>
     </button>
 </template>

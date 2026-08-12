@@ -11,7 +11,6 @@
     <script type="text/javascript">
         let appData = {!! json_encode(\App\Facades\CacheData::appData()) !!}
     </script>
-    {{-- @routes() --}}
     @vite('resources/js/app.ts')
     <x-inertia::head />
 </head>

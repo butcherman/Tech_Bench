@@ -1,0 +1,26 @@
+import "@inertiajs/core";
+
+declare module "@inertiajs/core" {
+    export interface InertiaConfig {
+        sharedPageProps: {
+            csrf_token: string;
+            breadcrumbs: {
+                title: string;
+                url: string;
+                is_current_page: boolean;
+            }[];
+        };
+        flashDataType: {
+            banner?: FlashAlert;
+        };
+        // errorValueType: string[];
+        // layoutProps: {
+        //     title: string;
+        //     showSidebar: boolean;
+        // };
+        // namedLayoutProps: {
+        //     app: { title: string; theme: "light" | "dark" };
+        //     content: { padding: string; maxWidth: string };
+        // };
+    }
+}

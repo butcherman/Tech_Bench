@@ -1,22 +1,21 @@
 <script setup lang="ts">
 import Card from "@/core/components/Card.vue";
-import LogoImage from "@/core/components/LogoImage.vue";
 import { useAppData } from "@/core/state/appData";
 
 const props = defineProps<{
     welcomeMessage?: string;
-    homeLinks: linkList[];
-    publicLink: linkList | false;
+    homeLinks: LinkList[];
+    publicLink: LinkList | false;
 }>();
 
-const { appName } = useAppData();
+const { appName, logo } = useAppData();
 </script>
 
 <template>
     <div class="w-full">
         <h1 class="text-center text-white">{{ appName }}</h1>
-        <Card size="large">
-            <LogoImage />
+        <Card size="lg">
+            <div><img :src="logo" class="justify-self-center" /></div>
             <hr class="bg-gray-500 my-2" />
             <h6 class="text-center font-semibold">
                 {{ welcomeMessage }}
