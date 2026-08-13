@@ -3,7 +3,9 @@ import "@inertiajs/core";
 declare module "@inertiajs/core" {
     export interface InertiaConfig {
         sharedPageProps: {
+            current_user: User | null;
             csrf_token: string;
+            navbar: MenuItem[];
             breadcrumbs: {
                 title: string;
                 url: string;
