@@ -4,7 +4,7 @@ import FlashAlert from "./components/FlashAlert.vue";
 
 <template>
     <div id="layout-wrapper">
-        <flash-alert />
+        <FlashAlert />
         <slot />
     </div>
 </template>
