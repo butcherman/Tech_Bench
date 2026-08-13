@@ -33,7 +33,7 @@ class HandleFlashDataMiddleware
             foreach ($flashData['old'] as $flash) {
                 if (FlashLevels::tryFrom($flash)) {
                     Inertia::flash('banner', [
-                        'level' => $flash,
+                        'variant' => $flash,
                         'message' => $request->session()->get($flash),
                     ]);
                 }
