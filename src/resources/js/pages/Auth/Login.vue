@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import AuthLayout from "@/layouts/AuthLayout.vue";
-import LoginLogo from "@/features/auth/components/LoginLogo.vue";
 import LoginInstructions from "@/features/auth/components/LoginInstructions.vue";
+import LoginLogo from "@/features/auth/components/LoginLogo.vue";
 
 const props = defineProps<{
-    welcomeMessage?: string;
+    allowOath: boolean;
     homeLinks: LinkList[];
     publicLink: LinkList | false;
-    allowOath: boolean;
+    welcomeMessage?: string;
 }>();
 </script>
 

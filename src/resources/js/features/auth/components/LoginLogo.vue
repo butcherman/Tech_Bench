@@ -3,9 +3,9 @@ import Card from "@/core/components/Card.vue";
 import { useAppData } from "@/core/state/appData";
 
 const props = defineProps<{
-    welcomeMessage?: string;
     homeLinks: LinkList[];
     publicLink: LinkList | false;
+    welcomeMessage?: string;
 }>();
 
 const { appName, logo } = useAppData();

@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import PasswordInput from "@/core/forms/components/validatedInputs/PasswordInput.vue";
+import SwitchInput from "@/core/forms/components/validatedInputs/SwitchInput.vue";
 import TextInput from "@/core/forms/components/validatedInputs/TextInput.vue";
 import VueForm from "@/core/forms/components/VueForm.vue";
 import { object, string, boolean } from "yup";
 import { login } from "@/wayfinder/routes";
 import { request } from "@/wayfinder/routes/password";
-import SwitchInput from "@/core/forms/components/validatedInputs/SwitchInput.vue";
 
 defineEmits<{
     success: [];
@@ -68,6 +68,10 @@ const validationSchema = object({
                 Forgot Password
             </Link>
         </div>
-        <SwitchInput name="remember" label="Remember Me" />
+        <div class="flex justify-center">
+            <div>
+                <SwitchInput name="remember" label="Remember Me" />
+            </div>
+        </div>
     </VueForm>
 </template>
