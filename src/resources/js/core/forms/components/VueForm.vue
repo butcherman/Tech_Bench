@@ -35,13 +35,22 @@ const validatedForm = useTemplateRef("validated-form");
 const isSubmitting = ref<boolean>(false);
 const uncaughtErrors = ref<string[]>([]);
 
+/*
+|-------------------------------------------------------------------------------
+| Handle errors if they are given
+|-------------------------------------------------------------------------------
+*/
 const handleErrors = (formErrors: FormDataErrors) => {
     for (const [field, message] of Object.entries(formErrors)) {
         if (typeof message === "string") {
-            validatedForm.value?.setFieldError(
-                field as Path<TFormData>,
-                message,
-            );
+            if (validatedForm.value?.getFieldValue(field as keyof TFormData)) {
+                validatedForm.value?.setFieldError(
+                    field as Path<TFormData>,
+                    message,
+                );
+            } else {
+                uncaughtErrors.value.push(String(message));
+            }
         } else {
             uncaughtErrors.value.push(String(message));
         }
@@ -101,6 +110,7 @@ defineExpose({
     <ValidatedVueForm
         v-bind="props"
         ref="validated-form"
+        :error-list="uncaughtErrors"
         :is-submitting="isSubmitting"
         @submit="onSubmit"
     >
