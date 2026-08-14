@@ -112,6 +112,7 @@ defineExpose({
         ref="validated-form"
         :error-list="uncaughtErrors"
         :is-submitting="isSubmitting"
+        v-tab-trap
         @submit="onSubmit"
     >
         <template v-for="(_, slot) of $slots" #[slot]="scope">

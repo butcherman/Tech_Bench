@@ -50,6 +50,7 @@ const validationSchema = object({
             help="Enter your username or email address"
             variant="standard"
             hide-help
+            v-focus
         />
         <PasswordInput
             name="password"

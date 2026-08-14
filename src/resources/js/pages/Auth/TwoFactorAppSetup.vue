@@ -10,6 +10,6 @@ export default { layout: AppLayout };
 </script>
 <template>
     <div class="flex justify-center">
-        <Card>Dashboard</Card>
+        <Card>Hello World</Card>
     </div>
 </template>

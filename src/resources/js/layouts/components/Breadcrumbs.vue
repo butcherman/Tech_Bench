@@ -7,7 +7,10 @@ const breadcrumbs = computed(() => page.props.breadcrumbs);
 </script>
 
 <template>
-    <div v-if="breadcrumbs" class="bg-blue-300 rounded-lg opacity-85 p-4">
+    <div
+        v-if="breadcrumbs.length"
+        class="bg-blue-300 rounded-lg opacity-85 p-4"
+    >
         <ul class="flex gap-2">
             <li v-for="link in breadcrumbs" :key="link.url">
                 <div v-if="link.is_current_page">
