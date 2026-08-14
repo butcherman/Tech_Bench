@@ -34,13 +34,13 @@ const { logo, appName } = useAppData();
                 variant="info"
                 circle
             />
+            <UserAvatar />
             <BaseButton
                 class="lg:hidden"
                 icon="bars"
                 variant="light"
                 @click="$emit('toggleNavbar')"
             />
-            <UserAvatar />
         </div>
     </header>
 </template>

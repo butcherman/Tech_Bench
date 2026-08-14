@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import PasswordInput from "@/core/forms/components/validatedInputs/PasswordInput.vue";
+import SubmitButton from "@/core/components/buttons/SubmitButton.vue";
 import SwitchInput from "@/core/forms/components/validatedInputs/SwitchInput.vue";
 import TextInput from "@/core/forms/components/validatedInputs/TextInput.vue";
 import VueForm from "@/core/forms/components/VueForm.vue";
@@ -73,5 +74,10 @@ const validationSchema = object({
                 <SwitchInput name="remember" label="Remember Me" />
             </div>
         </div>
+        <template #submit-button>
+            <div class="flex justify-center">
+                <SubmitButton text="Login" icon="user-check" class="w-1/2" />
+            </div>
+        </template>
     </VueForm>
 </template>

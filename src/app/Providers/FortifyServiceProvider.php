@@ -68,7 +68,7 @@ class FortifyServiceProvider extends ServiceProvider
         // Reset Password Route
         Fortify::resetPasswordView(function (Request $request) {
             return Inertia::render('Auth/ResetPassword', [
-                'email' => $request->get('email'),
+                'email' => $request->input('email'),
                 'token' => $request->route('token'),
                 'rules' => CacheData::passwordRules(),
             ]);
