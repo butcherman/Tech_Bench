@@ -23,7 +23,7 @@ const submitRoute = computed(() => {
 });
 
 const initValues = {
-    code: null,
+    code: "",
     remember_device: false,
 };
 const schema = object({

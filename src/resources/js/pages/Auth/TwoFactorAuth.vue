@@ -17,13 +17,13 @@ export default { layout: AppLayout };
     <div class="flex justify-center">
         <Card size="md">
             <div class="flex flex-col gap-2">
-                <div>
+                <div v-if="via === 'email'">
                     <h5 class="text-center">
                         A verification code has been sent to your email address.
                     </h5>
                     <p class="text-center">Please enter the code below.</p>
                 </div>
-                <div>
+                <div v-if="via === 'authenticator'">
                     <h5 class="text-center">
                         Input the code from your Authenticatior App
                     </h5>
@@ -31,7 +31,7 @@ export default { layout: AppLayout };
                 <div>
                     <TwoFactorForm :allow-remember="allowRemember" :via="via" />
                 </div>
-                <div class="text-center">
+                <div v-if="via === 'email'" class="text-center">
                     <BaseButton
                         text="Send New Verification Code"
                         variant="warning"

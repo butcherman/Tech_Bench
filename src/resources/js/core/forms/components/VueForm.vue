@@ -1,9 +1,9 @@
 <script setup lang="ts" generic="TFormData extends FormDataType<TFormData>">
 import ValidatedVueForm from "./ValidatedVueForm.vue";
+import { router } from "@inertiajs/vue3";
 import { ref, useTemplateRef } from "vue";
 import { GenericObject, useForm, Path } from "vee-validate";
-import { router } from "@inertiajs/vue3";
-import type { FormDataType, Errors } from "@inertiajs/core";
+import type { FormDataType, Errors, Page } from "@inertiajs/core";
 
 type FormDataErrors = Errors;
 type InitialValues<T extends GenericObject> = NonNullable<
@@ -12,7 +12,7 @@ type InitialValues<T extends GenericObject> = NonNullable<
 
 const emit = defineEmits<{
     submitting: [TFormData];
-    success: [];
+    success: [Page];
 }>();
 
 const props = defineProps<{
@@ -70,7 +70,7 @@ const onSubmit = (form: TFormData): void => {
     router[props.submitMethod](props.submitRoute, form, {
         preserveScroll: true,
         only: props.only,
-        onSuccess,
+        onSuccess: (res) => onSuccess(res),
         onError: (errors) => handleErrors(errors),
         onFinish: () => {
             isSubmitting.value = false;
@@ -83,11 +83,12 @@ const onSubmit = (form: TFormData): void => {
 | Handle successful completion of the form
 |-------------------------------------------------------------------------------
 */
-const onSuccess = () => {
+const onSuccess = (res: Page) => {
     if (!props.doNotReset) {
         validatedForm.value?.resetForm();
     }
-    emit("success");
+
+    emit("success", res);
 };
 
 /*
