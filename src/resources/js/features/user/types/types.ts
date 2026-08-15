@@ -21,11 +21,11 @@ interface UserRole {
     allow_edit: boolean;
 }
 
-// interface UserSettings {
-//     setting_type_id: number;
-//     value: boolean;
-//     name: string;
-// }
+interface UserSettings {
+    setting_type_id: number;
+    value: boolean;
+    name: string;
+}
 
 // interface UserRole {
 //     role_id: number;
@@ -52,16 +52,16 @@ interface UserRole {
 //     disable_compromised: boolean;
 // }
 
-// interface UserDevice {
-//     device_id: number;
-//     type: string;
-//     os: string;
-//     browser: string;
-//     registered_ip_address: string;
-//     updated_ip_address: string;
-//     created_at: string;
-//     updated_at: string;
-// }
+interface UserDevice {
+    device_id: number;
+    type: string;
+    os: string;
+    browser: string;
+    registered_ip_address: string;
+    updated_ip_address: string;
+    created_at: string;
+    updated_at: string;
+}
 
 // interface TwoFaConfig {
 //     required: boolean;

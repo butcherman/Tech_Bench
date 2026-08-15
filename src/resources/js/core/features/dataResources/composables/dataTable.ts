@@ -1,4 +1,4 @@
-import { ref } from "vue";
+import { ref, toRef } from "vue";
 import { useTableColumns } from "./tableColumns";
 import { useTableStyles } from "./tableStyles";
 import {
@@ -22,9 +22,11 @@ export const useDataTable = <TRow extends RowData>(
     const perPage = ref(25);
     const paginationArray = ref([10, 25, 50, 100]);
 
+    const data = toRef(props, "data");
+
     return useVueTable({
         columns: useTableColumns(props.columns),
-        data: props.data,
+        data,
         initialState: {
             pagination: {
                 pageIndex: 0,

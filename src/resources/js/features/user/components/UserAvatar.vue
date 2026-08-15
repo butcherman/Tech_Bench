@@ -1,10 +1,16 @@
 <script setup lang="ts">
 import UserAvatarSettingsMenu from "./UserAvatarSettingsMenu.vue";
 import { ref } from "vue";
+import { router } from "@inertiajs/vue3";
 import { useUserState } from "../state/userState.js";
 
 const { authorizedUser } = useUserState();
 const settingsOpen = ref(false);
+
+/**
+ * Close the settings menu when a link is clicked
+ */
+router.on("start", () => (settingsOpen.value = false));
 </script>
 
 <template>
