@@ -24,7 +24,7 @@ class UserSetting extends Model
     ];
 
     /** @var array<string, string> */
-    protected $appends = ['name'];
+    protected $appends = ['name', 'description'];
 
     /*
     |---------------------------------------------------------------------------
@@ -47,6 +47,13 @@ class UserSetting extends Model
     {
         return Attribute::make(
             get: fn () => $this->UserSettingType->name,
+        );
+    }
+
+    public function description(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->UserSettingType->description,
         );
     }
 

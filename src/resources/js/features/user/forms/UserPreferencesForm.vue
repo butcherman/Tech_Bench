@@ -44,20 +44,29 @@ const schema = () => {
 
 <template>
     <VueForm
-        name="user-settings-form"
+        name="user-preferences-form"
         submit-method="put"
-        submit-text="Update Settings"
+        submit-text="Update Preferences"
         :initial-values="initValues()"
         :validation-schema="schema()"
         :submit-route="update.url(user.username)"
         do-not-reset
         @success="$emit('success')"
     >
-        <template v-for="(setting, key) in settings" :key="key">
-            <SwitchInput
-                :name="`settingList.type_id_${setting.setting_type_id}`"
-                :label="setting.name"
-            />
+        <template v-for="setting in settings" :key="setting.setting_type_id">
+            <div class="border border-slate-300 p-2 rounded-lg">
+                <h5>{{ setting.name }}</h5>
+                <p>
+                    {{ setting.description }}
+                </p>
+                <div class="flex gap-2 flex-row-reverse">
+                    <div>
+                        <SwitchInput
+                            :name="`settingList.type_id_${setting.setting_type_id}`"
+                        />
+                    </div>
+                </div>
+            </div>
         </template>
     </VueForm>
 </template>

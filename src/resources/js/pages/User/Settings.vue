@@ -33,6 +33,7 @@ const { appName } = useAppData();
 const { fadeIn, fadeOut, beforeFadeIn } = useAnimationHelper();
 
 const activeComponentName = ref("profile");
+
 const activeComponent = computed(() => {
     return {
         profile: UserSettingsProfile,
@@ -42,6 +43,7 @@ const activeComponent = computed(() => {
         TwoFaDevices: TwoFactorDevices,
     }[activeComponentName.value];
 });
+
 const activeTitle = computed(() => {
     return {
         profile: "My Profile",

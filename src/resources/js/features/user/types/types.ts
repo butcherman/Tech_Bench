@@ -25,6 +25,7 @@ interface UserSettings {
     setting_type_id: number;
     value: boolean;
     name: string;
+    description: string;
 }
 
 // interface UserRole {
