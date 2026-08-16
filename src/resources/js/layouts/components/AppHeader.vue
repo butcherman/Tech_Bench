@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import AppHelp from "@/core/components/AppHelp.vue";
+import AuthorizedUser from "./AuthorizedUser.vue";
 import BaseBadge from "@/core/components/badges/BaseBadge.vue";
 import BaseButton from "@/core/components/buttons/BaseButton.vue";
-import UserAvatar from "@/features/user/components/UserAvatar.vue";
 import { about } from "@/wayfinder/routes";
 import { dashboard } from "@/wayfinder/routes";
 import { useAppData } from "@/core/state/appData.js";
@@ -34,7 +34,7 @@ const { logo, appName } = useAppData();
                 variant="info"
                 circle
             />
-            <UserAvatar />
+            <AuthorizedUser />
             <BaseButton
                 class="lg:hidden"
                 icon="bars"
