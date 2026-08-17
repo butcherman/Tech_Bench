@@ -5,16 +5,21 @@ import { vOnClickOutside } from "@vueuse/components";
 
 export default (
     message: string,
-    { title = undefined, forceOk = false } = {},
+    {
+        title = undefined,
+        forceOk = false,
+        size = "md",
+    }: { title?: string; forceOk?: boolean; size?: ComponentSize } = {},
 ) => {
     return new Promise(function (resolve) {
         const newComp = createApp({
             setup() {
                 return () =>
                     h(OkModal, {
-                        title: title,
-                        message: message,
-                        forceOk: forceOk,
+                        title,
+                        message,
+                        forceOk,
+                        size,
                         onBackdropClicked: () => resolve("backdrop-clicked"),
                         onOkClicked: () => resolve("ok-clicked"),
                         onHidden: () => unmount(),

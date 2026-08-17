@@ -50,7 +50,7 @@ const activeTitle = computed(() => {
         preferences: "My Preferences",
         security: "Security",
         TwoFaSettings: "2Factor Settings",
-        TwoFaDevices: "My Devices",
+        TwoFaDevices: "My Trusted Devices",
     }[activeComponentName.value];
 });
 

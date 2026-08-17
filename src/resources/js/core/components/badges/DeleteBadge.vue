@@ -27,6 +27,18 @@ const onBadgeclick = () => {
         showConfirm.value = true;
     }
 };
+
+const onConfirmClick = (res: "yes" | "no") => {
+    if (res === "yes") {
+        emit("yesClicked");
+    }
+
+    if (res === "no") {
+        emit("noClicked");
+    }
+
+    showConfirm.value = false;
+};
 </script>
 
 <template>
@@ -57,14 +69,14 @@ const onBadgeclick = () => {
                     text="Yes"
                     size="sm"
                     variant="danger"
-                    @click="$emit('yesClicked')"
+                    @click="onConfirmClick('yes')"
                 />
                 <BaseButton
                     icon="xmark"
                     text="No"
                     size="sm"
                     variant="success"
-                    @click="$emit('noClicked')"
+                    @click="onConfirmClick('no')"
                 />
             </div>
         </div>
