@@ -11,7 +11,7 @@ class ResetTwoFaController extends Controller
 {
     public function __construct()
     {
-        if (! config('auth.twoFa.required')) {
+        if (! config('auth.twoFa.enabled')) {
             abort(403);
         }
     }
@@ -21,7 +21,7 @@ class ResetTwoFaController extends Controller
      */
     public function __invoke(UserAdministrationService $svc, User $user): RedirectResponse
     {
-        $this->authorize('manage', $user);
+        $this->authorize('update', $user);
 
         $svc->clearTwoFaSettings($user);
 

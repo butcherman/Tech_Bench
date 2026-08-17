@@ -10,6 +10,8 @@ class TwoFactorSetupController extends Controller
 {
     public function __invoke(): Response
     {
-        return Inertia::render('Auth/TwoFactorSetup');
+        return Inertia::render('Auth/TwoFactorSetup', [
+            'required' => config('auth.twoFa.required'),
+        ]);
     }
 }

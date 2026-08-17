@@ -21,14 +21,14 @@ class UserSettingsController extends Controller
             'settings' => fn () => $svc($request->user()),
             'two-fa' => [
                 'allowSaveDevice' => fn () => config('auth.twoFa.allow_save_device')
-                    && config('auth.twoFa.required'),
+                    && config('auth.twoFa.enabled'),
                 'allowAuthenticator' => fn () => config('auth.twoFa.allow_via_authenticator')
-                    && config('auth.twoFa.required'),
+                    && config('auth.twoFa.enabled'),
                 'allowEmail' => fn () => config('auth.twoFa.allow_via_email')
-                    && config('auth.twoFa.required'),
+                    && config('auth.twoFa.enabled'),
                 'currentVia' => fn () => $request->user()->two_factor_via,
                 'devices' => fn () => $request->user()->DeviceTokens,
-                'enabled' => fn () => config('auth.twoFa.required'),
+                'enabled' => fn () => config('auth.twoFa.enabled'),
             ],
         ]);
     }

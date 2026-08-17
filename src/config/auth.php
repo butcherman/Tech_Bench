@@ -154,6 +154,7 @@ return [
     */
 
     'twoFa' => [
+        'enabled' => (bool) env('ENABLE_2FA', true),
         'required' => (bool) env('REQUIRE_2FA', false),
         'allow_save_device' => (bool) true,
         'allow_via_email' => (bool) true,

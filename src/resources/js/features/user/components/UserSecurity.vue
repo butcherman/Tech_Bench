@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import UserPasswordForm from "../forms/UserPasswordForm.vue";
-
-//
 </script>
 
 <template>

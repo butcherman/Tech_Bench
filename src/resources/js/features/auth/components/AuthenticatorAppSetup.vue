@@ -22,23 +22,21 @@ const qrUrl = ref();
  * Enable 2FA via Authenticator App
  */
 const enableQrCode = () => {
-    dataPost(enable.url(), {}).then((res) => {
-        if (res?.status === 200) {
-            getQrCode();
-        }
+    dataPost(enable.url(), {}).then(() => {
+        getQrCode();
     });
 };
 
 /**
  * Get QR Code for user to scan and assign to Authenticator App
  */
-const getQrCode = () => {
-    dataGet<twoFaResponseData>(qrCode.url()).then((res) => {
-        if (res?.status === 200) {
-            qrImage.value = res.data.svg;
-            qrUrl.value = res.data.url;
-        }
-    });
+const getQrCode = async () => {
+    const mfaData = await dataGet<twoFaResponseData>(qrCode.url());
+
+    if (mfaData) {
+        qrImage.value = mfaData.svg;
+        qrUrl.value = mfaData.url;
+    }
 };
 
 const onSuccess = () => {

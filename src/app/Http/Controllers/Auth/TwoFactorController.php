@@ -16,7 +16,7 @@ class TwoFactorController extends TwoFactorAuthenticatedSessionController
     {
         $user = $request->challengedUser();
 
-        if (! $user->validateVerificationCode($request->get('code'))) {
+        if (! $user->validateVerificationCode($request->input('code'))) {
             return app(FailedTwoFactorLoginResponse::class);
         }
 

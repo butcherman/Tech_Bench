@@ -1,20 +1,100 @@
 <script setup lang="ts">
-import Card from "@/core/components/Card.vue";
-import TwoFactorRecoveryCodes from "./TwoFactorRecoveryCodes.vue";
-import TwoFactorVerifiedDevices from "./TwoFactorVerifiedDevices.vue";
+import BaseButton from "@/core/components/buttons/BaseButton.vue";
+import okModal from "@/core/features/okModal";
+import { computed } from "vue";
+import { dataGet } from "@/core/services/axiosWrapper";
+import { index } from "@/wayfinder/routes/two-factor/setup";
+import { reset } from "@/wayfinder/routes/admin/user/two-factor";
+import { router } from "@inertiajs/vue3";
+import { secretKey } from "@/wayfinder/routes/two-factor";
+
+interface RecoveryCode {
+    secretKey: string;
+}
 
 const props = defineProps<{
-    user: User;
-    devices: UserDevice[];
+    current_user: User;
+    twoFa: {
+        allowSaveDevice: boolean;
+        allowAuthenticator: boolean;
+        allowEmail: boolean;
+        currentVia: "email" | "authenticator" | null;
+        devices: UserDevice[];
+        enabled: boolean;
+    };
 }>();
+
+const statusIcon = computed(() => (props.twoFa.currentVia ? "check" : "xmark"));
+const statusText = computed(() =>
+    props.twoFa.currentVia ? "Enabled" : "Disabled",
+);
+const statusVariant = computed(() =>
+    props.twoFa.currentVia ? "text-success" : "text-danger",
+);
+
+const onResetMfa = () => {
+    router.put(reset.url(props.current_user.username));
+};
+
+const onShowRecoveryCodes = async () => {
+    let code = await dataGet<RecoveryCode>(secretKey.url());
+
+    if (code) {
+        okModal(code?.secretKey, {
+            title: "Store this code in a safe location",
+            size: "sm",
+        });
+    }
+};
+
+const savedDeviceCount = computed(() => props.twoFa.devices.length);
 </script>
 
 <template>
-    <Card title="Two Factor Authentication">
-        <template #append-title>
-            <TwoFactorRecoveryCodes />
-        </template>
-        <div>authenticator config</div>
-        <TwoFactorVerifiedDevices :user="user" :devices="devices" />
-    </Card>
+    <div>
+        <p class="text-center">
+            Protect your account with an additional authentication method.
+        </p>
+        <h6 class="text-muted mt-4">2FA Status</h6>
+        <div>
+            <fa-icon :icon="statusIcon" :class="statusVariant" />
+            {{ statusText }}
+        </div>
+        <div v-if="twoFa.currentVia">
+            <div>
+                You are currently using {{ twoFa.currentVia }} as your MFA
+                Method.
+            </div>
+            <div class="mt-4">
+                <BaseButton
+                    text="Reset MFA"
+                    size="sm"
+                    variant="info"
+                    @click="onResetMfa"
+                />
+            </div>
+            <div v-if="twoFa.currentVia === 'authenticator'" class="mt-4">
+                <h6 class="text-muted">Recovery Codes</h6>
+                <BaseButton
+                    text="View Recovery Codes"
+                    size="sm"
+                    variant="info"
+                    @click="onShowRecoveryCodes"
+                />
+            </div>
+            <div v-if="twoFa.allowSaveDevice" class="mt-4">
+                <h6 class="text-muted">Saved Devices</h6>
+                <div>{{ savedDeviceCount }} devices are currently trusted.</div>
+            </div>
+        </div>
+        <div v-else>
+            <BaseButton
+                text="Setup MFA"
+                size="sm"
+                class="mt-4"
+                variant="warning"
+                :href="index.url()"
+            />
+        </div>
+    </div>
 </template>

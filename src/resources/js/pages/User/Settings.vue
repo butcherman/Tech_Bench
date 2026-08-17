@@ -84,12 +84,12 @@ const securityMenu: SettingsMenuItem[] = [
     {
         text: "MFA",
         component: "TwoFaSettings",
-        enabled: true,
+        enabled: props.twoFa.enabled,
     },
     {
         text: "Devices",
         component: "TwoFaDevices",
-        enabled: true,
+        enabled: props.twoFa.enabled && props.twoFa.allowSaveDevice,
     },
 ];
 </script>
@@ -109,7 +109,7 @@ export default { layout: AppLayout };
             <Card class="h-auto md:min-h-100 flex-1">
                 <div class="flex flex-col gap-7 p-5">
                     <div>
-                        <h5>ACCOUNT</h5>
+                        <h5 class="text-muted">ACCOUNT</h5>
                         <ul class="ms-5">
                             <li
                                 v-for="item in accountMenu"
@@ -126,7 +126,7 @@ export default { layout: AppLayout };
                         </ul>
                     </div>
                     <div>
-                        <h5>SECURITY</h5>
+                        <h5 class="text-muted">SECURITY</h5>
                         <ul class="ms-5">
                             <template
                                 v-for="item in securityMenu"
