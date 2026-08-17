@@ -30,5 +30,6 @@ class UpdateUserPassword implements UpdatesUserPasswords
         ])->save();
 
         event(new UserPasswordChangedEvent($user));
+        session()->flash('success', 'Password Updated');
     }
 }

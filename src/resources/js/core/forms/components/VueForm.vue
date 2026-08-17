@@ -52,7 +52,7 @@ const handleErrors = (formErrors: FormDataErrors) => {
                 uncaughtErrors.value.push(String(message));
             }
         } else {
-            uncaughtErrors.value.push(String(message));
+            handleErrors(message);
         }
     }
 };

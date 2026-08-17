@@ -157,7 +157,9 @@ export default { layout: AppLayout };
                     @enter="fadeIn"
                     @leave="fadeOut"
                 >
-                    <component :is="activeComponent" v-bind="props" />
+                    <div class="h-full">
+                        <component :is="activeComponent" v-bind="props" />
+                    </div>
                 </Transition>
             </Card>
         </div>
