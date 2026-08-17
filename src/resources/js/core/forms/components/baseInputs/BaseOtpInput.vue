@@ -73,7 +73,8 @@ const onKeyDown = (event: KeyboardEvent, index: number) => {
     if (
         event.key !== "Tab" &&
         event.key !== "ArrowRight" &&
-        event.key !== "ArrowLeft"
+        event.key !== "ArrowLeft" &&
+        event.key !== "Enter"
     ) {
         event.preventDefault();
     }

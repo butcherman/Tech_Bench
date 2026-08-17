@@ -55,7 +55,6 @@ const activeTitle = computed(() => {
 });
 
 const onMenuClick = (menuItem: SettingsMenuItem) => {
-    console.log(menuItem);
     activeComponentName.value = menuItem.component;
 };
 

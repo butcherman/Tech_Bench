@@ -20,8 +20,6 @@ export const useAlertState = () => {
             flashAlert.id = v4();
         }
 
-        console.log(flashAlert);
-
         flashAlerts.value.push(flashAlert);
         if (flashAlert.id) {
             setFlashTimeout(flashAlert.id);

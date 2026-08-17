@@ -148,7 +148,6 @@ export const useDateHelper = () => {
 
     const decreaseMonth = () => {
         if (selectedMonth.value === 0) {
-            console.log("next year");
             selectedYear.value--;
             selectedMonth.value = 11;
             return;
