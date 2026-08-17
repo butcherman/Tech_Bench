@@ -5,6 +5,7 @@ import AppSideNav from "./components/AppSideNav.vue";
 import Breadcrumbs from "./components/Breadcrumbs.vue";
 import FlashAlert from "./components/FlashAlert.vue";
 import ToastAlert from "./components/ToastAlert.vue";
+import UnbaggedErrors from "./components/UnbaggedErrors.vue";
 import { Head, router, usePage } from "@inertiajs/vue3";
 import { computed, ref, useTemplateRef } from "vue";
 
@@ -60,6 +61,7 @@ const onClickOutsideHandler = [
         <section class="mt-14 lg:ms-64 grow bg-gray-200 flex flex-col">
             <div class="p-5 grow flex flex-col">
                 <Breadcrumbs class="mb-2" />
+                <UnbaggedErrors class="mb-2" />
                 <slot />
             </div>
             <AppFooter />

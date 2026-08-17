@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Actions\User\BuildUserSettings;
+use App\Facades\CacheData;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -19,6 +20,7 @@ class UserSettingsController extends Controller
 
         return Inertia::render('User/Settings', [
             'settings' => fn () => $svc($request->user()),
+            'password-rules' => fn () => CacheData::passwordRules(),
             'two-fa' => [
                 'allowSaveDevice' => fn () => config('auth.twoFa.allow_save_device')
                     && config('auth.twoFa.enabled'),

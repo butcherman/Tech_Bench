@@ -18,6 +18,7 @@ interface SettingsMenuItem {
 
 const props = defineProps<{
     current_user: User;
+    passwordRules: string[];
     settings: UserSettings[];
     twoFa: {
         allowSaveDevice: boolean;
