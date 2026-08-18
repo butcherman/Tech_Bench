@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Init;
 
-use App\Actions\Fortify\PasswordValidationRules;
+// use App\Actions\Fortify\PasswordValidationRules;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Config\BasicSettingsRequest;
 use App\Http\Requests\Admin\Config\EmailSettingsRequest;
@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Validator;
 
 class SaveStepController extends Controller
 {
-    use PasswordValidationRules;
+    // use PasswordValidationRules;
 
     /**
      * Save the current Init step in the session and move onto the next step.
@@ -32,41 +32,41 @@ class SaveStepController extends Controller
         };
 
         // Validate the current request.  If it is the Admin password, we build a special request
-        if ($validator) {
-            $validator->validate($validator->rules());
-        } else {
-            // Validate the Administrator Account
-            if (end($path) === 'admin') {
-                Validator::make($saveData, [
-                    'username' => [
-                        'required',
-                    ],
-                    'first_name' => ['required', 'string'],
-                    'last_name' => ['required', 'string'],
-                    'email' => [
-                        'required',
-                        'email',
-                    ],
-                    'role_id' => ['required', 'exists:user_roles'],
-                ])->validateWithBag('adminUser');
-            } else {
-                // Validate the Admin Password
-                Validator::make($saveData, [
-                    'current_password' => [
-                        'required',
-                        'string',
-                        'current_password:web',
-                    ],
-                    'password' => $this->tmpPasswordRules(
-                        $request->session()->get(
-                            'setup.user-settings'
-                        )
-                    ),
-                ], [
-                    'current_password.current_password' => __('The provided password does not match your current password.'),
-                ])->validateWithBag('updatePassword');
-            }
-        }
+        // if ($validator) {
+        //     $validator->validate($validator->rules());
+        // } else {
+        //     // Validate the Administrator Account
+        //     if (end($path) === 'admin') {
+        //         Validator::make($saveData, [
+        //             'username' => [
+        //                 'required',
+        //             ],
+        //             'first_name' => ['required', 'string'],
+        //             'last_name' => ['required', 'string'],
+        //             'email' => [
+        //                 'required',
+        //                 'email',
+        //             ],
+        //             'role_id' => ['required', 'exists:user_roles'],
+        //         ])->validateWithBag('adminUser');
+        //     } else {
+        //         // Validate the Admin Password
+        //         Validator::make($saveData, [
+        //             'current_password' => [
+        //                 'required',
+        //                 'string',
+        //                 'current_password:web',
+        //             ],
+        //             'password' => $this->tmpPasswordRules(
+        //                 $request->session()->get(
+        //                     'setup.user-settings'
+        //                 )
+        //             ),
+        //         ], [
+        //             'current_password.current_password' => __('The provided password does not match your current password.'),
+        //         ])->validateWithBag('updatePassword');
+        //     }
+        // }
 
         $request->session()->put('setup.'.end($path), $saveData);
 

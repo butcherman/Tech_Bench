@@ -1,8 +1,5 @@
 <?php
 
-use App\Actions\Fortify\RedirectIfTwoFactorAuthenticatable;
-use Laravel\Fortify\Actions\AttemptToAuthenticate;
-use Laravel\Fortify\Actions\PrepareAuthenticatedSession;
 use Laravel\Fortify\Features;
 
 return [
@@ -120,6 +117,7 @@ return [
     'limiters' => [
         'login' => 'login',
         'two-factor' => 'two-factor',
+        'passkeys' => 'passkeys',
     ],
 
     /*
@@ -137,6 +135,23 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Passkeys
+    |--------------------------------------------------------------------------
+    |
+    | These settings configure Fortify's passkey (WebAuthn) support. Passkeys
+    | allow users to sign in without needing to remember credentials since
+    | they use public-key cryptography - making them immune to breaches.
+    |
+    */
+
+    'passkeys' => [
+        'relying_party_id' => parse_url(config('app.url'), PHP_URL_HOST),
+        'allowed_origins' => [config('app.url')],
+        'timeout' => 60000,
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Features
     |--------------------------------------------------------------------------
     |
@@ -150,29 +165,14 @@ return [
         Features::resetPasswords(),
         Features::updateProfileInformation(),
         Features::updatePasswords(),
-        Features::twoFactorAuthentication([
-            'confirm' => true,
-            'confirmPassword' => false,
-            // 'window' => 0,
-        ]),
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Pipelines
-    |--------------------------------------------------------------------------
-    |
-    | Custom Logic added to allow both Authenticator App and Email as possible
-    | two Factor options.
-    |
-    */
-
-    'pipelines' => [
-        'login' => [
-            RedirectIfTwoFactorAuthenticatable::class,
-            AttemptToAuthenticate::class,
-            PrepareAuthenticatedSession::class,
-        ],
+        // Features::twoFactorAuthentication([
+        //     'confirm' => true,
+        //     'confirmPassword' => true,
+        //     // 'window' => 0,
+        // ]),
+        // Features::passkeys([
+        //     'confirmPassword' => true,
+        // ]),
     ],
 
 ];
