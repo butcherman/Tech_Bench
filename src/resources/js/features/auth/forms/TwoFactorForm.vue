@@ -3,8 +3,6 @@ import OtpInput from "@/core/forms/components/validatedInputs/OtpInput.vue";
 import SwitchInput from "@/core/forms/components/validatedInputs/SwitchInput.vue";
 import VueForm from "@/core/forms/components/VueForm.vue";
 import { object, string, boolean } from "yup";
-import { computed } from "vue";
-import { email, store } from "@/wayfinder/routes/two-factor/login";
 
 defineEmits<{
     success: [];
@@ -12,15 +10,8 @@ defineEmits<{
 
 const props = defineProps<{
     allowRemember: boolean;
-    via: "authenticator" | "email";
+    submitRoute: string;
 }>();
-
-const submitRoute = computed(() => {
-    return {
-        authenticator: store.url(),
-        email: email.url(),
-    }[props.via];
-});
 
 const initValues = {
     code: "",
@@ -49,6 +40,7 @@ const schema = object({
                 <SwitchInput
                     name="remember_device"
                     label="Remember this device"
+                    v-focus
                 />
             </div>
         </div>

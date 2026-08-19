@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\TwoFactorMethod;
 use App\Models\User;
 
 return [
@@ -157,8 +158,12 @@ return [
         'enabled' => (bool) env('ENABLE_2FA', true),
         'required' => (bool) env('REQUIRE_2FA', false),
         'allow_save_device' => (bool) true,
-        'allow_via_email' => (bool) true,
-        'allow_via_authenticator' => (bool) true,
+
+        // Available MFA Methods
+        'methods' => [
+            TwoFactorMethod::Email->value => true,
+            TwoFactorMethod::Authenticator->value => false,
+        ],
     ],
 
 ];

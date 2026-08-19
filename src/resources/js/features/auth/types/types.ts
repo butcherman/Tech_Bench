@@ -1,0 +1,1 @@
+type MultiFactorMethod = "email" | "authenticator";

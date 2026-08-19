@@ -3,18 +3,20 @@
 namespace App\Providers;
 
 use App\Actions\Fortify\AuthenticateUser;
+use App\Actions\Fortify\RedirectIfTwoFactorAuthenticatable;
 use App\Actions\Fortify\ResetUserPassword;
 use App\Actions\Fortify\UpdateUserPassword;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\Auth\TwoFactorChallengeController;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
-use Laravel\Fortify\Actions\RedirectIfTwoFactorAuthenticatable;
 use Laravel\Fortify\Fortify;
+use Laravel\Fortify\Http\Requests\TwoFactorLoginRequest;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -31,10 +33,10 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Fortify::authenticateUsing([
-            app(AuthenticateUser::class),
-            'authenticate',
-        ]);
+        Fortify::authenticateUsing(
+            fn (Request $request) => app(AuthenticateUser::class)
+                ->authenticate($request)
+        );
         Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
         Fortify::redirectUserForTwoFactorAuthenticationUsing(
@@ -52,6 +54,10 @@ class FortifyServiceProvider extends ServiceProvider
         );
         Fortify::resetPasswordView(
             fn (Request $request) => app(ResetPasswordController::class)
+                ->__invoke($request)
+        );
+        Fortify::twoFactorChallengeView(
+            fn (TwoFactorLoginRequest $request) => app(TwoFactorChallengeController::class)
                 ->__invoke($request)
         );
 

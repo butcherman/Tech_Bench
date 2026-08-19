@@ -16,6 +16,16 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['guest', 'throttle:50,120'])->group(function () {
     Route::get('/', LoginController::class)->name('home');
+    Route::prefix('two-factor-authentication')->name('two-factor.')->group(function () {
+        //
+        Route::prefix('setup')->name('setup.')->group(function () {
+            Route::get('/', function () {
+                return 'setup any';
+            });
+            Route::get('email', [TwoFactorSetupEmailController::class, 'setup'])->name('email');
+            Route::post('email', [TwoFactorSetupEmailController::class, 'verify'])->name('email.verify');
+        });
+    });
 
     Route::get('/azure', function () {
         return 'azure';
