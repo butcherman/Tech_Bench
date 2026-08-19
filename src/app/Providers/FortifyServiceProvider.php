@@ -16,7 +16,6 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Laravel\Fortify\Fortify;
-use Laravel\Fortify\Http\Requests\TwoFactorLoginRequest;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -57,7 +56,7 @@ class FortifyServiceProvider extends ServiceProvider
                 ->__invoke($request)
         );
         Fortify::twoFactorChallengeView(
-            fn (TwoFactorLoginRequest $request) => app(TwoFactorChallengeController::class)
+            fn (Request $request) => app(TwoFactorChallengeController::class)
                 ->__invoke($request)
         );
 
