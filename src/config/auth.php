@@ -161,8 +161,8 @@ return [
 
         // Available MFA Methods
         'methods' => [
-            TwoFactorMethod::Email->value => true,
-            TwoFactorMethod::Authenticator->value => false,
+            TwoFactorMethod::Email->value => false,
+            TwoFactorMethod::Authenticator->value => true,
         ],
     ],
 

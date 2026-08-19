@@ -5,6 +5,7 @@ namespace App\Actions\Fortify;
 use App\Exceptions\Auth\InvalidMultiFactorAuthException;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Fortify\Actions\RedirectIfTwoFactorAuthenticatable as BaseRedirectIfTwoFactorAuthenticatable;
 
 class RedirectIfTwoFactorAuthenticatable extends BaseRedirectIfTwoFactorAuthenticatable
@@ -88,6 +89,8 @@ class RedirectIfTwoFactorAuthenticatable extends BaseRedirectIfTwoFactorAuthenti
      */
     private function redirectToTwoFactorSetup(Request $request, User $user): mixed
     {
+        Auth::login($user, $request->input('remember'));
+
         $methods = $this->availableTwoFactorMethods();
         $request->session()->put([
             'login.id' => $user->getKey(),

@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import MfaSetupEmail from "@/features/auth/components/MfaSetupEmail.vue";
 import AppLayout from "@/layouts/AppLayout.vue";
+import Card from "@/core/components/Card.vue";
+import MfaSetupAuthenticator from "@/features/auth/components/MfaSetupAuthenticator.vue";
 
 const props = defineProps<{
     allowRemember: boolean;
@@ -12,6 +13,8 @@ export default { layout: AppLayout };
 </script>
 <template>
     <div class="flex justify-center">
-        <MfaSetupEmail :allow-remember="allowRemember" />
+        <Card>
+            <MfaSetupAuthenticator :allow-remember="allowRemember" />
+        </Card>
     </div>
 </template>

@@ -22,6 +22,8 @@ class TwoFactorLoginResponse implements TwoFactorLoginResponseContract
     {
         $user = $request->user();
 
+        $request->session()->flash('success', 'Welcom Back '.$user->full_name);
+
         if ($request->input('remember_device')) {
             $token = $this->generateRememberDeviceToken($user, $request->header('User-Agent'));
 

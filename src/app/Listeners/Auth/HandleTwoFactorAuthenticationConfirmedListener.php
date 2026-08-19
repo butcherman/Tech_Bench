@@ -11,7 +11,8 @@ class HandleTwoFactorAuthenticationConfirmedListener
      */
     public function handle(TwoFactorAuthenticationConfirmed $event): void
     {
-        // $event->user->two_factor_via = 'authenticator';
-        // $event->user->save();
+        $event->user->forceFill([
+            'two_factor_via' => 'authenticator',
+        ])->save();
     }
 }
