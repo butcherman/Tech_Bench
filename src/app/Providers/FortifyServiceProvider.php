@@ -3,8 +3,10 @@
 namespace App\Providers;
 
 use App\Actions\Fortify\AuthenticateUser;
+use App\Actions\Fortify\LogoutResponse;
 use App\Actions\Fortify\RedirectIfTwoFactorAuthenticatable;
 use App\Actions\Fortify\ResetUserPassword;
+use App\Actions\Fortify\TwoFactorLoginResponse;
 use App\Actions\Fortify\UpdateUserPassword;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\ResetPasswordController;
@@ -15,6 +17,8 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
+use Laravel\Fortify\Contracts\LogoutResponse as LogoutResponseContract;
+use Laravel\Fortify\Contracts\TwoFactorLoginResponse as TwoFactorLoginResponseContract;
 use Laravel\Fortify\Fortify;
 
 class FortifyServiceProvider extends ServiceProvider
@@ -24,7 +28,11 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        // Deliver a logout response when logging out.
+        $this->app->instance(LogoutResponseContract::class, new LogoutResponse);
+
+        // Custom Login Response
+        $this->app->instance(TwoFactorLoginResponseContract::class, new TwoFactorLoginResponse);
     }
 
     /**
@@ -57,7 +65,7 @@ class FortifyServiceProvider extends ServiceProvider
         );
         Fortify::twoFactorChallengeView(
             fn (Request $request) => app(TwoFactorChallengeController::class)
-                ->__invoke($request)
+                ->challenge($request)
         );
 
         /*
