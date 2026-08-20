@@ -17,6 +17,7 @@ const initValues = {
     code: "",
     remember_device: false,
 };
+
 const schema = object({
     code: string().required("A Code is Required to Continue"),
     remember_device: boolean().required(),
@@ -26,11 +27,11 @@ const schema = object({
 <template>
     <VueForm
         name="two-factor-form"
+        submit-method="post"
+        submit-text="Verify"
         :initial-values="initValues"
         :validation-schema="schema"
         :submit-route="submitRoute"
-        submit-method="post"
-        submit-text="Verify"
         full-page-overlay
         @success="$emit('success')"
     >

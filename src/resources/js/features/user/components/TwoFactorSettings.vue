@@ -1,16 +1,12 @@
 <script setup lang="ts">
 import BaseButton from "@/core/components/buttons/BaseButton.vue";
-import okModal from "@/core/features/okModal";
-import { computed } from "vue";
+import Modal from "@/core/components/Modal.vue";
+import { computed, ref } from "vue";
 import { dataGet } from "@/core/services/axiosWrapper";
 import { index } from "@/wayfinder/routes/two-factor/setup";
 import { reset } from "@/wayfinder/routes/admin/user/two-factor";
 import { router } from "@inertiajs/vue3";
-import { secretKey } from "@/wayfinder/routes/two-factor";
-
-interface RecoveryCode {
-    secretKey: string;
-}
+import { recoveryCodes } from "@/wayfinder/routes/two-factor";
 
 const props = defineProps<{
     current_user: User;
@@ -36,14 +32,14 @@ const onResetMfa = () => {
     router.put(reset.url(props.current_user.username));
 };
 
+const showRecoveryModal = ref<boolean>(false);
+const recoveryCodeList = ref<string[]>([]);
 const onShowRecoveryCodes = async () => {
-    let code = await dataGet<RecoveryCode>(secretKey.url());
+    let code = await dataGet<string[]>(recoveryCodes.url());
 
     if (code) {
-        okModal(code?.secretKey, {
-            title: "Store this code in a safe location",
-            size: "sm",
-        });
+        recoveryCodeList.value = code;
+        showRecoveryModal.value = true;
     }
 };
 
@@ -96,5 +92,13 @@ const savedDeviceCount = computed(() => props.twoFa.devices.length);
                 :href="index.url()"
             />
         </div>
+        <Modal
+            v-model:show="showRecoveryModal"
+            title="Store these Recovery Codes in a safe place"
+        >
+            <div v-for="code in recoveryCodeList" :key="code">
+                {{ code }}
+            </div>
+        </Modal>
     </div>
 </template>
