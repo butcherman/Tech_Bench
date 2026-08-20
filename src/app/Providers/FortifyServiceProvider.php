@@ -6,6 +6,7 @@ use App\Actions\Fortify\AuthenticateUser;
 use App\Actions\Fortify\LogoutResponse;
 use App\Actions\Fortify\RedirectIfTwoFactorAuthenticatable;
 use App\Actions\Fortify\ResetUserPassword;
+use App\Actions\Fortify\TwoFactorConfirmedResponse;
 use App\Actions\Fortify\TwoFactorLoginResponse;
 use App\Actions\Fortify\UpdateUserPassword;
 use App\Http\Controllers\Auth\LoginController;
@@ -18,6 +19,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Laravel\Fortify\Contracts\LogoutResponse as LogoutResponseContract;
+use Laravel\Fortify\Contracts\TwoFactorConfirmedResponse as TwoFactorConfirmedResponseContract;
 use Laravel\Fortify\Contracts\TwoFactorLoginResponse as TwoFactorLoginResponseContract;
 use Laravel\Fortify\Fortify;
 
@@ -33,6 +35,9 @@ class FortifyServiceProvider extends ServiceProvider
 
         // Custom Login Response
         $this->app->instance(TwoFactorLoginResponseContract::class, new TwoFactorLoginResponse);
+
+        // Custom Successful Authenticator Setup Response
+        $this->app->instance(TwoFactorConfirmedResponseContract::class, new TwoFactorConfirmedResponse);
     }
 
     /**

@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Actions\Fortify\TwoFactorConfirmedResponse;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Services\Auth\TwoFactorService;
 use Inertia\Inertia;
-use Laravel\Fortify\Contracts\TwoFactorLoginResponse;
 use Laravel\Fortify\Http\Requests\TwoFactorLoginRequest;
 
 class TwoFactorSetupEmailController extends Controller
@@ -42,6 +42,6 @@ class TwoFactorSetupEmailController extends Controller
 
         $request->session()->flash('success', 'MFA Setup Successfully');
 
-        return app(TwoFactorLoginResponse::class);
+        return app(TwoFactorConfirmedResponse::class);
     }
 }
