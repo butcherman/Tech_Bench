@@ -21,21 +21,19 @@ return new class extends Migration
          */
         $emNotif = UserSettingType::where('name', 'Receive Email Notifications')
             ->first();
-        $emNotif->update([
-            'description' => 'Receive an email notifications from '.config('app.name'),
-        ]);
+        $emNotif->description = 'Receive email notifications from '.config('app.name');
+        $emNotif->save();
 
         $fileLinks = UserSettingType::where('name', 'Auto Delete Expired File Links')
             ->first();
-        $fileLinks->update([
-            'description' => 'Auto delete file links and attached files after they have been expired for a set amount of time',
-        ]);
+        $fileLinks->description =
+            'Auto delete file links and attached files after they have been expired for a set amount of time';
+        $fileLinks->save();
 
         $backupNotif = UserSettingType::where('name', 'Receive System Backup Notifications')
             ->first();
-        $backupNotif->update([
-            'description' => 'Receive an email on success or failure of a system backup',
-        ]);
+        $backupNotif->description = 'Receive an email on success or failure of a system backup';
+        $backupNotif->save();
     }
 
     /**

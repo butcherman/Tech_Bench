@@ -37,7 +37,7 @@ class TwoFactorLoginResponseUnitTest extends TestCase
                 'id' => $user->user_id,
                 'remember' => false,
             ],
-        ])->post(route('two-factor.login.email'), $data);
+        ])->post(route('two-factor.verify'), $data);
 
         $response->assertRedirect(route('dashboard'))
             ->assertCookieMissing('remember_device');
@@ -67,7 +67,7 @@ class TwoFactorLoginResponseUnitTest extends TestCase
                 'id' => $user->user_id,
                 'remember' => false,
             ],
-        ])->postJson(route('two-factor.login.email'), $data);
+        ])->postJson(route('two-factor.verify'), $data);
 
         $response->assertStatus(204);
     }
@@ -96,7 +96,7 @@ class TwoFactorLoginResponseUnitTest extends TestCase
                 'id' => $user->user_id,
                 'remember' => false,
             ],
-        ])->post(route('two-factor.login.email'), $data);
+        ])->post(route('two-factor.verify'), $data);
 
         $response->assertRedirect(route('dashboard'))
             ->assertCookie('remember_device');
@@ -130,7 +130,7 @@ class TwoFactorLoginResponseUnitTest extends TestCase
                 'id' => $user->user_id,
                 'remember' => false,
             ],
-        ])->postJson(route('two-factor.login.email'), $data);
+        ])->postJson(route('two-factor.verify'), $data);
 
         $response->assertStatus(204);
 

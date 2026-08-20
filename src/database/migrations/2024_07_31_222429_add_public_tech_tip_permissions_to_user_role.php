@@ -41,7 +41,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        $permType = UserRolePermission::where('description', 'Add Public Tech Tip')
+        $permTypeId = UserRolePermissionType::where('description', 'Add Public Tech Tip')
+            ->first();
+        $permType = UserRolePermission::where('perm_type_id', $permTypeId->perm_type_id)
             ->first();
 
         $permType->delete();

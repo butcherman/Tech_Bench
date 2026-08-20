@@ -157,7 +157,7 @@ class _LoginTest extends TestCase
             'password' => 'somethingElse',
         ]);
 
-        $response->assertStatus(302);
+        $response->assertStatus(429);
         $response->assertSessionHasErrors('throttle');
         $this->assertGuest();
 
@@ -198,8 +198,8 @@ class _LoginTest extends TestCase
     {
         config(['auth.twoFa.required' => true]);
         config(['auth.twoFa.allow_save_device' => true]);
-        config(['auth.twoFa.allow_via_authenticator' => false]);
-        config(['auth.twoFa.allow_via_email' => true]);
+        config(['auth.twoFa.methods.authenticator' => false]);
+        config(['auth.twoFa.methods.email' => true]);
 
         /** @var User $user */
         $user = User::factory()->createQuietly();
@@ -211,7 +211,7 @@ class _LoginTest extends TestCase
         ]);
 
         $response->assertStatus(302)
-            ->assertRedirect(route('two-factor.login'))
+            ->assertRedirect(route('two-factor.setup.email'))
             ->assertSessionHas('login', [
                 'id' => $user->user_id,
                 'remember' => false,
@@ -223,8 +223,8 @@ class _LoginTest extends TestCase
     {
         config(['auth.twoFa.required' => true]);
         config(['auth.twoFa.allow_save_device' => true]);
-        config(['auth.twoFa.allow_via_authenticator' => false]);
-        config(['auth.twoFa.allow_via_email' => true]);
+        config(['auth.twoFa.methods.authenticator' => false]);
+        config(['auth.twoFa.methods.email' => true]);
 
         /** @var User $user */
         $user = User::factory()->createQuietly([
@@ -238,7 +238,7 @@ class _LoginTest extends TestCase
         ]);
 
         $response->assertStatus(302)
-            ->assertRedirect(route('two-factor.login'))
+            ->assertRedirect(route('two-factor.setup.email'))
             ->assertSessionHas('login', [
                 'id' => $user->user_id,
                 'remember' => false,
@@ -250,8 +250,8 @@ class _LoginTest extends TestCase
     {
         config(['auth.twoFa.required' => true]);
         config(['auth.twoFa.allow_save_device' => true]);
-        config(['auth.twoFa.allow_via_authenticator' => false]);
-        config(['auth.twoFa.allow_via_email' => true]);
+        config(['auth.twoFa.methods.authenticator' => false]);
+        config(['auth.twoFa.methods.email' => true]);
 
         /** @var User $user */
         $user = User::factory()->createQuietly();

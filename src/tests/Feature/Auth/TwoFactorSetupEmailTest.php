@@ -15,11 +15,11 @@ class TwoFactorSetupEmailTest extends TestCase
     | Invoke Method
     |---------------------------------------------------------------------------
     */
-    public function test_invoke_guest(): void
+    public function test_setup_guest(): void
     {
         config(['auth.twoFa.required' => true]);
-        config(['auth.twoFa.allow_via_authenticator' => true]);
-        config(['auth.twoFa.allow_via_email' => true]);
+        config(['auth.twoFa.methods.authenticator' => true]);
+        config(['auth.twoFa.methods.email' => true]);
 
         $response = $this->get(route('two-factor.setup.email'));
 
@@ -28,11 +28,11 @@ class TwoFactorSetupEmailTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_invoke(): void
+    public function test_setup(): void
     {
         config(['auth.twoFa.required' => true]);
-        config(['auth.twoFa.allow_via_authenticator' => true]);
-        config(['auth.twoFa.allow_via_email' => true]);
+        config(['auth.twoFa.methods.authenticator' => true]);
+        config(['auth.twoFa.methods.email' => true]);
 
         Mail::fake();
 
@@ -45,19 +45,18 @@ class TwoFactorSetupEmailTest extends TestCase
         $response->assertSuccessful()
             ->assertInertia(
                 fn (Assert $page) => $page
-                    ->component('Auth/TwoFactorAuth')
+                    ->component('Auth/TwoFactorSetupEmail')
                     ->has('allow-remember')
-                    ->has('via')
             );
 
         Mail::assertQueued(VerificationCodeMail::class);
     }
 
-    public function test_invoke_expect_json(): void
+    public function test_setup_expect_json(): void
     {
         config(['auth.twoFa.required' => true]);
-        config(['auth.twoFa.allow_via_authenticator' => true]);
-        config(['auth.twoFa.allow_via_email' => true]);
+        config(['auth.twoFa.methods.authenticator' => true]);
+        config(['auth.twoFa.methods.email' => true]);
 
         Mail::fake();
 

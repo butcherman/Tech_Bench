@@ -16,7 +16,7 @@ class TwoFactorSetupAuthenticatorTest extends TestCase
     public function test_invoke_guest(): void
     {
         config(['auth.twoFa.required' => true]);
-        config(['auth.twoFa.allow_via_authenticator' => true]);
+        config(['auth.twoFa.methods.authenticator' => true]);
 
         $response = $this->get(route('two-factor.setup.authenticator'));
 
@@ -28,7 +28,7 @@ class TwoFactorSetupAuthenticatorTest extends TestCase
     public function test_invoke(): void
     {
         config(['auth.twoFa.required' => true]);
-        config(['auth.twoFa.allow_via_authenticator' => true]);
+        config(['auth.twoFa.methods.authenticator' => true]);
 
         /** @var User $user */
         $user = User::factory()->create();
@@ -39,7 +39,7 @@ class TwoFactorSetupAuthenticatorTest extends TestCase
         $response->assertSuccessful()
             ->assertInertia(
                 fn (Assert $page) => $page
-                    ->component('Auth/TwoFactorAppSetup')
+                    ->component('Auth/TwoFactorSetupAuthenticator')
             );
     }
 }

@@ -20,8 +20,8 @@ class _TwoFactorViewTest extends TestCase
     {
         config(['auth.twoFa.required' => true]);
         config(['auth.twoFa.allow_save_device' => true]);
-        config(['auth.twoFa.allow_via_authenticator' => false]);
-        config(['auth.twoFa.allow_via_email' => true]);
+        config(['auth.twoFa.method.authenticator' => false]);
+        config(['auth.twoFa.method.email' => true]);
 
         Mail::fake();
 
@@ -47,8 +47,8 @@ class _TwoFactorViewTest extends TestCase
     {
         config(['auth.twoFa.required' => true]);
         config(['auth.twoFa.allow_save_device' => true]);
-        config(['auth.twoFa.allow_via_authenticator' => true]);
-        config(['auth.twoFa.allow_via_email' => true]);
+        config(['auth.twoFa.method.authenticator' => true]);
+        config(['auth.twoFa.method.email' => true]);
 
         Mail::fake();
 
@@ -62,7 +62,7 @@ class _TwoFactorViewTest extends TestCase
         $response->assertSuccessful()
             ->assertInertia(
                 fn (Assert $page) => $page
-                    ->component('Auth/TwoFactorAuth')
+                    ->component('Auth/TwoFactorSetupEmail')
                     ->has('allow-remember')
                     ->has('via')
             );
@@ -74,8 +74,8 @@ class _TwoFactorViewTest extends TestCase
     {
         config(['auth.twoFa.required' => true]);
         config(['auth.twoFa.allow_save_device' => true]);
-        config(['auth.twoFa.allow_via_authenticator' => true]);
-        config(['auth.twoFa.allow_via_email' => false]);
+        config(['auth.twoFa.method.authenticator' => true]);
+        config(['auth.twoFa.method.email' => false]);
 
         Mail::fake();
 

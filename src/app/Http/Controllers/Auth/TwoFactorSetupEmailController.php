@@ -20,7 +20,7 @@ class TwoFactorSetupEmailController extends Controller
         $user->generateVerificationCode();
 
         return Inertia::render('Auth/TwoFactorSetupEmail', [
-            'allowRemember' => config('auth.twoFa.allow_save_device'),
+            'allow-remember' => config('auth.twoFa.allow_save_device'),
         ]);
     }
 

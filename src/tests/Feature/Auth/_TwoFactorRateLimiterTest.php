@@ -51,7 +51,7 @@ class _TwoFactorRateLimiterTest extends TestCase
             'remember' => false,
         ]])->post(route('two-factor.login'), $data);
 
-        $response->assertStatus(302)
+        $response->assertStatus(429)
             ->assertSessionHasErrors('throttle');
     }
 }

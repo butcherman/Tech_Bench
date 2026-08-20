@@ -23,7 +23,7 @@ class LoginControllerTest extends TestCase
         $response->assertSuccessful()
             ->assertInertia(
                 fn (Assert $page) => $page
-                    ->component('Auth/TechLogin')
+                    ->component('Auth/Login')
                     ->has('welcome-message')
                     ->has('home-links')
                     ->has('public-link')
@@ -42,7 +42,7 @@ class LoginControllerTest extends TestCase
         $response->assertSuccessful()
             ->assertInertia(
                 fn (Assert $page) => $page
-                    ->component('Auth/TechLogin')
+                    ->component('Auth/Login')
                     ->has('welcome-message')
                     ->has('home-links')
                     ->has('public-link')
