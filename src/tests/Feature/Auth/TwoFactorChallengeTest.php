@@ -4,20 +4,45 @@ namespace Tests\Feature\Auth;
 
 use App\Models\User;
 use App\Models\UserVerificationCode;
+use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
-class TwoFactorTest extends TestCase
+class TwoFactorChallengeTest extends TestCase
 {
     /*
     |---------------------------------------------------------------------------
-    | Invoke Method
+    | Challenge Method
     |---------------------------------------------------------------------------
     */
-    public function test_invoke(): void
+    public function test_challenge(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+
+        $response = $this->withSession(['login' => [
+            'id' => $user->user_id,
+            'remember' => false,
+        ]])->get(route('two-factor.login'));
+
+        $response->assertSuccessful()
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('Auth/TwoFactorChallenge')
+                ->has('via')
+                ->has('allow-remember')
+            );
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | Verify Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_verify(): void
     {
         config(['auth.twoFa.required' => true]);
-        config(['auth.twoFa.methods.email' => true]);
+        config(['auth.twoFa.allow_via_email' => true]);
 
+        /** @var User */
         $user = User::factory()->create();
 
         UserVerificationCode::createQuietly([
@@ -38,11 +63,12 @@ class TwoFactorTest extends TestCase
         $response->assertStatus(302)->assertRedirect(route('dashboard'));
     }
 
-    public function test_invoke_bad_code(): void
+    public function test_verify_bad_code(): void
     {
         config(['auth.twoFa.required' => true]);
-        config(['auth.twoFa.methods.email' => true]);
+        config(['auth.twoFa.allow_via_email' => true]);
 
+        /** @var User */
         $user = User::factory()->create();
 
         UserVerificationCode::createQuietly([
@@ -61,7 +87,6 @@ class TwoFactorTest extends TestCase
         ]])->post(route('two-factor.verify'), $data);
 
         $response->assertStatus(302)
-            // ->assertRedirect(route('two-factor.login'))
-            ->assertSessionHasErrors('code');
+            ->assertSessionHasErrorsIn('mfa', ['code']);
     }
 }

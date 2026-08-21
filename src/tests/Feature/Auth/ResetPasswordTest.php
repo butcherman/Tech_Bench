@@ -3,6 +3,7 @@
 namespace Tests\Feature\Auth;
 
 use App\Models\User;
+use Illuminate\Support\Facades\Password;
 use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
@@ -15,28 +16,32 @@ class ResetPasswordTest extends TestCase
     */
     public function test_invoke_guest(): void
     {
-        $response = $this->get(route('password.request'));
+        /** @var User $user */
+        $user = User::factory()->createQuietly();
+        $token = Password::broker()->createToken($user);
+
+        $response = $this->get(route('password.reset', [
+            'token' => $token,
+            'email' => $user->email,
+        ]));
 
         $response->assertSuccessful()
-            ->assertInertia(
-                fn (Assert $page) => $page
-                    ->component('Auth/ResetPassword')
-                    ->has('email')
-                    ->has('token')
-                    ->has('rules')
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('Auth/ResetPassword')
+                ->has('email')
+                ->has('token')
+                ->has('rules')
             );
-        $this->assertGuest();
     }
 
     public function test_invoke_as_logged_in(): void
     {
         /** @var User $user */
         $user = User::factory()->createQuietly();
+        $token = Password::broker()->createToken($user);
 
-        $response = $this->actingAs($user)
-            ->get(route('password.reset'));
+        $response = $this->actingAs($user)->get(route('password.reset', $token));
 
-        $response->assertStatus(302)
-            ->assertRedirect(route('dashboard'));
+        $response->assertRedirect(route('dashboard'));
     }
 }

@@ -16,7 +16,7 @@ class _ForgotPasswordTest extends TestCase
 {
     /*
     |---------------------------------------------------------------------------
-    | Test the Reset Password features
+    | Test the Forgot Password Page
     |---------------------------------------------------------------------------
     */
 
@@ -105,6 +105,12 @@ class _ForgotPasswordTest extends TestCase
         $response->assertStatus(302)
             ->assertSessionHasErrors('email');
     }
+
+    /*
+    |---------------------------------------------------------------------------
+    | Test the Reset Password Page
+    |---------------------------------------------------------------------------
+    */
 
     /**
      * Verify the user can view the reset form
