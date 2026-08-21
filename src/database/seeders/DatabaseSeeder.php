@@ -18,11 +18,11 @@ class DatabaseSeeder extends Seeder
         $this->initializeApp();
 
         $this->call([
-            UserSeeder::class,
-            EquipmentSeeder::class,
-            CustomerSeeder::class,
-            TechTipSeeder::class,
-            FileLinkSeeder::class,
+            // UserSeeder::class,
+            // EquipmentSeeder::class,
+            // CustomerSeeder::class,
+            // TechTipSeeder::class,
+            // FileLinkSeeder::class,
         ]);
 
         CacheData::clearCache();
