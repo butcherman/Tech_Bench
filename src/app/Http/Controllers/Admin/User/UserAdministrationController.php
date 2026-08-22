@@ -25,7 +25,7 @@ class UserAdministrationController extends Controller
     {
         $this->authorize('manage', User::class);
 
-        return Inertia::render('Admin/User/Index', [
+        return Inertia::render('User/Admin/Index', [
             'user-list' => Inertia::defer(
                 fn () => $this->svc->getAllUsers(),
                 rescue: true
@@ -40,7 +40,7 @@ class UserAdministrationController extends Controller
     {
         $this->authorize('create', User::class);
 
-        return Inertia::render('Admin/User/Create', [
+        return Inertia::render('User/Admin/Create', [
             'roles' => fn () => $this->getAvailableRoles($request->user()),
         ]);
     }
@@ -66,7 +66,7 @@ class UserAdministrationController extends Controller
     {
         $this->authorize('view', $user);
 
-        return Inertia::render('Admin/User/Show', [
+        return Inertia::render('User/Admin/Show', [
             'user' => fn () => $user->getAdminLoad(),
             'role' => fn () => $user->UserRole,
             'last-login' => fn () => $user->getLastLogin(),
@@ -83,7 +83,7 @@ class UserAdministrationController extends Controller
     {
         $this->authorize('update', $user);
 
-        return Inertia::render('Admin/User/Edit', [
+        return Inertia::render('User/Admin/Edit', [
             'roles' => fn () => $this->getAvailableRoles($request->user()),
             'user' => fn () => $user->getAdminLoad(),
         ]);

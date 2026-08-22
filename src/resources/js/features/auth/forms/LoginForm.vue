@@ -77,7 +77,13 @@ const validationSchema = object({
         </div>
         <template #submit-button>
             <div class="flex justify-center">
-                <SubmitButton text="Login" icon="user-check" class="w-1/2" />
+                <SubmitButton
+                    text="Login"
+                    icon="user-check"
+                    class="w-1/2"
+                    size="sm"
+                    pill
+                />
             </div>
         </template>
     </VueForm>
