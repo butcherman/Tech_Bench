@@ -7,10 +7,11 @@ interface User {
     role_name: string;
     role_id: string;
     username: string;
-    // two_factor_confirmed_at: string | null;
-    // deleted_at?: string;
-    // created_at?: string;
-    // updated_at?: string;
+    two_factor_confirmed_at: string | null;
+    two_factor_via: string | null;
+    deleted_at?: string;
+    created_at?: string;
+    updated_at?: string;
     // user_role?: UserRole;
 }
 
