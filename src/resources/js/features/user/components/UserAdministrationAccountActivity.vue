@@ -19,6 +19,10 @@ const props = defineProps<{
                     <td class="pe-15 text-muted">Created</td>
                     <td>{{ user.created_at }}</td>
                 </tr>
+                <tr v-if="user.deleted_at">
+                    <td class="pe-15 text-muted">Disabled</td>
+                    <td>{{ user.deleted_at }}</td>
+                </tr>
                 <tr>
                     <td class="pe-15 text-muted">Profile Updated</td>
                     <td>{{ user.updated_at }}</td>

@@ -9,6 +9,7 @@ import { useUserState } from "../state/userState";
 
 defineProps<{
     userList: User[];
+    disabledList?: boolean;
 }>();
 
 const { authorizedUser } = useUserState();
@@ -60,7 +61,7 @@ const onDisableUser = (userRow: User): void => {
             :row-click-fn="onRowClick"
             paginate
             striped
-            actions-slot
+            :actions-slot="disabledList ? false : true"
         >
             <template #row.actions="{ rowData }">
                 <DeleteBadge

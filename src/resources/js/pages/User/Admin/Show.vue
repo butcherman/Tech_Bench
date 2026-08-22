@@ -2,6 +2,7 @@
 import AppLayout from "@/layouts/AppLayout.vue";
 import UserAdministrationAccountActivity from "@/features/user/components/UserAdministrationAccountActivity.vue";
 import UserAdministrationActions from "@/features/user/components/UserAdministrationActions.vue";
+import UserAdministrationDisabledActions from "@/features/user/components/UserAdministrationDisabledActions.vue";
 import UserAdministrationProfile from "@/features/user/components/UserAdministrationProfile.vue";
 import UserAdministrationSecurity from "@/features/user/components/UserAdministrationSecurity.vue";
 
@@ -34,7 +35,8 @@ export default { layout: AppLayout };
                     :saved-devices-count="savedDevicesCount"
                 />
             </div>
-            <UserAdministrationActions :user="user" />
+            <UserAdministrationActions v-if="!user.deleted_at" :user="user" />
+            <UserAdministrationDisabledActions v-else :user="user" />
         </div>
         <div class="w-full md:w-3/4">
             <UserAdministrationAccountActivity

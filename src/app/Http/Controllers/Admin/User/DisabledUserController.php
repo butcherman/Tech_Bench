@@ -17,7 +17,7 @@ class DisabledUserController extends Controller
     {
         $this->authorize('manage', User::class);
 
-        return Inertia::render('Admin/User/Deactivated', [
+        return Inertia::render('User/Admin/Deactivated', [
             'user-list' => Inertia::defer(fn () => $svc->getAllUsers(true)),
         ]);
     }
