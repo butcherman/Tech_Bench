@@ -13,6 +13,7 @@ use App\Http\Controllers\User\UpdateUserSettingsController;
 use App\Http\Controllers\User\UserPasswordController;
 use App\Http\Controllers\User\UserSettingsController;
 use App\Http\Middleware\CheckPasswordExpiration;
+use App\Models\User;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Http\Controllers\PasswordResetLinkController;
@@ -88,10 +89,10 @@ Route::middleware('auth.secure')->group(function () {
 
         Route::resource('user', UserAdministrationController::class)
             ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
-                $breadcrumbs->index('User Administration', 'admin.index')
+                $breadcrumbs->index('Users', 'admin.index')
                     ->create('New User')
-                    ->show('User Details')
-                    ->edit('Edit User Details');
+                    ->show(fn (User $user) => $user->fullName)
+                    ->edit('Edit Profile');
             })->withTrashed();
 
         /*

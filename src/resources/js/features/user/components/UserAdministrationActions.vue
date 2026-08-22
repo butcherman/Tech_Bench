@@ -39,6 +39,7 @@ const onDisableUser = () => {
                     text="Edit User"
                     variant="warning"
                     class="w-full lg:w-3/4"
+                    icon="pencil"
                     :href="edit.url(user.username)"
                 />
             </div>
@@ -47,11 +48,13 @@ const onDisableUser = () => {
                 <BaseButton
                     class="w-full lg:w-3/4"
                     text="Set New Password"
+                    icon="key"
                     @click="showResetModal = true"
                 />
                 <BaseButton
                     class="w-full lg:w-3/4"
                     text="Send Reset Link"
+                    icon="link"
                     @click="onSendResetLink"
                 />
             </div>
@@ -62,6 +65,7 @@ const onDisableUser = () => {
                     class="w-full lg:w-3/4"
                     text="Disable User"
                     variant="danger"
+                    icon="user-slash"
                     @click="onDisableUser"
                 />
             </div>
