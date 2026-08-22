@@ -2,8 +2,10 @@
 import PasswordInput from "@/core/forms/components/validatedInputs/PasswordInput.vue";
 import TextInput from "@/core/forms/components/validatedInputs/TextInput.vue";
 import VueForm from "@/core/forms/components/VueForm.vue";
+import { computed } from "vue";
 import { object, string, ref as reference } from "yup";
 import { update } from "@/wayfinder/routes/password";
+import { update as initUpdate } from "@/wayfinder/routes/initialize";
 
 defineEmits<{
     success: [];
@@ -12,7 +14,12 @@ defineEmits<{
 const props = defineProps<{
     email: string;
     token: string;
+    init?: boolean;
 }>();
+
+const submitRoute = computed(() =>
+    props.init ? initUpdate.url(props.token) : update.url(),
+);
 
 const initValues = {
     email: props.email,
@@ -39,7 +46,7 @@ const schema = object({
         submit-text="Reset Password"
         :initial-values="initValues"
         :validation-schema="schema"
-        :submit-route="update.url()"
+        :submit-route="submitRoute"
         @success="$emit('success')"
     >
         <TextInput name="email" label="Email Address" variant="standard" />

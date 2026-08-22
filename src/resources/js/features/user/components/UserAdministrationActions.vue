@@ -8,15 +8,28 @@ import { edit } from "@/wayfinder/routes/admin/user";
 import { passwordLink, destroy } from "@/wayfinder/routes/admin/user";
 import { router } from "@inertiajs/vue3";
 import { ref } from "vue";
+import { useAlertState } from "@/core/state/alertState.js";
 
 const props = defineProps<{
     user: User;
 }>();
 
+const { pushFlashAlert } = useAlertState();
+
 const showResetModal = ref(false);
 
 const onSendResetLink = () => {
-    router.post(passwordLink.url(), { email: props.user.email });
+    router.post(
+        passwordLink.url(),
+        { email: props.user.email },
+        {
+            onSuccess: () =>
+                pushFlashAlert({
+                    variant: "success",
+                    message: "Reset Link Sent",
+                }),
+        },
+    );
 };
 
 const onDisableUser = () => {
