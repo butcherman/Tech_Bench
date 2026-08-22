@@ -22,7 +22,7 @@ class PasswordPolicyController extends Controller
     {
         $this->authorize('manage', User::class);
 
-        return Inertia::render('Admin/User/PasswordPolicy', [
+        return Inertia::render('Auth/PasswordPolicy', [
             'policy' => fn () => $this->svc->getPasswordPolicy(),
         ]);
     }
