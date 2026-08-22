@@ -1,13 +1,13 @@
 interface User {
-    username: string;
     email: string;
     first_name: string;
-    last_name: string;
     full_name: string;
     initials: string;
+    last_name: string;
     role_name: string;
+    role_id: string;
+    username: string;
     // two_factor_confirmed_at: string | null;
-    // role_id: string;
     // deleted_at?: string;
     // created_at?: string;
     // updated_at?: string;
@@ -15,10 +15,10 @@ interface User {
 }
 
 interface UserRole {
-    role_id: number;
-    name: string;
-    description: string;
     allow_edit: boolean;
+    description: string;
+    name: string;
+    role_id: number;
 }
 
 interface UserSettings {

@@ -1,8 +1,4 @@
-<script
-    setup
-    lang="ts"
-    generic="TOption extends string | Record<string, unknown>"
->
+<script setup lang="ts" generic="TOption extends string | object">
 import BaseSelectInput from "../baseInputs/BaseSelectInput.vue";
 import { useValidationHelper } from "../../composables/validationHelper.js";
 import { toRef } from "vue";

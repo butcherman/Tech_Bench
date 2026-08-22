@@ -1,8 +1,4 @@
-<script
-    setup
-    lang="ts"
-    generic="TOption extends string | Record<string, unknown>"
->
+<script setup lang="ts" generic="TOption extends string | object">
 import InputWrapper from "../wrappers/InputWrapper.vue";
 import { computed, useId } from "vue";
 import { useInputHelper } from "../../composables/inputHelper.js";
