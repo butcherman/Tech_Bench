@@ -42,6 +42,8 @@ class TwoFactorSetupTest extends TestCase
             ->assertInertia(
                 fn (Assert $page) => $page
                     ->component('Auth/TwoFactorSetup')
+                    ->has('required')
+                    ->has('methods')
             );
     }
 }

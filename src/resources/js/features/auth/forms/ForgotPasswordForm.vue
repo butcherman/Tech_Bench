@@ -1,6 +1,6 @@
 <script setup lang="ts">
+import TextInput from "@/core/forms/components/validatedInputs/TextInput.vue";
 import VueForm from "@/core/forms/components/VueForm.vue";
-import TextInput from "@/core/forms/components/TextInput.vue";
 import { email } from "@/wayfinder/routes/password";
 import { object, string } from "yup";
 
@@ -9,29 +9,30 @@ defineEmits<{
 }>();
 
 const initValues = {
-    email: null,
+    email: "",
 };
 const schema = object({
-    email: string().email().required("Enter your email address"),
+    email: string().email().required(),
 });
 </script>
 
 <template>
     <VueForm
-        name="form"
+        name="forgot-password"
         :initial-values="initValues"
         :validation-schema="schema"
         :submit-route="email.url()"
         submit-method="post"
-        submit-text="Send Instructions"
+        submit-text="Send Recovery Instructions"
+        full-page-overlay
         @success="$emit('success')"
     >
         <TextInput
-            id="email"
             name="email"
             label="Email Address"
-            placeholder="Email Address"
+            type="email"
             variant="standard"
+            focus
         />
     </VueForm>
 </template>

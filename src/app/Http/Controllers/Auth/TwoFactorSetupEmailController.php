@@ -2,31 +2,46 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Actions\Fortify\TwoFactorConfirmedResponse;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response as HttpResponse;
+use App\Models\User;
+use App\Services\Auth\TwoFactorService;
 use Inertia\Inertia;
-use Inertia\Response;
+use Laravel\Fortify\Http\Requests\TwoFactorLoginRequest;
 
 class TwoFactorSetupEmailController extends Controller
 {
-    /**
-     * Setup TwoFactor with Email as the primary response type
-     */
-    public function __invoke(Request $request): Response|HttpResponse
+    public function __construct(protected TwoFactorService $svc) {}
+
+    public function setup(TwoFactorLoginRequest $request)
     {
-        $request->user()->generateVerificationCode();
+        /** @var User */
+        $user = $request->user();
+        $user->generateVerificationCode();
 
-        $request->user()->two_factor_via = 'email';
-        $request->user()->save();
+        return Inertia::render('Auth/TwoFactorSetupEmail', [
+            'allow-remember' => config('auth.twoFa.allow_save_device'),
+        ]);
+    }
 
-        if ($request->expectsJson()) {
-            return response()->noContent();
+    public function verify(TwoFactorLoginRequest $request)
+    {
+        $user = $request->user();
+        $valid = $user->validateVerificationCode($request->input('code'));
+
+        if (! $valid) {
+            return back()->withErrors([
+                'code' => 'The provided code is invalid or has expired',
+            ], 'mfa');
         }
 
-        return Inertia::render('Auth/TwoFactorAuth', [
-            'allow-remember' => config('auth.twoFa.allow_save_device'),
-            'via' => 'email',
-        ]);
+        $user->forceFill([
+            'two_factor_via' => 'email',
+            'two_factor_confirmed_at' => now(),
+        ])->save();
+
+        $request->session()->flash('success', 'MFA Setup Successfully');
+
+        return app(TwoFactorConfirmedResponse::class);
     }
 }

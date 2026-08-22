@@ -12,9 +12,10 @@ const showHelp = computed(() => (props.helpVisible ? true : props.hasFocus));
 </script>
 
 <template>
-    <div class="my-2">
+    <div class="flex w-full flex-col">
         <slot />
         <div class="text-xs text-danger">{{ errorMessage }}</div>
         <div v-if="showHelp" class="text-sm text-muted">{{ helpMessage }}</div>
+        <slot name="message" />
     </div>
 </template>

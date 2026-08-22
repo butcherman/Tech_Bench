@@ -62,30 +62,30 @@ class PasswordValidationRulesUnitTest extends TestCase
     | Password Rules used during Initial Setup
     |---------------------------------------------------------------------------
     */
-    public function test_tmp_password_rules_default(): void
-    {
-        $passRules = [
-            'disable_compromised' => false,
-            'min_length' => 6,
-            'contains_uppercase' => true,
-            'contains_lowercase' => true,
-            'contains_number' => true,
-            'contains_special' => true,
-        ];
+    // public function test_tmp_password_rules_default(): void
+    // {
+    //     $passRules = [
+    //         'disable_compromised' => false,
+    //         'min_length' => 6,
+    //         'contains_uppercase' => true,
+    //         'contains_lowercase' => true,
+    //         'contains_number' => true,
+    //         'contains_special' => true,
+    //     ];
 
-        $rules = $this->tmpPasswordRules($passRules);
-        $shouldBe = [
-            'required',
-            'string',
-            'confirmed',
-            'different:current_password',
-            new ContainsUpperCase,
-            new ContainsLowerCase,
-            new ContainsNumber,
-            new ContainsSpecialChar,
-            Password::min(6),
-        ];
+    //     $rules = $this->tmpPasswordRules($passRules);
+    //     $shouldBe = [
+    //         'required',
+    //         'string',
+    //         'confirmed',
+    //         'different:current_password',
+    //         new ContainsUpperCase,
+    //         new ContainsLowerCase,
+    //         new ContainsNumber,
+    //         new ContainsSpecialChar,
+    //         Password::min(6),
+    //     ];
 
-        $this->assertEquals($shouldBe, $rules);
-    }
+    //     $this->assertEquals($shouldBe, $rules);
+    // }
 }

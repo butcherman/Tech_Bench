@@ -8,7 +8,6 @@ export const useLinkHelper = (event: MouseEvent, link: LinkHelper): void => {
         event.metaKey ||
         event.shiftKey
     ) {
-        console.log("clicky");
         window.open(link.href, "_blank");
         return;
     }

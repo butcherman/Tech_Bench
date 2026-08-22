@@ -15,7 +15,7 @@ class RedirectIfTwoFactorAuthenticatableUnitTest extends TestCase
     */
     public function test_handle_two_fa_disabled(): void
     {
-        config(['auth.twoFa.required' => false]);
+        config(['auth.twoFa.enabled' => false]);
 
         $user = User::factory()->create();
         $data = [
@@ -32,8 +32,8 @@ class RedirectIfTwoFactorAuthenticatableUnitTest extends TestCase
     {
         config(['auth.twoFa.required' => true]);
         config(['auth.twoFa.allow_save_device' => true]);
-        config(['auth.twoFa.allow_via_authenticator' => true]);
-        config(['auth.twoFa.allow_via_email' => true]);
+        config(['auth.twoFa.methods.authenticator' => true]);
+        config(['auth.twoFa.methods.email' => true]);
 
         $user = User::factory()->create(['two_factor_via' => 'email']);
         $token = DeviceToken::factory()->create(['user_id' => $user->user_id]);
@@ -52,8 +52,8 @@ class RedirectIfTwoFactorAuthenticatableUnitTest extends TestCase
     {
         config(['auth.twoFa.required' => true]);
         config(['auth.twoFa.allow_save_device' => true]);
-        config(['auth.twoFa.allow_via_authenticator' => true]);
-        config(['auth.twoFa.allow_via_email' => true]);
+        config(['auth.twoFa.methods.authenticator' => true]);
+        config(['auth.twoFa.methods.email' => true]);
 
         $user = User::factory()->create();
         DeviceToken::factory()->create(['user_id' => $user->user_id]);
@@ -72,8 +72,8 @@ class RedirectIfTwoFactorAuthenticatableUnitTest extends TestCase
     {
         config(['auth.twoFa.required' => true]);
         config(['auth.twoFa.allow_save_device' => true]);
-        config(['auth.twoFa.allow_via_authenticator' => true]);
-        config(['auth.twoFa.allow_via_email' => false]);
+        config(['auth.twoFa.methods.authenticator' => true]);
+        config(['auth.twoFa.methods.email' => false]);
 
         $user = User::factory()->create();
         $data = [
@@ -90,8 +90,8 @@ class RedirectIfTwoFactorAuthenticatableUnitTest extends TestCase
     {
         config(['auth.twoFa.required' => true]);
         config(['auth.twoFa.allow_save_device' => true]);
-        config(['auth.twoFa.allow_via_authenticator' => true]);
-        config(['auth.twoFa.allow_via_email' => true]);
+        config(['auth.twoFa.methods.authenticator' => true]);
+        config(['auth.twoFa.methods.email' => true]);
 
         $user = User::factory()->create([
             'two_factor_confirmed_at' => now(),

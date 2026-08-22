@@ -2,6 +2,7 @@
 
 namespace App\Listeners\Auth;
 
+use App\Models\User;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Support\Facades\Log;
 

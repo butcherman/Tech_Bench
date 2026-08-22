@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import AppLayout from "@/layouts/AppLayout.vue";
 import Card from "@/core/components/Card.vue";
-import ChangePasswordForm from "@/features/user/forms/ChangePasswordForm.vue";
+import UserPasswordForm from "@/features/user/forms/UserPasswordForm.vue";
 
-defineProps<{
+const props = defineProps<{
     rules: string[];
 }>();
 </script>
@@ -12,13 +12,13 @@ defineProps<{
 export default { layout: AppLayout };
 </script>
 <template>
-    <div class="flex flex-col justify-center items-center h-full">
-        <Card title="Change Password" size="normal">
-            <ChangePasswordForm />
+    <div class="flex flex-col gap-2">
+        <Card>
+            <UserPasswordForm />
         </Card>
-        <Card title="Password Rules" size="normal">
+        <Card title="Password Rules">
             <ul class="text-center">
-                <li v-for="rule in rules" class="border-b">{{ rule }}</li>
+                <li v-for="rule in rules">{{ rule }}</li>
             </ul>
         </Card>
     </div>

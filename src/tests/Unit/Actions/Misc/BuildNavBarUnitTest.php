@@ -17,17 +17,17 @@ class BuildNavBarUnitTest extends TestCase
     {
         $shouldBe = [
             [
-                'name' => 'Dashboard',
+                'label' => 'Dashboard',
                 'route' => route('dashboard'),
                 'icon' => 'fas fa-tachometer-alt',
             ],
             [
-                'name' => 'Customers',
+                'label' => 'Customers',
                 'route' => route('customers.index'),
                 'icon' => 'fas fa-user-tie',
             ],
             [
-                'name' => 'Tech Tips',
+                'label' => 'Tech Tips',
                 'route' => route('tech-tips.index'),
                 'icon' => 'fas fa-tools',
             ],
@@ -45,22 +45,22 @@ class BuildNavBarUnitTest extends TestCase
 
         $shouldBe = [
             [
-                'name' => 'Dashboard',
+                'label' => 'Dashboard',
                 'route' => route('dashboard'),
                 'icon' => 'fas fa-tachometer-alt',
             ],
             [
-                'name' => 'Customers',
+                'label' => 'Customers',
                 'route' => route('customers.index'),
                 'icon' => 'fas fa-user-tie',
             ],
             [
-                'name' => 'Tech Tips',
+                'label' => 'Tech Tips',
                 'route' => route('tech-tips.index'),
                 'icon' => 'fas fa-tools',
             ],
             [
-                'name' => 'File Links',
+                'label' => 'File Links',
                 'icon' => 'link',
                 'route' => route('links.index'),
             ],
@@ -76,27 +76,27 @@ class BuildNavBarUnitTest extends TestCase
     {
         $shouldBe = [
             [
-                'name' => 'Dashboard',
+                'label' => 'Dashboard',
                 'route' => route('dashboard'),
                 'icon' => 'fas fa-tachometer-alt',
             ],
             [
-                'name' => 'Administration',
+                'label' => 'Administration',
                 'route' => route('admin.index'),
                 'icon' => 'fas fa-user-shield',
             ],
             [
-                'name' => 'Reports',
+                'label' => 'Reports',
                 'icon' => 'chart-bar',
                 'route' => route('reports.index'),
             ],
             [
-                'name' => 'Customers',
+                'label' => 'Customers',
                 'route' => route('customers.index'),
                 'icon' => 'fas fa-user-tie',
             ],
             [
-                'name' => 'Tech Tips',
+                'label' => 'Tech Tips',
                 'route' => route('tech-tips.index'),
                 'icon' => 'fas fa-tools',
             ],
@@ -112,27 +112,27 @@ class BuildNavBarUnitTest extends TestCase
     {
         $shouldBe = [
             [
-                'name' => 'Dashboard',
+                'label' => 'Dashboard',
                 'route' => route('dashboard'),
                 'icon' => 'fas fa-tachometer-alt',
             ],
             [
-                'name' => 'Administration',
+                'label' => 'Administration',
                 'route' => route('admin.index'),
                 'icon' => 'fas fa-user-shield',
             ],
             [
-                'name' => 'Reports',
+                'label' => 'Reports',
                 'icon' => 'chart-bar',
                 'route' => route('reports.index'),
             ],
             [
-                'name' => 'Customers',
+                'label' => 'Customers',
                 'route' => route('customers.index'),
                 'icon' => 'fas fa-user-tie',
             ],
             [
-                'name' => 'Tech Tips',
+                'label' => 'Tech Tips',
                 'route' => route('tech-tips.index'),
                 'icon' => 'fas fa-tools',
             ],

@@ -8,6 +8,7 @@
 /storage/pail
 /stubs
 /tests/_Report
+/tests/_tmp
 /vendor
 .env
 .env.backup

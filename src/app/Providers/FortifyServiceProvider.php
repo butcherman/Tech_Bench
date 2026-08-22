@@ -2,32 +2,42 @@
 
 namespace App\Providers;
 
+use App\Actions\Fortify\AuthenticateUser;
 use App\Actions\Fortify\LogoutResponse;
+use App\Actions\Fortify\RedirectIfTwoFactorAuthenticatable;
 use App\Actions\Fortify\ResetUserPassword;
+use App\Actions\Fortify\TwoFactorConfirmedResponse;
 use App\Actions\Fortify\TwoFactorLoginResponse;
 use App\Actions\Fortify\UpdateUserPassword;
-use App\Facades\CacheData;
-use App\Models\User;
-use Illuminate\Auth\Events\Lockout;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\Auth\TwoFactorChallengeController;
+use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Laravel\Fortify\Contracts\LogoutResponse as LogoutResponseContract;
+use Laravel\Fortify\Contracts\TwoFactorConfirmedResponse as TwoFactorConfirmedResponseContract;
 use Laravel\Fortify\Contracts\TwoFactorLoginResponse as TwoFactorLoginResponseContract;
 use Laravel\Fortify\Fortify;
 
 class FortifyServiceProvider extends ServiceProvider
 {
+    /**
+     * Register any application services.
+     */
     public function register(): void
     {
         // Deliver a logout response when logging out.
         $this->app->instance(LogoutResponseContract::class, new LogoutResponse);
 
         // Custom Login Response
-        $this->app->singleton(TwoFactorLoginResponseContract::class, TwoFactorLoginResponse::class);
+        $this->app->instance(TwoFactorLoginResponseContract::class, new TwoFactorLoginResponse);
+
+        // Custom Successful Authenticator Setup Response
+        $this->app->instance(TwoFactorConfirmedResponseContract::class, new TwoFactorConfirmedResponse);
     }
 
     /**
@@ -35,129 +45,57 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Allow login via either Email Address, or username
-        Fortify::authenticateUsing(function (Request $request) {
-            $user = User::where('email', $request->username)
-                ->orWhere('username', $request->username)
-                ->first();
-
-            if ($user && Hash::check($request->password, $user->password)) {
-                return $user;
-            }
-        });
-
-        // Login Route
-        Fortify::loginView(function () {
-            return Inertia::render('Auth/Login', [
-                'welcome-message' => config('app.welcome_message'),
-                'home-links' => config('app.home_links'),
-                'allow-oath' => config('services.azure.allow_login'),
-                'public-link' => fn () => config('tech-tips.allow_public')
-                    ? [
-                        'url' => route('publicTips.index'),
-                        'text' => config('tech-tips.public_link_text'),
-                    ] : false,
-            ]);
-        });
-
-        // Reset Password Request Route
-        Fortify::requestPasswordResetLinkView(function () {
-            return Inertia::render('Auth/ForgotPassword');
-        });
-
-        // Reset Password Route
-        Fortify::resetPasswordView(function (Request $request) {
-            return Inertia::render('Auth/ResetPassword', [
-                'email' => $request->get('email'),
-                'token' => $request->route('token'),
-                'rules' => CacheData::passwordRules(),
-            ]);
-        });
-
-        // Two Factor Authentication Route
-        Fortify::twoFactorChallengeView(function ($request) {
-            $user = User::find($request->session()->get('login.id'));
-
-            $via = $this->getTwoFaViaParam($user);
-
-            if ($via === 'email') {
-                $user->generateVerificationCode();
-            }
-
-            return Inertia::render('Auth/TwoFactorAuth', [
-                'allow-remember' => fn () => config('auth.twoFa.allow_save_device'),
-                'via' => fn () => $via,
-            ]);
-        });
-
-        // Update and Reset Routes
+        Fortify::authenticateUsing(
+            fn (Request $request) => app(AuthenticateUser::class)
+                ->authenticate($request)
+        );
         Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
+        Fortify::redirectUserForTwoFactorAuthenticationUsing(
+            RedirectIfTwoFactorAuthenticatable::class
+        );
 
+        /*
+        |-----------------------------------------------------------------------
+        | Fortify Views
+        |-----------------------------------------------------------------------
+        */
+        Fortify::loginView(fn () => app(LoginController::class)->__invoke());
+        Fortify::requestPasswordResetLinkView(
+            fn () => Inertia::render('Auth/ForgotPassword')
+        );
+        Fortify::resetPasswordView(
+            fn (Request $request) => app(ResetPasswordController::class)
+                ->__invoke($request)
+        );
+        Fortify::twoFactorChallengeView(
+            fn (Request $request) => app(TwoFactorChallengeController::class)
+                ->challenge($request)
+        );
+
+        /*
+        |-----------------------------------------------------------------------
+        | Rate Limiters
+        |-----------------------------------------------------------------------
+        */
         RateLimiter::for('login', function (Request $request) {
-            $throttleKey = Str::transliterate(
-                Str::lower($request->input(Fortify::username())).'|'.$request->ip()
-            );
+            $throttleKey = Str::transliterate(Str::lower(
+                $request->input(Fortify::username())
+            ).'|'.$request->ip());
 
-            if (RateLimiter::tooManyAttempts($throttleKey, 5)) {
-                $availableIn = ceil(RateLimiter::availableIn($throttleKey) / 60);
-
-                event(new Lockout($request));
-
-                return back()
-                    ->withErrors([
-                        'throttle' => 'Too many failed login attempts, try again in '.
-                            $availableIn.' minutes',
-                    ]);
-            }
-
-            RateLimiter::hit($throttleKey, 600);
+            return Limit::perMinute(5)->by($throttleKey);
         });
 
         RateLimiter::for('two-factor', function (Request $request) {
-            $throttleKey = Str::transliterate(
-                Str::lower($request->input(Fortify::username())).'|'.$request->ip()
-            );
-
-            if (RateLimiter::tooManyAttempts($throttleKey, 5)) {
-                $availableIn = ceil(RateLimiter::availableIn($throttleKey) / 60);
-
-                event(new Lockout($request));
-
-                return back()
-                    ->withErrors([
-                        'throttle' => 'Too many failed login attempts, try again in '.
-                            $availableIn.' minutes',
-                    ]);
-            }
-
-            RateLimiter::hit($throttleKey, 600);
+            return Limit::perMinute(5)->by($request->session()->get('login.id'));
         });
-    }
 
-    /**
-     * Determine if the two factor auth code should be sent via email or
-     * the authenticator app.
-     */
-    protected function getTwoFaViaParam(User $user): ?string
-    {
-        $app = config('auth.twoFa.allow_via_authenticator');
-        $email = config('auth.twoFa.allow_via_email');
+        RateLimiter::for('passkeys', function (Request $request) {
+            $credentialId = $request->input('credential.id');
 
-        if ($app && $email) {
-            return $user->two_factor_via;
-        }
-
-        if ($app && ! $email) {
-            return 'authenticator';
-        }
-
-        if ($email && ! $app) {
-            return 'email';
-        }
-
-        // @codeCoverageIgnoreStart
-        return null;
-        // @codeCoverageIgnoreEnd
+            return Limit::perMinute(10)->by(
+                ($credentialId ?: $request->session()->getId()).'|'.$request->ip()
+            );
+        });
     }
 }

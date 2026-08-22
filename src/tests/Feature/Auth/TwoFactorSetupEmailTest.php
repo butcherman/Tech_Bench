@@ -4,6 +4,7 @@ namespace Tests\Feature\Auth;
 
 use App\Mail\Auth\VerificationCodeMail;
 use App\Models\User;
+use App\Models\UserVerificationCode;
 use Illuminate\Support\Facades\Mail;
 use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
@@ -12,14 +13,12 @@ class TwoFactorSetupEmailTest extends TestCase
 {
     /*
     |---------------------------------------------------------------------------
-    | Invoke Method
+    | Setup Method
     |---------------------------------------------------------------------------
     */
-    public function test_invoke_guest(): void
+    public function test_setup_guest(): void
     {
         config(['auth.twoFa.required' => true]);
-        config(['auth.twoFa.allow_via_authenticator' => true]);
-        config(['auth.twoFa.allow_via_email' => true]);
 
         $response = $this->get(route('two-factor.setup.email'));
 
@@ -28,11 +27,9 @@ class TwoFactorSetupEmailTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_invoke(): void
+    public function test_setup(): void
     {
         config(['auth.twoFa.required' => true]);
-        config(['auth.twoFa.allow_via_authenticator' => true]);
-        config(['auth.twoFa.allow_via_email' => true]);
 
         Mail::fake();
 
@@ -45,30 +42,64 @@ class TwoFactorSetupEmailTest extends TestCase
         $response->assertSuccessful()
             ->assertInertia(
                 fn (Assert $page) => $page
-                    ->component('Auth/TwoFactorAuth')
+                    ->component('Auth/TwoFactorSetupEmail')
                     ->has('allow-remember')
-                    ->has('via')
             );
 
         Mail::assertQueued(VerificationCodeMail::class);
     }
 
-    public function test_invoke_expect_json(): void
+    /*
+    |---------------------------------------------------------------------------
+    | Verify Method
+    |---------------------------------------------------------------------------
+    */
+    public function test_verify(): void
     {
         config(['auth.twoFa.required' => true]);
-        config(['auth.twoFa.allow_via_authenticator' => true]);
         config(['auth.twoFa.allow_via_email' => true]);
 
-        Mail::fake();
-
-        /** @var User $user */
+        /** @var User */
         $user = User::factory()->create();
 
+        UserVerificationCode::createQuietly([
+            'user_id' => $user->user_id,
+            'code' => '123456',
+        ]);
+
+        $data = [
+            'code' => '123456',
+            'remember_device' => false,
+        ];
+
         $response = $this->actingAs($user)
-            ->getJson(route('two-factor.setup.email'));
+            ->post(route('two-factor.setup.email.verify'), $data);
 
-        $response->assertSuccessful();
+        $response->assertStatus(302)->assertRedirect(route('dashboard'));
+    }
 
-        Mail::assertQueued(VerificationCodeMail::class);
+    public function test_verify_bad_code(): void
+    {
+        config(['auth.twoFa.required' => true]);
+        config(['auth.twoFa.allow_via_email' => true]);
+
+        /** @var User */
+        $user = User::factory()->create();
+
+        UserVerificationCode::createQuietly([
+            'user_id' => $user->user_id,
+            'code' => '123456',
+        ]);
+
+        $data = [
+            'code' => '654321',
+            'remember_device' => false,
+        ];
+
+        $response = $this->actingAs($user)
+            ->post(route('two-factor.setup.email.verify'), $data);
+
+        $response->assertStatus(302)
+            ->assertSessionHasErrorsIn('mfa', ['code']);
     }
 }

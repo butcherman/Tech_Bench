@@ -1,25 +1,24 @@
 <script setup lang="ts">
-import PasswordInput from "@/core/forms/components/PasswordInput.vue";
+import PasswordInput from "@/core/forms/components/validatedInputs/PasswordInput.vue";
+import TextInput from "@/core/forms/components/validatedInputs/TextInput.vue";
 import VueForm from "@/core/forms/components/VueForm.vue";
-import TextInput from "@/core/forms/components/TextInput.vue";
-import { ref as reference, object, string } from "yup";
+import { object, string, ref as reference } from "yup";
 import { update } from "@/wayfinder/routes/password";
+
+defineEmits<{
+    success: [];
+}>();
 
 const props = defineProps<{
     email: string;
     token: string;
 }>();
 
-/*
-|-------------------------------------------------------------------------------
-| Validation
-|-------------------------------------------------------------------------------
-*/
 const initValues = {
     email: props.email,
     token: props.token,
-    password: null,
-    password_confirmation: null,
+    password: "",
+    password_confirmation: "",
 };
 
 const schema = object({
@@ -35,28 +34,22 @@ const schema = object({
 
 <template>
     <VueForm
-        name="reset-password-form"
+        name="reset-password"
+        submit-method="post"
+        submit-text="Reset Password"
         :initial-values="initValues"
         :validation-schema="schema"
         :submit-route="update.url()"
-        submit-method="post"
-        submit-text="Reset Password"
+        @success="$emit('success')"
     >
-        <TextInput
-            id="email"
-            name="email"
-            label="Email Address"
-            variant="standard"
-        />
+        <TextInput name="email" label="Email Address" variant="standard" />
         <PasswordInput
-            id="password"
             name="password"
             label="New Password"
             variant="standard"
             focus
         />
         <PasswordInput
-            id="password-confirmation"
             name="password_confirmation"
             label="Confirm Password"
             variant="standard"

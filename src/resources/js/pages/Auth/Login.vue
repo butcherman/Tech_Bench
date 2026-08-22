@@ -4,17 +4,16 @@ import LoginInstructions from "@/features/auth/components/LoginInstructions.vue"
 import LoginLogo from "@/features/auth/components/LoginLogo.vue";
 
 const props = defineProps<{
-    welcomeMessage?: string;
-    homeLinks: linkList[];
-    publicLink: linkList | false;
     allowOath: boolean;
+    homeLinks: LinkList[];
+    publicLink: LinkList | false;
+    welcomeMessage?: string;
 }>();
 </script>
 
 <script lang="ts">
 export default { layout: AuthLayout };
 </script>
-
 <template>
     <div class="flex flex-col md:flex-row h-screen">
         <div class="flex md:grow items-center justify-center">

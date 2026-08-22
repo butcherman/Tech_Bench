@@ -1,23 +1,24 @@
 <script setup lang="ts">
-import PasswordInput from "@/core/forms/components/PasswordInput.vue";
-import SwitchInput from "@/core/forms/components/SwitchInput.vue";
+import PasswordInput from "@/core/forms/components/validatedInputs/PasswordInput.vue";
+import SubmitButton from "@/core/components/buttons/SubmitButton.vue";
+import SwitchInput from "@/core/forms/components/validatedInputs/SwitchInput.vue";
+import TextInput from "@/core/forms/components/validatedInputs/TextInput.vue";
 import VueForm from "@/core/forms/components/VueForm.vue";
-import TextInput from "@/core/forms/components/TextInput.vue";
+import { object, string, boolean } from "yup";
 import { login } from "@/wayfinder/routes";
 import { request } from "@/wayfinder/routes/password";
-import { ref } from "vue";
-import { object, string, boolean } from "yup";
+
+defineEmits<{
+    success: [];
+}>();
 
 const props = defineProps<{
     allowOath: boolean;
 }>();
 
-// TODO - Change to only email field when using OATH.
-const showPassField = ref(true); //  ref(!props.allowOath);
-
 const initialValues = {
-    username: null,
-    password: null,
+    username: "",
+    password: "",
     remember: false,
 };
 const validationSchema = object({
@@ -30,53 +31,54 @@ const validationSchema = object({
 </script>
 
 <template>
-    <div>
-        <VueForm
-            name="login-form"
-            submit-method="post"
-            submit-text="Login"
-            submit-icon="user-check"
-            :submit-route="login.url()"
-            :validation-schema="validationSchema"
-            :initial-values="initialValues"
-            full-page-overlay
-        >
-            <TextInput
-                id="username"
-                name="username"
-                label="Username"
-                placeholder="Username"
-                input-style="standard"
-                help="Enter your username or email address"
-                variant="standard"
-                hide-help
-            />
-            <PasswordInput
-                v-if="showPassField"
-                id="password"
-                name="password"
-                label="Password"
-                placeholder="Password"
-                input-style="standard"
-                help="Enter your password"
-                variant="standard"
-                hide-help
-            />
-            <div class="text-right">
-                <Link
-                    :href="request.url()"
-                    class="text-xs text-blue-400"
-                    tabindex="-1"
-                >
-                    Forgot Password
-                </Link>
+    <VueForm
+        name="login-form"
+        submit-method="post"
+        submit-text="Login"
+        submit-icon="user-check"
+        :submit-route="login.url()"
+        :validation-schema="validationSchema"
+        :initial-values="initialValues"
+        full-page-overlay
+        @success="$emit('success')"
+    >
+        <TextInput
+            name="username"
+            label="Username"
+            placeholder="Username"
+            input-style="standard"
+            help="Enter your username or email address"
+            variant="standard"
+            hide-help
+            v-focus
+        />
+        <PasswordInput
+            name="password"
+            label="Password"
+            placeholder="Password"
+            input-style="standard"
+            help="Enter your password"
+            variant="standard"
+            hide-help
+        />
+        <div class="text-right">
+            <Link
+                :href="request.url()"
+                class="text-xs text-blue-400"
+                tabindex="-1"
+            >
+                Forgot Password
+            </Link>
+        </div>
+        <div class="flex justify-center">
+            <div>
+                <SwitchInput name="remember" label="Remember Me" />
             </div>
-            <SwitchInput
-                id="remember"
-                name="remember"
-                label="Remember Me"
-                center
-            />
-        </VueForm>
-    </div>
+        </div>
+        <template #submit-button>
+            <div class="flex justify-center">
+                <SubmitButton text="Login" icon="user-check" class="w-1/2" />
+            </div>
+        </template>
+    </VueForm>
 </template>

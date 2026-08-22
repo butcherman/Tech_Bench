@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { computed } from "vue";
 import BaseBadge from "./badges/BaseBadge.vue";
+import { computed } from "vue";
 
-const emit = defineEmits(["update:modelValue"]);
+const emit = defineEmits(["update:show"]);
 
 const props = defineProps<{
-    modelValue: boolean;
-    position?: "left" | "right" | "bottom" | "top";
+    show: boolean;
+    position?: Placement;
     title?: string;
 }>();
 
@@ -27,8 +27,8 @@ const positionClass = computed(() => {
  * Status of the Drawer - opened or closed
  */
 const isOpen = computed({
-    get: () => props.modelValue,
-    set: (value) => emit("update:modelValue", value),
+    get: () => props.show,
+    set: (value) => emit("update:show", value),
 });
 </script>
 

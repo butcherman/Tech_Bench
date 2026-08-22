@@ -3,13 +3,22 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
-use Inertia\Response;
 
 class TwoFactorSetupController extends Controller
 {
-    public function __invoke(): Response
+    /**
+     * Handle the incoming request.
+     */
+    public function __invoke(Request $request)
     {
-        return Inertia::render('Auth/TwoFactorSetup');
+        return Inertia::render('Auth/TwoFactorSetup', [
+            'required' => config('auth.twoFa.required'),
+            'methods' => collect(config('auth.twoFa.methods'))
+                ->filter()
+                ->keys()
+                ->all(),
+        ]);
     }
 }

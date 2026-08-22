@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import AppLayout from "@/layouts/AppLayout.vue";
 import Card from "@/core/components/Card.vue";
-import LogoImage from "@/core/components/LogoImage.vue";
 import { useAppData } from "@/core/state/appData";
 
-const { copyright, version, appName } = useAppData();
+const { copyright, version, appName, logo } = useAppData();
 
 const props = defineProps<{
     build: string;
@@ -17,9 +16,11 @@ export default { layout: AppLayout };
 </script>
 <template>
     <div class="flex grow justify-center items-center">
-        <Card>
+        <Card size="md">
             <h2 class="text-center">{{ appName }}</h2>
-            <LogoImage />
+            <div class="flex justify-center">
+                <img :src="logo" />
+            </div>
             <hr class="my-4" />
             <p class="text-center">
                 Tech Bench &copy; {{ copyright }}

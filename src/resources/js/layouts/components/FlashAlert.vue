@@ -1,12 +1,11 @@
 <script setup lang="ts">
+import BannerAlert from "@/core/components/alerts/BannerAlert.vue";
 import gsap from "gsap";
-import { useAlertStyles } from "../composables/alertStyles";
-import { useFlashState } from "../../core/state/flashState";
 import { onMounted, onUnmounted, ref } from "vue";
 import { router } from "@inertiajs/vue3";
+import { useAlertState } from "@/core/state/alertState";
 
-const { getStatusType, getStatusIcon } = useAlertStyles();
-const { flashAlerts, pushFlashAlert } = useFlashState();
+const { flashAlerts, pushFlashAlert } = useAlertState();
 
 /*
 |-------------------------------------------------------------------------------
@@ -31,15 +30,14 @@ const onLeave = (el: Element, done: () => void): void => {
     });
 };
 
+/*
+|-------------------------------------------------------------------------------
+| Regester the event listener to monitor for flash messages
+|-------------------------------------------------------------------------------
+*/
 const flashListener = ref();
-
-/**
- * Regester the event listener to monitor for flash messages
- */
 onMounted(() => {
     flashListener.value = router.on("flash", (event) => {
-        console.log(event.detail.flash);
-
         let msg = event.detail.flash;
         if (msg.banner) {
             pushFlashAlert(msg.banner);
@@ -60,16 +58,13 @@ onUnmounted(() => flashListener.value());
                 <div
                     v-for="flash in flashAlerts"
                     class="flash-alert flex justify-between w-11/12 md:w-1/2 px-3 py-2 my-2 rounded-xl text-xl pointer-events-auto opacity-90"
-                    :class="getStatusType(flash.level)"
                     :key="flash.id"
                 >
-                    <div class="flex items-center">
-                        <fa-icon :icon="getStatusIcon(flash.level)" />
-                    </div>
-                    <div class="text-center my-1">{{ flash.message }}</div>
-                    <div class="flex items-center">
-                        <fa-icon :icon="getStatusIcon(flash.level)" />
-                    </div>
+                    <BannerAlert
+                        class="w-full"
+                        :text="flash.message"
+                        :variant="flash.variant"
+                    />
                 </div>
             </TransitionGroup>
         </div>

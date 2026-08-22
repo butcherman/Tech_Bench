@@ -2,55 +2,46 @@
 
 namespace App\Services\Auth;
 
+use App\Enums\TwoFactorMethod;
 use App\Models\DeviceToken;
 use App\Models\User;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
-use Karmendra\LaravelAgentDetector\AgentDetector;
+use Illuminate\Http\Request;
 
 class TwoFactorService
 {
     /**
-     * Save in the session that the Two Factor process has been completed.  If
-     * the user opted to save this device, generate a unique token that will
-     * be saved as a cookie on the users machine.
+     * Get the user trying to authenticate
      */
-    public function processVerificationResponse(
-        Collection $requestData,
-        User $user,
-        string $userAgent
-    ): ?string {
-        session()->put('2fa_verified', true);
+    public function getChallengedUser(Request $request): ?User
+    {
+        $userId = $request->session()->get('login.id');
+        $user = User::find($userId);
 
-        // Clear the code so it cannot be used again
-        $user->UserVerificationCode->delete();
+        if (! $user) {
+            return null;
+        }
 
-        return $requestData->get('remember')
-            ? $this->generateRememberDeviceToken($user, $userAgent)
-            : null;
+        return $user;
     }
 
     /**
-     * Generate a Remember token for a device
+     * Get the method we will be using for 2FA
      */
-    public function generateRememberDeviceToken(User $user, string $userAgent): string
+    public function getMfaMethod(User $user)
     {
-        $token = Str::random(60);
-        $agent = new AgentDetector($userAgent);
-        $ipAddr = request()->ip();
+        return TwoFactorMethod::tryFrom($user->two_factor_via);
+    }
 
-        $devToken = new DeviceToken([
-            'token' => $token,
-            'type' => $agent->device(),
-            'os' => $agent->platform().' '.$agent->platformVersion(),
-            'browser' => $agent->browser(),
-            'registered_ip_address' => $ipAddr,
-            'updated_ip_address' => $ipAddr,
-        ]);
+    /**
+     * Check for verification process and complete the necessary steps
+     */
+    public function provideChallenge(User $user)
+    {
+        $via = $this->getMfaMethod($user);
 
-        $user->DeviceTokens()->save($devToken);
-
-        return $token;
+        if ($via === TwoFactorMethod::Email) {
+            $user->generateVerificationCode();
+        }
     }
 
     /**

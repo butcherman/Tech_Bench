@@ -1,0 +1,64 @@
+<script setup lang="ts" generic="TRow extends RowData">
+import DataTableBody from "./components/DataTableBody.vue";
+import DataTableFooter from "./components/DataTableFooter.vue";
+import DataTableHeader from "./components/DataTableHeader.vue";
+import { useDataTable } from "./composables/dataTable.js";
+import type { DataTableColumn } from "./types/types.js";
+import type { RowData } from "@tanstack/vue-table";
+
+defineSlots<{
+    [key: string]: any;
+}>();
+
+const emit = defineEmits<{
+    "row-click": [TRow];
+}>();
+
+const props = defineProps<{
+    columns: DataTableColumn<TRow, any>[];
+    data: TRow[];
+
+    // Optional
+    actionsSlot?: boolean;
+    allowRowClick?: boolean;
+    compact?: boolean;
+    striped?: boolean;
+    gridLines?: boolean;
+    noResultsText?: string;
+    paginate?: boolean;
+
+    rowClassFn?: (row: TRow) => string | false;
+    rowClickFn?: (event: MouseEvent, row: TRow) => void;
+}>();
+
+const table = useDataTable(props);
+</script>
+
+<template>
+    <div class="overflow-x-auto w-full">
+        <table class="table-auto w-full">
+            <DataTableHeader :table="table">
+                <template v-for="(_, slot) of $slots" #[slot]="scope">
+                    <slot :name="slot" v-bind="scope" />
+                </template>
+            </DataTableHeader>
+            <DataTableBody
+                :table="table"
+                :no-results-text="noResultsText"
+                @row-click="$emit('row-click', $event)"
+            >
+                <template v-for="(_, slot) of $slots" #[slot]="scope">
+                    <slot :name="slot" v-bind="scope" />
+                </template>
+            </DataTableBody>
+            <DataTableFooter
+                :table="table"
+                :has-action-slot="props.actionsSlot"
+            >
+                <template v-for="(_, slot) of $slots" #[slot]="scope">
+                    <slot :name="slot" v-bind="scope" />
+                </template>
+            </DataTableFooter>
+        </table>
+    </div>
+</template>

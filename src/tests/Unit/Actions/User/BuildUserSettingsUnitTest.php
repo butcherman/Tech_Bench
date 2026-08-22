@@ -24,6 +24,7 @@ class BuildUserSettingsUnitTest extends TestCase
                 'setting_type_id' => 1,
                 'name' => 'Receive Email Notifications',
                 'value' => true,
+                'description' => 'Receive email notifications from '.config('app.name'),
             ],
         ];
 
@@ -43,11 +44,13 @@ class BuildUserSettingsUnitTest extends TestCase
                 'setting_type_id' => 1,
                 'name' => 'Receive Email Notifications',
                 'value' => true,
+                'description' => 'Receive email notifications from '.config('app.name'),
             ],
             [
                 'setting_type_id' => 2,
                 'name' => 'Auto Delete Expired File Links',
                 'value' => true,
+                'description' => 'Auto delete file links and attached files after they have been expired for a set amount of time',
             ],
         ];
 
@@ -76,6 +79,7 @@ class BuildUserSettingsUnitTest extends TestCase
                 'setting_type_id' => 1,
                 'name' => 'Receive Email Notifications',
                 'value' => true,
+                'description' => 'Receive email notifications from '.config('app.name'),
             ],
         ];
 
@@ -96,6 +100,7 @@ class BuildUserSettingsUnitTest extends TestCase
                 'setting_type_id' => 1,
                 'name' => 'Receive Email Notifications',
                 'value' => true,
+                'description' => 'Receive email notifications from '.config('app.name'),
             ],
         ];
 
