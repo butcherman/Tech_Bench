@@ -32,10 +32,14 @@
             "./node_modules/@types",
             "./node_modules/"
         ],
-        "types": ["vite/client"],
+        "types": ["vite/client", "vitest/globals"],
         "paths": {
             "@/*": ["./resources/js/*"]
         }
     },
-    "include": ["resources/js/**/*.ts", "resources/js/**/*.vue"]
+    "include": [
+        "resources/js/**/*.ts",
+        "resources/js/**/*.vue",
+        "tests/Vitest/**/*.ts"
+    ]
 }

@@ -5,7 +5,7 @@ export const useAnimationHelper = () => {
      * Increase the height of the element, then increase the opacity.
      */
     const growShow = (el: Element, done: () => void) => {
-        let timeline = gsap.timeline();
+        const timeline = gsap.timeline();
 
         timeline
             .fromTo(
@@ -35,7 +35,7 @@ export const useAnimationHelper = () => {
      * Fade out via opacity, then bring height to 0 before exiting
      */
     const shrinkHide = (el: Element, done: () => void) => {
-        let timeline = gsap.timeline();
+        const timeline = gsap.timeline();
 
         timeline
             .to(el, {

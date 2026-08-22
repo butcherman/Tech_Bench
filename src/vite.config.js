@@ -59,7 +59,7 @@ export default defineConfig(({ mode }) => {
             coverage: {
                 enabled: true,
                 provider: 'v8',
-                reportsDirectory: './tests/vitest/_Report'
+                reportsDirectory: './tests/Vitest/_Report'
             }
         }
     };

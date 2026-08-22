@@ -21,17 +21,13 @@ const props = defineProps<{
     title?: string;
 }>();
 
-watch(props, (newProps) => {
-    if (newProps.show) {
-        emit("show");
-        return;
-    }
-
-    if (!newProps.show) {
-        emit("hide");
-        return;
-    }
-});
+watch(
+    () => props.show,
+    (show) => {
+        if (show) emit("show");
+        if (!show) emit("hide");
+    },
+);
 
 /**
  * Modal visual state
@@ -93,11 +89,11 @@ const attentionRequired = ref<boolean>(false);
         >
             <div
                 v-if="isOpen"
-                class="fixed inset-0 z-50 w-screen overflow-y-auto flex justify-center"
+                class="tb-modal fixed inset-0 z-50 w-screen overflow-y-auto flex justify-center"
                 :class="[modalPosition, { 'bg-gray-500/75': !hideBackdrop }]"
             >
                 <div
-                    class="bg-white min-w-96 m-4 min-h-32 rounded-lg p-5 flex flex-col relative border border-slate-300"
+                    class="tb-modal-body bg-white min-w-96 m-4 min-h-32 rounded-lg p-5 flex flex-col relative border border-slate-300"
                     :class="[modalSize, { attention: attentionRequired }]"
                     v-on-click-outside="onBackgroundClicked"
                 >
@@ -105,7 +101,10 @@ const attentionRequired = ref<boolean>(false);
                         v-if="!hideClose"
                         class="absolute top-2 right-4 text-muted pointer"
                     >
-                        <button class="pointer" @click="isOpen = false">
+                        <button
+                            class="pointer hide-button"
+                            @click="isOpen = false"
+                        >
                             <fa-icon icon="close" />
                         </button>
                     </div>
