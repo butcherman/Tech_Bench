@@ -38,7 +38,7 @@ const initValues = {
     first_name: props.user?.first_name ?? "",
     last_name: props.user?.last_name ?? "",
     email: props.user?.email ?? "",
-    role_id: props.user?.role_id ?? "4",
+    role_id: String(props.user?.role_id) ?? "4",
 };
 
 const schema = object({
