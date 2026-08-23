@@ -22,7 +22,7 @@ class UserRolesController extends Controller
     {
         $this->authorize('viewAny', UserRole::class);
 
-        return Inertia::render('Admin/Role/Index', [
+        return Inertia::render('User/Role/Index', [
             'roles' => fn () => $this->svc->getAllRoles(),
         ]);
     }
@@ -34,7 +34,7 @@ class UserRolesController extends Controller
     {
         $this->authorize('create', UserRole::class);
 
-        return Inertia::render('Admin/Role/Create', [
+        return Inertia::render('User/Role/Create', [
             'permission-list' => $this->svc->getRolePermissionTypes(),
             'base-role' => fn () => $request->role_id
                 ? $this->svc->getRole($request->role_id)
@@ -63,7 +63,7 @@ class UserRolesController extends Controller
     {
         $this->authorize('view', $user_role);
 
-        return Inertia::render('Admin/Role/Show', [
+        return Inertia::render('User/Role/Show', [
             'role' => fn () => $user_role->makeVisible(['allow_edit']),
             'permission-list' => fn () => $this->svc->getRolePermissionTypes(),
             'permission-values' => fn () => $user_role->UserRolePermission,
@@ -77,7 +77,7 @@ class UserRolesController extends Controller
     {
         $this->authorize('update', $user_role);
 
-        return Inertia::render('Admin/Role/Edit', [
+        return Inertia::render('User/Role/Edit', [
             'base-role' => fn () => $user_role,
             'permission-list' => fn () => $this->svc->getRolePermissionTypes(),
             'permission-values' => fn () => $user_role->UserRolePermission,
