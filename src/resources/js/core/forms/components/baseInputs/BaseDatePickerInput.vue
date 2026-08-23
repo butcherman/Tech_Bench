@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import TextInputWrapper from "../wrappers/TextInputWrapper.vue";
-import { computed, ref, useId } from "vue";
+import { computed, onMounted, ref, useId } from "vue";
 import { useInputHelper } from "../../composables/inputHelper.js";
 import { useDateHelper } from "../../composables/dateHelper.js";
 
@@ -65,7 +65,7 @@ const triggerFocus = () => {
  * If the input was cleared, we need to clear the head end value as well.
  * If date was manually inputted, we need to properly format it.
  */
-const onChange = () => {
+const reformatInput = () => {
     if (!formattedValue.value) {
         inputValue.value = "";
         return;
@@ -77,6 +77,11 @@ const onChange = () => {
     selectMonth(monthNames[newDate.getMonth()]);
     onDaySelected(newDate.getDate());
 };
+
+onMounted(() => {
+    formattedValue.value = props.value;
+    reformatInput();
+});
 
 /*
 |-------------------------------------------------------------------------------
@@ -133,7 +138,7 @@ const onDaySelected = (day: number | null): void => {
             :name="name"
             @focus="triggerFocus"
             @blur="onBlur"
-            @change="onChange"
+            @change="reformatInput"
         />
         <div
             class="absolute inset-e-1.5 bottom-1.5 text-muted pointer"

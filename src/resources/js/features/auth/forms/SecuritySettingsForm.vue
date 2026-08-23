@@ -1,9 +1,13 @@
 <script setup lang="ts">
-import VueForm from "@/core/forms/components/VueForm.vue";
-import { object, string } from "yup";
-import { update } from "@/wayfinder/routes/admin/user/user-settings";
-import SwitchInput from "@/core/forms/components/validatedInputs/SwitchInput.vue";
 import Collapse from "@/core/components/Collapse.vue";
+import DatePickerInput from "@/core/forms/components/validatedInputs/DatePickerInput.vue";
+import PasswordInput from "@/core/forms/components/validatedInputs/PasswordInput.vue";
+import SelectInput from "@/core/forms/components/validatedInputs/SelectInput.vue";
+import SwitchInput from "@/core/forms/components/validatedInputs/SwitchInput.vue";
+import TextInput from "@/core/forms/components/validatedInputs/TextInput.vue";
+import VueForm from "@/core/forms/components/VueForm.vue";
+import { object, boolean, string } from "yup";
+import { update } from "@/wayfinder/routes/admin/user/user-settings";
 
 defineEmits<{
     success: [];
@@ -21,7 +25,56 @@ const initValues = {
     twoFa: props.twoFa,
     oath: props.oath,
 };
-const schema = object({});
+
+const schema = object({
+    auto_logout_timer: string().required().label("Auto Logout Timer"),
+    twoFa: object({
+        required: boolean().required(),
+        allow_save_device: boolean().required(),
+        allow_via_email: boolean()
+            .required()
+            .when(["required", "allow_via_authenticator"], {
+                is: (required: boolean, app: boolean): boolean =>
+                    required && !app,
+                then: (schema) =>
+                    schema.oneOf(
+                        [true],
+                        "At least one Authenticator method must be selected",
+                    ),
+            }),
+    }),
+    oath: object({
+        allow_login: boolean().required(),
+        allow_register: boolean().required(),
+        tenant: string().when("allow_login", {
+            is: true,
+            then: (schema) =>
+                schema.required("You must enter the Azure Tenant ID"),
+            otherwise: (schema) => schema.nullable(),
+        }),
+        client_id: string().when("allow_login", {
+            is: true,
+            then: (schema) =>
+                schema.required("You must enter the Azure Client ID"),
+            otherwise: (schema) => schema.nullable(),
+        }),
+        client_secret: string().when("allow_login", {
+            is: true,
+            then: (schema) =>
+                schema.required("You must enter the Azure Client Secret"),
+            otherwise: (schema) => schema.nullable(),
+        }),
+        secret_expires: string().when("allow_login", {
+            is: true,
+            then: (schema) =>
+                schema.required(
+                    "You must enter the Expiration Date for the Client Secret",
+                ),
+            otherwise: (schema) => schema.nullable(),
+        }),
+        redirect: string().required(),
+    }),
+});
 </script>
 
 <template>
@@ -67,6 +120,51 @@ const schema = object({});
                         id="allow-via-authenticator"
                         name="twoFa.methods.authenticator"
                         label="Allow Authenticator App as Two Factor Method"
+                    />
+                </Collapse>
+            </div>
+        </fieldset>
+        <fieldset class="border mb-3 py-3">
+            <legend>Single Sign On</legend>
+            <div class="ms-4 flex flex-col gap-3">
+                <SwitchInput
+                    id="allow-oath"
+                    name="oath.allow_login"
+                    label="Allow Office 365 Login"
+                />
+                <Collapse
+                    :show="values.oath.allow_login"
+                    class="flex flex-col gap-3"
+                >
+                    <SwitchInput
+                        name="oath.allow_register"
+                        class="w-100"
+                        label="Allow anyone in my organization to login"
+                    />
+                    <SelectInput
+                        name="oath.default_role_id"
+                        label="User Role When Creating New User"
+                        :list="roleList"
+                        text-field="name"
+                        value-field="role_id"
+                    />
+                    <TextInput name="oath.tenant" label="Azure Tenant ID" />
+                    <TextInput name="oath.client_id" label="Azure Client ID" />
+                    <PasswordInput
+                        type="password"
+                        name="oath.client_secret"
+                        label="Azure Client Secret"
+                        hide-unmask
+                    />
+                    <DatePickerInput
+                        name="oath.secret_expires"
+                        label="Date Client Secret Expires"
+                    />
+                    <TextInput
+                        type="url"
+                        name="oath.redirect"
+                        label="Azure Redirect URI"
+                        disabled
                     />
                 </Collapse>
             </div>
