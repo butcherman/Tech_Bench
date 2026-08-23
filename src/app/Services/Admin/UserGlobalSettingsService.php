@@ -49,10 +49,10 @@ class UserGlobalSettingsService
     public function getTwoFaConfig(): array
     {
         return [
+            'enabled' => (bool) config('auth.twoFa.enabled'),
             'required' => (bool) config('auth.twoFa.required'),
             'allow_save_device' => (bool) config('auth.twoFa.allow_save_device'),
-            'allow_via_email' => (bool) config('auth.twoFa.allow_via_email'),
-            'allow_via_authenticator' => (bool) config('auth.twoFa.allow_via_authenticator'),
+            'methods' => config('auth.twoFa.methods'),
         ];
     }
 
@@ -95,7 +95,11 @@ class UserGlobalSettingsService
             intval($requestData->get('auto_logout_timer'))
         );
 
+        $mfaConfig = $requestData->get('twoFa');
+        $this->saveSettingsArray($mfaConfig['methods'], 'auth.twoFa.methods');
+        unset($mfaConfig['methods']);
+        $this->saveSettingsArray($mfaConfig, 'auth.twoFa');
+
         $this->saveSettingsArray($requestData->get('oath'), 'services.azure');
-        $this->saveSettingsArray($requestData->get('twoFa'), 'auth.twoFa');
     }
 }

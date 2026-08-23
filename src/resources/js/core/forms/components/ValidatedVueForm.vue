@@ -1,6 +1,6 @@
 <script setup lang="ts" generic="TFormData extends FormDataType<TFormData>">
 import BaseVueForm from "./BaseVueForm.vue";
-import { computed, readonly } from "vue";
+import { computed } from "vue";
 import { GenericObject, useForm, Path, PathValue } from "vee-validate";
 import type { FormDataType } from "@inertiajs/core";
 
@@ -77,15 +77,19 @@ defineExpose({
     setFieldError,
     setValue,
     resetForm,
-    isDirty,
-    values: readonly(values),
 });
 </script>
 
 <template>
     <BaseVueForm v-bind="props" @submit="onSubmit">
         <template v-for="(_, slot) of $slots" #[slot]="scope">
-            <slot :name="slot" v-bind="scope" />
+            <slot
+                v-bind="scope"
+                :name="slot"
+                :values="values"
+                :is-dirty="isDirty"
+                :is-submitting="isSubmitting"
+            />
         </template>
     </BaseVueForm>
 </template>
