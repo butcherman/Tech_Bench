@@ -29,13 +29,15 @@ interface UserSettings {
     description: string;
 }
 
-// interface UserRolePermission {
-//     perm_type_id: number;
-//     description: string;
-//     group: string;
-//     allow: boolean;
-//     feature_enabled: boolean;
-// }
+interface UserRolePermission {
+    perm_type_id: number;
+    description: string;
+    group: string;
+    allow: boolean;
+    feature_enabled: boolean;
+}
+
+type UserRolePermissionCategory = { [key: string]: UserRolePermission[] };
 
 interface UserDevice {
     device_id: number;

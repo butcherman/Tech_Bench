@@ -33,7 +33,7 @@ const { getBackgroundClass } = useVariantHelper();
 const inputId = useId();
 
 const variantClass = computed(() => {
-    if (inputValue) {
+    if (inputValue.value) {
         return getBackgroundClass(props.switchVariant ?? "primary");
     }
 

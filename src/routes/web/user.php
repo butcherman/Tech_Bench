@@ -13,6 +13,7 @@ use App\Http\Controllers\User\UpdateUserSettingsController;
 use App\Http\Controllers\User\UserPasswordController;
 use App\Http\Controllers\User\UserSettingsController;
 use App\Http\Middleware\CheckPasswordExpiration;
+use App\Models\UserRole;
 use App\Models\User;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 use Illuminate\Support\Facades\Route;
@@ -109,7 +110,7 @@ Route::middleware('auth.secure')->group(function () {
             ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
                 $breadcrumbs->index('Roles and Permissions', 'admin.index')
                     ->create('Build New Role')
-                    ->show('View Role')
+                    ->show(fn(UserRole $role) => $role->name)
                     ->edit('Modify Role');
             });
     });
