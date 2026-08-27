@@ -1,19 +1,17 @@
 <script setup lang="ts">
 import TextInputWrapper from "../wrappers/TextInputWrapper.vue";
-import { computed, useId } from "vue";
+import {  useId } from "vue";
 import { useInputHelper } from "../../composables/inputHelper.js";
 
 const emit = defineEmits<{
-    "update:value": [string];
     focus: [];
     blur: [];
-    change: [string];
+    change: [value: string | null];
 }>();
 
 const props = defineProps<{
     name: string;
     list: string[];
-    value: string;
 
     autocomplete?: string;
     disabled?: boolean;
@@ -25,6 +23,10 @@ const props = defineProps<{
     variant?: InputVariant;
 }>();
 
+const inputValue = defineModel<string | null>({
+    required: true,
+});
+
 const { hasFocus, onFocus, onBlur, inputVariantStyle } = useInputHelper(
     props,
     emit,
@@ -32,10 +34,6 @@ const { hasFocus, onFocus, onBlur, inputVariantStyle } = useInputHelper(
 
 const inputId = useId();
 const datalistId = useId();
-const inputValue = computed({
-    get: () => props.value,
-    set: (value) => emit("update:value", value),
-});
 </script>
 
 <template>
@@ -56,7 +54,7 @@ const inputValue = computed({
             :name="name"
             @focus="onFocus"
             @blur="onBlur"
-            @change="$emit('change', value)"
+            @change="$emit('change', inputValue)"
         />
         <label
             :for="inputId"

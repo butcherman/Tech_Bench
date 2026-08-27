@@ -4,7 +4,7 @@
     generic="TOption extends string | Record<string, unknown>"
 >
 import InputWrapper from "../wrappers/InputWrapper.vue";
-import { computed, useId } from "vue";
+import {  useId } from "vue";
 import { useInputHelper } from "../../composables/inputHelper.js";
 import { useSelectHelper } from "../../composables/selectHelper.js";
 
@@ -13,7 +13,6 @@ defineSlots<{
 }>();
 
 const emit = defineEmits<{
-    "update:value": [string];
     focus: [];
     blur: [];
 }>();
@@ -21,7 +20,6 @@ const emit = defineEmits<{
 const props = defineProps<{
     name: string;
     list: TOption[];
-    value: string;
 
     disabled?: boolean;
     errorMessage?: string;
@@ -32,14 +30,14 @@ const props = defineProps<{
     valueField?: TOption extends string ? never : keyof TOption;
 }>();
 
+const inputValue = defineModel<string | null>({
+    required: true,
+});
+
 const { getValue, getOptionText } = useSelectHelper(props);
 const { hasFocus, onFocus, onBlur } = useInputHelper(props, emit);
 
 const inputId = useId();
-const inputValue = computed({
-    get: () => props.value,
-    set: (value) => emit("update:value", value),
-});
 </script>
 
 <template>

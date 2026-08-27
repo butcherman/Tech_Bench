@@ -1,6 +1,6 @@
 <script setup lang="ts" generic="TOption extends string | object">
 import InputWrapper from "../wrappers/InputWrapper.vue";
-import { computed, useId } from "vue";
+import {  useId } from "vue";
 import { useInputHelper } from "../../composables/inputHelper.js";
 import { useSelectHelper } from "../../composables/selectHelper.js";
 
@@ -9,16 +9,14 @@ defineSlots<{
 }>();
 
 const emit = defineEmits<{
-    "update:value": [string];
     focus: [];
     blur: [];
-    change: [string];
+    change: [modelValue: string | null];
 }>();
 
 const props = defineProps<{
     name: string;
     list: TOption[];
-    value: string;
 
     autocomplete?: string;
     disabled?: boolean;
@@ -32,6 +30,10 @@ const props = defineProps<{
     variant?: InputVariant;
 }>();
 
+const inputValue = defineModel<string | null>({
+    required: true,
+});
+
 const { hasFocus, onFocus, onBlur, inputVariantStyle } = useInputHelper(
     props,
     emit,
@@ -39,10 +41,6 @@ const { hasFocus, onFocus, onBlur, inputVariantStyle } = useInputHelper(
 const { getValue, getOptionText } = useSelectHelper(props);
 
 const inputId = useId();
-const inputValue = computed({
-    get: () => props.value,
-    set: (value) => emit("update:value", value),
-});
 </script>
 
 <template>
@@ -70,7 +68,7 @@ const inputValue = computed({
                     :placeholder="placeholder ?? ''"
                     @focus="onFocus"
                     @blur="onBlur"
-                    @change="$emit('change', value)"
+                    @change="$emit('change', inputValue)"
                 >
                     <option
                         v-for="opt in list"

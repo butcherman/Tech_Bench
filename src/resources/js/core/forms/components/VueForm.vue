@@ -1,7 +1,7 @@
 <script setup lang="ts" generic="TFormData extends FormDataType<TFormData>">
 import ValidatedVueForm from "./ValidatedVueForm.vue";
 import { router } from "@inertiajs/vue3";
-import { computed, ref, useTemplateRef } from "vue";
+import {  ref, useTemplateRef } from "vue";
 import { GenericObject, useForm, Path } from "vee-validate";
 import type { FormDataType, Errors, Page } from "@inertiajs/core";
 

@@ -5,15 +5,13 @@ import { useInputHelper } from "../../composables/inputHelper.js";
 import { useVariantHelper } from "@/core/composables/variantHelper";
 
 const emit = defineEmits<{
-    "update:value": [boolean];
     focus: [];
     blur: [];
-    change: [any];
+    change: [modelValue: boolean];
 }>();
 
 const props = defineProps<{
     name: string;
-    value: boolean;
 
     disabled?: boolean;
     errorMessage?: string;
@@ -23,19 +21,19 @@ const props = defineProps<{
     switchVariant?: VariantType;
 }>();
 
+const inputValue = defineModel<boolean>({
+    required: true,
+});
+
 const { hasFocus, onBlur, onFocus, switchSize, switchInputSize } =
     useInputHelper(props, emit);
 
 const { getBackgroundClass } = useVariantHelper();
 
 const inputId = useId();
-const inputValue = computed({
-    get: () => props.value,
-    set: (value) => emit("update:value", value),
-});
 
 const variantClass = computed(() => {
-    if (props.value) {
+    if (inputValue) {
         return getBackgroundClass(props.switchVariant ?? "primary");
     }
 
@@ -56,13 +54,13 @@ const variantClass = computed(() => {
                     v-model="inputValue"
                     class="sr-only peer"
                     type="checkbox"
-                    :checked="value"
+                    :checked="inputValue"
                     :disabled="disabled"
                     :id="inputId"
                     :name="name"
                     @focus="onFocus"
                     @blur="onBlur"
-                    @change="$emit('change', value)"
+                    @change="$emit('change', inputValue)"
                 />
                 <div
                     class="rounded-full transition-colors duration-200"

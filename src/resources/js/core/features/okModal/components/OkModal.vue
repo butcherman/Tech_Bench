@@ -35,7 +35,7 @@ const forceOption = () => {
 
 <template>
     <Modal
-        :show="isOpen"
+        v-model="isOpen"
         :title="title"
         :size="size"
         position="top"

@@ -13,7 +13,6 @@ defineSlots<{
 }>();
 
 const emit = defineEmits<{
-    "update:value": [string[]];
     focus: [];
     blur: [];
 }>();
@@ -21,7 +20,6 @@ const emit = defineEmits<{
 const props = defineProps<{
     name: string;
     list: TOption[];
-    value: string[];
 
     disabled?: boolean;
     errorMessage?: string;
@@ -32,6 +30,10 @@ const props = defineProps<{
     textField?: TOption extends string ? never : keyof TOption;
     valueField?: TOption extends string ? never : keyof TOption;
 }>();
+
+const inputValue = defineModel<string[]>({
+    required: true,
+});
 
 const { getValue, getOptionText } = useSelectHelper(props);
 const { hasFocus, onFocus, onBlur } = useInputHelper(props, emit);
@@ -46,18 +48,11 @@ const availableSelected = ref<string[]>([]);
 const assignedSelected = ref<string[]>([]);
 
 const availableList = computed(() =>
-    props.list.filter((option) => !props.value.includes(getValue(option))),
+    props.list.filter((option) => !inputValue.value.includes(getValue(option))),
 );
 const assignedList = computed(() =>
-    props.list.filter((option) => props.value.includes(getValue(option))),
+    props.list.filter((option) => inputValue.value.includes(getValue(option))),
 );
-
-/**
- * Update the value without mutating props.
- */
-const updateValue = (value: string[]) => {
-    emit("update:value", value);
-};
 
 /**
  * Add selected items from the Available list.
@@ -71,10 +66,10 @@ const onAddItems = (all = false) => {
         return;
     }
 
-    updateValue([
-        ...props.value,
-        ...valuesToAdd.filter((value) => !props.value.includes(value)),
-    ]);
+    inputValue.value = [
+        ...inputValue.value,
+        ...valuesToAdd.filter((value) => !inputValue.value.includes(value)),
+    ];
 
     availableSelected.value = [];
 };
@@ -84,17 +79,17 @@ const onAddItems = (all = false) => {
  */
 const onRemoveItems = (all = false) => {
     if (all) {
-        updateValue([]);
+        inputValue.value = [];
     } else {
         if (!assignedSelected.value.length) {
             return;
         }
 
-        updateValue(
-            props.value.filter(
+        inputValue.value =
+            inputValue.value.filter(
                 (value) => !assignedSelected.value.includes(value),
-            ),
-        );
+            )
+        ;
     }
 
     assignedSelected.value = [];
@@ -106,8 +101,8 @@ const onRemoveItems = (all = false) => {
 const onAvailableDoubleClick = (option: TOption) => {
     const value = getValue(option);
 
-    if (!props.value.includes(value)) {
-        updateValue([...props.value, value]);
+    if (!inputValue.value.includes(value)) {
+        inputValue.value = [...inputValue.value, value];
     }
 
     availableSelected.value = [];
@@ -117,7 +112,7 @@ const onAvailableDoubleClick = (option: TOption) => {
  * Move an individual Selected option by double-clicking it.
  */
 const onAssignedDoubleClick = (value: string) => {
-    updateValue(props.value.filter((item) => item !== value));
+    inputValue.value = inputValue.value.filter((item) => item !== value);
 
     assignedSelected.value = [];
 };
@@ -206,7 +201,7 @@ const onAssignedDoubleClick = (value: string) => {
                 <button
                     type="button"
                     class="px-2 py-1 bg-slate-200 border border-slate-200 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
-                    :disabled="disabled || props.value.length === 0"
+                    :disabled="disabled || inputValue.length === 0"
                     title="Remove all"
                     aria-label="Remove all selected items"
                     @click="onRemoveItems(true)"

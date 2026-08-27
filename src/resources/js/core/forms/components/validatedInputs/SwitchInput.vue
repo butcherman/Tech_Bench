@@ -26,7 +26,7 @@ const { errorMessage, value } = useValidationHelper<boolean>(
 <template>
     <BaseSwitchInput
         v-bind="props"
-        v-model:value="value"
+        v-model="value"
         :error-message="errorMessage"
         @focus="$emit('focus')"
         @blur="$emit('blur')"

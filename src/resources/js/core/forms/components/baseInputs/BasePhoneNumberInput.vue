@@ -8,14 +8,12 @@ defineSlots<{
 }>();
 
 const emit = defineEmits<{
-    "update:value": [string];
     focus: [];
     blur: [];
 }>();
 
 const props = defineProps<{
     name: string;
-    value: string;
 
     disabled?: boolean;
     errorMessage?: string;
@@ -33,10 +31,7 @@ const { hasFocus, onFocus, onBlur, inputVariantStyle } = useInputHelper(
 
 const inputId = useId();
 
-const inputValue = computed({
-    get: () => formatPhone(props.value),
-    set: (value) => emit("update:value", cleanPhone(value)),
-});
+
 
 const inputPlaceholder = computed(() =>
     props.placeholder ? props.placeholder : "(XXX) XXX-XXXX",
@@ -67,6 +62,11 @@ const formatPhone = (value: string) => {
 
     return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
 };
+
+const inputValue = defineModel<string>({
+    get: formatPhone,
+    set: cleanPhone,
+});
 </script>
 
 <template>

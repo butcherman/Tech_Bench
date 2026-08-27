@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import InputWrapper from "../wrappers/InputWrapper.vue";
-import { computed, useId } from "vue";
+import {  useId } from "vue";
 import { useInputHelper } from "../../composables/inputHelper.js";
 import { useVariantHelper } from "@/core/composables/variantHelper.js";
 
@@ -9,17 +9,15 @@ defineSlots<{
 }>();
 
 const emit = defineEmits<{
-    "update:value": [string];
     focus: [];
     blur: [];
-    change: [string];
+    change: [modelValue: string | null];
 }>();
 
 const props = defineProps<{
     name: string;
     min: number;
     max: number;
-    value: string;
 
     autocomplete?: string;
     disabled?: boolean;
@@ -33,14 +31,14 @@ const props = defineProps<{
     valueText?: string;
 }>();
 
+const inputValue = defineModel<string | null>({
+    required: true,
+});
+
 const { getVariantBase } = useVariantHelper();
 const { hasFocus, onFocus, onBlur } = useInputHelper(props, emit);
 
 const inputId = useId();
-const inputValue = computed({
-    get: () => props.value,
-    set: (value) => emit("update:value", value),
-});
 </script>
 
 <template>
