@@ -151,7 +151,7 @@ class BuildAdminMenuUnitTest extends TestCase
                     'route' => route('admin.user.password-policy.edit'),
                 ],
                 [
-                    'label' => 'User Settings',
+                    'label' => 'User Security Settings',
                     'icon' => 'cog',
                     'route' => route('admin.user.user-settings.edit'),
                 ],

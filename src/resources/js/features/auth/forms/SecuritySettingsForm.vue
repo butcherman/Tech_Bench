@@ -31,17 +31,10 @@ const schema = object({
     twoFa: object({
         required: boolean().required(),
         allow_save_device: boolean().required(),
-        allow_via_email: boolean()
-            .required()
-            .when(["required", "allow_via_authenticator"], {
-                is: (required: boolean, app: boolean): boolean =>
-                    required && !app,
-                then: (schema) =>
-                    schema.oneOf(
-                        [true],
-                        "At least one Authenticator method must be selected",
-                    ),
-            }),
+        methods: object({
+            email: boolean().required(),
+            authenticator: boolean().required(),
+        }),
     }),
     oath: object({
         allow_login: boolean().required(),

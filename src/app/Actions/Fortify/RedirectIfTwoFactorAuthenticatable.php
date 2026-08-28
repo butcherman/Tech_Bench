@@ -97,10 +97,12 @@ class RedirectIfTwoFactorAuthenticatable extends BaseRedirectIfTwoFactorAuthenti
             'login.remember' => $request->boolean('remember'),
         ]);
 
+        // If no methods are allowed, throw exception
         if (count($methods) === 0) {
             throw new InvalidMultiFactorAuthException('Two-factor authentication is required, but no methods are enabled.');
         }
 
+        // If multiple methods are allowed but none setup, redirect to setup
         if (count($methods) > 1) {
             $request->session()->put(
                 'url.intended',
@@ -110,6 +112,7 @@ class RedirectIfTwoFactorAuthenticatable extends BaseRedirectIfTwoFactorAuthenti
             return redirect()->route('two-factor.setup.index');
         }
 
+        // Return to the setup for the one method that is allowed
         return match ($methods[0]) {
             'email' => redirect()->route('two-factor.setup.email'),
             'authenticator' => redirect()->route('two-factor.setup.authenticator'),

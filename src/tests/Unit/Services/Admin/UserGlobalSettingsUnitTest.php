@@ -130,10 +130,10 @@ class UserGlobalSettingsUnitTest extends TestCase
     public function test_get_two_fa_config(): void
     {
         $shouldBe = [
+            'enabled' => (bool) config('auth.twoFa.enabled'),
             'required' => (bool) config('auth.twoFa.required'),
             'allow_save_device' => (bool) config('auth.twoFa.allow_save_device'),
-            'allow_via_email' => (bool) config('auth.twoFa.allow_via_email'),
-            'allow_via_authenticator' => (bool) config('auth.twoFa.allow_via_authenticator'),
+            'methods' => config('auth.twoFa.methods'),
         ];
 
         $testObj = new UserGlobalSettingsService;
@@ -154,11 +154,11 @@ class UserGlobalSettingsUnitTest extends TestCase
         $shouldBe = [
             'allow_login' => (bool) config('services.azure.allow_login'),
             'allow_register' => (bool) config('services.azure.allow_register'),
-            'default_role_id' => (int) config('services.azure.default_role_id'),
+            'default_role_id' => (string) config('services.azure.default_role_id'),
             'tenant' => config('services.azure.tenant'),
             'client_id' => config('services.azure.client_id'),
             'client_secret' => config('services.azure.client_secret') ? __('admin.fake-password') : '',
-            'secret_expires' => Carbon::parse(config('services.azure.secret_expires'))->format('m/d/Y'),
+            'secret_expires' => Carbon::parse(config('services.azure.secret_expires'))->format('m-d-Y'),
             'redirect' => config('services.azure.redirect') ?? config('app.url').'/auth/callback',
         ];
 

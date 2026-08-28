@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import TextInputWrapper from "../wrappers/TextInputWrapper.vue";
-import {  onMounted, ref, useId } from "vue";
+import { onMounted, ref, useId } from "vue";
 import { useInputHelper } from "../../composables/inputHelper.js";
 import { useDateHelper } from "../../composables/dateHelper.js";
 
@@ -104,7 +104,7 @@ const onMonthSelected = (month: string): void => {
  * Assign the input value
  */
 const onDaySelected = (day: number | null): void => {
-    let rawDateValue = `${selectedMonth.value + 1}-${day}-${selectedYear.value}`;
+    let rawDateValue = `${selectedYear.value}-${selectedMonth.value + 1}-${day}`;
     let formatted = `${selectedMonthName.value} ${day}, ${selectedYear.value}`;
 
     inputValue.value = rawDateValue;
