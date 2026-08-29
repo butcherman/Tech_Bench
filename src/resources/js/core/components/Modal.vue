@@ -20,13 +20,10 @@ const props = defineProps<{
 
 const show = defineModel();
 
-watch(
-    () => show,
-    (show) => {
-        if (show.value) emit("show");
-        if (!show.value) emit("hide");
-    },
-);
+watch(show, (value) => {
+    if (value) emit("show");
+    else emit("hide");
+});
 
 /**
  * Determine if the modal should close when the backdrop is clicked
