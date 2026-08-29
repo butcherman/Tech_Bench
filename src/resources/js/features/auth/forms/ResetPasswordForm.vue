@@ -21,6 +21,10 @@ const submitRoute = computed(() =>
     props.init ? initUpdate.url(props.token) : update.url(),
 );
 
+const submitText = computed(() =>
+    props.init ? "Create Password" : "Reset Password",
+);
+
 const initValues = {
     email: props.email,
     token: props.token,
@@ -43,7 +47,7 @@ const schema = object({
     <VueForm
         name="reset-password"
         submit-method="post"
-        submit-text="Reset Password"
+        :submit-text="submitText"
         :initial-values="initValues"
         :validation-schema="schema"
         :submit-route="submitRoute"

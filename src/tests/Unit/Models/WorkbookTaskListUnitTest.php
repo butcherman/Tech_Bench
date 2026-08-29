@@ -4,7 +4,7 @@ namespace Tests\Unit\Models;
 
 use App\Models\CustomerEquipmentWorkbook;
 use App\Models\WorkbookTaskList;
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
 
 class WorkbookTaskListUnitTest extends TestCase
 {
