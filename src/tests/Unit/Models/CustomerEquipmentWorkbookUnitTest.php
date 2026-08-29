@@ -6,6 +6,7 @@ use App\Models\Customer;
 use App\Models\CustomerEquipment;
 use App\Models\CustomerEquipmentWorkbook;
 use App\Models\WorkbookTableValue;
+use App\Models\WorkbookTaskList;
 use App\Models\WorkbookValue;
 use Tests\TestCase;
 
@@ -98,6 +99,29 @@ class CustomerEquipmentWorkbookUnitTest extends TestCase
         ]);
 
         $this->assertCount(10, $this->model->PublicWorkbookTableValues);
+    }
+
+    public function test_task_list_relationship(): void
+    {
+        WorkbookTaskList::factory()->count(10)->create([
+            'wb_id' => $this->model->wb_id,
+        ]);
+
+        $this->assertCount(10, $this->model->TaskLists);
+    }
+
+    public function test_public_task_list_relationship(): void
+    {
+        WorkbookTaskList::factory()->count(10)->create([
+            'wb_id' => $this->model->wb_id,
+            'public' => true,
+        ]);
+        WorkbookTaskList::factory()->count(10)->create([
+            'wb_id' => $this->model->wb_id,
+            'public' => false,
+        ]);
+
+        $this->assertCount(10, $this->model->PublicTaskLists);
     }
 
     public function test_customer_relationship(): void
