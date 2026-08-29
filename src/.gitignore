@@ -8,7 +8,7 @@
 /storage/pail
 /stubs
 /tests/_Report
-# /tests/Vitest/_Report
+/tests/Vitest/_Report
 /tests/_tmp
 /vendor
 .env

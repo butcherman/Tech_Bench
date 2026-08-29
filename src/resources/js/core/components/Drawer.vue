@@ -32,7 +32,7 @@ const positionClass = computed(() => {
             <Transition name="drawer-backdrop" appear>
                 <div
                     v-if="show"
-                    class="fixed inset-0 bg-gray-500/75 z-40"
+                    class="drawer-backdrop fixed inset-0 bg-gray-500/75 z-40"
                     @click="show = false"
                 />
             </Transition>
@@ -40,17 +40,17 @@ const positionClass = computed(() => {
                 <div
                     v-if="show"
                     id="drawer"
-                    class="fixed p-4 overflow-y-auto bg-white border-slate-300 z-50"
+                    class="tb-drawer fixed p-4 overflow-y-auto bg-white border-slate-300 z-50"
                     :class="positionClass"
                     tabindex="-1"
                 >
                     <div
-                        class="border-b border-slate-200 pb-4 mb-5 flex flex-row-reverse"
+                        class="tb-drawer-body border-b border-slate-200 pb-4 mb-5 flex flex-row-reverse"
                     >
                         <BaseBadge
                             icon="xmark"
                             variant="light"
-                            class="text-white pointer"
+                            class="hide-button text-white pointer"
                             circle
                             @click="show = false"
                         />
