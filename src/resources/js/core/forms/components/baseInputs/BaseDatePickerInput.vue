@@ -1,19 +1,17 @@
 <script setup lang="ts">
 import TextInputWrapper from "../wrappers/TextInputWrapper.vue";
-import { computed, ref, useId } from "vue";
+import { onMounted, ref, useId } from "vue";
 import { useInputHelper } from "../../composables/inputHelper.js";
 import { useDateHelper } from "../../composables/dateHelper.js";
 
 const emit = defineEmits<{
-    "update:value": [string];
     focus: [];
     blur: [];
-    change: [string];
+    change: [value: string | null];
 }>();
 
 const props = defineProps<{
     name: string;
-    value: string;
 
     autocomplete?: string;
     disabled?: boolean;
@@ -26,6 +24,10 @@ const props = defineProps<{
     placeholder?: string;
     variant?: InputVariant;
 }>();
+
+const inputValue = defineModel<string | null>({
+    required: true,
+});
 
 const { hasFocus, onFocus, onBlur, inputVariantStyle } = useInputHelper(
     props,
@@ -48,10 +50,6 @@ const {
 const inputId = useId();
 const showCal = ref(false);
 const formattedValue = ref();
-const inputValue = computed({
-    get: () => props.value,
-    set: (value) => emit("update:value", value),
-});
 
 /**
  * Open the Calendar input to allow user to select the date.
@@ -65,7 +63,7 @@ const triggerFocus = () => {
  * If the input was cleared, we need to clear the head end value as well.
  * If date was manually inputted, we need to properly format it.
  */
-const onChange = () => {
+const reformatInput = () => {
     if (!formattedValue.value) {
         inputValue.value = "";
         return;
@@ -77,6 +75,11 @@ const onChange = () => {
     selectMonth(monthNames[newDate.getMonth()]);
     onDaySelected(newDate.getDate());
 };
+
+onMounted(() => {
+    formattedValue.value = inputValue.value;
+    reformatInput();
+});
 
 /*
 |-------------------------------------------------------------------------------
@@ -101,7 +104,7 @@ const onMonthSelected = (month: string): void => {
  * Assign the input value
  */
 const onDaySelected = (day: number | null): void => {
-    let rawDateValue = `${selectedMonth.value + 1}-${day}-${selectedYear.value}`;
+    let rawDateValue = `${selectedYear.value}-${selectedMonth.value + 1}-${day}`;
     let formatted = `${selectedMonthName.value} ${day}, ${selectedYear.value}`;
 
     inputValue.value = rawDateValue;
@@ -133,7 +136,7 @@ const onDaySelected = (day: number | null): void => {
             :name="name"
             @focus="triggerFocus"
             @blur="onBlur"
-            @change="onChange"
+            @change="reformatInput"
         />
         <div
             class="absolute inset-e-1.5 bottom-1.5 text-muted pointer"

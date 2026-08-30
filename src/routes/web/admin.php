@@ -54,10 +54,10 @@ Route::middleware('auth.secure')->prefix('administration')->name('admin.')->grou
         |-----------------------------------------------------------------------
         */
         Route::controller(UserSettingsController::class)->group(function () {
-            Route::get('user-settings', 'edit')
+            Route::get('user-security-settings', 'edit')
                 ->name('user-settings.edit')
-                ->breadcrumb('User Settings', 'admin.index');
-            Route::put('user-settings', 'update')
+                ->breadcrumb('User Security Settings', 'admin.index');
+            Route::put('user-security-settings', 'update')
                 ->name('user-settings.update');
         });
     });

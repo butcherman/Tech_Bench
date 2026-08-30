@@ -26,7 +26,7 @@ class UserSettingsController extends Controller
     {
         $this->authorize('viewAny', AppSettings::class);
 
-        return Inertia::render('Admin/User/UserSettings', [
+        return Inertia::render('Auth/SecuritySettings', [
             'auto-logout-timer' => fn () => intval(config('auth.auto_logout_timer')),
             'two-fa' => fn () => $this->svc->getTwoFaConfig(),
             'oath' => fn () => $this->svc->getOathConfig(),

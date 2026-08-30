@@ -15,7 +15,7 @@ const skelWidth = computed(() => {
 </script>
 
 <template>
-    <div class="w-full animate-pulse">
+    <div class="skeleton w-full animate-pulse">
         <div
             class="block h-3 bg-gray-300 rounded-full"
             :style="`width: ${skelWidth}%`"

@@ -19,7 +19,7 @@ type InputBaseEmit = (event: string) => unknown;
 
 interface InputSelectProps<
     TGroup extends Record<string, unknown>,
-    TOption extends string | Record<string, unknown>,
+    TOption extends string | object,
 > extends InputBaseProps {
     list: TGroup[] | TOption[];
     textField?: TOption extends string ? never : keyof TOption;

@@ -5,7 +5,7 @@
 >
 import BaseBadge from "@/core/components/badges/BaseBadge.vue";
 import InputWrapper from "../wrappers/InputWrapper.vue";
-import { computed, ref, useId } from "vue";
+import {  ref, useId } from "vue";
 import { useDataHelper } from "@/core/composables/dataHelper.js";
 import { useInputHelper } from "../../composables/inputHelper.js";
 import { useSelectHelper } from "../../composables/selectHelper.js";
@@ -15,7 +15,6 @@ defineSlots<{
 }>();
 
 const emit = defineEmits<{
-    "update:value": [string[]];
     focus: [];
     blur: [];
 }>();
@@ -23,7 +22,6 @@ const emit = defineEmits<{
 const props = defineProps<{
     name: string;
     list: TOption[];
-    value: string[];
 
     autocomplete?: string;
     disabled?: boolean;
@@ -37,6 +35,10 @@ const props = defineProps<{
     variant?: InputVariant;
 }>();
 
+const inputValue = defineModel<string[]>({
+    required: true,
+});
+
 const { indexData } = useDataHelper();
 const { getValue, getOptionText, getOptionTextFromValue } =
     useSelectHelper(props);
@@ -47,10 +49,6 @@ const { hasFocus, onFocus, onBlur, inputVariantStyle } = useInputHelper(
 
 const inputId = useId();
 const showSelect = ref(false);
-const inputValue = computed({
-    get: () => props.value,
-    set: (value) => emit("update:value", value),
-});
 
 /*
 |-------------------------------------------------------------------------------

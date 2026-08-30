@@ -269,6 +269,7 @@ class User extends Authenticatable
     public function getAdminLoad(): User
     {
         return $this->makeVisible([
+            'two_factor_via',
             'role_id',
             'created_at',
             'updated_at',

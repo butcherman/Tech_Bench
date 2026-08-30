@@ -2,6 +2,7 @@ import Modal from "@/core/components/Modal.vue";
 import { mount } from "@vue/test-utils";
 import { describe, expect, it, vi } from "vitest";
 import { afterEach } from "vitest";
+import { DirectiveBinding, nextTick } from "vue";
 
 afterEach(() => {
     vi.useRealTimers();
@@ -12,7 +13,7 @@ const outsideClickHandler = vi.fn();
 const mountModal = (props = {}, options = {}) => {
     return mount(Modal, {
         props: {
-            show: true,
+            modelValue: true,
             ...props,
         },
         attachTo: document.body,
@@ -25,7 +26,9 @@ const mountModal = (props = {}, options = {}) => {
                 },
             },
             stubs: {
-                "fa-icon": true,
+                "fa-icon": {
+                    template: "<span />",
+                },
                 Transition: {
                     template: "<div><slot /></div>",
                 },
@@ -48,7 +51,7 @@ describe("Modal", () => {
 
     it("does not render when show is false", () => {
         const wrapper = mountModal({
-            show: false,
+            modelValue: false,
         });
 
         expect(document.body.querySelector(".tb-modal")).toBeNull();
@@ -56,7 +59,7 @@ describe("Modal", () => {
         wrapper.unmount();
     });
 
-    it("emits update:show when the close button is clicked", async () => {
+    it("emits update:modelValue when the close button is clicked", async () => {
         const wrapper = mountModal();
 
         const button = document.body.querySelector(".hide-button");
@@ -65,7 +68,7 @@ describe("Modal", () => {
 
         await button!.dispatchEvent(new MouseEvent("click"));
 
-        expect(wrapper.emitted("update:show")).toEqual([[false]]);
+        expect(wrapper.emitted("update:modelValue")).toEqual([[false]]);
 
         wrapper.unmount();
     });
@@ -226,7 +229,9 @@ describe("Modal", () => {
 
         outsideClickHandler();
 
-        expect(wrapper.emitted("update:show")).toEqual([[false]]);
+        expect(wrapper.emitted("update:modelValue")).toEqual([[false]]);
+
+        wrapper.unmount();
     });
 
     it("prevents closing when preventOutsideClick is true", () => {
@@ -237,51 +242,62 @@ describe("Modal", () => {
         outsideClickHandler();
 
         expect(wrapper.emitted("hidePrevented")).toHaveLength(1);
-        expect(wrapper.emitted("update:show")).toBeUndefined();
+        expect(wrapper.emitted("update:modelValue")).toBeUndefined();
+
+        wrapper.unmount();
     });
 
-    // it("shows attention when outside click is prevented", () => {
-    //     vi.useFakeTimers();
+    it("shows attention when outside click is prevented", async () => {
+        vi.useFakeTimers();
 
-    //     const wrapper = mountModal({
-    //         preventOutsideClick: true,
-    //     });
+        try {
+            const wrapper = mountModal({
+                preventOutsideClick: true,
+            });
 
-    //     const modal = document.body.querySelector(".tb-modal-body");
+            const modal = document.body.querySelector(".tb-modal-body");
 
-    //     outsideClickHandler();
+            outsideClickHandler();
 
-    //     expect(modal?.classList).toContain("attention");
+            await nextTick();
 
-    //     vi.advanceTimersByTime(1000);
+            expect(modal?.classList).toContain("attention");
 
-    //     expect(modal?.classList).not.toContain("attention");
+            vi.runAllTimers();
+            await nextTick();
 
-    //     vi.useRealTimers();
+            expect(modal?.classList).not.toContain("attention");
 
-    //     wrapper.unmount();
-    // });
+            wrapper.unmount();
+        } finally {
+            vi.useRealTimers();
+        }
+    });
 
     it("emits show when show changes to true", async () => {
         const wrapper = mountModal({
-            show: false,
+            modelValue: false,
         });
 
         await wrapper.setProps({
-            show: true,
+            modelValue: true,
         });
 
         expect(wrapper.emitted("show")).toHaveLength(1);
+
+        wrapper.unmount();
     });
 
     it("emits hide when show changes to false", async () => {
         const wrapper = mountModal();
 
         await wrapper.setProps({
-            show: false,
+            modelValue: false,
         });
 
         expect(wrapper.emitted("hide")).toHaveLength(1);
+
+        wrapper.unmount();
     });
 
     it("emits shown after the modal enters", async () => {
@@ -289,10 +305,22 @@ describe("Modal", () => {
             {},
             {
                 global: {
+                    directives: {
+                        "on-click-outside": {
+                            mounted(el: any, binding: DirectiveBinding) {
+                                outsideClickHandler.mockImplementation(
+                                    binding.value,
+                                );
+                            },
+                        },
+                    },
                     stubs: {
                         Transition: {
                             template: "<div><slot /></div>",
                             emits: ["after-enter", "after-leave"],
+                        },
+                        "fa-icon": {
+                            template: "<span />",
                         },
                     },
                 },
@@ -304,5 +332,43 @@ describe("Modal", () => {
             .vm.$emit("after-enter");
 
         expect(wrapper.emitted("shown")).toHaveLength(1);
+
+        wrapper.unmount();
+    });
+
+    it("emits hidden after the modal leaves", async () => {
+        const wrapper = mountModal(
+            {},
+            {
+                global: {
+                    directives: {
+                        "on-click-outside": {
+                            mounted(el: any, binding: DirectiveBinding) {
+                                outsideClickHandler.mockImplementation(
+                                    binding.value,
+                                );
+                            },
+                        },
+                    },
+                    stubs: {
+                        Transition: {
+                            template: "<div><slot /></div>",
+                            emits: ["after-enter", "after-leave"],
+                        },
+                        "fa-icon": {
+                            template: "<span />",
+                        },
+                    },
+                },
+            },
+        );
+
+        await wrapper
+            .findComponent({ name: "Transition" })
+            .vm.$emit("after-leave");
+
+        expect(wrapper.emitted("hidden")).toHaveLength(1);
+
+        wrapper.unmount();
     });
 });

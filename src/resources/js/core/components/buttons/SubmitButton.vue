@@ -3,10 +3,12 @@ import { computed } from "vue";
 import { useVariantHelper } from "@/core/composables/variantHelper";
 
 const props = defineProps<{
+    text: string;
+
+    disabled?: boolean;
     flat?: boolean;
     icon?: string;
     pill?: boolean;
-    text?: string;
     size?: ComponentSize;
     variant?: VariantType;
 }>();
@@ -39,6 +41,7 @@ const sizeClass = computed<string>(() => {
             variantClass,
             { 'rounded-full!': pill, 'shadow-xl': !flat },
         ]"
+        :disabled="disabled"
         class="rounded-lg inline-block text-center pointer"
         type="submit"
     >

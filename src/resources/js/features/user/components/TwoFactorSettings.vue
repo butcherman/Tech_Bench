@@ -2,7 +2,7 @@
 import BaseButton from "@/core/components/buttons/BaseButton.vue";
 import Modal from "@/core/components/Modal.vue";
 import { computed, ref } from "vue";
-import { dataGet } from "@/core/services/axiosWrapper";
+import { dataGet } from "@/core/utilities/axiosWrapper";
 import { index } from "@/wayfinder/routes/two-factor/setup";
 import { reset } from "@/wayfinder/routes/admin/user/two-factor";
 import { router } from "@inertiajs/vue3";

@@ -14,6 +14,7 @@ const props = defineProps<{
     href?: string;
     icon?: string;
     pointer?: boolean;
+    size?: ComponentSize;
     text?: string;
     variant?: VariantType;
 }>();

@@ -6,15 +6,13 @@ import { useInputHelper } from "../../composables/inputHelper.js";
 type OTPDigit = "" | `${string}`;
 
 const emit = defineEmits<{
-    "update:value": [string];
     focus: [];
     blur: [];
-    change: [string];
+    change: [modelValue: string | null];
 }>();
 
 const props = defineProps<{
     name: string;
-    value: string;
 
     disabled?: boolean;
     errorMessage?: string;
@@ -24,15 +22,14 @@ const props = defineProps<{
     variant?: InputVariant;
 }>();
 
+const inputValue = defineModel<string | null>({
+    required: true,
+});
+
 const { hasFocus, onFocus, onBlur, inputVariantStyle } = useInputHelper(
     props,
     emit,
 );
-
-const inputValue = computed({
-    get: () => props.value,
-    set: (value) => emit("update:value", value),
-});
 
 const otpInput = useTemplateRef<HTMLDivElement>("otp-wrapper");
 const otpLength = computed<number>(() => props.length ?? 4);

@@ -1,7 +1,7 @@
 <script setup lang="ts" generic="TFormData extends FormDataType<TFormData>">
 import ValidatedVueForm from "./ValidatedVueForm.vue";
 import { router } from "@inertiajs/vue3";
-import { ref, useTemplateRef } from "vue";
+import {  ref, useTemplateRef } from "vue";
 import { GenericObject, useForm, Path } from "vee-validate";
 import type { FormDataType, Errors, Page } from "@inertiajs/core";
 
@@ -97,13 +97,23 @@ const onSuccess = (res: Page) => {
 |-------------------------------------------------------------------------------
 */
 defineExpose({
-    getFieldValue: validatedForm.value?.getFieldValue,
-    setFieldError: validatedForm.value?.setFieldError,
-    setValue: validatedForm.value?.setValue,
-    resetForm: validatedForm.value?.resetForm,
-    isDirty: validatedForm.value?.isDirty,
-    values: validatedForm.value?.values,
-    isSubmitting,
+    getFieldValue: (
+        ...args: Parameters<
+            NonNullable<typeof validatedForm.value>["getFieldValue"]
+        >
+    ) => validatedForm.value?.getFieldValue(...args),
+
+    setFieldError: (
+        ...args: Parameters<
+            NonNullable<typeof validatedForm.value>["setFieldError"]
+        >
+    ) => validatedForm.value?.setFieldError(...args),
+
+    setValue: (
+        ...args: Parameters<NonNullable<typeof validatedForm.value>["setValue"]>
+    ) => validatedForm.value?.setValue(...args),
+
+    resetForm: () => validatedForm.value?.resetForm(),
 });
 </script>
 

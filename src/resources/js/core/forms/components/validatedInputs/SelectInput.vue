@@ -1,8 +1,4 @@
-<script
-    setup
-    lang="ts"
-    generic="TOption extends string | Record<string, unknown>"
->
+<script setup lang="ts" generic="TOption extends string | object">
 import BaseSelectInput from "../baseInputs/BaseSelectInput.vue";
 import { useValidationHelper } from "../../composables/validationHelper.js";
 import { toRef } from "vue";
@@ -33,7 +29,7 @@ const { errorMessage, value } = useValidationHelper<string>(toRef(props.name));
 <template>
     <BaseSelectInput
         v-bind="props"
-        v-model:value="value"
+        v-model="value"
         :error-message="errorMessage"
         @focus="$emit('focus')"
         @blur="$emit('blur')"

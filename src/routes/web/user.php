@@ -13,6 +13,8 @@ use App\Http\Controllers\User\UpdateUserSettingsController;
 use App\Http\Controllers\User\UserPasswordController;
 use App\Http\Controllers\User\UserSettingsController;
 use App\Http\Middleware\CheckPasswordExpiration;
+use App\Models\UserRole;
+use App\Models\User;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Http\Controllers\PasswordResetLinkController;
@@ -88,10 +90,10 @@ Route::middleware('auth.secure')->group(function () {
 
         Route::resource('user', UserAdministrationController::class)
             ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
-                $breadcrumbs->index('User Administration', 'admin.index')
+                $breadcrumbs->index('Users', 'admin.index')
                     ->create('New User')
-                    ->show('User Details')
-                    ->edit('Edit User Details');
+                    ->show(fn (User $user) => $user->fullName)
+                    ->edit('Edit Profile');
             })->withTrashed();
 
         /*
@@ -108,7 +110,7 @@ Route::middleware('auth.secure')->group(function () {
             ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
                 $breadcrumbs->index('Roles and Permissions', 'admin.index')
                     ->create('Build New Role')
-                    ->show('View Role')
+                    ->show(fn(UserRole $role) => $role->name)
                     ->edit('Modify Role');
             });
     });
@@ -125,7 +127,7 @@ Route::middleware('guest')->controller(InitializeUserController::class)->group(f
         ->missing(function () {
             throw new InitializeUserLinkMissingException;
         });
-    Route::put('initialize-account/{token}', 'update')
+    Route::post('initialize-account/{token}', 'update')
         ->name('initialize.update')
         ->missing(function () {
             throw new InitializeUserLinkMissingException;

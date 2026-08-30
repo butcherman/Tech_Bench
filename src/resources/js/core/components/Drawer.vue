@@ -2,13 +2,15 @@
 import BaseBadge from "./badges/BaseBadge.vue";
 import { computed } from "vue";
 
-const emit = defineEmits(["update:show"]);
-
 const props = defineProps<{
-    show: boolean;
     position?: Placement;
     title?: string;
 }>();
+
+const show = defineModel({
+    required: true,
+    default: false,
+});
 
 const positionClass = computed(() => {
     switch (props.position) {
@@ -22,43 +24,35 @@ const positionClass = computed(() => {
             return "bottom-0 left-0 right-0 border-t w-full min-h-96";
     }
 });
-
-/**
- * Status of the Drawer - opened or closed
- */
-const isOpen = computed({
-    get: () => props.show,
-    set: (value) => emit("update:show", value),
-});
 </script>
 
 <template>
     <Teleport to="body">
-        <div v-if="isOpen" id="drawer-wrapper">
+        <div v-if="show" id="drawer-wrapper">
             <Transition name="drawer-backdrop" appear>
                 <div
-                    v-if="isOpen"
-                    class="fixed inset-0 bg-gray-500/75 z-40"
-                    @click="isOpen = false"
+                    v-if="show"
+                    class="drawer-backdrop fixed inset-0 bg-gray-500/75 z-40"
+                    @click="show = false"
                 />
             </Transition>
             <Transition :name="`drawer-${position ?? 'bottom'}`" appear>
                 <div
-                    v-if="isOpen"
+                    v-if="show"
                     id="drawer"
-                    class="fixed p-4 overflow-y-auto bg-white border-slate-300 z-50"
+                    class="tb-drawer fixed p-4 overflow-y-auto bg-white border-slate-300 z-50"
                     :class="positionClass"
                     tabindex="-1"
                 >
                     <div
-                        class="border-b border-slate-200 pb-4 mb-5 flex flex-row-reverse"
+                        class="tb-drawer-body border-b border-slate-200 pb-4 mb-5 flex flex-row-reverse"
                     >
                         <BaseBadge
                             icon="xmark"
                             variant="light"
-                            class="text-white pointer"
+                            class="hide-button text-white pointer"
                             circle
-                            @click="isOpen = false"
+                            @click="show = false"
                         />
                         <h5 class="grow text-muted">
                             {{ title }}

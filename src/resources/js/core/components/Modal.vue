@@ -2,7 +2,6 @@
 import { computed, ref, watch } from "vue";
 
 const emit = defineEmits<{
-    "update:show": [boolean];
     hidePrevented: [];
     hide: [];
     hidden: [];
@@ -11,8 +10,6 @@ const emit = defineEmits<{
 }>();
 
 const props = defineProps<{
-    show: boolean;
-
     hideBackdrop?: boolean;
     hideClose?: boolean;
     position?: "top" | "center" | "bottom";
@@ -21,20 +18,11 @@ const props = defineProps<{
     title?: string;
 }>();
 
-watch(
-    () => props.show,
-    (show) => {
-        if (show) emit("show");
-        if (!show) emit("hide");
-    },
-);
+const show = defineModel();
 
-/**
- * Modal visual state
- */
-const isOpen = computed({
-    get: () => props.show,
-    set: (value) => emit("update:show", value),
+watch(show, (value) => {
+    if (value) emit("show");
+    else emit("hide");
 });
 
 /**
@@ -49,7 +37,7 @@ const onBackgroundClicked = () => {
         return;
     }
 
-    isOpen.value = false;
+    show.value = false;
 };
 
 /**
@@ -88,7 +76,7 @@ const attentionRequired = ref<boolean>(false);
             @after-leave="$emit('hidden')"
         >
             <div
-                v-if="isOpen"
+                v-if="show"
                 class="tb-modal fixed inset-0 z-50 w-screen overflow-y-auto flex justify-center"
                 :class="[modalPosition, { 'bg-gray-500/75': !hideBackdrop }]"
             >
@@ -103,7 +91,7 @@ const attentionRequired = ref<boolean>(false);
                     >
                         <button
                             class="pointer hide-button"
-                            @click="isOpen = false"
+                            @click="show = false"
                         >
                             <fa-icon icon="close" />
                         </button>

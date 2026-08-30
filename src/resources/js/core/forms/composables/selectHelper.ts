@@ -2,7 +2,7 @@ import { computed } from "vue";
 
 export const useSelectHelper = <
     TGroup extends Record<string, unknown>,
-    TOption extends string | Record<string, unknown>,
+    TOption extends string | object,
 >(
     props: InputSelectProps<TGroup, TOption>,
 ) => {

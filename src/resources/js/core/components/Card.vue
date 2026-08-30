@@ -22,7 +22,7 @@ const cardSize = computed(() => {
     >
         <div
             v-if="title || $slots.title"
-            class="text-muted border-b mb-5 pb-1 flex"
+            class="card-title text-muted border-b mb-5 pb-1 flex"
         >
             <div class="grow">
                 <slot name="title">

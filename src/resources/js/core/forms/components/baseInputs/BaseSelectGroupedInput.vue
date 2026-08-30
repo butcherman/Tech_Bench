@@ -7,7 +7,7 @@
     "
 >
 import InputWrapper from "../wrappers/InputWrapper.vue";
-import { computed, useId } from "vue";
+import {  useId } from "vue";
 import { useInputHelper } from "../../composables/inputHelper.js";
 import { useSelectHelper } from "../../composables/selectHelper.js";
 
@@ -16,16 +16,14 @@ defineSlots<{
 }>();
 
 const emit = defineEmits<{
-    "update:value": [string];
     focus: [];
     blur: [];
-    change: [string];
+    change: [modelValue: string | null];
 }>();
 
 const props = defineProps<{
     name: string;
     list: TGroup[];
-    value: string;
 
     autocomplete?: string;
     disabled?: boolean;
@@ -41,6 +39,10 @@ const props = defineProps<{
     variant?: InputVariant;
 }>();
 
+const inputValue = defineModel<string | null>({
+    required: true,
+});
+
 const { hasFocus, onFocus, onBlur, inputVariantStyle } = useInputHelper(
     props,
     emit,
@@ -49,10 +51,6 @@ const { getValue, getOptionText, getGroupItems, getGroupText } =
     useSelectHelper(props);
 
 const inputId = useId();
-const inputValue = computed({
-    get: () => props.value,
-    set: (value) => emit("update:value", value),
-});
 </script>
 
 <template>
@@ -80,7 +78,7 @@ const inputValue = computed({
                     :placeholder="placeholder ?? ''"
                     @focus="onFocus"
                     @blur="onBlur"
-                    @change="$emit('change', value)"
+                    @change="$emit('change', inputValue)"
                 >
                     <optgroup
                         v-for="group in list"

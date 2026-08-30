@@ -28,7 +28,7 @@ const { errorMessage, value } = useValidationHelper<string>(
 <template>
     <BaseTextInput
         v-bind="props"
-        v-model:value="value"
+        v-model="value"
         :error-message="errorMessage"
         @focus="$emit('focus')"
         @blur="$emit('blur')"

@@ -2,7 +2,7 @@
 import Overlay from "@/core/components/Overlay.vue";
 import TwoFactorForm from "../forms/TwoFactorForm.vue";
 import { confirm } from "@/wayfinder/routes/two-factor";
-import { dataGet, dataPost, isLoading } from "@/core/services/axiosWrapper";
+import { dataGet, dataPost, isLoading } from "@/core/utilities/axiosWrapper.js";
 import { onMounted, ref } from "vue";
 import { enable, qrCode } from "@/wayfinder/routes/two-factor";
 

@@ -28,7 +28,7 @@ const { errorMessage, value } = useValidationHelper<JSONContent>(
 <template>
     <BaseEditorInput
         v-bind="props"
-        v-model:value="value"
+        v-model="value"
         :error-message="errorMessage"
         @focus="$emit('focus')"
         @blur="$emit('blur')"
