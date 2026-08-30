@@ -67,7 +67,7 @@ const schema = object({
         <fieldset class="border rounded-xl p-2 flex flex-col gap-3">
             <legend class="text-muted">Basic Settings</legend>
             <TextInput label="Site URL" name="url" prepend="https://" focus>
-                <template #start-text>
+                <template #prepend-input>
                     <span>https://</span>
                 </template>
             </TextInput>

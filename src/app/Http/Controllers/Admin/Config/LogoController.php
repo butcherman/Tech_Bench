@@ -25,6 +25,7 @@ class LogoController extends Controller
 
         return Inertia::render('Admin/Config/Logo', [
             'current-logo' => config('app.logo'),
+            'is-default' => config('app.logo') === '/images/TechBenchLogo.png',
         ]);
     }
 

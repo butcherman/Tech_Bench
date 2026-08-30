@@ -32,5 +32,9 @@ const { errorMessage, value } = useValidationHelper<string>(
         :error-message="errorMessage"
         @focus="$emit('focus')"
         @blur="$emit('blur')"
-    />
+    >
+        <template v-for="(_, slot) of $slots" #[slot]="scope">
+            <slot :name="slot" v-bind="scope" />
+        </template>
+    </BaseTextInput>
 </template>
