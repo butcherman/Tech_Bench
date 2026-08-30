@@ -15,3 +15,10 @@ interface SslCertificateData {
     signature: string;
     organization: string;
 }
+
+interface AppFeatureList {
+    file_links: boolean;
+    enable_workbooks: boolean;
+    public_tips: boolean;
+    tip_comments: boolean;
+}

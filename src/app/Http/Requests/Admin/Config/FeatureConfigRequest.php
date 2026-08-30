@@ -24,6 +24,7 @@ class FeatureConfigRequest extends FormRequest
     {
         return [
             'file_links' => ['required', 'boolean'],
+            'enable_workbooks' => ['required', 'boolean'],
             'public_tips' => ['required', 'boolean'],
             'tip_comments' => ['required', 'boolean'],
         ];

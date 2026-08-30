@@ -147,6 +147,10 @@ class ApplicationSettingsService
             $requestData->get('file_links')
         );
         $this->saveSettings(
+            'customer.enable_workbooks',
+            $requestData->get('enable_workbooks'),
+        );
+        $this->saveSettings(
             'tech-tips.allow_public',
             $requestData->get('public_tips')
         );
