@@ -47,10 +47,10 @@ describe("useVariantHelper", () => {
         it.each([
             ["danger", "bg-rose-600 text-white focus:outline-rose-700"],
             ["dark", "bg-gray-900 text-white focus:outline-gray-900"],
-            ["error", "bg-red-500 text-white focus:outline-red-860"],
+            ["error", "bg-red-500 text-white focus:outline-red-800"],
             ["help", "bg-violet-600 text-white focus:outline-violet-700"],
             ["info", "bg-blue-400 text-white focus:outline-blue-500"],
-            ["light", "bg-neutral-300 focus:outline-nuetral-400"],
+            ["light", "bg-neutral-300 focus:outline-neutral-400"],
             ["primary", "bg-blue-500 text-white focus:outline-blue-600"],
             ["secondary", "bg-blue-300 focus:outline-blue-400"],
             ["success", "bg-green-500 text-white focus:outline-green-600"],

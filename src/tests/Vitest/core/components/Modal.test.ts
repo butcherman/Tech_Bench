@@ -2,7 +2,7 @@ import Modal from "@/core/components/Modal.vue";
 import { mount } from "@vue/test-utils";
 import { describe, expect, it, vi } from "vitest";
 import { afterEach } from "vitest";
-import { nextTick } from "vue";
+import { DirectiveBinding, nextTick } from "vue";
 
 afterEach(() => {
     vi.useRealTimers();
@@ -305,10 +305,22 @@ describe("Modal", () => {
             {},
             {
                 global: {
+                    directives: {
+                        "on-click-outside": {
+                            mounted(el: any, binding: DirectiveBinding) {
+                                outsideClickHandler.mockImplementation(
+                                    binding.value,
+                                );
+                            },
+                        },
+                    },
                     stubs: {
                         Transition: {
                             template: "<div><slot /></div>",
                             emits: ["after-enter", "after-leave"],
+                        },
+                        "fa-icon": {
+                            template: "<span />",
                         },
                     },
                 },
@@ -329,10 +341,22 @@ describe("Modal", () => {
             {},
             {
                 global: {
+                    directives: {
+                        "on-click-outside": {
+                            mounted(el: any, binding: DirectiveBinding) {
+                                outsideClickHandler.mockImplementation(
+                                    binding.value,
+                                );
+                            },
+                        },
+                    },
                     stubs: {
                         Transition: {
                             template: "<div><slot /></div>",
                             emits: ["after-enter", "after-leave"],
+                        },
+                        "fa-icon": {
+                            template: "<span />",
                         },
                     },
                 },

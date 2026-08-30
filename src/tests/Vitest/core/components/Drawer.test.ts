@@ -1,9 +1,7 @@
-import AddButton from "@/core/components/buttons/AddButton.vue";
 import Drawer from "@/core/components/Drawer.vue";
 import { mount } from "@vue/test-utils";
 import { describe, expect, it, vi } from "vitest";
 import { afterEach } from "vitest";
-import { nextTick } from "vue";
 
 afterEach(() => {
     vi.useRealTimers();

@@ -58,6 +58,7 @@ const sizeClass = computed<string>(() => {
         :is="buttonType"
         :async="async"
         :href="href"
+        :disabled="disabled"
         :class="[
             sizeClass,
             variantClass,
