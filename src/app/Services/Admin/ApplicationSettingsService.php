@@ -23,9 +23,9 @@ class ApplicationSettingsService
             'url' => preg_replace('(^https?://)', '', config('app.url')),
             'company_name' => config('app.company_name'),
             'timezone' => config('app.timezone'),
-            'max_filesize' => (int) config('filesystems.max_filesize'),
+            'max_filesize' => config('filesystems.max_filesize'),
             'welcome_message' => config('app.welcome_message'),
-            'home_links' => config('app.home_links'),
+            'home_links' => $this->formatHomeLinks(),
         ];
     }
 
@@ -46,7 +46,7 @@ class ApplicationSettingsService
             'app.timezone' => $requestData->get('timezone'),
             'app.company_name' => $requestData->get('company_name'),
             'app.schedule_timezone' => $requestData->get('timezone'),
-            'app.home_links' => $requestData->get('home_links'),
+            // 'app.home_links' => $requestData->get('home_links'),
             'filesystems.max_filesize' => $requestData->get('max_filesize'),
             'services.azure.redirect' => 'https://'.$requestData->get('url').'/auth/callback',
         ];
@@ -54,6 +54,7 @@ class ApplicationSettingsService
         $this->saveSettingsArray($setArr);
 
         $this->updateWelcomeMessage($requestData->get('welcome_message'));
+        $this->updateHomeLinks($requestData->get('home_links'));
     }
 
     /**
@@ -69,6 +70,40 @@ class ApplicationSettingsService
                 $this->clearSetting('app.welcome_message');
             }
         }
+    }
+
+    /**
+     * Format the home links for the settings form.
+     */
+    protected function formatHomeLinks(): array
+    {
+        return array_replace_recursive(
+            array_fill(0, 3, [
+                'url' => null,
+                'text' => null,
+            ]),
+            config('app.home_links'),
+        );
+    }
+
+    /**
+     * Update the Home Links
+     */
+    protected function updateHomeLinks(array $homeLinks): void
+    {
+        // dd($homeLinks);
+        $newLinks = [];
+
+        foreach ($homeLinks as $link) {
+            if ($link['url'] && $link['text']) {
+                $newLinks[] = [
+                    'url' => $link['url'],
+                    'text' => $link['text'],
+                ];
+            }
+        }
+
+        $this->saveSettings('app.home_links', $newLinks);
     }
 
     /**
