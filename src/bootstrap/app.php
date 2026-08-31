@@ -52,6 +52,9 @@ return Application::configure(basePath: dirname(__DIR__))
             EncryptHistoryMiddleware::class,
         ])->alias([
             'init' => InitializeApp::class,
+        ])->preventRequestForgery(except: [
+            'tus',
+            'tus/*',
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

@@ -6,9 +6,13 @@ use App\Events\Config\UrlChangedEvent;
 use App\Events\Feature\FeatureChangedEvent;
 use App\Facades\CacheData;
 use App\Traits\AppSettingsTrait;
+use ArthurPatriot\Tus\Facades\Tus;
+use ArthurPatriot\Tus\Helpers\TusFile;
 use Illuminate\Http\File;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use RuntimeException;
 
 class ApplicationSettingsService
 {
@@ -166,13 +170,32 @@ class ApplicationSettingsService
     /**
      * Save the Logo File
      */
-    public function updateLogo(Collection $requestData): string
+    public function updateLogo(TusFile $tusFile): string
     {
-        $path = 'images/logo';
-        $storedFile = Storage::disk('public')
-            ->putFile($path, new File($requestData->get('file')));
+        $extension = strtolower(
+            pathinfo(
+                $tusFile->metadata['name'],
+                PATHINFO_EXTENSION
+            )
+        );
 
-        $this->saveSettings('app.logo', '/storage/'.$storedFile);
+        $filename = 'logo-'.Str::uuid().'.'.$extension;
+
+        $storedFile = 'images/logo/'.$filename;
+
+        $source = Tus::storage()->path($tusFile->path);
+        $destination = Storage::disk('public')->path($storedFile);
+
+        if (! rename($source, $destination)) {
+            throw new RuntimeException(
+                'Unable to move the uploaded logo.'
+            );
+        }
+
+        $this->saveSettings(
+            'app.logo',
+            '/storage/'.$storedFile
+        );
 
         CacheData::clearCache('appData');
 

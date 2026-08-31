@@ -18,6 +18,9 @@ COPY ./entrypoint.sh /tb_data/entrypoint.d/entrypoint.sh
 RUN chown tbuser:www-data /tb_data/entrypoint.d/entrypoint.sh
 RUN chmod 775 /tb_data/entrypoint.d/entrypoint.sh
 
+# Copy the .ini file for additional configuration
+COPY ./php-extended.ini $PHP_INI_DIR/conf.d/php-extended.ini
+
 # Bring the baseline scripts into the image
 COPY ./_functions.sh /tb_data/scripts/
 COPY ./download_tb.sh /tb_data/scripts/
