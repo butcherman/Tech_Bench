@@ -25,8 +25,7 @@ class HandleTusUploadFinishedUnitTest extends TestCase
 
         $service = Mockery::mock(ApplicationSettingsService::class);
 
-        $service
-            ->shouldReceive('updateLogo')
+        $service->shouldReceive('updateLogo')
             ->once()
             ->with($tusFile);
 
@@ -49,8 +48,7 @@ class HandleTusUploadFinishedUnitTest extends TestCase
 
         $service = Mockery::mock(ApplicationSettingsService::class);
 
-        $service
-            ->shouldNotReceive('updateLogo');
+        $service->shouldNotReceive('updateLogo');
 
         $listener = new HandleTusUploadFinished($service);
 
@@ -70,8 +68,7 @@ class HandleTusUploadFinishedUnitTest extends TestCase
 
         $service = Mockery::mock(ApplicationSettingsService::class);
 
-        $service
-            ->shouldNotReceive('updateLogo');
+        $service->shouldNotReceive('updateLogo');
 
         $listener = new HandleTusUploadFinished($service);
 

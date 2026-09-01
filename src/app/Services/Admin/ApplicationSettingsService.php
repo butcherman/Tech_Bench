@@ -9,6 +9,7 @@ use App\Services\Upload\TusUploadService;
 use App\Traits\AppSettingsTrait;
 use ArthurPatriot\Tus\Helpers\TusFile;
 use Illuminate\Http\File;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -95,11 +96,10 @@ class ApplicationSettingsService
      */
     protected function updateHomeLinks(array $homeLinks): void
     {
-        // dd($homeLinks);
         $newLinks = [];
 
         foreach ($homeLinks as $link) {
-            if ($link['url'] && $link['text']) {
+            if (Arr::hasAll($link, ['url', 'text'])) {
                 $newLinks[] = [
                     'url' => $link['url'],
                     'text' => $link['text'],
@@ -227,8 +227,19 @@ class ApplicationSettingsService
      */
     public function processBackupSettings(Collection $requestData): void
     {
-        $this->saveSettingsArray($requestData->only(['nightly_backup', 'nightly_cleanup'])->toArray(), 'backup');
-        $this->saveSettings('backup.backup.password', $requestData->get('password'));
-        $this->saveSettings('backup.backup.encryption', $requestData->get('encryption') ? 'default' : false);
+        $this->saveSettingsArray(
+            $requestData->only(['nightly_backup', 'nightly_cleanup'])->toArray(),
+            'backup'
+        );
+
+        $this->saveSettings(
+            'backup.backup.password',
+            $requestData->get('password')
+        );
+
+        $this->saveSettings(
+            'backup.backup.encryption',
+            $requestData->get('encryption') ? 'default' : false
+        );
     }
 }
