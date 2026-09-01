@@ -5,8 +5,8 @@ namespace App\Services\Admin;
 use App\Events\Config\UrlChangedEvent;
 use App\Events\Feature\FeatureChangedEvent;
 use App\Facades\CacheData;
+use App\Services\Upload\TusUploadService;
 use App\Traits\AppSettingsTrait;
-use ArthurPatriot\Tus\Facades\Tus;
 use ArthurPatriot\Tus\Helpers\TusFile;
 use Illuminate\Http\File;
 use Illuminate\Support\Collection;
@@ -172,34 +172,44 @@ class ApplicationSettingsService
      */
     public function updateLogo(TusFile $tusFile): string
     {
-        $extension = strtolower(
-            pathinfo(
-                $tusFile->metadata['name'],
-                PATHINFO_EXTENSION
-            )
+        $sourceDisk = Storage::disk($tusFile->disk);
+        $publicDisk = Storage::disk('public');
+
+        $sourcePath = $sourceDisk->path($tusFile->path);
+
+        $helper = new TusUploadService;
+
+        $mime = $helper->getMimeType($sourcePath);
+
+        $extension = match ($mime) {
+            'image/jpeg' => 'jpg',
+            'image/bmp' => 'bmp',
+            'image/png' => 'png',
+            'image/gif' => 'gif',
+            default => throw new RuntimeException('Invalid logo MIME type.'),
+        };
+
+        $filename = 'logo-'.Str::random(10).'.'.$extension;
+        $destination = 'images/logo/'.$filename;
+
+        $publicDisk->deleteDirectory('images/logo');
+
+        $publicDisk->put(
+            $destination,
+            $sourceDisk->get($tusFile->path)
         );
 
-        $filename = 'logo-'.Str::uuid().'.'.$extension;
-
-        $storedFile = 'images/logo/'.$filename;
-
-        $source = Tus::storage()->path($tusFile->path);
-        $destination = Storage::disk('public')->path($storedFile);
-
-        if (! rename($source, $destination)) {
-            throw new RuntimeException(
-                'Unable to move the uploaded logo.'
-            );
-        }
+        $sourceDisk->delete($tusFile->path);
+        $sourceDisk->delete($tusFile->path.'.json');
 
         $this->saveSettings(
             'app.logo',
-            '/storage/'.$storedFile
+            '/storage/'.$destination
         );
 
         CacheData::clearCache('appData');
 
-        return $storedFile;
+        return $destination;
     }
 
     /**

@@ -37,20 +37,28 @@ class TusUploadService
     }
 
     /**
+     * Get the MIME type of the file
+     */
+    public function getMimeType(string $filePath): string
+    {
+        return (new finfo(FILEINFO_MIME_TYPE))->file($filePath);
+    }
+
+    /**
      * Validate that the file has the correct MIME type
      */
-    public function validateMimeType(string $filePath, array $allowedMimes): bool
-    {
-        $finfo = new finfo(FILEINFO_MIME_TYPE);
+    // public function validateMimeType(string $filePath, array $allowedMimes): bool
+    // {
+    //     $finfo = new finfo(FILEINFO_MIME_TYPE);
 
-        $mime = $finfo->file($filePath);
+    //     $mime = $finfo->file($filePath);
 
-        if ($mime === false) {
-            return false;
-        }
+    //     if ($mime === false) {
+    //         return false;
+    //     }
 
-        return in_array($mime, $allowedMimes, true);
-    }
+    //     return in_array($mime, $allowedMimes, true);
+    // }
 
     // public function finalize(TusFile $upload, string $destination): void
     // {
