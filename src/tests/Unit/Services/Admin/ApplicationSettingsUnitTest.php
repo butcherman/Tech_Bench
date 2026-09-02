@@ -6,9 +6,11 @@ use App\Events\Config\UrlChangedEvent;
 use App\Events\Feature\FeatureChangedEvent;
 use App\Models\AppSettings;
 use App\Services\Admin\ApplicationSettingsService;
-use Illuminate\Http\UploadedFile;
+use ArthurPatriot\Tus\Helpers\TusFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Exceptions;
+use RuntimeException;
 use Tests\TestCase;
 
 class ApplicationSettingsUnitTest extends TestCase
@@ -166,6 +168,54 @@ class ApplicationSettingsUnitTest extends TestCase
         Event::assertNotDispatched(UrlChangedEvent::class);
     }
 
+    public function test_update_basic_settings_add_home_links(): void
+    {
+        Event::fake(UrlChangedEvent::class);
+
+        DB::table('app_settings')->insert([
+            'key' => 'app.welcome_message',
+            'value' => json_encode('This is a Welcome Message'),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        $data = [
+            'url' => str_replace('https://', '', config('app.url')),
+            'timezone' => 'America/LosAngeles',
+            'max_filesize' => '123456',
+            'company_name' => 'Bobs Fancy Cats',
+            'welcome_message' => null,
+            'home_links' => [[
+                'url' => 'https://somesite.com',
+                'text' => 'This is a website',
+            ], [], []],
+        ];
+
+        $testObj = new ApplicationSettingsService;
+        $testObj->updateBasicSettings(collect($data));
+
+        $this->assertDatabaseHas('app_settings', [
+            'key' => 'app.timezone',
+            'value' => $data['timezone'],
+        ]);
+        $this->assertDatabaseHas('app_settings', [
+            'key' => 'filesystems.max_filesize',
+            'value' => $data['max_filesize'],
+        ]);
+        $this->assertDatabaseHas('app_settings', [
+            'key' => 'app.company_name',
+            'value' => $data['company_name'],
+        ]);
+        $this->assertDatabaseMissing('app_settings', [
+            'key' => 'app.welcome_message',
+        ]);
+        $this->assertDatabaseHas('app_settings', [
+            'key' => 'app.home_links',
+        ]);
+
+        Event::assertNotDispatched(UrlChangedEvent::class);
+    }
+
     /*
     |---------------------------------------------------------------------------
     | getEmailSettings()
@@ -288,14 +338,48 @@ class ApplicationSettingsUnitTest extends TestCase
     */
     // public function test_update_logo(): void
     // {
-    //     $data = [
-    //         'file' => UploadedFile::fake()->image('testPhoto.png'),
-    //     ];
+    //     $tusFile = new TusFile(
+    //         id: 'test-upload',
+    //         path: 'tus/test-upload.png',
+    //         metadata: [
+    //             'name' => 'logo.png',
+    //             'purpose' => 'logo',
+    //             'extension' => 'png',
+    //         ],
+    //     );
 
     //     $testObj = new ApplicationSettingsService;
-    //     $testObj->updateLogo(collect($data));
+    //     $response = $testObj->updateLogo($tusFile);
 
-    //     $this->assertDatabaseHas('app_settings', [
+    //     $this->assertNotNull($response);
+
+    //     $this->assertDatabaseHas('application_settings', [
+    //         'key' => 'app.logo',
+    //     ]);
+    // }
+
+    // public function test_update_logo_invalid_file(): void
+    // {
+    //     Exceptions::fake();
+
+    //     $tusFile = new TusFile(
+    //         id: 'test-upload',
+    //         path: 'tus/test-upload.txt',
+    //         metadata: [
+    //             'name' => 'logo.txt',
+    //             'purpose' => 'logo',
+    //             'extension' => 'txt',
+    //         ],
+    //     );
+
+    //     $testObj = new ApplicationSettingsService;
+    //     $response = $testObj->updateLogo($tusFile);
+
+    //     Exceptions::assertReported(RuntimeException::class);
+
+    //     $this->assertNotNull($response);
+
+    //     $this->assertDatabaseMissing('application_settings', [
     //         'key' => 'app.logo',
     //     ]);
     // }
@@ -305,20 +389,20 @@ class ApplicationSettingsUnitTest extends TestCase
     | destroyLogo()
     |---------------------------------------------------------------------------
     */
-    // public function test_destroy_logo(): void
-    // {
-    //     AppSettings::create([
-    //         'key' => 'app.logo',
-    //         'value' => '/storage/images/newLogo.png',
-    //     ]);
+    public function test_destroy_logo(): void
+    {
+        AppSettings::create([
+            'key' => 'app.logo',
+            'value' => json_encode('/storage/images/newLogo.png'),
+        ]);
 
-    //     $testObj = new ApplicationSettingsService;
-    //     $testObj->destroyLogo();
+        $testObj = new ApplicationSettingsService;
+        $testObj->destroyLogo();
 
-    //     $this->assertDatabaseMissing('app_settings', [
-    //         'key' => 'app.logo',
-    //     ]);
-    // }
+        $this->assertDatabaseMissing('app_settings', [
+            'key' => 'app.logo',
+        ]);
+    }
 
     /*
     |---------------------------------------------------------------------------
