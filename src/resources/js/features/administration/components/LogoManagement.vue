@@ -1,49 +1,110 @@
 <script setup lang="ts">
-import AppLogoForm from "../forms/AppLogoForm.vue";
-import BaseButton from "@/core/components/buttons/BaseButton.vue";
-import Card from "@/core/components/Card.vue";
-import { destroy } from "@/wayfinder/routes/admin/logo/index.js";
-import { router } from "@inertiajs/vue3";
-import verifyModal from "@/core/features/verifyModal/index.js";
+import * as tus from "tus-js-client";
+import { onBeforeUnmount, ref } from "vue";
 
-defineProps<{
+const props = defineProps<{
     currentLogo: string;
     isDefault: boolean;
 }>();
 
-const onDeleteLogo = () => {
-    verifyModal("The system will revert to the Default Logo").then((res) => {
-        if (res) {
-            router.delete(destroy.url());
-        }
+const fileInput = ref<HTMLInputElement | null>(null);
+
+const uploading = ref(false);
+const progress = ref(0);
+const errorRef = ref<string | null>(null);
+
+let upload: tus.Upload | null = null;
+
+function selectFile(): void {
+    fileInput.value?.click();
+}
+
+function handleFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+
+    if (!file) {
+        return;
+    }
+
+    errorRef.value = null;
+    progress.value = 0;
+
+    startUpload(file);
+}
+
+function startUpload(file: File): void {
+    upload?.abort();
+
+    uploading.value = true;
+
+    upload = new tus.Upload(file, {
+        endpoint: "/tus",
+        chunkSize: 5_000_000,
+
+        metadata: {
+            name: file.name,
+            type: file.type,
+            purpose: "logo",
+        },
+
+        onError(error) {
+            uploading.value = false;
+            errorRef.value = error.message;
+            console.log(error);
+        },
+
+        onProgress(bytesUploaded, bytesTotal) {
+            progress.value = Math.round((bytesUploaded / bytesTotal) * 100);
+        },
+
+        onSuccess() {
+            uploading.value = false;
+            progress.value = 100;
+
+            console.log("success");
+
+            // We'll handle refreshing the logo here.
+        },
     });
-};
+
+    upload.start();
+}
+
+function cancelUpload(): void {
+    upload?.abort();
+    upload = null;
+    uploading.value = false;
+    progress.value = 0;
+}
+
+onBeforeUnmount(() => {
+    upload?.abort();
+});
 </script>
 
 <template>
-    <div class="flex flex-col gap-2">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <Card title="Current Logo">
-                <div>
-                    <img
-                        :src="currentLogo"
-                        alt="Tech Bench Logo"
-                        class="mx-auto"
-                    />
-                </div>
-                <div v-if="!isDefault" class="flex justify-center mt-2">
-                    <BaseButton
-                        text="Delete Logo"
-                        size="sm"
-                        variant="danger"
-                        icon="trash-alt"
-                        @click="onDeleteLogo"
-                    />
-                </div>
-            </Card>
-            <Card>
-                <AppLogoForm />
-            </Card>
+    <div>
+        <input
+            ref="fileInput"
+            type="file"
+            accept="image/jpeg,image/png,image/gif,image/bmp"
+            class="hidden"
+            @change="handleFileSelected"
+        />
+
+        <button type="button" :disabled="uploading" @click="selectFile">
+            Choose Logo
+        </button>
+
+        <div v-if="uploading">
+            Uploading: {{ progress }}%
+
+            <button type="button" @click="cancelUpload">Cancel</button>
+        </div>
+
+        <div v-if="errorRef">
+            {{ errorRef }}
         </div>
     </div>
 </template>
