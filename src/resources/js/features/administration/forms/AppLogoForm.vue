@@ -1,34 +1,35 @@
 <script setup lang="ts">
-import TextInput from "@/core/forms/components/validatedInputs/TextInput.vue";
-import VueForm from "@/core/forms/components/VueForm.vue";
-import { object, string } from "yup";
-import { computed } from "vue";
+import BaseFileUploadInput from "@/core/forms/components/baseInputs/BaseFileUploadInput.vue";
+import BaseVueForm from "@/core/forms/components/BaseVueForm.vue";
+import { useTemplateRef } from "vue";
 
 defineEmits<{
     success: [];
 }>();
 
-const props = defineProps<{
-    edit?: any;
-}>();
+const dropzone = useTemplateRef("file-upload-input");
 
-const submitRoute = computed(() => (props.edit ? "#" : "#"));
-const submitMethod = computed(() => (props.edit ? "put" : "post"));
-const submitText = computed(() => (props.edit ? "Update" : "Submit"));
-const initValues = {};
-const schema = object({});
+const processFileQueue = () => {
+    dropzone.value?.processQueue();
+};
 </script>
 
 <template>
-    <VueForm
+    <BaseVueForm
         name="form"
-        :initial-values="initValues"
-        :validation-schema="schema"
-        :submit-route="submitRoute"
-        :submit-method="submitMethod"
-        :submit-text="submitText"
         @success="$emit('success')"
+        @submit="processFileQueue"
     >
-        <TextInput id="input" name="input" label="Input" focus />
-    </VueForm>
+        <BaseFileUploadInput
+            ref="file-upload-input"
+            purpose="logo"
+            @success="$emit('success')"
+        >
+            <template #upload-message>
+                <p class="font-medium">Drop your logo here</p>
+                <p class="text-sm text-gray-500">or click to select a file</p>
+                <p class="mt-2 text-xs text-gray-500">PNG, JPG, GIF, or BMP</p>
+            </template>
+        </BaseFileUploadInput>
+    </BaseVueForm>
 </template>
