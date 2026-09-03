@@ -7,10 +7,21 @@ export const useTusUpload = () => {
     const uploading = ref(false);
     const progress = ref(0);
     const error = ref<string | null>(null);
-    const fileQueue = ref<File[]>([]);
+    const fileQueue = ref<QueuedFile[]>([]);
 
     const addFile = (file: File) => {
-        fileQueue.value.push(file);
+        fileQueue.value.push({
+            file,
+            status: "idle",
+        });
+    };
+
+    const removeFile = (file: File) => {
+        let fileIndex = fileQueue.value.findIndex((f) => f.file === file);
+
+        if (fileIndex >= 0) {
+            fileQueue.value.splice(fileIndex, 1);
+        }
     };
 
     const startUpload = (): void => {
@@ -18,14 +29,14 @@ export const useTusUpload = () => {
 
         uploading.value = true;
 
-        fileQueue.value.forEach((file) => {
-            upload = new tus.Upload(file, {
+        fileQueue.value.forEach((queuedFile) => {
+            upload = new tus.Upload(queuedFile.file, {
                 endpoint: "/tus",
                 chunkSize: 5_000_000,
 
                 metadata: {
-                    name: file.name,
-                    type: file.type,
+                    name: queuedFile.file.name,
+                    type: queuedFile.file.type,
                     purpose: "logo",
                 },
 
@@ -77,6 +88,7 @@ export const useTusUpload = () => {
         addFile,
         cancelUpload,
         startUpload,
+        removeFile,
         resetStats,
     };
 };

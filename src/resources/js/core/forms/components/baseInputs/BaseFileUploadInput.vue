@@ -1,29 +1,40 @@
 <script setup lang="ts">
+import prettyBytes from "pretty-bytes";
 import { computed, ref, useTemplateRef } from "vue";
+import { useFileIconHelper } from "../../composables/fileIconHelper";
 import { useTusUpload } from "../../composables/tusUpload";
+import "file-icon-vectors/dist/file-icon-vectors.min.css";
+
+const emit = defineEmits<{}>();
 
 const props = defineProps<{
     purpose: string;
 
     autoUpload?: boolean;
+    maxFiles?: number;
     uploadMessage?: string;
 }>();
 
 const {
     error,
-    uploading,
+    fileQueue,
     progress,
+    uploading,
+    addFile,
     cancelUpload,
     startUpload,
-    addFile,
-    fileQueue,
+    removeFile,
 } = useTusUpload();
 
-const fileInput = useTemplateRef("file-input");
+const { getFileIcon } = useFileIconHelper();
+
+const fileInput = useTemplateRef("fileInput");
 
 const uploadFileMessage = computed(
     () => props.uploadMessage ?? "Drag file here, or click to upload",
 );
+
+const uploadFileLimit = computed(() => props.maxFiles ?? 1);
 
 /**
  * Open the Select File dialog
@@ -37,14 +48,32 @@ function selectFile(): void {
  */
 function handleFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
-    const file = input.files?.[0];
+    const fileList = input.files;
 
-    if (!file) {
+    if (!fileList) {
         return;
     }
 
-    addFile(file);
+    for (let i = 0; i < fileList.length; i++) {
+        let file = fileList[i];
+        if (file) {
+            addFile(file);
+        }
+    }
+
+    // Auto start the queue if needed
+    if (props.autoUpload) {
+        startUpload();
+    }
 }
+
+/**
+ * Remove a file from the upload queue
+ */
+const onRemoveFile = (file: File): void => {
+    console.log(file);
+    removeFile(file);
+};
 
 /**
  * Upload the files to the server
@@ -94,7 +123,7 @@ defineExpose({
     <div class="space-y-6">
         <div>
             <input
-                ref="file-input"
+                ref="fileInput"
                 type="file"
                 accept="image/jpeg,image/png,image/gif,image/bmp"
                 class="hidden"
@@ -117,18 +146,40 @@ defineExpose({
                     type="file"
                     accept="image/jpeg,image/png,image/gif,image/bmp"
                     class="hidden"
+                    :multiple="uploadFileLimit > 1"
                     @change="handleFileSelected"
                 />
-                <div class="pointer-events-none">
+                <div
+                    v-if="fileQueue.length"
+                    class="dropzone-queue-wrapper flex gap-3 justify-center flex-wrap"
+                >
+                    <div v-for="queuedFile in fileQueue">
+                        <div class="flex justify-center">
+                            <div class="relative">
+                                <fa-icon
+                                    icon="trash-alt"
+                                    class="text-danger absolute top-0 right-0 z-50 bg-slate-300"
+                                    v-tooltip="'Remove File'"
+                                    @click.stop="onRemoveFile(queuedFile.file)"
+                                />
+                                <span :class="getFileIcon(queuedFile.file)" />
+                            </div>
+                        </div>
+                        <div class="text-xs text-muted">
+                            {{ queuedFile.file.name }}
+                        </div>
+                        <div class="text-xs text-muted">
+                            {{ prettyBytes(queuedFile.file.size) }}
+                        </div>
+                    </div>
+                </div>
+                <div v-else class="pointer-events-none">
                     <slot name="upload-message">
                         <fa-icon icon="cloud-arrow-up" />
                         {{ uploadFileMessage }}
                     </slot>
                 </div>
             </div>
-        </div>
-        <div>
-            {{ fileQueue }}
         </div>
 
         <div v-if="uploading" class="space-y-2">
