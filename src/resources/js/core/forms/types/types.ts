@@ -43,7 +43,7 @@ interface InputFileProps {
 
 interface TusUploadOptions {
     onFileUploaded?: (file: string) => void;
-    onQueueCompleted?: (files: InputQueuedFile[]) => void;
+    onQueueCompleted?: (files: string[]) => void;
 }
 
 interface InputQueuedFile {

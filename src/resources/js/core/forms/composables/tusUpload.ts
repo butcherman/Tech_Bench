@@ -7,8 +7,8 @@ export const useTusUpload = (options: TusUploadOptions = {}) => {
 
     let upload: tus.Upload[] = [];
 
-    const totalProgress = ref(0);
     const hasError = ref<boolean>(false);
+    const completedList = ref<string[]>([]);
 
     const startUpload = (
         fileQueue: Ref<InputQueuedFile[]>,
@@ -57,6 +57,7 @@ export const useTusUpload = (options: TusUploadOptions = {}) => {
 
                     if (fileId) {
                         onFileUploaded?.(fileId);
+                        completedList.value.push(fileId);
                     }
                 };
 
@@ -72,11 +73,7 @@ export const useTusUpload = (options: TusUploadOptions = {}) => {
         );
 
         if (!hasActiveUploads) {
-            onQueueCompleted?.(
-                fileQueue.value.filter(
-                    (queuedFile) => queuedFile.status === "complete",
-                ),
-            );
+            onQueueCompleted?.(completedList.value);
         }
     };
 
@@ -88,8 +85,11 @@ export const useTusUpload = (options: TusUploadOptions = {}) => {
         upload = [];
     };
 
-    const resetStats = (): void => {
+    const resetQueue = (): void => {
+        cancelUpload();
+
         hasError.value = false;
+        completedList.value = [];
     };
 
     onBeforeUnmount(() => {
@@ -97,11 +97,11 @@ export const useTusUpload = (options: TusUploadOptions = {}) => {
     });
 
     return {
-        totalProgress: readonly(totalProgress),
         hasError: readonly(hasError),
+        completedList: readonly(completedList),
 
         cancelUpload,
         startUpload,
-        resetStats,
+        resetQueue,
     };
 };

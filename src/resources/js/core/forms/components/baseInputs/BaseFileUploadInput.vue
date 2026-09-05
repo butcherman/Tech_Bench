@@ -9,7 +9,7 @@ import "file-icon-vectors/dist/file-icon-vectors.min.css";
 
 const emit = defineEmits<{
     fileUploaded: [file: string];
-    queueCompleted: [files: InputQueuedFile[]];
+    queueCompleted: [files: string[]];
 }>();
 
 const props = defineProps<{
@@ -92,6 +92,17 @@ const onDrop = (event: DragEvent): void => {
         startUpload(fileQueue, props.purpose);
     }
 };
+
+/**
+ * Exposed function to manually trigger the upload
+ */
+const processQueue = () => {
+    startUpload(fileQueue, props.purpose);
+};
+
+defineExpose({
+    processQueue,
+});
 </script>
 
 <template>
