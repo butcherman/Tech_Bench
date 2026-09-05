@@ -22,7 +22,7 @@ const props = defineProps<{
 }>();
 
 const { getFileIcon } = useFileIconHelper();
-const { startUpload } = useTusUpload({
+const { startUpload, resetTus } = useTusUpload({
     onFileUploaded: (file) => {
         emit("fileUploaded", file);
     },
@@ -42,6 +42,7 @@ const {
     onDragLeave,
     onRemoveFile,
     processFileList,
+    resetQueues,
 } = useUploadHelper(props);
 
 const fileInput = useTemplateRef("file-input");
@@ -68,7 +69,6 @@ const onFileSelected = (event: Event): void => {
     processFileList(fileList);
 
     if (props.autoUpload) {
-        console.log("process queue");
         startUpload(fileQueue, props.purpose);
     }
 };
@@ -88,7 +88,6 @@ const onDrop = (event: DragEvent): void => {
     processFileList(fileList);
 
     if (props.autoUpload) {
-        console.log("process queue");
         startUpload(fileQueue, props.purpose);
     }
 };
@@ -100,8 +99,17 @@ const processQueue = () => {
     startUpload(fileQueue, props.purpose);
 };
 
+/**
+ * Reset the input to start fresh
+ */
+const resetInput = () => {
+    resetQueues();
+    resetTus();
+};
+
 defineExpose({
     processQueue,
+    resetInput,
 });
 </script>
 

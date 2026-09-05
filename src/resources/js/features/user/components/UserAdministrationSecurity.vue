@@ -26,7 +26,6 @@ const onResetMfa = () => {
     verifyModal("This will remove all MFA Settings and Saved Devices").then(
         (res) => {
             if (res) {
-                console.log("yes");
                 router.put(reset.url(props.user.username));
             }
         },

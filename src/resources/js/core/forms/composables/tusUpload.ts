@@ -41,30 +41,22 @@ export const useTusUpload = (options: TusUploadOptions = {}) => {
                         );
                     },
 
-                    // onSuccess() {
-                    //     console.log("on success trigger");
+                    onSuccess() {
+                        let fileId = newUpload.url?.split("/").pop();
 
-                    // },
+                        if (fileId) {
+                            queuedFile.progress = 100;
+                            queuedFile.status = "complete";
+
+                            completedList.value.push(fileId);
+                            onFileUploaded?.(fileId);
+
+                            checkQueueCompleted(fileQueue);
+                        }
+                    },
                 });
 
                 upload.push(newUpload);
-
-                newUpload.options.onSuccess = () => {
-                    console.log(newUpload.url?.split("/").pop());
-                    let fileId = newUpload.url?.split("/").pop();
-
-                    if (fileId) {
-                        queuedFile.progress = 100;
-                        queuedFile.status = "complete";
-
-                        console.log("file success", fileId);
-                        completedList.value.push(fileId);
-                        onFileUploaded?.(fileId);
-
-                        checkQueueCompleted(fileQueue);
-                    }
-                };
-
                 newUpload.start();
             });
     };
@@ -76,10 +68,7 @@ export const useTusUpload = (options: TusUploadOptions = {}) => {
                 queuedFile.status === "uploading",
         );
 
-        console.log(hasActiveUploads);
-
         if (!hasActiveUploads) {
-            console.log("queue success", completedList.value);
             onQueueCompleted?.(completedList.value);
         }
     };
@@ -92,7 +81,7 @@ export const useTusUpload = (options: TusUploadOptions = {}) => {
         upload = [];
     };
 
-    const resetQueue = (): void => {
+    const resetTus = (): void => {
         cancelUpload();
 
         hasError.value = false;
@@ -109,6 +98,6 @@ export const useTusUpload = (options: TusUploadOptions = {}) => {
 
         cancelUpload,
         startUpload,
-        resetQueue,
+        resetTus,
     };
 };

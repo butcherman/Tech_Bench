@@ -16,21 +16,12 @@ const processFileQueue = () => {
 };
 
 const onQueueCompleted = (fileList: string[]) => {
-    console.log(fileList);
-    console.log("submitting new logo");
-
     const formData = {
         upload_id: fileList[0],
     };
 
     router.post(update.url(), formData, {
-        // preserveScroll: true,
-        // only: props.only,
-        onSuccess: (res) => console.log("success", res),
-        // onError: (errors) => handleErrors(errors),
-        onFinish: () => {
-            console.log("finished");
-        },
+        onSuccess: () => dropzone.value?.resetInput(),
     });
 };
 </script>

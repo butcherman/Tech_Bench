@@ -186,6 +186,14 @@ export const useUploadHelper = (props: InputFileProps) => {
         return Math.round((uploadedBytes / totalBytes) * 100);
     });
 
+    /**
+     * Clear all file queues
+     */
+    const resetQueues = () => {
+        fileQueue.value = [];
+        rejectedFiles.value = [];
+    };
+
     return {
         dragging: readonly(dragging),
         fileQueue,
@@ -196,5 +204,6 @@ export const useUploadHelper = (props: InputFileProps) => {
         onDragLeave,
         onRemoveFile,
         processFileList,
+        resetQueues,
     };
 };
