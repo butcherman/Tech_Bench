@@ -32,8 +32,29 @@ type ArrayProperty<T, TElement> = {
     [K in keyof T]: T[K] extends readonly TElement[] ? K : never;
 }[keyof T];
 
-interface QueuedFile {
+interface InputFileProps {
+    purpose: string;
+
+    acceptedFiles?: string[];
+    autoUpload?: boolean;
+    maxFiles?: number;
+    uploadMessage?: string;
+}
+
+interface TusUploadOptions {
+    onFileUploaded?: (file: string) => void;
+    onQueueCompleted?: (files: InputQueuedFile[]) => void;
+}
+
+interface InputQueuedFile {
     file: File;
-    status: "idle" | "uploading" | "complete";
+    status: "pending" | "uploading" | "complete" | "error";
+    progress: number;
     error?: string;
+}
+
+interface InputRejectedFile {
+    file: File;
+    error: string;
+    allowRetry: boolean;
 }

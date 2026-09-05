@@ -11,8 +11,8 @@ type InitialValues<T extends GenericObject> = NonNullable<
 >["initialValues"];
 
 const emit = defineEmits<{
-    success: [Page];
     submit: [TFormData];
+    success: [Page];
 }>();
 
 const props = defineProps<{
