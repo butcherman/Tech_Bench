@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Services\Upload;
+namespace App\Services\File;
 
 use ArthurPatriot\Tus\Exceptions\FileNotFoundException;
 use ArthurPatriot\Tus\Facades\Tus;
 use ArthurPatriot\Tus\Helpers\TusFile;
 use finfo;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 
@@ -14,7 +15,7 @@ class TusUploadService
     /**
      * Retrieve a completed tus upload.
      */
-    public function getCompleted(string $id): TusFile
+    public function getCompletedUpload(string $id): TusFile
     {
         try {
             $upload = TusFile::find($id);
@@ -37,41 +38,46 @@ class TusUploadService
     }
 
     /**
-     * Get the MIME type of the file
+     * Validate that the file has the correct MIME type
      */
-    public function getMimeType(string $filePath): string
+    public function validateMimeType(TusFile $tusFile, array $allowedMimes): bool
     {
-        return (new finfo(FILEINFO_MIME_TYPE))->file($filePath);
+        $finfo = new finfo(FILEINFO_MIME_TYPE);
+        $path = Tus::storage()->path($tusFile->path);
+
+        $mime = $finfo->file($path);
+
+        if ($mime === false) {
+            return false;
+        }
+
+        Log::debug('Validating Tus Upload Mime', [
+            'found' => $mime,
+            'allowed' => $allowedMimes,
+            'result' => in_array($mime, $allowedMimes, true),
+        ]);
+
+        return in_array($mime, $allowedMimes, true);
     }
 
     /**
-     * Validate that the file has the correct MIME type
+     * Save the file to its final destination
      */
-    // public function validateMimeType(string $filePath, array $allowedMimes): bool
-    // {
-    //     $finfo = new finfo(FILEINFO_MIME_TYPE);
+    public function finalizeUpload(TusFile $upload, string $destination): void
+    {
+        rename(
+            Tus::storage()->path($upload->path),
+            Storage::disk('public')->path($destination)
+        );
 
-    //     $mime = $finfo->file($filePath);
-
-    //     if ($mime === false) {
-    //         return false;
-    //     }
-
-    //     return in_array($mime, $allowedMimes, true);
-    // }
-
-    // public function finalize(TusFile $upload, string $destination): void
-    // {
-    //     rename(
-    //         Tus::storage()->path($upload->path),
-    //         Storage::disk('public')->path($destination)
-    //     );
-    // }
+        // Delete the meta data from the file
+        $this->deleteUpload($upload);
+    }
 
     /**
      * Delete a tus upload and its metadata.
      */
-    public function delete(TusFile $upload): void
+    public function deleteUpload(TusFile $upload): void
     {
         Tus::storage()->delete($upload->path);
         Tus::storage()->delete(Tus::path($upload->id, 'json'));

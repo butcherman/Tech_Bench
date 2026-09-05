@@ -5,15 +5,12 @@ namespace App\Services\Admin;
 use App\Events\Config\UrlChangedEvent;
 use App\Events\Feature\FeatureChangedEvent;
 use App\Facades\CacheData;
-use App\Services\Upload\TusUploadService;
+use App\Services\File\TusUploadService;
 use App\Traits\AppSettingsTrait;
-use ArthurPatriot\Tus\Helpers\TusFile;
-use Illuminate\Http\File;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use RuntimeException;
+use Illuminate\Validation\ValidationException;
 
 class ApplicationSettingsService
 {
@@ -51,7 +48,6 @@ class ApplicationSettingsService
             'app.timezone' => $requestData->get('timezone'),
             'app.company_name' => $requestData->get('company_name'),
             'app.schedule_timezone' => $requestData->get('timezone'),
-            // 'app.home_links' => $requestData->get('home_links'),
             'filesystems.max_filesize' => $requestData->get('max_filesize'),
             'services.azure.redirect' => 'https://'.$requestData->get('url').'/auth/callback',
         ];
@@ -170,44 +166,36 @@ class ApplicationSettingsService
     /**
      * Save the Logo File
      */
-    public function updateLogo(TusFile $tusFile): string
+    public function updateLogo(string $uploadId): string
     {
-        $sourceDisk = Storage::disk($tusFile->disk);
-        $publicDisk = Storage::disk('public');
+        $fileSvc = new TusUploadService;
 
-        $sourcePath = $sourceDisk->path($tusFile->path);
+        // Get the file and validate it
+        $logoFile = $fileSvc->getCompletedUpload($uploadId);
 
-        $helper = new TusUploadService;
+        if (! $fileSvc->validateMimeType($logoFile, [
+            'image/jpg', 'image/jpeg', 'image/bmp', 'image/png', 'image/gif',
+        ])) {
+            $fileSvc->deleteUpload($logoFile);
 
-        $mime = $helper->getMimeType($sourcePath);
+            throw ValidationException::withMessages([
+                'upload_id' => 'The uploaded file is not a supported image type.',
+            ]);
+        }
 
-        $extension = match ($mime) {
-            'image/jpeg' => 'jpg',
-            'image/bmp' => 'bmp',
-            'image/png' => 'png',
-            'image/gif' => 'gif',
-            default => throw new RuntimeException('Invalid logo MIME type.'),
-        };
+        // Set the new filename
+        $fileParts = pathinfo($logoFile->path);
+        $extension = $fileParts['extension'];
 
-        $filename = 'logo-'.Str::random(10).'.'.$extension;
-        $destination = 'images/logo/'.$filename;
+        $logoName = 'logo-'.Str::random(10).'.'.$extension;
+        $destination = 'images/logo/'.$logoName;
 
-        $publicDisk->deleteDirectory('images/logo');
-
-        $publicDisk->put(
-            $destination,
-            $sourceDisk->get($tusFile->path)
-        );
-
-        $sourceDisk->delete($tusFile->path);
-        $sourceDisk->delete($tusFile->path.'.json');
+        $fileSvc->finalizeUpload($logoFile, $destination);
 
         $this->saveSettings(
             'app.logo',
             '/storage/'.$destination
         );
-
-        CacheData::clearCache('appData');
 
         return $destination;
     }

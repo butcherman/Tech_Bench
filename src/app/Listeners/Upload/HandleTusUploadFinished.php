@@ -19,19 +19,7 @@ class HandleTusUploadFinished
     public function handle(FileUploadFinished $event): void
     {
         Log::debug('File Uploade Completed', [
-            'event' => $event,
+            'uploaded-file' => $event->tusFile,
         ]);
-
-        $tusFile = $event->tusFile;
-
-        if (($tusFile->metadata['purpose'] ?? null) !== 'logo') {
-            Log::error('File Upload has no purpose', [
-                'event' => $event,
-            ]);
-
-            return;
-        }
-
-        $this->svc->updateLogo($tusFile);
     }
 }

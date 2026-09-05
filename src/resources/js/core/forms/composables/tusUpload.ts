@@ -41,12 +41,10 @@ export const useTusUpload = (options: TusUploadOptions = {}) => {
                         );
                     },
 
-                    onSuccess() {
-                        queuedFile.progress = 100;
-                        queuedFile.status = "complete";
+                    // onSuccess() {
+                    //     console.log("on success trigger");
 
-                        checkQueueCompleted(fileQueue);
-                    },
+                    // },
                 });
 
                 upload.push(newUpload);
@@ -56,8 +54,14 @@ export const useTusUpload = (options: TusUploadOptions = {}) => {
                     let fileId = newUpload.url?.split("/").pop();
 
                     if (fileId) {
-                        onFileUploaded?.(fileId);
+                        queuedFile.progress = 100;
+                        queuedFile.status = "complete";
+
+                        console.log("file success", fileId);
                         completedList.value.push(fileId);
+                        onFileUploaded?.(fileId);
+
+                        checkQueueCompleted(fileQueue);
                     }
                 };
 
@@ -72,7 +76,10 @@ export const useTusUpload = (options: TusUploadOptions = {}) => {
                 queuedFile.status === "uploading",
         );
 
+        console.log(hasActiveUploads);
+
         if (!hasActiveUploads) {
+            console.log("queue success", completedList.value);
             onQueueCompleted?.(completedList.value);
         }
     };
