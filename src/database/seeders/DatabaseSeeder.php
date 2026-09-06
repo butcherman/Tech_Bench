@@ -49,7 +49,7 @@ class DatabaseSeeder extends Seeder
         // Set Pacific Timezone
         AppSettings::create([
             'key' => 'timezone',
-            'value' => 'America/Los_Angeles',
+            'value' => json_encode('America/Los_Angeles'),
         ]);
     }
 }
