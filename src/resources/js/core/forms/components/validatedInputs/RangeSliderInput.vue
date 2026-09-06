@@ -22,6 +22,8 @@ const props = defineProps<{
     placeholder?: string;
     rangeVariant?: VariantType;
     valueText?: string;
+
+    valueFormatter?: (value: number) => string;
 }>();
 
 const { errorMessage, value } = useValidationHelper<string>(

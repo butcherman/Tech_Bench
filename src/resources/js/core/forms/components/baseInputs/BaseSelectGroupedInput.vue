@@ -1,13 +1,10 @@
 <script
     setup
     lang="ts"
-    generic="
-        TGroup extends Record<string, unknown>,
-        TOption extends string | Record<string, unknown>
-    "
+    generic="TGroup extends object, TOption extends string | object"
 >
 import InputWrapper from "../wrappers/InputWrapper.vue";
-import {  useId } from "vue";
+import { useId } from "vue";
 import { useInputHelper } from "../../composables/inputHelper.js";
 import { useSelectHelper } from "../../composables/selectHelper.js";
 

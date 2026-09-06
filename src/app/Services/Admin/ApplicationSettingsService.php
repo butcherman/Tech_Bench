@@ -6,9 +6,10 @@ use App\Events\Config\UrlChangedEvent;
 use App\Events\Feature\FeatureChangedEvent;
 use App\Facades\CacheData;
 use App\Traits\AppSettingsTrait;
-use Illuminate\Http\File;
+use ArthurPatriot\Tus\Helpers\TusFile;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class ApplicationSettingsService
 {
@@ -23,9 +24,9 @@ class ApplicationSettingsService
             'url' => preg_replace('(^https?://)', '', config('app.url')),
             'company_name' => config('app.company_name'),
             'timezone' => config('app.timezone'),
-            'max_filesize' => (int) config('filesystems.max_filesize'),
+            'max_filesize' => config('filesystems.max_filesize'),
             'welcome_message' => config('app.welcome_message'),
-            'home_links' => config('app.home_links'),
+            'home_links' => $this->formatHomeLinks(),
         ];
     }
 
@@ -46,7 +47,6 @@ class ApplicationSettingsService
             'app.timezone' => $requestData->get('timezone'),
             'app.company_name' => $requestData->get('company_name'),
             'app.schedule_timezone' => $requestData->get('timezone'),
-            'app.home_links' => $requestData->get('home_links'),
             'filesystems.max_filesize' => $requestData->get('max_filesize'),
             'services.azure.redirect' => 'https://'.$requestData->get('url').'/auth/callback',
         ];
@@ -54,6 +54,7 @@ class ApplicationSettingsService
         $this->saveSettingsArray($setArr);
 
         $this->updateWelcomeMessage($requestData->get('welcome_message'));
+        $this->updateHomeLinks($requestData->get('home_links'));
     }
 
     /**
@@ -69,6 +70,39 @@ class ApplicationSettingsService
                 $this->clearSetting('app.welcome_message');
             }
         }
+    }
+
+    /**
+     * Format the home links for the settings form.
+     */
+    protected function formatHomeLinks(): array
+    {
+        return array_replace_recursive(
+            array_fill(0, 3, [
+                'url' => null,
+                'text' => null,
+            ]),
+            config('app.home_links'),
+        );
+    }
+
+    /**
+     * Update the Home Links
+     */
+    protected function updateHomeLinks(array $homeLinks): void
+    {
+        $newLinks = [];
+
+        foreach ($homeLinks as $link) {
+            if (Arr::hasAll($link, ['url', 'text'])) {
+                $newLinks[] = [
+                    'url' => $link['url'],
+                    'text' => $link['text'],
+                ];
+            }
+        }
+
+        $this->saveSettings('app.home_links', $newLinks);
     }
 
     /**
@@ -112,6 +146,10 @@ class ApplicationSettingsService
             $requestData->get('file_links')
         );
         $this->saveSettings(
+            'customer.enable_workbooks',
+            $requestData->get('enable_workbooks'),
+        );
+        $this->saveSettings(
             'tech-tips.allow_public',
             $requestData->get('public_tips')
         );
@@ -127,17 +165,21 @@ class ApplicationSettingsService
     /**
      * Save the Logo File
      */
-    public function updateLogo(Collection $requestData): string
+    public function updateLogo(TusFile $logoFile): string
     {
-        $path = 'images/logo';
-        $storedFile = Storage::disk('public')
-            ->putFile($path, new File($requestData->get('file')));
+        // Set the new filename
+        $fileParts = pathinfo($logoFile->path);
+        $extension = $fileParts['extension'];
 
-        $this->saveSettings('app.logo', '/storage/'.$storedFile);
+        $logoName = 'logo-'.Str::random(10).'.'.$extension;
+        $destination = 'images/logo/'.$logoName;
 
-        CacheData::clearCache('appData');
+        $this->saveSettings(
+            'app.logo',
+            '/storage/'.$destination
+        );
 
-        return $storedFile;
+        return $destination;
     }
 
     /**
@@ -155,8 +197,19 @@ class ApplicationSettingsService
      */
     public function processBackupSettings(Collection $requestData): void
     {
-        $this->saveSettingsArray($requestData->only(['nightly_backup', 'nightly_cleanup'])->toArray(), 'backup');
-        $this->saveSettings('backup.backup.password', $requestData->get('password'));
-        $this->saveSettings('backup.backup.encryption', $requestData->get('encryption') ? 'default' : false);
+        $this->saveSettingsArray(
+            $requestData->only(['nightly_backup', 'nightly_cleanup'])->toArray(),
+            'backup'
+        );
+
+        $this->saveSettings(
+            'backup.backup.password',
+            $requestData->get('password')
+        );
+
+        $this->saveSettings(
+            'backup.backup.encryption',
+            $requestData->get('encryption') ? 'default' : false
+        );
     }
 }

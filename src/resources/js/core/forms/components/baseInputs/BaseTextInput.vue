@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import TextInputWrapper from "../wrappers/TextInputWrapper.vue";
-import {  useId } from "vue";
+import { useId } from "vue";
 import { useInputHelper } from "../../composables/inputHelper.js";
 
 defineSlots<{
@@ -25,7 +25,7 @@ const props = defineProps<{
     variant?: InputVariant;
 }>();
 
-const inputValue = defineModel<string | null>({
+const inputValue = defineModel<string | null | undefined>({
     required: true,
 });
 

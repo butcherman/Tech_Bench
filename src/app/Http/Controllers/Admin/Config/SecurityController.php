@@ -34,7 +34,7 @@ class SecurityController extends Controller
         }
 
         return Inertia::render('Admin/Security/Index', [
-            'data' => fn () => $certData,
+            'cert-data' => fn () => $certData,
         ]);
     }
 

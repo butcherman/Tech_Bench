@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import InputWrapper from "../wrappers/InputWrapper.vue";
-import {  useId } from "vue";
+import { computed, useId } from "vue";
 import { useInputHelper } from "../../composables/inputHelper.js";
 import { useVariantHelper } from "@/core/composables/variantHelper.js";
 
@@ -29,11 +29,19 @@ const props = defineProps<{
     placeholder?: string;
     rangeVariant?: VariantType;
     valueText?: string;
+
+    valueFormatter?: (value: number) => string;
 }>();
 
 const inputValue = defineModel<string | null>({
     required: true,
 });
+
+const displayValue = computed(() =>
+    props.valueFormatter && inputValue.value
+        ? props.valueFormatter(+inputValue.value)
+        : inputValue.value,
+);
 
 const { getVariantBase } = useVariantHelper();
 const { hasFocus, onFocus, onBlur } = useInputHelper(props, emit);
@@ -68,7 +76,7 @@ const inputId = useId();
         />
         <div v-if="!hideValue" class="text-muted">
             <span v-if="valueText">{{ valueText }}</span>
-            {{ inputValue }}
+            {{ displayValue }}
         </div>
     </InputWrapper>
 </template>

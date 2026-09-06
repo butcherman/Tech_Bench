@@ -18,6 +18,7 @@
     "license": "LGPL-2.0-or-later",
     "require": {
         "php": "^8.5",
+        "arthurpatriot/laravel-tus": "^1.4",
         "barryvdh/laravel-dompdf": "^3.1",
         "butcherman/version": "^1.4",
         "glhd/gretel": "^1.10",
@@ -39,7 +40,6 @@
         "pion/laravel-chunk-upload": "^1.6",
         "predis/predis": "^3.5",
         "socialiteproviders/microsoft-azure": "^5.2",
-        "spatie/laravel-backup": "^10.3",
         "spatie/laravel-cookie-consent": "^3.5",
         "spatie/simple-excel": "^3.10",
         "spatie/ssl-certificate": "^2.7",

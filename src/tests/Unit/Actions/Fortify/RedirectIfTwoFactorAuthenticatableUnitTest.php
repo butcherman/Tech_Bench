@@ -286,6 +286,12 @@ class RedirectIfTwoFactorAuthenticatableUnitTest extends TestCase
         );
     }
 
+    /*
+    |---------------------------------------------------------------------------
+    | Testing Methods
+    |---------------------------------------------------------------------------
+    */
+
     private function action(User $user): RedirectIfTwoFactorAuthenticatable
     {
         $action = $this->getMockBuilder(RedirectIfTwoFactorAuthenticatable::class)

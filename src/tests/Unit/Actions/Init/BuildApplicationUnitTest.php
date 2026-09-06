@@ -28,6 +28,7 @@ class BuildApplicationUnitTest extends TestCase
                 'timezone' => 'UTC',
                 'max_filesize' => 123456,
                 'company_name' => 'Bobs Fancy Cats',
+                'home_links' => [[], [], []],
             ],
             'email-settings' => [
                 'from_address' => 'new@email.org',

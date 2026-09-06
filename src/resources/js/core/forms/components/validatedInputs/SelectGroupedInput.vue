@@ -1,10 +1,7 @@
 <script
     setup
     lang="ts"
-    generic="
-        TGroup extends Record<string, unknown>,
-        TOption extends string | Record<string, unknown>
-    "
+    generic="TGroup extends object, TOption extends string | object"
 >
 import BaseSelectGroupedInput from "../baseInputs/BaseSelectGroupedInput.vue";
 import { useValidationHelper } from "../../composables/validationHelper.js";
