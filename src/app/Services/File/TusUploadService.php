@@ -47,10 +47,6 @@ class TusUploadService
 
         $mime = $finfo->file($path);
 
-        if ($mime === false) {
-            return false;
-        }
-
         Log::debug('Validating Tus Upload Mime', [
             'found' => $mime,
             'allowed' => $allowedMimes,
