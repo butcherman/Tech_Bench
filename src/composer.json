@@ -40,7 +40,6 @@
         "pion/laravel-chunk-upload": "^1.6",
         "predis/predis": "^3.5",
         "socialiteproviders/microsoft-azure": "^5.2",
-        "spatie/laravel-backup": "^10.3",
         "spatie/laravel-cookie-consent": "^3.5",
         "spatie/simple-excel": "^3.10",
         "spatie/ssl-certificate": "^2.7",

@@ -9,8 +9,6 @@ use App\Services\Admin\ApplicationSettingsService;
 use ArthurPatriot\Tus\Helpers\TusFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\Exceptions;
-use RuntimeException;
 use Tests\TestCase;
 
 class ApplicationSettingsUnitTest extends TestCase
@@ -336,53 +334,27 @@ class ApplicationSettingsUnitTest extends TestCase
     | updateLogo
     |---------------------------------------------------------------------------
     */
-    // public function test_update_logo(): void
-    // {
-    //     $tusFile = new TusFile(
-    //         id: 'test-upload',
-    //         path: 'tus/test-upload.png',
-    //         metadata: [
-    //             'name' => 'logo.png',
-    //             'purpose' => 'logo',
-    //             'extension' => 'png',
-    //         ],
-    //     );
+    public function test_update_logo(): void
+    {
+        $tusFile = new TusFile(
+            id: 'test-upload',
+            path: 'tus/test-upload.png',
+            metadata: [
+                'name' => 'logo.png',
+                'purpose' => 'logo',
+                'extension' => 'png',
+            ],
+        );
 
-    //     $testObj = new ApplicationSettingsService;
-    //     $response = $testObj->updateLogo($tusFile);
+        $testObj = new ApplicationSettingsService;
+        $response = $testObj->updateLogo($tusFile);
 
-    //     $this->assertNotNull($response);
+        $this->assertNotNull($response);
 
-    //     $this->assertDatabaseHas('application_settings', [
-    //         'key' => 'app.logo',
-    //     ]);
-    // }
-
-    // public function test_update_logo_invalid_file(): void
-    // {
-    //     Exceptions::fake();
-
-    //     $tusFile = new TusFile(
-    //         id: 'test-upload',
-    //         path: 'tus/test-upload.txt',
-    //         metadata: [
-    //             'name' => 'logo.txt',
-    //             'purpose' => 'logo',
-    //             'extension' => 'txt',
-    //         ],
-    //     );
-
-    //     $testObj = new ApplicationSettingsService;
-    //     $response = $testObj->updateLogo($tusFile);
-
-    //     Exceptions::assertReported(RuntimeException::class);
-
-    //     $this->assertNotNull($response);
-
-    //     $this->assertDatabaseMissing('application_settings', [
-    //         'key' => 'app.logo',
-    //     ]);
-    // }
+        $this->assertDatabaseHas('application_settings', [
+            'key' => 'app.logo',
+        ]);
+    }
 
     /*
     |---------------------------------------------------------------------------

@@ -5,12 +5,11 @@ namespace App\Services\Admin;
 use App\Events\Config\UrlChangedEvent;
 use App\Events\Feature\FeatureChangedEvent;
 use App\Facades\CacheData;
-use App\Services\File\TusUploadService;
 use App\Traits\AppSettingsTrait;
+use ArthurPatriot\Tus\Helpers\TusFile;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
-use Illuminate\Validation\ValidationException;
 
 class ApplicationSettingsService
 {
@@ -166,31 +165,14 @@ class ApplicationSettingsService
     /**
      * Save the Logo File
      */
-    public function updateLogo(string $uploadId): string
+    public function updateLogo(TusFile $logoFile): string
     {
-        $fileSvc = new TusUploadService;
-
-        // Get the file and validate it
-        $logoFile = $fileSvc->getCompletedUpload($uploadId);
-
-        if (! $fileSvc->validateMimeType($logoFile, [
-            'image/jpg', 'image/jpeg', 'image/bmp', 'image/png', 'image/gif',
-        ])) {
-            $fileSvc->deleteUpload($logoFile);
-
-            throw ValidationException::withMessages([
-                'upload_id' => 'The uploaded file is not a supported image type.',
-            ]);
-        }
-
         // Set the new filename
         $fileParts = pathinfo($logoFile->path);
         $extension = $fileParts['extension'];
 
         $logoName = 'logo-'.Str::random(10).'.'.$extension;
         $destination = 'images/logo/'.$logoName;
-
-        $fileSvc->finalizeUpload($logoFile, $destination);
 
         $this->saveSettings(
             'app.logo',
