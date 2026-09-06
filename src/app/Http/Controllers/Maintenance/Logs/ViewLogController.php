@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Maintenance\Logs;
 
+use App\Actions\Maintenance\ParseLogFile;
 use App\Exceptions\Maintenance\LogFileMissingException;
 use App\Http\Controllers\Controller;
 use App\Models\AppSettings;
@@ -16,18 +17,19 @@ class ViewLogController extends Controller
     /**
      * View a log file details
      */
-    public function __invoke(string $channel, string $logFile): Response
+    public function __invoke(ParseLogFile $parse, string $logFile): Response
     {
         $this->authorize('viewAny', AppSettings::class);
 
-        if (! $this->svc->validateLogFile($channel, $logFile)) {
-            throw new LogFileMissingException($logFile);
-        }
+        throw_unless(
+            $this->svc->validateLogFile($logFile),
+            LogFileMissingException::class,
+            $logFile
+        );
 
-        return Inertia::render('Maint/AppLogView', [
-            'channel' => $channel,
-            'log-file' => $logFile,
-            'log-data' => Inertia::defer(fn () => $this->svc->getLogFileData($channel, $logFile)),
+        return Inertia::render('Maint/Logs/Index', [
+            'levels' => $this->svc->getLogLevels(),
+            'log-data' => Inertia::defer(fn () => $parse($logFile)),
         ]);
     }
 }

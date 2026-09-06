@@ -59,9 +59,10 @@ class LogDebugVisits
          */
         Context::add('trace_id', Str::uuid()->toString());
         Context::add(
-            'user_id',
-            $request->user() ? $request->user()->user_id : null
+            'user',
+            $request->user() ? $request->user()->toArray() : null
         );
+
         Context::add('ip_address', $request->ip());
 
         // If log level is not set to debug, continue on
