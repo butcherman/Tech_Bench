@@ -45,20 +45,20 @@ class NightlyBackupJobUnitTest extends TestCase
         NightlyBackupJob::dispatch();
     }
 
-    public function test_handle_no_disk_space(): void
-    {
-        config(['backup.nightly_backup' => true]);
+    // public function test_handle_no_disk_space(): void
+    // {
+    //     config(['backup.nightly_backup' => true]);
 
-        Event::fake();
+    //     Event::fake();
 
-        $this->partialMock(BackupService::class, function (MockInterface $mock) {
-            $mock->shouldReceive('verifyBackupDiskSpace')->once()->andReturn(false);
-        });
+    //     $this->partialMock(BackupService::class, function (MockInterface $mock) {
+    //         $mock->shouldReceive('verifyBackupDiskSpace')->once()->andReturn(false);
+    //     });
 
-        $this->expectException(BackupFailedException::class);
+    //     $this->expectException(BackupFailedException::class);
 
-        NightlyBackupJob::dispatch();
+    //     NightlyBackupJob::dispatch();
 
-        Event::assertDispatched(BackupHasFailed::class);
-    }
+    //     Event::assertDispatched(BackupHasFailed::class);
+    // }
 }

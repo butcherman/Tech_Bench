@@ -59,7 +59,7 @@ class ApplicationSettingsUnitTest extends TestCase
 
         $data = [
             'url' => 'https://someUrl.noSite',
-            'timezone' => 'America/LosAngeles',
+            'timezone' => 'America/Los_Angeles',
             'max_filesize' => '123456',
             'company_name' => 'Bobs Fancy Cats',
             'welcome_message' => 'New Welcome Message',
@@ -99,7 +99,7 @@ class ApplicationSettingsUnitTest extends TestCase
 
         $data = [
             'url' => str_replace('https://', '', config('app.url')),
-            'timezone' => 'America/LosAngeles',
+            'timezone' => 'America/Los_Angeles',
             'max_filesize' => '123456',
             'company_name' => 'Bobs Fancy Cats',
             'home_links' => [[], [], []],
@@ -137,7 +137,7 @@ class ApplicationSettingsUnitTest extends TestCase
 
         $data = [
             'url' => str_replace('https://', '', config('app.url')),
-            'timezone' => 'America/LosAngeles',
+            'timezone' => 'America/Los_Angeles',
             'max_filesize' => '123456',
             'company_name' => 'Bobs Fancy Cats',
             'welcome_message' => null,
@@ -179,7 +179,7 @@ class ApplicationSettingsUnitTest extends TestCase
 
         $data = [
             'url' => str_replace('https://', '', config('app.url')),
-            'timezone' => 'America/LosAngeles',
+            'timezone' => 'America/Los_Angeles',
             'max_filesize' => '123456',
             'company_name' => 'Bobs Fancy Cats',
             'welcome_message' => null,
@@ -351,7 +351,7 @@ class ApplicationSettingsUnitTest extends TestCase
 
         $this->assertNotNull($response);
 
-        $this->assertDatabaseHas('application_settings', [
+        $this->assertDatabaseHas('app_settings', [
             'key' => 'app.logo',
         ]);
     }

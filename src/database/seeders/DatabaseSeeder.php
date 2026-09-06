@@ -5,11 +5,13 @@ namespace Database\Seeders;
 use App\Facades\CacheData;
 use App\Models\AppSettings;
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
+    use WithoutModelEvents;
+
     /**
      * Seed the application's database.
      */
@@ -42,6 +44,12 @@ class DatabaseSeeder extends Seeder
         // Set Admin User's password to not be expired
         User::find(1)->update([
             'password_expires' => null,
+        ]);
+
+        // Set Pacific Timezone
+        AppSettings::create([
+            'key' => 'timezone',
+            'value' => 'America/Los_Angeles',
         ]);
     }
 }

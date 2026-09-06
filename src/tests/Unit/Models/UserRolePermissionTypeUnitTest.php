@@ -8,6 +8,7 @@ use Tests\TestCase;
 
 class UserRolePermissionTypeUnitTest extends TestCase
 {
+    /** @var UserRolePermissionType */
     protected $model;
 
     protected function setUp(): void
