@@ -8,6 +8,7 @@ use App\Services\_Base\TraceContext;
 use App\Services\Misc\CacheFacadeHelper;
 use App\Services\User\GetMailableUsers;
 use App\Services\User\UserPermissionsService;
+use Illuminate\Console\Events\CommandStarting;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Queue\Events\JobExceptionOccurred;
 use Illuminate\Queue\Events\JobProcessed;
@@ -107,6 +108,15 @@ class AppServiceProvider extends ServiceProvider
             Log::withoutContext(['trace_id']);
 
             app(TraceContext::class)->clear();
+        });
+
+        // Add Trace ID to all console jobs
+        Event::listen(CommandStarting::class, function (CommandStarting $event) {
+            $traceId = app(TraceContext::class)->id();
+
+            Context::add([
+                'trace_id' => $traceId,
+            ]);
         });
     }
 }

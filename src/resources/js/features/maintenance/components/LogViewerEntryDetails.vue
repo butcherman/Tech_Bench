@@ -84,5 +84,6 @@ const entryTimestamp = computed(() => {
                 </div>
             </div>
         </div>
+        {{ activeEntry }}
     </div>
 </template>

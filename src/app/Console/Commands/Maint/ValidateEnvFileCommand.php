@@ -5,6 +5,7 @@ namespace App\Console\Commands\Maint;
 use App\Actions\Maintenance\ValidateEnvFile;
 use Illuminate\Console\Command;
 use Illuminate\Console\ConfirmableTrait;
+use Illuminate\Support\Facades\Log;
 
 class ValidateEnvFileCommand extends Command
 {
@@ -39,8 +40,12 @@ class ValidateEnvFileCommand extends Command
 
         $this->line('Checking Environment File');
 
+        Log::info('Checking Environment File');
+
         $svc();
 
         $this->info('Environment File is up to date');
+
+        Log::info('Environment File is up to date');
     }
 }
