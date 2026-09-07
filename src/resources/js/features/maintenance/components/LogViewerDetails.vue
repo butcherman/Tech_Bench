@@ -12,19 +12,22 @@ const colHelper = useColumnBuilder<LogEntry>();
 const { getBadgeClass, getBadgeIcon } = useLogEntryHelper();
 
 const dataColumns = [
-    colHelper.text("time", "Date / Time", {
+    colHelper.text("timestamp", "Date / Time", {
         filterable: false,
         sort: false,
+        width: 145,
     }),
     colHelper.text("level", "Level", {
         filterable: false,
         sort: false,
+        width: 80,
     }),
-    // colHelper.text("context.user", "User", {
-    //     filterable: false,
-    //     sort: false,
-    // }),
-    colHelper.text("message", "Message", {
+    colHelper.text("user", "User", {
+        filterable: false,
+        sort: false,
+        width: 200,
+    }),
+    colHelper.text("data.body", "Message", {
         filterable: false,
         sort: false,
     }),

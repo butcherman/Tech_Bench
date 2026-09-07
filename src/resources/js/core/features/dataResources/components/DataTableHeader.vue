@@ -2,7 +2,7 @@
 import DataTableHeaderFilter from "./DataTableHeaderFilter.vue";
 import { computed } from "vue";
 import { FlexRender } from "@tanstack/vue-table";
-import type { RowData, Table } from "@tanstack/vue-table";
+import type { Header, RowData, Table } from "@tanstack/vue-table";
 
 defineSlots<{
     [key: string]: any;
@@ -26,6 +26,21 @@ const getSortingIcon = (
         default:
             return "sort";
     }
+};
+
+/**
+ * Get the style attribute of the column
+ */
+const getStyleData = (column: Header<TData, unknown>): string[] => {
+    let styleData: string[] = [];
+
+    if (column.column.columnDef.meta?.width) {
+        styleData.push(
+            `width: ${column.column.columnDef.meta.width}px !important`,
+        );
+    }
+
+    return styleData;
 };
 
 /**
@@ -55,6 +70,7 @@ const showFilterRow = computed<boolean>(() => {
                 v-for="headerCell in headerGroup.headers"
                 :key="headerCell.id"
                 :class="table?.options.meta?.paddingClass"
+                :style="getStyleData(headerCell)"
             >
                 <fa-icon
                     v-if="headerCell.column.getCanSort()"

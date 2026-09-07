@@ -60,6 +60,7 @@ declare module "@tanstack/table-core" {
         filterSelect?: boolean;
         icon?: string;
         label?: string;
+        width?: number;
     }
 
     interface TableMeta<TData extends RowData> {

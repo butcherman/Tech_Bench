@@ -1,10 +1,18 @@
 interface LogEntry {
-    time: string;
+    timestamp: string;
     env: string;
     level: string;
-    message: string;
-    data: any;
-    context: any;
+    user: string | null;
+    data: {
+        body: string;
+        extra: unknown[];
+        stack_trace: string | string[];
+        context: {
+            ip_address: string;
+            trace_id: string;
+            user: User;
+        };
+    };
 }
 
 type LogLevel =

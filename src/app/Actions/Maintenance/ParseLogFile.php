@@ -3,90 +3,179 @@
 namespace App\Actions\Maintenance;
 
 use Carbon\Carbon;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 class ParseLogFile
 {
-    /**
-     * Regex pattern for standard application log entries
-     *
-     * @var string
-     */
-    protected $appLogEntryPattern = '/^\[(\d{4}-\d{2}-\d{2}) (\d{2}:\d{2}:\d{2})\] (?:.*?(\w+)\.)(?:.*?(\w+)\:) (.*?)? (?:\{(.*?)\})? (?:\{(.*?)\})$/i';
-
-    /**
-     * Regex pattern for log entries that are missing Context or additional data
-     *
-     * @var string
-     */
-    protected $contextMissingPattern = '/^\[(\d{4}-\d{2}-\d{2}) (\d{2}:\d{2}:\d{2})\] (?:.*?(\w+)\.)(?:.*?(\w+)\:) (.*)?$/i';
-
     public function __invoke(string $logFile)
     {
-        $log = file(Storage::disk('logs')->path('Application/'.$logFile.'.log'));
 
-        return $this->parseFileArray($log);
-    }
+        $logEntries = $this->getLogEntries($logFile);
+        $entryData = [];
 
-    /**
-     * Separate the sections of the log file for formatting
-     */
-    private function parseFileArray(array $logFileArray): array
-    {
-        $entries = [];
+        foreach ($logEntries as $entry) {
+            if ($entry) {
+                $logHeaders = $this->parseLogHeaders($entry);
+                $bodyData = $this->extractBodyData(($logHeaders['body']));
 
-        foreach ($logFileArray as $entry) {
-            $parsedEntry = $this->parseLogEntry($entry);
-
-            if (! $parsedEntry) {
-                $entries[array_key_last($entries)]['stack_trace'][] = $entries;
-            } else {
-                $entries[] = $parsedEntry;
+                $entryData[] = [
+                    'timestamp' => Carbon::parse($logHeaders['timestamp'])
+                        ->setTimezone(config('app.timezone'))
+                        ->format('m-d h:i A'),
+                    'env' => $logHeaders['environment'],
+                    'level' => $logHeaders['level'],
+                    'data' => $bodyData,
+                    'user' => $bodyData['context']['user']['full_name'] ?? null,
+                ];
             }
         }
 
-        return $entries;
+        return $entryData;
     }
 
     /**
-     * Parse an individual Log Entry
+     * Separate the log file into individual entries.
      */
-    private function parseLogEntry(string $entry): array|false
+    private function getLogEntries(string $logFile): array
     {
-        // If this is a standard entry line, we will return normal data
-        if (preg_match($this->appLogEntryPattern, $entry, $data)) {
+        $logFile = Storage::disk('logs')->get('Application/'.$logFile.'.log');
 
-            $context = isset($data[7]) ? json_decode($data[7], true) : null;
+        return preg_split(
+            '/(?=^\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\])/m',
+            trim($logFile)
+        );
+    }
 
-            return [
-                'time' => Carbon::parse($data[1].' '.$data[2])
-                    ->setTimezone(config('app.timezone'))
-                    ->format('m-d h:i A'),
-                'env' => $data[3],
-                'level' => Str::lower($data[4]),
-                'user' => $context ? $context['user']['full_name'] : null,
-                'message' => $data[5],
-                'data' => $data[6] ? json_decode('{'.$data[6].'}') : null,
-                'context' => $context,
-            ];
+    /**
+     * Get the log entry headers
+     */
+    private function parseLogHeaders(string $entry): array
+    {
+        preg_match(
+            '/^\[(?<timestamp>[^\]]+)\]\s+(?<environment>[^.]+)\.(?<level>[A-Z]+):\s*(?<body>.*)$/s',
+            $entry,
+            $matches
+        );
+
+        return Arr::only($matches, ['timestamp', 'environment', 'level', 'body']);
+    }
+
+    /**
+     * Pull the JSON data out of the message body.
+     */
+    private function extractBodyData(string $body)
+    {
+        $lines = preg_split('/\R/', $body);
+        $firstLine = array_shift($lines);
+
+        // Extract the Stack Trace from the rest of the entry
+        $stackTrace = array_filter(
+            $lines,
+            static fn (string $line): bool => trim($line) !== ''
+        );
+
+        $jsonData = $this->extractTrailingJson($firstLine);
+
+        $jsonData['stack_trace'] = $stackTrace;
+
+        return $jsonData;
+    }
+
+    private function extractTrailingJson(string $body): array
+    {
+        $json = [];
+
+        while (true) {
+            $position = $this->findTrailingJsonStart($body);
+
+            if ($position === null) {
+                break;
+            }
+
+            $candidate = trim(substr($body, $position));
+
+            try {
+                $decoded = json_decode(
+                    $candidate,
+                    true,
+                    512,
+                    JSON_THROW_ON_ERROR
+                );
+            } catch (\JsonException) {
+                break;
+            }
+
+            array_unshift($json, $decoded);
+
+            $body = trim(substr($body, 0, $position));
         }
 
-        // If the entry is missing context data, return normal data as well
-        if (preg_match($this->contextMissingPattern, $entry, $data)) {
-            return [
-                'time' => Carbon::parse($data[1].' '.$data[2])
-                    ->setTimezone(config('app.timezone'))
-                    ->format('m-d h:i A'),
-                'env' => $data[3],
-                'level' => Str::lower($data[4]),
-                'user' => null,
-                'message' => $data[5],
-                'data' => null,
-                'context' => null,
-            ];
+        $json = array_reverse($json);
+
+        return [
+            'body' => $body,
+            'context' => $json[0] ?? [],
+            'extra' => $json[1] ?? [],
+        ];
+    }
+
+    private function findTrailingJsonStart(string $body): ?int
+    {
+        $body = rtrim($body);
+
+        if ($body === '' || ! str_ends_with($body, '}')) {
+            return null;
         }
 
-        return false;
+        $depth = 0;
+        $inString = false;
+        $escaped = false;
+
+        for ($i = strlen($body) - 1; $i >= 0; $i--) {
+            $character = $body[$i];
+
+            if ($inString) {
+                if ($escaped) {
+                    $escaped = false;
+
+                    continue;
+                }
+
+                if ($character === '\\') {
+                    $escaped = true;
+
+                    continue;
+                }
+
+                if ($character === '"') {
+                    $inString = false;
+                }
+
+                continue;
+            }
+
+            if ($character === '"') {
+                $inString = true;
+
+                continue;
+            }
+
+            if ($character === '}') {
+                $depth++;
+
+                continue;
+            }
+
+            if ($character === '{') {
+                $depth--;
+
+                if ($depth === 0) {
+                    return $i;
+                }
+            }
+        }
+
+        return null;
     }
 }
