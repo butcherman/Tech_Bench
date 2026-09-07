@@ -50,6 +50,7 @@ const entryTimestamp = computed(() => {
             v-if="activeEntry.data.context"
             class="border border-slate-300 rounded-lg p-2"
         >
+            {{ activeEntry.data.context }}
             <h6 class="text-muted">Trace ID:</h6>
             <div class="px-2">
                 {{ activeEntry.data.context.trace_id }}
