@@ -31,8 +31,6 @@ class TraceRequest
         );
         Context::add('ip_address', $request->ip());
 
-        Log::debug('middleware is triggered');
-
         try {
             $response = $next($request);
 
