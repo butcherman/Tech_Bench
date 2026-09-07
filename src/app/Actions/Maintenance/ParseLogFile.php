@@ -27,7 +27,7 @@ class ParseLogFile
                     'env' => $logHeaders['environment'],
                     'level' => Str::lower($logHeaders['level']),
                     'data' => $bodyData,
-                    'user' => $bodyData['context']['user']['full_name'] ?? null,
+                    'user' => $bodyData['context']['user'] ?? null,
                 ];
             }
         }

@@ -27,7 +27,11 @@ class TraceRequest
         Context::add('trace_id', $traceId);
         Context::add(
             'user_id',
-            $request->user() ? $request->user()->user_id : null
+            $request->user()?->user_id
+        );
+        Context::add(
+            'user',
+            $request->user()?->full_name
         );
         Context::add('ip_address', $request->ip());
 

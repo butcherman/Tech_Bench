@@ -75,14 +75,18 @@ class LogDebugVisits
             : $request->ip();
 
         $requestData = $this->checkRequestArray($request->toArray());
-
         $currentRoute = $request->route()->getName();
 
-        Log::debug('Route '.$currentRoute.' visited by '.$user, [
+        $logData = [
             'url' => $request->fullUrl(),
             'method' => $request->method(),
-            'submitted-data' => $requestData,
-        ]);
+        ];
+
+        if ($requestData) {
+            $logData['submitted-data'] = $requestData;
+        }
+
+        Log::debug('Route '.$currentRoute.' visited by '.$user, $logData);
     }
 
     /**
