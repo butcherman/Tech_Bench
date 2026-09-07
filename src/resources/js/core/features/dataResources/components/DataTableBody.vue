@@ -2,7 +2,7 @@
 import DataTableBodyData from "./DataTableBodyData.vue";
 import DataTableBodyEmpty from "./DataTableBodyEmpty.vue";
 import DataTableBodyLoading from "./DataTableBodyLoading.vue";
-import { computed, ref } from "vue";
+import { computed } from "vue";
 import type { RowData, Table } from "@tanstack/vue-table";
 
 defineSlots<{
@@ -16,12 +16,11 @@ const emit = defineEmits<{
 const props = defineProps<{
     table: Table<TRow>;
     noResultsText?: string;
+    isLoading?: boolean;
 }>();
 
-const isLoading = ref(false);
-
 const showComponent = computed(() => {
-    if (isLoading.value) {
+    if (props.isLoading) {
         return "loader";
     }
 

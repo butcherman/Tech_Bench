@@ -26,6 +26,7 @@ const props = defineProps<{
     gridLines?: boolean;
     noResultsText?: string;
     paginate?: boolean;
+    loading?: boolean;
 
     rowClassFn?: (row: TRow) => string | false;
     rowClickFn?: (event: MouseEvent, row: TRow) => void;
@@ -45,6 +46,7 @@ const table = useDataTable(props);
             <DataTableBody
                 :table="table"
                 :no-results-text="noResultsText"
+                :is-loading="loading"
                 @row-click="$emit('row-click', $event)"
             >
                 <template v-for="(_, slot) of $slots" #[slot]="scope">
