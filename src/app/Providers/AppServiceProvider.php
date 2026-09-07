@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Actions\Misc\CheckDatabaseError;
 use App\Policies\GatePolicy;
+use App\Services\_Base\TraceContext;
 use App\Services\Misc\CacheFacadeHelper;
 use App\Services\User\GetMailableUsers;
 use App\Services\User\UserPermissionsService;
@@ -37,6 +38,9 @@ class AppServiceProvider extends ServiceProvider
 
         // User Permission Facade
         $this->app->bind('UserPermissions', UserPermissionsService::class);
+
+        // Tracing Context for logging information
+        $this->app->scoped(TraceContext::class, fn () => new TraceContext);
 
         // Get Mailable Facade
         // $this->app->bind('GetMailable', GetMailableUsers::class);
