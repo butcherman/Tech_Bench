@@ -10,13 +10,10 @@ use App\Services\User\GetMailableUsers;
 use App\Services\User\UserPermissionsService;
 use Illuminate\Console\Events\CommandStarting;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Queue\Events\JobExceptionOccurred;
-use Illuminate\Queue\Events\JobProcessed;
 use Illuminate\Queue\Events\JobProcessing;
 use Illuminate\Support\Facades\Context;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\ServiceProvider;
 use SocialiteProviders\Azure\Provider;
@@ -96,18 +93,6 @@ class AppServiceProvider extends ServiceProvider
             Context::add([
                 'trace_id' => $traceId,
             ]);
-        });
-
-        Queue::after(function (JobProcessed $event) {
-            Log::withoutContext(['trace_id']);
-
-            app(TraceContext::class)->clear();
-        });
-
-        Queue::exceptionOccurred(function (JobExceptionOccurred $event) {
-            Log::withoutContext(['trace_id']);
-
-            app(TraceContext::class)->clear();
         });
 
         // Add Trace ID to all console jobs
