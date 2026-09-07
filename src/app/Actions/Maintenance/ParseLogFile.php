@@ -5,6 +5,7 @@ namespace App\Actions\Maintenance;
 use Carbon\Carbon;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class ParseLogFile
 {
@@ -20,11 +21,9 @@ class ParseLogFile
                 $bodyData = $this->extractBodyData(($logHeaders['body']));
 
                 $entryData[] = [
-                    'timestamp' => Carbon::parse($logHeaders['timestamp'])
-                        ->setTimezone(config('app.timezone'))
-                        ->format('m-d h:i A'),
+                    'timestamp' => Carbon::parse($logHeaders['timestamp']),
                     'env' => $logHeaders['environment'],
-                    'level' => $logHeaders['level'],
+                    'level' => Str::lower($logHeaders['level']),
                     'data' => $bodyData,
                     'user' => $bodyData['context']['user']['full_name'] ?? null,
                 ];
@@ -115,8 +114,8 @@ class ParseLogFile
 
         return [
             'body' => $body,
-            'context' => $json[0] ?? [],
-            'extra' => $json[1] ?? [],
+            'context' => $json[0] ?? null,
+            'extra' => $json[1] ?? null,
         ];
     }
 

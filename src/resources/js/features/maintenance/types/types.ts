@@ -1,17 +1,17 @@
 interface LogEntry {
     timestamp: string;
     env: string;
-    level: string;
+    level: LogLevel;
     user: string | null;
     data: {
         body: string;
-        extra: unknown[];
-        stack_trace: string | string[];
+        extra: unknown[] | null;
+        stack_trace: string[];
         context: {
-            ip_address: string;
-            trace_id: string;
-            user: User;
-        };
+            ip_address?: string;
+            trace_id?: string;
+            user?: User;
+        } | null;
     };
 }
 

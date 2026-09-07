@@ -36,7 +36,7 @@ const getStyleData = (column: Header<TData, unknown>): string[] => {
 
     if (column.column.columnDef.meta?.width) {
         styleData.push(
-            `width: ${column.column.columnDef.meta.width}px !important`,
+            `width: ${column.column.columnDef.meta.width}px; min-width: ${column.column.columnDef.meta.width}px;`,
         );
     }
 

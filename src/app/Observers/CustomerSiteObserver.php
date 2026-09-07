@@ -10,7 +10,7 @@ class CustomerSiteObserver extends Observer
     public function created(CustomerSite $site): void
     {
         Log::info(
-            'New Customer Site created for '.$site->Customer.' by '.$this->user,
+            'New Customer Site created for '.$site->Customer->name.' by '.$this->user,
             $site->toArray()
         );
     }
