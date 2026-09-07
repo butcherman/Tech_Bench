@@ -50,7 +50,8 @@ class ValidateWorkbookImportFile
             return $validatedRow;
         });
 
-        Log::debug('File Import Validation Completed', $validated->toArray());
+        // TODO - Properly log this
+        // Log::debug('File Import Validation Completed', $validated->toArray());
 
         return $validated;
     }

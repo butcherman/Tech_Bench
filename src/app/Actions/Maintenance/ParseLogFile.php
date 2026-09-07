@@ -9,9 +9,11 @@ use Illuminate\Support\Str;
 
 class ParseLogFile
 {
-    public function __invoke(string $logFile)
+    /**
+     * Parse the log file into individual entries
+     */
+    public function __invoke(string $logFile): array
     {
-
         $logEntries = $this->getLogEntries($logFile);
         $entryData = [];
 
@@ -81,6 +83,9 @@ class ParseLogFile
         return $jsonData;
     }
 
+    /**
+     * Separate context and additional data from message body
+     */
     private function extractTrailingJson(string $body): array
     {
         $json = [];
@@ -112,13 +117,34 @@ class ParseLogFile
 
         $json = array_reverse($json);
 
+        if (count($json) === 2 || count($json) === 0) {
+            return [
+                'body' => $body,
+                'context' => $json[0] ?? null,
+                'extra' => $json[1] ?? null,
+            ];
+        }
+
+        $isContext = array_key_exists('trace_id', $json[0]);
+
+        if ($isContext) {
+            return [
+                'body' => $body,
+                'context' => $json[0],
+                'extra' => null,
+            ];
+        }
+
         return [
             'body' => $body,
-            'context' => $json[0] ?? null,
-            'extra' => $json[1] ?? null,
+            'context' => null,
+            'extra' => $json[0],
         ];
     }
 
+    /**
+     * Find the start of the JSON string in the message body
+     */
     private function findTrailingJsonStart(string $body): ?int
     {
         $body = rtrim($body);

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import BaseBadge from "@/core/components/badges/BaseBadge.vue";
+import TableStacked from "@/core/features/dataResources/TableStacked.vue";
 import { useLogEntryHelper } from "../composables/logEntryHelper";
 import { computed } from "vue";
 
@@ -22,6 +23,14 @@ const entryTimestamp = computed(() => {
         timeStamp: date.toLocaleTimeString(),
     };
 });
+
+const isValueObject = (rowData: object | number | string): boolean => {
+    if (typeof rowData === "string" || typeof rowData === "number") {
+        return false;
+    }
+
+    return true;
+};
 </script>
 
 <template>
@@ -40,8 +49,8 @@ const entryTimestamp = computed(() => {
         </div>
 
         <div class="border border-slate-300 rounded-lg p-2">
-            <h5 class="text-muted">Message:</h5>
-            <div class="p-2 overflow-x-auto">
+            <h6 class="text-muted">Message:</h6>
+            <div class="px-2 overflow-x-auto">
                 {{ activeEntry.data.body }}
             </div>
         </div>
@@ -50,33 +59,69 @@ const entryTimestamp = computed(() => {
             v-if="activeEntry.data.context"
             class="border border-slate-300 rounded-lg p-2"
         >
-            {{ activeEntry.data.context }}
             <h6 class="text-muted">Trace ID:</h6>
             <div class="px-2">
                 {{ activeEntry.data.context.trace_id }}
             </div>
-            <h6 class="text-muted">User:</h6>
-            <div class="px-2">
-                <div>{{ activeEntry.data.context.user?.full_name }}</div>
-                <div>{{ activeEntry.data.context.user?.email }}</div>
+            <div v-if="activeEntry.data.context.user">
+                <h6 class="text-muted">User:</h6>
+                <div class="px-2">
+                    <div>{{ activeEntry.data.context.user?.full_name }}</div>
+                    <div>{{ activeEntry.data.context.user?.email }}</div>
+                </div>
             </div>
-            <h6 class="text-muted">IP Address:</h6>
-            <div class="px-2">
-                {{ activeEntry.data.context.ip_address }}
+            <div v-if="activeEntry.data.context.ip_address">
+                <h6 class="text-muted">IP Address:</h6>
+                <div class="px-2">
+                    {{ activeEntry.data.context.ip_address }}
+                </div>
             </div>
-        </div>
-
-        <div v-if="activeEntry.data.extra">
-            {{ activeEntry.data.extra }}
         </div>
 
         <div
-            v-if="activeEntry.data.stack_trace.length"
-            class="border border-slate-300 rounded-lg p-2"
+            v-if="activeEntry.data.extra"
+            class="border border-slate-300 rounded-lg p-2 overflow-x-auto"
         >
+            <h6 class="text-muted">Additional Data:</h6>
+            <TableStacked :data="activeEntry.data.extra" compact>
+                <template #row="{ rowData }">
+                    <template v-if="isValueObject(rowData.value)">
+                        <td colspan="2">
+                            <div class="font-bold text-muted">
+                                {{ rowData.toTitle }} :
+                            </div>
+                            <TableStacked :data="rowData.value" compact>
+                                <template #index="{ rowData }">
+                                    <div
+                                        class="text-start text-muted flex flex-row gap-1 text-nowrap"
+                                    >
+                                        <div class="grow">
+                                            {{ rowData.toTitle }}
+                                        </div>
+                                        <div>:</div>
+                                    </div>
+                                </template>
+                            </TableStacked>
+                        </td>
+                    </template>
+                    <template v-else>
+                        <th
+                            class="text-start text-muted flex flex-row gap-1 pe-2 text-nowrap"
+                        >
+                            <div class="grow">
+                                {{ rowData.toTitle }}
+                            </div>
+                            <div>:</div>
+                        </th>
+                        <td class="text-nowrap">{{ rowData.value }}</td>
+                    </template>
+                </template>
+            </TableStacked>
+        </div>
+
+        <div v-if="activeEntry.data.stack_trace.length">
             <h6 class="text-muted">Stack Trace:</h6>
             <div class="px-2 overflow-x-auto text-nowrap">
-                <!-- {{ activeEntry.data.stack_trace }} -->
                 <div v-for="line in activeEntry.data.stack_trace">
                     <span v-if="line !== '[stacktrace]'">
                         {{ line }}
@@ -84,6 +129,5 @@ const entryTimestamp = computed(() => {
                 </div>
             </div>
         </div>
-        {{ activeEntry }}
     </div>
 </template>
