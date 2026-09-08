@@ -2,6 +2,7 @@
 
 namespace App\Services\Maintenance;
 
+use App\Actions\Maintenance\ParseLogFile;
 use App\Enums\LogLevels;
 use App\Traits\AppSettingsTrait;
 use Illuminate\Support\Arr;
@@ -12,6 +13,8 @@ use Illuminate\Support\Facades\Storage;
 class LogUtilitiesService
 {
     use AppSettingsTrait;
+
+    public function __construct(protected ParseLogFile $parseLogFile) {}
 
     /**
      * Return the possible log levels.
@@ -34,6 +37,18 @@ class LogUtilitiesService
         }
 
         return true;
+    }
+
+    /**
+     * Get a select number of entries from a log file
+     */
+    public function entries(string $logFile, int $page, int $perPage)
+    {
+        return ($this->parseLogFile)(
+            $logFile,
+            $page,
+            $perPage,
+        );
     }
 
     /**

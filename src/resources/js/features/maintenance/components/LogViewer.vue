@@ -4,10 +4,10 @@ import LogViewerEntries from "./LogViewerEntries.vue";
 import { computed } from "vue";
 
 const props = defineProps<{
-    logData?: LogEntry[];
+    logData?: LogData;
 }>();
 
-const thisLog = computed(() => props.logData ?? []);
+const thisLog = computed(() => props.logData?.data ?? []);
 </script>
 
 <template>

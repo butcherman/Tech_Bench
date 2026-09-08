@@ -119,7 +119,10 @@ const isValueObject = (rowData: object | number | string): boolean => {
             </TableStacked>
         </div>
 
-        <div v-if="activeEntry.data.stack_trace.length">
+        <div
+            v-if="activeEntry.data.stack_trace.length"
+            class="border border-slate-300 rounded-lg p-2 overflow-x-auto"
+        >
             <h6 class="text-muted">Stack Trace:</h6>
             <div class="px-2 overflow-x-auto text-nowrap">
                 <div v-for="line in activeEntry.data.stack_trace">

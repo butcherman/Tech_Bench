@@ -15,6 +15,17 @@ interface LogEntry {
     };
 }
 
+interface LogData {
+    data: LogEntry[];
+    meta: {
+        current_page: number;
+        from: number;
+        has_more: boolean;
+        per_page: number;
+        to: number;
+    };
+}
+
 type LogLevel =
     | "emergency"
     | "alert"

@@ -31,8 +31,24 @@ class LogsIndexController extends Controller
             $todaysLog
         );
 
+        // return Inertia::render('Maint/Logs/Index', [
+        //     'log-data' => Inertia::defer(fn () => $parse($todaysLog)),
+        // ]);
+
         return Inertia::render('Maint/Logs/Index', [
-            'log-data' => Inertia::defer(fn () => $parse($todaysLog)),
+            'logFile' => $todaysLog,
+
+            'logData' => Inertia::defer(
+                fn () => $this->svc->entries(
+                    $todaysLog,
+                    1,
+                    100,
+                )
+            ),
+
+            // 'stats' => Inertia::defer(
+            //     fn () => $this->svc->stats($todaysLog)
+            // ),
         ]);
     }
 }
