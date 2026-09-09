@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Maintenance\Logs;
 
-use App\Actions\Maintenance\ParseLogFile;
 use App\Exceptions\Maintenance\LogFileMissingException;
 use App\Http\Controllers\Controller;
 use App\Models\AppSettings;
@@ -18,7 +17,7 @@ class LogsIndexController extends Controller
     /**
      * Show a listing of Log Channels and Logs in that Channel
      */
-    public function __invoke(ParseLogFile $parse): Response
+    public function __invoke(): Response
     {
         $this->authorize('viewAny', AppSettings::class);
 
@@ -31,18 +30,13 @@ class LogsIndexController extends Controller
             $todaysLog
         );
 
-        // return Inertia::render('Maint/Logs/Index', [
-        //     'log-data' => Inertia::defer(fn () => $parse($todaysLog)),
-        // ]);
-
         return Inertia::render('Maint/Logs/Index', [
             'logFile' => $todaysLog,
-
             'logData' => Inertia::defer(
                 fn () => $this->svc->entries(
                     $todaysLog,
                     1,
-                    100,
+                    10,
                 )
             ),
 

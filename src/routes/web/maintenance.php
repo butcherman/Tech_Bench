@@ -7,6 +7,7 @@ use App\Http\Controllers\Maintenance\Backup\DownloadBackupController;
 use App\Http\Controllers\Maintenance\Backup\RunBackupController;
 use App\Http\Controllers\Maintenance\Backup\UploadBackupController;
 use App\Http\Controllers\Maintenance\Logs\DownloadLogController;
+use App\Http\Controllers\Maintenance\Logs\LogLoadMoreController;
 use App\Http\Controllers\Maintenance\Logs\LogSettingsController;
 use App\Http\Controllers\Maintenance\Logs\LogsIndexController;
 use App\Http\Controllers\Maintenance\Logs\ViewLogController;
@@ -32,12 +33,14 @@ Route::middleware('auth.secure')->prefix('maintenance')->name('maint.')->group(f
                 Route::put('settings', 'update')->name('update');
             });
 
-        Route::get('{channel}/{logFile}/download', DownloadLogController::class)
+        Route::get('{logFile}/load-more', LogLoadMoreController::class)
+            ->name('load');
+        Route::get('{logFile}/download', DownloadLogController::class)
             ->name('download');
-        Route::get('{channel}/{logFile}', ViewLogController::class)
+        Route::get('{logFile}', ViewLogController::class)
             ->name('show')
             ->breadcrumb('View Log', 'maint.logs.index');
-        Route::get('/{channel?}', LogsIndexController::class)
+        Route::get('/', LogsIndexController::class)
             ->name('index')
             ->breadcrumb('Logs', 'admin.index');
     });
