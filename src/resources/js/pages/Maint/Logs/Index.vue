@@ -3,7 +3,7 @@ import AppLayout from "@/layouts/AppLayout.vue";
 import LogViewer from "@/features/maintenance/components/LogViewer.vue";
 
 const props = defineProps<{
-    logData?: LogEntry[];
+    logData?: LogData;
 }>();
 </script>
 
