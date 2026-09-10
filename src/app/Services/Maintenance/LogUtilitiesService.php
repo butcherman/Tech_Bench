@@ -42,12 +42,11 @@ class LogUtilitiesService
     /**
      * Get a select number of entries from a log file
      */
-    public function entries(string $logFile, int $page, int $perPage)
+    public function entries(string $logFile, int $page)
     {
         return ($this->parseLogFile)(
             $logFile,
             $page,
-            $perPage,
         );
     }
 

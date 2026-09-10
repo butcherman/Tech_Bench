@@ -52,8 +52,6 @@ const dataColumns = [
 ];
 
 const onRowClick = (event: MouseEvent, rowData: LogEntry) => {
-    console.log(rowData);
-
     activeEntry.value = rowData;
     showEntry.value = true;
 };

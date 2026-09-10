@@ -22,7 +22,6 @@ interface LogData {
         current_page: number;
         from: number;
         has_more: boolean;
-        per_page: number;
         to: number;
     };
 }

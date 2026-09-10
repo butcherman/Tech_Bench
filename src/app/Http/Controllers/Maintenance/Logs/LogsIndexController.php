@@ -36,7 +36,6 @@ class LogsIndexController extends Controller
                 fn () => $this->svc->entries(
                     $todaysLog,
                     1,
-                    50,
                 )
             ),
 

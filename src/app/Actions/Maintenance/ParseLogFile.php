@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Storage;
 
 class ParseLogFile
 {
+    private const PER_PAGE = 100;
+
     public function __construct(
         protected ReverseLogReader $reader,
         protected ParseLogEntry $parseEntry,
@@ -15,11 +17,10 @@ class ParseLogFile
     public function __invoke(
         string $logFile,
         int $page = 1,
-        int $perPage = 100,
     ): array {
         $path = Storage::disk('logs')->path('Application/'.$logFile.'.log');
 
-        $skip = ($page - 1) * $perPage;
+        $skip = ($page - 1) * self::PER_PAGE;
 
         $entries = [];
         $position = 0;
@@ -35,12 +36,12 @@ class ParseLogFile
                 $entries[] = $parsed;
             }
 
-            if (count($entries) > $perPage) {
+            if (count($entries) > self::PER_PAGE) {
                 break;
             }
         }
 
-        $hasMore = count($entries) > $perPage;
+        $hasMore = count($entries) > self::PER_PAGE;
 
         if ($hasMore) {
             array_pop($entries);
@@ -50,7 +51,6 @@ class ParseLogFile
             'data' => $entries,
             'meta' => [
                 'current_page' => $page,
-                'per_page' => $perPage,
                 'from' => $entries === []
                     ? null
                     : $skip + 1,

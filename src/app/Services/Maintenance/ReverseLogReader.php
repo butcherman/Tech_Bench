@@ -7,7 +7,7 @@ use RuntimeException;
 
 class ReverseLogReader
 {
-    private const CHUNK_SIZE = 8192;
+    private const CHUNK_SIZE = 64 * 1024;
 
     /**
      * Yield complete log entries from newest to oldest.
