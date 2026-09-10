@@ -4,9 +4,9 @@ import BaseButton from "@/core/components/buttons/BaseButton.vue";
 import DataTable from "@/core/features/dataResources/DataTable.vue";
 import Drawer from "@/core/components/Drawer.vue";
 import LogViewerEntryDetails from "./LogViewerEntryDetails.vue";
+import { ref } from "vue";
 import { useColumnBuilder } from "@/core/features/dataResources/composables/columnBuilder";
 import { useLogEntryHelper } from "../composables/logEntryHelper";
-import { ref } from "vue";
 
 const emit = defineEmits<{
     loadMore: [];
@@ -16,6 +16,7 @@ const props = defineProps<{
     logData: LogEntry[];
     loaded: boolean;
     hasMore: boolean;
+    isLoading: boolean;
 }>();
 
 const colHelper = useColumnBuilder<LogEntry>();
@@ -79,11 +80,18 @@ const onRowClick = (event: MouseEvent, rowData: LogEntry) => {
             <template #footer>
                 <div v-if="hasMore" class="flex justify-center">
                     <BaseButton
-                        text="Load More..."
+                        class="w-40"
                         size="sm"
                         variant="light"
                         @click="$emit('loadMore')"
-                    />
+                    >
+                        <fa-icon
+                            v-if="isLoading"
+                            icon="spinner"
+                            class="fa-spin-pulse"
+                        />
+                        <span v-else>Load More...</span>
+                    </BaseButton>
                 </div>
             </template>
         </DataTable>

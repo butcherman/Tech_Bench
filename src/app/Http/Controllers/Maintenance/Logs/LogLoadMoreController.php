@@ -29,7 +29,7 @@ class LogLoadMoreController extends Controller
             $this->svc->entries(
                 $logFile,
                 $request->input('page'),
-                10
+                50
             ),
         );
     }

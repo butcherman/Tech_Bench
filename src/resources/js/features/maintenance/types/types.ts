@@ -8,9 +8,10 @@ interface LogEntry {
         extra: unknown[] | null;
         stack_trace: string[];
         context: {
-            ip_address?: string;
-            trace_id?: string;
-            user?: User;
+            ip_address: string;
+            trace_id: string;
+            user: string;
+            user_id: number;
         } | null;
     };
 }

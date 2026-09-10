@@ -66,8 +66,8 @@ const isValueObject = (rowData: object | number | string): boolean => {
             <div v-if="activeEntry.data.context.user">
                 <h6 class="text-muted">User:</h6>
                 <div class="px-2">
-                    <div>{{ activeEntry.data.context.user?.full_name }}</div>
-                    <div>{{ activeEntry.data.context.user?.email }}</div>
+                    <div>{{ activeEntry.data.context.user }}</div>
+                    <div>User ID: {{ activeEntry.data.context.user_id }}</div>
                 </div>
             </div>
             <div v-if="activeEntry.data.context.ip_address">

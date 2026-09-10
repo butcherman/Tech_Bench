@@ -19,23 +19,13 @@ const props = defineProps<{
     isLoading?: boolean;
 }>();
 
-const showComponent = computed(() => {
-    if (props.isLoading) {
-        return "loader";
-    }
-
-    if (!props.table.getRowModel().rows.length) {
-        return "empty";
-    }
-
-    return "body";
-});
+const rows = computed(() => props.table.getRowModel().rows);
 </script>
 
 <template>
-    <DataTableBodyLoading v-if="showComponent === 'loader'" :table="table" />
+    <DataTableBodyLoading v-if="isLoading" :table="table" />
     <DataTableBodyEmpty
-        v-if="showComponent === 'empty'"
+        v-else-if="!rows.length"
         :table="table"
         :no-results-text="noResultsText"
     >
@@ -43,7 +33,7 @@ const showComponent = computed(() => {
             <slot :name="slot" v-bind="scope" />
         </template>
     </DataTableBodyEmpty>
-    <DataTableBodyData v-if="showComponent === 'body'" :table="table">
+    <DataTableBodyData v-else :table="table">
         <template v-for="(_, slot) of $slots" #[slot]="scope">
             <slot :name="slot" v-bind="scope" />
         </template>

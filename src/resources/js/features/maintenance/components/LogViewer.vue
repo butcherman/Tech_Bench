@@ -13,27 +13,32 @@ const props = defineProps<{
 const thisLog = ref<LogEntry[]>([]);
 const hasMore = ref<boolean>(false);
 const curPage = ref<number>(1);
+const isLoading = ref(false);
 
 /**
  * Get the next set of log entries.
  */
 const loadMore = async () => {
+    isLoading.value = true;
+
     const newEntries = await dataGet<LogData>(
         `${load.url(props.logFile)}?page=${curPage.value + 1}`,
     );
 
     if (newEntries) {
-        thisLog.value.push(...newEntries.data);
+        thisLog.value = [...thisLog.value, ...newEntries.data];
         hasMore.value = newEntries.meta.has_more;
         curPage.value = newEntries.meta.current_page;
     }
+
+    isLoading.value = false;
 };
 
 watch(
     () => props.logData,
     (newData) => {
         if (newData) {
-            thisLog.value.push(...newData?.data);
+            thisLog.value = [...newData.data];
             hasMore.value = newData.meta.has_more;
             curPage.value = newData.meta.current_page;
         }
@@ -51,9 +56,9 @@ watch(
                     :log-data="thisLog"
                     :loaded="logData !== undefined"
                     :has-more
+                    :is-loading
                     @load-more="loadMore"
                 />
-                {{ thisLog }}
             </div>
         </div>
     </Card>
