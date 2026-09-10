@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import BaseBadge from "@/core/components/badges/BaseBadge.vue";
+import BaseButton from "@/core/components/buttons/BaseButton.vue";
 import DataTable from "@/core/features/dataResources/DataTable.vue";
 import Drawer from "@/core/components/Drawer.vue";
 import LogViewerEntryDetails from "./LogViewerEntryDetails.vue";
@@ -7,9 +8,14 @@ import { useColumnBuilder } from "@/core/features/dataResources/composables/colu
 import { useLogEntryHelper } from "../composables/logEntryHelper";
 import { ref } from "vue";
 
+const emit = defineEmits<{
+    loadMore: [];
+}>();
+
 const props = defineProps<{
     logData: LogEntry[];
     loaded: boolean;
+    hasMore: boolean;
 }>();
 
 const colHelper = useColumnBuilder<LogEntry>();
@@ -69,6 +75,16 @@ const onRowClick = (event: MouseEvent, rowData: LogEntry) => {
                     :icon="getBadgeIcon(rowData.level)"
                     :text="rowData.level"
                 />
+            </template>
+            <template #footer>
+                <div v-if="hasMore" class="flex justify-center">
+                    <BaseButton
+                        text="Load More..."
+                        size="sm"
+                        variant="light"
+                        @click="$emit('loadMore')"
+                    />
+                </div>
             </template>
         </DataTable>
         <Drawer v-model="showEntry" position="right" title="Log Details">
