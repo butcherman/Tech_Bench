@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Maintenance\Logs;
 
+use App\Actions\Maintenance\CalculateLogStatics;
 use App\Exceptions\Maintenance\LogFileMissingException;
 use App\Http\Controllers\Controller;
 use App\Models\AppSettings;
@@ -12,7 +13,10 @@ use Inertia\Response;
 
 class LogsIndexController extends Controller
 {
-    public function __construct(protected LogUtilitiesService $svc) {}
+    public function __construct(
+        protected LogUtilitiesService $svc,
+        protected CalculateLogStatics $stats
+    ) {}
 
     /**
      * Show a listing of Log Channels and Logs in that Channel
@@ -32,11 +36,15 @@ class LogsIndexController extends Controller
 
         return Inertia::render('Maint/Logs/Index', [
             'logFile' => $todaysLog,
+            'loggingLevel' => config('logging.channels.app.level'),
             'logData' => Inertia::defer(
                 fn () => $this->svc->entries(
                     $todaysLog,
                     1,
                 )
+            ),
+            'logStats' => Inertia::defer(
+                fn () => ($this->stats)($todaysLog)
             ),
 
             // 'stats' => Inertia::defer(

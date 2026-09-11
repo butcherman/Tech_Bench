@@ -27,6 +27,16 @@ interface LogData {
     };
 }
 
+interface LogStats {
+    total: number;
+    levels: {
+        [key in LogLevel]: number;
+    };
+    traceIds: {
+        [key: string]: number;
+    };
+}
+
 type LogLevel =
     | "emergency"
     | "alert"

@@ -1,13 +1,16 @@
 <script setup lang="ts">
 import Card from "@/core/components/Card.vue";
 import LogViewerEntries from "./LogViewerEntries.vue";
+import LogViewerStatistics from "./LogViewerStatistics.vue";
 import { ref, watch } from "vue";
 import { dataGet } from "@/core/utilities/axiosWrapper.js";
 import { load } from "@/wayfinder/routes/maint/logs/index.js";
 
 const props = defineProps<{
     logFile: string;
+    loggingLevel: LogLevel;
     logData?: LogData;
+    logStats?: LogStats;
 }>();
 
 const thisLog = ref<LogEntry[]>([]);
@@ -49,17 +52,19 @@ watch(
 <template>
     <Card>
         <div class="flex flex-col gap-2">
-            <!-- <div>search filters</div>
-            <div>stats</div> -->
-            <div>
-                <LogViewerEntries
-                    :log-data="thisLog"
-                    :loaded="logData !== undefined"
-                    :has-more
-                    :is-loading
-                    @load-more="loadMore"
-                />
-            </div>
+            <!-- <div>search filters</div>-->
+            <LogViewerStatistics
+                :log-stats
+                :loaded="logStats !== undefined"
+                :logging-level
+            />
+            <LogViewerEntries
+                :log-data="thisLog"
+                :loaded="logData !== undefined"
+                :has-more
+                :is-loading
+                @load-more="loadMore"
+            />
         </div>
     </Card>
 </template>
