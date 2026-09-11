@@ -4,7 +4,7 @@ import BaseButton from "@/core/components/buttons/BaseButton.vue";
 import DataTable from "@/core/features/dataResources/DataTable.vue";
 import Drawer from "@/core/components/Drawer.vue";
 import LogViewerEntryDetails from "./LogViewerEntryDetails.vue";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { useColumnBuilder } from "@/core/features/dataResources/composables/columnBuilder";
 import { useLogEntryHelper } from "../composables/logEntryHelper";
 
@@ -14,7 +14,6 @@ const emit = defineEmits<{
 
 const props = defineProps<{
     logData: LogEntry[];
-    loaded: boolean;
     hasMore: boolean;
     isLoading: boolean;
 }>();
@@ -24,6 +23,7 @@ const { getBadgeClass, getBadgeIcon } = useLogEntryHelper();
 
 const activeEntry = ref();
 const showEntry = ref(false);
+const loaded = computed(() => props.logData.length > 0);
 
 const dataColumns = [
     colHelper.text("timestamp", "Date / Time", {

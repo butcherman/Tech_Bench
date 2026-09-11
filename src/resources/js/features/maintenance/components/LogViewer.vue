@@ -1,14 +1,16 @@
 <script setup lang="ts">
 import Card from "@/core/components/Card.vue";
 import LogViewerEntries from "./LogViewerEntries.vue";
+import LogViewerFilters from "./LogViewerFilters.vue";
 import LogViewerStatistics from "./LogViewerStatistics.vue";
-import { ref, watch } from "vue";
 import { dataGet } from "@/core/utilities/axiosWrapper.js";
 import { load } from "@/wayfinder/routes/maint/logs/index.js";
+import { ref, watch } from "vue";
 
 const props = defineProps<{
     logFile: string;
     loggingLevel: LogLevel;
+    logList: string[];
     logData?: LogData;
     logStats?: LogStats;
 }>();
@@ -21,7 +23,7 @@ const isLoading = ref<boolean>(false);
 /**
  * Get the next set of log entries.
  */
-const loadMore = async () => {
+const loadMore = async (): Promise<void> => {
     isLoading.value = true;
 
     const newEntries = await dataGet<LogData>(
@@ -52,7 +54,13 @@ watch(
 <template>
     <Card>
         <div class="flex flex-col gap-2">
-            <!-- <div>search filters</div>-->
+            <LogViewerFilters
+                v-if="logStats"
+                :log-file
+                :log-stats
+                :log-list
+                :loaded="logStats !== undefined"
+            />
             <LogViewerStatistics
                 :log-stats
                 :loaded="logStats !== undefined"
@@ -60,7 +68,6 @@ watch(
             />
             <LogViewerEntries
                 :log-data="thisLog"
-                :loaded="logData !== undefined"
                 :has-more
                 :is-loading
                 @load-more="loadMore"

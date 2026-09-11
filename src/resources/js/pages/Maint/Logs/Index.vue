@@ -5,6 +5,7 @@ import LogViewer from "@/features/maintenance/components/LogViewer.vue";
 const props = defineProps<{
     logFile: string;
     loggingLevel: LogLevel;
+    logList: string[];
     logData?: LogData;
     logStats?: LogStats;
 }>();

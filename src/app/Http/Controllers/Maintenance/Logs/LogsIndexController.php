@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Maintenance\Logs;
 
-use App\Actions\Maintenance\CalculateLogStatics;
+use App\Actions\Maintenance\CalculateLogStatistics;
 use App\Exceptions\Maintenance\LogFileMissingException;
 use App\Http\Controllers\Controller;
 use App\Models\AppSettings;
@@ -15,41 +15,40 @@ class LogsIndexController extends Controller
 {
     public function __construct(
         protected LogUtilitiesService $svc,
-        protected CalculateLogStatics $stats
+        protected CalculateLogStatistics $stats
     ) {}
 
     /**
      * Show a listing of Log Channels and Logs in that Channel
      */
-    public function __invoke(): Response
+    public function __invoke(?string $logFile = null): Response
     {
         $this->authorize('viewAny', AppSettings::class);
 
         $today = Carbon::now();
-        $todaysLog = 'TechBench-'.$today->format('Y-m-d');
+        if (is_null($logFile)) {
+            $logFile = 'TechBench-'.$today->format('Y-m-d');
+        }
 
         throw_unless(
-            $this->svc->validateLogFile($todaysLog),
+            $this->svc->validateLogFile($logFile),
             LogFileMissingException::class,
-            $todaysLog
+            $logFile
         );
 
         return Inertia::render('Maint/Logs/Index', [
-            'logFile' => $todaysLog,
+            'logFile' => $logFile,
+            'logList' => $this->svc->getListOfLogFiles(),
             'loggingLevel' => config('logging.channels.app.level'),
             'logData' => Inertia::defer(
                 fn () => $this->svc->entries(
-                    $todaysLog,
+                    $logFile,
                     1,
                 )
             ),
             'logStats' => Inertia::defer(
-                fn () => ($this->stats)($todaysLog)
+                fn () => ($this->stats)($logFile)
             ),
-
-            // 'stats' => Inertia::defer(
-            //     fn () => $this->svc->stats($todaysLog)
-            // ),
         ]);
     }
 }

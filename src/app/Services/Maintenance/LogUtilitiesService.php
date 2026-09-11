@@ -6,8 +6,8 @@ use App\Actions\Maintenance\ParseLogFile;
 use App\DTO\Maintenance\LogSnapshot;
 use App\Enums\LogLevels;
 use App\Traits\AppSettingsTrait;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use RuntimeException;
 
@@ -75,6 +75,25 @@ class LogUtilitiesService
         }
 
         return new LogSnapshot($size);
+    }
+
+    /**
+     * Get a list of available log files
+     */
+    public function getListOfLogFiles(): array
+    {
+        $fileList = Storage::disk('logs')->files('Application');
+        $logList = Arr::where($fileList, function ($value) {
+            $pathInfo = pathinfo($value);
+
+            return $pathInfo['extension'] === 'log';
+        });
+
+        return Arr::map($logList, function ($logFile) {
+            $pathInfo = pathinfo($logFile);
+
+            return $pathInfo['filename'];
+        });
     }
 
     /*

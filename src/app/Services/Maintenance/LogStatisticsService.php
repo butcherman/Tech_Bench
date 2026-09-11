@@ -23,6 +23,9 @@ class LogStatisticsService
     /** @var array<string, int> */
     private array $traceIds = [];
 
+    /** @var array<string, int> */
+    private array $userList = [];
+
     public function add(array $entry): void
     {
         $this->total++;
@@ -34,14 +37,24 @@ class LogStatisticsService
             $traceId = $entry['data']['context']['trace_id'];
             $this->traceIds[$traceId] = ($this->traceIds[$traceId] ?? 0) + 1;
         }
+
+        if (Arr::has($entry, 'data.context.user')) {
+            $user = $entry['data']['context']['user'];
+            if ($user) {
+                $this->userList[$user] = ($this->userList[$user] ?? 0) + 1;
+            }
+        }
     }
 
     public function toArray(): array
     {
+        ksort($this->userList);
+
         return [
             'total' => $this->total,
             'levels' => $this->levels,
-            'trace_ids' => $this->traceIds,
+            'traceIds' => $this->traceIds,
+            'userList' => $this->userList,
         ];
     }
 }

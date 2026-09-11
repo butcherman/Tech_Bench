@@ -35,6 +35,9 @@ interface LogStats {
     traceIds: {
         [key: string]: number;
     };
+    userList: {
+        [key: string]: number;
+    };
 }
 
 type LogLevel =

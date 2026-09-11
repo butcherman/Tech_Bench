@@ -10,7 +10,6 @@ use App\Http\Controllers\Maintenance\Logs\DownloadLogController;
 use App\Http\Controllers\Maintenance\Logs\LogLoadMoreController;
 use App\Http\Controllers\Maintenance\Logs\LogSettingsController;
 use App\Http\Controllers\Maintenance\Logs\LogsIndexController;
-use App\Http\Controllers\Maintenance\Logs\ViewLogController;
 use Illuminate\Support\Facades\Route;
 
 /**
@@ -37,9 +36,9 @@ Route::middleware('auth.secure')->prefix('maintenance')->name('maint.')->group(f
             ->name('load');
         Route::get('{logFile}/download', DownloadLogController::class)
             ->name('download');
-        Route::get('{logFile}', ViewLogController::class)
+        Route::get('{logFile}', LogsIndexController::class)
             ->name('show')
-            ->breadcrumb('View Log', 'maint.logs.index');
+            ->breadcrumb(fn (string $logFile) => $logFile, 'maint.logs.index');
         Route::get('/', LogsIndexController::class)
             ->name('index')
             ->breadcrumb('Logs', 'admin.index');

@@ -2,11 +2,12 @@
 
 namespace App\Actions\Maintenance;
 
+use App\DTO\Maintenance\LogSnapshot;
 use App\Services\Maintenance\LogStatisticsService;
 use App\Services\Maintenance\ReverseLogReader;
 use Illuminate\Support\Facades\Storage;
 
-class CalculateLogStatics
+class CalculateLogStatistics
 {
     public function __construct(
         protected ReverseLogReader $reader,
@@ -14,11 +15,11 @@ class CalculateLogStatics
         protected LogStatisticsService $stats
     ) {}
 
-    public function __invoke(string $logFile)
+    public function __invoke(string $logFile, ?LogSnapshot $snapshot = null): array
     {
         $path = Storage::disk('logs')->path('Application/'.$logFile.'.log');
 
-        foreach ($this->reader->entries($path) as $entry) {
+        foreach ($this->reader->entries($path, $snapshot?->position) as $entry) {
             $this->stats->add(($this->parseEntry)($entry));
         }
 
