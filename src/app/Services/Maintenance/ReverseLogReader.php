@@ -12,7 +12,7 @@ class ReverseLogReader
     /**
      * Yield complete log entries from newest to oldest.
      */
-    public function entries(string $path): Generator
+    public function entries(string $path, ?int $endPosition = null): Generator
     {
         $handle = fopen($path, 'rb');
 
@@ -26,9 +26,12 @@ class ReverseLogReader
             $buffer = '';
             $currentEntry = [];
 
-            fseek($handle, 0, SEEK_END);
+            if ($endPosition === null) {
+                fseek($handle, 0, SEEK_END);
+                $endPosition = ftell($handle);
+            }
 
-            $position = ftell($handle);
+            $position = $endPosition;
 
             while ($position > 0) {
                 $readSize = min(

@@ -3,12 +3,13 @@
 namespace App\Services\Maintenance;
 
 use App\Actions\Maintenance\ParseLogFile;
+use App\DTO\Maintenance\LogSnapshot;
 use App\Enums\LogLevels;
 use App\Traits\AppSettingsTrait;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use RuntimeException;
 
 class LogUtilitiesService
 {
@@ -22,6 +23,17 @@ class LogUtilitiesService
     public function getLogLevels(): array
     {
         return array_column(LogLevels::cases(), 'name');
+    }
+
+    /**
+     * Get the path of the log file
+     */
+    public function getLogFilePath(string $filename): string
+    {
+        $folder = 'Application';
+        $relativePath = $folder.DIRECTORY_SEPARATOR.$filename.'.log';
+
+        return Storage::disk('logs')->path($relativePath);
     }
 
     /**
@@ -42,66 +54,28 @@ class LogUtilitiesService
     /**
      * Get a select number of entries from a log file
      */
-    public function entries(string $logFile, int $page)
+    public function entries(string $logFile, int $page, ?LogSnapshot $snapshot = null): array
     {
         return ($this->parseLogFile)(
             $logFile,
             $page,
+            $snapshot->position ?? $this->snapshot($logFile)->position,
         );
     }
 
     /**
-     * Validate a specific log file exists
+     * Make a snapshot of the log file as it currently sits
      */
-    // public function validateLogFile(string $channel, string $filename): string|bool
-    // {
-    //     $folder = $this->validateLogChannel($channel);
-    //     $relativePath = $folder.DIRECTORY_SEPARATOR.$filename.'.log';
+    public function snapshot(string $logFile): LogSnapshot
+    {
+        $size = filesize($this->getLogFilePath($logFile));
 
-    //     if (! Storage::disk('logs')->exists($relativePath)) {
-    //         return false;
-    //     }
+        if ($size === false) {
+            throw new RuntimeException('Unable to determine log file size: '.$logFile);
+        }
 
-    //     return $relativePath;
-    // }
-
-    /**
-     * Get a list of log files for the selected channel
-     */
-    // public function getLogList(string $channel): array
-    // {
-    //     $folder = $this->validateLogChannel($channel);
-
-    //     return $this->getLogFiles($folder);
-    // }
-
-    /**
-     * Get a list of files from a folder in the Logs Directory and parse
-     * to only show the .log files
-     */
-    // protected function getLogFiles(string $folder): array
-    // {
-    //     $fileList = Storage::disk('logs')->files($folder);
-    //     $logList = Arr::where($fileList, function ($value) {
-    //         $pathInfo = pathinfo($value);
-
-    //         return $pathInfo['extension'] === 'log';
-    //     });
-
-    //     return Arr::map($logList, function ($logFile) {
-    //         $pathInfo = pathinfo($logFile);
-
-    //         return $pathInfo['filename'];
-    //     });
-    // }
-
-    /**
-     * Return a log file as an array of entries
-     */
-    // protected function getLogFileArray(string $relativePath): array
-    // {
-    //     return file(Storage::disk('logs')->path($relativePath));
-    // }
+        return new LogSnapshot($size);
+    }
 
     /*
     |---------------------------------------------------------------------------

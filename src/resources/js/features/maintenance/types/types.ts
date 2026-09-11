@@ -23,6 +23,7 @@ interface LogData {
         from: number;
         has_more: boolean;
         to: number;
+        snapshot: number;
     };
 }
 

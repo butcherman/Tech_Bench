@@ -13,7 +13,7 @@ const props = defineProps<{
 const thisLog = ref<LogEntry[]>([]);
 const hasMore = ref<boolean>(false);
 const curPage = ref<number>(1);
-const isLoading = ref(false);
+const isLoading = ref<boolean>(false);
 
 /**
  * Get the next set of log entries.
@@ -22,7 +22,7 @@ const loadMore = async () => {
     isLoading.value = true;
 
     const newEntries = await dataGet<LogData>(
-        `${load.url(props.logFile)}?page=${curPage.value + 1}`,
+        `${load.url(props.logFile)}?page=${curPage.value + 1}&snapshot=${props.logData?.meta.snapshot}`,
     );
 
     if (newEntries) {

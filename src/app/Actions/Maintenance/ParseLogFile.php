@@ -16,7 +16,8 @@ class ParseLogFile
 
     public function __invoke(
         string $logFile,
-        int $page = 1,
+        int $page,
+        int $endPosition,
     ): array {
         $path = Storage::disk('logs')->path('Application/'.$logFile.'.log');
 
@@ -25,7 +26,7 @@ class ParseLogFile
         $entries = [];
         $position = 0;
 
-        foreach ($this->reader->entries($path) as $entry) {
+        foreach ($this->reader->entries($path, $endPosition) as $entry) {
             if ($position++ < $skip || ! $entry) {
                 continue;
             }
@@ -56,6 +57,7 @@ class ParseLogFile
                     : $skip + 1,
                 'to' => $skip + count($entries),
                 'has_more' => $hasMore,
+                'snapshot' => $endPosition,
             ],
         ];
     }
