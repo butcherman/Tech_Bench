@@ -4,11 +4,15 @@ import TableStacked from "@/core/features/dataResources/TableStacked.vue";
 import { useLogEntryHelper } from "../composables/logEntryHelper";
 import { computed } from "vue";
 
-const { getBadgeClass, getBadgeIcon } = useLogEntryHelper();
+const emit = defineEmits<{
+    search: [string];
+}>();
 
 const props = defineProps<{
     activeEntry: LogEntry;
 }>();
+
+const { getBadgeClass, getBadgeIcon } = useLogEntryHelper();
 
 const entryTimestamp = computed<{ dateStamp: string; timeStamp: string }>(
     () => {
@@ -31,6 +35,10 @@ const isValueObject = (rowData: object | number | string): boolean => {
     }
 
     return true;
+};
+
+const onSearchData = (searchQuery: string) => {
+    emit("search", searchQuery);
 };
 </script>
 
@@ -61,19 +69,31 @@ const isValueObject = (rowData: object | number | string): boolean => {
             class="border border-slate-300 rounded-lg p-2"
         >
             <h6 class="text-muted">Trace ID:</h6>
-            <div class="px-2">
+            <div
+                v-tooltip="'Search this Trace ID'"
+                class="px-2 text-blue-700 pointer"
+                @click="onSearchData(activeEntry.data.context.trace_id)"
+            >
                 {{ activeEntry.data.context.trace_id }}
             </div>
             <div v-if="activeEntry.data.context.user">
                 <h6 class="text-muted">User:</h6>
-                <div class="px-2">
+                <div
+                    v-tooltip="'Trace this user'"
+                    class="px-2 text-blue-700 pointer"
+                    @click="onSearchData(activeEntry.data.context.user)"
+                >
                     <div>{{ activeEntry.data.context.user }}</div>
                     <div>User ID: {{ activeEntry.data.context.user_id }}</div>
                 </div>
             </div>
             <div v-if="activeEntry.data.context.ip_address">
                 <h6 class="text-muted">IP Address:</h6>
-                <div class="px-2">
+                <div
+                    v-tooltip="'Trace this IP Address'"
+                    class="px-2 text-blue-700 pointer"
+                    @click="onSearchData(activeEntry.data.context.ip_address)"
+                >
                     {{ activeEntry.data.context.ip_address }}
                 </div>
             </div>

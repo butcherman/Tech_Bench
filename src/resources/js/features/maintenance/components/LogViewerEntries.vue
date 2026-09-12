@@ -11,6 +11,7 @@ import type { DataTableColumn } from "@/core/features/dataResources/types/types.
 
 const emit = defineEmits<{
     loadMore: [];
+    search: [string];
 }>();
 
 const props = defineProps<{
@@ -56,6 +57,11 @@ const onRowClick = (event: MouseEvent, rowData: LogEntry): void => {
     activeEntry.value = rowData;
     showEntry.value = true;
 };
+
+const search = (searchQuery: string): void => {
+    showEntry.value = false;
+    emit("search", searchQuery);
+};
 </script>
 
 <template>
@@ -95,7 +101,11 @@ const onRowClick = (event: MouseEvent, rowData: LogEntry): void => {
             </template>
         </DataTable>
         <Drawer v-model="showEntry" position="right" title="Log Details">
-            <LogViewerEntryDetails v-if="activeEntry" :activeEntry />
+            <LogViewerEntryDetails
+                v-if="activeEntry"
+                :activeEntry
+                @search="search"
+            />
         </Drawer>
     </div>
 </template>

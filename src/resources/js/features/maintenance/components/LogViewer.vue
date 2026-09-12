@@ -5,7 +5,7 @@ import LogViewerFilters from "./LogViewerFilters.vue";
 import LogViewerStatistics from "./LogViewerStatistics.vue";
 import { dataGet } from "@/core/utilities/axiosWrapper.js";
 import { load } from "@/wayfinder/routes/maint/logs/index.js";
-import { ref, watch } from "vue";
+import { reactive, ref, watch } from "vue";
 
 const props = defineProps<{
     logFile: string;
@@ -39,13 +39,20 @@ const loadMore = async (): Promise<void> => {
     isLoading.value = false;
 };
 
+const searchFilters = reactive<LogFilter>({
+    search: "",
+    logFile: props.logFile,
+    level: "All",
+    user: "All",
+});
+
 /**
  * Apply a search filter and fetch new results
  */
-const onApplyFilter = async (filterObj: LogFilter): Promise<void> => {
+const onApplyFilter = async (): Promise<void> => {
     isLoading.value = true;
 
-    const cleanFilter = Object.entries(filterObj).filter(([_, value]) => {
+    const cleanFilter = Object.entries(searchFilters).filter(([_, value]) => {
         return (
             value !== "All" &&
             value !== "" &&
@@ -72,6 +79,13 @@ const onApplyFilter = async (filterObj: LogFilter): Promise<void> => {
     isLoading.value = false;
 };
 
+const onSearch = (searchQuery: string): void => {
+    searchFilters.search = searchQuery;
+    ((searchFilters.level = "All"),
+        (searchFilters.user = "All"),
+        onApplyFilter());
+};
+
 watch(
     () => props.logData,
     (newData) => {
@@ -93,6 +107,7 @@ watch(
                 :log-stats
                 :log-list
                 :loaded="logStats !== undefined"
+                :search-filters
                 @apply-filter="onApplyFilter"
             />
             <LogViewerStatistics
@@ -105,6 +120,7 @@ watch(
                 :has-more
                 :is-loading
                 @load-more="loadMore"
+                @search="onSearch"
             />
         </div>
     </Card>

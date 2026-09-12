@@ -13,23 +13,26 @@ const emit = defineEmits<{
 const props = defineProps<{
     logFile: string;
     logList: string[];
+    searchFilters: LogFilter;
     logStats?: LogStats;
 }>();
 
 const searchDelay = ref<number>();
 
-const searchFilters = reactive<LogFilter>({
-    search: "",
-    logFile: props.logFile,
-    level: "All",
-    user: "All",
-});
-
 const logLevelList = computed<string[]>(() => {
     let list: string[] = [];
 
     if (props.logStats) {
-        list = Object.keys(props.logStats?.levels);
+        let availableLevels = Object.keys(props.logStats?.levels) as LogLevel[];
+
+        availableLevels.forEach((level) => {
+            if (
+                props.logStats?.levels[level] &&
+                props.logStats?.levels[level] > 0
+            ) {
+                list.push(level);
+            }
+        });
     }
 
     list.unshift("All");
@@ -53,7 +56,7 @@ const userList = computed<string[]>(() => {
  * Move to a different file
  */
 const onLogFileChange = (): void => {
-    router.get(show.url(searchFilters.logFile));
+    router.get(show.url(props.searchFilters.logFile));
 };
 
 /**
@@ -63,7 +66,7 @@ const onFilterChange = (): void => {
     clearTimeout(searchDelay.value);
 
     searchDelay.value = setTimeout(() => {
-        emit("applyFilter", searchFilters);
+        emit("applyFilter", props.searchFilters);
     }, 500);
 };
 </script>
