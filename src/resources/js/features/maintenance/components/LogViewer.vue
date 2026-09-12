@@ -39,6 +39,39 @@ const loadMore = async (): Promise<void> => {
     isLoading.value = false;
 };
 
+/**
+ * Apply a search filter and fetch new results
+ */
+const onApplyFilter = async (filterObj: LogFilter): Promise<void> => {
+    isLoading.value = true;
+
+    const cleanFilter = Object.entries(filterObj).filter(([_, value]) => {
+        return (
+            value !== "All" &&
+            value !== "" &&
+            value !== null &&
+            value !== undefined
+        );
+    });
+
+    let filterQuery = new URLSearchParams(cleanFilter).toString();
+
+    let queryString = `?page=1&snapshot=${props.logData?.meta.snapshot}&${filterQuery}`;
+    thisLog.value = [];
+
+    const newEntries = await dataGet<LogData>(
+        `${load.url(props.logFile)}${queryString}`,
+    );
+
+    if (newEntries) {
+        thisLog.value = [...newEntries.data];
+        hasMore.value = newEntries.meta.has_more;
+        curPage.value = newEntries.meta.current_page;
+    }
+
+    isLoading.value = false;
+};
+
 watch(
     () => props.logData,
     (newData) => {
@@ -60,6 +93,7 @@ watch(
                 :log-stats
                 :log-list
                 :loaded="logStats !== undefined"
+                @apply-filter="onApplyFilter"
             />
             <LogViewerStatistics
                 :log-stats

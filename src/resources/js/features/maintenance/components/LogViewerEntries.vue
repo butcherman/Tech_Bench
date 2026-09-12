@@ -7,6 +7,7 @@ import LogViewerEntryDetails from "./LogViewerEntryDetails.vue";
 import { computed, ref } from "vue";
 import { useColumnBuilder } from "@/core/features/dataResources/composables/columnBuilder";
 import { useLogEntryHelper } from "../composables/logEntryHelper";
+import type { DataTableColumn } from "@/core/features/dataResources/types/types.js";
 
 const emit = defineEmits<{
     loadMore: [];
@@ -21,11 +22,11 @@ const props = defineProps<{
 const colHelper = useColumnBuilder<LogEntry>();
 const { getBadgeClass, getBadgeIcon } = useLogEntryHelper();
 
-const activeEntry = ref();
-const showEntry = ref(false);
-const loaded = computed(() => props.logData.length > 0);
+const activeEntry = ref<LogEntry>();
+const showEntry = ref<boolean>(false);
+const loaded = computed<boolean>(() => props.logData.length > 0);
 
-const dataColumns = [
+const dataColumns: DataTableColumn<LogEntry, LogLevel>[] = [
     colHelper.text("timestamp", "Date / Time", {
         filterable: false,
         sort: false,
@@ -51,7 +52,7 @@ const dataColumns = [
     }),
 ];
 
-const onRowClick = (event: MouseEvent, rowData: LogEntry) => {
+const onRowClick = (event: MouseEvent, rowData: LogEntry): void => {
     activeEntry.value = rowData;
     showEntry.value = true;
 };

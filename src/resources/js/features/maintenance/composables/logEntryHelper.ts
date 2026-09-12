@@ -1,5 +1,5 @@
 export const useLogEntryHelper = () => {
-    const getBadgeClass = (logLevel: LogLevel) => {
+    const getBadgeClass = (logLevel: LogLevel): string => {
         return {
             emergency: "bg-red-100 text-red-900 ring-1 ring-inset ring-red-400",
             alert: "bg-red-100 text-red-800 ring-1 ring-inset ring-red-300",
@@ -13,7 +13,7 @@ export const useLogEntryHelper = () => {
         }[logLevel];
     };
 
-    const getBadgeIcon = (logLevel: LogLevel) => {
+    const getBadgeIcon = (logLevel: LogLevel): string => {
         return {
             emergency: "ambulance",
             alert: "bullhorn",

@@ -40,6 +40,13 @@ interface LogStats {
     };
 }
 
+interface LogFilter {
+    search: string;
+    logFile: string;
+    level: LogLevel | "All";
+    user: string;
+}
+
 type LogLevel =
     | "emergency"
     | "alert"

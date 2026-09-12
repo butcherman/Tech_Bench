@@ -10,19 +10,20 @@ const props = defineProps<{
     activeEntry: LogEntry;
 }>();
 
-const entryTimestamp = computed(() => {
-    console.log(props.activeEntry);
-    let date = new Date(props.activeEntry.timestamp);
+const entryTimestamp = computed<{ dateStamp: string; timeStamp: string }>(
+    () => {
+        let date = new Date(props.activeEntry.timestamp);
 
-    return {
-        dateStamp: date.toLocaleDateString("en-us", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-        }),
-        timeStamp: date.toLocaleTimeString(),
-    };
-});
+        return {
+            dateStamp: date.toLocaleDateString("en-us", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+            }),
+            timeStamp: date.toLocaleTimeString(),
+        };
+    },
+);
 
 const isValueObject = (rowData: object | number | string): boolean => {
     if (typeof rowData === "string" || typeof rowData === "number") {

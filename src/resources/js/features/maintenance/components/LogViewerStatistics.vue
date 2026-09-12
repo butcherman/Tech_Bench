@@ -10,7 +10,7 @@ const props = defineProps<{
 
 const { getBadgeClass, getBadgeIcon } = useLogEntryHelper();
 
-const loaded = computed(() => props.logStats !== undefined);
+const loaded = computed<boolean>(() => props.logStats !== undefined);
 </script>
 
 <template>

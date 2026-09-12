@@ -3,6 +3,7 @@
 namespace App\Services\Maintenance;
 
 use App\Actions\Maintenance\ParseLogFile;
+use App\DTO\Maintenance\LogFilter;
 use App\DTO\Maintenance\LogSnapshot;
 use App\Enums\LogLevels;
 use App\Traits\AppSettingsTrait;
@@ -52,14 +53,15 @@ class LogUtilitiesService
     }
 
     /**
-     * Get a select number of entries from a log file
+     * Get a select number of entries from a log file, query filtering is included
      */
-    public function entries(string $logFile, int $page, ?LogSnapshot $snapshot = null): array
+    public function query(string $logFile, LogSnapshot $snapshot, LogFilter $filter, int $page = 1): array
     {
         return ($this->parseLogFile)(
             $logFile,
+            $snapshot,
+            $filter,
             $page,
-            $snapshot->position ?? $this->snapshot($logFile)->position,
         );
     }
 
@@ -76,6 +78,11 @@ class LogUtilitiesService
 
         return new LogSnapshot($size);
     }
+
+    /**
+     * Fill out the Log filter object and return it
+     */
+    // public function getLogFilters(string $queryString)
 
     /**
      * Get a list of available log files

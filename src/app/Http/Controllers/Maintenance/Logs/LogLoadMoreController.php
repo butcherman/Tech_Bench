@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Maintenance\Logs;
 
+use App\DTO\Maintenance\LogFilter;
 use App\DTO\Maintenance\LogSnapshot;
 use App\Exceptions\Maintenance\LogFileMissingException;
 use App\Http\Controllers\Controller;
@@ -28,13 +29,23 @@ class LogLoadMoreController extends Controller
 
         if ($request->has('snapshot')) {
             $snapshot = new LogSnapshot($request->input('snapshot'));
+        } else {
+            $snapshot = $this->svc->snapshot($logFile);
         }
 
+        $filter = new LogFilter(
+            $request->input('search') ?? null,
+            $request->input('level') ?? null,
+            $request->input('user') ?? null,
+            $request->input('traceId') ?? null
+        );
+
         return response()->json(
-            $this->svc->entries(
+            $this->svc->query(
                 $logFile,
+                $snapshot,
+                $filter,
                 $request->input('page'),
-                $snapshot ?? null,
             ),
         );
     }
