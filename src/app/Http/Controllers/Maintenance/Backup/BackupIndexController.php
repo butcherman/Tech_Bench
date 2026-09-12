@@ -18,8 +18,8 @@ class BackupIndexController extends Controller
     {
         $this->authorize('is-installer');
 
-        return Inertia::render('Maint/Backup', [
-            'backup-list' => fn () => $this->svc->getBackupListWithMetaData(),
+        return Inertia::render('Maint/Backup/Index', [
+            // 'backup-list' => fn () => $this->svc->getBackupListWithMetaData(),
         ]);
     }
 }

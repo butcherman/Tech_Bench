@@ -1,19 +1,18 @@
 <?php
 
-use App\Notifications\Maintenance\Backup\BackupHasFailedNotification;
-use App\Notifications\Maintenance\Backup\BackupNotifiable;
-use App\Notifications\Maintenance\Backup\BackupWasSuccessfulNotification;
-use App\Notifications\Maintenance\Backup\CleanupHasFailedNotification;
-use App\Notifications\Maintenance\Backup\CleanupWasSuccessfulNotification;
-use App\Notifications\Maintenance\Backup\HealthyBackupWasFoundNotification;
-use App\Notifications\Maintenance\Backup\UnhealthyBackupWasFoundNotification;
+use Spatie\Backup\Notifications\Notifiable;
+use Spatie\Backup\Notifications\Notifications\BackupHasFailedNotification;
+use Spatie\Backup\Notifications\Notifications\BackupWasSuccessfulNotification;
+use Spatie\Backup\Notifications\Notifications\CleanupHasFailedNotification;
+use Spatie\Backup\Notifications\Notifications\CleanupWasSuccessfulNotification;
+use Spatie\Backup\Notifications\Notifications\HealthyBackupWasFoundNotification;
+use Spatie\Backup\Notifications\Notifications\UnhealthyBackupWasFoundNotification;
 use Spatie\Backup\Tasks\Cleanup\Strategies\DefaultStrategy;
 use Spatie\Backup\Tasks\Monitor\HealthChecks\MaximumAgeInDays;
 use Spatie\Backup\Tasks\Monitor\HealthChecks\MaximumStorageInMegabytes;
 
 return [
-    'nightly_backup' => true,
-    'nightly_cleanup' => true,
+
     'backup' => [
         /*
          * The name of this application. You can use this name to monitor
@@ -38,7 +37,11 @@ return [
                  *
                  * Directories used by the backup process will automatically be excluded.
                  */
-                'exclude' => [],
+                'exclude' => [
+                    base_path('vendor'),
+                    base_path('node_modules'),
+                    storage_path('framework'),
+                ],
 
                 /*
                  * Determines if symlinks should be followed.
@@ -68,7 +71,7 @@ return [
              * 'mysql' => [
              *       ...
              *      'dump' => [
-             *           'excludeTables' => [
+             *           'exclude_tables' => [
              *                'table_to_exclude_from_backup',
              *                'another_table_to_exclude'
              *            ]
@@ -102,7 +105,7 @@ return [
                 ],
             ],
             'databases' => [
-                'mysql',
+                env('DB_CONNECTION', 'mysql'),
             ],
         ],
 
@@ -138,7 +141,7 @@ return [
          * If not specified, the file extension will be .archive for MongoDB and .sql for all other databases
          * The file extension should be specified without a leading .
          */
-        'database_dump_file_extension' => 'sql',
+        'database_dump_file_extension' => '',
 
         'destination' => [
             /*
@@ -178,6 +181,11 @@ return [
             'disks' => [
                 'backups',
             ],
+
+            /*
+             * Determines whether to allow backups to continue when some targets fail instead of failing completely.
+             */
+            'continue_on_failure' => false,
         ],
 
         /*
@@ -193,12 +201,19 @@ return [
 
         /*
          * The encryption algorithm to be used for archive encryption.
-         * You can set it to `null` or `false` to disable encryption.
+         * Set to 'none' to disable encryption.
          *
-         * When set to 'default', we'll use ZipArchive::EM_AES_256 if it is
-         * available on your system.
+         * Supported: 'none', 'default', 'aes128', 'aes192', 'aes256'
+         *
+         * When set to 'default', we'll use AES-256 if available on your system.
          */
-        'encryption' => false,
+        'encryption' => 'default',
+
+        /*
+         * After creating the zip, verify it can be opened and contains files.
+         * Recommended for critical backups but adds a small overhead.
+         */
+        'verify_backup' => false,
 
         /*
          * The number of attempts, in case the backup command encounters an exception
@@ -222,19 +237,72 @@ return [
     'notifications' => [
         'notifications' => [
             BackupHasFailedNotification::class => ['mail'],
-            BackupWasSuccessfulNotification::class => ['mail'],
-            CleanupHasFailedNotification::class => ['mail'],
-            CleanupWasSuccessfulNotification::class => ['mail'],
-            HealthyBackupWasFoundNotification::class => ['mail'],
             UnhealthyBackupWasFoundNotification::class => ['mail'],
+            CleanupHasFailedNotification::class => ['mail'],
+            BackupWasSuccessfulNotification::class => ['mail'],
+            HealthyBackupWasFoundNotification::class => ['mail'],
+            CleanupWasSuccessfulNotification::class => ['mail'],
         ],
 
         /*
          * Here you can specify the notifiable to which the notifications should be sent. The default
          * notifiable will use the variables specified in this config file.
          */
-        'notifiable' => BackupNotifiable::class,
+        'notifiable' => Notifiable::class,
+
+        'mail' => [
+            'to' => 'your@example.com',
+
+            'from' => [
+                'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
+                'name' => env('MAIL_FROM_NAME', 'Example'),
+            ],
+        ],
+
+        'slack' => [
+            'webhook_url' => '',
+
+            /*
+             * If this is set to null the default channel of the webhook will be used.
+             */
+            'channel' => null,
+
+            'username' => null,
+
+            'icon' => null,
+        ],
+
+        'discord' => [
+            'webhook_url' => '',
+
+            /*
+             * If this is an empty string, the name field on the webhook will be used.
+             */
+            'username' => '',
+
+            /*
+             * If this is an empty string, the avatar on the webhook will be used.
+             */
+            'avatar_url' => '',
+        ],
+
+        /*
+         * A generic webhook channel that POSTs JSON to a URL.
+         * Useful for Mattermost, Microsoft Teams, or custom integrations.
+         */
+        'webhook' => [
+            'url' => '',
+        ],
     ],
+
+    /*
+     * The log channel used for backup activity messages.
+     *
+     * Set to a channel name defined in config/logging.php to use that channel.
+     * Set to false to disable backup logging entirely.
+     * Set to null to use the default log channel.
+     */
+    'log_channel' => null,
 
     /*
      * Here you can specify which backups should be monitored.
@@ -250,6 +318,17 @@ return [
                 MaximumStorageInMegabytes::class => 5000,
             ],
         ],
+
+        /*
+        [
+            'name' => 'name of the second app',
+            'disks' => ['local', 's3'],
+            'health_checks' => [
+                \Spatie\Backup\Tasks\Monitor\HealthChecks\MaximumAgeInDays::class => 1,
+                \Spatie\Backup\Tasks\Monitor\HealthChecks\MaximumStorageInMegabytes::class => 5000,
+            ],
+        ],
+        */
     ],
 
     'cleanup' => [
