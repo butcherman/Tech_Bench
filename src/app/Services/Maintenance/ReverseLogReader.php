@@ -46,7 +46,9 @@ class ReverseLogReader
                 $chunk = fread($handle, $readSize);
 
                 if ($chunk === false) {
+                    // @codeCoverageIgnoreStart
                     break;
+                    // @codeCoverageIgnoreEnd
                 }
 
                 $buffer = $chunk.$buffer;
@@ -64,6 +66,10 @@ class ReverseLogReader
                     );
 
                     $line = rtrim($line, "\r");
+
+                    if ($line === '' && $currentEntry === []) {
+                        continue;
+                    }
 
                     if ($this->isEntryStart($line)) {
                         $currentEntry[] = $line;

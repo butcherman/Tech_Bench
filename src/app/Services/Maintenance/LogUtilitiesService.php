@@ -6,11 +6,11 @@ use App\Actions\Maintenance\ParseLogFile;
 use App\DTO\Maintenance\LogFilter;
 use App\DTO\Maintenance\LogSnapshot;
 use App\Enums\LogLevels;
+use App\Exceptions\Maintenance\LogFileMissingException;
 use App\Traits\AppSettingsTrait;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
-use RuntimeException;
 
 class LogUtilitiesService
 {
@@ -45,18 +45,18 @@ class LogUtilitiesService
         $folder = 'Application';
         $relativePath = $folder.DIRECTORY_SEPARATOR.$filename.'.log';
 
-        if (! Storage::disk('logs')->exists($relativePath)) {
-            return false;
-        }
-
-        return true;
+        return Storage::disk('logs')->exists($relativePath);
     }
 
     /**
      * Get a select number of entries from a log file, query filtering is included
      */
-    public function query(string $logFile, LogSnapshot $snapshot, LogFilter $filter, int $page = 1): array
-    {
+    public function query(
+        string $logFile,
+        LogSnapshot $snapshot,
+        LogFilter $filter,
+        int $page = 1
+    ): array {
         return ($this->parseLogFile)(
             $logFile,
             $snapshot,
@@ -70,19 +70,14 @@ class LogUtilitiesService
      */
     public function snapshot(string $logFile): LogSnapshot
     {
-        $size = filesize($this->getLogFilePath($logFile));
-
-        if ($size === false) {
-            throw new RuntimeException('Unable to determine log file size: '.$logFile);
+        if (! $this->validateLogFile($logFile)) {
+            throw new LogFileMissingException($logFile);
         }
+
+        $size = Storage::disk('logs')->size('Application/'.$logFile.'.log');
 
         return new LogSnapshot($size);
     }
-
-    /**
-     * Fill out the Log filter object and return it
-     */
-    // public function getLogFilters(string $queryString)
 
     /**
      * Get a list of available log files

@@ -1,9 +1,11 @@
 <script setup lang="ts">
+import BaseBadge from "@/core/components/badges/BaseBadge.vue";
 import Card from "@/core/components/Card.vue";
 import LogViewerEntries from "./LogViewerEntries.vue";
 import LogViewerFilters from "./LogViewerFilters.vue";
 import LogViewerStatistics from "./LogViewerStatistics.vue";
 import { dataGet } from "@/core/utilities/axiosWrapper.js";
+import { download } from "@/wayfinder/routes/maint/logs/index.js";
 import { load } from "@/wayfinder/routes/maint/logs/index.js";
 import { reactive, ref, watch } from "vue";
 
@@ -99,7 +101,16 @@ watch(
 </script>
 
 <template>
-    <Card>
+    <Card title="Log Viewer">
+        <template #append-title>
+            <a :href="download.url(logFile)">
+                <BaseBadge
+                    class="pointer"
+                    icon="download"
+                    v-tooltip="'Download'"
+                />
+            </a>
+        </template>
         <div class="flex flex-col gap-2">
             <LogViewerFilters
                 v-if="logStats"

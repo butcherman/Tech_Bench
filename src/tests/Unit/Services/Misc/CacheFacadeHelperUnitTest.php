@@ -18,7 +18,7 @@ use Tests\TestCase;
 
 class CacheFacadeHelperUnitTest extends TestCase
 {
-    /** @var CacheHelper */
+    /** @var CacheFacadeHelper */
     protected $helperObj;
 
     protected function setUp(): void
