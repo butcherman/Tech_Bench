@@ -1,9 +1,11 @@
 <?php
 
+use App\Enums\BackupType;
 use App\Jobs\Maintenance\CheckAzureCertificateJob;
 use App\Jobs\Maintenance\CheckSslCertificateJob;
 use App\Jobs\Maintenance\CleanImageFoldersJob;
 use App\Jobs\Maintenance\GarbageCollectionJob;
+use App\Jobs\Maintenance\RunBackupJob;
 use Illuminate\Support\Facades\Schedule;
 
 /*
@@ -25,7 +27,7 @@ Schedule::command('auth:clear-validation-codes')->everyFifteenMinutes();
 Schedule::job(new CheckSslCertificateJob)->daily();
 Schedule::job(new CheckAzureCertificateJob)->daily();
 Schedule::job(new GarbageCollectionJob)->daily();
-Schedule::command('backup:run')
+Schedule::job(new RunBackupJob(BackupType::Scheduled))
     ->dailyAt('03:00')
     ->when(
         fn () => (bool) config('backup.nightly_backup')
