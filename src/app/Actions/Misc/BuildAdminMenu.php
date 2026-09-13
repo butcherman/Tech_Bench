@@ -262,11 +262,6 @@ class BuildAdminMenu
                     'icon' => 'fa-hdd',
                     'route' => route('maint.backups.index'),
                 ],
-                [
-                    'label' => 'Backup Settings',
-                    'icon' => 'fa-cog',
-                    'route' => route('maint.backups.settings.show'),
-                ],
             ];
         }
 

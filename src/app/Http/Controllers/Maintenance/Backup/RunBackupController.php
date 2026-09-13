@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Maintenance\Backup;
 
+use App\Enums\BackupType;
 use App\Http\Controllers\Controller;
 use App\Jobs\Maintenance\RunBackupJob;
 use App\Models\AppSettings;
@@ -15,7 +16,7 @@ class RunBackupController extends Controller
     {
         $this->authorize('viewAny', AppSettings::class);
 
-        RunBackupJob::dispatch();
+        RunBackupJob::dispatch(BackupType::Manual);
 
         Log::info(
             'Backup operation requested by '.$request->user()->username

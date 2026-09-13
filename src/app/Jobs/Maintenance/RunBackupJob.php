@@ -3,6 +3,7 @@
 namespace App\Jobs\Maintenance;
 
 use App\Actions\Maintenance\RunBackup;
+use App\Enums\BackupType;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -16,7 +17,7 @@ class RunBackupJob implements ShouldBeUnique, ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    public function __construct()
+    public function __construct(public BackupType $type)
     {
         $this->onQueue('backups');
     }
@@ -24,12 +25,14 @@ class RunBackupJob implements ShouldBeUnique, ShouldQueue
     public function middleware(): array
     {
         return [
-            new WithoutOverlapping('backup_process'),
+            new WithoutOverlapping('backup_process')
+                ->dontRelease()
+                ->expireAfter(600),
         ];
     }
 
     public function handle(RunBackup $backup): void
     {
-        $backup->handle();
+        $backup->handle($this->type);
     }
 }
