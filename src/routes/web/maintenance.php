@@ -51,22 +51,14 @@ Route::middleware('auth.secure')->prefix('maintenance')->name('maint.')->group(f
      |---------------------------------------------------------------------------
      */
     Route::prefix('backups')->name('backups.')->group(function () {
-        Route::controller(BackupSettingsController::class)
-            ->name('settings.')
-            ->group(function () {
-                Route::get('settings', 'show')
-                    ->name('show')
-                    ->breadcrumb('Backup Settings', 'maint.backups.index');
-                Route::put('settings', 'update')
-                    ->name('update');
-            });
-        Route::post('upload-backup', UploadBackupController::class)
-            ->name('upload');
-        Route::get('download/{backupName}', DownloadBackupController::class)
-            ->name('download');
+        Route::put('settings', BackupSettingsController::class)->name('update');
+        // Route::post('upload-backup', UploadBackupController::class)
+        //     ->name('upload');
+        // Route::get('download/{backupName}', DownloadBackupController::class)
+        //     ->name('download');
         Route::get('run-backup', RunBackupController::class)->name('run-backup');
-        Route::delete('delete-backup/{backupName}', DeleteBackupController::class)
-            ->name('delete');
+        // Route::delete('delete-backup/{backupName}', DeleteBackupController::class)
+        //     ->name('delete');
         Route::get('/', BackupIndexController::class)
             ->name('index')
             ->breadcrumb('Backups', 'admin.index');

@@ -2,6 +2,7 @@
 
 namespace App\DTO\Maintenance;
 
+use Carbon\Carbon;
 use Carbon\CarbonImmutable;
 
 final readonly class BackupSummary
@@ -17,7 +18,10 @@ final readonly class BackupSummary
         return [
             'name' => $this->name,
             'size' => $this->size,
-            'modified' => $this->modified->timestamp,
+            'modified' => Carbon::createFromTimestamp(
+                $this->modified->timestamp,
+                config('app.timezone')
+            )->format('M d, Y h:m A'),
         ];
     }
 }

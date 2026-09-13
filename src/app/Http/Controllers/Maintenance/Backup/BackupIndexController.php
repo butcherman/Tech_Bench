@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\Maintenance\Backup;
 
+use App\Enums\DiskEnum;
 use App\Http\Controllers\Controller;
+use App\Services\File\StorageUsageService;
 use App\Services\Maintenance\BackupService;
+use App\Services\Maintenance\BackupSettingsService;
 use App\Services\Maintenance\BackupStatusService;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -13,6 +16,8 @@ class BackupIndexController extends Controller
     public function __construct(
         protected BackupService $backups,
         protected BackupStatusService $status,
+        protected BackupSettingsService $settings,
+        protected StorageUsageService $storage,
     ) {}
 
     public function __invoke(): Response
@@ -21,12 +26,15 @@ class BackupIndexController extends Controller
 
         return Inertia::render('Maint/Backup/Index', [
             'status' => fn () => $this->status->status()->toArray(),
-
             'backups' => fn () => $this->backups
                 ->recent(10)
                 ->map
                 ->toArray()
                 ->values(),
+            'next-run' => $this->status->getNextScheduledBackup(),
+            'strategy' => $this->status->getRetentionPolicy(),
+            'settings' => $this->settings->getBackupSettings(),
+            'storage' => $this->storage->getUsage(DiskEnum::backups),
         ]);
     }
 }

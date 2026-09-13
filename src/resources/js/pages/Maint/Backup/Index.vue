@@ -1,15 +1,20 @@
 <script setup lang="ts">
 import AppLayout from "@/layouts/AppLayout.vue";
-import Card from "@/core/components/Card.vue";
+import SystemBackup from "@/features/maintenance/components/SystemBackup.vue";
 
-const props = defineProps<{}>();
+const props = defineProps<{
+    status: BackupStatus;
+    backups: BackupInfo[];
+    nextRun: string;
+    strategy: BackupStrategy;
+    settings: BackupSettings;
+    storage: StorageUsage;
+}>();
 </script>
 
 <script lang="ts">
 export default { layout: AppLayout };
 </script>
 <template>
-    <div class="flex justify-center">
-        <Card>Hello World</Card>
-    </div>
+    <SystemBackup v-bind="props" />
 </template>
