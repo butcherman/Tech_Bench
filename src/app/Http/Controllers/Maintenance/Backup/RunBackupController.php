@@ -11,17 +11,16 @@ use Illuminate\Support\Facades\Log;
 
 class RunBackupController extends Controller
 {
-    /**
-     * Manually start the Backup Process
-     */
     public function __invoke(Request $request): RedirectResponse
     {
         $this->authorize('viewAny', AppSettings::class);
 
-        dispatch(new RunBackupJob);
+        RunBackupJob::dispatch();
 
-        Log::info('Backup Operation called by '.$request->user()->username);
+        Log::info(
+            'Backup operation requested by '.$request->user()->username
+        );
 
-        return back();
+        return back()->with('success', 'Backup has been queued.');
     }
 }

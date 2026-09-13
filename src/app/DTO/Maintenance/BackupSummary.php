@@ -1,0 +1,23 @@
+<?php
+
+namespace App\DTO\Maintenance;
+
+use Carbon\CarbonImmutable;
+
+final readonly class BackupSummary
+{
+    public function __construct(
+        public string $name,
+        public int $size,
+        public CarbonImmutable $modified,
+    ) {}
+
+    public function toArray(): array
+    {
+        return [
+            'name' => $this->name,
+            'size' => $this->size,
+            'modified' => $this->modified->timestamp,
+        ];
+    }
+}

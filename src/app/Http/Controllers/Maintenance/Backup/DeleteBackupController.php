@@ -11,22 +11,26 @@ use Illuminate\Support\Facades\Log;
 
 class DeleteBackupController extends Controller
 {
-    public function __construct(protected BackupService $svc) {}
+    public function __construct(
+        protected BackupService $backups,
+    ) {}
 
-    /**
-     * Delete A Backup File
-     */
-    public function __invoke(Request $request, string $backupName): RedirectResponse
-    {
+    public function __invoke(
+        Request $request,
+        string $backupName,
+    ): RedirectResponse {
         $this->authorize('viewAny', AppSettings::class);
 
-        $this->svc->deleteBackupFile($backupName);
+        $this->backups->delete($backupName);
 
         Log::notice(
-            'Backup File '.$backupName.' deleted by '.
-                $request->user()->username
+            'Backup file '.$backupName.' deleted by '.
+            $request->user()->username
         );
 
-        return back()->with('success', __('admin.backups.deleted'));
+        return back()->with(
+            'success',
+            __('admin.backups.deleted')
+        );
     }
 }

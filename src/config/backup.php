@@ -14,6 +14,13 @@ use Spatie\Backup\Tasks\Monitor\HealthChecks\MaximumStorageInMegabytes;
 return [
 
     'backup' => [
+        /**
+         * Determine if the backup and backup cleanup jobs are enabled
+         * to be run on a daily schedule.
+         */
+        'nightly_backup' => true,
+        'nightly_cleanup' => true,
+
         /*
          * The name of this application. You can use this name to monitor
          * the backups.

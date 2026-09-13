@@ -18,11 +18,13 @@ class UploadBackupController extends FileUploadController
     {
         $this->authorize('viewAny', AppSettings::class);
 
-        $this->setFileData(DiskEnum::backups, 'tech-bench');
+        // TODO - Refactor to accept new upload process.
 
-        if ($savedFile = $this->getChunk($request->file('file'), $request)) {
-            Log::info('New Backup File Uploaded '.$savedFile->file_name);
-        }
+        // $this->setFileData(DiskEnum::backups, 'tech-bench');
+
+        // if ($savedFile = $this->getChunk($request->file('file'), $request)) {
+        //     Log::info('New Backup File Uploaded '.$savedFile->file_name);
+        // }
 
         return response()->noContent();
     }
