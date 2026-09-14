@@ -1,8 +1,8 @@
 <script setup lang="ts">
+import BaseButton from "@/core/components/buttons/BaseButton.vue";
 import Card from "@/core/components/Card.vue";
 import { computed } from "vue";
 import { runBackup } from "@/wayfinder/routes/maint/backups/index.js";
-import BaseButton from "@/core/components/buttons/BaseButton.vue";
 
 const props = defineProps<{
     status: BackupStatus;
@@ -36,7 +36,7 @@ const statusText = computed(() =>
             </div>
             <div class="grid grid-cols-2 gap-3 w-full lg:w-2/3">
                 <div>Last Successful:</div>
-                <div>{{ props.status.latest.modified }}</div>
+                <div>{{ props.status.latest?.started_at }}</div>
                 <div>Next Scheduled:</div>
                 <div>{{ nextRun }}</div>
                 <div>Retention Policy:</div>

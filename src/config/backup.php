@@ -101,6 +101,7 @@ return [
             'mysql' => [
                 'dump' => [
                     'excludeTables' => [
+                        'backup_runs',
                         'failed_jobs',
                         'jobs',
                         'password_resets',

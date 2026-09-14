@@ -2,11 +2,13 @@
 
 namespace App\DTO\Maintenance;
 
+use App\Models\BackupRun;
+
 final readonly class BackupStatus
 {
     public function __construct(
         public bool $healthy,
-        public ?BackupSummary $latest,
+        public ?BackupRun $latest,
         public int $backupCount,
         public int $totalSize,
         public ?string $message = null,

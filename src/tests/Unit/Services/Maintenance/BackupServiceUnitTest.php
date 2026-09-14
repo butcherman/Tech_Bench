@@ -2,8 +2,8 @@
 
 namespace Tests\Unit\Services\Maintenance;
 
-use App\DTO\Maintenance\BackupSummary;
 use App\Exceptions\Maintenance\BackupFileMissingException;
+use App\Models\BackupRun;
 use App\Services\Maintenance\BackupService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Exceptions;
@@ -22,22 +22,17 @@ class BackupServiceUnitTest extends TestCase
     */
     public function test_all(): void
     {
-        Storage::fake('backups');
-
-        $backupBasename = config('backup.backup.name').DIRECTORY_SEPARATOR;
-
-        // Create some backup files
-        Storage::disk('backups')->put($backupBasename.'backup-1.zip', '123456');
-        Storage::disk('backups')->put($backupBasename.'backup-2.zip', '123456');
-        Storage::disk('backups')->put($backupBasename.'backup-3.zip', '123456');
+        $backupList = BackupRun::factory()->count(3)->create();
 
         $testObj = new BackupService;
         $res = $testObj->all();
 
+        $this->assertCount(3, $res);
         $this->assertEquals(
-            $res->pluck('name')->all(),
-            ['backup-1.zip', 'backup-2.zip', 'backup-3.zip']
+            $backupList->makeHidden('duration')->toArray(),
+            $res->makeHidden('duration')->toArray()
         );
+        $this->assertInstanceOf(BackupRun::class, $res[0]);
     }
 
     /*
@@ -47,34 +42,13 @@ class BackupServiceUnitTest extends TestCase
     */
     public function test_recent(): void
     {
-        Storage::fake('backups');
-
-        $backupBasename = config('backup.backup.name').DIRECTORY_SEPARATOR;
-
-        // Create some backup files
-        Storage::disk('backups')->put($backupBasename.'backup-1.zip', '123456');
-        Storage::disk('backups')->put($backupBasename.'backup-2.zip', '123456');
-        Storage::disk('backups')->put($backupBasename.'backup-3.zip', '123456');
-        Storage::disk('backups')->put($backupBasename.'backup-4.zip', '123456');
-        Storage::disk('backups')->put($backupBasename.'backup-5.zip', '123456');
-        Storage::disk('backups')->put($backupBasename.'backup-6.zip', '123456');
-        Storage::disk('backups')->put($backupBasename.'backup-7.zip', '123456');
-        Storage::disk('backups')->put($backupBasename.'backup-8.zip', '123456');
-        Storage::disk('backups')->put($backupBasename.'backup-9.zip', '123456');
+        $backupList = BackupRun::factory()->count(10)->create();
 
         $testObj = new BackupService;
         $res = $testObj->recent(5);
 
-        $this->assertEquals(
-            $res->pluck('name')->all(),
-            [
-                'backup-1.zip',
-                'backup-2.zip',
-                'backup-3.zip',
-                'backup-4.zip',
-                'backup-5.zip',
-            ]
-        );
+        $this->assertCount(5, $res);
+        $this->assertInstanceOf(BackupRun::class, $res->last());
     }
 
     /*
@@ -84,27 +58,16 @@ class BackupServiceUnitTest extends TestCase
     */
     public function test_latest(): void
     {
-        Storage::fake('backups');
-
-        $backupBasename = config('backup.backup.name').DIRECTORY_SEPARATOR;
-
-        // Create some backup files
-        Storage::disk('backups')->put($backupBasename.'backup-1.zip', '123456');
-        Storage::disk('backups')->put($backupBasename.'backup-2.zip', '123456');
-        Storage::disk('backups')->put($backupBasename.'backup-3.zip', '123456');
-        Storage::disk('backups')->put($backupBasename.'backup-4.zip', '123456');
-        Storage::disk('backups')->put($backupBasename.'backup-5.zip', '123456');
-        Storage::disk('backups')->put($backupBasename.'backup-6.zip', '123456');
-        Storage::disk('backups')->put($backupBasename.'backup-7.zip', '123456');
-        Storage::disk('backups')->put($backupBasename.'backup-8.zip', '123456');
-        Storage::disk('backups')->put($backupBasename.'backup-9.zip', '123456');
+        $backupList = BackupRun::factory()->count(10)->create();
 
         $testObj = new BackupService;
         $res = $testObj->latest();
 
-        $this->assertInstanceOf(BackupSummary::class, $res);
-        $this->assertEquals('backup-1.zip', $res->name);
-        $this->assertEquals(6, $res->size);
+        $this->assertInstanceOf(BackupRun::class, $res);
+        $this->assertEquals(
+            $backupList->last()->makeHidden('duration')->toArray(),
+            $res->makeHidden('duration')->toArray()
+        );
     }
 
     /*
@@ -114,20 +77,7 @@ class BackupServiceUnitTest extends TestCase
     */
     public function test_count(): void
     {
-        Storage::fake('backups');
-
-        $backupBasename = config('backup.backup.name').DIRECTORY_SEPARATOR;
-
-        // Create some backup files
-        Storage::disk('backups')->put($backupBasename.'backup-1.zip', '123456');
-        Storage::disk('backups')->put($backupBasename.'backup-2.zip', '123456');
-        Storage::disk('backups')->put($backupBasename.'backup-3.zip', '123456');
-        Storage::disk('backups')->put($backupBasename.'backup-4.zip', '123456');
-        Storage::disk('backups')->put($backupBasename.'backup-5.zip', '123456');
-        Storage::disk('backups')->put($backupBasename.'backup-6.zip', '123456');
-        Storage::disk('backups')->put($backupBasename.'backup-7.zip', '123456');
-        Storage::disk('backups')->put($backupBasename.'backup-8.zip', '123456');
-        Storage::disk('backups')->put($backupBasename.'backup-9.zip', '123456');
+        BackupRun::factory()->count(9)->create();
 
         $testObj = new BackupService;
         $res = $testObj->count();
@@ -142,20 +92,7 @@ class BackupServiceUnitTest extends TestCase
     */
     public function test_total_size(): void
     {
-        Storage::fake('backups');
-
-        $backupBasename = config('backup.backup.name').DIRECTORY_SEPARATOR;
-
-        // Create some backup files
-        Storage::disk('backups')->put($backupBasename.'backup-1.zip', '123456');
-        Storage::disk('backups')->put($backupBasename.'backup-2.zip', '123456');
-        Storage::disk('backups')->put($backupBasename.'backup-3.zip', '123456');
-        Storage::disk('backups')->put($backupBasename.'backup-4.zip', '123456');
-        Storage::disk('backups')->put($backupBasename.'backup-5.zip', '123456');
-        Storage::disk('backups')->put($backupBasename.'backup-6.zip', '123456');
-        Storage::disk('backups')->put($backupBasename.'backup-7.zip', '123456');
-        Storage::disk('backups')->put($backupBasename.'backup-8.zip', '123456');
-        Storage::disk('backups')->put($backupBasename.'backup-9.zip', '123456');
+        BackupRun::factory()->count(9)->create(['size' => 6]);
 
         $testObj = new BackupService;
         $res = $testObj->totalSize();
@@ -227,25 +164,30 @@ class BackupServiceUnitTest extends TestCase
 
         // Create some backup files
         Storage::disk('backups')->put($backupBasename.'backup-1.zip', '123456');
-        Storage::disk('backups')->put($backupBasename.'backup-2.zip', '123456');
-        Storage::disk('backups')->put($backupBasename.'backup-3.zip', '123456');
-        Storage::disk('backups')->put($backupBasename.'backup-4.zip', '123456');
-        Storage::disk('backups')->put($backupBasename.'backup-5.zip', '123456');
-        Storage::disk('backups')->put($backupBasename.'backup-6.zip', '123456');
-        Storage::disk('backups')->put($backupBasename.'backup-7.zip', '123456');
-        Storage::disk('backups')->put($backupBasename.'backup-8.zip', '123456');
-        Storage::disk('backups')->put($backupBasename.'backup-9.zip', '123456');
+        BackupRun::factory()->create([
+            'backup_name' => 'backup-1.zip',
+            'size' => 6,
+        ]);
 
         $testObj = new BackupService;
         $testObj->delete('backup-1.zip');
 
         Storage::assertMissing($backupBasename.'backup-1.zip');
+        $this->assertDatabaseMissing('backup_runs', [
+            'backup_name' => 'backup-1.zip',
+            'size' => 6,
+        ]);
     }
 
     public function test_delete_missing_file(): void
     {
         Exceptions::fake();
         Storage::fake('backups');
+
+        BackupRun::factory()->create([
+            'backup_name' => 'backup-1.zip',
+            'size' => 6,
+        ]);
 
         $this->expectException(BackupFileMissingException::class);
 

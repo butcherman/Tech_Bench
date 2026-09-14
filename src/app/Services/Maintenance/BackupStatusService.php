@@ -3,7 +3,7 @@
 namespace App\Services\Maintenance;
 
 use App\DTO\Maintenance\BackupStatus;
-use Carbon\CarbonImmutable;
+use Carbon\Carbon;
 
 class BackupStatusService
 {
@@ -29,10 +29,7 @@ class BackupStatusService
             1
         );
 
-        $healthy = $latest->modified
-            ->greaterThanOrEqualTo(
-                CarbonImmutable::now()->subDays($maximumAge)
-            );
+        $healthy = $latest->started_at >= Carbon::now()->subDays($maximumAge);
 
         return new BackupStatus(
             healthy: $healthy,

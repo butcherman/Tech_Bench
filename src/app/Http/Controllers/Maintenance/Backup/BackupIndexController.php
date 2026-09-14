@@ -25,7 +25,7 @@ class BackupIndexController extends Controller
         $this->authorize('is-installer');
 
         return Inertia::render('Maint/Backup/Index', [
-            'status' => fn () => $this->status->status()->toArray(),
+            'status' => $this->status->status()->toArray(),
             'backups' => fn () => $this->backups
                 ->recent(10)
                 ->map

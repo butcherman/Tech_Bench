@@ -2,11 +2,10 @@
 
 namespace App\Services\Maintenance;
 
-use App\DTO\Maintenance\BackupSummary;
 use App\Exceptions\Maintenance\BackupFileMissingException;
+use App\Models\BackupRun;
 use Carbon\Carbon;
-use Carbon\CarbonImmutable;
-use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Facades\Storage;
 
 class BackupService
@@ -29,41 +28,48 @@ class BackupService
     /**
      * Get all Tech Bench backups.
      */
-    public function all(): Collection
+    public function all(): EloquentCollection
     {
-        return collect($this->storage->files(
-            rtrim($this->backupBaseName, DIRECTORY_SEPARATOR)
-        ))
-            ->map(fn (string $path) => $this->makeSummary($path))
-            ->sortByDesc(fn (BackupSummary $backup) => $backup->modified)
-            ->values();
+        return BackupRun::all()->sortBy('completed_at')->sortDesc();
     }
 
     /**
-     * Get the most recent backups.
+     * Get a list of the most recent backups.
      */
-    public function recent(int $limit = 10): Collection
+    public function recent(int $limit = 10): EloquentCollection
     {
-        return $this->all()->take($limit)->values();
+        return $this->all()->take($limit);
     }
 
-    public function latest(): ?BackupSummary
+    /**
+     * Get the last backup that was ran
+     */
+    public function latest(): ?BackupRun
     {
         return $this->recent(1)->first();
     }
 
+    /**
+     * Count how many backups exist
+     */
     public function count(): int
     {
         return $this->all()->count();
     }
 
+    /**
+     * Get the amount of disk space being used by the backup files
+     */
     public function totalSize(): int
     {
         return $this->all()->sum(
-            fn (BackupSummary $backup) => $backup->size
+            fn ($backup) => $backup->size
         );
     }
 
+    /**
+     * Determine if a backup file actually exists
+     */
     public function exists(string $backupName): bool
     {
         return $this->storage->exists(
@@ -71,15 +77,23 @@ class BackupService
         );
     }
 
+    /**
+     * Delete a backup file and its associated DB record
+     */
     public function delete(string $backupName): void
     {
         $this->ensureExists($backupName);
+
+        BackupRun::where('backup_name', $backupName)->delete();
 
         $this->storage->delete(
             $this->backupPath($backupName)
         );
     }
 
+    /**
+     * Get the full path that the file belongs to.
+     */
     public function path(string $backupName): string
     {
         $this->ensureExists($backupName);
@@ -89,6 +103,9 @@ class BackupService
         );
     }
 
+    /**
+     * Detemine the next time an automated backup will be ran
+     */
     public function getNextScheduledBackup(): string
     {
         if (! config('backup.nightly_backup')) {
@@ -105,7 +122,10 @@ class BackupService
         return $next3am->format('M d, Y h:00 A');
     }
 
-    public function getRetentionPolicy()
+    /**
+     * Show the saved retention policy
+     */
+    public function getRetentionPolicy(): array
     {
         $strategy = config('backup.cleanup.default_strategy');
 
@@ -117,6 +137,9 @@ class BackupService
         ];
     }
 
+    /**
+     * Make sure file exists, throw exception if missing.
+     */
     protected function ensureExists(string $backupName): void
     {
         if (! $this->exists($backupName)) {
@@ -124,19 +147,11 @@ class BackupService
         }
     }
 
+    /**
+     * Get the relative path of a backup file.
+     */
     protected function backupPath(string $backupName): string
     {
         return $this->backupBaseName.$backupName;
-    }
-
-    protected function makeSummary(string $path): BackupSummary
-    {
-        return new BackupSummary(
-            name: basename($path),
-            size: $this->storage->size($path),
-            modified: CarbonImmutable::createFromTimestamp(
-                $this->storage->lastModified($path)
-            ),
-        );
     }
 }

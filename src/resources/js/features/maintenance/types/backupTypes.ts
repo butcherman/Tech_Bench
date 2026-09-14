@@ -1,15 +1,20 @@
 interface BackupStatus {
     healthy: boolean;
-    latest: BackupInfo;
+    latest?: BackupInfo;
     backup_count: number;
     total_size: number;
     message: string | null;
 }
 
 interface BackupInfo {
-    name: string;
+    backup_name: string;
+    completed_at: string;
+    duration: number;
+    error: string | null;
     size: number;
-    modified: number;
+    started_at: string;
+    status: "running" | "completed" | "failed";
+    type: "scheduled" | "manual" | "cli" | "unknown";
 }
 
 interface BackupStrategy {
