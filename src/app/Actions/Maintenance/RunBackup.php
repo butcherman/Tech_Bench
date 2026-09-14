@@ -16,7 +16,7 @@ class RunBackup
 {
     public function __construct(protected BackupService $svc) {}
 
-    public function handle(BackupType $type): void
+    public function handle(BackupType $type): BackupRun
     {
         Log::info('Starting Tech Bench backup.');
 
@@ -58,5 +58,7 @@ class RunBackup
 
             throw $e;
         }
+
+        return $run;
     }
 }

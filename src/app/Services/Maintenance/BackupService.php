@@ -4,6 +4,7 @@ namespace App\Services\Maintenance;
 
 use App\DTO\Maintenance\BackupSummary;
 use App\Exceptions\Maintenance\BackupFileMissingException;
+use Carbon\Carbon;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
@@ -27,8 +28,6 @@ class BackupService
 
     /**
      * Get all Tech Bench backups.
-     *
-     * @return Collection<int, BackupSummary>
      */
     public function all(): Collection
     {
@@ -42,8 +41,6 @@ class BackupService
 
     /**
      * Get the most recent backups.
-     *
-     * @return Collection<int, BackupSummary>
      */
     public function recent(int $limit = 10): Collection
     {
@@ -92,9 +89,32 @@ class BackupService
         );
     }
 
-    public function disk()
+    public function getNextScheduledBackup(): string
     {
-        return $this->storage;
+        if (! config('backup.nightly_backup')) {
+            return 'Never';
+        }
+
+        $now = Carbon::now();
+        $next3am = Carbon::today()->setTime(3, 0, 0);
+
+        if ($now->gte($next3am)) {
+            $next3am->addDay();
+        }
+
+        return $next3am->format('M d, Y h:00 A');
+    }
+
+    public function getRetentionPolicy()
+    {
+        $strategy = config('backup.cleanup.default_strategy');
+
+        return [
+            'daily' => $strategy['keep_daily_backups_for_days'],
+            'weekly' => $strategy['keep_weekly_backups_for_weeks'],
+            'monthly' => $strategy['keep_monthly_backups_for_months'],
+            'yearly' => $strategy['keep_yearly_backups_for_years'],
+        ];
     }
 
     protected function ensureExists(string $backupName): void

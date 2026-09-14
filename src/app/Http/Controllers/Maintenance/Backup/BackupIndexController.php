@@ -31,8 +31,8 @@ class BackupIndexController extends Controller
                 ->map
                 ->toArray()
                 ->values(),
-            'next-run' => $this->status->getNextScheduledBackup(),
-            'strategy' => $this->status->getRetentionPolicy(),
+            'next-run' => $this->backups->getNextScheduledBackup(),
+            'strategy' => $this->backups->getRetentionPolicy(),
             'settings' => $this->settings->getBackupSettings(),
             'storage' => $this->storage->getUsage(DiskEnum::backups),
         ]);
