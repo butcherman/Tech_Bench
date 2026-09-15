@@ -8,12 +8,14 @@ use RuntimeException;
 
 class StorageUsageService
 {
+    public function __construct(protected FileSystemSpace $space) {}
+
     public function getUsage(DiskEnum $disk): array
     {
         $path = Storage::disk($disk->value)->path('/');
 
-        $total = disk_total_space($path);
-        $free = disk_free_space($path);
+        $total = $this->space->getDiskTotalSpace($path);
+        $free = $this->space->getDiskFreeSpace($path);
 
         if ($total === false || $free === false) {
             throw new RuntimeException(
