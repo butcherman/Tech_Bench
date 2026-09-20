@@ -31,7 +31,7 @@ class BackupWasSuccessfulListener
         }
 
         if ($runningBackup->isEmpty()) {
-            $backup = $this->svc->latest();
+            $backup = $this->svc->latestFile();
 
             BackupRun::create([
                 'type' => BackupType::Unknown,

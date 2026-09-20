@@ -39,7 +39,7 @@ class RunBackup
                 );
             }
 
-            $backup = $this->svc->latest();
+            $backup = $this->svc->latestFile();
 
             $run->update([
                 'status' => BackupRunStatus::Completed,

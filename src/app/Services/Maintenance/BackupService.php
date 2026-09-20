@@ -2,10 +2,13 @@
 
 namespace App\Services\Maintenance;
 
+use App\DTO\Maintenance\BackupSummary;
 use App\Exceptions\Maintenance\BackupFileMissingException;
 use App\Models\BackupRun;
 use Carbon\Carbon;
+use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 
 class BackupService
@@ -26,11 +29,24 @@ class BackupService
     }
 
     /**
-     * Get all Tech Bench backups.
+     * Get all Tech Bench backups from DB.
      */
     public function all(): EloquentCollection
     {
         return BackupRun::all()->sortBy('completed_at')->sortDesc();
+    }
+
+    /**
+     * Get all Tech Bench backups files.
+     */
+    public function allFiles(): Collection
+    {
+        return collect($this->storage->files(
+            rtrim($this->backupBaseName, DIRECTORY_SEPARATOR)
+        ))
+            ->map(fn (string $path) => $this->makeSummary($path))
+            ->sortByDesc(fn (BackupSummary $backup) => $backup->modified)
+            ->values();
     }
 
     /**
@@ -42,11 +58,27 @@ class BackupService
     }
 
     /**
+     * Get a list of th emost recent backup files.
+     */
+    public function recentFiles(int $limit = 10): Collection
+    {
+        return $this->allFiles()->take($limit)->values();
+    }
+
+    /**
      * Get the last backup that was ran
      */
     public function latest(): ?BackupRun
     {
         return $this->recent(1)->first();
+    }
+
+    /**
+     * Get the last backup file that was run
+     */
+    public function latestFile(): ?BackupSummary
+    {
+        return $this->recentFiles(1)->first();
     }
 
     /**
@@ -153,5 +185,19 @@ class BackupService
     protected function backupPath(string $backupName): string
     {
         return $this->backupBaseName.$backupName;
+    }
+
+    /**
+     * Make a summary of the backup file
+     */
+    protected function makeSummary(string $path): BackupSummary
+    {
+        return new BackupSummary(
+            name: basename($path),
+            size: $this->storage->size($path),
+            modified: CarbonImmutable::createFromTimestamp(
+                $this->storage->lastModified($path)
+            ),
+        );
     }
 }
