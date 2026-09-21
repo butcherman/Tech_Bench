@@ -54,11 +54,11 @@ Route::middleware('auth.secure')->prefix('maintenance')->name('maint.')->group(f
         Route::put('settings', BackupSettingsController::class)->name('update');
         // Route::post('upload-backup', UploadBackupController::class)
         //     ->name('upload');
-        // Route::get('download/{backupName}', DownloadBackupController::class)
-        //     ->name('download');
+        Route::get('download/{backupName:backup_name}', DownloadBackupController::class)
+            ->name('download');
         Route::get('run-backup', RunBackupController::class)->name('run-backup');
-        // Route::delete('delete-backup/{backupName}', DeleteBackupController::class)
-        //     ->name('delete');
+        Route::delete('delete-backup/{backupName:backup_name}', DeleteBackupController::class)
+            ->name('delete');
         Route::get('/', BackupIndexController::class)
             ->name('index')
             ->breadcrumb('Backups', 'admin.index');

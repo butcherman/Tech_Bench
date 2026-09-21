@@ -1,3 +1,7 @@
+type BackupState = "running" | "completed" | "failed";
+
+type BackupType = "scheduled" | "manual" | "cli" | "unknown";
+
 interface BackupStatus {
     healthy: boolean;
     latest?: BackupInfo;
@@ -13,8 +17,8 @@ interface BackupInfo {
     error: string | null;
     size: number;
     started_at: string;
-    status: "running" | "completed" | "failed";
-    type: "scheduled" | "manual" | "cli" | "unknown";
+    status: BackupState;
+    type: BackupType;
 }
 
 interface BackupStrategy {

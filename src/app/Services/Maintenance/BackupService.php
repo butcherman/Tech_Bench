@@ -10,6 +10,7 @@ use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class BackupService
 {
@@ -112,15 +113,13 @@ class BackupService
     /**
      * Delete a backup file and its associated DB record
      */
-    public function delete(string $backupName): void
+    public function delete(BackupRun $backup): void
     {
-        $this->ensureExists($backupName);
+        if ($this->exists($backup->backup_name)) {
+            $this->storage->delete($this->backupPath($backup->backup_name));
+        }
 
-        BackupRun::where('backup_name', $backupName)->delete();
-
-        $this->storage->delete(
-            $this->backupPath($backupName)
-        );
+        $backup->delete();
     }
 
     /**
@@ -133,6 +132,17 @@ class BackupService
         return $this->storage->path(
             $this->backupPath($backupName)
         );
+    }
+
+    /**
+     * Download a backup file
+     */
+    public function download(BackupRun $backup): StreamedResponse
+    {
+        $this->ensureExists($backup->backup_name);
+
+        return $this->storage
+            ->download($this->backupPath($backup->backup_name));
     }
 
     /**

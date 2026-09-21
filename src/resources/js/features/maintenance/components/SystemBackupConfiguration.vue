@@ -54,7 +54,6 @@ const getBooleanColor = (boolVal: boolean): string => {
             <BaseButton
                 text="Edit Configuration"
                 size="sm"
-                pill
                 @click="showSettingsForm = true"
             />
         </div>
