@@ -2,30 +2,39 @@
 
 namespace App\Http\Controllers\Maintenance\Backup;
 
-use App\Enums\DiskEnum;
+use App\Actions\Maintenance\ProcessUploadedBackup;
 use App\Http\Controllers\FileUploadController;
+use App\Http\Requests\Maintenance\UploadBackupRequest;
 use App\Models\AppSettings;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Log;
+use Exception;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class UploadBackupController extends FileUploadController
 {
+    public function __construct(protected ProcessUploadedBackup $action) {}
+
     /**
-     * Handle the incoming request.
+     * Show form to upload a backup file
      */
-    public function __invoke(Request $request): Response
+    public function create(): Response
     {
         $this->authorize('viewAny', AppSettings::class);
 
-        // TODO - Refactor to accept new upload process.
+        return Inertia::render('Maint/Backup/Create');
+    }
 
-        // $this->setFileData(DiskEnum::backups, 'tech-bench');
+    /**
+     * Save an uploaded backup file.
+     */
+    public function store(UploadBackupRequest $request)
+    {
+        try {
+            ($this->action)($request->input('upload_id'));
+        } catch (Exception $e) {
+            return back()->with('error', $e->getMessage());
+        }
 
-        // if ($savedFile = $this->getChunk($request->file('file'), $request)) {
-        //     Log::info('New Backup File Uploaded '.$savedFile->file_name);
-        // }
-
-        return response()->noContent();
+        return back()->with('success', 'File Uploaded');
     }
 }

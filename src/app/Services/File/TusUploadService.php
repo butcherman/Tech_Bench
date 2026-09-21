@@ -2,6 +2,7 @@
 
 namespace App\Services\File;
 
+use App\Enums\DiskEnum;
 use ArthurPatriot\Tus\Exceptions\FileNotFoundException;
 use ArthurPatriot\Tus\Facades\Tus;
 use ArthurPatriot\Tus\Helpers\TusFile;
@@ -71,11 +72,11 @@ class TusUploadService
     /**
      * Save the file to its final destination
      */
-    public function finalizeUpload(TusFile $upload, string $destination): void
+    public function finalizeUpload(TusFile $upload, DiskEnum $disk, string $destination): void
     {
         rename(
             Tus::storage()->path($upload->path),
-            Storage::disk('public')->path($destination)
+            Storage::disk($disk->value)->path($destination)
         );
 
         // Delete the meta data from the file

@@ -18,6 +18,7 @@ Schedule::command('telescope:prune')->daily();
 Schedule::command('horizon:snapshot')->everyFifteenMinutes();
 Schedule::command('auth:clear-resets')->everyFifteenMinutes();
 Schedule::command('auth:clear-validation-codes')->everyFifteenMinutes();
+Schedule::command('tus:prune')->hourly();
 
 /*
 |-------------------------------------------------------------------------------

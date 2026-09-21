@@ -16,7 +16,7 @@ return new class extends Migration
             $table->text('backup_name')->nullable();
             $table->text('type')->nullable();
             $table->text('status');
-            $table->timestamp('started_at');
+            $table->timestamp('started_at')->nullable();
             $table->timestamp('completed_at')->nullable();
             $table->integer('size')->nullable();
             $table->text('error')->nullable();

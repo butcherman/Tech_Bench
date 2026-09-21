@@ -24,6 +24,6 @@ class BackupFileInvalidException extends Exception
 
     public function render(): never
     {
-        abort(404, 'Unable to find Backup File');
+        abort(500, 'Selected file is not a valid Tech Bench backup file');
     }
 }

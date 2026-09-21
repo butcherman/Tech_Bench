@@ -1,6 +1,6 @@
 type BackupState = "running" | "completed" | "failed";
 
-type BackupType = "scheduled" | "manual" | "cli" | "unknown";
+type BackupType = "scheduled" | "manual" | "cli" | "upload" | "unknown";
 
 interface BackupStatus {
     healthy: boolean;

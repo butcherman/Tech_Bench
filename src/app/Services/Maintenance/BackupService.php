@@ -182,7 +182,7 @@ class BackupService
     /**
      * Make sure file exists, throw exception if missing.
      */
-    protected function ensureExists(string $backupName): void
+    public function ensureExists(string $backupName): void
     {
         if (! $this->exists($backupName)) {
             throw new BackupFileMissingException($backupName);
