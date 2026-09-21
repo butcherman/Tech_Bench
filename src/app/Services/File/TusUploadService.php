@@ -38,9 +38,9 @@ class TusUploadService
     }
 
     /**
-     * Validate that the file has the correct MIME type
+     * Validate the file has correct MIME type without triggering exception
      */
-    public function validateMimeType(TusFile $tusFile, array $allowedMimes): bool
+    public function isMimeValid(TusFile $tusFile, array $allowedMimes): bool
     {
         $finfo = new finfo(FILEINFO_MIME_TYPE);
         $path = Tus::storage()->path($tusFile->path);
@@ -54,6 +54,18 @@ class TusUploadService
         ]);
 
         return in_array($mime, $allowedMimes, true);
+    }
+
+    /**
+     * Validate that the file has the correct MIME type
+     */
+    public function validateMimeType(TusFile $tusFile, array $allowedMimes): void
+    {
+        if (! $this->isMimeValid($tusFile, $allowedMimes)) {
+            throw ValidationException::withMessages([
+                'upload_id' => 'The uploaded file is not a supported file type.',
+            ]);
+        }
     }
 
     /**

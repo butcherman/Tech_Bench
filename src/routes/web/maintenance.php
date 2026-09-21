@@ -56,8 +56,15 @@ Route::middleware('auth.secure')->prefix('maintenance')->name('maint.')->group(f
             ->name('show-all')
             ->breadcrumb('All Backup Files', 'maint.backups.index');
         Route::put('settings', BackupSettingsController::class)->name('update');
-        // Route::post('upload-backup', UploadBackupController::class)
-        //     ->name('upload');
+        Route::controller(UploadBackupController::class)
+            ->prefix('upload')
+            ->name('upload.')
+            ->group(function () {
+                Route::get('/', 'create')
+                    ->name('create')
+                    ->breadcrumb('Upload Backup File', 'maint.backups.index');
+                Route::post('/', 'store')->name('store');
+            });
         Route::get('download/{backupName:backup_name}', DownloadBackupController::class)
             ->name('download');
         Route::get('run-backup', RunBackupController::class)->name('run-backup');

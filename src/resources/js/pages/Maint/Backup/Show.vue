@@ -11,7 +11,7 @@ const props = defineProps<{
 export default { layout: AppLayout };
 </script>
 <template>
-    <div class="flex justify-center">
+    <div class="flex flex-col gap-2 justify-center items-center">
         <SystemBackupRecent :backups shown-all />
     </div>
 </template>

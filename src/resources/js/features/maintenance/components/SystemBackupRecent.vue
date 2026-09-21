@@ -6,6 +6,7 @@ import Drawer from "@/core/components/Drawer.vue";
 import prettyBytes from "pretty-bytes";
 import verifyModal from "@/core/features/verifyModal";
 import { computed, ref } from "vue";
+import { create } from "@/wayfinder/routes/maint/backups/upload";
 import { deleteMethod } from "@/wayfinder/routes/maint/backups";
 import { download } from "@/wayfinder/routes/maint/backups";
 import { router } from "@inertiajs/vue3";
@@ -37,7 +38,7 @@ const tableColumns = [
         sort: props.shownAll,
     }),
     colHelper.text("type", "Type", {
-        filterable: props.shownAll,
+        filterSelect: props.shownAll,
         sort: props.shownAll,
     }),
     colHelper.text("size", "Size", {
@@ -81,8 +82,16 @@ const deleteBackup = () => {
 
 <template>
     <Card :title="cardTitle">
-        <template v-if="!shownAll" #append-title>
-            <BaseButton :href="showAll.url()" text="Show All" size="sm" pill />
+        <template #append-title>
+            <BaseButton
+                v-if="!shownAll"
+                :href="showAll.url()"
+                text="Show All"
+                size="sm"
+                class="me-2"
+                pill
+            />
+            <BaseButton :href="create.url()" text="Upload" size="sm" pill />
         </template>
         <DataTable
             :columns="tableColumns"
