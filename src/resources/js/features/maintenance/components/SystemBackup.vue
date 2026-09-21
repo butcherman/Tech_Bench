@@ -21,6 +21,6 @@ const props = defineProps<{
             <SystemBackupConfiguration :settings :strategy />
             <SystemBackupStorage :storage :status />
         </div>
-        <SystemBackupRecent :backups />
+        <SystemBackupRecent :backups :show-filters="false" />
     </div>
 </template>

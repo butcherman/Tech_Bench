@@ -9,11 +9,17 @@ import { computed, ref } from "vue";
 import { deleteMethod } from "@/wayfinder/routes/maint/backups";
 import { download } from "@/wayfinder/routes/maint/backups";
 import { router } from "@inertiajs/vue3";
+import { showAll } from "@/wayfinder/routes/maint/backups";
 import { useColumnBuilder } from "@/core/features/dataResources/composables/columnBuilder";
 
 const props = defineProps<{
     backups: BackupInfo[];
+    shownAll?: boolean;
 }>();
+
+const cardTitle = computed(() =>
+    props.shownAll ? "All Backups" : "Recent Backups",
+);
 
 const showInfoDrawer = ref<boolean>(false);
 const activeBackup = ref<BackupInfo>();
@@ -27,39 +33,39 @@ const colHelper = useColumnBuilder<BackupInfo>();
 
 const tableColumns = [
     colHelper.text("backup_name", "Name", {
-        filterable: false,
-        sort: false,
+        filterable: props.shownAll,
+        sort: props.shownAll,
     }),
     colHelper.text("type", "Type", {
-        filterable: false,
-        sort: false,
+        filterable: props.shownAll,
+        sort: props.shownAll,
     }),
     colHelper.text("size", "Size", {
-        filterable: false,
-        sort: false,
+        filterable: props.shownAll,
+        sort: props.shownAll,
         formatter: (value: number) => prettyBytes(value ?? 0),
     }),
     colHelper.text("status", "Status", {
         filterable: false,
-        sort: false,
+        sort: props.shownAll,
     }),
 ];
 
-const stateIcon = computed(() => {
+const getStateIcon = (state: BackupState): string => {
     return {
         completed: "check",
         failed: "xmark",
         running: "microchip",
-    }[activeBackup.value?.status ?? "failed"];
-});
+    }[state];
+};
 
-const stateColor = computed(() => {
+const getStateColor = (state: BackupState): string => {
     return {
         completed: "text-success",
         failed: "text-danger",
         running: "text-warning",
-    }[activeBackup.value?.status ?? "failed"];
-});
+    }[state];
+};
 
 const deleteBackup = () => {
     verifyModal("This cannot be undone").then((res) => {
@@ -74,13 +80,25 @@ const deleteBackup = () => {
 </script>
 
 <template>
-    <Card title="Recent Backups">
+    <Card :title="cardTitle">
+        <template v-if="!shownAll" #append-title>
+            <BaseButton :href="showAll.url()" text="Show All" size="sm" pill />
+        </template>
         <DataTable
             :columns="tableColumns"
             :data="backups"
             :row-click-fn="showBackupInfo"
             compact
-        />
+        >
+            <template #row.status="{ rowData }">
+                <div class="text-center w-full">
+                    <fa-icon
+                        :icon="getStateIcon(rowData.status)"
+                        :class="getStateColor(rowData.status)"
+                    />
+                </div>
+            </template>
+        </DataTable>
         <Drawer
             v-model="showInfoDrawer"
             position="right"
@@ -93,8 +111,8 @@ const deleteBackup = () => {
                             <th class="text-start pe-3 py-3">Status</th>
                             <td class="capitalize">
                                 <fa-icon
-                                    :icon="stateIcon"
-                                    :class="stateColor"
+                                    :icon="getStateIcon(activeBackup.status)"
+                                    :class="getStateColor(activeBackup.status)"
                                 />
                                 {{ activeBackup.status }}
                             </td>

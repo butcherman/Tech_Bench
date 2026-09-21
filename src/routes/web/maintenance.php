@@ -5,6 +5,7 @@ use App\Http\Controllers\Maintenance\Backup\BackupSettingsController;
 use App\Http\Controllers\Maintenance\Backup\DeleteBackupController;
 use App\Http\Controllers\Maintenance\Backup\DownloadBackupController;
 use App\Http\Controllers\Maintenance\Backup\RunBackupController;
+use App\Http\Controllers\Maintenance\Backup\ShowAllBackupsController;
 use App\Http\Controllers\Maintenance\Backup\UploadBackupController;
 use App\Http\Controllers\Maintenance\Logs\DownloadLogController;
 use App\Http\Controllers\Maintenance\Logs\LogLoadMoreController;
@@ -51,6 +52,9 @@ Route::middleware('auth.secure')->prefix('maintenance')->name('maint.')->group(f
      |---------------------------------------------------------------------------
      */
     Route::prefix('backups')->name('backups.')->group(function () {
+        Route::get('all', ShowAllBackupsController::class)
+            ->name('show-all')
+            ->breadcrumb('All Backup Files', 'maint.backups.index');
         Route::put('settings', BackupSettingsController::class)->name('update');
         // Route::post('upload-backup', UploadBackupController::class)
         //     ->name('upload');
