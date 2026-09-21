@@ -49,55 +49,55 @@ class BackupRestoreCommand extends Command
         $this->components->alert('PROCEED WITH CAUTION');
 
         // Select Backup file to Restore
-        $backupChoice = select(
-            label: 'Select Backup File to Restore',
-            options: collect($this->svc->getBackupListWithMetaData())
-                ->pluck('name'),
-        );
+        // $backupChoice = select(
+        //     label: 'Select Backup File to Restore',
+        //     options: collect($this->svc->getBackupListWithMetaData())
+        //         ->pluck('name'),
+        // );
 
         /*
         |-----------------------------------------------------------------------
         | Mount and Validate the backup file
         |-----------------------------------------------------------------------
         */
-        spin(
-            message: 'Validating Backup File',
-            callback: fn () => $this->svc->validateBackupArchive($backupChoice),
-        );
+        // spin(
+        //     message: 'Validating Backup File',
+        //     callback: fn () => $this->svc->validateBackupArchive($backupChoice),
+        // );
 
-        $this->info('Backup File is Valid');
+        // $this->info('Backup File is Valid');
 
         /*
         |-----------------------------------------------------------------------
         | Should Logs and SSL Cert be restored?
         |-----------------------------------------------------------------------
         */
-        $restoreEnv = confirm(
-            label: 'Restore Environment File?',
-            default: true,
-        );
+        // $restoreEnv = confirm(
+        //     label: 'Restore Environment File?',
+        //     default: true,
+        // );
 
-        $restoreLogs = confirm(
-            label: 'Restore Log Files?',
-            default: true,
-        );
+        // $restoreLogs = confirm(
+        //     label: 'Restore Log Files?',
+        //     default: true,
+        // );
 
-        $restoreCert = confirm(
-            label: 'Restore SSL Certificate?',
-            default: true,
-        );
+        // $restoreCert = confirm(
+        //     label: 'Restore SSL Certificate?',
+        //     default: true,
+        // );
 
-        $this->components->alert('WARNING:  All Existing Data Will Be Erased');
-        warning('Selected Backup File - '.$backupChoice);
+        // $this->components->alert('WARNING:  All Existing Data Will Be Erased');
+        // warning('Selected Backup File - '.$backupChoice);
 
-        $continue = confirm(
-            label: 'Continue?',
-            default: false,
-        );
+        // $continue = confirm(
+        //     label: 'Continue?',
+        //     default: false,
+        // );
 
-        if (! $continue) {
-            $this->abortRestore('Recovery Confirmation Aborted');
-        }
+        // if (! $continue) {
+        //     $this->abortRestore('Recovery Confirmation Aborted');
+        // }
 
         /*
         |-----------------------------------------------------------------------
@@ -105,26 +105,26 @@ class BackupRestoreCommand extends Command
         |-----------------------------------------------------------------------
         */
 
-        $this->components->info(
-            'Starting Database Restore Process, this may take some time.'
-        );
-        $this->components->info('Taking Tech Bench Offline');
+        // $this->components->info(
+        //     'Starting Database Restore Process, this may take some time.'
+        // );
+        // $this->components->info('Taking Tech Bench Offline');
 
-        $this->call('down');
+        // $this->call('down');
 
-        spin(
-            message: 'Extracting Backup',
-            callback: fn () => $this->svc->extractBackup(),
-        );
+        // spin(
+        //     message: 'Extracting Backup',
+        //     callback: fn () => $this->svc->extractBackup(),
+        // );
 
-        $this->components->info('Backup Extracted');
+        // $this->components->info('Backup Extracted');
 
-        spin(
-            message: 'Restoring Database',
-            callback: fn () => $this->svc->restoreDatabase()
-        );
+        // spin(
+        //     message: 'Restoring Database',
+        //     callback: fn () => $this->svc->restoreDatabase()
+        // );
 
-        $this->components->info('Database Restored');
+        // $this->components->info('Database Restored');
 
         /*
         |-----------------------------------------------------------------------
@@ -132,85 +132,85 @@ class BackupRestoreCommand extends Command
         |-----------------------------------------------------------------------
         */
 
-        spin(
-            message: 'Restoring Filesystem',
-            callback: fn () => $this->svc->restoreFileSystem()
-        );
+        // spin(
+        //     message: 'Restoring Filesystem',
+        //     callback: fn () => $this->svc->restoreFileSystem()
+        // );
 
-        $this->components->info('Filesystem Restored');
+        // $this->components->info('Filesystem Restored');
 
-        if ($restoreEnv) {
-            spin(
-                message: 'Restoring Environment File',
-                callback: fn () => $this->svc->restoreEnvironmentFile()
-            );
+        // if ($restoreEnv) {
+        //     spin(
+        //         message: 'Restoring Environment File',
+        //         callback: fn () => $this->svc->restoreEnvironmentFile()
+        //     );
 
-            $this->components->info('Environment File Restored');
-        }
+        //     $this->components->info('Environment File Restored');
+        // }
 
-        if ($restoreLogs) {
-            spin(
-                message: 'Restoring Log Files',
-                callback: fn () => $this->svc->restoreLogFiles()
-            );
+        // if ($restoreLogs) {
+        //     spin(
+        //         message: 'Restoring Log Files',
+        //         callback: fn () => $this->svc->restoreLogFiles()
+        //     );
 
-            $this->components->info('Log Files Restored');
-        }
+        //     $this->components->info('Log Files Restored');
+        // }
 
-        if ($restoreCert) {
-            spin(
-                message: 'Restoring SSL Certificate',
-                callback: fn () => $this->svc->restoreCert()
-            );
+        // if ($restoreCert) {
+        //     spin(
+        //         message: 'Restoring SSL Certificate',
+        //         callback: fn () => $this->svc->restoreCert()
+        //     );
 
-            $this->components->info('SSL Certificate Restored');
-        }
+        //     $this->components->info('SSL Certificate Restored');
+        // }
 
-        $this->components->info('Restore Process Complete');
-        $this->components->info('Performing Cleanup Tasks');
+        // $this->components->info('Restore Process Complete');
+        // $this->components->info('Performing Cleanup Tasks');
 
-        $this->cleanup(true);
+        // $this->cleanup(true);
     }
 
     /**
      * Abort the Restore Process with error.
      */
-    private function abortRestore(string $reason): void
-    {
-        Log::error('Aborting Restore Process.  Reason - '.$reason);
+    // private function abortRestore(string $reason): void
+    // {
+    //     Log::error('Aborting Restore Process.  Reason - '.$reason);
 
-        $this->components->error('Backup Recovery Failed.  Aborting.');
+    //     $this->components->error('Backup Recovery Failed.  Aborting.');
 
-        $this->cleanup();
+    //     $this->cleanup();
 
-        $this->fail($reason);
-    }
+    //     $this->fail($reason);
+    // }
 
     /**
      * Cleanup all temporary files and re-enable application
      */
-    protected function cleanup(bool $reboot = false): void
-    {
-        $this->svc->deleteExtractedFiles();
+    // protected function cleanup(bool $reboot = false): void
+    // {
+    //     $this->svc->deleteExtractedFiles();
 
-        // @codeCoverageIgnoreStart
-        if (App::environment('production')) {
-            // Clear and re-cache all config data
-            $this->call('optimize:clear');
-            $this->call('breadcrumbs:cache');
-            $this->call('optimize');
+    //     // @codeCoverageIgnoreStart
+    //     if (App::environment('production')) {
+    //         // Clear and re-cache all config data
+    //         $this->call('optimize:clear');
+    //         $this->call('breadcrumbs:cache');
+    //         $this->call('optimize');
 
-            // Rebuild all JS application files
-            Process::run('npm run build');
-        }
-        // @codeCoverageIgnoreEnd
+    //         // Rebuild all JS application files
+    //         Process::run('npm run build');
+    //     }
+    //     // @codeCoverageIgnoreEnd
 
-        if (App::isDownForMaintenance()) {
-            $this->call('up');
-        }
+    //     if (App::isDownForMaintenance()) {
+    //         $this->call('up');
+    //     }
 
-        if ($reboot) {
-            $this->call('app:reboot', ['--force' => true]);
-        }
-    }
+    //     if ($reboot) {
+    //         $this->call('app:reboot', ['--force' => true]);
+    //     }
+    // }
 }

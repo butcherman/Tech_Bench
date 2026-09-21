@@ -2,12 +2,14 @@
 
 namespace Tests\Unit\Services\Maintenance;
 
+use App\DTO\Maintenance\BackupSummary;
 use App\Exceptions\Maintenance\BackupFileMissingException;
 use App\Models\BackupRun;
 use App\Services\Maintenance\BackupService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Exceptions;
 use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Tests\TestCase;
 
 class BackupServiceUnitTest extends TestCase
@@ -37,6 +39,31 @@ class BackupServiceUnitTest extends TestCase
 
     /*
     |---------------------------------------------------------------------------
+    | allFiles()
+    |---------------------------------------------------------------------------
+    */
+    public function test_all_files(): void
+    {
+        Storage::fake('backups');
+
+        $backupBasename = config('backup.backup.name').DIRECTORY_SEPARATOR;
+
+        // Create some backup files
+        Storage::disk('backups')->put($backupBasename.'backup-1.zip', '123456');
+        Storage::disk('backups')->put($backupBasename.'backup-2.zip', '123456');
+        Storage::disk('backups')->put($backupBasename.'backup-3.zip', '123456');
+
+        $testObj = new BackupService;
+        $res = $testObj->allFiles();
+
+        $this->assertEquals(
+            $res->pluck('name')->all(),
+            ['backup-1.zip', 'backup-2.zip', 'backup-3.zip']
+        );
+    }
+
+    /*
+    |---------------------------------------------------------------------------
     | recent()
     |---------------------------------------------------------------------------
     */
@@ -49,6 +76,43 @@ class BackupServiceUnitTest extends TestCase
 
         $this->assertCount(5, $res);
         $this->assertInstanceOf(BackupRun::class, $res->last());
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | recentFiles()
+    |---------------------------------------------------------------------------
+    */
+    public function test_recent_files(): void
+    {
+        Storage::fake('backups');
+
+        $backupBasename = config('backup.backup.name').DIRECTORY_SEPARATOR;
+
+        // Create some backup files
+        Storage::disk('backups')->put($backupBasename.'backup-1.zip', '123456');
+        Storage::disk('backups')->put($backupBasename.'backup-2.zip', '123456');
+        Storage::disk('backups')->put($backupBasename.'backup-3.zip', '123456');
+        Storage::disk('backups')->put($backupBasename.'backup-4.zip', '123456');
+        Storage::disk('backups')->put($backupBasename.'backup-5.zip', '123456');
+        Storage::disk('backups')->put($backupBasename.'backup-6.zip', '123456');
+        Storage::disk('backups')->put($backupBasename.'backup-7.zip', '123456');
+        Storage::disk('backups')->put($backupBasename.'backup-8.zip', '123456');
+        Storage::disk('backups')->put($backupBasename.'backup-9.zip', '123456');
+
+        $testObj = new BackupService;
+        $res = $testObj->recentFiles(5);
+
+        $this->assertEquals(
+            $res->pluck('name')->all(),
+            [
+                'backup-1.zip',
+                'backup-2.zip',
+                'backup-3.zip',
+                'backup-4.zip',
+                'backup-5.zip',
+            ]
+        );
     }
 
     /*
@@ -68,6 +132,36 @@ class BackupServiceUnitTest extends TestCase
             $backupList->last()->makeHidden('duration')->toArray(),
             $res->makeHidden('duration')->toArray()
         );
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | latestFile()
+    |---------------------------------------------------------------------------
+    */
+    public function test_latest_file(): void
+    {
+        Storage::fake('backups');
+
+        $backupBasename = config('backup.backup.name').DIRECTORY_SEPARATOR;
+
+        // Create some backup files
+        Storage::disk('backups')->put($backupBasename.'backup-1.zip', '123456');
+        Storage::disk('backups')->put($backupBasename.'backup-2.zip', '123456');
+        Storage::disk('backups')->put($backupBasename.'backup-3.zip', '123456');
+        Storage::disk('backups')->put($backupBasename.'backup-4.zip', '123456');
+        Storage::disk('backups')->put($backupBasename.'backup-5.zip', '123456');
+        Storage::disk('backups')->put($backupBasename.'backup-6.zip', '123456');
+        Storage::disk('backups')->put($backupBasename.'backup-7.zip', '123456');
+        Storage::disk('backups')->put($backupBasename.'backup-8.zip', '123456');
+        Storage::disk('backups')->put($backupBasename.'backup-9.zip', '123456');
+
+        $testObj = new BackupService;
+        $res = $testObj->latestFile();
+
+        $this->assertInstanceOf(BackupSummary::class, $res);
+        $this->assertEquals('backup-1.zip', $res->name);
+        $this->assertEquals(6, $res->size);
     }
 
     /*
@@ -164,13 +258,13 @@ class BackupServiceUnitTest extends TestCase
 
         // Create some backup files
         Storage::disk('backups')->put($backupBasename.'backup-1.zip', '123456');
-        BackupRun::factory()->create([
+        $run = BackupRun::factory()->create([
             'backup_name' => 'backup-1.zip',
             'size' => 6,
         ]);
 
         $testObj = new BackupService;
-        $testObj->delete('backup-1.zip');
+        $testObj->delete($run);
 
         Storage::assertMissing($backupBasename.'backup-1.zip');
         $this->assertDatabaseMissing('backup_runs', [
@@ -181,20 +275,20 @@ class BackupServiceUnitTest extends TestCase
 
     public function test_delete_missing_file(): void
     {
-        Exceptions::fake();
         Storage::fake('backups');
 
-        BackupRun::factory()->create([
+        $run = BackupRun::factory()->create([
             'backup_name' => 'backup-1.zip',
             'size' => 6,
         ]);
 
-        $this->expectException(BackupFileMissingException::class);
-
         $testObj = new BackupService;
-        $testObj->delete('backup-1.zip');
+        $testObj->delete($run);
 
-        Exceptions::assertReported(BackupFileMissingException::class);
+        $this->assertDatabaseMissing('backup_runs', [
+            'backup_name' => 'backup-1.zip',
+            'size' => 6,
+        ]);
     }
 
     /*
@@ -236,6 +330,62 @@ class BackupServiceUnitTest extends TestCase
 
         $testObj = new BackupService;
         $testObj->path('backup-1.zip');
+
+        Exceptions::assertReported(BackupFileMissingException::class);
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | download()
+    |---------------------------------------------------------------------------
+    */
+    public function test_download(): void
+    {
+        Storage::fake('backups');
+
+        $backupBasename = config('backup.backup.name').DIRECTORY_SEPARATOR;
+        $response = $this->mock(StreamedResponse::class);
+
+        Storage::disk('backups')->put($backupBasename.'backup-1.zip', '123456');
+
+        $run = BackupRun::factory()->create([
+            'backup_name' => 'backup-1.zip',
+            'size' => 6,
+        ]);
+
+        Storage::shouldReceive('disk')
+            ->once()
+            ->with('backups')
+            ->andReturnSelf();
+
+        Storage::shouldReceive('exists')
+            ->with($backupBasename.'backup-1.zip')
+            ->andReturnTrue();
+
+        Storage::shouldReceive('download')
+            ->once()
+            ->with($backupBasename.'backup-1.zip')
+            ->andReturn($response);
+
+        $testObj = new BackupService;
+        $res = $testObj->download($run);
+
+        $this->assertEquals($response, $res);
+    }
+
+    public function test_download_missing_file(): void
+    {
+        Exceptions::fake();
+
+        $run = BackupRun::factory()->create([
+            'backup_name' => 'backup-1.zip',
+            'size' => 6,
+        ]);
+
+        $this->expectException(BackupFileMissingException::class);
+
+        $testObj = new BackupService;
+        $testObj->download($run);
 
         Exceptions::assertReported(BackupFileMissingException::class);
     }

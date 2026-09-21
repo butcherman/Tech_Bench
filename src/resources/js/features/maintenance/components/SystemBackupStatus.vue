@@ -22,12 +22,7 @@ const statusText = computed(() =>
 <template>
     <Card title="Backups">
         <template #append-title>
-            <BaseButton
-                :href="runBackup.url()"
-                size="sm"
-                text="Run Backup"
-                pill
-            />
+            <BaseButton :href="runBackup.url()" size="sm" text="Run Backup" />
         </template>
         <div class="border border-slate-300 rounded-lg p-3 flex flex-col gap-3">
             <div>

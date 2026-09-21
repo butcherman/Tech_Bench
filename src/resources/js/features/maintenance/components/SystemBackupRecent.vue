@@ -89,9 +89,8 @@ const deleteBackup = () => {
                 text="Show All"
                 size="sm"
                 class="me-2"
-                pill
             />
-            <BaseButton :href="create.url()" text="Upload" size="sm" pill />
+            <BaseButton :href="create.url()" text="Upload" size="sm" />
         </template>
         <DataTable
             :columns="tableColumns"

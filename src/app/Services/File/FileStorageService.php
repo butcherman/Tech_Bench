@@ -2,6 +2,7 @@
 
 namespace App\Services\File;
 
+use App\Enums\DiskEnum;
 use App\Exceptions\File\FileMissingException;
 use App\Traits\HandleFileTrait;
 use Illuminate\Support\Facades\File;
@@ -15,10 +16,10 @@ class FileStorageService
      * Move a file from one folder to another.
      */
     public function moveDiskFile(
-        string $disk,
+        DiskEnum $disk,
         string $currentPath,
         string $newPath,
-        ?string $newDisk = null
+        ?DiskEnum $newDisk = null
     ): void {
         $this->checkForDiskFile($disk, $currentPath);
 
@@ -33,8 +34,8 @@ class FileStorageService
         $properPath = $newInfo['dirname'].DIRECTORY_SEPARATOR.$fileName;
 
         if ($newDisk) {
-            $currentFullPath = Storage::disk($disk)->path($currentPath);
-            $newFullPath = Storage::disk($newDisk)->path($properPath);
+            $currentFullPath = Storage::disk($disk->value)->path($currentPath);
+            $newFullPath = Storage::disk($newDisk->value)->path($properPath);
             $newDirPath = pathinfo($newFullPath)['dirname'];
 
             File::ensureDirectoryExists($newDirPath);
@@ -43,26 +44,26 @@ class FileStorageService
             return;
         }
 
-        Storage::disk($disk)->move($currentPath, $properPath);
+        Storage::disk($disk->value)->move($currentPath, $properPath);
     }
 
     /**
      * Delete a file from a storage disk.
      */
-    public function deleteDiskFile(string $disk, string $path): void
+    public function deleteDiskFile(DiskEnum $disk, string $path): void
     {
         $this->checkForDiskFile($disk, $path);
 
-        Storage::disk($disk)->delete($path);
+        Storage::disk($disk->value)->delete($path);
     }
 
     /**
      * Verify if a file exists or not.  Throw exception if it is missing.
      */
-    protected function checkForDiskFile(string $disk, string $path): void
+    protected function checkForDiskFile(DiskEnum $disk, string $path): void
     {
-        if (Storage::disk($disk)->missing($path)) {
-            throw new FileMissingException($disk.DIRECTORY_SEPARATOR.$path);
+        if (! Storage::disk($disk->value)->exists($path)) {
+            throw new FileMissingException($disk->value.DIRECTORY_SEPARATOR.$path);
         }
     }
 }
