@@ -2,6 +2,7 @@
 
 namespace App\Services\File;
 
+use App\Enums\DiskEnum;
 use App\Facades\DbException;
 use App\Models\FileUpload;
 use Illuminate\Database\QueryException;
@@ -17,7 +18,12 @@ class FileUploadService extends FileStorageService
         $currentPath = $file->folder.DIRECTORY_SEPARATOR.$file->hash_name;
         $newPath = $newFolder.DIRECTORY_SEPARATOR.$file->hash_name;
 
-        $this->moveDiskFile($file->disk, $currentPath, $newPath, $newDisk);
+        $this->moveDiskFile(
+            DiskEnum::tryFrom($file->disk),
+            $currentPath,
+            $newPath,
+            DiskEnum::tryFrom($newDisk)
+        );
 
         $file->folder = $newFolder;
         if ($newDisk) {
@@ -39,7 +45,7 @@ class FileUploadService extends FileStorageService
         }
 
         $this->deleteDiskFile(
-            $file->disk,
+            DiskEnum::tryFrom($file->disk),
             $file->folder.DIRECTORY_SEPARATOR.$file->hash_name
         );
 

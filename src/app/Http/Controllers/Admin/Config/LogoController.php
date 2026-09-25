@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Config;
 
+use App\Enums\DiskEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Config\LogoRequest;
 use App\Models\AppSettings;
@@ -34,14 +35,15 @@ class LogoController extends Controller
      */
     public function update(LogoRequest $request): RedirectResponse
     {
-        $logoFile = $this->uploadSvc->getCompletedUpload($request->input('upload_id'));
+        $logoFile = $this->uploadSvc
+            ->getCompletedUpload($request->input('upload_id'));
 
         $this->uploadSvc->validateMimeType($logoFile, [
             'image/jpg', 'image/jpeg', 'image/bmp', 'image/png', 'image/gif',
         ]);
 
         $location = $this->svc->updateLogo($logoFile);
-        $this->uploadSvc->finalizeUpload($logoFile, $location);
+        $this->uploadSvc->finalizeUpload($logoFile, DiskEnum::public, $location);
 
         Log::notice(
             'New Tech Bench Logo uploaded by '.$request->user()->username,

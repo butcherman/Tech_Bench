@@ -25,7 +25,7 @@ class ProcessUploadedBackup
     /**
      * Validate and save a manually uploaded backup file
      */
-    public function __invoke(string $uploadId)
+    public function __invoke(string $uploadId): void
     {
         $upload = $this->uploadSvc->getCompletedUpload($uploadId);
 
