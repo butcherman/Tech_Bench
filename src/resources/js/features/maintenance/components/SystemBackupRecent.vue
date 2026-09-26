@@ -4,6 +4,7 @@ import Card from "@/core/components/Card.vue";
 import DataTable from "@/core/features/dataResources/DataTable.vue";
 import Drawer from "@/core/components/Drawer.vue";
 import prettyBytes from "pretty-bytes";
+import prettyMs from "pretty-ms";
 import verifyModal from "@/core/features/verifyModal";
 import { computed, ref } from "vue";
 import { create } from "@/wayfinder/routes/maint/backups/upload";
@@ -146,7 +147,9 @@ const deleteBackup = () => {
                         </tr>
                         <tr>
                             <th class="text-start pe-3 py-3">Duration</th>
-                            <td>{{ activeBackup.duration }}</td>
+                            <td>
+                                {{ prettyMs(activeBackup.duration * 1000) }}
+                            </td>
                         </tr>
                         <tr>
                             <th class="text-start pe-3 py-3">File Name</th>
