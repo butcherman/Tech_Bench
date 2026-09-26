@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import BaseBadge from "@/core/components/badges/BaseBadge.vue";
 import BaseButton from "@/core/components/buttons/BaseButton.vue";
 import Card from "@/core/components/Card.vue";
 import DataTable from "@/core/features/dataResources/DataTable.vue";
@@ -101,14 +102,14 @@ const restoreBackup = () => {
 <template>
     <Card :title="cardTitle">
         <template #append-title>
-            <BaseButton
+            <BaseBadge
                 v-if="!shownAll"
                 :href="showAll.url()"
                 text="Show All"
                 size="sm"
                 class="me-2"
             />
-            <BaseButton :href="create.url()" text="Upload" size="sm" />
+            <BaseBadge :href="create.url()" text="Upload" size="sm" />
         </template>
         <DataTable
             :columns="tableColumns"

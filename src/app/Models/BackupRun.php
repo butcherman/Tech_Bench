@@ -35,8 +35,8 @@ class BackupRun extends Model
         return [
             'type' => BackupType::class,
             'status' => BackupRunStatus::class,
-            'started_at' => 'datetime:M d, Y | h:m:s A',
-            'completed_at' => 'datetime:M d, Y | h:m:s A',
+            'started_at' => 'datetime:M d, Y | h:i:s A',
+            'completed_at' => 'datetime:M d, Y | h:i:s A',
             'created_at' => 'datetime:M d, Y',
             'updated_at' => 'datetime:M d, Y',
         ];

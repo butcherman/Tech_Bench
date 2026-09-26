@@ -25,16 +25,16 @@ class BackupIndexController extends Controller
         $this->authorize('is-installer');
 
         return Inertia::render('Maint/Backup/Index', [
-            'status' => $this->status->status()->toArray(),
+            'status' => fn () => $this->status->status()->toArray(),
             'backups' => fn () => $this->backups
                 ->recent(10)
                 ->map
                 ->toArray()
                 ->values(),
-            'next-run' => $this->backups->getNextScheduledBackup(),
-            'strategy' => $this->backups->getRetentionPolicy(),
-            'settings' => $this->settings->getBackupSettings(),
-            'storage' => $this->storage->getUsage(DiskEnum::backups),
+            'next-run' => fn () => $this->backups->getNextScheduledBackup(),
+            'strategy' => fn () => $this->backups->getRetentionPolicy(),
+            'settings' => fn () => $this->settings->getBackupSettings(),
+            'storage' => fn () => $this->storage->getUsage(DiskEnum::backups),
         ]);
     }
 }

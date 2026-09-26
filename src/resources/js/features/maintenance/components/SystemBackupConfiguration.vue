@@ -1,6 +1,6 @@
 <script setup lang="ts">
+import BaseBadge from "@/core/components/badges/BaseBadge.vue";
 import BackupSettingsForm from "../forms/BackupSettingsForm.vue";
-import BaseButton from "@/core/components/buttons/BaseButton.vue";
 import Card from "@/core/components/Card.vue";
 import Modal from "@/core/components/Modal.vue";
 import { ref } from "vue";
@@ -23,6 +23,13 @@ const getBooleanColor = (boolVal: boolean): string => {
 
 <template>
     <Card title="Backup Configuration">
+        <template #append-title>
+            <BaseBadge
+                text="Edit Configuration"
+                size="sm"
+                @click="showSettingsForm = true"
+            />
+        </template>
         <div class="grid grid-cols-2 gap-3">
             <div>Nightly Backups:</div>
             <div>
@@ -49,13 +56,6 @@ const getBooleanColor = (boolVal: boolean): string => {
             </div>
             <div>Retention:</div>
             <div>{{ Object.values(strategy).join(" / ") }}</div>
-        </div>
-        <div class="mt-4">
-            <BaseButton
-                text="Edit Configuration"
-                size="sm"
-                @click="showSettingsForm = true"
-            />
         </div>
         <Modal v-model="showSettingsForm" title="Backup Settings" size="sm">
             <BackupSettingsForm :settings @success="showSettingsForm = false" />

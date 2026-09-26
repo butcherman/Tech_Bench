@@ -2,6 +2,7 @@
 import BaseBadge from "@/core/components/badges/BaseBadge.vue";
 import Card from "@/core/components/Card.vue";
 import { computed, ref } from "vue";
+import { router } from "@inertiajs/vue3";
 import { runBackup } from "@/wayfinder/routes/maint/backups/index.js";
 import { useEcho } from "@laravel/echo-vue";
 
@@ -19,6 +20,7 @@ useEcho(
 
         if (e.msg === "Backup completed!") {
             backupIsRunning.value = false;
+            router.reload();
         } else {
             backupIsRunning.value = true;
         }
