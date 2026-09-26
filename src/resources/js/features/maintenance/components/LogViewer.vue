@@ -8,6 +8,7 @@ import { dataGet } from "@/core/utilities/axiosWrapper.js";
 import { download } from "@/wayfinder/routes/maint/logs/index.js";
 import { load } from "@/wayfinder/routes/maint/logs/index.js";
 import { reactive, ref, watch } from "vue";
+import { show } from "@/wayfinder/routes/maint/logs/settings";
 
 const props = defineProps<{
     logFile: string;
@@ -103,6 +104,12 @@ watch(
 <template>
     <Card title="Log Viewer">
         <template #append-title>
+            <BaseBadge
+                icon="cog"
+                class="me-1"
+                :href="show.url()"
+                v-tooltip="'Settings'"
+            />
             <a :href="download.url(logFile)">
                 <BaseBadge
                     class="pointer"

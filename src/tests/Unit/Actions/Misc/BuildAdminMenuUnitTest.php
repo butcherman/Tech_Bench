@@ -251,14 +251,9 @@ class BuildAdminMenuUnitTest extends TestCase
             ],
             'Maintenance' => [
                 [
-                    'label' => 'Application Logs',
+                    'label' => 'Logs',
                     'icon' => 'fa-bug',
                     'route' => route('maint.logs.index'),
-                ],
-                [
-                    'label' => 'Log Settings',
-                    'icon' => 'fa-sliders',
-                    'route' => route('maint.logs.settings.show'),
                 ],
                 [
                     'label' => 'Backups',
