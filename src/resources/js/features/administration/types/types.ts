@@ -22,3 +22,7 @@ interface AppFeatureList {
     public_tips: boolean;
     tip_comments: boolean;
 }
+
+interface AdministrativeMessage {
+    msg: string;
+}

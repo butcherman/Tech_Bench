@@ -13,6 +13,7 @@ import { download } from "@/wayfinder/routes/maint/backups";
 import { router } from "@inertiajs/vue3";
 import { showAll } from "@/wayfinder/routes/maint/backups";
 import { useColumnBuilder } from "@/core/features/dataResources/composables/columnBuilder";
+import { restore } from "@/wayfinder/routes/maint/backups";
 
 const props = defineProps<{
     backups: BackupInfo[];
@@ -76,6 +77,21 @@ const deleteBackup = () => {
             router.delete(deleteMethod.url(activeBackup.value?.backup_name), {
                 preserveScroll: true,
                 onFinish: () => (showInfoDrawer.value = false),
+            });
+        }
+    });
+};
+
+const restoreBackup = () => {
+    console.log("restore");
+    verifyModal(
+        "All existing data will be replace with the data in this backup.  Only continue if you are sure you want to replace all data",
+        "DANGER!!!",
+    ).then((res) => {
+        console.log(res);
+        if (res) {
+            router.put(restore.url(), {
+                selected: activeBackup.value?.backup_name,
             });
         }
     });
@@ -166,6 +182,12 @@ const deleteBackup = () => {
                         size="sm"
                         variant="danger"
                         @click="deleteBackup"
+                    />
+                    <BaseButton
+                        text="Restore This Backup"
+                        size="sm"
+                        variant="error"
+                        @click="restoreBackup"
                     />
                 </div>
             </div>

@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import BaseButton from "@/core/components/buttons/BaseButton.vue";
+import BaseBadge from "@/core/components/badges/BaseBadge.vue";
 import Card from "@/core/components/Card.vue";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { runBackup } from "@/wayfinder/routes/maint/backups/index.js";
+import { useEcho } from "@laravel/echo-vue";
 
 const props = defineProps<{
     status: BackupStatus;
@@ -10,11 +11,29 @@ const props = defineProps<{
     strategy: BackupStrategy;
 }>();
 
-const statusIcon = computed(() => (props.status.healthy ? "check" : "xmark"));
-const statusColor = computed(() =>
+useEcho(
+    "administration-channel",
+    ".AdministrationEvent",
+    (e: AdministrativeMessage) => {
+        console.log(e);
+
+        if (e.msg === "Backup completed!") {
+            backupIsRunning.value = false;
+        } else {
+            backupIsRunning.value = true;
+        }
+    },
+);
+
+const backupIsRunning = ref(false);
+
+const statusIcon = computed<string>(() =>
+    props.status.healthy ? "check" : "xmark",
+);
+const statusColor = computed<string>(() =>
     props.status.healthy ? "text-success" : "text-danger",
 );
-const statusText = computed(() =>
+const statusText = computed<string | null>(() =>
     props.status.healthy ? "Backups are Healthy" : props.status.message,
 );
 </script>
@@ -22,7 +41,19 @@ const statusText = computed(() =>
 <template>
     <Card title="Backups">
         <template #append-title>
-            <BaseButton :href="runBackup.url()" size="sm" text="Run Backup" />
+            <BaseBadge
+                v-if="!backupIsRunning"
+                :href="runBackup.url()"
+                size="sm"
+                text="Run Backup"
+            />
+            <BaseBadge v-else>
+                <fa-icon
+                    icon="spinner"
+                    class="fa-spin"
+                    v-tooltip="'Backup Running'"
+                />
+            </BaseBadge>
         </template>
         <div class="border border-slate-300 rounded-lg p-3 flex flex-col gap-3">
             <div>

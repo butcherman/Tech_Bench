@@ -4,6 +4,7 @@ use App\Http\Controllers\Maintenance\Backup\BackupIndexController;
 use App\Http\Controllers\Maintenance\Backup\BackupSettingsController;
 use App\Http\Controllers\Maintenance\Backup\DeleteBackupController;
 use App\Http\Controllers\Maintenance\Backup\DownloadBackupController;
+use App\Http\Controllers\Maintenance\Backup\RestoreBackupController;
 use App\Http\Controllers\Maintenance\Backup\RunBackupController;
 use App\Http\Controllers\Maintenance\Backup\ShowAllBackupsController;
 use App\Http\Controllers\Maintenance\Backup\UploadBackupController;
@@ -70,6 +71,7 @@ Route::middleware('auth.secure')->prefix('maintenance')->name('maint.')->group(f
         Route::get('run-backup', RunBackupController::class)->name('run-backup');
         Route::delete('delete-backup/{backupName:backup_name}', DeleteBackupController::class)
             ->name('delete');
+        Route::put('restore', RestoreBackupController::class)->name('restore');
         Route::get('/', BackupIndexController::class)
             ->name('index')
             ->breadcrumb('Backups', 'admin.index');

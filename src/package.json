@@ -45,10 +45,13 @@
     },
     "devDependencies": {
         "@faker-js/faker": "^10.5.0",
+        "@laravel/echo-vue": "^2.5.0",
         "@testing-library/vue": "^8.1.0",
         "@types/lodash": "^4.17.24",
         "@vitest/coverage-v8": "^4.1.11",
         "happy-dom": "^20.11.6",
+        "laravel-echo": "^2.5.0",
+        "pusher-js": "^8.6.0",
         "vitest": "^4.1.11"
     }
 }

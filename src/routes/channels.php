@@ -40,21 +40,21 @@ Broadcast::channel('administration-channel', function (User $user) {
 | Workbook Channels
 |-------------------------------------------------------------------------------
 */
-Broadcast::channel('workbook-canvas.{equipment_type}', function (User $user, string $equipment_type) {
-    Log::debug(
-        'User '.$user->username.' connecting to Workbook Canvas Channel for Equip ID '.$equipment_type
-    );
+// Broadcast::channel('workbook-canvas.{equipment_type}', function (User $user, string $equipment_type) {
+//     Log::debug(
+//         'User '.$user->username.' connecting to Workbook Canvas Channel for Equip ID '.$equipment_type
+//     );
 
-    return $user->can('manage', EquipmentWorkbook::class);
-});
+//     return $user->can('manage', EquipmentWorkbook::class);
+// });
 
-Broadcast::channel('equipment-workbook.{wb_hash}', function (string $wb_hash) {
-    Log::debug(
-        'User connecting to Workbook Channel for Workbook Hash '.$wb_hash
-    );
+// Broadcast::channel('equipment-workbook.{wb_hash}', function (string $wb_hash) {
+//     Log::debug(
+//         'User connecting to Workbook Channel for Workbook Hash '.$wb_hash
+//     );
 
-    return true;
-});
+//     return true;
+// });
 
 /*
 |------------------------------------------------------------------------------
@@ -62,13 +62,13 @@ Broadcast::channel('equipment-workbook.{wb_hash}', function (string $wb_hash) {
 |------------------------------------------------------------------------------
 */
 
-Broadcast::channel('customer.{slug}', function (User $user, string $slug) {
-    Log::debug(
-        'User '.$user->username.' registering to Customer Channel - '.$slug
-    );
+// Broadcast::channel('customer.{slug}', function (User $user, string $slug) {
+//     Log::debug(
+//         'User '.$user->username.' registering to Customer Channel - '.$slug
+//     );
 
-    return $user ? true : false;
-});
+//     return $user ? true : false;
+// });
 
 // Broadcast::channel(
 //     'customer-site.{siteSlug}',
@@ -82,17 +82,17 @@ Broadcast::channel('customer.{slug}', function (User $user, string $slug) {
 //     }
 // );
 
-Broadcast::channel(
-    'customer.equipment.{custEquipId}',
-    function (User $user, int $custEquipId) {
-        Log::debug(
-            'User '.$user->username.' registering to Customer Equipment Channel - '.
-                $custEquipId
-        );
+// Broadcast::channel(
+//     'customer.equipment.{custEquipId}',
+//     function (User $user, int $custEquipId) {
+//         Log::debug(
+//             'User '.$user->username.' registering to Customer Equipment Channel - '.
+//                 $custEquipId
+//         );
 
-        return $user ? true : false;
-    }
-);
+//         return $user ? true : false;
+//     }
+// );
 
 /*
 |------------------------------------------------------------------------------
@@ -100,14 +100,14 @@ Broadcast::channel(
 |------------------------------------------------------------------------------
 */
 
-Broadcast::channel('tech-tips.{tip_id}', function (User $user, int $tip_id) {
-    Log::debug(
-        'User '.$user->username.' registering to Tech Tip Channel for Tip '.
-            $tip_id
-    );
+// Broadcast::channel('tech-tips.{tip_id}', function (User $user, int $tip_id) {
+//     Log::debug(
+//         'User '.$user->username.' registering to Tech Tip Channel for Tip '.
+//             $tip_id
+//     );
 
-    return $user ? true : false;
-});
+//     return $user ? true : false;
+// });
 
 /*
 |------------------------------------------------------------------------------
