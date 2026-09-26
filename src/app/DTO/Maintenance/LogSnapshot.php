@@ -2,6 +2,9 @@
 
 namespace App\DTO\Maintenance;
 
+/**
+ * @codeCoverageIgnore
+ */
 final readonly class LogSnapshot
 {
     /**

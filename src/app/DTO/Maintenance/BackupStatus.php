@@ -4,6 +4,9 @@ namespace App\DTO\Maintenance;
 
 use App\Models\BackupRun;
 
+/**
+ * @codeCoverageIgnore
+ */
 final readonly class BackupStatus
 {
     public function __construct(

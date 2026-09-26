@@ -5,6 +5,9 @@ namespace App\DTO\Maintenance;
 use Carbon\Carbon;
 use Carbon\CarbonImmutable;
 
+/**
+ * @codeCoverageIgnore
+ */
 final readonly class BackupSummary
 {
     public function __construct(

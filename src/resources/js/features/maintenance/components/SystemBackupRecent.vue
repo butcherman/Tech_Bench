@@ -38,6 +38,7 @@ const tableColumns = [
         sort: props.shownAll,
     }),
     colHelper.text("type", "Type", {
+        filterable: props.shownAll,
         filterSelect: props.shownAll,
         sort: props.shownAll,
     }),
