@@ -2,6 +2,7 @@
 
 namespace App\Services\Maintenance;
 
+use App\Contracts\DatabaseRestoreContract;
 use App\DTO\Maintenance\RestoreTransaction;
 use App\Exceptions\Maintenance\BackupFileInvalidException;
 use App\Exceptions\Maintenance\RestoreFailedException;
@@ -23,7 +24,8 @@ class BackupRestoreService
 
     public function __construct(
         protected BackupService $svc,
-        protected ConsoleOutputService $output
+        protected ConsoleOutputService $output,
+        protected DatabaseRestoreContract $databaseRestore,
     ) {}
 
     public function prepareRestore(string $backupName): RestoreTransaction
@@ -88,60 +90,28 @@ class BackupRestoreService
      */
     public function restoreDatabase(string $dbBackup): void
     {
-        $config = config('database.connections.mysql');
-
-        $command = sprintf(
-            'mysql --host=%s --port=%s --user=%s --password=%s %s',
-            escapeshellarg($config['host']),
-            escapeshellarg($config['port']),
-            escapeshellarg($config['username']),
-            escapeshellarg($config['password']),
-            escapeshellarg($config['database']),
-        );
-
-        $process = proc_open(
-            $command,
-            [
-                0 => ['file', $dbBackup, 'r'],
-                1 => ['pipe', 'w'],
-                2 => ['pipe', 'w'],
-            ],
-            $pipes,
-        );
-
-        if (! is_resource($process)) {
-            throw new RestoreFailedException(
-                'Unable to start MySQL restore process.'
-            );
-        }
-
-        $stdout = stream_get_contents($pipes[1]);
-        $stderr = stream_get_contents($pipes[2]);
-
-        fclose($pipes[1]);
-        fclose($pipes[2]);
-
-        $exitCode = proc_close($process);
-
-        if ($exitCode !== 0) {
-            throw new RestoreFailedException(
-                'MySQL restore failed: '.$stderr
-            );
-        }
+        $this->databaseRestore->restore($dbBackup);
     }
 
     /**
      * Restore the file system
      */
-    public function restoreFileSystem(RestoreTransaction $transaction): void
+    public function restoreFileSystem(RestoreTransaction $transaction): bool
     {
         $path = $this->findExtractedBasePath($transaction->extractedPath());
         $storagePath = storage_path('app');
 
         $envPath = App::environmentFilePath();
 
-        File::moveDirectory($path.'/storage', $storagePath);
+        // Delete the existing storage path to remove all old files before copy
+        File::deleteDirectory($storagePath);
+        File::copyDirectory($path.'/storage/app', $storagePath);
+
+        // Delete the old .env file and replace it
+        File::delete($envPath);
         File::move($path.'/.env', $envPath);
+
+        return true;
     }
 
     /*
@@ -266,7 +236,7 @@ class BackupRestoreService
         foreach ($baseDirectories as $dir) {
             if (! File::isDirectory($storagePath.$dir)) {
                 throw new RestoreFailedException(
-                    'Base file directory missing from restore process - '.$dir,
+                    'Base file directory missing from restore process - '.$storagePath.$dir,
                 );
             }
         }
@@ -332,7 +302,7 @@ class BackupRestoreService
     private function createStorageRollback(string $path): void
     {
         $current = storage_path('app');
-        File::moveDirectory($current, $path);
+        File::copyDirectory($current, $path);
     }
 
     /**
@@ -343,7 +313,7 @@ class BackupRestoreService
         $storageRollback = $transaction->rollbackStoragePath();
         $current = storage_path('app');
 
-        File::moveDirectory($storageRollback, $current);
+        File::copyDirectory($storageRollback, $current);
 
         $dbFile = $transaction->rollbackDatabasePath();
         $this->restoreDatabase($dbFile);

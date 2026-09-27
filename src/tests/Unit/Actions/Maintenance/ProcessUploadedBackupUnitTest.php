@@ -34,16 +34,27 @@ class ProcessUploadedBackupUnitTest extends TestCase
 
         $zip = $this->mock(Zip::class);
 
-        $restoreSvc = $this->mock(BackupRestoreService::class, function (MockInterface $mock) use ($zip) {
-            $mock->shouldReceive('mountArchive')->once()->with('backup.zip')->andReturn($zip);
-            $mock->shouldReceive('validateBackupStructure')->once()->with($zip);
-        });
+        $restoreSvc = $this->mock(
+            BackupRestoreService::class,
+            function (MockInterface $mock) use ($zip) {
+                $mock->shouldReceive('mountArchive')
+                    ->once()
+                    ->with('backup.zip')
+                    ->andReturn($zip);
+                $mock->shouldReceive('validateBackupStructure')->once();
+            });
 
-        $uploadSvc = $this->mock(TusUploadService::class, function (MockInterface $mock) use ($tusFile) {
-            $mock->shouldReceive('getCompletedUPload')->once()->andReturn($tusFile);
-            $mock->shouldReceive('validateMimeType')->once()->andReturn(true);
-            $mock->shouldReceive('finalizeUpload')->once();
-        });
+        $uploadSvc = $this->mock(
+            TusUploadService::class,
+            function (MockInterface $mock) use ($tusFile) {
+                $mock->shouldReceive('getCompletedUPload')
+                    ->once()
+                    ->andReturn($tusFile);
+                $mock->shouldReceive('validateMimeType')
+                    ->once()
+                    ->andReturn(true);
+                $mock->shouldReceive('finalizeUpload')->once();
+            });
 
         $testObj = new ProcessUploadedBackup($uploadSvc, $restoreSvc);
         $testObj($tusFile->id);
@@ -71,16 +82,29 @@ class ProcessUploadedBackupUnitTest extends TestCase
 
         $zip = $this->mock(Zip::class);
 
-        $restoreSvc = $this->mock(BackupRestoreService::class, function (MockInterface $mock) use ($zip) {
-            $mock->shouldReceive('mountArchive')->once()->with('backup.zip')->andReturn($zip);
-            $mock->shouldReceive('validateBackupStructure')->once()->with($zip)->andThrow(BackupFileInvalidException::class);
-        });
+        $restoreSvc = $this->mock(
+            BackupRestoreService::class,
+            function (MockInterface $mock) use ($zip) {
+                $mock->shouldReceive('mountArchive')
+                    ->once()
+                    ->with('backup.zip')
+                    ->andReturn($zip);
+                $mock->shouldReceive('validateBackupStructure')
+                    ->once()
+                    ->andThrow(BackupFileInvalidException::class);
+            });
 
-        $uploadSvc = $this->mock(TusUploadService::class, function (MockInterface $mock) use ($tusFile) {
-            $mock->shouldReceive('getCompletedUPload')->once()->andReturn($tusFile);
-            $mock->shouldReceive('validateMimeType')->once()->andReturn(true);
-            $mock->shouldReceive('finalizeUpload')->once();
-        });
+        $uploadSvc = $this->mock(
+            TusUploadService::class,
+            function (MockInterface $mock) use ($tusFile) {
+                $mock->shouldReceive('getCompletedUPload')
+                    ->once()
+                    ->andReturn($tusFile);
+                $mock->shouldReceive('validateMimeType')
+                    ->once()
+                    ->andReturn(true);
+                $mock->shouldReceive('finalizeUpload')->once();
+            });
 
         $this->expectException(BackupFileInvalidException::class);
 

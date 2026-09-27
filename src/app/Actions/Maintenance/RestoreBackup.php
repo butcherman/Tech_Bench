@@ -33,14 +33,13 @@ class RestoreBackup
             $dbPath = $transaction->extractedPath().'/db-dumps/mysql-tech-bench.sql';
             $this->output->writeLn('Restoring Database');
             $this->svc->restoreDatabase($dbPath);
+            Artisan::call('migrate --force');
 
             $this->output->writeLn('Restoring files');
             $this->svc->restoreFileSystem($transaction);
 
             $this->output->writeLn('Validating restore process');
             $this->svc->verifyRestore();
-
-            Artisan::call('migrate --force');
 
             $this->output->writeLn('Bringing application back online');
             Artisan::call('up');

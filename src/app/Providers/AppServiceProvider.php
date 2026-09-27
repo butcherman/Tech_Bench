@@ -3,8 +3,10 @@
 namespace App\Providers;
 
 use App\Actions\Misc\CheckDatabaseError;
+use App\Contracts\DatabaseRestoreContract;
 use App\Policies\GatePolicy;
 use App\Services\_Base\TraceContext;
+use App\Services\Maintenance\MySqlRestoreProcess;
 use App\Services\Misc\CacheFacadeHelper;
 use App\Services\User\GetMailableUsers;
 use App\Services\User\UserPermissionsService;
@@ -45,6 +47,8 @@ class AppServiceProvider extends ServiceProvider
 
         // Tracing Context for logging information
         $this->app->scoped(TraceContext::class, fn () => new TraceContext);
+
+        $this->app->bind(DatabaseRestoreContract::class, MySqlRestoreProcess::class);
 
         // Get Mailable Facade
         // $this->app->bind('GetMailable', GetMailableUsers::class);

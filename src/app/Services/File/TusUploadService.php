@@ -74,6 +74,7 @@ class TusUploadService
      */
     public function finalizeUpload(TusFile $upload, DiskEnum $disk, string $destination): void
     {
+        // TODO - This is not going to work properly
         rename(
             Tus::storage()->path($upload->path),
             Storage::disk($disk->value)->path($destination)
