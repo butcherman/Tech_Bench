@@ -2,7 +2,9 @@
 
 namespace App\Console\Commands\Maint;
 
+use App\Actions\Maintenance\RestoreBackup;
 use App\Services\Maintenance\BackupRestoreService;
+use App\Services\Maintenance\BackupService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
@@ -20,7 +22,7 @@ class BackupRestoreCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'app:backup-restore';
+    protected $signature = 'app:restore';
 
     /**
      * The console command description.
@@ -32,15 +34,18 @@ class BackupRestoreCommand extends Command
     /**
      * Constructor will inject the Restore Service Class
      */
-    public function __construct(protected BackupRestoreService $svc)
-    {
+    public function __construct(
+        protected RestoreBackup $action,
+        protected BackupRestoreService $svc,
+        protected BackupService $backups
+    ) {
         parent::__construct();
     }
 
     /**
      * Execute the command.
      */
-    public function handle(): void
+    public function handle(): int
     {
         $this->components->alert('Database Restore');
         $this->components->alert(
@@ -49,11 +54,28 @@ class BackupRestoreCommand extends Command
         $this->components->alert('PROCEED WITH CAUTION');
 
         // Select Backup file to Restore
-        // $backupChoice = select(
-        //     label: 'Select Backup File to Restore',
-        //     options: collect($this->svc->getBackupListWithMetaData())
-        //         ->pluck('name'),
-        // );
+        $backupChoice = select(
+            label: 'Select Backup File to Restore',
+            options: $this->backups->all()->pluck('backup_name'),
+        );
+
+        $this->components->alert('You are about to restore '.$backupChoice);
+
+        // dd($backupChoice);
+        $continue = confirm(
+            label: 'Are you sure you want to continue?',
+            default: false,
+        );
+
+        if (! $continue) {
+            $this->info('Canceling');
+
+            return 0;
+        }
+
+        $this->action->__invoke($backupChoice);
+
+        return 0;
 
         /*
         |-----------------------------------------------------------------------

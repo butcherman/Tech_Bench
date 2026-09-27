@@ -41,10 +41,10 @@ class ProcessUploadedBackup
 
         $this->uploadSvc->finalizeUpload($upload, DiskEnum::backups, $filePath);
 
-        $archive = $this->svc->mountArchive($fileName);
+        $this->svc->mountArchive($fileName);
 
         try {
-            $this->svc->validateBackupStructure($archive);
+            $this->svc->validateBackupStructure();
         } catch (BackupFileInvalidException $e) {
             Storage::disk('backups')->delete($filePath);
 

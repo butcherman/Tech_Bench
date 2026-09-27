@@ -34,7 +34,10 @@ class BackupService
      */
     public function all(): EloquentCollection
     {
-        return BackupRun::all()->sortBy('completed_at')->sortDesc();
+        return BackupRun::where('status', 'completed')
+            ->get()
+            ->sortBy('completed_at')
+            ->sortDesc();
     }
 
     /**
