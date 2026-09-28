@@ -45,6 +45,57 @@ class BackupRestoreServiceUnitTest extends TestCase
 
     /*
     |---------------------------------------------------------------------------
+    | prepareRestore()
+    |---------------------------------------------------------------------------
+    */
+    public function test_prepare_restore_missing_backup(): void
+    {
+        Exceptions::fake();
+
+        $backupName = 'test-backup.zip';
+
+        $this->backupService
+            ->shouldReceive('ensureExists')
+            ->once()
+            ->with($backupName)
+            ->andThrow(BackupFileMissingException::class);
+
+        $this->expectException(BackupFileMissingException::class);
+
+        $this->testObj->prepareRestore($backupName);
+
+        Exceptions::assertReported(BackupFileMissingException::class);
+    }
+
+    public function test_prepare_restore(): void
+    {
+        $this->createTestBackup();
+        $archive = 'test_backup.zip';
+        $path = storage_path('framework/testing/restore');
+
+        $reflection = new \ReflectionClass($this->testObj);
+        $prop = $reflection->getProperty('tmpPath');
+        $prop->setValue($this->testObj, $path);
+
+        $this->backupService
+            ->shouldReceive('ensureExists')
+            ->twice()
+            ->with($archive);
+        $this->backupService
+            ->shouldReceive('path')
+            ->once()
+            ->with($archive)
+            ->andReturn($path.'/'.$archive);
+
+        $this->output->shouldReceive('writeLn')->times(3);
+
+        $result = $this->testObj->prepareRestore($archive);
+
+        $this->assertInstanceOf(RestoreTransaction::class, $result);
+    }
+
+    /*
+    |---------------------------------------------------------------------------
     | mountArchive()
     |---------------------------------------------------------------------------
     */
@@ -214,6 +265,90 @@ class BackupRestoreServiceUnitTest extends TestCase
 
     /*
     |---------------------------------------------------------------------------
+    | validateBackupStructure()
+    |---------------------------------------------------------------------------
+    */
+    public function test_validate_backup_structure_missing_database_dump(): void
+    {
+        $zip = Mockery::mock(Zip::class);
+
+        $zip->shouldReceive('has')
+            ->with('app/.env')
+            ->andReturn(true);
+
+        $zip->shouldReceive('has')
+            ->with('app/keystore/version')
+            ->andReturn(true);
+
+        $zip->shouldReceive('has')
+            ->with('app/storage/app/.gitignore')
+            ->andReturn(true);
+
+        $zip->shouldReceive('has')
+            ->with('app/storage/logs/.gitignore')
+            ->andReturn(true);
+
+        $zip->shouldReceive('has')
+            ->with('var/www/html/.env')
+            ->andReturn(false);
+
+        $zip->shouldReceive('has')
+            ->with('var/www/html/keystore/version')
+            ->andReturn(false);
+
+        $zip->shouldReceive('has')
+            ->with('var/www/html/storage/app/.gitignore')
+            ->andReturn(false);
+
+        $zip->shouldReceive('has')
+            ->with('var/www/html/storage/logs/.gitignore')
+            ->andReturn(false);
+
+        $zip->shouldReceive('has')
+            ->with('db-dumps/mysql-tech-bench.sql')
+            ->andReturn(false);
+
+        $zip->shouldReceive('close');
+
+        $this->setArchive($zip);
+
+        $this->expectException(BackupFileInvalidException::class);
+
+        $this->testObj->validateBackupStructure();
+    }
+
+    public function test_validate_backup_structure_missing_file(): void
+    {
+        $zip = Mockery::mock(Zip::class);
+
+        $requiredFiles = [
+            '.env',
+            'keystore/version',
+            'storage/app/.gitignore',
+            'storage/logs/.gitignore',
+        ];
+
+        foreach ($requiredFiles as $file) {
+            $zip->shouldReceive('has')
+                ->with('app/'.$file)
+                ->andReturn(false);
+
+            $zip->shouldReceive('has')
+                ->with('var/www/html/'.$file)
+                ->andReturn(false);
+        }
+
+        $zip->shouldReceive('close');
+
+        $this->setArchive($zip);
+
+        $this->expectException(BackupFileInvalidException::class);
+
+        $this->testObj->validateBackupStructure();
+    }
+
+    /*
+    |---------------------------------------------------------------------------
     | Helpers
     |---------------------------------------------------------------------------
     */
@@ -237,13 +372,13 @@ class BackupRestoreServiceUnitTest extends TestCase
         return $zip;
     }
 
-    // private function setArchive(Zip $archive): void
-    // {
-    //     $reflection = new \ReflectionClass($this->service);
+    private function setArchive(Zip $archive): void
+    {
+        $reflection = new \ReflectionClass($this->testObj);
 
-    //     $property = $reflection->getProperty('archive');
-    //     $property->setValue($this->service, $archive);
-    // }
+        $property = $reflection->getProperty('archive');
+        $property->setValue($this->testObj, $archive);
+    }
 
     // public static function requiredBackupFilesProvider(): array
     // {
