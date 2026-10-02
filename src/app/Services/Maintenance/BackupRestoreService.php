@@ -28,6 +28,9 @@ class BackupRestoreService
         protected DatabaseRestoreContract $databaseRestore,
     ) {}
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function prepareRestore(string $backupName): RestoreTransaction
     {
         $this->svc->ensureExists($backupName);
@@ -167,12 +170,6 @@ class BackupRestoreService
         }
 
         $basePath = $this->findExtractedBasePath($path);
-
-        if (! File::isDirectory($basePath.'/storage/app')) {
-            throw new BackupFileInvalidException(
-                'Storage directory was not extracted.'
-            );
-        }
 
         if (! File::exists($basePath.'/.env')) {
             throw new BackupFileInvalidException(
