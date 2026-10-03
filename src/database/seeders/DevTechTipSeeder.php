@@ -8,12 +8,15 @@ use App\Models\FileUpload;
 use App\Models\TechTip;
 use App\Models\TechTipComment;
 use App\Models\User;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class TechTipSeeder extends Seeder
+class DevTechTipSeeder extends Seeder
 {
+    use WithoutModelEvents;
+
     /**
-     * Create 50 Tech Tips
+     * Run the database seeds.
      */
     public function run(): void
     {

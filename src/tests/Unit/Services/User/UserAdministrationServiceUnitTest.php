@@ -10,7 +10,7 @@ use App\Models\CustomerNote;
 use App\Models\DeviceToken;
 use App\Models\User;
 use App\Services\User\UserAdministrationService;
-use Database\Seeders\UserSeeder;
+use Database\Seeders\DevUserSeeder;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
@@ -26,7 +26,7 @@ class UserAdministrationServiceUnitTest extends TestCase
     */
     public function test_get_all_users(): void
     {
-        $this->seed(UserSeeder::class);
+        $this->seed(DevUserSeeder::class);
 
         $testObj = new UserAdministrationService;
         $response = $testObj->getAllUsers();
@@ -36,7 +36,7 @@ class UserAdministrationServiceUnitTest extends TestCase
 
     public function test_get_trashed(): void
     {
-        $this->seed(UserSeeder::class);
+        $this->seed(DevUserSeeder::class);
 
         $testObj = new UserAdministrationService;
         $response = $testObj->getAllUsers(true);

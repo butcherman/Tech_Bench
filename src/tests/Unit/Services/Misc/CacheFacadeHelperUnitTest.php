@@ -11,7 +11,7 @@ use App\Models\TechTipType;
 use App\Models\UserRole;
 use App\Models\UserSettingType;
 use App\Services\Misc\CacheFacadeHelper;
-use Database\Seeders\EquipmentSeeder;
+use Database\Seeders\DevEquipmentSeeder;
 use Illuminate\Support\Facades\Cache;
 use PragmaRX\Version\Package\Version;
 use Tests\TestCase;
@@ -29,7 +29,7 @@ class CacheFacadeHelperUnitTest extends TestCase
 
         $this->helperObj = new CacheFacadeHelper;
 
-        $this->seed(EquipmentSeeder::class);
+        $this->seed(DevEquipmentSeeder::class);
     }
 
     /*

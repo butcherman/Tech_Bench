@@ -40,19 +40,4 @@ class CreateCustomerFilesTable extends Migration
                 ->onUpdate('cascade');
         });
     }
-
-    /**
-     * Reverse the migrations
-     */
-    public function down(): void
-    {
-        Schema::table('customer_files', function (Blueprint $table) {
-            $table->dropForeign(['file_id']);
-            $table->dropForeign(['file_type_id']);
-            $table->dropForeign(['cust_id']);
-            $table->dropForeign(['user_id']);
-        });
-
-        Schema::dropIfExists('customer_files');
-    }
 }

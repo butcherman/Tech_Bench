@@ -23,15 +23,4 @@ class CreateUserLoginsTable extends Migration
                 ->onDelete('cascade');
         });
     }
-
-    /**
-     * Reverse the migrations
-     */
-    public function down(): void
-    {
-        Schema::table('user_logins', function (Blueprint $table) {
-            $table->dropForeign(['user_id']);
-        });
-        Schema::dropIfExists('user_logins');
-    }
 }
