@@ -1,9 +1,7 @@
 <?php
 
-use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
@@ -34,24 +32,6 @@ class CreateUsersTable extends Migration
                 ->on('user_roles')
                 ->onUpdate('cascade');
         });
-
-        /**
-         * Create the initial default user
-         */
-        $default = [
-            'user_id' => 1,
-            'role_id' => 1,
-            'username' => 'admin',
-            'first_name' => 'System',
-            'last_name' => 'Administrator',
-            'email' => 'admin@em.com',
-            'password' => bcrypt('password'),
-            'password_expires' => '2000-01-01 00:00:00',
-            'created_at' => now(),
-            'updated_at' => now(),
-        ];
-
-        DB::table('users')->insert($default);
     }
 
     /**

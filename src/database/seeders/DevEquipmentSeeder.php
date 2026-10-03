@@ -5,13 +5,15 @@ namespace Database\Seeders;
 use App\Models\DataField;
 use App\Models\EquipmentCategory;
 use App\Models\EquipmentType;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class EquipmentSeeder extends Seeder
+class DevEquipmentSeeder extends Seeder
 {
+    use WithoutModelEvents;
+
     /**
-     *  Create sample categories and equipment
-     * (rather than relying on Faker to generate random words)
+     * Run the database seeds.
      */
     public function run(): void
     {

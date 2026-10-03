@@ -27,10 +27,10 @@ return new class extends Migration
             $table->string('config_key')->after('feature_name')->nullable();
         });
 
-        UserRolePermissionType::where('description', 'Comment on Tech Tip')
-            ->update(['feature_name' => TechTipCommentFeature::class]);
-        UserRolePermissionType::where('description', 'Add Public Tech Tip')
-            ->update(['feature_name' => PublicTechTipFeature::class]);
+        // UserRolePermissionType::where('description', 'Comment on Tech Tip')
+        //     ->update(['feature_name' => TechTipCommentFeature::class]);
+        // UserRolePermissionType::where('description', 'Add Public Tech Tip')
+        //     ->update(['feature_name' => PublicTechTipFeature::class]);
     }
 
     /**

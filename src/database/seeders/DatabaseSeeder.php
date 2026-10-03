@@ -3,8 +3,6 @@
 namespace Database\Seeders;
 
 use App\Facades\CacheData;
-use App\Models\AppSettings;
-use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -17,39 +15,17 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->initializeApp();
-
         $this->call([
+            AppSettingsSeeder::class,
+            UserRoleSeeder::class,
             UserSeeder::class,
-            EquipmentSeeder::class,
-            CustomerSeeder::class,
-            TechTipSeeder::class,
-            FileLinkSeeder::class,
+            UserSettingsSeeder::class,
+            DataFieldTypesSeeder::class,
+            PhoneNumberTypeSeeder::class,
+            CustomerFileTypeSeeder::class,
+            TechTipTypeSeeder::class,
         ]);
 
         CacheData::clearCache();
-    }
-
-    /**
-     * Initialize the App
-     */
-    protected function initializeApp(): void
-    {
-        // Turn off first time setup
-        $settingId = AppSettings::find(1);
-        if ($settingId) {
-            $settingId->delete();
-        }
-
-        // Set Admin User's password to not be expired
-        User::find(1)->update([
-            'password_expires' => null,
-        ]);
-
-        // Set Pacific Timezone
-        AppSettings::create([
-            'key' => 'timezone',
-            'value' => json_encode('America/Los_Angeles'),
-        ]);
     }
 }

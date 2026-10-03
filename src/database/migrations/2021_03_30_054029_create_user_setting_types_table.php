@@ -2,7 +2,6 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class CreateUserSettingTypesTable extends Migration
@@ -18,20 +17,6 @@ class CreateUserSettingTypesTable extends Migration
             $table->unsignedBigInteger('perm_type_id')->nullable();
             $table->timestamps();
         });
-
-        /**
-         * Default Data
-         */
-        $default = [
-            [
-                'setting_type_id' => 1,
-                'name' => 'Receive Email Notifications',
-                'updated_at' => NOW(),
-                'created_at' => NOW(),
-            ],
-        ];
-
-        DB::table('user_setting_types')->insert($default);
     }
 
     /**

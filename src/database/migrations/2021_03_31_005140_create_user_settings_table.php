@@ -2,7 +2,6 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class CreateUserSettingsTable extends Migration
@@ -29,21 +28,6 @@ class CreateUserSettingsTable extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
         });
-
-        /**
-         * Add the default admin user to the table
-         */
-        $default = [
-            [
-                'user_id' => 1,
-                'setting_type_id' => 1,
-                'value' => 1,
-                'created_at' => NOW(),
-                'updated_at' => NOW(),
-            ],
-        ];
-
-        DB::table('user_settings')->insert($default);
     }
 
     /**

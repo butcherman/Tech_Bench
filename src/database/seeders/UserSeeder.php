@@ -2,70 +2,44 @@
 
 namespace Database\Seeders;
 
-use App\Models\AppSettings;
-use App\Models\DeviceToken;
-use App\Models\User;
-use Illuminate\Database\Eloquent\Factories\Sequence;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class UserSeeder extends Seeder
 {
+    use WithoutModelEvents;
+
     /**
-     * Create 21 users.
+     * Create the default Admin User.
      */
     public function run(): void
     {
-        // Nerf the password policy for testing
-        AppSettings::upsert([
-            [
-                'key' => 'auth.passwords.settings.min_length',
-                'value' => json_encode(3),
-            ],
-            [
-                'key' => 'auth.passwords.settings.contains_uppercase',
-                'value' => json_encode(false),
-            ],
-            [
-                'key' => 'auth.passwords.settings.contains_lowercase',
-                'value' => json_encode(false),
-            ],
-            [
-                'key' => 'auth.passwords.settings.contains_number',
-                'value' => json_encode(false),
-            ],
-            [
-                'key' => 'auth.passwords.settings.contains_special',
-                'value' => json_encode(false),
-            ],
-        ], 'id');
+        $defaultUser = [
+            'user_id' => 1,
+            'role_id' => 1,
+            'username' => 'admin',
+            'first_name' => 'System',
+            'last_name' => 'Administrator',
+            'email' => 'admin@em.com',
+            'password' => bcrypt('password'),
+            'password_expires' => '2000-01-01 00:00:00',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ];
 
-        // Create a tech user if it does not already exist
-        if (! User::where('username', 'tech')->first()) {
-            User::factory()->create(
-                [
-                    'username' => 'tech',
-                    'role_id' => 4,
-                    'first_name' => 'Tech',
-                    'last_name' => 'User',
-                    'email' => 'tech@em.com',
-                    'password' => bcrypt('password'),
-                    'password_expires' => null,
-                ]
-            );
-        }
+        DB::table('users')->insertOrIgnore($defaultUser);
 
-        DeviceToken::factory()
-            ->count(5)
-            ->create(['user_id' => User::first()->user_id]);
+        $settings = [
+            [
+                'user_id' => 1,
+                'setting_type_id' => 1,
+                'value' => 1,
+                'created_at' => NOW(),
+                'updated_at' => NOW(),
+            ],
+        ];
 
-        //  Create 10 users each with a different role_id
-        User::factory()->count(20)->state(new Sequence(
-            ['role_id' => 2],
-            ['role_id' => 3],
-            ['role_id' => 4]
-        ))->has(DeviceToken::factory(rand(0, 5)))->create();
-
-        //  Create 10 users and disable them
-        User::factory()->count(5)->trashed()->create();
+        DB::table('user_settings')->insertOrIgnore($settings);
     }
 }

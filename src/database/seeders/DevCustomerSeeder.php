@@ -5,12 +5,15 @@ namespace Database\Seeders;
 use App\Models\Customer;
 use App\Models\CustomerSite;
 use App\Models\User;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class CustomerSeeder extends Seeder
+class DevCustomerSeeder extends Seeder
 {
+    use WithoutModelEvents;
+
     /**
-     *  Create 150 random customers
+     * Run the database seeds.
      */
     public function run(): void
     {
