@@ -461,7 +461,7 @@ class UserRoleSeeder extends Seeder
         $defaultList = [
             1 => [
                 'installer' => true,
-                'administrator' => true,
+                'administrator' => false,
                 'reports' => false,
                 'other' => false,
             ],

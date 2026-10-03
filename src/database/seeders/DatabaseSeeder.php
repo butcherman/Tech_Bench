@@ -18,8 +18,8 @@ class DatabaseSeeder extends Seeder
         $this->call([
             AppSettingsSeeder::class,
             UserRoleSeeder::class,
-            UserSeeder::class,
             UserSettingsSeeder::class,
+            UserSeeder::class,
             DataFieldTypesSeeder::class,
             PhoneNumberTypeSeeder::class,
             CustomerFileTypeSeeder::class,

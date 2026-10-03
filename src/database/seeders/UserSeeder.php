@@ -32,8 +32,25 @@ class UserSeeder extends Seeder
 
         $settings = [
             [
+                'setting_id' => 1,
                 'user_id' => 1,
                 'setting_type_id' => 1,
+                'value' => 1,
+                'created_at' => NOW(),
+                'updated_at' => NOW(),
+            ],
+            [
+                'setting_id' => 2,
+                'user_id' => 1,
+                'setting_type_id' => 2,
+                'value' => 1,
+                'created_at' => NOW(),
+                'updated_at' => NOW(),
+            ],
+            [
+                'setting_id' => 3,
+                'user_id' => 1,
+                'setting_type_id' => 3,
                 'value' => 1,
                 'created_at' => NOW(),
                 'updated_at' => NOW(),

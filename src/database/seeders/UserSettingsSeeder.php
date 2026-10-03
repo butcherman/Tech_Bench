@@ -20,7 +20,7 @@ class UserSettingsSeeder extends Seeder
             [
                 'setting_type_id' => 1,
                 'name' => 'Receive Email Notifications',
-                'description' => 'Receive an email from application',
+                'description' => 'Receive email notifications from '.config('app.name'),
                 'perm_type_id' => null,
                 'feature_name' => null,
                 'config_key' => null,
@@ -30,7 +30,7 @@ class UserSettingsSeeder extends Seeder
             [
                 'setting_type_id' => 2,
                 'name' => 'Auto Delete Expired File Links',
-                'description' => 'Delete File Links that are no longer valid',
+                'description' => 'Auto delete file links and attached files after they have been expired for a set amount of time',
                 'perm_type_id' => null,
                 'feature_name' => FileLinkFeature::class,
                 'config_key' => 'file-link.auto_delete_override',
