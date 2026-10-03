@@ -37,7 +37,7 @@ class DevSeeder extends Seeder
     protected function initializeApp(): void
     {
         // Turn off first time setup
-        $firstSetup = AppSettings::where('key', 'app.first_time_setup')->where('value', true)->first();
+        $firstSetup = AppSettings::where('key', 'app.first_time_setup')->first();
 
         if ($firstSetup) {
             $firstSetup->delete();
