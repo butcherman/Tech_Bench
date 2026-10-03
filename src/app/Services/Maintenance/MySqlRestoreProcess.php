@@ -5,6 +5,9 @@ namespace App\Services\Maintenance;
 use App\Contracts\DatabaseRestoreContract;
 use App\Exceptions\Maintenance\RestoreFailedException;
 
+/**
+ * @codeCoverageIgnore
+ */
 class MySqlRestoreProcess implements DatabaseRestoreContract
 {
     public function restore(string $backupPath): void

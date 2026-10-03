@@ -19,7 +19,7 @@ class RestoreBackup
      */
     public function __invoke(string $backupName)
     {
-        $this->output->writeln('Restoring backup file '.$backupName);
+        $this->output->writeLn('Restoring backup file '.$backupName);
 
         $transaction = $this->svc->prepareRestore($backupName);
 
@@ -27,7 +27,7 @@ class RestoreBackup
             $this->output->writeLn('Putting application in Maintenance Mode');
             Artisan::call('down');
 
-            $this->output->writeln('Creating Restore point');
+            $this->output->writeLn('Creating Restore point');
             $this->svc->createRollbackSnapshot($transaction);
 
             $dbPath = $transaction->extractedPath().'/db-dumps/mysql-tech-bench.sql';
