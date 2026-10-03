@@ -28,17 +28,4 @@ class CreateUserRolePermissionsTable extends Migration
                 ->onUpdate('cascade');
         });
     }
-
-    /**
-     * Reverse the migrations
-     */
-    public function down(): void
-    {
-        Schema::table('user_role_permissions', function (Blueprint $table) {
-            $table->dropForeign(['role_id']);
-            $table->dropForeign(['perm_type_id']);
-        });
-
-        Schema::dropIfExists('user_role_permissions');
-    }
 }

@@ -18,12 +18,4 @@ class CreateUserSettingTypesTable extends Migration
             $table->timestamps();
         });
     }
-
-    /**
-     * Reverse the migrations
-     */
-    public function down()
-    {
-        Schema::dropIfExists('user_setting_types');
-    }
 }

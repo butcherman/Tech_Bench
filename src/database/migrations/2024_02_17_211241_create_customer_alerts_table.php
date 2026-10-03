@@ -33,6 +33,7 @@ return new class extends Migration
         Schema::table('customer_alerts', function (Blueprint $table) {
             $table->dropForeign(['cust_id']);
         });
+
         Schema::dropIfExists('customer_alerts');
     }
 };

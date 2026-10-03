@@ -17,12 +17,4 @@ class CreateTechTipTypesTable extends Migration
             $table->timestamps();
         });
     }
-
-    /**
-     * Reverse the migrations
-     */
-    public function down(): void
-    {
-        Schema::dropIfExists('tech_tip_types');
-    }
 }

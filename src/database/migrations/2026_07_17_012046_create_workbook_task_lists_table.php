@@ -34,6 +34,7 @@ return new class extends Migration
         Schema::table('workbook_task_lists', function (Blueprint $table) {
             $table->dropForeign(['wb_id']);
         });
+
         Schema::dropIfExists('workbook_task_lists');
     }
 };

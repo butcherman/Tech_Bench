@@ -33,16 +33,4 @@ class CreateUsersTable extends Migration
                 ->onUpdate('cascade');
         });
     }
-
-    /**
-     * Reverse the migrations
-     */
-    public function down(): void
-    {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropForeign(['role_id']);
-        });
-
-        Schema::dropIfExists('users');
-    }
 }

@@ -29,16 +29,4 @@ class CreateUserSettingsTable extends Migration
                 ->onDelete('cascade');
         });
     }
-
-    /**
-     * Reverse the migrations
-     */
-    public function down(): void
-    {
-        Schema::table('user_settings', function (Blueprint $table) {
-            $table->dropForeign(['user_id']);
-            $table->dropForeign(['setting_type_id']);
-        });
-        Schema::dropIfExists('user_settings');
-    }
 }

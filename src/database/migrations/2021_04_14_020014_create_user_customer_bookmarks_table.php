@@ -29,17 +29,4 @@ class CreateUserCustomerBookmarksTable extends Migration
                 ->onDelete('cascade');
         });
     }
-
-    /**
-     * Reverse the migrations
-     */
-    public function down(): void
-    {
-        Schema::table('user_customer_bookmarks', function (Blueprint $table) {
-            $table->dropForeign(['user_id']);
-            $table->dropForeign(['cust_id']);
-        });
-
-        Schema::dropIfExists('user_customer_bookmarks');
-    }
 }

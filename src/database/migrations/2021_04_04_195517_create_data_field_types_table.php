@@ -18,12 +18,4 @@ class CreateDataFieldTypesTable extends Migration
             $table->timestamps();
         });
     }
-
-    /**
-     * Reverse the migrations
-     */
-    public function down(): void
-    {
-        Schema::dropIfExists('data_field_types');
-    }
 }
