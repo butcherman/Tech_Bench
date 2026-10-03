@@ -2,13 +2,12 @@
 
 namespace Tests\Unit\Jobs\Maintenance;
 
-use App\Exceptions\Maintenance\BackupFailedException;
+use App\Actions\Maintenance\RunBackup;
+use App\Enums\BackupType;
 use App\Jobs\Maintenance\RunBackupJob;
-use App\Services\Maintenance\BackupService;
-use App\Services\Misc\ConsoleOutputService;
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Notification;
-use Mockery\MockInterface;
+use Illuminate\Queue\Middleware\WithoutOverlapping;
+use Illuminate\Support\Facades\Queue;
+use Mockery;
 use Tests\TestCase;
 
 class RunBackupJobUnitTest extends TestCase
@@ -20,33 +19,42 @@ class RunBackupJobUnitTest extends TestCase
     */
     public function test_handle(): void
     {
-        // Clear any potential Atomic Locks
-        Artisan::call('cache:clear');
+        $type = BackupType::Scheduled;
 
-        Artisan::shouldReceive('call')
+        $backup = Mockery::mock(RunBackup::class);
+
+        $backup
+            ->shouldReceive('handle')
             ->once()
-            ->with('backup:run', [], ConsoleOutputService::class);
+            ->with($type);
 
-        RunBackupJob::dispatch();
+        $job = new RunBackupJob($type);
+
+        $job->handle($backup);
     }
 
-    // public function test_handle_no_disk_space(): void
-    // {
-    //     // Clear any potential Atomic Locks
-    //     Artisan::call('cache:clear');
+    public function test_handle_uses_overlapping_middleware(): void
+    {
+        $job = new RunBackupJob(BackupType::Scheduled);
 
-    //     Notification::fake();
+        $middleware = $job->middleware();
 
-    //     $this->mock(BackupService::class, function (MockInterface $mock) {
-    //         $mock->shouldReceive('verifyBackupDiskSpace')
-    //             ->once()
-    //             ->andReturn(false);
-    //     });
+        $this->assertCount(1, $middleware);
+        $this->assertInstanceOf(WithoutOverlapping::class, $middleware[0]);
+    }
 
-    //     $this->expectException(BackupFailedException::class);
+    public function test_handle_dispatches_properly(): void
+    {
+        Queue::fake();
 
-    //     RunBackupJob::dispatch();
+        RunBackupJob::dispatch(BackupType::Scheduled);
 
-    //     Notification::assertCount(1);
-    // }
+        Queue::assertPushed(
+            RunBackupJob::class,
+            function (RunBackupJob $job) {
+                return $job->type === BackupType::Scheduled
+                    && $job->queue === 'backups';
+            }
+        );
+    }
 }

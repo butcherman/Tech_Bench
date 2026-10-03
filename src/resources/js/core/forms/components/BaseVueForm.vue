@@ -17,6 +17,7 @@ const props = defineProps<{
     isSubmitting?: boolean;
     submitIcon?: string;
     submitText?: string;
+    hideSubmit?: boolean;
 }>();
 
 const submitText = computed<string>(() => props.submitText ?? "Submit");
@@ -54,7 +55,7 @@ const onSubmit = () => {
             <div class="grow flex flex-col gap-2">
                 <slot />
             </div>
-            <div>
+            <div v-if="!hideSubmit">
                 <slot name="submit-button">
                     <SubmitButton
                         class="w-full"

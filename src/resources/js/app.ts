@@ -4,6 +4,7 @@ import { copy } from "./core/directives/copyDirective";
 import { focus } from "./core/directives/focusDirective";
 import { tabTrap } from "./core/directives/tabTrapDirective";
 import { tooltip } from "./core/directives/tooltipDirective";
+import { configureEcho } from "@laravel/echo-vue";
 
 /*
 |-------------------------------------------------------------------------------
@@ -21,6 +22,16 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { fas } from "@fortawesome/free-solid-svg-icons";
 import { far } from "@fortawesome/free-regular-svg-icons";
+
+configureEcho({
+    broadcaster: "reverb",
+    key: import.meta.env.VITE_REVERB_APP_KEY,
+    wsHost: import.meta.env.VITE_REVERB_HOST,
+    wsPort: 80,
+    wssPort: 443,
+    forceTLS: true,
+    enabledTransports: ["ws", "wss"],
+});
 
 library.add(fas);
 library.add(far);

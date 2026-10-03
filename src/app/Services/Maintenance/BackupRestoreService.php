@@ -2,290 +2,361 @@
 
 namespace App\Services\Maintenance;
 
+use App\Contracts\DatabaseRestoreContract;
+use App\DTO\Maintenance\RestoreTransaction;
 use App\Exceptions\Maintenance\BackupFileInvalidException;
-use App\Exceptions\Maintenance\BackupFileMissingException;
 use App\Exceptions\Maintenance\RestoreFailedException;
-use Illuminate\Database\QueryException;
+use App\Services\Misc\ConsoleOutputService;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Process;
+use Illuminate\Support\Str;
 use PragmaRX\Version\Package\Version;
+use Throwable;
 use ZanySoft\Zip\Zip;
 
-class BackupRestoreService extends BackupService
+class BackupRestoreService
 {
-    /**
-     * Zip Object with the backup archive.
-     *
-     * @var Zip
-     */
-    protected $archive;
+    protected string $tmpPath = '/tmp/restore/';
+
+    protected ?Zip $archive;
+
+    public function __construct(
+        protected BackupService $svc,
+        protected ConsoleOutputService $output,
+        protected DatabaseRestoreContract $databaseRestore,
+    ) {}
 
     /**
-     * Temp Directory for extracted backup files
-     *
-     * @var string
+     * @codeCoverageIgnore
      */
-    protected $tmpArchive = 'restore-tmp/';
-
-    /*
-    |---------------------------------------------------------------------------
-    | Public Methods
-    |---------------------------------------------------------------------------
-    */
-
-    /**
-     * Delete the extracted temporary files.
-     */
-    public function deleteExtractedFiles(): void
+    public function prepareRestore(string $backupName): RestoreTransaction
     {
-        $this->storage->deleteDirectory($this->tmpArchive);
-    }
+        $this->svc->ensureExists($backupName);
 
-    /**
-     * Extract the backup file to a temporary directory.
-     */
-    public function extractBackup(): bool
-    {
-        if (! $this->archive) {
-            throw new BackupFileMissingException('Trying to extract invalid file');
+        $restoreId = now()->format('Ymd-His').'-'.Str::random(5);
+        $restorePath = $this->tmpPath.$restoreId;
+
+        File::ensureDirectoryExists($restorePath);
+
+        $transaction = new RestoreTransaction(
+            id: $restoreId,
+            backupName: $backupName,
+            path: $restorePath,
+        );
+
+        File::ensureDirectoryExists($transaction->extractedPath());
+        File::ensureDirectoryExists($transaction->rollbackPath());
+        File::ensureDirectoryExists($transaction->rollbackStoragePath());
+
+        // Prep the restore process
+        try {
+            $this->output->writeLn('Mounting backup');
+            $this->mountArchive($backupName);
+
+            $this->output->writeLn('Validating backup');
+            $this->validateBackupStructure();
+            $this->validateBackupVersion($transaction->extractedPath());
+
+            $this->output->writeLn('Extracting backup');
+            $this->archive->extract($transaction->extractedPath());
+            $this->validateExtractedBackup($transaction);
+
+            $this->archive->close();
+            $this->archive = null;
+
+            return $transaction;
+        } catch (Throwable $e) {
+            $this->cleanupTransaction($transaction);
+
+            throw $e;
         }
-
-        $this->archive->extract($this->storage->path($this->tmpArchive));
-
-        return true;
     }
 
     /**
-     * Restore SSL Certificate
+     * Create and open the Zip Archive with the backup file
      */
-    public function restoreCert(): void
-    {
-        $basePath = base_path('keystore');
-        $backedUpPath = $this->storage->path($this->tmpArchive.'app/keystore');
-
-        // Wipe the current filesystem.
-        $this->wipeDirectory($basePath);
-
-        // Restore backed up files
-        $this->restoreFiles($basePath, $backedUpPath);
-    }
-
-    /**
-     * Wipe the existing database and restore the backed up database
-     */
-    public function restoreDatabase(): bool
-    {
-        $this->wipeDatabase();
-        $dbFile = $this->getDbFile();
-
-        // Insert the Database file one section at a time.
-        $currentLine = '';
-        foreach ($dbFile as $line) {
-            if ($line !== "\n") {
-                $currentLine .= $line;
-            } else {
-                try {
-                    DB::unprepared($currentLine);
-                    $currentLine = '';
-                } catch (QueryException $e) {
-                    throw new RestoreFailedException($e->getMessage());
-                }
-            }
-        }
-
-        // Run any migrations to get the DB up to date with the current version.
-        Artisan::call('migrate --force');
-
-        return true;
-    }
-
-    /**
-     * Restore the .env file
-     */
-    public function restoreEnvironmentFile(): void
-    {
-        $env = $this->storage->get($this->tmpArchive.'app/.env');
-        $envPath = App::environmentFilePath();
-
-        File::put($envPath, $env);
-
-        Artisan::call('app:validate-env --force');
-    }
-
-    /**
-     * Restore the log files from the backup
-     */
-    public function restoreLogFiles(): void
-    {
-        $basePath = storage_path('logs');
-        $backedUpPath = $this->storage
-            ->path($this->tmpArchive.'app/storage/logs');
-
-        // Wipe the current filesystem.
-        $this->wipeDirectory($basePath);
-
-        // Restore backed up files
-        $this->restoreFiles($basePath, $backedUpPath);
-    }
-
-    /**
-     * Wipe existing file system and restore backed up files.
-     */
-    public function restoreFileSystem(): void
-    {
-        $basePath = storage_path('app');
-        $backedUpPath = $this->storage
-            ->path($this->tmpArchive.'app/storage/app');
-
-        // Wipe the current filesystem.
-        $this->wipeDirectory($basePath);
-
-        // Restore backed up files
-        $this->restoreFiles($basePath, $backedUpPath);
-    }
-
-    /**
-     * Mount and Validate a backup file.
-     */
-    public function validateBackupArchive(string $backupName): bool
-    {
-        // Backup must exist in file system.
-        if (! $this->doesBackupExist($backupName)) {
-            throw new BackupFileMissingException($backupName);
-        }
-
-        // Mount and verify this is a proper backup file.
-        $this->mountArchive($backupName);
-        $this->validateBackupStructure();
-        $this->validateBackupVersion();
-
-        return true;
-    }
-
-    /*
-    |---------------------------------------------------------------------------
-    | Protected Methods
-    |---------------------------------------------------------------------------
-    */
-
-    /**
-     * Create a Zip Object and mount the selected backup file to it.
-     */
-    protected function mountArchive(string $backupName): void
+    public function mountArchive(string $backupName): Zip
     {
         $this->archive = new Zip;
 
-        $archivePath = $this->storage->path($this->backupBaseName.$backupName);
+        $this->svc->ensureExists($backupName);
 
-        if (! $this->archive->check($archivePath)) {
-            throw new BackupFileInvalidException('File Failed Archive Check');
-        }
+        $this->archive->open($this->svc->path($backupName));
 
-        $this->archive->open($archivePath);
+        return $this->archive;
     }
 
     /**
-     * Restore a portion of the backed up files
+     * Restore the database
      */
-    protected function restoreFiles(string $restoreBase, string $backedUpPath): void
+    public function restoreDatabase(string $dbBackup): void
     {
-        // Restore backed up files
-        $filesToRestore = $this->getFileList($backedUpPath);
-
-        foreach ($filesToRestore as $sourceFile) {
-            $destination = $restoreBase.str_replace($backedUpPath, '', $sourceFile);
-
-            // Make sure destination directory exists
-            $pathInfo = pathinfo($destination);
-            if (! File::isDirectory($pathInfo['dirname'])) {
-                File::makeDirectory($pathInfo['dirname'], 0775, true);
-            }
-
-            File::move($sourceFile, $destination);
-        }
+        $this->databaseRestore->restore($dbBackup);
     }
+
+    /**
+     * Restore the file system
+     */
+    public function restoreFileSystem(RestoreTransaction $transaction): bool
+    {
+        $path = $this->findExtractedBasePath($transaction->extractedPath());
+        $storagePath = storage_path('app');
+
+        $envPath = App::environmentFilePath();
+
+        // Delete the existing storage path to remove all old files before copy
+        File::deleteDirectory($storagePath);
+        File::copyDirectory($path.'/storage/app', $storagePath);
+
+        // Delete the old .env file and replace it
+        File::delete($envPath);
+        File::move($path.'/.env', $envPath);
+
+        return true;
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | Validation
+    |---------------------------------------------------------------------------
+    */
 
     /**
      * Validate that a backup file contains all files necessary to restore
      * Tech Bench database and file structure.
      */
-    protected function validateBackupStructure(): bool
+    public function validateBackupStructure(): void
     {
         $structureFiles = [
-            'app/.env',
-            'app/keystore/version',
-            'app/storage/app/.gitignore',
-            'app/storage/logs/.gitignore',
-            'db-dumps/mysql-tech-bench.sql',
+            '.env',
+            'keystore/version',
+            'storage/app/.gitignore',
+            'storage/logs/.gitignore',
         ];
 
+        // Verify file structure exists
         foreach ($structureFiles as $file) {
-            if (! $this->archive->has($file)) {
+            if (
+                ! $this->archive->has('app/'.$file) &&
+                ! $this->archive->has('var/www/html/'.$file)
+            ) {
+                $this->archive->close();
+
                 throw new BackupFileInvalidException('Missing '.$file);
             }
         }
 
-        return true;
+        // Verify DB backup exists
+        if (! $this->archive->has('db-dumps/mysql-tech-bench.sql')) {
+            throw new BackupFileInvalidException('Missing database dump');
+        }
+    }
+
+    /**
+     * Verify that the full backup zip was extracted properly
+     */
+    protected function validateExtractedBackup(RestoreTransaction $transaction): void
+    {
+        $path = $transaction->extractedPath();
+
+        $database = $path.'/db-dumps/mysql-tech-bench.sql';
+
+        if (! File::exists($database)) {
+            throw new BackupFileInvalidException(
+                'Database dump was not extracted.'
+            );
+        }
+
+        $basePath = $this->findExtractedBasePath($path);
+
+        if (! File::exists($basePath.'/.env')) {
+            throw new BackupFileInvalidException(
+                'Env file was not extracted',
+            );
+        }
     }
 
     /**
      * Validate that a backup file contains a version file equal to or less
      * than the current application version.
      */
-    protected function validateBackupVersion(): bool
+    private function validateBackupVersion(string $extractionPath): void
     {
+        if ($this->archive->has('app/keystore/version')) {
+            $verPath = 'app/keystore/version';
+        } else {
+            $verPath = 'var/www/html/keystore/version';
+        }
+
         $this->archive->extract(
-            $this->storage->path($this->tmpArchive),
-            ['app/keystore/version']
+            $extractionPath,
+            [$verPath]
         );
 
-        $versionText = $this->storage->get('restore-tmp/app/keystore/version');
+        // $versionText = $this->storage->get('restore-tmp/app/keystore/version');
+        $versionText = File::get($extractionPath.DIRECTORY_SEPARATOR.$verPath);
         $backupVersion = explode(' ', $versionText)[0];
         $appVersion = (new Version)->compact();
 
-        $isValid = version_compare($appVersion, $backupVersion);
+        $isValid = version_compare($backupVersion, $appVersion);
 
-        if ($isValid !== 1) {
+        if ($isValid === 1) {
             throw new BackupFileInvalidException(
-                'Backup Version is a Newer Version than the Installed Tech Bench Version'
+                'Backup Version is a Newer Version than the Installed Tech Bench Version'.
+                ' App Version: '.$appVersion.
+                ' Backup Version: '.$backupVersion
+            );
+        }
+    }
+
+    /**
+     * Verify DB tables and filesystem exists
+     */
+    public function verifyRestore(): void
+    {
+        $storagePath = storage_path('app');
+
+        $baseDirectories = [
+            '/private',
+            '/public',
+        ];
+
+        $baseTables = [
+            'backup_runs',
+            'app_settings',
+            'customers',
+            'users',
+        ];
+
+        foreach ($baseDirectories as $dir) {
+            if (! File::isDirectory($storagePath.$dir)) {
+                throw new RestoreFailedException(
+                    'Base file directory missing from restore process - '.$storagePath.$dir,
+                );
+            }
+        }
+
+        foreach ($baseTables as $table) {
+            if (! DB::table($table)->exists()) {
+                throw new RestoreFailedException(
+                    'Base database table missing from restore process - '.$table
+                );
+            }
+        }
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | Rollback
+    |---------------------------------------------------------------------------
+    */
+
+    /**
+     * Create a restore point in case of failure
+     */
+    public function createRollbackSnapshot(RestoreTransaction $transaction)
+    {
+        $this->createDatabaseSnapshot($transaction->rollbackDatabasePath());
+        $this->createStorageRollback($transaction->rollbackStoragePath());
+
+        $envPath = App::environmentFilePath();
+
+        File::copy($envPath, $transaction->rollbackPath().'/.env');
+    }
+
+    /**
+     * Create a database snapshot
+     */
+    private function createDatabaseSnapshot(string $path): void
+    {
+        $result = Process::run([
+            'mysqldump',
+            '--host='.config('database.connections.mysql.host'),
+            '--port='.config('database.connections.mysql.port'),
+            '--user='.config('database.connections.mysql.username'),
+            '--password='.config('database.connections.mysql.password'),
+            '--single-transaction',
+            '--routines',
+            '--triggers',
+            config('database.connections.mysql.database'),
+        ]);
+
+        if ($result->failed()) {
+            throw new RestoreFailedException(
+                'Unable to create database rollback: '.
+                $result->errorOutput()
             );
         }
 
-        return true;
+        File::put($path, $result->output());
     }
 
     /**
-     * Wipe the current database - drop all tables.
-     *
-     * @codeCoverageIgnore
+     * Move the existing storage system into the rollback folder
      */
-    protected function wipeDatabase(): void
+    private function createStorageRollback(string $path): void
     {
-        try {
-            // Drop all Database Tables
-            DB::connection(DB::getDefaultConnection())
-                ->getSchemaBuilder()
-                ->dropAllTables();
-            DB::reconnect();
-        } catch (QueryException $e) {
-            report($e);
-            throw new RestoreFailedException('Unable to modify database');
+        $current = storage_path('app');
+        File::copyDirectory($current, $path);
+    }
+
+    /**
+     * Restore the Rollback Snapshot
+     */
+    public function rollback(RestoreTransaction $transaction): void
+    {
+        $storageRollback = $transaction->rollbackStoragePath();
+        $current = storage_path('app');
+
+        File::copyDirectory($storageRollback, $current);
+
+        $dbFile = $transaction->rollbackDatabasePath();
+        $this->restoreDatabase($dbFile);
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | Cleanup
+    |---------------------------------------------------------------------------
+    */
+
+    /**
+     * Cleanup the temporary files created by the transaction
+     */
+    public function cleanupTransaction(RestoreTransaction $transaction): void
+    {
+        File::deleteDirectories($transaction->path);
+
+        unset($transaction);
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | Helpers
+    |---------------------------------------------------------------------------
+    */
+
+    /**
+     * Starting with V9, app files are stored in a different location.  Determine
+     * proper path to look for files.
+     */
+    protected function findExtractedBasePath(string $path): string
+    {
+        $possiblePaths = [
+            $path.'/app',
+            $path.'/var/www/html',
+        ];
+
+        foreach ($possiblePaths as $filePath) {
+            if (File::isDirectory($filePath)) {
+                return $filePath;
+            }
         }
-    }
 
-    /**
-     * Get the .sql file to restore the database.
-     *
-     * @codeCoverageIgnore
-     */
-    protected function getDbFile(): array
-    {
-        $dbPath = $this->storage
-            ->path($this->tmpArchive.'db-dumps/mysql-tech-bench.sql');
-        $dbFile = file($dbPath);
-
-        return $dbFile;
+        throw new BackupFileInvalidException(
+            'Missing storage directory.'
+        );
     }
 }

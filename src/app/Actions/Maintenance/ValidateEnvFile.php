@@ -3,6 +3,7 @@
 namespace App\Actions\Maintenance;
 
 use App\Services\_Base\ApplicationEnvironment;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class ValidateEnvFile extends ApplicationEnvironment
@@ -24,6 +25,7 @@ class ValidateEnvFile extends ApplicationEnvironment
     protected function checkBaseUrl(): void
     {
         $baseUrl = $this->getEnvKeyValue('BASE_URL');
+        Log::debug('Checking Base URL');
 
         if (! $baseUrl) {
             $appUrl = $this->getEnvKeyValue('APP_URL');
@@ -38,6 +40,11 @@ class ValidateEnvFile extends ApplicationEnvironment
                 'APP_URL',
                 '"'.$protocol.'://${BASE_URL}"'
             );
+
+            Log::notice('Base URL Missing, ENV File updated', [
+                'BASE_URL' => $url,
+                'APP_URL' => '"'.$protocol.'://${BASE_URL}"',
+            ]);
         }
     }
 
@@ -46,6 +53,8 @@ class ValidateEnvFile extends ApplicationEnvironment
      */
     protected function checkReverbVariables(): void
     {
+        Log::debug('Checking Reverb Variables');
+
         $passKeyList = [
             'REVERB_APP_ID',
             'REVERB_APP_KEY',
@@ -62,6 +71,10 @@ class ValidateEnvFile extends ApplicationEnvironment
         foreach ($passKeyList as $key) {
             if (! $this->getEnvKeyValue($key)) {
                 $this->writeNewEnvironmentFileWith($key, Str::ulid());
+                Log::notice('Created new Reverb Credential', [
+                    'key' => $key,
+                    'value' => '[REDACTED]',
+                ]);
             }
         }
 
@@ -69,6 +82,10 @@ class ValidateEnvFile extends ApplicationEnvironment
         foreach ($otherKeys as $key => $value) {
             if (! $this->getEnvKeyValue($key)) {
                 $this->writeNewEnvironmentFileWith($key, $value);
+                Log::notice('Created new Reverb Credential', [
+                    'key' => $key,
+                    'value' => $value,
+                ]);
             }
         }
     }

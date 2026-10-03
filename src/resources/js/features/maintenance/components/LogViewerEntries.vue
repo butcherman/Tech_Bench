@@ -1,0 +1,111 @@
+<script setup lang="ts">
+import BaseBadge from "@/core/components/badges/BaseBadge.vue";
+import BaseButton from "@/core/components/buttons/BaseButton.vue";
+import DataTable from "@/core/features/dataResources/DataTable.vue";
+import Drawer from "@/core/components/Drawer.vue";
+import LogViewerEntryDetails from "./LogViewerEntryDetails.vue";
+import { computed, ref } from "vue";
+import { useColumnBuilder } from "@/core/features/dataResources/composables/columnBuilder";
+import { useLogEntryHelper } from "../composables/logEntryHelper";
+import type { DataTableColumn } from "@/core/features/dataResources/types/types.js";
+
+const emit = defineEmits<{
+    loadMore: [];
+    search: [string];
+}>();
+
+const props = defineProps<{
+    logData: LogEntry[];
+    hasMore: boolean;
+    isLoading: boolean;
+}>();
+
+const colHelper = useColumnBuilder<LogEntry>();
+const { getBadgeClass, getBadgeIcon } = useLogEntryHelper();
+
+const activeEntry = ref<LogEntry>();
+const showEntry = ref<boolean>(false);
+const loaded = computed<boolean>(() => props.logData.length > 0);
+
+const dataColumns: DataTableColumn<LogEntry, LogLevel>[] = [
+    colHelper.text("timestamp", "Date / Time", {
+        filterable: false,
+        sort: false,
+        width: 145,
+        formatter: (value: string) => {
+            let date = new Date(value);
+            return date.toLocaleTimeString();
+        },
+    }),
+    colHelper.text("level", "Level", {
+        filterable: false,
+        sort: false,
+        width: 80,
+    }),
+    colHelper.text("user", "User", {
+        filterable: false,
+        sort: false,
+        width: 200,
+    }),
+    colHelper.text("data.body", "Message", {
+        filterable: false,
+        sort: false,
+    }),
+];
+
+const onRowClick = (event: MouseEvent, rowData: LogEntry): void => {
+    activeEntry.value = rowData;
+    showEntry.value = true;
+};
+
+const search = (searchQuery: string): void => {
+    showEntry.value = false;
+    emit("search", searchQuery);
+};
+</script>
+
+<template>
+    <div>
+        <DataTable
+            :columns="dataColumns"
+            :data="logData"
+            :row-click-fn="onRowClick"
+            :loading="!loaded"
+            compact
+        >
+            <template #row.level="{ rowData }">
+                <BaseBadge
+                    class="uppercase w-full"
+                    variant="none"
+                    :class="getBadgeClass(rowData.level)"
+                    :icon="getBadgeIcon(rowData.level)"
+                    :text="rowData.level"
+                />
+            </template>
+            <template #footer>
+                <div v-if="hasMore" class="flex justify-center">
+                    <BaseButton
+                        class="w-40"
+                        size="sm"
+                        variant="light"
+                        @click="$emit('loadMore')"
+                    >
+                        <fa-icon
+                            v-if="isLoading"
+                            icon="spinner"
+                            class="fa-spin-pulse"
+                        />
+                        <span v-else>Load More...</span>
+                    </BaseButton>
+                </div>
+            </template>
+        </DataTable>
+        <Drawer v-model="showEntry" position="right" title="Log Details">
+            <LogViewerEntryDetails
+                v-if="activeEntry"
+                :activeEntry
+                @search="search"
+            />
+        </Drawer>
+    </div>
+</template>

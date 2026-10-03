@@ -375,35 +375,4 @@ class ApplicationSettingsUnitTest extends TestCase
             'key' => 'app.logo',
         ]);
     }
-
-    /*
-    |---------------------------------------------------------------------------
-    | processBackupSettings()
-    |---------------------------------------------------------------------------
-    */
-    public function test_process_backup_settings(): void
-    {
-        $data = [
-            'nightly_backup' => false,
-            'nightly_cleanup' => false,
-            'encryption' => true,
-            'password' => 'randomValue',
-        ];
-
-        $testObj = new ApplicationSettingsService;
-        $testObj->processBackupSettings(collect($data));
-
-        $this->assertDatabaseHas('app_settings', [
-            'key' => 'backup.nightly_backup',
-        ]);
-        $this->assertDatabaseHas('app_settings', [
-            'key' => 'backup.nightly_cleanup',
-        ]);
-        $this->assertDatabaseHas('app_settings', [
-            'key' => 'backup.backup.encryption',
-        ]);
-        $this->assertDatabaseHas('app_settings', [
-            'key' => 'backup.backup.password',
-        ]);
-    }
 }

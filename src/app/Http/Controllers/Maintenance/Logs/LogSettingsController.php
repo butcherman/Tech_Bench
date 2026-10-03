@@ -22,11 +22,10 @@ class LogSettingsController extends Controller
     {
         $this->authorize('viewAny', AppSettings::class);
 
-        return Inertia::render('Maint/LogSettings', [
-            'days' => (int) config('logging.channels.daily.days'),
-            'log-level' => config('logging.channels.daily.level'),
-            'level-list' => $this->svc->getLogLevels(),
-        ]);
+        return Inertia::render(
+            'Maint/Logs/Settings',
+            $this->svc->getLogSettings()
+        );
     }
 
     /**

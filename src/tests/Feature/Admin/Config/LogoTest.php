@@ -160,13 +160,6 @@ class LogoTest extends TestCase
             'upload_id' => $tusFile->id,
         ];
 
-        $this->mock(TusUploadService::class, function (MockInterface $mock) use ($tusFile) {
-            $mock->shouldReceive('getCompletedUPload')->once()->with($tusFile->id)->andReturn($tusFile);
-            $mock->shouldReceive('validateMimeType')->once()->andReturn(false);
-            $mock->shouldReceive('deleteUpload')->once()->with($tusFile);
-            $mock->shouldNotReceive('finalizeUpload');
-        });
-
         $this->expectException(ValidationException::class);
 
         $response = $this->withoutExceptionHandling()->actingAs($user)

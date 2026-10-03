@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use App\Enums\DiskEnum;
 use Illuminate\Support\Facades\Storage;
 
 trait HandleFileTrait
@@ -13,7 +14,11 @@ trait HandleFileTrait
     */
     public function cleanFilename(string $name): string
     {
-        $newName = str_replace(' ', '_', preg_replace("([^\w\s\d\-_~,;\[\]\(\).])", '', $name));
+        $newName = str_replace(
+            ' ',
+            '_',
+            preg_replace("([^\w\s\d\-_~,;\[\]\(\).])", '', $name)
+        );
 
         return $newName;
     }
@@ -24,10 +29,11 @@ trait HandleFileTrait
     | with an index number.
     |---------------------------------------------------------------------------
     */
-    public function checkForDuplicate(string $disk, string $folder, string $name): string
+    public function checkForDuplicate(DiskEnum $disk, string $folder, string $name): string
     {
         if (
-            Storage::disk($disk)->exists($folder.DIRECTORY_SEPARATOR.$name)
+            Storage::disk($disk->value)
+                ->exists($folder.DIRECTORY_SEPARATOR.$name)
         ) {
             // Index for appending filename
             $number = 0;
@@ -44,7 +50,7 @@ trait HandleFileTrait
             do {
                 $name = $base.'('.++$number.')'.$ext;
             } while (
-                Storage::disk($disk)
+                Storage::disk($disk->value)
                     ->exists($folder.DIRECTORY_SEPARATOR.$name)
             );
         }

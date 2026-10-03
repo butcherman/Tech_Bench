@@ -1,4 +1,4 @@
-import { ref, toRef } from "vue";
+import { computed, ref, toRef } from "vue";
 import { useTableColumns } from "./tableColumns";
 import { useTableStyles } from "./tableStyles";
 import {
@@ -9,7 +9,7 @@ import {
     getPaginationRowModel,
     getFacetedRowModel,
     getFacetedUniqueValues,
-    RowData,
+    type RowData,
 } from "@tanstack/vue-table";
 import type { DataTableProps } from "../types/types";
 
@@ -19,20 +19,25 @@ export const useDataTable = <TRow extends RowData>(
     const { pointerClass, borderClass, paddingClass, stripedClass } =
         useTableStyles(props);
 
+    const data = toRef(props, "data");
+    const columns = toRef(props, "columns");
+    const tableColumns = computed(() => useTableColumns(columns.value));
+
     const perPage = ref(25);
     const paginationArray = ref([10, 25, 50, 100]);
 
-    const data = toRef(props, "data");
-
     return useVueTable({
-        columns: useTableColumns(props.columns),
+        columns: tableColumns.value,
+
         data,
+
         initialState: {
             pagination: {
                 pageIndex: 0,
                 pageSize: perPage.value,
             },
         },
+
         meta: {
             borderClass: borderClass.value,
             paddingClass: paddingClass.value,
@@ -46,6 +51,7 @@ export const useDataTable = <TRow extends RowData>(
             rowClassFn: props.rowClassFn,
             rowClickFn: props.rowClickFn,
         },
+
         getCoreRowModel: getCoreRowModel(),
         getFacetedRowModel: getFacetedRowModel(),
         getFacetedUniqueValues: getFacetedUniqueValues(),

@@ -23,6 +23,8 @@ ADD --chmod=0755 \
 # Install dependency packages
 RUN apt update && apt install -yq \
     curl \
+    libncurses6 \
+    libtinfo6 \
     nano \
     nodejs \
     npm \

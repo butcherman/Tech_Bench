@@ -1,12 +1,17 @@
 <script setup lang="ts" generic="TData">
-defineProps<{
+import { computed } from "vue";
+
+const props = defineProps<{
     data: TData;
 
     // Optional
     bordered?: boolean;
+    compact?: boolean;
     only?: string[];
     skip?: string[];
 }>();
+
+const spacingClass = computed(() => (props.compact ? "p-0 px-2" : "p-2"));
 
 /**
  * Translate the table header from snake_case to Title Case
@@ -32,13 +37,29 @@ const toTitleCase = (str: string): string => {
                     "
                     class="border-b"
                 >
-                    <slot name="row" :row-data="{ value, index }">
-                        <th class="text-end p-2 max-w-1/2 w-1/3">
-                            <slot name="index" :row-data="{ value, index }">
-                                {{ toTitleCase(index.toString()) }}:
+                    <slot
+                        name="row"
+                        :row-data="{
+                            value,
+                            index,
+                            toTitle: toTitleCase(index.toString()),
+                        }"
+                    >
+                        <th class="max-w-1/2 w-1/3" :class="spacingClass">
+                            <slot
+                                name="index"
+                                :row-data="{
+                                    value,
+                                    index,
+                                    toTitle: toTitleCase(index.toString()),
+                                }"
+                            >
+                                <div class="text-end">
+                                    {{ toTitleCase(index.toString()) }}:
+                                </div>
                             </slot>
                         </th>
-                        <td class="p-2">
+                        <td :class="spacingClass">
                             <slot name="value" :row-data="{ value, index }">
                                 <span v-if="typeof value === 'boolean'">
                                     <fa-icon

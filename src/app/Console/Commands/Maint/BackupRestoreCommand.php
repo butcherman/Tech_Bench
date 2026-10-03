@@ -2,16 +2,13 @@
 
 namespace App\Console\Commands\Maint;
 
+use App\Actions\Maintenance\RestoreBackup;
 use App\Services\Maintenance\BackupRestoreService;
+use App\Services\Maintenance\BackupService;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Process;
 
 use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\select;
-use function Laravel\Prompts\spin;
-use function Laravel\Prompts\warning;
 
 class BackupRestoreCommand extends Command
 {
@@ -20,7 +17,7 @@ class BackupRestoreCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'app:backup-restore';
+    protected $signature = 'app:restore';
 
     /**
      * The console command description.
@@ -32,15 +29,18 @@ class BackupRestoreCommand extends Command
     /**
      * Constructor will inject the Restore Service Class
      */
-    public function __construct(protected BackupRestoreService $svc)
-    {
+    public function __construct(
+        protected RestoreBackup $action,
+        protected BackupRestoreService $svc,
+        protected BackupService $backups
+    ) {
         parent::__construct();
     }
 
     /**
      * Execute the command.
      */
-    public function handle(): void
+    public function handle(): int
     {
         $this->components->alert('Database Restore');
         $this->components->alert(
@@ -51,166 +51,24 @@ class BackupRestoreCommand extends Command
         // Select Backup file to Restore
         $backupChoice = select(
             label: 'Select Backup File to Restore',
-            options: collect($this->svc->getBackupListWithMetaData())
-                ->pluck('name'),
+            options: $this->backups->all()->pluck('backup_name'),
         );
 
-        /*
-        |-----------------------------------------------------------------------
-        | Mount and Validate the backup file
-        |-----------------------------------------------------------------------
-        */
-        spin(
-            message: 'Validating Backup File',
-            callback: fn () => $this->svc->validateBackupArchive($backupChoice),
-        );
-
-        $this->info('Backup File is Valid');
-
-        /*
-        |-----------------------------------------------------------------------
-        | Should Logs and SSL Cert be restored?
-        |-----------------------------------------------------------------------
-        */
-        $restoreEnv = confirm(
-            label: 'Restore Environment File?',
-            default: true,
-        );
-
-        $restoreLogs = confirm(
-            label: 'Restore Log Files?',
-            default: true,
-        );
-
-        $restoreCert = confirm(
-            label: 'Restore SSL Certificate?',
-            default: true,
-        );
-
-        $this->components->alert('WARNING:  All Existing Data Will Be Erased');
-        warning('Selected Backup File - '.$backupChoice);
+        $this->components->alert('You are about to restore '.$backupChoice);
 
         $continue = confirm(
-            label: 'Continue?',
+            label: 'Are you sure you want to continue?',
             default: false,
         );
 
         if (! $continue) {
-            $this->abortRestore('Recovery Confirmation Aborted');
+            $this->info('Canceling');
+
+            return 1;
         }
 
-        /*
-        |-----------------------------------------------------------------------
-        | Start the Restore Process - Restore Database
-        |-----------------------------------------------------------------------
-        */
+        $this->action->__invoke($backupChoice);
 
-        $this->components->info(
-            'Starting Database Restore Process, this may take some time.'
-        );
-        $this->components->info('Taking Tech Bench Offline');
-
-        $this->call('down');
-
-        spin(
-            message: 'Extracting Backup',
-            callback: fn () => $this->svc->extractBackup(),
-        );
-
-        $this->components->info('Backup Extracted');
-
-        spin(
-            message: 'Restoring Database',
-            callback: fn () => $this->svc->restoreDatabase()
-        );
-
-        $this->components->info('Database Restored');
-
-        /*
-        |-----------------------------------------------------------------------
-        | Restore filesystem.
-        |-----------------------------------------------------------------------
-        */
-
-        spin(
-            message: 'Restoring Filesystem',
-            callback: fn () => $this->svc->restoreFileSystem()
-        );
-
-        $this->components->info('Filesystem Restored');
-
-        if ($restoreEnv) {
-            spin(
-                message: 'Restoring Environment File',
-                callback: fn () => $this->svc->restoreEnvironmentFile()
-            );
-
-            $this->components->info('Environment File Restored');
-        }
-
-        if ($restoreLogs) {
-            spin(
-                message: 'Restoring Log Files',
-                callback: fn () => $this->svc->restoreLogFiles()
-            );
-
-            $this->components->info('Log Files Restored');
-        }
-
-        if ($restoreCert) {
-            spin(
-                message: 'Restoring SSL Certificate',
-                callback: fn () => $this->svc->restoreCert()
-            );
-
-            $this->components->info('SSL Certificate Restored');
-        }
-
-        $this->components->info('Restore Process Complete');
-        $this->components->info('Performing Cleanup Tasks');
-
-        $this->cleanup(true);
-    }
-
-    /**
-     * Abort the Restore Process with error.
-     */
-    private function abortRestore(string $reason): void
-    {
-        Log::error('Aborting Restore Process.  Reason - '.$reason);
-
-        $this->components->error('Backup Recovery Failed.  Aborting.');
-
-        $this->cleanup();
-
-        $this->fail($reason);
-    }
-
-    /**
-     * Cleanup all temporary files and re-enable application
-     */
-    protected function cleanup(bool $reboot = false): void
-    {
-        $this->svc->deleteExtractedFiles();
-
-        // @codeCoverageIgnoreStart
-        if (App::environment('production')) {
-            // Clear and re-cache all config data
-            $this->call('optimize:clear');
-            $this->call('breadcrumbs:cache');
-            $this->call('optimize');
-
-            // Rebuild all JS application files
-            Process::run('npm run build');
-        }
-        // @codeCoverageIgnoreEnd
-
-        if (App::isDownForMaintenance()) {
-            $this->call('up');
-        }
-
-        if ($reboot) {
-            $this->call('app:reboot', ['--force' => true]);
-        }
+        return 0;
     }
 }

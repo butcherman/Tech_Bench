@@ -2,6 +2,7 @@
 
 namespace App\Services\File;
 
+use App\Enums\DiskEnum;
 use ArthurPatriot\Tus\Exceptions\FileNotFoundException;
 use ArthurPatriot\Tus\Facades\Tus;
 use ArthurPatriot\Tus\Helpers\TusFile;
@@ -38,9 +39,9 @@ class TusUploadService
     }
 
     /**
-     * Validate that the file has the correct MIME type
+     * Validate the file has correct MIME type without triggering exception
      */
-    public function validateMimeType(TusFile $tusFile, array $allowedMimes): bool
+    public function isMimeValid(TusFile $tusFile, array $allowedMimes): bool
     {
         $finfo = new finfo(FILEINFO_MIME_TYPE);
         $path = Tus::storage()->path($tusFile->path);
@@ -57,13 +58,26 @@ class TusUploadService
     }
 
     /**
+     * Validate that the file has the correct MIME type
+     */
+    public function validateMimeType(TusFile $tusFile, array $allowedMimes): void
+    {
+        if (! $this->isMimeValid($tusFile, $allowedMimes)) {
+            throw ValidationException::withMessages([
+                'upload_id' => 'The uploaded file is not a supported file type.',
+            ]);
+        }
+    }
+
+    /**
      * Save the file to its final destination
      */
-    public function finalizeUpload(TusFile $upload, string $destination): void
+    public function finalizeUpload(TusFile $upload, DiskEnum $disk, string $destination): void
     {
+        // TODO - This is not going to work properly
         rename(
             Tus::storage()->path($upload->path),
-            Storage::disk('public')->path($destination)
+            Storage::disk($disk->value)->path($destination)
         );
 
         // Delete the meta data from the file

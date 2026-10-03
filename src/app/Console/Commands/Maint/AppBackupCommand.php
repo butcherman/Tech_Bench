@@ -2,15 +2,11 @@
 
 namespace App\Console\Commands\Maint;
 
+use App\Enums\BackupType;
 use App\Jobs\Maintenance\RunBackupJob;
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Log;
-
-/*
-|-------------------------------------------------------------------------------
-| Manually trigger a backup from the command prompt.
-|-------------------------------------------------------------------------------
-*/
 
 class AppBackupCommand extends Command
 {
@@ -35,8 +31,6 @@ class AppBackupCommand extends Command
     {
         $this->line('Running System Backup');
 
-        Log::info('Manual Backup called from Command Line');
-
-        RunBackupJob::dispatchSync();
+        RunBackupJob::dispatchSync(BackupType::Cli);
     }
 }

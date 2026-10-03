@@ -1,12 +1,12 @@
 <?php
 
 use App\Http\Middleware\CheckForInit;
-use App\Http\Middleware\CheckForTwoFactor;
 use App\Http\Middleware\CheckPasswordExpiration;
 use App\Http\Middleware\HandleFlashDataMiddleware;
 use App\Http\Middleware\HandleInertiaRequests;
 use App\Http\Middleware\InitializeApp;
 use App\Http\Middleware\LogDebugVisits;
+use App\Http\Middleware\TraceRequest;
 use Illuminate\Auth\Middleware\Authenticate;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -41,13 +41,13 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->web(append: [
+            TraceRequest::class,
             LogDebugVisits::class,
             HandleInertiaRequests::class,
             HandleFlashDataMiddleware::class,
         ])->appendToGroup('auth.secure', [
             Authenticate::class,
             CheckForInit::class,
-            // CheckForTwoFactor::class,
             CheckPasswordExpiration::class,
             EncryptHistoryMiddleware::class,
         ])->alias([

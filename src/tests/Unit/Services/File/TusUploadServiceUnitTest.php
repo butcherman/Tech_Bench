@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Services\File;
 
+use App\Enums\DiskEnum;
 use App\Services\File\TusUploadService;
 use ArthurPatriot\Tus\Exceptions\FileNotFoundException;
 use ArthurPatriot\Tus\Facades\Tus;
@@ -9,6 +10,7 @@ use ArthurPatriot\Tus\Helpers\TusFile;
 use ArthurPatriot\Tus\Helpers\TusUploadMetadataManager;
 use ErrorException;
 use Illuminate\Contracts\Filesystem\Filesystem;
+use Illuminate\Support\Facades\Exceptions;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 use Mockery;
@@ -246,18 +248,18 @@ class TusUploadServiceUnitTest extends TestCase
             ->once()
             ->andReturn($storage);
 
-        $result = $this->service->validateMimeType(
+        $this->service->validateMimeType(
             $upload,
             ['text/plain']
         );
 
         unlink($file);
-
-        $this->assertTrue($result);
     }
 
     public function test_validate_mime_type_not_allowed(): void
     {
+        Exceptions::fake();
+
         $file = tempnam(sys_get_temp_dir(), 'tus-test-');
 
         file_put_contents($file, 'This is a test file.');
@@ -280,14 +282,16 @@ class TusUploadServiceUnitTest extends TestCase
             ->once()
             ->andReturn($storage);
 
-        $result = $this->service->validateMimeType(
+        $this->expectException(ValidationException::class);
+
+        $this->service->validateMimeType(
             $upload,
             ['application/pdf']
         );
 
-        unlink($file);
+        Exceptions::assertReported(ValidationException::class);
 
-        $this->assertFalse($result);
+        unlink($file);
     }
 
     public function test_validate_mime_type_file_cannot_be_read(): void
@@ -312,12 +316,10 @@ class TusUploadServiceUnitTest extends TestCase
 
         $this->expectException(ErrorException::class);
 
-        $result = $this->service->validateMimeType(
+        $this->service->validateMimeType(
             $upload,
             ['text/plain']
         );
-
-        $this->assertFalse($result);
     }
 
     /*
@@ -367,7 +369,7 @@ class TusUploadServiceUnitTest extends TestCase
 
         $destination = 'abc123.txt';
 
-        $this->service->finalizeUpload($upload, $destination);
+        $this->service->finalizeUpload($upload, DiskEnum::public, $destination);
 
         Storage::disk('public')->assertExists($destination);
 

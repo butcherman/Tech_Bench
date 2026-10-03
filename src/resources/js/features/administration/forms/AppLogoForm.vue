@@ -28,7 +28,7 @@ const onQueueCompleted = (fileList: string[]) => {
 
 <template>
     <BaseVueForm
-        name="form"
+        name="logo-form"
         @success="$emit('success')"
         @submit="processFileQueue"
     >

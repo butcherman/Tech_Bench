@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Services\File;
 
+use App\Enums\DiskEnum;
 use App\Exceptions\File\FileMissingException;
 use App\Services\File\FileStorageService;
 use Illuminate\Support\Facades\Storage;
@@ -27,7 +28,7 @@ class FileStorageServiceUnitTest extends TestCase
 
         $testObj = new FileStorageService;
         $testObj->moveDiskFile(
-            'local',
+            DiskEnum::local,
             $oldFolder.DIRECTORY_SEPARATOR.$file,
             $newFolder.DIRECTORY_SEPARATOR.$file
         );
@@ -53,7 +54,7 @@ class FileStorageServiceUnitTest extends TestCase
 
         $testObj = new FileStorageService;
         $testObj->moveDiskFile(
-            'local',
+            DiskEnum::local,
             $oldFolder.DIRECTORY_SEPARATOR.$file,
             $newFolder.DIRECTORY_SEPARATOR.$file
         );
@@ -80,10 +81,10 @@ class FileStorageServiceUnitTest extends TestCase
 
         $testObj = new FileStorageService;
         $testObj->moveDiskFile(
-            'local',
+            DiskEnum::local,
             $oldFolder.DIRECTORY_SEPARATOR.$file,
             $newFolder.DIRECTORY_SEPARATOR.$file,
-            'customers'
+            DiskEnum::customers
         );
 
         Storage::disk('local')
@@ -104,7 +105,7 @@ class FileStorageServiceUnitTest extends TestCase
 
         $testObj = new FileStorageService;
         $testObj->moveDiskFile(
-            'local',
+            DiskEnum::local,
             $oldFolder.DIRECTORY_SEPARATOR.$file,
             $newFolder.DIRECTORY_SEPARATOR.$file
         );
@@ -125,7 +126,7 @@ class FileStorageServiceUnitTest extends TestCase
             ->put($file, 'This is a test file');
 
         $testObj = new FileStorageService;
-        $testObj->deleteDiskFile('local', $file);
+        $testObj->deleteDiskFile(DiskEnum::local, $file);
 
         Storage::disk('local')->assertMissing($file);
     }

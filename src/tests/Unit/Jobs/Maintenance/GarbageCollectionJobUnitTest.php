@@ -20,10 +20,6 @@ class GarbageCollectionJobUnitTest extends TestCase
 
         Artisan::shouldReceive('call')
             ->once()
-            ->with('backup:clean')
-            ->andReturn(null);
-        Artisan::shouldReceive('call')
-            ->once()
             ->with('queue:prune-failed')
             ->andReturn(null);
         Artisan::shouldReceive('call')

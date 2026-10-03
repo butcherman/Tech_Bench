@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Config;
 
+use App\Enums\DiskEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Config\LogoRequest;
 use App\Models\AppSettings;
@@ -9,7 +10,6 @@ use App\Services\Admin\ApplicationSettingsService;
 use App\Services\File\TusUploadService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -35,20 +35,15 @@ class LogoController extends Controller
      */
     public function update(LogoRequest $request): RedirectResponse
     {
-        $logoFile = $this->uploadSvc->getCompletedUpload($request->input('upload_id'));
+        $logoFile = $this->uploadSvc
+            ->getCompletedUpload($request->input('upload_id'));
 
-        if (! $this->uploadSvc->validateMimeType($logoFile, [
+        $this->uploadSvc->validateMimeType($logoFile, [
             'image/jpg', 'image/jpeg', 'image/bmp', 'image/png', 'image/gif',
-        ])) {
-            $this->uploadSvc->deleteUpload($logoFile);
-
-            throw ValidationException::withMessages([
-                'upload_id' => 'The uploaded file is not a supported image type.',
-            ]);
-        }
+        ]);
 
         $location = $this->svc->updateLogo($logoFile);
-        $this->uploadSvc->finalizeUpload($logoFile, $location);
+        $this->uploadSvc->finalizeUpload($logoFile, DiskEnum::public, $location);
 
         Log::notice(
             'New Tech Bench Logo uploaded by '.$request->user()->username,

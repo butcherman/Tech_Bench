@@ -37,11 +37,6 @@ class GarbageCollectionJob implements ShouldQueue
     {
         Log::info('Garbage Collection Job starting');
 
-        // Determine if any backup files need to be removed
-        if (config('backup.nightly_cleanup')) {
-            Artisan::call('backup:clean');
-        }
-
         // Prune failed jobs more than 48 hours old and retry all others
         Artisan::call('queue:prune-failed');
         Artisan::call('queue:retry all');

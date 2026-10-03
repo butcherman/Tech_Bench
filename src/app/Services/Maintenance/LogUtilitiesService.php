@@ -2,25 +2,21 @@
 
 namespace App\Services\Maintenance;
 
-use App\Enums\LogChannels;
+use App\Actions\Maintenance\ParseLogFile;
+use App\DTO\Maintenance\LogFilter;
+use App\DTO\Maintenance\LogSnapshot;
 use App\Enums\LogLevels;
-use App\Exceptions\Maintenance\InvalidLogChannelException;
+use App\Exceptions\Maintenance\LogFileMissingException;
 use App\Traits\AppSettingsTrait;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class LogUtilitiesService
 {
     use AppSettingsTrait;
 
-    /**
-     * Log channels that normal logs are written to.
-     *
-     * @var array<int, string>
-     */
-    protected $logChannels = ['Application', 'Authentication'];
+    public function __construct(protected ParseLogFile $parseLogFile) {}
 
     /**
      * Return the possible log levels.
@@ -31,51 +27,93 @@ class LogUtilitiesService
     }
 
     /**
-     * Return the possible log Channels
+     * Get the path of the log file
      */
-    public function getLogChannels(): array
+    public function getLogFilePath(string $filename): string
     {
-        return array_column(LogChannels::cases(), 'name');
-    }
+        $folder = 'Application';
+        $relativePath = $folder.DIRECTORY_SEPARATOR.$filename.'.log';
 
-    /**
-     * Validate that a log channel exists and return the folder the log files
-     * are in
-     */
-    public function validateLogChannel(string $channel): string|false
-    {
-        $valid = LogChannels::tryFrom(strtolower($channel));
-
-        if (! $valid) {
-            throw new InvalidLogChannelException;
-        }
-
-        return $valid->getFolder();
+        return Storage::disk('logs')->path($relativePath);
     }
 
     /**
      * Validate a specific log file exists
      */
-    public function validateLogFile(string $channel, string $filename): string|bool
+    public function validateLogFile(string $filename): string|bool
     {
-        $folder = $this->validateLogChannel($channel);
+        $folder = 'Application';
         $relativePath = $folder.DIRECTORY_SEPARATOR.$filename.'.log';
 
-        if (! Storage::disk('logs')->exists($relativePath)) {
-            return false;
-        }
-
-        return $relativePath;
+        return Storage::disk('logs')->exists($relativePath);
     }
 
     /**
-     * Get a list of log files for the selected channel
+     * Get a select number of entries from a log file, query filtering is included
      */
-    public function getLogList(string $channel): array
-    {
-        $folder = $this->validateLogChannel($channel);
+    public function query(
+        string $logFile,
+        LogSnapshot $snapshot,
+        LogFilter $filter,
+        int $page = 1
+    ): array {
+        return ($this->parseLogFile)(
+            $logFile,
+            $snapshot,
+            $filter,
+            $page,
+        );
+    }
 
-        return $this->getLogFiles($folder);
+    /**
+     * Make a snapshot of the log file as it currently sits
+     */
+    public function snapshot(string $logFile): LogSnapshot
+    {
+        if (! $this->validateLogFile($logFile)) {
+            throw new LogFileMissingException($logFile);
+        }
+
+        $size = Storage::disk('logs')->size('Application/'.$logFile.'.log');
+
+        return new LogSnapshot($size);
+    }
+
+    /**
+     * Get a list of available log files
+     */
+    public function getListOfLogFiles(): array
+    {
+        $fileList = Storage::disk('logs')->files('Application');
+        $logList = Arr::where($fileList, function ($value) {
+            $pathInfo = pathinfo($value);
+
+            return $pathInfo['extension'] === 'log';
+        });
+
+        return Arr::map($logList, function ($logFile) {
+            $pathInfo = pathinfo($logFile);
+
+            return $pathInfo['filename'];
+        });
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | Log Settings
+    |---------------------------------------------------------------------------
+    */
+
+    /**
+     * Get the Log Settings
+     */
+    public function getLogSettings(): array
+    {
+        return [
+            'days' => (int) config('logging.channels.app.days'),
+            'log-level' => config('logging.channels.app.level'),
+            'level-list' => $this->getLogLevels(),
+        ];
     }
 
     /**
@@ -100,33 +138,5 @@ class LogUtilitiesService
             'logging.channels.auth.level',
             $settings->get('log_level')
         );
-    }
-
-    /**
-     * Get a list of files from a folder in the Logs Directory and parse
-     * to only show the .log files
-     */
-    protected function getLogFiles(string $folder): array
-    {
-        $fileList = Storage::disk('logs')->files($folder);
-        $logList = Arr::where($fileList, function ($value) {
-            $pathInfo = pathinfo($value);
-
-            return $pathInfo['extension'] === 'log';
-        });
-
-        return Arr::map($logList, function ($logFile) {
-            $pathInfo = pathinfo($logFile);
-
-            return $pathInfo['filename'];
-        });
-    }
-
-    /**
-     * Return a log file as an array of entries
-     */
-    protected function getLogFileArray(string $relativePath): array
-    {
-        return file(Storage::disk('logs')->path($relativePath));
     }
 }

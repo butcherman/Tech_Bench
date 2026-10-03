@@ -18,15 +18,15 @@ class DownloadLogController extends Controller
     /**
      * Download a raw log file
      */
-    public function __invoke(Request $request, string $channel, string $logFile): StreamedResponse
+    public function __invoke(Request $request, string $logFile): StreamedResponse
     {
         $this->authorize('viewAny', AppSettings::class);
 
-        $filePath = $this->svc->validateLogFile($channel, $logFile);
-
-        if (! $filePath) {
+        if (! $this->svc->validateLogFile($logFile)) {
             throw new LogFileMissingException($logFile);
         }
+
+        $filePath = 'Application/'.$logFile.'.log';
 
         Log::info($request->user()->username.' is downloading log file '.$filePath);
 

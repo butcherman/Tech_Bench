@@ -4,12 +4,14 @@ use App\Http\Controllers\Maintenance\Backup\BackupIndexController;
 use App\Http\Controllers\Maintenance\Backup\BackupSettingsController;
 use App\Http\Controllers\Maintenance\Backup\DeleteBackupController;
 use App\Http\Controllers\Maintenance\Backup\DownloadBackupController;
+use App\Http\Controllers\Maintenance\Backup\RestoreBackupController;
 use App\Http\Controllers\Maintenance\Backup\RunBackupController;
+use App\Http\Controllers\Maintenance\Backup\ShowAllBackupsController;
 use App\Http\Controllers\Maintenance\Backup\UploadBackupController;
 use App\Http\Controllers\Maintenance\Logs\DownloadLogController;
+use App\Http\Controllers\Maintenance\Logs\LogLoadMoreController;
 use App\Http\Controllers\Maintenance\Logs\LogSettingsController;
 use App\Http\Controllers\Maintenance\Logs\LogsIndexController;
-use App\Http\Controllers\Maintenance\Logs\ViewLogController;
 use Illuminate\Support\Facades\Route;
 
 /**
@@ -32,12 +34,14 @@ Route::middleware('auth.secure')->prefix('maintenance')->name('maint.')->group(f
                 Route::put('settings', 'update')->name('update');
             });
 
-        Route::get('{channel}/{logFile}/download', DownloadLogController::class)
+        Route::get('{logFile}/load-more', LogLoadMoreController::class)
+            ->name('load');
+        Route::get('{logFile}/download', DownloadLogController::class)
             ->name('download');
-        Route::get('{channel}/{logFile}', ViewLogController::class)
+        Route::get('{logFile}', LogsIndexController::class)
             ->name('show')
-            ->breadcrumb('View Log', 'maint.logs.index');
-        Route::get('/{channel?}', LogsIndexController::class)
+            ->breadcrumb(fn (string $logFile) => $logFile, 'maint.logs.index');
+        Route::get('/', LogsIndexController::class)
             ->name('index')
             ->breadcrumb('Logs', 'admin.index');
     });
@@ -49,22 +53,25 @@ Route::middleware('auth.secure')->prefix('maintenance')->name('maint.')->group(f
      |---------------------------------------------------------------------------
      */
     Route::prefix('backups')->name('backups.')->group(function () {
-        Route::controller(BackupSettingsController::class)
-            ->name('settings.')
+        Route::get('all', ShowAllBackupsController::class)
+            ->name('show-all')
+            ->breadcrumb('All Backup Files', 'maint.backups.index');
+        Route::put('settings', BackupSettingsController::class)->name('update');
+        Route::controller(UploadBackupController::class)
+            ->prefix('upload')
+            ->name('upload.')
             ->group(function () {
-                Route::get('settings', 'show')
-                    ->name('show')
-                    ->breadcrumb('Backup Settings', 'maint.backups.index');
-                Route::put('settings', 'update')
-                    ->name('update');
+                Route::get('/', 'create')
+                    ->name('create')
+                    ->breadcrumb('Upload Backup File', 'maint.backups.index');
+                Route::post('/', 'store')->name('store');
             });
-        Route::post('upload-backup', UploadBackupController::class)
-            ->name('upload');
-        Route::get('download/{backupName}', DownloadBackupController::class)
+        Route::get('download/{backupName:backup_name}', DownloadBackupController::class)
             ->name('download');
         Route::get('run-backup', RunBackupController::class)->name('run-backup');
-        Route::delete('delete-backup/{backupName}', DeleteBackupController::class)
+        Route::delete('delete-backup/{backupName:backup_name}', DeleteBackupController::class)
             ->name('delete');
+        Route::put('restore', RestoreBackupController::class)->name('restore');
         Route::get('/', BackupIndexController::class)
             ->name('index')
             ->breadcrumb('Backups', 'admin.index');

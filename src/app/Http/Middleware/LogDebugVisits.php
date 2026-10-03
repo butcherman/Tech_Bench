@@ -4,9 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Context;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
 
 /*
@@ -49,21 +47,8 @@ class LogDebugVisits
         'administration/telescope/*',
     ];
 
-    /**
-     * Add Trace Data to each log entry Context
-     */
     public function handle(Request $request, Closure $next): Response
     {
-        /**
-         * Add Unique ID, User, and IP Address to all log entries
-         */
-        Context::add('trace_id', Str::uuid()->toString());
-        Context::add(
-            'user_id',
-            $request->user() ? $request->user()->user_id : null
-        );
-        Context::add('ip_address', $request->ip());
-
         // If log level is not set to debug, continue on
         if (config('logging.channels.daily.level') === 'debug') {
             $this->logDebugVisit($request);
@@ -89,15 +74,19 @@ class LogDebugVisits
             ? $request->user()->full_name
             : $request->ip();
 
-        $currentRoute = $request->path();
-
-        Log::debug('Route '.$currentRoute.' visited by '.$user);
-
         $requestData = $this->checkRequestArray($request->toArray());
+        $currentRoute = $request->route()->getName();
+
+        $logData = [
+            'url' => $request->fullUrl(),
+            'method' => $request->method(),
+        ];
 
         if ($requestData) {
-            Log::debug('Submitted Data', $requestData);
+            $logData['submitted-data'] = $requestData;
         }
+
+        Log::debug('Route '.$currentRoute.' visited by '.$user, $logData);
     }
 
     /**

@@ -2,99 +2,215 @@
 
 namespace App\Services\Maintenance;
 
+use App\DTO\Maintenance\BackupSummary;
 use App\Exceptions\Maintenance\BackupFileMissingException;
-use Illuminate\Support\Facades\Log;
+use App\Models\BackupRun;
+use Carbon\Carbon;
+use Carbon\CarbonImmutable;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
-class BackupService extends FileMaintenanceService
+class BackupService
 {
-    /**
-     * Storage object used to interact with the Storage Backup Disk.
-     *
-     * @var Storage
-     */
+    /** @var Storage */
     protected $storage;
 
-    /**
-     * Base name of the backup file.
-     *
-     * @var string
-     */
-    protected $backupBaseName;
+    protected string $backupBaseName;
 
     public function __construct()
     {
         $this->storage = Storage::disk('backups');
-        $this->backupBaseName = config('backup.backup.name').DIRECTORY_SEPARATOR;
+
+        $this->backupBaseName = trim(
+            config('backup.backup.name'),
+            DIRECTORY_SEPARATOR,
+        ).DIRECTORY_SEPARATOR;
     }
 
     /**
-     * Delete a backup file.
+     * Get all Tech Bench backups from DB.
      */
-    public function deleteBackupFile(string $backupName): void
+    public function all(): EloquentCollection
     {
-        if (! $this->doesBackupExist($backupName)) {
+        return BackupRun::where('status', 'completed')
+            ->get()
+            ->sortBy('completed_at')
+            ->sortDesc();
+    }
+
+    /**
+     * Get all Tech Bench backups files.
+     */
+    public function allFiles(): Collection
+    {
+        return collect($this->storage->files(
+            rtrim($this->backupBaseName, DIRECTORY_SEPARATOR)
+        ))
+            ->map(fn (string $path) => $this->makeSummary($path))
+            ->sortByDesc(fn (BackupSummary $backup) => $backup->modified)
+            ->values();
+    }
+
+    /**
+     * Get a list of the most recent backups.
+     */
+    public function recent(int $limit = 10): EloquentCollection
+    {
+        return $this->all()->take($limit);
+    }
+
+    /**
+     * Get a list of th emost recent backup files.
+     */
+    public function recentFiles(int $limit = 10): Collection
+    {
+        return $this->allFiles()->take($limit)->values();
+    }
+
+    /**
+     * Get the last backup that was ran
+     */
+    public function latest(): ?BackupRun
+    {
+        return $this->recent(1)->first();
+    }
+
+    /**
+     * Get the last backup file that was run
+     */
+    public function latestFile(): ?BackupSummary
+    {
+        return $this->recentFiles(1)->first();
+    }
+
+    /**
+     * Count how many backups exist
+     */
+    public function count(): int
+    {
+        return $this->all()->count();
+    }
+
+    /**
+     * Get the amount of disk space being used by the backup files
+     */
+    public function totalSize(): int
+    {
+        return $this->all()->sum(
+            fn ($backup) => $backup->size
+        );
+    }
+
+    /**
+     * Determine if a backup file actually exists
+     */
+    public function exists(string $backupName): bool
+    {
+        return $this->storage->exists(
+            $this->backupPath($backupName)
+        );
+    }
+
+    /**
+     * Delete a backup file and its associated DB record
+     */
+    public function delete(BackupRun $backup): void
+    {
+        if ($this->exists($backup->backup_name)) {
+            $this->storage->delete($this->backupPath($backup->backup_name));
+        }
+
+        $backup->delete();
+    }
+
+    /**
+     * Get the full path that the file belongs to.
+     */
+    public function path(string $backupName): string
+    {
+        $this->ensureExists($backupName);
+
+        return $this->storage->path(
+            $this->backupPath($backupName)
+        );
+    }
+
+    /**
+     * Download a backup file
+     */
+    public function download(BackupRun $backup): StreamedResponse
+    {
+        $this->ensureExists($backup->backup_name);
+
+        return $this->storage
+            ->download($this->backupPath($backup->backup_name));
+    }
+
+    /**
+     * Detemine the next time an automated backup will be ran
+     */
+    public function getNextScheduledBackup(): string
+    {
+        if (! config('backup.nightly_backup')) {
+            return 'Never';
+        }
+
+        $now = Carbon::now();
+        $next3am = Carbon::today()->setTime(3, 0, 0);
+
+        if ($now->gte($next3am)) {
+            $next3am->addDay();
+        }
+
+        return $next3am->format('M d, Y h:00 A');
+    }
+
+    /**
+     * Show the saved retention policy
+     */
+    public function getRetentionPolicy(): array
+    {
+        $strategy = config('backup.cleanup.default_strategy');
+
+        return [
+            'daily' => $strategy['keep_daily_backups_for_days'],
+            'weekly' => $strategy['keep_weekly_backups_for_weeks'],
+            'monthly' => $strategy['keep_monthly_backups_for_months'],
+            'yearly' => $strategy['keep_yearly_backups_for_years'],
+        ];
+    }
+
+    /**
+     * Make sure file exists, throw exception if missing.
+     */
+    public function ensureExists(string $backupName): void
+    {
+        if (! $this->exists($backupName)) {
             throw new BackupFileMissingException($backupName);
         }
-
-        $this->storage->delete($this->backupBaseName.$backupName);
     }
 
     /**
-     * Determine if a given name belongs to a backup file.
+     * Get the relative path of a backup file.
      */
-    public function doesBackupExist(string $backupName): bool
+    protected function backupPath(string $backupName): string
     {
-        return $this->storage->exists($this->backupBaseName.$backupName);
+        return $this->backupBaseName.$backupName;
     }
 
     /**
-     * Get a list of all backup files in the Backup Disk.
+     * Make a summary of the backup file
      */
-    public function getBackupFileList(): array
+    protected function makeSummary(string $path): BackupSummary
     {
-        return array_reverse($this->storage->files('tech-bench'));
-    }
-
-    /**
-     * Get a list of backup files with size and timestamp.
-     */
-    public function getBackupListWithMetaData(): array
-    {
-        $fileList = $this->getBackupFileList();
-        $metaList = [];
-
-        foreach ($fileList as $fileName) {
-            $metaList[] = [
-                'name' => str_replace($this->backupBaseName, '', $fileName),
-                'size' => $this->storage->size($fileName),
-                'modified' => $this->storage->lastModified($fileName),
-            ];
-        }
-
-        return $metaList;
-    }
-
-    /**
-     * Check if the backup directory has enough free space to store a system
-     * backup.
-     */
-    public function verifyBackupDiskSpace(): bool
-    {
-        $backupFreeSpace = $this->getDiskFreeSpace('backups');
-        $appStorageSize = $this->getStorageDiskSize('local');
-        $logStorageSize = $this->getStorageDiskSize('logs');
-
-        $estimatedBackupSize = $appStorageSize + $logStorageSize;
-
-        $checkPassed = $backupFreeSpace > $estimatedBackupSize;
-
-        Log::debug('Checking disk for available space in backup drive.', [
-            'backup_free_space' => $this->readableFileSize($backupFreeSpace),
-            'estimated_backup_size' => $this->readableFileSize($estimatedBackupSize),
-            'check_passed' => $this->readableFileSize($checkPassed) ? 'Yes' : 'No',
-        ]);
-
-        return $checkPassed;
+        return new BackupSummary(
+            name: basename($path),
+            size: $this->storage->size($path),
+            modified: CarbonImmutable::createFromTimestamp(
+                $this->storage->lastModified($path)
+            ),
+        );
     }
 }

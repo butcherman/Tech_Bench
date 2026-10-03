@@ -106,7 +106,7 @@ class BasicSettingsTest extends TestCase
         $user = User::factory()->createQuietly(['role_id' => 1]);
         $data = [
             'url' => 'https://someUrl.noSite',
-            'timezone' => 'America/LosAngeles',
+            'timezone' => 'America/Los_Angeles',
             'max_filesize' => '123456',
             'company_name' => 'Bobs Fancy Cats',
             'home_links' => [],
@@ -146,7 +146,7 @@ class BasicSettingsTest extends TestCase
         $user = User::factory()->createQuietly(['role_id' => 1]);
         $data = [
             'url' => str_replace('https://', '', config('app.url')),
-            'timezone' => 'America/LosAngeles',
+            'timezone' => 'America/Los_Angeles',
             'max_filesize' => '123456',
             'company_name' => 'Bobs Fancy Cats',
             'home_links' => [],
