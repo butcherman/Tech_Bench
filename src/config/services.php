@@ -29,4 +29,11 @@ return [
         'tenant' => env('AZURE_TENANT_ID'),
     ],
 
+    /**
+     * Docker Manager Data
+     */
+    'docker_manager' => [
+        'url' => env('DOCKER_MANAGER_URL', 'http://dockerManager:8080/api'),
+        'api_key' => env('DOCKER_MANAGER_API_KEY'),
+    ],
 ];

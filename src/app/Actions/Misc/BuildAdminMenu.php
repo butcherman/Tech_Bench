@@ -248,6 +248,11 @@ class BuildAdminMenu
         if ($this->checkPermission($this->user, 'App Settings')) {
             $maintMenu = [
                 [
+                    'label' => 'Status',
+                    'icon' => 'temperature-three-quarters',
+                    'route' => route('maint.status.index'),
+                ],
+                [
                     'label' => 'Logs',
                     'icon' => 'fa-bug',
                     'route' => route('maint.logs.index'),
