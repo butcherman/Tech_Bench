@@ -158,6 +158,20 @@ services:
             database:
                 condition: service_healthy
 
+    # Docker Management Container
+    dockerManager:
+        image: butcherman/docker-sidecar:1.0
+        container_name: dockerManager
+        restart: unless-stopped
+        stop_signal: SIGTERM
+        volumes:
+            - /home/cerberus/dev/Docker-Sidecar/src:/var/www/html
+            - /var/run/docker.sock:/var/run/docker.sock
+        networks:
+            - app-tier # TODO - Make this an internal only network between TB & this container
+        ports:
+            - 8080:8080
+
     ###########################################################################################
     #                               Dev Specific Containers                                   #
     ###########################################################################################
