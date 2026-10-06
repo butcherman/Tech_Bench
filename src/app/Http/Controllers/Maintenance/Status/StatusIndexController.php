@@ -15,10 +15,10 @@ class StatusIndexController extends Controller
     /**
      * Handle the incoming request.
      */
-    public function __invoke(Request $request) // : Response
+    public function __invoke(): Response
     {
         return Inertia::render('Maint/Status/Index', [
-            'status' => fn () => $this->svc->getDockerStatus(),
+            'summary' => fn () => $this->svc->getDockerStatus(),
         ]);
     }
 }

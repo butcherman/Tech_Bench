@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import AppLayout from "@/layouts/AppLayout.vue";
-import Card from "@/core/components/Card.vue";
+import ContainerStatus from "@/features/maintenance/components/ContainerStatus.vue";
 
 const props = defineProps<{
-    status: any | any[];
+    summary: ContainerSummary[];
 }>();
 </script>
 
@@ -11,7 +11,7 @@ const props = defineProps<{
 export default { layout: AppLayout };
 </script>
 <template>
-    <div class="flex justify-center">
-        <Card>{{ status }}</Card>
+    <div class="flex gap-2 justify-center">
+        <ContainerStatus :summary />
     </div>
 </template>
