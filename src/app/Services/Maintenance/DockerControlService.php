@@ -4,9 +4,7 @@ namespace App\Services\Maintenance;
 
 use App\Enums\ContainerList;
 use Illuminate\Http\Client\PendingRequest;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Process;
 
 /**
  * @codeCoverageIgnore
@@ -30,32 +28,10 @@ class DockerControlService
     }
 
     /**
-     * Reboot a single container.
+     * Reboot a container.
      */
-    // public function rebootContainer(ContainerList $container): bool
-    // {
-    //     // In Testing Environment, we do not want to trigger reboot
-    //     if (App::environment('testing')) {
-    //         return true;
-    //     }
-
-    //     $status = Process::run('docker restart '.$container->value);
-
-    //     return $status->successful();
-    // }
-
-    /**
-     * Reboot all Containers
-     */
-    // public function rebootAllContainers(): void
-    // {
-    //     // In Testing Environment, we do not want to trigger reboot
-    //     if (App::environment('testing')) {
-    //         return;
-    //     }
-
-    //     foreach (ContainerList::cases() as $container) {
-    //         $this->rebootContainer($container);
-    //     }
-    // }
+    public function rebootContainer(ContainerList $container)
+    {
+        $this->http->post('/containers/'.$container->value.'/restart')->throw();
+    }
 }

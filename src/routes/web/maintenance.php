@@ -12,6 +12,7 @@ use App\Http\Controllers\Maintenance\Logs\DownloadLogController;
 use App\Http\Controllers\Maintenance\Logs\LogLoadMoreController;
 use App\Http\Controllers\Maintenance\Logs\LogSettingsController;
 use App\Http\Controllers\Maintenance\Logs\LogsIndexController;
+use App\Http\Controllers\Maintenance\Status\RebootContainerController;
 use App\Http\Controllers\Maintenance\Status\StatusIndexController;
 use Illuminate\Support\Facades\Route;
 
@@ -87,5 +88,7 @@ Route::middleware('auth.secure')->prefix('maintenance')->name('maint.')->group(f
         Route::get('/', StatusIndexController::class)
             ->name('index')
             ->breadcrumb('System Status', 'admin.index');
+        Route::post('/{container}/restart', RebootContainerController::class)
+            ->name('reboot');
     });
 });

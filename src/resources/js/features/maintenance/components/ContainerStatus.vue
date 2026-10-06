@@ -5,7 +5,8 @@ import Card from "@/core/components/Card.vue";
 import prettyMilliseconds from "pretty-ms";
 import verifyModal from "@/core/features/verifyModal";
 import { computed, onMounted, onUnmounted, ref } from "vue";
-import { usePoll } from "@inertiajs/vue3";
+import { reboot } from "@/wayfinder/routes/maint/status";
+import { usePoll, router } from "@inertiajs/vue3";
 
 const props = defineProps<{
     summary: ContainerSummary[];
@@ -112,11 +113,9 @@ const getUptime = (startedAt: string): string => {
 };
 
 const restartContainer = (container: ContainerSummary): void => {
-    console.log(container);
-
     verifyModal("This will cause service disruption").then((res) => {
         if (res) {
-            console.log("yes");
+            router.post(reboot.url(container.service));
         }
     });
 };

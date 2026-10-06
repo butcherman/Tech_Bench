@@ -2,25 +2,25 @@
 
 namespace App\Http\Controllers\Maintenance\Status;
 
+use App\Enums\ContainerList;
 use App\Http\Controllers\Controller;
 use App\Models\AppSettings;
 use App\Services\Maintenance\DockerControlService;
-use Inertia\Inertia;
-use Inertia\Response;
+use Illuminate\Http\Request;
 
-class StatusIndexController extends Controller
+class RebootContainerController extends Controller
 {
     public function __construct(protected DockerControlService $svc) {}
 
     /**
-     * Show the current status of the Docker Containers
+     * Reboot one of the Docker Containers
      */
-    public function __invoke(): Response
+    public function __invoke(Request $request, ContainerList $container)
     {
         $this->authorize('update', AppSettings::class);
 
-        return Inertia::render('Maint/Status/Index', [
-            'summary' => fn () => $this->svc->getDockerStatus(),
-        ]);
+        $this->svc->rebootContainer($container);
+
+        return back()->with('success', 'Service Rebooting');
     }
 }
