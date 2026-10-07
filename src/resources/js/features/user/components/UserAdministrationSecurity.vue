@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import BaseButton from "@/core/components/buttons/BaseButton.vue";
+import BaseBadge from "@/core/components/badges/BaseBadge.vue";
 import Card from "@/core/components/Card.vue";
 import verifyModal from "@/core/features/verifyModal";
 import { computed } from "vue";
@@ -34,7 +34,16 @@ const onResetMfa = () => {
 </script>
 
 <template>
-    <Card title="security">
+    <Card title="Security">
+        <template #append-title>
+            <BaseBadge
+                text="Reset MFA"
+                size="sm"
+                class="mt-3"
+                variant="warning"
+                @click="onResetMfa"
+            />
+        </template>
         <table>
             <tbody>
                 <tr>
@@ -54,12 +63,5 @@ const onResetMfa = () => {
                 </tr>
             </tbody>
         </table>
-        <BaseButton
-            text="Reset MFA"
-            size="sm"
-            class="mt-3"
-            variant="warning"
-            @click="onResetMfa"
-        />
     </Card>
 </template>

@@ -10,14 +10,16 @@ class BuildAdminMenuUnitTest extends TestCase
 {
     /*
     |---------------------------------------------------------------------------
-    | build()
+    | __invoke()
     |---------------------------------------------------------------------------
     */
     public function test_build_admin_menu_installer(): void
     {
+        config(['file-link.feature_enabled' => true]);
+        config(['customer.enable_workbooks' => true]);
+
         $user = User::factory()->create(['role_id' => 1]);
         $shouldBe = $this->getBaseMenu();
-        $shouldBe['File Links'] = [];
 
         $testObj = new BuildAdminMenu;
         $menu = $testObj($user);
@@ -25,18 +27,17 @@ class BuildAdminMenuUnitTest extends TestCase
         $this->assertEquals($shouldBe, $menu);
     }
 
-    public function test_build_admin_menu_installer_file_links_enabled(): void
+    public function test_build_admin_menu_installer_file_links_disabled(): void
     {
-        config(['file-link.feature_enabled' => true]);
-        config(['customer.enable_workbooks' => true]);
+        config(['file-link.feature_enabled' => false]);
+        config(['customer.enable_workbooks' => false]);
 
         $user = User::factory()->create(['role_id' => 1]);
         $shouldBe = $this->getBaseMenu();
-        $shouldBe['Equipment'][] = [
-            'label' => 'Equipment Workbooks',
-            'icon' => 'fa-table',
-            'route' => route('workbooks.index'),
-        ];
+
+        unset($shouldBe['Files & Equipment'][1]);
+        unset($shouldBe['Files & Equipment'][2]);
+        unset($shouldBe['Files & Equipment'][3]);
 
         $testObj = new BuildAdminMenu;
         $menu = $testObj($user);
@@ -46,11 +47,15 @@ class BuildAdminMenuUnitTest extends TestCase
 
     public function test_build_admin_menu_as_admin(): void
     {
+        config(['file-link.feature_enabled' => true]);
+        config(['customer.enable_workbooks' => true]);
+
         $user = User::factory()->create(['role_id' => 2]);
         $shouldBe = $this->getBaseMenu();
-        $shouldBe['Settings'] = [];
-        $shouldBe['Maintenance'] = [];
-        $shouldBe['File Links'] = [];
+
+        unset($shouldBe['Content & Features'][4]);
+        unset($shouldBe['Application']);
+        unset($shouldBe['Maintenance']);
 
         $testObj = new BuildAdminMenu;
         $menu = $testObj($user);
@@ -61,15 +66,7 @@ class BuildAdminMenuUnitTest extends TestCase
     public function test_build_admin_menu_no_access(): void
     {
         $user = User::factory()->create();
-        $shouldBe = [
-            'Users' => [],
-            'Customers' => [],
-            'Tech Tips' => [],
-            'Equipment' => [],
-            'Settings' => [],
-            'Maintenance' => [],
-            'File Links' => [],
-        ];
+        $shouldBe = [];
 
         $testObj = new BuildAdminMenu;
         $menu = $testObj($user);
@@ -79,13 +76,16 @@ class BuildAdminMenuUnitTest extends TestCase
 
     public function test_build_no_user_access(): void
     {
+        config(['file-link.feature_enabled' => true]);
+        config(['customer.enable_workbooks' => true]);
+
         $this->changeRolePermission(1, 'Manage Users', false);
         $this->changeRolePermission(1, 'Manage Permissions', false);
 
         $user = User::factory()->create(['role_id' => 1]);
         $shouldBe = $this->getBaseMenu();
-        $shouldBe['Users'] = [];
-        $shouldBe['File Links'] = [];
+
+        unset($shouldBe['Users & Access']);
 
         $testObj = new BuildAdminMenu;
         $menu = $testObj($user);
@@ -95,12 +95,15 @@ class BuildAdminMenuUnitTest extends TestCase
 
     public function test_build_no_customer_access(): void
     {
+        config(['file-link.feature_enabled' => true]);
+        config(['customer.enable_workbooks' => true]);
+
         $this->changeRolePermission(1, 'Manage Customers', false);
 
         $user = User::factory()->create(['role_id' => 1]);
         $shouldBe = $this->getBaseMenu();
-        $shouldBe['Customers'] = [];
-        $shouldBe['File Links'] = [];
+
+        unset($shouldBe['Customers']);
 
         $testObj = new BuildAdminMenu;
         $menu = $testObj($user);
@@ -110,12 +113,22 @@ class BuildAdminMenuUnitTest extends TestCase
 
     public function test_build_no_tech_tip_access(): void
     {
+        config(['file-link.feature_enabled' => true]);
+        config(['customer.enable_workbooks' => true]);
+
         $this->changeRolePermission(1, 'Manage Tech Tips', false);
 
         $user = User::factory()->create(['role_id' => 1]);
         $shouldBe = $this->getBaseMenu();
-        $shouldBe['Tech Tips'] = [];
-        $shouldBe['File Links'] = [];
+
+        unset($shouldBe['Content & Features'][0]);
+        unset($shouldBe['Content & Features'][1]);
+        unset($shouldBe['Content & Features'][2]);
+        unset($shouldBe['Content & Features'][3]);
+
+        $shouldBe['Content & Features'] = array_values(
+            $shouldBe['Content & Features']
+        );
 
         $testObj = new BuildAdminMenu;
         $menu = $testObj($user);
@@ -129,7 +142,7 @@ class BuildAdminMenuUnitTest extends TestCase
     protected function getBaseMenu(): array
     {
         return [
-            'Users' => [
+            'Users & Access' => [
                 [
                     'label' => 'Users',
                     'icon' => 'fas fa-user-edit',
@@ -141,7 +154,7 @@ class BuildAdminMenuUnitTest extends TestCase
                     'route' => route('admin.user.create'),
                 ],
                 [
-                    'label' => 'List Disabled Users',
+                    'label' => 'Disabled Users',
                     'icon' => 'fas fa-store-alt-slash',
                     'route' => route('admin.user.deactivated'),
                 ],
@@ -156,7 +169,7 @@ class BuildAdminMenuUnitTest extends TestCase
                     'route' => route('admin.user.user-settings.edit'),
                 ],
                 [
-                    'label' => 'Roles and Permissions',
+                    'label' => 'Roles & Permissions',
                     'icon' => 'fas fa-users-cog',
                     'route' => route('admin.user-roles.index'),
                 ],
@@ -173,7 +186,7 @@ class BuildAdminMenuUnitTest extends TestCase
                     'route' => route('customers.disabled.index'),
                 ],
                 [
-                    'label' => 'Uploaded File Types',
+                    'label' => 'Customer Document Types',
                     'icon' => 'file-import',
                     'route' => route('admin.file-types.index'),
                 ],
@@ -187,20 +200,13 @@ class BuildAdminMenuUnitTest extends TestCase
                     'icon' => 'truck-moving',
                     'route' => route('customers.re-assign.edit'),
                 ],
-            ],
-            'Equipment' => [
-                [
-                    'label' => 'Equipment Categories and Types',
-                    'icon' => 'fas fa-cogs',
-                    'route' => route('equipment.index'),
-                ],
                 [
                     'label' => 'Customer Equipment Data',
                     'icon' => 'fas fa-database',
                     'route' => route('equipment-data.index'),
                 ],
             ],
-            'Tech Tips' => [
+            'Content & Features' => [
                 [
                     'label' => 'Tech Tip Settings',
                     'icon' => 'cog',
@@ -217,39 +223,62 @@ class BuildAdminMenuUnitTest extends TestCase
                     'route' => route('admin.tech-tips.deleted-tips'),
                 ],
                 [
-                    'label' => 'View Flagged Comments',
+                    'label' => 'Flagged Comments',
                     'icon' => 'flag',
                     'route' => route('admin.tech-tips.flagged-comments.index'),
                 ],
-            ],
-            'Settings' => [
                 [
-                    'label' => 'Application Logo',
-                    'icon' => 'fa-image',
-                    'route' => route('admin.logo.edit'),
+                    'label' => 'Feature Management',
+                    'icon' => 'gears',
+                    'route' => route('admin.features.edit'),
                 ],
+            ],
+            'Files & Equipment' => [
+                [
+                    'label' => 'Equipment Categories & Types',
+                    'icon' => 'fas fa-cogs',
+                    'route' => route('equipment.index'),
+                ],
+                [
+                    'label' => 'Equipment Workbooks',
+                    'icon' => 'fa-table',
+                    'route' => route('workbooks.index'),
+                ],
+                [
+                    'label' => 'File Link Settings',
+                    'icon' => 'cog',
+                    'route' => route('admin.links.settings.edit'),
+                ],
+                [
+                    'label' => 'Manage File Links',
+                    'icon' => 'tools',
+                    'route' => route('admin.links.manage.index'),
+                ],
+            ],
+            'Application' => [
                 [
                     'label' => 'Application Configuration',
                     'icon' => 'fa-server',
                     'route' => route('admin.basic-settings.edit'),
                 ],
                 [
+                    'label' => 'Application Logo',
+                    'icon' => 'fa-image',
+                    'route' => route('admin.logo.edit'),
+                ],
+
+                [
                     'label' => 'Email Settings',
                     'icon' => 'fas fa-envelope',
                     'route' => route('admin.email-settings.edit'),
                 ],
-                [
-                    'label' => 'Security Settings',
-                    'icon' => 'fa-lock',
-                    'route' => route('admin.security.index'),
-                ],
-                [
-                    'label' => 'Enable/Disable Features',
-                    'icon' => 'gears',
-                    'route' => route('admin.features.edit'),
-                ],
             ],
             'Maintenance' => [
+                [
+                    'label' => 'System Status',
+                    'icon' => 'temperature-three-quarters',
+                    'route' => route('maint.status.index'),
+                ],
                 [
                     'label' => 'Logs',
                     'icon' => 'fa-bug',
@@ -260,17 +289,10 @@ class BuildAdminMenuUnitTest extends TestCase
                     'icon' => 'fa-hdd',
                     'route' => route('maint.backups.index'),
                 ],
-            ],
-            'File Links' => [
                 [
-                    'label' => 'File Link Settings',
-                    'icon' => 'cog',
-                    'route' => route('admin.links.settings.edit'),
-                ],
-                [
-                    'label' => 'Manage File Links',
-                    'icon' => 'tools',
-                    'route' => route('admin.links.manage.index'),
+                    'label' => 'SSL Certificate',
+                    'icon' => 'fa-lock',
+                    'route' => route('admin.security.index'),
                 ],
             ],
         ];

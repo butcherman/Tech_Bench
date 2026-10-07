@@ -54,14 +54,6 @@ RUN npm install -g npm@12.0.1
 # Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/local/bin/composer
 
-# Bring the docker file in to allow for internal reboot
-COPY ./docker /usr/local/bin/docker
-RUN chmod 775 /usr/local/bin/docker
-
-# Create a group and user to run the Docker file permissions
-RUN addgroup --gid 999 docker
-RUN usermod -a -G docker tbuser
-
 # Use the default production configuration
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 

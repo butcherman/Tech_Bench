@@ -33,6 +33,7 @@ export default { layout: AppLayout };
                     :allow-two-fa="allowTwoFa"
                     :allow-save-device="allowSaveDevice"
                     :saved-devices-count="savedDevicesCount"
+                    class="grow"
                 />
             </div>
             <UserAdministrationActions v-if="!user.deleted_at" :user="user" />

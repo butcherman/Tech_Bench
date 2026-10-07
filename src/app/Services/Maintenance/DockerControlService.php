@@ -3,52 +3,32 @@
 namespace App\Services\Maintenance;
 
 use App\Enums\ContainerList;
-use App\Exceptions\Maintenance\DockerNotAllowedException;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Process;
+use Illuminate\Http\Client\PendingRequest;
+use Illuminate\Support\Facades\Http;
 
-/**
- * @codeCoverageIgnore
- */
 class DockerControlService
 {
+    protected PendingRequest $http;
+
     public function __construct()
     {
-        // Check to see if Docker Commands are allowed
-        $res = Process::run('docker ps');
-
-        if ($res->failed()) {
-            throw new DockerNotAllowedException;
-        }
+        $this->http = Http::baseUrl(config('services.docker_manager.url'))
+            ->withToken(config('services.docker_manager.api_key'));
     }
 
     /**
-     * Reboot a single container.
+     * Get the status of all Docker Containers
      */
-    public function rebootContainer(ContainerList $container): bool
+    public function getDockerStatus(): array
     {
-        // In Testing Environment, we do not want to trigger reboot
-        if (App::environment('testing')) {
-            return true;
-        }
-
-        $status = Process::run('docker restart '.$container->value);
-
-        return $status->successful();
+        return $this->http->get('/containers')->throw()->json('containers');
     }
 
     /**
-     * Reboot all Containers
+     * Reboot a container.
      */
-    public function rebootAllContainers(): void
+    public function rebootContainer(ContainerList $container): void
     {
-        // In Testing Environment, we do not want to trigger reboot
-        if (App::environment('testing')) {
-            return;
-        }
-
-        foreach (ContainerList::cases() as $container) {
-            $this->rebootContainer($container);
-        }
+        $this->http->post('/containers/'.$container->value.'/restart')->throw();
     }
 }

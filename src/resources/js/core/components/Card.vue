@@ -26,7 +26,7 @@ const cardSize = computed(() => {
         >
             <div class="grow">
                 <slot name="title">
-                    {{ title }}
+                    <h4>{{ title }}</h4>
                 </slot>
             </div>
             <div>

@@ -21,10 +21,9 @@ const onEnableUser = () => {
 </script>
 
 <template>
-    <Card>
+    <Card title="User Actions">
         <div class="flex flex-col gap-5">
             <div class="flex flex-col items-center">
-                <h3 class="text-muted w-full">User Actions</h3>
                 <BaseButton
                     text="Enable User"
                     variant="warning"
