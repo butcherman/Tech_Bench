@@ -44,10 +44,9 @@ const onDisableUser = () => {
 </script>
 
 <template>
-    <Card>
+    <Card title="User Actions">
         <div class="flex flex-col gap-5">
             <div class="flex flex-col items-center">
-                <h3 class="text-muted w-full">User Actions</h3>
                 <BaseButton
                     text="Edit User"
                     variant="warning"
@@ -57,7 +56,9 @@ const onDisableUser = () => {
                 />
             </div>
             <div class="flex flex-col gap-2 items-center">
-                <h3 class="text-muted w-full">Password</h3>
+                <h3 class="text-muted w-full border-b border-b-slate-200">
+                    Password
+                </h3>
                 <BaseButton
                     class="w-full lg:w-3/4"
                     text="Set New Password"

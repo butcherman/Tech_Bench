@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import AddButton from "@/core/components/buttons/AddButton.vue";
+import AddBadge from "@/core/components/badges/AddBadge.vue";
 import AppLayout from "@/layouts/AppLayout.vue";
 import Card from "@/core/components/Card.vue";
 import ResourceList from "@/core/components/ResourceList.vue";
@@ -27,7 +27,7 @@ export default { layout: AppLayout };
     <div class="flex justify-center">
         <Card title="Select A Role" size="md">
             <template #append-title>
-                <AddButton
+                <AddBadge
                     text="Create Role"
                     size="sm"
                     :href="create.url()"

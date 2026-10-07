@@ -77,14 +77,6 @@ class BuildAdminMenu
             );
         }
 
-        if ($this->can('App Settings')) {
-            $menu[] = $this->item(
-                'Security Settings',
-                'fa-lock',
-                'admin.security.index'
-            );
-        }
-
         return $menu;
     }
 
@@ -283,6 +275,12 @@ class BuildAdminMenu
                 'Backups',
                 'fa-hdd',
                 'maint.backups.index'
+            ),
+
+            $this->item(
+                'SSL Certificate',
+                'fa-lock',
+                'admin.security.index'
             ),
         ];
     }
