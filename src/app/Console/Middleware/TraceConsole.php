@@ -7,6 +7,9 @@ use Closure;
 use Illuminate\Support\Facades\Context;
 use Illuminate\Support\Facades\Log;
 
+/**
+ * @codeCoverageIgnore
+ */
 class TraceConsole
 {
     public function handle(

@@ -6,9 +6,6 @@ use App\Enums\ContainerList;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Facades\Http;
 
-/**
- * @codeCoverageIgnore
- */
 class DockerControlService
 {
     protected PendingRequest $http;
@@ -30,7 +27,7 @@ class DockerControlService
     /**
      * Reboot a container.
      */
-    public function rebootContainer(ContainerList $container)
+    public function rebootContainer(ContainerList $container): void
     {
         $this->http->post('/containers/'.$container->value.'/restart')->throw();
     }

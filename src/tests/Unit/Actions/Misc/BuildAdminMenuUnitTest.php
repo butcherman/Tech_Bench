@@ -251,6 +251,11 @@ class BuildAdminMenuUnitTest extends TestCase
             ],
             'Maintenance' => [
                 [
+                    'label' => 'Status',
+                    'icon' => 'temperature-three-quarters',
+                    'route' => route('maint.status.index'),
+                ],
+                [
                     'label' => 'Logs',
                     'icon' => 'fa-bug',
                     'route' => route('maint.logs.index'),
