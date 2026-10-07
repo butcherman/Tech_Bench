@@ -10,289 +10,300 @@ class BuildAdminMenu
 {
     use AllowTrait;
 
-    /** @var User */
-    protected $user;
+    protected User $user;
 
-    /** @var array<string, array> */
-    protected $menu;
-
-    /*
-    |---------------------------------------------------------------------------
-    | Based on the users permissions, build the Administration links that they
-    | have permission to view.
-    |---------------------------------------------------------------------------
-    */
+    /**
+     * Build the Administration menu based on the user's
+     * permissions and enabled application features.
+     */
     public function __invoke(User $user): array
     {
         $this->user = $user;
 
-        $this->buildUserMenu();
-        $this->buildCustomerMenu();
-        $this->buildTechTipMenu();
-        $this->buildEquipmentMenu();
-        $this->buildFileLinkMenu();
-        $this->buildSettingsMenu();
-        $this->buildMaintenanceMenu();
-
-        return $this->menu;
+        return array_filter([
+            'Users & Access' => $this->usersAndAccess(),
+            'Customers' => $this->customers(),
+            'Content & Features' => $this->contentAndFeatures(),
+            'Files & Equipment' => $this->filesAndEquipment(),
+            'Application' => $this->application(),
+            'Maintenance' => $this->maintenance(),
+        ]);
     }
 
     /**
-     * Get the administration links for Users
+     * Users, authentication, authorization and security.
      */
-    protected function buildUserMenu(): void
+    protected function usersAndAccess(): array
     {
-        $userBuild = [];
-        if ($this->checkPermission($this->user, 'Manage Users')) {
-            $userBuild = [
-                [
-                    'label' => 'Users',
-                    'icon' => 'fas fa-user-edit',
-                    'route' => route('admin.user.index'),
-                ],
-                [
-                    'label' => 'Create User',
-                    'icon' => 'fas fa-user-plus',
-                    'route' => route('admin.user.create'),
-                ],
-                [
-                    'label' => 'List Disabled Users',
-                    'icon' => 'fas fa-store-alt-slash',
-                    'route' => route('admin.user.deactivated'),
-                ],
-                [
-                    'label' => 'Password Policy',
-                    'icon' => 'fas fa-user-lock',
-                    'route' => route('admin.user.password-policy.edit'),
-                ],
-                [
-                    'label' => 'User Security Settings',
-                    'icon' => 'cog',
-                    'route' => route('admin.user.user-settings.edit'),
-                ],
-            ];
+        $menu = [];
+
+        if ($this->can('Manage Users')) {
+            $menu[] = $this->item(
+                'Users',
+                'fas fa-user-edit',
+                'admin.user.index'
+            );
+
+            $menu[] = $this->item(
+                'Create User',
+                'fas fa-user-plus',
+                'admin.user.create'
+            );
+
+            $menu[] = $this->item(
+                'Disabled Users',
+                'fas fa-store-alt-slash',
+                'admin.user.deactivated'
+            );
+
+            $menu[] = $this->item(
+                'Password Policy',
+                'fas fa-user-lock',
+                'admin.user.password-policy.edit'
+            );
+
+            $menu[] = $this->item(
+                'User Security Settings',
+                'cog',
+                'admin.user.user-settings.edit'
+            );
         }
 
-        if ($this->checkPermission($this->user, 'Manage Permissions')) {
-            $userBuild[] = [
-                'label' => 'Roles and Permissions',
-                'icon' => 'fas fa-users-cog',
-                'route' => route('admin.user-roles.index'),
-            ];
+        if ($this->can('Manage Permissions')) {
+            $menu[] = $this->item(
+                'Roles & Permissions',
+                'fas fa-users-cog',
+                'admin.user-roles.index'
+            );
         }
 
-        $this->menu['Users'] = $userBuild;
+        if ($this->can('App Settings')) {
+            $menu[] = $this->item(
+                'Security Settings',
+                'fa-lock',
+                'admin.security.index'
+            );
+        }
+
+        return $menu;
     }
 
     /**
-     * Build Administration menu for Customers
+     * Customer-specific configuration and data.
      */
-    protected function buildCustomerMenu(): void
+    protected function customers(): array
     {
-        $custMenu = [];
-
-        if ($this->checkPermission($this->user, 'Manage Customers')) {
-            $custMenu = [
-                [
-                    'label' => 'Customer Settings',
-                    'icon' => 'cog',
-                    'route' => route('customers.settings.edit'),
-                ],
-                [
-                    'label' => 'Disabled Customers',
-                    'icon' => 'ban',
-                    'route' => route('customers.disabled.index'),
-                ],
-                [
-                    'label' => 'Uploaded File Types',
-                    'icon' => 'file-import',
-                    'route' => route('admin.file-types.index'),
-                ],
-                [
-                    'label' => 'Contact Phone Types',
-                    'icon' => 'phone',
-                    'route' => route('admin.phone-types.index'),
-                ],
-                [
-                    'label' => 'Re-Assign Customer Site',
-                    'icon' => 'truck-moving',
-                    'route' => route('customers.re-assign.edit'),
-                ],
-            ];
+        if (! $this->can('Manage Customers')) {
+            return [];
         }
 
-        $this->menu['Customers'] = $custMenu;
+        return [
+            $this->item(
+                'Customer Settings',
+                'cog',
+                'customers.settings.edit'
+            ),
+
+            $this->item(
+                'Disabled Customers',
+                'ban',
+                'customers.disabled.index'
+            ),
+
+            $this->item(
+                'Customer Document Types',
+                'file-import',
+                'admin.file-types.index'
+            ),
+
+            $this->item(
+                'Contact Phone Types',
+                'phone',
+                'admin.phone-types.index'
+            ),
+
+            $this->item(
+                'Re-Assign Customer Site',
+                'truck-moving',
+                'customers.re-assign.edit'
+            ),
+
+            $this->item(
+                'Customer Equipment Data',
+                'fas fa-database',
+                'equipment-data.index'
+            ),
+        ];
     }
 
     /**
-     * Build administration menu for Equipment, Categories and Data Types
+     * Tech Tips and application feature management.
      */
-    protected function buildEquipmentMenu(): void
+    protected function contentAndFeatures(): array
     {
-        $equipMenu = [];
+        $menu = [];
 
-        if ($this->checkPermission($this->user, 'Manage Equipment')) {
-            $equipMenu = [
-                [
-                    'label' => 'Equipment Categories and Types',
-                    'icon' => 'fas fa-cogs',
-                    'route' => route('equipment.index'),
-                ],
-                [
-                    'label' => 'Customer Equipment Data',
-                    'icon' => 'fas fa-database',
-                    'route' => route('equipment-data.index'),
-                ],
-            ];
-        }
+        if ($this->can('Manage Tech Tips')) {
+            $menu[] = $this->item(
+                'Tech Tip Settings',
+                'cog',
+                'admin.tech-tips.settings.edit'
+            );
 
-        if (
-            config('customer.enable_workbooks')
-            && $this->checkPermission($this->user, 'Manage Equipment Workbooks')
-        ) {
-            $equipMenu[] = [
-                'label' => 'Equipment Workbooks',
-                'icon' => 'fa-table',
-                'route' => route('workbooks.index'),
-            ];
-        }
+            $menu[] = $this->item(
+                'Tech Tip Types',
+                'file-alt',
+                'admin.tech-tips.tip-types.index'
+            );
 
-        $this->menu['Equipment'] = $equipMenu;
-    }
-
-    /**
-     * Build Administration Menu for Tech Tips
-     */
-    protected function buildTechTipMenu(): void
-    {
-        $techTipMenu = [];
-
-        if ($this->checkPermission($this->user, 'Manage Tech Tips')) {
-            $techTipMenu = [
-                [
-                    'label' => 'Tech Tip Settings',
-                    'icon' => 'cog',
-                    'route' => route('admin.tech-tips.settings.edit'),
-                ],
-                [
-                    'label' => 'Tech Tip Types',
-                    'icon' => 'file-alt',
-                    'route' => route('admin.tech-tips.tip-types.index'),
-                ],
-                [
-                    'label' => 'Disabled Tech Tips',
-                    'icon' => 'ban',
-                    'route' => route('admin.tech-tips.deleted-tips'),
-                ],
-            ];
+            $menu[] = $this->item(
+                'Disabled Tech Tips',
+                'ban',
+                'admin.tech-tips.deleted-tips'
+            );
 
             if ($this->user->features()->active(TechTipCommentFeature::class)) {
-                $techTipMenu[] = [
-                    'label' => 'View Flagged Comments',
-                    'icon' => 'flag',
-                    'route' => route('admin.tech-tips.flagged-comments.index'),
-                ];
+                $menu[] = $this->item(
+                    'Flagged Comments',
+                    'flag',
+                    'admin.tech-tips.flagged-comments.index'
+                );
             }
         }
 
-        $this->menu['Tech Tips'] = $techTipMenu;
-    }
-
-    /**
-     * Build Administration Menu for Application Settings
-     */
-    protected function buildSettingsMenu(): void
-    {
-        $settingsMenu = [];
-
-        if ($this->checkPermission($this->user, 'App Settings')) {
-            $settingsMenu = [
-                [
-                    'label' => 'Application Logo',
-                    'icon' => 'fa-image',
-                    'route' => route('admin.logo.edit'),
-                ],
-                [
-                    'label' => 'Application Configuration',
-                    'icon' => 'fa-server',
-                    'route' => route('admin.basic-settings.edit'),
-                ],
-                [
-                    'label' => 'Email Settings',
-                    'icon' => 'fas fa-envelope',
-                    'route' => route('admin.email-settings.edit'),
-                ],
-                [
-                    'label' => 'Security Settings',
-                    'icon' => 'fa-lock',
-                    'route' => route('admin.security.index'),
-                ],
-                [
-                    'label' => 'Enable/Disable Features',
-                    'icon' => 'gears',
-                    'route' => route('admin.features.edit'),
-                ],
-            ];
+        if ($this->can('App Settings')) {
+            $menu[] = $this->item(
+                'Feature Management',
+                'gears',
+                'admin.features.edit'
+            );
         }
 
-        $this->menu['Settings'] = $settingsMenu;
+        return $menu;
     }
 
     /**
-     * Build administration menu for Application Maintenance
+     * Equipment configuration and file-related functionality.
      */
-    protected function buildMaintenanceMenu(): void
+    protected function filesAndEquipment(): array
     {
-        $maintMenu = [];
+        $menu = [];
 
-        if ($this->checkPermission($this->user, 'App Settings')) {
-            $maintMenu = [
-                [
-                    'label' => 'Status',
-                    'icon' => 'temperature-three-quarters',
-                    'route' => route('maint.status.index'),
-                ],
-                [
-                    'label' => 'Logs',
-                    'icon' => 'fa-bug',
-                    'route' => route('maint.logs.index'),
-                ],
-                [
-                    'label' => 'Backups',
-                    'icon' => 'fa-hdd',
-                    'route' => route('maint.backups.index'),
-                ],
-            ];
+        if ($this->can('Manage Equipment')) {
+            $menu[] = $this->item(
+                'Equipment Categories & Types',
+                'fas fa-cogs',
+                'equipment.index'
+            );
+
+            if (config('customer.enable_workbooks')) {
+                if ($this->can('Manage Equipment Workbooks')) {
+                    $menu[] = $this->item(
+                        'Equipment Workbooks',
+                        'fa-table',
+                        'workbooks.index'
+                    );
+                }
+            }
         }
-
-        $this->menu['Maintenance'] = $maintMenu;
-    }
-
-    /**
-     * Administrative menu for File Links
-     */
-    protected function buildFileLinkMenu(): void
-    {
-        $fileLinkMenu = [];
 
         if (
             config('file-link.feature_enabled')
-            && $this->checkPermission($this->user, 'Manage File Links')
+            && $this->can('Manage File Links')
         ) {
-            $fileLinkMenu = [
-                [
-                    'label' => 'File Link Settings',
-                    'icon' => 'cog',
-                    'route' => route('admin.links.settings.edit'),
-                ],
-                [
-                    'label' => 'Manage File Links',
-                    'icon' => 'tools',
-                    'route' => route('admin.links.manage.index'),
-                ],
-            ];
+            $menu[] = $this->item(
+                'File Link Settings',
+                'cog',
+                'admin.links.settings.edit'
+            );
+
+            $menu[] = $this->item(
+                'Manage File Links',
+                'tools',
+                'admin.links.manage.index'
+            );
         }
 
-        $this->menu['File Links'] = $fileLinkMenu;
+        return $menu;
+    }
+
+    /**
+     * Application-wide configuration.
+     */
+    protected function application(): array
+    {
+        if (! $this->can('App Settings')) {
+            return [];
+        }
+
+        return [
+            $this->item(
+                'Application Configuration',
+                'fa-server',
+                'admin.basic-settings.edit'
+            ),
+
+            $this->item(
+                'Application Logo',
+                'fa-image',
+                'admin.logo.edit'
+            ),
+
+            $this->item(
+                'Email Settings',
+                'fas fa-envelope',
+                'admin.email-settings.edit'
+            ),
+        ];
+    }
+
+    /**
+     * Application maintenance and diagnostics.
+     */
+    protected function maintenance(): array
+    {
+        if (! $this->can('App Settings')) {
+            return [];
+        }
+
+        return [
+            $this->item(
+                'System Status',
+                'temperature-three-quarters',
+                'maint.status.index'
+            ),
+
+            $this->item(
+                'Logs',
+                'fa-bug',
+                'maint.logs.index'
+            ),
+
+            $this->item(
+                'Backups',
+                'fa-hdd',
+                'maint.backups.index'
+            ),
+        ];
+    }
+
+    /**
+     * Determine whether the current user has a permission.
+     */
+    protected function can(string $permission): bool
+    {
+        return $this->checkPermission($this->user, $permission);
+    }
+
+    /**
+     * Build a menu item.
+     */
+    protected function item(string $label, string $icon, string $routeName): array
+    {
+        return [
+            'label' => $label,
+            'icon' => $icon,
+            'route' => route($routeName),
+        ];
     }
 }
