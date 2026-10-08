@@ -1,30 +1,41 @@
 <script setup lang="ts">
+import { router } from "@inertiajs/vue3";
 import { useSetupState } from "../state/setupState";
 
-const { activeStep, stepList } = useSetupState();
+const { stepList, getStepUrl } = useSetupState();
 
 const getStepIcon = (step: InitStep): string => {
-    if (activeStep.value === step.id) {
-        return "circle";
-    }
-
     if (step.completed) {
         return "check";
+    }
+
+    if (step.inProgress) {
+        return "circle";
     }
 
     return "fa-regular fa-circle";
 };
 
 const getStepClass = (step: InitStep): string => {
-    if (activeStep.value === step.id) {
-        return "text-warning";
-    }
-
     if (step.completed) {
         return "text-success";
     }
 
+    if (step.inProgress) {
+        return "text-warning";
+    }
+
     return "";
+};
+
+const goToSetp = (step: InitStep) => {
+    if (!step.completed) {
+        return;
+    }
+
+    let url = getStepUrl(step);
+
+    router.get(url);
 };
 </script>
 
@@ -34,6 +45,8 @@ const getStepClass = (step: InitStep): string => {
             v-for="step in stepList"
             :key="step.id"
             class="relative flex items-center"
+            :class="{ pointer: step.completed || step.inProgress }"
+            @click="goToSetp(step)"
         >
             <div class="absolute -left-8.5 bg-white">
                 <fa-icon

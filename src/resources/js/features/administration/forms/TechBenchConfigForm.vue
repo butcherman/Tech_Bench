@@ -2,6 +2,7 @@
 import prettyBytes from "pretty-bytes";
 import RangeSliderInput from "@/core/forms/components/validatedInputs/RangeSliderInput.vue";
 import SelectGroupedInput from "@/core/forms/components/validatedInputs/SelectGroupedInput.vue";
+import SubmitButton from "@/core/components/buttons/SubmitButton.vue";
 import TextInput from "@/core/forms/components/validatedInputs/TextInput.vue";
 import VueForm from "@/core/forms/components/VueForm.vue";
 import { object, string, number, array } from "yup";
@@ -124,5 +125,10 @@ const schema = object({
                 </div>
             </fieldset>
         </fieldset>
+        <template #submit-button>
+            <slot name="submit-button">
+                <SubmitButton class="w-full" :text="submitText" />
+            </slot>
+        </template>
     </VueForm>
 </template>

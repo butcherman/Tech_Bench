@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import BaseButton from "@/core/components/buttons/BaseButton.vue";
 import InitLayout from "@/layouts/InitLayout.vue";
+import { onMounted } from "vue";
 import { step1 } from "@/wayfinder/routes/init/index.js";
 import { useSetupState } from "@/features/init/state/setupState";
 
-const { markStepComplete } = useSetupState();
+const { markStepComplete, markStepInProgress } = useSetupState();
 
 const props = defineProps<{}>();
+
+onMounted(() => markStepInProgress(0));
 </script>
 
 <script lang="ts">
