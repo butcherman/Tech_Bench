@@ -1,5 +1,5 @@
-import { usePage } from "@inertiajs/vue3";
-import { computed, ref } from "vue";
+import { router } from "@inertiajs/vue3";
+import { ref } from "vue";
 import {
     step1,
     step2,
@@ -9,9 +9,7 @@ import {
     welcome,
 } from "@/wayfinder/routes/init";
 
-const page = usePage();
-
-const activeStep = computed(() => page.props.step ?? 0);
+const activeStep = ref<number>(0);
 
 const stepList = ref<InitStep[]>([
     {
@@ -53,6 +51,8 @@ const stepList = ref<InitStep[]>([
 ]);
 
 export const useSetupState = () => {
+    const showForm = ref(true);
+
     const getStep = (stepId: number): InitStep | undefined => {
         return stepList.value.find((st) => st.id === stepId);
     };
@@ -62,6 +62,8 @@ export const useSetupState = () => {
 
         if (step) {
             step.inProgress = true;
+            activeStep.value = stepId;
+            showForm.value = true;
         }
     };
 
@@ -87,11 +89,24 @@ export const useSetupState = () => {
         );
     };
 
+    const onStepSuccess = () => {
+        showForm.value = false;
+        markStepComplete(activeStep.value);
+
+        let nextStep = getStep(activeStep.value + 1);
+
+        if (nextStep) {
+            router.get(getStepUrl(nextStep));
+        }
+    };
+
     return {
         activeStep,
         stepList,
+        showForm,
         markStepInProgress,
         markStepComplete,
         getStepUrl,
+        onStepSuccess,
     };
 };

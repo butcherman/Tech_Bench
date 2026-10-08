@@ -1,19 +1,32 @@
 <script setup lang="ts">
+import BaseButton from "@/core/components/buttons/BaseButton.vue";
 import InitLayout from "@/layouts/InitLayout.vue";
+import SubmitButton from "@/core/components/buttons/SubmitButton.vue";
+import TechBenchConfigForm from "@/features/administration/forms/TechBenchConfigForm.vue";
+import { onMounted } from "vue";
+import { welcome } from "@/wayfinder/routes/init";
 import { useSetupState } from "@/features/init/state/setupState";
 
-const { stepList, markStepComplete } = useSetupState();
+const props = defineProps<{
+    rules: string[];
+    roles: UserRole[];
+    user: User;
+    hasPass: boolean;
+}>();
 
-const props = defineProps<{}>();
+const { markStepInProgress, onStepSuccess, showForm } = useSetupState();
 
-console.log(stepList.value);
+onMounted(() => markStepInProgress(4));
 </script>
 
 <script lang="ts">
 export default { layout: InitLayout };
 </script>
 <template>
-    <div class="flex justify-center">
-        <h1>Step 4</h1>
+    <div v-if="showForm" class="flex flex-col justify-center p-2">
+        <h1 class="text-center">Administrator</h1>
+        <p class="text-center">
+            Lastly, lets make sure that the Administrator Account is secure.
+        </p>
     </div>
 </template>

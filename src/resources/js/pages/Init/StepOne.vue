@@ -3,12 +3,9 @@ import BaseButton from "@/core/components/buttons/BaseButton.vue";
 import InitLayout from "@/layouts/InitLayout.vue";
 import SubmitButton from "@/core/components/buttons/SubmitButton.vue";
 import TechBenchConfigForm from "@/features/administration/forms/TechBenchConfigForm.vue";
-import { onMounted, ref } from "vue";
-import { router } from "@inertiajs/vue3";
-import { welcome, step2 } from "@/wayfinder/routes/init";
+import { onMounted } from "vue";
+import { welcome } from "@/wayfinder/routes/init";
 import { useSetupState } from "@/features/init/state/setupState";
-
-const { markStepComplete, markStepInProgress } = useSetupState();
 
 defineProps<{
     settings: {
@@ -22,14 +19,7 @@ defineProps<{
     timezoneList: TimezoneList[];
 }>();
 
-const showForm = ref(true);
-
-const onSuccess = () => {
-    showForm.value = false;
-
-    markStepComplete(1);
-    router.get(step2.url());
-};
+const { markStepInProgress, onStepSuccess, showForm } = useSetupState();
 
 onMounted(() => markStepInProgress(1));
 </script>
@@ -45,7 +35,12 @@ export default { layout: InitLayout };
             enter the Full URL, the Timezone and the maximum filesize upload
             that will be allowed.
         </p>
-        <TechBenchConfigForm :settings :timezoneList init @success="onSuccess">
+        <TechBenchConfigForm
+            :settings
+            :timezoneList
+            init
+            @success="onStepSuccess"
+        >
             <template #submit-button>
                 <div class="flex justify-center gap-3">
                     <BaseButton

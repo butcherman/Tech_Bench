@@ -2,16 +2,6 @@
 import Card from "@/core/components/Card.vue";
 import FlashAlert from "./components/FlashAlert.vue";
 import SetupProgress from "@/features/init/components/SetupProgress.vue";
-import { onMounted } from "vue";
-import { useSetupState } from "@/features/init/state/setupState";
-
-const props = defineProps<{
-    step?: number;
-}>();
-
-const { markStepInProgress } = useSetupState();
-
-onMounted(() => markStepInProgress(props.step ?? 0));
 </script>
 
 <template>

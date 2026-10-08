@@ -29,7 +29,7 @@ const getStepClass = (step: InitStep): string => {
 };
 
 const goToSetp = (step: InitStep) => {
-    if (!step.completed) {
+    if (!step.completed && !step.inProgress) {
         return;
     }
 

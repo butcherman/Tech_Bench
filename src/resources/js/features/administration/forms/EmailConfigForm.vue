@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import Collapse from "@/core/components/Collapse.vue";
 import SelectInput from "@/core/forms/components/validatedInputs/SelectInput.vue";
+import SubmitButton from "@/core/components/buttons/SubmitButton.vue";
 import SwitchInput from "@/core/forms/components/validatedInputs/SwitchInput.vue";
 import TextInput from "@/core/forms/components/validatedInputs/TextInput.vue";
 import VueForm from "@/core/forms/components/VueForm.vue";
@@ -65,52 +66,58 @@ const schema = object({
         :submit-route="submitRoute"
         :submit-text="submitText"
         :validation-schema="schema"
-        v-slot="{ values }"
         do-not-reset
         @success="$emit('success')"
     >
-        <TextInput
-            type="email"
-            name="from_address"
-            label="From Email Address"
-            placeholder="no-reply@your-domain.com"
-            help="The From Email Address that will show when an email is sent"
-        />
-        <TextInput
-            name="host"
-            label="SMTP Host"
-            placeholder="smtp.your-email-server.com"
-        />
-        <TextInput type="number" name="port" label="SMTP Port" />
-        <SelectInput
-            name="encryption"
-            label="Encryption Method"
-            :list="encryptionTypes"
-        />
-        <div class="flex justify-center">
-            <div>
-                <SwitchInput
-                    name="require_auth"
-                    label="Require Authentication"
-                />
+        <template #default="{ values }">
+            <TextInput
+                type="email"
+                name="from_address"
+                label="From Email Address"
+                placeholder="no-reply@your-domain.com"
+                help="The From Email Address that will show when an email is sent"
+            />
+            <TextInput
+                name="host"
+                label="SMTP Host"
+                placeholder="smtp.your-email-server.com"
+            />
+            <TextInput type="number" name="port" label="SMTP Port" />
+            <SelectInput
+                name="encryption"
+                label="Encryption Method"
+                :list="encryptionTypes"
+            />
+            <div class="flex justify-center">
+                <div>
+                    <SwitchInput
+                        name="require_auth"
+                        label="Require Authentication"
+                    />
+                </div>
             </div>
-        </div>
-        <Collapse :show="values.require_auth">
-            <div class="flex flex-col gap-2">
-                <TextInput
-                    id="auth-username"
-                    name="username"
-                    label="Username"
-                    placeholder="Username"
-                />
-                <TextInput
-                    id="auth-password"
-                    type="password"
-                    name="password"
-                    label="Password"
-                    placeholder="Password"
-                />
-            </div>
-        </Collapse>
+            <Collapse :show="values.require_auth">
+                <div class="flex flex-col gap-2">
+                    <TextInput
+                        id="auth-username"
+                        name="username"
+                        label="Username"
+                        placeholder="Username"
+                    />
+                    <TextInput
+                        id="auth-password"
+                        type="password"
+                        name="password"
+                        label="Password"
+                        placeholder="Password"
+                    />
+                </div>
+            </Collapse>
+        </template>
+        <template #submit-button>
+            <slot name="submit-button">
+                <SubmitButton class="w-full" :text="submitText" />
+            </slot>
+        </template>
     </VueForm>
 </template>

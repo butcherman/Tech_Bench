@@ -2,10 +2,9 @@
 import BaseButton from "@/core/components/buttons/BaseButton.vue";
 import InitLayout from "@/layouts/InitLayout.vue";
 import { onMounted } from "vue";
-import { step1 } from "@/wayfinder/routes/init/index.js";
 import { useSetupState } from "@/features/init/state/setupState";
 
-const { markStepComplete, markStepInProgress } = useSetupState();
+const { markStepInProgress, onStepSuccess } = useSetupState();
 
 const props = defineProps<{}>();
 
@@ -22,12 +21,7 @@ export default { layout: InitLayout };
             Let's get your Tech Bench installation configured. This will take
             just a few minutes.
         </p>
-        <BaseButton
-            :href="step1.url()"
-            class="w-3/4"
-            text="Get Started"
-            @click="markStepComplete(0)"
-        />
+        <BaseButton class="w-3/4" text="Get Started" @click="onStepSuccess" />
         <!-- <BaseButton class="w-3/4" text="Recover From Backup" /> -->
     </div>
 </template>

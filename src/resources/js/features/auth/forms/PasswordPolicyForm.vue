@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import RangeSliderInput from "@/core/forms/components/validatedInputs/RangeSliderInput.vue";
+import SubmitButton from "@/core/components/buttons/SubmitButton.vue";
 import SwitchInput from "@/core/forms/components/validatedInputs/SwitchInput.vue";
 import TextInput from "@/core/forms/components/validatedInputs/TextInput.vue";
 import VueForm from "@/core/forms/components/VueForm.vue";
@@ -93,5 +94,10 @@ const schema = object({
                 />
             </div>
         </fieldset>
+        <template #submit-button>
+            <slot name="submit-button">
+                <SubmitButton class="w-full" :text="submitText" />
+            </slot>
+        </template>
     </VueForm>
 </template>
