@@ -39,7 +39,7 @@ const initValues = {
     url: props.settings.url,
     company_name: props.settings.company_name,
     timezone: props.settings.timezone,
-    max_filesize: props.settings.max_filesize,
+    max_filesize: props.settings.max_filesize.toString(),
     welcome_message: props.settings.welcome_message,
     home_links: props.settings.home_links,
 };
@@ -99,7 +99,7 @@ const schema = object({
             <TextInput
                 name="welcome_message"
                 label="Welcome Message"
-                help="This message will show on the home page under the Company Logo"
+                help-message="This message will show on the home page under the Company Logo"
             />
             <fieldset class="border rounded-xl p-2 mt-4 flex flex-col gap-3">
                 <legend class="text-muted">
