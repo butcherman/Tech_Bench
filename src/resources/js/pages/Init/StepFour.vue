@@ -1,15 +1,11 @@
 <script setup lang="ts">
-import BaseButton from "@/core/components/buttons/BaseButton.vue";
+import InitAdminUserForm from "@/features/init/forms/InitAdminUserForm.vue";
 import InitLayout from "@/layouts/InitLayout.vue";
-import SubmitButton from "@/core/components/buttons/SubmitButton.vue";
-import TechBenchConfigForm from "@/features/administration/forms/TechBenchConfigForm.vue";
 import { onMounted } from "vue";
-import { welcome } from "@/wayfinder/routes/init";
 import { useSetupState } from "@/features/init/state/setupState";
 
 const props = defineProps<{
     rules: string[];
-    roles: UserRole[];
     user: User;
     hasPass: boolean;
 }>();
@@ -28,5 +24,6 @@ export default { layout: InitLayout };
         <p class="text-center">
             Lastly, lets make sure that the Administrator Account is secure.
         </p>
+        <InitAdminUserForm :user @success="onStepSuccess" />
     </div>
 </template>
