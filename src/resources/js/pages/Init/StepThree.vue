@@ -1,11 +1,8 @@
 <script setup lang="ts">
-import BaseButton from "@/core/components/buttons/BaseButton.vue";
 import InitLayout from "@/layouts/InitLayout.vue";
-import PasswordPolicyForm from "@/features/auth/forms/PasswordPolicyForm.vue";
-import SubmitButton from "@/core/components/buttons/SubmitButton.vue";
+import InitUserSecurityForm from "@/features/init/forms/InitUserSecurityForm.vue";
 import { onMounted } from "vue";
 import { useSetupState } from "@/features/init/state/setupState";
-import { step2 } from "@/wayfinder/routes/init";
 
 const { markStepInProgress, onStepSuccess } = useSetupState();
 
@@ -24,19 +21,8 @@ export default { layout: InitLayout };
         <h1 class="text-center">Security</h1>
         <p class="text-center">
             Now we will setup User Security Settings. Adjust the password policy
-            as you see fit.
+            and MFA settings as you see fit.
         </p>
-        <PasswordPolicyForm :policy init @success="onStepSuccess">
-            <template #submit-button>
-                <div class="flex justify-center gap-3">
-                    <BaseButton
-                        :href="step2.url()"
-                        class="basis-1/3"
-                        text="Back"
-                    />
-                    <SubmitButton class="basis-1/3" text="Next" />
-                </div>
-            </template>
-        </PasswordPolicyForm>
+        <InitUserSecurityForm :policy @success="onStepSuccess" />
     </div>
 </template>

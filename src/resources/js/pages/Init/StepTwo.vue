@@ -9,6 +9,8 @@ import { useSetupState } from "@/features/init/state/setupState";
 
 const { markStepInProgress, onStepSuccess, showForm } = useSetupState();
 
+// TODO - Add test email
+
 defineProps<{
     settings: {
         from_address: string;

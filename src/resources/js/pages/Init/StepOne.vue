@@ -1,10 +1,7 @@
 <script setup lang="ts">
-import BaseButton from "@/core/components/buttons/BaseButton.vue";
 import InitLayout from "@/layouts/InitLayout.vue";
-import SubmitButton from "@/core/components/buttons/SubmitButton.vue";
-import TechBenchConfigForm from "@/features/administration/forms/TechBenchConfigForm.vue";
+import InitApplicationForm from "@/features/init/forms/InitApplicationForm.vue";
 import { onMounted } from "vue";
-import { welcome } from "@/wayfinder/routes/init";
 import { useSetupState } from "@/features/init/state/setupState";
 
 defineProps<{
@@ -35,22 +32,11 @@ export default { layout: InitLayout };
             enter the Full URL, the Timezone and the maximum filesize upload
             that will be allowed.
         </p>
-        <TechBenchConfigForm
+        <InitApplicationForm
             :settings
             :timezoneList
             init
             @success="onStepSuccess"
-        >
-            <template #submit-button>
-                <div class="flex justify-center gap-3">
-                    <BaseButton
-                        :href="welcome.url()"
-                        class="basis-1/3"
-                        text="Back"
-                    />
-                    <SubmitButton class="basis-1/3" text="Next" />
-                </div>
-            </template>
-        </TechBenchConfigForm>
+        />
     </div>
 </template>
