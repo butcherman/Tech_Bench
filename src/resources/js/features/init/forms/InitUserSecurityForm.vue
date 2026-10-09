@@ -14,7 +14,9 @@ defineEmits<{
 }>();
 
 const props = defineProps<{
-    policy: PasswordPolicy;
+    policy: PasswordPolicy & {
+        twoFa: MultiFactorConfig;
+    };
 }>();
 
 const initValues = {
@@ -26,12 +28,12 @@ const initValues = {
     contains_special: props.policy.contains_special,
     disable_compromised: props.policy.disable_compromised,
     twoFa: {
-        enabled: true,
-        required: false,
-        allow_save_device: true,
+        enabled: props.policy.twoFa.enabled ?? true,
+        required: props.policy.twoFa.required ?? false,
+        allow_save_device: props.policy.twoFa.allow_save_device ?? true,
         methods: {
-            email: true,
-            authenticator: true,
+            email: props.policy.twoFa.allow_via_email ?? true,
+            authenticator: props.policy.twoFa.allow_via_authenticator ?? true,
         },
     },
 };

@@ -7,7 +7,9 @@ import { useSetupState } from "@/features/init/state/setupState";
 const { markStepInProgress, onStepSuccess } = useSetupState();
 
 defineProps<{
-    policy: PasswordPolicy;
+    policy: PasswordPolicy & {
+        twoFa: MultiFactorConfig;
+    };
 }>();
 
 onMounted(() => markStepInProgress(3));
