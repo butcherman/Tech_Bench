@@ -49,12 +49,13 @@ class BuildApplication
      */
     protected function buildUserSettings(): void
     {
-        event(new AdministrationEvent('Saving Password Policy'));
+        event(new AdministrationEvent('Saving Security Policy'));
 
         $svc = new UserGlobalSettingsService;
-        $process = collect($this->appSettingsData['user-settings']);
+        $process = collect($this->appSettingsData['security']);
 
         $svc->savePasswordPolicy($process);
+        $svc->saveTwoFaSettings($process);
     }
 
     /**
@@ -74,7 +75,7 @@ class BuildApplication
     {
         event(new AdministrationEvent('Saving Administrator Password'));
 
-        $pass = $this->appSettingsData['administrator-password']['password'];
+        $pass = $this->appSettingsData['admin']['password'];
         $user = User::find(1);
         $user->forceFill([
             'password' => Hash::make($pass),
@@ -99,10 +100,10 @@ class BuildApplication
      */
     protected function buildBasicSettings(): void
     {
-        event(new AdministrationEvent('Saving App Settings'));
+        event(new AdministrationEvent('Saving Application Settings'));
 
         $svc = new ApplicationSettingsService;
-        $process = collect($this->appSettingsData['basic-settings']);
+        $process = collect($this->appSettingsData['application-settings']);
 
         $svc->updateBasicSettings($process);
     }

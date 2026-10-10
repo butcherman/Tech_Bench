@@ -2,7 +2,7 @@
 import BaseButton from "@/core/components/buttons/BaseButton.vue";
 import EditButton from "@/core/components/buttons/EditButton.vue";
 import { computed } from "vue";
-import { step1, step2, step3, step4 } from "@/wayfinder/routes/init";
+import { step1, step2, step3, step4, finish } from "@/wayfinder/routes/init";
 
 const props = defineProps<{
     applicationSettings: {
@@ -109,7 +109,11 @@ const mfaStatus = computed(() => {
             </div>
         </div>
         <div class="mt-4 flex justify-center">
-            <BaseButton text="Complete Setup" class="w-3/4" />
+            <BaseButton
+                :href="finish.url()"
+                text="Complete Setup"
+                class="w-3/4"
+            />
         </div>
     </div>
 </template>
