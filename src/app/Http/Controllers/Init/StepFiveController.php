@@ -18,6 +18,10 @@ class StepFiveController extends Controller
         $summary['admin']['password'] = '*****';
         $summary['admin']['password_confirmation'] = '*****';
 
+        if ($summary['email-settings']['password']) {
+            $summary['email-settings']['password'] = '*****';
+        }
+
         return Inertia::render(
             'Init/StepFive',
             array_merge($summary, ['step' => 5])

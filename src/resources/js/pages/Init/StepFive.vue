@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import InitLayout from "@/layouts/InitLayout.vue";
+import VerifySettings from "@/features/init/components/VerifySettings.vue";
 import { useSetupState } from "@/features/init/state/setupState";
 
 const { stepList, markStepComplete } = useSetupState();
@@ -10,6 +11,7 @@ const props = defineProps<{
         timezone: string;
         max_filesize: number;
         company_name: string;
+        welcome_message: string | null;
     };
     emailSettings: {
         from_address: string;
@@ -31,12 +33,9 @@ console.log(stepList.value);
 export default { layout: InitLayout };
 </script>
 <template>
-    <div class="flex justify-center">
-        <h1>Step 5</h1>
-        <div>
-            <pre>
-                {{ props }}
-            </pre>
-        </div>
+    <div class="flex flex-col gap-4 justify-center items-center h-full">
+        <h1 class="text-center">Review Your Configuration</h1>
+        <VerifySettings v-bind="props" />
+        <!-- <pre>{{ props }}</pre> -->
     </div>
 </template>

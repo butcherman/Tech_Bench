@@ -14,8 +14,10 @@ interface MultiFactorConfig {
     enabled: boolean;
     required: boolean;
     allow_save_device: boolean;
-    allow_via_email: boolean;
-    allow_via_authenticator: boolean;
+    methods: {
+        email: boolean;
+        authenticator: boolean;
+    };
 }
 
 interface OathConfig {

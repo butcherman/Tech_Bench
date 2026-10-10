@@ -14,39 +14,44 @@ defineEmits<{
 }>();
 
 const props = defineProps<{
-    policy: PasswordPolicy & {
+    policy: {
+        password: PasswordPolicy;
         twoFa: MultiFactorConfig;
     };
 }>();
 
 const initValues = {
-    expire: String(props.policy.expire),
-    min_length: String(props.policy.min_length),
-    contains_uppercase: props.policy.contains_uppercase,
-    contains_lowercase: props.policy.contains_lowercase,
-    contains_number: props.policy.contains_number,
-    contains_special: props.policy.contains_special,
-    disable_compromised: props.policy.disable_compromised,
+    password: {
+        expire: String(props.policy.password.expire),
+        min_length: String(props.policy.password.min_length),
+        contains_uppercase: props.policy.password.contains_uppercase,
+        contains_lowercase: props.policy.password.contains_lowercase,
+        contains_number: props.policy.password.contains_number,
+        contains_special: props.policy.password.contains_special,
+        disable_compromised: props.policy.password.disable_compromised,
+    },
     twoFa: {
         enabled: props.policy.twoFa.enabled ?? true,
         required: props.policy.twoFa.required ?? false,
         allow_save_device: props.policy.twoFa.allow_save_device ?? true,
         methods: {
-            email: props.policy.twoFa.allow_via_email ?? true,
-            authenticator: props.policy.twoFa.allow_via_authenticator ?? true,
+            email: props.policy.twoFa.methods.email ?? true,
+            authenticator: props.policy.twoFa.methods.authenticator ?? true,
         },
     },
 };
 
 const schema = object({
-    expire: number().required(),
-    min_length: number().required(),
-    contains_uppercase: boolean().required(),
-    contains_lowercase: boolean().required(),
-    contains_number: boolean().required(),
-    contains_special: boolean().required(),
-    disable_compromised: boolean().required(),
-    twoFa: object({
+    password: object<PasswordPolicy>({
+        expire: number().required(),
+        min_length: number().required(),
+        contains_uppercase: boolean().required(),
+        contains_lowercase: boolean().required(),
+        contains_number: boolean().required(),
+        contains_special: boolean().required(),
+        disable_compromised: boolean().required(),
+    }),
+    twoFa: object<MultiFactorConfig>({
         required: boolean().required(),
         allow_save_device: boolean().required(),
         methods: object({
@@ -70,13 +75,13 @@ const schema = object({
     >
         <TextInput
             id="password-expires"
-            name="expire"
+            name="password.expire"
             label="Password Expires in Days (enter 0 for no expiration)"
         />
         <fieldset>
             <legend>Password Complexity</legend>
             <RangeSliderInput
-                name="min_length"
+                name="password.min_length"
                 label="Password Minimum Length"
                 value-text="Length"
                 :min="3"
@@ -88,20 +93,23 @@ const schema = object({
                     following:
                 </p>
                 <SwitchInput
-                    name="contains_uppercase"
+                    name="password.contains_uppercase"
                     label="Uppercase Letter"
                 />
                 <SwitchInput
-                    name="contains_lowercase"
+                    name="password.contains_lowercase"
                     label="Lowercase Letter"
                 />
-                <SwitchInput name="contains_number" label="Number (0-9)" />
                 <SwitchInput
-                    name="contains_special"
+                    name="password.contains_number"
+                    label="Number (0-9)"
+                />
+                <SwitchInput
+                    name="password.contains_special"
                     label="Special Character (!@#$%^&*)"
                 />
                 <SwitchInput
-                    name="disable_compromised"
+                    name="password.disable_compromised"
                     label="Disable Known Compromised Passwords (Example: Pa$$word!)"
                 />
             </div>

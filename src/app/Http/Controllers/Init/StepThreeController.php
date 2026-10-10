@@ -17,8 +17,14 @@ class StepThreeController extends Controller
      */
     public function __invoke(Request $request): Response
     {
+        $pass = $this->svc->getPasswordPolicy();
+        $mfa = $this->svc->getTwoFaConfig();
+
         $settingsData = $request->session()
-            ->get('setup.security') ?: $this->svc->getPasswordPolicy();
+            ->get('setup.security', [
+                'password' => $pass,
+                'twoFa' => $mfa,
+            ]);
 
         return Inertia::render('Init/StepThree', [
             'step' => 3,

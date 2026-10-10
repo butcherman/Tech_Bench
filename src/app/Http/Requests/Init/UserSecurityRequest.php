@@ -21,13 +21,13 @@ class UserSecurityRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'expire' => ['required', 'numeric'],
-            'min_length' => ['required', 'numeric'],
-            'contains_uppercase' => ['required', 'boolean'],
-            'contains_lowercase' => ['required', 'boolean'],
-            'contains_number' => ['required', 'boolean'],
-            'contains_special' => ['required', 'boolean'],
-            'disable_compromised' => ['required', 'boolean'],
+            'password.expire' => ['required', 'numeric'],
+            'password.min_length' => ['required', 'numeric'],
+            'password.contains_uppercase' => ['required', 'boolean'],
+            'password.contains_lowercase' => ['required', 'boolean'],
+            'password.contains_number' => ['required', 'boolean'],
+            'password.contains_special' => ['required', 'boolean'],
+            'password.disable_compromised' => ['required', 'boolean'],
             'twoFa.enabled' => ['required', 'boolean'],
             'twoFa.required' => ['required', 'boolean'],
             'twoFa.allow_save_device' => ['required', 'boolean'],
