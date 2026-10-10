@@ -25,7 +25,22 @@ export default { layout: AppLayout };
 </script>
 <template>
     <div class="flex justify-center">
-        <Card title="Select A Role" size="md">
+        <Card size="md">
+            <template #title>
+                <div class="flex gap-2">
+                    <div class="flex items-center">
+                        <h1>
+                            <fa-icon icon="fa-users-cog" />
+                        </h1>
+                    </div>
+                    <div class="grow">
+                        <h3 class="text-black">User Roles and Permissions</h3>
+                        <p class="text-muted">
+                            Select a User Role for create a new one.
+                        </p>
+                    </div>
+                </div>
+            </template>
             <template #append-title>
                 <AddBadge
                     text="Create Role"

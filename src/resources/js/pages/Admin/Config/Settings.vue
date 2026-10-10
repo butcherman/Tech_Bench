@@ -22,6 +22,19 @@ export default { layout: AppLayout };
 <template>
     <div class="flex justify-center">
         <Card size="md" title="Application Settings">
+            <template #title>
+                <div class="flex gap-2">
+                    <div class="flex items-center">
+                        <h1>
+                            <fa-icon icon="fa-server" />
+                        </h1>
+                    </div>
+                    <div class="grow">
+                        <h3 class="text-black">Application Settings</h3>
+                        <p class="text-muted">Basic Application Settings.</p>
+                    </div>
+                </div>
+            </template>
             <TechBenchConfigForm
                 :settings="settings"
                 :timezoneList="timezoneList"

@@ -27,6 +27,21 @@ export default { layout: AppLayout };
 <template>
     <div class="flex flex-col justify-center items-center gap-2">
         <Card size="md">
+            <template #title>
+                <div class="flex gap-2">
+                    <div class="flex items-center">
+                        <h1>
+                            <fa-icon icon="fa-lock" />
+                        </h1>
+                    </div>
+                    <div class="grow">
+                        <h3 class="text-black">SSL Certificate</h3>
+                        <p class="text-muted">
+                            Manage Application SSL Certificate.
+                        </p>
+                    </div>
+                </div>
+            </template>
             <BannerAlert
                 v-if="certData === null"
                 variant="danger"

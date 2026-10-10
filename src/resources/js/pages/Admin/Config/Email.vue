@@ -24,6 +24,22 @@ export default { layout: AppLayout };
 <template>
     <div class="flex justify-center">
         <Card size="md" title="Email Settings">
+            <template #title>
+                <div class="flex gap-2">
+                    <div class="flex items-center">
+                        <h1>
+                            <fa-icon icon="fa-envelope" />
+                        </h1>
+                    </div>
+                    <div class="grow">
+                        <h3 class="text-black">Email Settings</h3>
+                        <p class="text-muted">
+                            Modify SMTP settings to allow users to receive
+                            emails from the application.
+                        </p>
+                    </div>
+                </div>
+            </template>
             <div>
                 <EmailConfigForm :settings />
                 <div class="text-center mt-2">
