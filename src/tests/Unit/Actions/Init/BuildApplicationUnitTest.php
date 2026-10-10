@@ -5,7 +5,6 @@ namespace Tests\Unit\Actions\Init;
 use App\Actions\Init\BuildApplication;
 use App\Events\Admin\AdministrationEvent;
 use App\Jobs\User\UpdatePasswordExpireJob;
-use App\Models\User;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Queue;
 use Tests\TestCase;
@@ -23,7 +22,7 @@ class BuildApplicationUnitTest extends TestCase
         Queue::fake();
 
         $data = [
-            'basic-settings' => [
+            'application-settings' => [
                 'url' => 'https://someUrl.noSite',
                 'timezone' => 'UTC',
                 'max_filesize' => 123456,
@@ -39,20 +38,34 @@ class BuildApplicationUnitTest extends TestCase
                 'encryption' => 'none',
                 'require_auth' => true,
             ],
-            'user-settings' => [
-                'expire' => '60',
-                'min_length' => '12',
-                'contains_uppercase' => 'false',
-                'contains_lowercase' => 'false',
-                'contains_number' => 'false',
-                'contains_special' => 'false',
-                'disable_compromised' => 'false',
+            'security' => [
+                'password' => [
+                    'expire' => '60',
+                    'min_length' => '12',
+                    'contains_uppercase' => 'false',
+                    'contains_lowercase' => 'false',
+                    'contains_number' => 'false',
+                    'contains_special' => 'false',
+                    'disable_compromised' => 'false',
+                ],
+                'twoFa' => [
+                    'enables' => true,
+                    'required' => false,
+                    'allow_save_device' => true,
+                    'methods' => [
+                        'email' => true,
+                        'authenticator' => true,
+                    ],
+                ],
+
             ],
-            'admin' => User::factory()->make()->makeVisible('role_id')->toArray(),
-            'administrator-password' => [
-                'current_password' => 'password',
-                'password' => 'SomeN3wP@ssword',
-                'password_confirmation' => 'SomeN3wP@ssword',
+            'admin' => [
+                'email' => 'admin@em.fake',
+                'first_name' => 'Some',
+                'last_name' => 'Dude',
+                'role_id' => 1,
+                'password' => 'MyCoolPassword!!',
+                'password_confirmation' => 'MyCoolPassword!!',
             ],
         ];
 

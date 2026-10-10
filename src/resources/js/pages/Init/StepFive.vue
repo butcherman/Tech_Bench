@@ -3,7 +3,7 @@ import InitLayout from "@/layouts/InitLayout.vue";
 import VerifySettings from "@/features/init/components/VerifySettings.vue";
 import { useSetupState } from "@/features/init/state/setupState";
 
-const { stepList, markStepComplete } = useSetupState();
+const { stepList } = useSetupState();
 
 const props = defineProps<{
     applicationSettings: {
@@ -22,7 +22,10 @@ const props = defineProps<{
         username: string;
         password: string;
     };
-    security: PasswordPolicy;
+    security: {
+        password: PasswordPolicy;
+        twoFa: MultiFactorConfig;
+    };
     admin: User;
 }>();
 
@@ -36,6 +39,5 @@ export default { layout: InitLayout };
     <div class="flex flex-col gap-4 justify-center items-center h-full">
         <h1 class="text-center">Review Your Configuration</h1>
         <VerifySettings v-bind="props" />
-        <!-- <pre>{{ props }}</pre> -->
     </div>
 </template>
