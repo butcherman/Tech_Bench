@@ -1,8 +1,10 @@
-import { defineConfig, loadEnv } from "vite";
+import fs from "fs";
+import inertia from '@inertiajs/vite';
 import laravel from "laravel-vite-plugin";
 import tailwindcss from '@tailwindcss/vite';
 import vue from "@vitejs/plugin-vue";
-import fs from "fs";
+import { defineConfig, loadEnv } from "vite";
+import { wayfinder } from '@laravel/vite-plugin-wayfinder';
 
 export default defineConfig(({ mode }) => {
     process.env = { ...process.env, ...loadEnv(mode, process.cwd()) };
@@ -26,19 +28,23 @@ export default defineConfig(({ mode }) => {
                 },
             }),
             tailwindcss(),
+            inertia(),
+            ...(mode !== "test" ? [wayfinder({
+                path: 'resources/js/wayfinder'
+            })] : [])
         ],
         server: {
             https: {
-                key: fs.readFileSync("/app/keystore/private/server.key"),
-                cert: fs.readFileSync("/app/keystore/server.crt"),
+                key: fs.readFileSync("/var/www/html/keystore/private/server.key"),
+                cert: fs.readFileSync("/var/www/html/keystore/server.crt"),
             },
             host: "0.0.0.0",
             hmr: {
                 protocol: "wss",
                 host: wsHost,
                 https: {
-                    key: fs.readFileSync("/app/keystore/private/server.key"),
-                    cert: fs.readFileSync("/app/keystore/server.crt"),
+                    key: fs.readFileSync("/var/www/html/keystore/private/server.key"),
+                    cert: fs.readFileSync("/var/www/html/keystore/server.crt"),
                 },
             },
             cors: {
@@ -47,5 +53,14 @@ export default defineConfig(({ mode }) => {
                 ],
             }
         },
+        test: {
+            globals: true,
+            environment: 'happy-dom',
+            coverage: {
+                enabled: true,
+                provider: 'v8',
+                reportsDirectory: './tests/Vitest/_Report'
+            }
+        }
     };
 });
