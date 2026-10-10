@@ -10,14 +10,6 @@ class AdministratorAccountRequest extends FormRequest
     use PasswordValidationRules;
 
     /**
-     * Determine if the user is authorized to make this request.
-     */
-    public function authorize(): bool
-    {
-        return $this->user()->user_id === 1;
-    }
-
-    /**
      * Get the validation rules that apply to the request.
      */
     public function rules(): array

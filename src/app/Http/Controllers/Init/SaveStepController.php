@@ -25,8 +25,6 @@ class SaveStepController extends Controller
             'email-settings' => new EmailSettingsRequest($saveData),
             'security' => new UserSecurityRequest($saveData),
             'admin' => new AdministratorAccountRequest($saveData),
-
-            default => null,
         };
 
         $validator->validate($validator->rules());
