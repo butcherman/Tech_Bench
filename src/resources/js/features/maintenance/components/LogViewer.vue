@@ -103,6 +103,19 @@ watch(
 
 <template>
     <Card title="Log Viewer">
+        <template #title>
+            <div class="flex gap-2">
+                <div class="flex items-center">
+                    <h1>
+                        <fa-icon icon="fa-bug" />
+                    </h1>
+                </div>
+                <div class="grow">
+                    <h3 class="text-black">Log Viewer</h3>
+                    <p class="text-muted">Application Logs.</p>
+                </div>
+            </div>
+        </template>
         <template #append-title>
             <BaseBadge
                 icon="cog"

@@ -4,8 +4,6 @@ import SwitchInput from "@/core/forms/components/validatedInputs/SwitchInput.vue
 import TextInput from "@/core/forms/components/validatedInputs/TextInput.vue";
 import VueForm from "@/core/forms/components/VueForm.vue";
 import { object, number, boolean } from "yup";
-import { computed } from "vue";
-import { submit } from "@/wayfinder/routes/init/step-3";
 import { update } from "@/wayfinder/routes/admin/user/password-policy";
 
 defineEmits<{
@@ -14,14 +12,7 @@ defineEmits<{
 
 const props = defineProps<{
     policy: PasswordPolicy;
-    init?: boolean;
 }>();
-
-const submitRoute = computed(() => (props.init ? submit.url() : update.url()));
-
-const submitText = computed(() =>
-    props.init ? "Save and Continue" : "Update Password Policy",
-);
 
 const initValues = {
     expire: String(props.policy.expire),
@@ -48,9 +39,9 @@ const schema = object({
     <VueForm
         name="password-policy-form"
         submit-method="put"
+        submit-text="Update Password Policy"
         :initial-values="initValues"
-        :submit-route="submitRoute"
-        :submit-text="submitText"
+        :submit-route="update.url()"
         :validation-schema="schema"
         do-not-reset
         @success="$emit('success')"

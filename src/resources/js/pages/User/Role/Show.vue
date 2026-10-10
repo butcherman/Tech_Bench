@@ -61,6 +61,22 @@ export default { layout: AppLayout };
     <div class="flex flex-col gap-3">
         <div class="flex justify-center">
             <Card title="Role Permissions">
+                <template #title>
+                    <div class="flex gap-2">
+                        <div class="flex items-center">
+                            <h1>
+                                <fa-icon icon="fa-users-cog" />
+                            </h1>
+                        </div>
+                        <div class="grow">
+                            <h3 class="text-black">Role Permissions</h3>
+                            <p class="text-muted">
+                                Users with this Role assigned have the following
+                                permissions.
+                            </p>
+                        </div>
+                    </div>
+                </template>
                 <h5 class="text-center font-bold text-lg">{{ role.name }}</h5>
                 <p class="text-center">{{ role.description }}</p>
                 <hr />

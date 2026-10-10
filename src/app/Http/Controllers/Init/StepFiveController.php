@@ -14,9 +14,17 @@ class StepFiveController extends Controller
      */
     public function __invoke(Request $request): Response
     {
+        $summary = $request->session()->get('setup', []);
+        $summary['admin']['password'] = '*****';
+        $summary['admin']['password_confirmation'] = '*****';
+
+        if ($summary['email-settings']['password']) {
+            $summary['email-settings']['password'] = '*****';
+        }
+
         return Inertia::render(
             'Init/StepFive',
-            array_merge($request->session()->get('setup'), ['step' => 5])
+            array_merge($summary, ['step' => 5])
         );
     }
 }

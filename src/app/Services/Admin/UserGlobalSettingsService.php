@@ -57,6 +57,17 @@ class UserGlobalSettingsService
     }
 
     /**
+     * Save the MFA Config
+     */
+    public function saveTwoFaSettings(Collection $requestData): void
+    {
+        $mfaConfig = $requestData->get('twoFa');
+        $this->saveSettingsArray($mfaConfig['methods'], 'auth.twoFa.methods');
+        unset($mfaConfig['methods']);
+        $this->saveSettingsArray($mfaConfig, 'auth.twoFa');
+    }
+
+    /**
      * Return the current OATH Configuration
      */
     public function getOathConfig(): array
@@ -95,10 +106,7 @@ class UserGlobalSettingsService
             intval($requestData->get('auto_logout_timer'))
         );
 
-        $mfaConfig = $requestData->get('twoFa');
-        $this->saveSettingsArray($mfaConfig['methods'], 'auth.twoFa.methods');
-        unset($mfaConfig['methods']);
-        $this->saveSettingsArray($mfaConfig, 'auth.twoFa');
+        $this->saveTwoFaSettings($requestData);
 
         $this->saveSettingsArray($requestData->get('oath'), 'services.azure');
     }

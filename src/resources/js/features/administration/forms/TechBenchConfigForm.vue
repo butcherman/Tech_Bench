@@ -5,8 +5,6 @@ import SelectGroupedInput from "@/core/forms/components/validatedInputs/SelectGr
 import TextInput from "@/core/forms/components/validatedInputs/TextInput.vue";
 import VueForm from "@/core/forms/components/VueForm.vue";
 import { object, string, number, array } from "yup";
-import { computed } from "vue";
-import { submit } from "@/wayfinder/routes/init/step-1";
 import { update } from "@/wayfinder/routes/admin/basic-settings";
 
 defineEmits<{
@@ -26,20 +24,13 @@ const props = defineProps<{
         }[];
     };
     timezoneList: TimezoneList[];
-    init?: boolean;
 }>();
-
-const submitRoute = computed(() => (props.init ? submit.url() : update.url()));
-
-const submitText = computed(() =>
-    props.init ? "Save and Continue" : "Update Application Configuration",
-);
 
 const initValues = {
     url: props.settings.url,
     company_name: props.settings.company_name,
     timezone: props.settings.timezone,
-    max_filesize: props.settings.max_filesize,
+    max_filesize: props.settings.max_filesize.toString(),
     welcome_message: props.settings.welcome_message,
     home_links: props.settings.home_links,
 };
@@ -58,8 +49,8 @@ const schema = object({
         name="application-settings-form"
         submit-method="put"
         :initial-values="initValues"
-        :submit-route="submitRoute"
-        :submit-text="submitText"
+        :submit-route="update.url()"
+        submit-text="Update Application Configuration"
         :validation-schema="schema"
         do-not-reset
         @success="$emit('success')"
@@ -99,7 +90,7 @@ const schema = object({
             <TextInput
                 name="welcome_message"
                 label="Welcome Message"
-                help="This message will show on the home page under the Company Logo"
+                help-message="This message will show on the home page under the Company Logo"
             />
             <fieldset class="border rounded-xl p-2 mt-4 flex flex-col gap-3">
                 <legend class="text-muted">

@@ -14,6 +14,21 @@ export default { layout: AppLayout };
 <template>
     <div class="flex justify-center">
         <Card size="md">
+            <template #title>
+                <div class="flex gap-2">
+                    <div class="flex items-center">
+                        <h1>
+                            <fa-icon icon="gears" />
+                        </h1>
+                    </div>
+                    <div class="grow">
+                        <h3 class="text-black">App Features</h3>
+                        <p class="text-muted">
+                            Enable and Disabled Application Features.
+                        </p>
+                    </div>
+                </div>
+            </template>
             <AppFeatureForm :featureList />
         </Card>
     </div>

@@ -2,19 +2,11 @@
 import PasswordInput from "@/core/forms/components/validatedInputs/PasswordInput.vue";
 import VueForm from "@/core/forms/components/VueForm.vue";
 import { object, string, ref as reference } from "yup";
-import { computed } from "vue";
-import { submit } from "@/wayfinder/routes/init/step-4b";
 import { update } from "@/wayfinder/routes/user-password";
 
 defineEmits<{
     success: [];
 }>();
-
-const props = defineProps<{
-    init?: boolean;
-}>();
-
-const submitRoute = computed(() => (props.init ? submit.url() : update.url()));
 
 const initValues = {
     current_password: "",
@@ -35,7 +27,7 @@ const schema = object({
         name="user-password-form"
         :initial-values="initValues"
         :validation-schema="schema"
-        :submit-route="submitRoute"
+        :submit-route="update.url()"
         submit-method="put"
         submit-text="Update Password"
         @success="$emit('success')"

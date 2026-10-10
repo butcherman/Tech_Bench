@@ -29,7 +29,7 @@ const cardSize = computed(() => {
                     <h4>{{ title }}</h4>
                 </slot>
             </div>
-            <div>
+            <div class="flex items-center">
                 <span class="mb-1">
                     <slot name="append-title" />
                 </span>
