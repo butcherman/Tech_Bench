@@ -5,9 +5,9 @@ namespace App\Providers;
 use App\Actions\Misc\CheckDatabaseError;
 use App\Contracts\DatabaseRestoreContract;
 use App\Policies\_GatePolicy;
+use App\Services\_Base\CacheFacadeHelper;
 use App\Services\_Base\TraceContext;
 use App\Services\Maintenance\MySqlRestoreProcess;
-use App\Services\Misc\CacheFacadeHelper;
 use App\Services\User\GetMailableUsers;
 use App\Services\User\UserPermissionsService;
 use Illuminate\Console\Events\CommandStarting;
@@ -37,7 +37,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         // CacheFacade
-        // $this->app->bind('CacheData', CacheFacadeHelper::class);
+        $this->app->bind('CacheData', CacheFacadeHelper::class);
 
         // DbQueryFacade
         // $this->app->bind('DbException', CheckDatabaseError::class);
