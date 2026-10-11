@@ -29,6 +29,7 @@ services:
             - ../src:/var/www/html
             - ./.env:/var/www/html/.env
             - /var/run/docker.sock:/var/run/docker.sock
+            # - /home/cerberus/dev/artisan-dev-commands:/var/www/html/vendor/butcherman/artisan-dev-commands
         environment:
             - SERVICE=app
         networks:
