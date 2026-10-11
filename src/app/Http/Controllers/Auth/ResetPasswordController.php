@@ -17,7 +17,7 @@ class ResetPasswordController extends Controller
         return Inertia::render('Auth/ResetPassword', [
             'email' => $request->input('email'),
             'token' => $request->route('token'),
-            // 'rules' => CacheData::passwordRules(),
+            'rules' => CacheData::passwordRules(),
         ]);
     }
 }
