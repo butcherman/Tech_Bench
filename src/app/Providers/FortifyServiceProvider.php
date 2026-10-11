@@ -31,13 +31,13 @@ class FortifyServiceProvider extends ServiceProvider
     public function register(): void
     {
         // Deliver a logout response when logging out.
-        $this->app->instance(LogoutResponseContract::class, new LogoutResponse);
+        // $this->app->instance(LogoutResponseContract::class, new LogoutResponse);
 
         // Custom Login Response
-        $this->app->instance(TwoFactorLoginResponseContract::class, new TwoFactorLoginResponse);
+        // $this->app->instance(TwoFactorLoginResponseContract::class, new TwoFactorLoginResponse);
 
         // Custom Successful Authenticator Setup Response
-        $this->app->instance(TwoFactorConfirmedResponseContract::class, new TwoFactorConfirmedResponse);
+        // $this->app->instance(TwoFactorConfirmedResponseContract::class, new TwoFactorConfirmedResponse);
     }
 
     /**
@@ -51,9 +51,9 @@ class FortifyServiceProvider extends ServiceProvider
         );
         Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
-        Fortify::redirectUserForTwoFactorAuthenticationUsing(
-            RedirectIfTwoFactorAuthenticatable::class
-        );
+        // Fortify::redirectUserForTwoFactorAuthenticationUsing(
+        //     RedirectIfTwoFactorAuthenticatable::class
+        // );
 
         /*
         |-----------------------------------------------------------------------

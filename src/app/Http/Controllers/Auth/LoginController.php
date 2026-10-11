@@ -1,0 +1,26 @@
+<?php
+
+namespace App\Http\Controllers\Auth;
+
+use Inertia\Inertia;
+use Inertia\Response;
+
+class LoginController
+{
+    /**
+     * Show Login Screen
+     */
+    public function __invoke(): Response
+    {
+        return Inertia::render('Auth/Login', [
+            'welcome-message' => fn () => config('app.welcome_message'),
+            'home-links' => fn () => config('app.home_links'),
+            'allow-oath' => fn () => config('services.azure.allow_login'),
+            'public-link' => fn () => config('tech-tips.allow_public')
+                ? [
+                    'url' => route('publicTips.index'),
+                    'text' => config('tech-tips.public_link_text'),
+                ] : false,
+        ]);
+    }
+}

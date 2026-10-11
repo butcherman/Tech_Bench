@@ -11899,16 +11899,16 @@
         },
         {
             "name": "butcherman/artisan-dev-commands",
-            "version": "0.0.9",
+            "version": "0.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/butcherman/artisan-dev-commands.git",
-                "reference": "ad81847f5debf7f987ef90e697d04b76b2f04098"
+                "reference": "e181c04c6c219014cd6904ae49421ba2d35a333c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/butcherman/artisan-dev-commands/zipball/ad81847f5debf7f987ef90e697d04b76b2f04098",
-                "reference": "ad81847f5debf7f987ef90e697d04b76b2f04098",
+                "url": "https://api.github.com/repos/butcherman/artisan-dev-commands/zipball/e181c04c6c219014cd6904ae49421ba2d35a333c",
+                "reference": "e181c04c6c219014cd6904ae49421ba2d35a333c",
                 "shasum": ""
             },
             "require": {
@@ -11939,7 +11939,7 @@
             "authors": [
                 {
                     "name": "Butcherman",
-                    "email": "ronbutcher@att.net"
+                    "email": "ronbutcherii@gmail.com"
                 }
             ],
             "description": "A collection of commands to run in the Artisan CLI that will make development troubleshooting your Laravel project a little easier",
@@ -11952,9 +11952,9 @@
             ],
             "support": {
                 "issues": "https://github.com/butcherman/artisan-dev-commands/issues",
-                "source": "https://github.com/butcherman/artisan-dev-commands/tree/0.0.9"
+                "source": "https://github.com/butcherman/artisan-dev-commands/tree/0.1.0"
             },
-            "time": "2025-01-21T02:41:32+00:00"
+            "time": "2026-10-11T00:28:03+00:00"
         },
         {
             "name": "composer/class-map-generator",

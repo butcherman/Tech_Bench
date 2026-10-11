@@ -8,9 +8,9 @@
         name="viewport"
         content="width=device-width, initial-scale=1, shrink-to-fit=no"
     >
-    <script type="text/javascript">
+    {{-- <script type="text/javascript">
         let appData = {!! json_encode(\App\Facades\CacheData::appData()) !!}
-    </script>
+    </script> --}}
     @vite('resources/js/app.ts')
     <x-inertia::head />
 </head>

@@ -4,7 +4,7 @@ namespace App\Providers;
 
 use App\Actions\Misc\CheckDatabaseError;
 use App\Contracts\DatabaseRestoreContract;
-use App\Policies\GatePolicy;
+use App\Policies\_GatePolicy;
 use App\Services\_Base\TraceContext;
 use App\Services\Maintenance\MySqlRestoreProcess;
 use App\Services\Misc\CacheFacadeHelper;
@@ -54,13 +54,13 @@ class AppServiceProvider extends ServiceProvider
         // $this->app->bind('GetMailable', GetMailableUsers::class);
 
         //  Gate to determine if the Administration link should show up on the navigation menu
-        Gate::define('admin-link', [GatePolicy::class, 'adminLink']);
+        Gate::define('admin-link', [_GatePolicy::class, 'adminLink']);
 
         //  Gate to determine if the Reports link should show up on the navigation menu
-        Gate::define('reports-link', [GatePolicy::class, 'reportsLink']);
+        Gate::define('reports-link', [_GatePolicy::class, 'reportsLink']);
 
         // Gate to determine if the user is an installer level user
-        Gate::define('is-installer', [GatePolicy::class, 'isInstaller']);
+        Gate::define('is-installer', [_GatePolicy::class, 'isInstaller']);
 
         // Listen to Socialite Events
         Event::listen(function (SocialiteWasCalled $event) {
