@@ -1,0 +1,21 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class CreateDataFieldTypesTable extends Migration
+{
+    /**
+     * Run the migrations
+     */
+    public function up(): void
+    {
+        Schema::create('data_field_types', function (Blueprint $table) {
+            $table->id('type_id');
+            $table->string('name');
+            $table->boolean('hidden')->default(0);
+            $table->timestamps();
+        });
+    }
+}

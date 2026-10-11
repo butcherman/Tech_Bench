@@ -3,6 +3,8 @@
 namespace Database\Factories;
 
 use App\Models\User;
+use App\Models\UserSetting;
+use App\Models\UserSettingType;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -19,27 +21,39 @@ class UserFactory extends Factory
 
     /**
      * Define the model's default state.
-     *
-     * @return array<string, mixed>
      */
     public function definition(): array
     {
+        $first = $this->faker->firstName();
+        $last = $this->faker->lastName();
+
         return [
-            'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now(),
+            'role_id' => 4,
+            'username' => $first.'.'.$last,
+            'first_name' => $first,
+            'last_name' => $last,
+            'email' => $first.'.'.$last.'@noEm.com',
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
+            'password_expires' => null,
         ];
     }
 
     /**
-     * Indicate that the model's email address should be unverified.
+     * Automatically create the User Settings after adding them to DB
      */
-    public function unverified(): static
+    public function configure(): static
     {
-        return $this->state(fn (array $attributes) => [
-            'email_verified_at' => null,
-        ]);
+        return $this->afterCreating(function (User $user) {
+            $settingData = UserSettingType::all();
+
+            foreach ($settingData as $setting) {
+                UserSetting::create([
+                    'user_id' => $user->user_id,
+                    'setting_type_id' => $setting->setting_type_id,
+                    'value' => true,
+                ]);
+            }
+        });
     }
 }
