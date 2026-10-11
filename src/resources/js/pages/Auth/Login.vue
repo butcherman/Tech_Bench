@@ -1,23 +1,30 @@
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue';
+import AuthLayout from "@/layouts/AuthLayout.vue";
+import LoginInstructions from "@/features/auth/components/LoginInstructions.vue";
+import LoginLogo from "@/features/auth/components/LoginLogo.vue";
 
-const props = defineProps<{}>();
+defineOptions({ layout: AuthLayout });
+
+const props = defineProps<{
+    allowOath: boolean;
+    homeLinks: LinkList[];
+    publicLink: LinkList | false;
+    welcomeMessage?: string;
+}>();
 </script>
 
 <template>
-    <div>
-        <div class="row">
-            <div class="col-12">
-                <h4 class="text-center text-md-left">Hello World</h4>
+    <div class="flex flex-col md:flex-row h-screen">
+        <div class="flex md:grow items-center justify-center">
+            <div class="md:w-80 m-3">
+                <LoginLogo v-bind="props" />
             </div>
         </div>
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        <p class="text-center">This is a new page</p>
-                    </div>
-                </div>
+        <div
+            class="flex items-center md:basis-80 bg-white m-3 md:m-0 rounded-lg md:rounded-none"
+        >
+            <div class="m-3 w-full">
+                <LoginInstructions :allow-oath />
             </div>
         </div>
     </div>
