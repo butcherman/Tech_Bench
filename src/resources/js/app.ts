@@ -1,9 +1,9 @@
 import { createInertiaApp, Link } from "@inertiajs/vue3";
 import { vOnClickOutside } from "@vueuse/components";
 // import { copy } from "./core/directives/copyDirective";
-// import { focus } from "./core/directives/focusDirective";
-// import { tabTrap } from "./core/directives/tabTrapDirective";
-// import { tooltip } from "./core/directives/tooltipDirective";
+import { focus } from "./core/directives/focusDirective";
+import { tabTrap } from "./core/directives/tabTrapDirective";
+import { tooltip } from "./core/directives/tooltipDirective";
 import { configureEcho } from "@laravel/echo-vue";
 
 /*
@@ -40,10 +40,10 @@ createInertiaApp({
     withApp(app) {
         app.component("fa-icon", FontAwesomeIcon)
             .component("Link", Link)
-            .directive("on-click-outside", vOnClickOutside);
-        // .directive("tooltip", tooltip)
-        // .directive("copy", copy)
-        // .directive("focus", focus)
-        // .directive("tab-trap", tabTrap);
+            .directive("on-click-outside", vOnClickOutside)
+            .directive("tooltip", tooltip)
+            // .directive("copy", copy)
+            .directive("focus", focus)
+            .directive("tab-trap", tabTrap);
     },
 });
