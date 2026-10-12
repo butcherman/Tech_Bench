@@ -64,21 +64,21 @@ export const useVariantHelper = () => {
     /**
      * Class information for background and text colors when component is 'active'
      */
-    // const getActiveVariantClass = (variant: VariantType): string => {
-    //     return {
-    //         danger: "bg-rose-800",
-    //         dark: "bg-gray-900",
-    //         error: "bg-red-700",
-    //         help: "bg-violet-800",
-    //         info: "bg-blue-600",
-    //         light: "bg-neutral-500",
-    //         primary: "bg-blue-700",
-    //         secondary: "bg-blue-500",
-    //         success: "bg-green-700",
-    //         warning: "bg-yellow-600",
-    //         none: "bg-blue-100",
-    //     }[variant];
-    // };
+    const getActiveVariantClass = (variant: VariantType): string => {
+        return {
+            danger: "bg-rose-800",
+            dark: "bg-gray-900",
+            error: "bg-red-700",
+            help: "bg-violet-800",
+            info: "bg-blue-600",
+            light: "bg-neutral-500",
+            primary: "bg-blue-700",
+            secondary: "bg-blue-500",
+            success: "bg-green-700",
+            warning: "bg-yellow-600",
+            none: "bg-blue-100",
+        }[variant];
+    };
 
     /**
      * Font-Awesome Icon based on Variant Icon for alerts
@@ -102,7 +102,7 @@ export const useVariantHelper = () => {
     return {
         // getBackgroundClass,
         getVariantClass,
-        // getActiveVariantClass,
+        getActiveVariantClass,
         // getVariantBase,
         // getVariantIcon,
     };

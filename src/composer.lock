@@ -11899,16 +11899,16 @@
         },
         {
             "name": "butcherman/artisan-dev-commands",
-            "version": "0.1.0",
+            "version": "0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/butcherman/artisan-dev-commands.git",
-                "reference": "e181c04c6c219014cd6904ae49421ba2d35a333c"
+                "reference": "bd3cb862947235e13c6c572b18304039ec635593"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/butcherman/artisan-dev-commands/zipball/e181c04c6c219014cd6904ae49421ba2d35a333c",
-                "reference": "e181c04c6c219014cd6904ae49421ba2d35a333c",
+                "url": "https://api.github.com/repos/butcherman/artisan-dev-commands/zipball/bd3cb862947235e13c6c572b18304039ec635593",
+                "reference": "bd3cb862947235e13c6c572b18304039ec635593",
                 "shasum": ""
             },
             "require": {
@@ -11952,9 +11952,9 @@
             ],
             "support": {
                 "issues": "https://github.com/butcherman/artisan-dev-commands/issues",
-                "source": "https://github.com/butcherman/artisan-dev-commands/tree/0.1.0"
+                "source": "https://github.com/butcherman/artisan-dev-commands/tree/0.1.1"
             },
-            "time": "2026-10-11T00:28:03+00:00"
+            "time": "2026-10-11T19:06:30+00:00"
         },
         {
             "name": "composer/class-map-generator",

@@ -59,6 +59,7 @@ const inputId = useId();
             @blur="onBlur"
         />
         <label
+            v-if="label"
             :for="inputId"
             class="form-label-base"
             :class="{ 'bg-white!': variant === 'outlined' }"
