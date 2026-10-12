@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import AuthorizedUser from "./AuthorizedUser.vue";
 import AppSearchForm from "./AppSearchForm.vue";
+import AuthorizedUser from "./AuthorizedUser.vue";
 import BaseBadge from "@/core/components/badges/BaseBadge.vue";
 import BaseButton from "@/core/components/buttons/BaseButton.vue";
 import { about } from "@/wayfinder/routes";
@@ -12,29 +12,27 @@ defineEmits<{
 
 <template>
     <header
-        class="flex h-16 items-center justify-between border-b border-slate-300 bg-gray-200 px-6 dark:bg-gray-800"
+        class="fixed top-0 left-0 z-20 w-full h-14 bg-gray-100 dark:bg-gray-500 flex flex-row-reverse gap-4 border-b border-b-slate-200"
     >
-        <AppSearchForm class="md:w-150" />
-        <div class="flex gap-2">
-            <div class="items-center hidden lg:flex">
-                <BaseBadge
-                    icon="circle-info"
-                    :href="about.url()"
-                    variant="info"
-                    size="sm"
-                    circle
-                />
-            </div>
+        <div class="grow md:grow-0 flex items-center justify-end gap-2 me-2">
+            <BaseBadge
+                icon="circle-info"
+                :href="about.url()"
+                size="sm"
+                variant="info"
+                circle
+            />
             <AuthorizedUser />
-            <div class="flex items-center">
-                <BaseButton
-                    class="lg:hidden"
-                    icon="bars"
-                    variant="light"
-                    size="sm"
-                    @click="$emit('toggleNavbar')"
-                />
-            </div>
+            <BaseButton
+                class="lg:hidden"
+                icon="bars"
+                variant="light"
+                size="sm"
+                @click="$emit('toggleNavbar')"
+            />
+        </div>
+        <div class="grow lg:ms-64">
+            <AppSearchForm class="mx-2 lg:w-1/2" />
         </div>
     </header>
 </template>
