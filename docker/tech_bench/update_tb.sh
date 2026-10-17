@@ -10,13 +10,12 @@
 
 set -eE
 
-source /scripts/_functions.sh
+source /tb_data/scripts/_functions.sh
 trap 'catchError $? $LINENO' ERR
 
 ERROR_MSG="Upgrade Failed"
-APP_ROOT=/app
-TMP_ROOT=/app/tmp
-STAGE_ROOT=/staging
+APP_ROOT=/var/www/html
+TMP_ROOT=/tb_data/tmp
 
 # Roll back the update attempt
 handleError()
@@ -75,8 +74,8 @@ main()
 # Check the staged version vs. the running version to see if update is needed
 checkForUpdate()
 {
-    STAGED_VERSION=$(head -n 1 $STAGE_ROOT/version)
-    APP_VERSION=$(head -n 1 $APP_ROOT/keystore/version)
+    STAGED_VERSION=$(head -n 1 /tb_data/staging/version)
+    APP_VERSION=$(head -n 1 /var/www/html/keystore/version)
 
     NEED_UPDATE=$(versionCompare $STAGED_VERSION $APP_VERSION)
 
@@ -116,7 +115,7 @@ backupAppFiles()
 # Copy all of the staged files to the Application Directory
 moveAppFiles()
 {
-    run cp -R $STAGE_ROOT/* $APP_ROOT/
+    run cp -R /tb_data/staging/* $APP_ROOT/
 }
 
 # Update and compile Composer and NPM dependencies

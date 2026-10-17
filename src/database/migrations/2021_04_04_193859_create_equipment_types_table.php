@@ -22,15 +22,4 @@ class CreateEquipmentTypesTable extends Migration
                 ->onUpdate('cascade');
         });
     }
-
-    /**
-     * Reverse the migrations
-     */
-    public function down(): void
-    {
-        Schema::table('equipment_types', function (Blueprint $table) {
-            $table->dropForeign(['cat_id']);
-        });
-        Schema::dropIfExists('equipment_types');
-    }
 }

@@ -29,12 +29,4 @@ class CreateCustomerContactPhonesTable extends Migration
                 ->onUpdate('cascade');
         });
     }
-
-    /**
-     * Reverse the migrations
-     */
-    public function down(): void
-    {
-        Schema::dropIfExists('customer_contact_phones');
-    }
 }

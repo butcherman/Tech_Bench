@@ -36,6 +36,7 @@ return new class extends Migration
         Schema::table('workbook_table_values', function (Blueprint $table) {
             $table->dropForeign(['wb_id']);
         });
+
         Schema::dropIfExists('workbook_table_values');
     }
 };

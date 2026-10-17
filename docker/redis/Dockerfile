@@ -1,15 +1,16 @@
-#################################################################################################
-#                                                                                               #
-#            Redis Container holds the Redis Database for Tech Bench                            #
-#                                                                                               #
-#################################################################################################
+################################################################################
+#                                                                              #
+#        Redis Container holds the Redis Database for Tech Bench               #
+#                                                                              #
+################################################################################
 
-FROM butcherman/tech_bench_redis:1.0
+FROM redis:8.10.2
 
-ENV REDIS_PASSWORD=tbRootPassword
+# Bring in custom config file
+COPY redis.conf /usr/local/etc/redis/redis.conf
 
-USER root
+# Build Healthcheck
+HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
+    CMD redis-cli ping
 
-RUN apt update && apt upgrade -y --no-install-recommends
-
-WORKDIR /app
+CMD ["redis-server", "/usr/local/etc/redis/redis.conf"]
