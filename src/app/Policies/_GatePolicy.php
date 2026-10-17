@@ -5,7 +5,7 @@ namespace App\Policies;
 use App\Models\User;
 use App\Traits\AllowTrait;
 
-class GatePolicy
+class _GatePolicy
 {
     use AllowTrait;
 

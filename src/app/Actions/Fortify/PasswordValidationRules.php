@@ -42,12 +42,12 @@ trait PasswordValidationRules
         $basePath = 'auth.passwords.settings';
 
         config([
-            $basePath.'.disable_compromised' => $passRules['disable_compromised'],
-            $basePath.'.min_length' => $passRules['min_length'],
-            $basePath.'.contains_uppercase' => $passRules['contains_uppercase'],
-            $basePath.'.contains_lowercase' => $passRules['contains_lowercase'],
-            $basePath.'.contains_number' => $passRules['contains_number'],
-            $basePath.'.contains_special' => $passRules['contains_special'],
+            $basePath.'.disable_compromised' => $passRules['password']['disable_compromised'],
+            $basePath.'.min_length' => $passRules['password']['min_length'],
+            $basePath.'.contains_uppercase' => $passRules['password']['contains_uppercase'],
+            $basePath.'.contains_lowercase' => $passRules['password']['contains_lowercase'],
+            $basePath.'.contains_number' => $passRules['password']['contains_number'],
+            $basePath.'.contains_special' => $passRules['password']['contains_special'],
         ]);
 
         return $this->passwordRules();
