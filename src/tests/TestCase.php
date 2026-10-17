@@ -5,9 +5,11 @@ namespace Tests;
 use App\Http\Middleware\CheckForInit;
 use App\Models\UserRolePermission;
 use App\Models\UserRolePermissionType;
+use Illuminate\Foundation\Testing\Attributes\Seed;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
+#[Seed]
 abstract class TestCase extends BaseTestCase
 {
     use RefreshDatabase;
