@@ -58,7 +58,7 @@ const onClickOutsideHandler = [
             v-model="sideNavHidden"
             v-on-click-outside="onClickOutsideHandler"
         />
-        <section class="mt-14 lg:ms-64 grow bg-gray-200 flex flex-col">
+        <section class="mt-14 lg:ms-64 grow flex flex-col">
             <div class="p-5 grow flex flex-col">
                 <!-- <Breadcrumbs class="mb-2" />
                 <UnbaggedErrors class="mb-2" /> -->

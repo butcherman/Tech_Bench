@@ -31,3 +31,8 @@ Route::middleware('auth.secure')->group(function () {
 |-------------------------------------------------------------------------------
 */
 Route::get('download/{file}/{fileName}', DownloadFileController::class)->name('download');
+
+// FIXME:  Delete these routes
+Route::get('public-tips', function () {
+    return 'public tech tips';
+})->name('publicTips.index');

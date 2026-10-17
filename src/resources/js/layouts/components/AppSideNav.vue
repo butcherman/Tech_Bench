@@ -26,7 +26,7 @@ const hiddenClass = computed<string>(() => (isOpen.value ? "w-0" : "w-64"));
 
 <template>
     <nav
-        class="fixed top-0 right-0 lg:left-0 h-full z-30 lg:w-64 overflow-hidden rounded-s-lg lg:rounded-none border-s border-s-slate-200 lg:border-0 transition-[width] transition-900 bg-white"
+        class="fixed top-0 right-0 lg:left-0 h-full z-30 lg:w-64 overflow-hidden rounded-s-lg lg:rounded-none transition-[width] transition-900 bg-sidebar"
         :class="hiddenClass"
     >
         <div class="mt-4 ms-4 me-2">Navbar</div>

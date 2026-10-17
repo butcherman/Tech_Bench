@@ -12,7 +12,7 @@ defineEmits<{
 
 <template>
     <header
-        class="fixed top-0 left-0 z-20 w-full h-14 bg-gray-100 dark:bg-gray-500 flex flex-row-reverse gap-4 border-b border-b-slate-200"
+        class="fixed top-0 left-0 z-20 w-full h-14 flex flex-row-reverse gap-4 bg-header border-b border-slate-300"
     >
         <div class="grow md:grow-0 flex items-center justify-end gap-2 me-2">
             <BaseBadge

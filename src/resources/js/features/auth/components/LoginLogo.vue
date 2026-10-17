@@ -21,7 +21,7 @@ const hasAdditionalData = computed(
         <h1 class="text-center text-white">{{ appName }}</h1>
         <Card>
             <div><img :src="logo" class="justify-self-center" /></div>
-            <hr v-if="hasAdditionalData" class="bg-gray-500 my-2" />
+            <hr v-if="hasAdditionalData" class="border border-gray-300 my-2" />
             <h6 class="text-center font-semibold">
                 {{ welcomeMessage }}
             </h6>
