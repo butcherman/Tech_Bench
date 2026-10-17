@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware(['guest', 'throttle:50,120'])->group(function () {
-    // Route::get('/', LoginController::class)->name('home');
+    Route::get('/', LoginController::class)->name('home');
     // Route::post('two-factor-submit', TwoFactorController::class)
     //     ->name('two-factor.login.email');
     /*

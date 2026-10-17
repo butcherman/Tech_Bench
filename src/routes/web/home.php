@@ -13,19 +13,19 @@ use Illuminate\Support\Facades\Route;
 |-------------------------------------------------------------------------------
 */
 
-// Route::middleware('auth.secure')->group(function () {
-//     Route::get('dashboard', DashboardController::class)
-//         ->name('dashboard')
-//         ->breadcrumb('Dashboard');
+Route::middleware('auth.secure')->group(function () {
+    Route::get('dashboard', DashboardController::class)
+        ->name('dashboard')
+        ->breadcrumb('Dashboard');
 
-//     Route::get('about', AboutController::class)
-//         ->name('about')
-//         ->breadcrumb('About', 'dashboard');
+    // Route::get('about', AboutController::class)
+    //     ->name('about')
+    //     ->breadcrumb('About', 'dashboard');
 
-//     Route::post('upload-image/{folder?}', UploadImageController::class)
-//         ->name('upload-image')
-//         ->withoutMiddleware(ValidateCsrfToken::class);
-// });
+    // Route::post('upload-image/{folder?}', UploadImageController::class)
+    //     ->name('upload-image')
+    //     ->withoutMiddleware(ValidateCsrfToken::class);
+});
 
 /*
 |-------------------------------------------------------------------------------
