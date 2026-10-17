@@ -9,7 +9,7 @@
 
 set -eE
 
-source /scripts/_functions.sh
+source /tb_data/scripts/_functions.sh
 
 # Variables
 BRANCH="${1:-false}"     # GitHub Branch to be downloaded - blank for version
@@ -17,9 +17,9 @@ VERSION="${2:-latest}"   # Version to be downloaded
 ERROR_MSG="Unable to Complete Download"
 
 # Directory Variables
-STAGE_ROOT=/staging
-TMP_ROOT=/tmp/download
-DNLD_ROOT=$TMP_ROOT
+STAGE_ROOT=/tb_data/staging
+TMP_ROOT=/tb_data/tmp
+DNLD_ROOT=$TMP_ROOT/download
 
 # Catch any errors
 trap 'catchError $? $LINENO' ERR
@@ -41,20 +41,18 @@ main()
     echo "$MAJOR.$MINOR.$PATCH" > $STAGE_ROOT/version
 
     echo -e "${GREEN}Download Complete${NC}"
-
-    bash /scripts/install.sh
 }
 
 # Build directory structure
 buildDirectoryStructure()
 {
-    # if test -d $STAGE_ROOT
-    # then
-    #     run rm -rf $STAGE_ROOT
-    # fi
+    if test -d $STAGE_ROOT
+    then
+        run rm -rf $STAGE_ROOT
+    fi
 
     run mkdir -p $DNLD_ROOT
-    # run mkdir -p $STAGE_ROOT
+    run mkdir -p $STAGE_ROOT
 }
 
 # Download the Tech Bench package and Stage it in the Staging directory

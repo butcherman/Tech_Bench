@@ -8,6 +8,8 @@
 /storage/pail
 /stubs
 /tests/_Report
+/tests/Vitest/_Report
+/tests/_tmp
 /vendor
 .env
 .env.backup
@@ -20,6 +22,7 @@ auth.json
 npm-debug.log
 yarn-error.log
 version.txt
+version
 _ide_helper.php
 _ide_helper_models.php
 .phpstorm.meta.php
