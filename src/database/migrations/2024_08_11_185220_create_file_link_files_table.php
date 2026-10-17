@@ -100,6 +100,7 @@ return new class extends Migration
             $table->dropForeign(['link_id']);
             $table->dropForeign(['file_id']);
         });
+
         Schema::dropIfExists('file_link_files');
     }
 };

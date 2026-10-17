@@ -50,7 +50,9 @@ return new class extends Migration
         Schema::table('data_field_types', function (Blueprint $table) {
             $table->dropColumn('pattern');
             $table->dropColumn('pattern_error');
-            $table->dropColumn('required');
+            $table->dropColumn('is_hyperlink');
+            $table->dropColumn('allow_copy');
+            $table->dropColumn('do_not_log_value');
             $table->renameColumn('masked', 'hidden');
         });
     }

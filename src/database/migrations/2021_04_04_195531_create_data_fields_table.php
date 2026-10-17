@@ -29,16 +29,4 @@ class CreateDataFieldsTable extends Migration
                 ->onDelete('cascade');
         });
     }
-
-    /**
-     * Reverse the migrations
-     */
-    public function down(): void
-    {
-        Schema::table('data_fields', function (Blueprint $table) {
-            $table->dropForeign(['equip_id']);
-            $table->dropForeign(['type_id']);
-        });
-        Schema::dropIfExists('data_fields');
-    }
 }
