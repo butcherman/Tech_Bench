@@ -44,7 +44,6 @@
         "spatie/laravel-cookie-consent": "^3.5",
         "spatie/simple-excel": "^3.10",
         "spatie/ssl-certificate": "^2.7",
-        "tightenco/ziggy": "^2.6",
         "zanysoft/laravel-zip": "^3.1"
     },
     "require-dev": {
