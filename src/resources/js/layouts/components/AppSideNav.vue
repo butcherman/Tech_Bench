@@ -4,7 +4,7 @@ import { useUserState } from "@/features/user/state/userState";
 import { useAppData } from "@/core/state/appData.js";
 
 const { navBar } = useUserState();
-const { appName } = useAppData();
+const { appName, copyright, version } = useAppData();
 
 /**
  * Status of the Nav Menu - opened or closed
@@ -19,7 +19,7 @@ const hiddenClass = computed<string>(() => (isOpen.value ? "w-0" : "w-64"));
 
 <template>
     <nav
-        class="fixed top-0 right-0 lg:left-0 h-full z-30 lg:w-64 overflow-hidden rounded-s-lg lg:rounded-none transition-[width] transition-900 bg-sidebar"
+        class="fixed top-0 right-0 lg:left-0 h-full z-30 lg:w-64 overflow-hidden rounded-s-lg lg:rounded-none transition-[width] transition-900 bg-sidebar flex flex-col"
         :class="hiddenClass"
     >
         <div
@@ -45,7 +45,7 @@ const hiddenClass = computed<string>(() => (isOpen.value ? "w-0" : "w-64"));
                 </li>
             </ul>
         </div>
-        <div v-if="navBar.admin.length" class="border-t border-slate-300">
+        <div v-if="navBar.admin.length" class="grow border-t border-slate-300">
             <ul class="my-2">
                 <li
                     v-for="nav in navBar.admin"
@@ -61,5 +61,11 @@ const hiddenClass = computed<string>(() => (isOpen.value ? "w-0" : "w-64"));
                 </li>
             </ul>
         </div>
+        <footer class="text-slate-500 p-2 border-t border-slate-300">
+            <div class="text-center">Copyright &copy; {{ copyright }}</div>
+            <div class="text-center">
+                {{ version }}
+            </div>
+        </footer>
     </nav>
 </template>
