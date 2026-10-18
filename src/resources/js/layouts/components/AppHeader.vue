@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import AuthorizedUser from "./AuthorizedUser.vue";
-import AppSearchForm from "./AppSearchForm.vue";
 import BaseBadge from "@/core/components/badges/BaseBadge.vue";
+import AppSearchForm from "./AppSearchForm.vue";
 import BaseButton from "@/core/components/buttons/BaseButton.vue";
 import { about } from "@/wayfinder/routes";
 
@@ -19,8 +19,8 @@ defineEmits<{
         </div>
         <div class="flex items-center gap-2">
             <BaseBadge
+                class="text-blue-300"
                 icon="circle-info"
-                size="sm"
                 :href="about.url()"
                 v-tooltip="'About'"
             />

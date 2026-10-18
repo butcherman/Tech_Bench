@@ -6,6 +6,7 @@ import { computed, ref } from "vue";
 import Breadcrumbs from "./components/Breadcrumbs.vue";
 import FlashAlert from "./components/FlashAlert.vue";
 import ToastAlert from "./components/ToastAlert.vue";
+import UnbaggedErrors from "./components/UnbaggedErrors.vue";
 
 const pageTitle = computed<string | undefined>(
     () =>
@@ -36,6 +37,7 @@ router.on("before", () => {
             class="mt-14 lg:ms-64 flex flex-col gap-5 p-5 bg-content h-full"
         >
             <Breadcrumbs />
+            <UnbaggedErrors />
             <div>
                 <slot />
             </div>
