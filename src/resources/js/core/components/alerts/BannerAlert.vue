@@ -2,7 +2,12 @@
 import { computed } from "vue";
 import { useVariantHelper } from "@/core/composables/variantHelper";
 
+defineEmits<{
+    dismiss: [];
+}>();
+
 const props = defineProps<{
+    dismissable?: boolean;
     text: string;
     variant: VariantType;
 }>();
@@ -20,6 +25,14 @@ const icon = computed(() => getVariantIcon(props.variant));
     >
         <div><fa-icon :icon="icon" /></div>
         <div>{{ text }}</div>
-        <div><fa-icon :icon="icon" /></div>
+        <div>
+            <fa-icon
+                v-if="dismissable"
+                class="pointer"
+                icon="xmark"
+                @click="$emit('dismiss')"
+            />
+            <fa-icon v-else :icon="icon" />
+        </div>
     </div>
 </template>

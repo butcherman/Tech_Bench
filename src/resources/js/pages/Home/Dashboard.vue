@@ -2,10 +2,14 @@
 import AppLayout from "@/layouts/AppLayout.vue";
 import Card from "@/core/components/Card.vue";
 import BannerAlert from "@/core/components/alerts/BannerAlert.vue";
+import { useAlertState } from "@/core/state/alertState";
+import BaseButton from "@/core/components/buttons/BaseButton.vue";
 
 defineOptions({ layout: AppLayout });
 
 const props = defineProps<{}>();
+
+const { pushFlashAlert } = useAlertState();
 </script>
 
 <template>
@@ -40,6 +44,16 @@ const props = defineProps<{}>();
                         variant="warning"
                     />
                 </div>
+                <BaseButton
+                    text="push alert"
+                    variant="success"
+                    @click="
+                        pushFlashAlert({
+                            message: 'This is an alert',
+                            variant: 'success',
+                        })
+                    "
+                />
             </Card>
         </div>
     </div>

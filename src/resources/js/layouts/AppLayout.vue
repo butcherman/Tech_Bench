@@ -4,6 +4,7 @@ import AppSideNav from "./components/AppSideNav.vue";
 import { Head, router, usePage } from "@inertiajs/vue3";
 import { computed, ref } from "vue";
 import Breadcrumbs from "./components/Breadcrumbs.vue";
+import FlashAlert from "./components/FlashAlert.vue";
 
 const pageTitle = computed<string | undefined>(
     () =>
@@ -26,6 +27,7 @@ router.on("before", () => {
 <template>
     <div class="h-screen flex flex-col">
         <Head :title="pageTitle" />
+        <FlashAlert />
         <AppHeader @toggle-navbar="toggleNav" />
         <AppSideNav v-model="sideNavHidden" v-on-click-outside="closeNav" />
         <section

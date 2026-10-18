@@ -1,10 +1,10 @@
 <script setup lang="ts">
-// import FlashAlert from "./components/FlashAlert.vue";
+import FlashAlert from "./components/FlashAlert.vue";
 </script>
 
 <template>
     <div id="layout-wrapper">
-        <!-- <FlashAlert /> -->
+        <FlashAlert />
         <slot />
     </div>
 </template>
