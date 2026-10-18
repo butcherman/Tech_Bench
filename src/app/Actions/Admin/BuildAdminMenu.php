@@ -21,12 +21,12 @@ class BuildAdminMenu
         $this->user = $user;
 
         return array_filter([
-            'Users & Access' => $this->usersAndAccess(),
-            'Customers' => $this->customers(),
-            'Content & Features' => $this->contentAndFeatures(),
-            'Files & Equipment' => $this->filesAndEquipment(),
+            // 'Users & Access' => $this->usersAndAccess(),
+            // 'Customers' => $this->customers(),
+            // 'Content & Features' => $this->contentAndFeatures(),
+            // 'Files & Equipment' => $this->filesAndEquipment(),
             'Application' => $this->application(),
-            'Maintenance' => $this->maintenance(),
+            // 'Maintenance' => $this->maintenance(),
         ]);
     }
 
@@ -302,7 +302,7 @@ class BuildAdminMenu
         return [
             'label' => $label,
             'icon' => $icon,
-            'route' => '#', //  route($routeName),
+            'route' => route($routeName),
         ];
     }
 }

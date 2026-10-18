@@ -8,20 +8,20 @@ export const useVariantHelper = () => {
     /**
      * Get the base color of the variant
      */
-    // const getVariantBase = (variant: VariantType): string => {
-    //     return {
-    //         danger: "rose-600",
-    //         dark: "gray-800",
-    //         error: "rose-500",
-    //         help: "violet-600",
-    //         info: "blue-400",
-    //         light: "neutral-300",
-    //         primary: "blue-600",
-    //         secondary: "blue-300",
-    //         success: "emerald-500",
-    //         warning: "amber-500",
-    //     }[variant];
-    // };
+    const getVariantBase = (variant: VariantType): string => {
+        return {
+            danger: "rose-600",
+            dark: "gray-800",
+            error: "rose-500",
+            help: "violet-600",
+            info: "blue-400",
+            light: "neutral-300",
+            primary: "blue-600",
+            secondary: "blue-300",
+            success: "emerald-500",
+            warning: "amber-500",
+        }[variant];
+    };
 
     /**
      * Get the active color of the variant
@@ -138,7 +138,7 @@ export const useVariantHelper = () => {
         getVariantClass,
         getLightVariantClass,
         getActiveVariantClass,
-        // getVariantBase,
+        getVariantBase,
         getVariantIcon,
     };
 };
