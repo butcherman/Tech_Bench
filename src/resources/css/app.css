@@ -84,3 +84,7 @@
 .mask-field {
     @apply blur-xs hover:blur-none;
 }
+
+.text-muted {
+    @apply text-slate-500;
+}

@@ -11,7 +11,11 @@ const props = defineProps<{}>();
 <template>
     <div class="flex flex-col gap-2">
         <div>
-            <Card title="Badge Components">
+            <Card
+                title="Badge Components"
+                sub-title="A List of Banner Alerts"
+                title-icon="fa-regular fa-house"
+            >
                 <div class="flex flex-col w-full gap-2">
                     <BannerAlert
                         text="This is a Primary alert"

@@ -38,17 +38,17 @@ class BuildUserNavbar
             [
                 'label' => 'Dashboard',
                 'route' => route('dashboard'),
-                'icon' => 'fas fa-tachometer-alt',
+                'icon' => 'house',
             ],
             [
                 'label' => 'Customers',
                 'route' => '#', // route('customers.index'),
-                'icon' => 'fas fa-user-tie',
+                'icon' => 'people-group',
             ],
             [
                 'label' => 'Tech Tips',
                 'route' => '#', // route('tech-tips.index'),
-                'icon' => 'fas fa-tools',
+                'icon' => 'book-open',
             ],
         ])->when(config('file-link.feature_enabled'), function ($collection) {
             return $collection->add([
@@ -68,7 +68,7 @@ class BuildUserNavbar
             $collection->add([
                 'label' => 'Administration',
                 'route' => '#', // route('admin.index'),
-                'icon' => 'fas fa-user-shield',
+                'icon' => 'cog',
             ]);
         })->when($this->seeReportLink($this->user), function ($collection) {
             $collection->add([

@@ -33,8 +33,8 @@ configureEcho({
     enabledTransports: ["ws", "wss"],
 });
 
-library.add(fas);
 library.add(far);
+library.add(fas);
 
 createInertiaApp({
     withApp(app) {
