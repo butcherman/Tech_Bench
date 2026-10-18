@@ -32,7 +32,9 @@ router.on("before", () => {
             class="mt-14 lg:ms-64 flex flex-col gap-5 p-5 bg-content h-full"
         >
             <Breadcrumbs />
-            <div>main stuff...</div>
+            <div>
+                <slot />
+            </div>
         </section>
     </div>
 </template>

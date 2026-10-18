@@ -1,27 +1,34 @@
 <script setup lang="ts">
-import AppLayout from '@/layouts/AppLayout.vue'
-import { ref, reactive, onMounted } from 'vue';
+import AppLayout from "@/layouts/AppLayout.vue";
+import Card from "@/core/components/Card.vue";
+import { useAppData } from "@/core/state/appData";
 
 defineOptions({ layout: AppLayout });
 
-const props = defineProps<{}>();
+const { copyright, version, appName, logo } = useAppData();
+
+const props = defineProps<{
+    build: string;
+    build_date: string;
+}>();
 </script>
 
 <template>
-    <div>
-        <div class="row">
-            <div class="col-12">
-                <h4 class="text-center text-md-left">Hello World</h4>
+    <div class="flex grow justify-center items-center">
+        <Card size="md">
+            <h2 class="text-center">{{ appName }}</h2>
+            <div class="flex justify-center">
+                <img :src="logo" />
             </div>
-        </div>
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        <p class="text-center">This is a new page</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+            <hr class="my-4" />
+            <p class="text-center">
+                Tech Bench &copy; {{ copyright }}
+                <span class="inline-block">
+                    Butcherman - All Rights Reserved
+                </span>
+            </p>
+            <p class="text-center">{{ version }} (Build {{ build }})</p>
+            <p class="text-center">Build Date - {{ build_date }}</p>
+        </Card>
     </div>
 </template>
