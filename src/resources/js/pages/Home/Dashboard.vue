@@ -9,7 +9,7 @@ defineOptions({ layout: AppLayout });
 
 const props = defineProps<{}>();
 
-const { pushFlashAlert } = useAlertState();
+const { pushFlashAlert, pushToastAlert } = useAlertState();
 </script>
 
 <template>
@@ -51,6 +51,16 @@ const { pushFlashAlert } = useAlertState();
                         pushFlashAlert({
                             message: 'This is an alert',
                             variant: 'success',
+                        })
+                    "
+                />
+                <BaseButton
+                    text="push toast"
+                    variant="danger"
+                    @click="
+                        pushToastAlert({
+                            title: 'toast title',
+                            message: 'test message',
                         })
                     "
                 />

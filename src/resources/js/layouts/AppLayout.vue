@@ -5,6 +5,7 @@ import { Head, router, usePage } from "@inertiajs/vue3";
 import { computed, ref } from "vue";
 import Breadcrumbs from "./components/Breadcrumbs.vue";
 import FlashAlert from "./components/FlashAlert.vue";
+import ToastAlert from "./components/ToastAlert.vue";
 
 const pageTitle = computed<string | undefined>(
     () =>
@@ -28,6 +29,7 @@ router.on("before", () => {
     <div class="h-screen flex flex-col">
         <Head :title="pageTitle" />
         <FlashAlert />
+        <ToastAlert />
         <AppHeader @toggle-navbar="toggleNav" />
         <AppSideNav v-model="sideNavHidden" v-on-click-outside="closeNav" />
         <section
