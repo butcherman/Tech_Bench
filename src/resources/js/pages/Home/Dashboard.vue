@@ -1,5 +1,8 @@
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue';
+import AppLayout from "@/layouts/AppLayout.vue";
+import { ref, reactive, onMounted } from "vue";
+
+defineOptions({ layout: AppLayout });
 
 const props = defineProps<{}>();
 </script>

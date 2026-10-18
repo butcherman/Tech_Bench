@@ -4,3 +4,74 @@
 * Additional CSS Style Sheets
 */
 @import "./form.css";
+
+/**
+* Base styles applied to all pages
+*/
+@layer base {
+    a {
+        @apply hover:font-semibold;
+    }
+
+    h1 {
+        @apply text-3xl! font-bold;
+    }
+
+    h2 {
+        @apply text-2xl! font-bold;
+    }
+
+    h3 {
+        @apply text-xl! font-bold;
+    }
+
+    h4 {
+        @apply text-lg! font-bold;
+    }
+
+    h5 {
+        @apply font-bold;
+    }
+
+    h6 {
+        @apply text-sm! font-bold;
+    }
+
+    blockquote {
+        @apply p-4 my-4 border-s-4;
+    }
+
+    code {
+        @apply bg-slate-800/90 text-white font-mono whitespace-pre select-none px-1;
+    }
+}
+
+/**
+* Layout Theme Variables
+*/
+
+@theme {
+    --color-header: var(--color-header);
+    --color-highlight-nav: var(--color-highlight-nav);
+}
+
+:root {
+    --color-header: #f8fafc;
+    --color-highlight-nav: #2563eb;
+}
+
+.dark {
+    --color-header: #0f172a;
+    --color-highlight-nav: #2563eb;
+}
+
+/**
+* Additional Styles
+*/
+.pointer {
+    cursor: pointer;
+}
+
+.mask-field {
+    @apply blur-xs hover:blur-none;
+}
