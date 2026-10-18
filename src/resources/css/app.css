@@ -53,16 +53,22 @@
 @theme {
     --color-header: var(--color-header);
     --color-highlight-nav: var(--color-highlight-nav);
+    --color-sidebar: var(--color-sidebar);
+    --color-sidebar-header: var(--color-sidebar-header);
 }
 
 :root {
     --color-header: #f8fafc;
     --color-highlight-nav: #2563eb;
+    --color-sidebar: #102037;
+    --color-sidebar-header: #152845;
 }
 
 .dark {
-    --color-header: #0f172a;
+    --color-header: #102037;
     --color-highlight-nav: #2563eb;
+    --color-sidebar: #0b1120;
+    --color-sidebar-header: #102037;
 }
 
 /**

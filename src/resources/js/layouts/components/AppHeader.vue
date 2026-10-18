@@ -1,9 +1,13 @@
 <script setup lang="ts">
-import BaseBadge from "@/core/components/badges/BaseBadge.vue";
-import AppSearchForm from "./AppSearchForm.vue";
-import BaseButton from "@/core/components/buttons/BaseButton.vue";
 import AuthorizedUser from "./AuthorizedUser.vue";
+import AppSearchForm from "./AppSearchForm.vue";
+import BaseBadge from "@/core/components/badges/BaseBadge.vue";
+import BaseButton from "@/core/components/buttons/BaseButton.vue";
 import { about } from "@/wayfinder/routes";
+
+defineEmits<{
+    toggleNavbar: [];
+}>();
 </script>
 
 <template>
@@ -26,6 +30,7 @@ import { about } from "@/wayfinder/routes";
                 icon="bars"
                 variant="light"
                 size="sm"
+                @click="$emit('toggleNavbar')"
             />
         </div>
     </header>

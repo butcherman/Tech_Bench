@@ -56,3 +56,8 @@ interface ToastAlert {
     message: string;
     href?: string;
 }
+
+interface SideNav {
+    base: MenuItem[];
+    admin: MenuItem[];
+}

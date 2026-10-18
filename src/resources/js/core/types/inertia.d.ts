@@ -5,7 +5,7 @@ declare module "@inertiajs/core" {
         sharedPageProps: {
             current_user: User | null;
             csrf_token: string;
-            navbar: MenuItem[];
+            navbar: SideNav;
             breadcrumbs: {
                 title: string;
                 url: string;

@@ -31,15 +31,15 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         $user = $request->user() ? $request->user() : null;
-        // $navbar = $request->user() ?
-        // new BuildUserNavbar($request->user())() :
-        // [];
+        $navbar = $request->user() ?
+        new BuildUserNavbar($request->user())() :
+        [];
 
         return [
             ...parent::share($request),
             'csrf_token' => fn () => csrf_token(),
             'current_user' => fn () => $user,
-            // 'navbar' => fn () => $navbar,
+            'navbar' => fn () => $navbar,
         ];
     }
 }
