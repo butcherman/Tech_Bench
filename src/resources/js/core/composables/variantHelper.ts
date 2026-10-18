@@ -117,21 +117,21 @@ export const useVariantHelper = () => {
     /**
      * Font-Awesome Icon based on Variant Icon for alerts
      */
-    // const getVariantIcon = (variant: VariantType): string => {
-    //     return {
-    //         danger: "exclamation-circle",
-    //         dark: "bell",
-    //         error: "bug",
-    //         help: "circle-question",
-    //         info: "bell",
-    //         light: "bell",
-    //         primary: "bell",
-    //         secondary: "bell",
-    //         success: "circle-check",
-    //         warning: "triangle-exclamation",
-    //         none: "",
-    //     }[variant];
-    // };
+    const getVariantIcon = (variant: VariantType): string => {
+        return {
+            danger: "exclamation-circle",
+            dark: "bell",
+            error: "bug",
+            help: "circle-question",
+            info: "bell",
+            light: "bell",
+            primary: "bell",
+            secondary: "bell",
+            success: "circle-check",
+            warning: "triangle-exclamation",
+            none: "",
+        }[variant];
+    };
 
     return {
         // getBackgroundClass,
@@ -139,6 +139,6 @@ export const useVariantHelper = () => {
         getLightVariantClass,
         getActiveVariantClass,
         // getVariantBase,
-        // getVariantIcon,
+        getVariantIcon,
     };
 };
