@@ -79,6 +79,24 @@ export const useVariantHelper = () => {
     };
 
     /**
+     * Class information for light backgrounds with darker matching text
+     */
+    const getLightVariantClass = (variant: VariantType): string => {
+        return {
+            danger: `bg-rose-100 hover:bg-rose-300 text-rose-700 `,
+            dark: `bg-slate-100 hover:bg-slate-300 text-slate-900 focus:outline-slate-900`,
+            error: `bg-rose-100 hover:bg-rose-300 text-rose-600 focus:outline-rose-600`,
+            help: `bg-violet-100 hover:bg-violet-300 text-violet-700 focus:outline-violet-700`,
+            info: `bg-blue-100 hover:bg-blue-300 text-blue-500 focus:outline-blue-500`,
+            light: `bg-neutral-100 hover:bg-neutral-300 text-slate-600 focus:outline-neutral-400`,
+            primary: `bg-blue-300 hover:bg-blue-500 text-blue-700 focus:outline-blue-700`,
+            secondary: `bg-blue-100 hover:bg-blue-300 text-blue-400 focus:outline-blue-400`,
+            success: `bg-emerald-100 hover:bg-emerald-300 text-emerald-600 focus:outline-emerald-600`,
+            warning: `bg-amber-100 hover:bg-amber-300 text-amber-600 focus:outline-amber-600`,
+        }[variant];
+    };
+
+    /**
      * Class information for background and text colors when component is 'active'
      */
     const getActiveVariantClass = (variant: VariantType): string => {
@@ -118,6 +136,7 @@ export const useVariantHelper = () => {
     return {
         // getBackgroundClass,
         getVariantClass,
+        getLightVariantClass,
         getActiveVariantClass,
         // getVariantBase,
         // getVariantIcon,
