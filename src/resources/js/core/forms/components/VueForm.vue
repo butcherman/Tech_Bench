@@ -1,0 +1,136 @@
+<script setup lang="ts" generic="TFormData extends FormDataType<TFormData>">
+import SubmitButton from "@/core/components/buttons/SubmitButton.vue";
+import ValidatedVueForm from "./ValidatedVueForm.vue";
+import { router } from "@inertiajs/vue3";
+import { ref, useTemplateRef } from "vue";
+import { GenericObject, useForm, Path } from "vee-validate";
+import type { FormDataType, Errors, Page } from "@inertiajs/core";
+
+type FormDataErrors = Errors;
+type InitialValues<T extends GenericObject> = NonNullable<
+    Parameters<typeof useForm<T>>[0]
+>["initialValues"];
+
+const emit = defineEmits<{
+    submit: [TFormData];
+    success: [Page];
+}>();
+
+const props = defineProps<{
+    initialValues: InitialValues<TFormData>;
+    name: string;
+    submitMethod: "post" | "put" | "delete";
+    submitRoute: string;
+    validationSchema: object;
+
+    // Optional
+    doNotReset?: boolean;
+    fullPageOverlay?: boolean;
+    hideOverlay?: boolean;
+    only?: string[];
+    submitIcon?: string;
+    submitText?: string;
+}>();
+
+const validatedForm = useTemplateRef("validated-form");
+const isSubmitting = ref<boolean>(false);
+const uncaughtErrors = ref<string[]>([]);
+
+/*
+|-------------------------------------------------------------------------------
+| Handle errors if they are given
+|-------------------------------------------------------------------------------
+*/
+const handleErrors = (formErrors: FormDataErrors) => {
+    for (const [field, message] of Object.entries(formErrors)) {
+        if (typeof message === "string") {
+            if (validatedForm.value?.getFieldValue(field as keyof TFormData)) {
+                validatedForm.value?.setFieldError(
+                    field as Path<TFormData>,
+                    message,
+                );
+            } else {
+                uncaughtErrors.value.push(String(message));
+            }
+        } else {
+            handleErrors(message);
+        }
+    }
+};
+
+/*
+|-------------------------------------------------------------------------------
+| Handle the Submission of the Form
+|-------------------------------------------------------------------------------
+*/
+const onSubmit = (form: TFormData): void => {
+    uncaughtErrors.value = [];
+    isSubmitting.value = true;
+    emit("submit", form);
+
+    console.log(isSubmitting.value);
+
+    router[props.submitMethod](props.submitRoute, form, {
+        preserveScroll: true,
+        only: props.only,
+        onSuccess: (res) => onSuccess(res),
+        onError: (errors) => handleErrors(errors),
+        onFinish: () => {
+            isSubmitting.value = false;
+        },
+    });
+};
+
+/*
+|-------------------------------------------------------------------------------
+| Handle successful completion of the form
+|-------------------------------------------------------------------------------
+*/
+const onSuccess = (res: Page) => {
+    if (!props.doNotReset) {
+        validatedForm.value?.resetForm();
+    }
+
+    emit("success", res);
+};
+
+/*
+|-------------------------------------------------------------------------------
+| Expose the necessary methods
+|-------------------------------------------------------------------------------
+*/
+defineExpose({
+    getFieldValue: (
+        ...args: Parameters<
+            NonNullable<typeof validatedForm.value>["getFieldValue"]
+        >
+    ) => validatedForm.value?.getFieldValue(...args),
+
+    setFieldError: (
+        ...args: Parameters<
+            NonNullable<typeof validatedForm.value>["setFieldError"]
+        >
+    ) => validatedForm.value?.setFieldError(...args),
+
+    setValue: (
+        ...args: Parameters<NonNullable<typeof validatedForm.value>["setValue"]>
+    ) => validatedForm.value?.setValue(...args),
+
+    resetForm: () => validatedForm.value?.resetForm(),
+});
+</script>
+
+<template>
+    <ValidatedVueForm
+        v-bind="props"
+        ref="validated-form"
+        :error-list="uncaughtErrors"
+        :is-submitting="isSubmitting"
+        v-tab-trap
+        @submit="onSubmit"
+    >
+        <template v-for="(_, slot) of $slots" #[slot]="scope">
+            <slot :name="slot" v-bind="scope" />
+        </template>
+    </ValidatedVueForm>
+</template>

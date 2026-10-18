@@ -1,3 +1,11 @@
+import { createInertiaApp, Link } from "@inertiajs/vue3";
+import { vOnClickOutside } from "@vueuse/components";
+// import { copy } from "./core/directives/copyDirective";
+import { focus } from "./core/directives/focusDirective";
+import { tabTrap } from "./core/directives/tabTrapDirective";
+import { tooltip } from "./core/directives/tooltipDirective";
+import { configureEcho } from "@laravel/echo-vue";
+
 /*
 |-------------------------------------------------------------------------------
 | CSS Style Sheets
@@ -7,79 +15,35 @@ import "../css/app.css";
 
 /*
 |-------------------------------------------------------------------------------
-| Vue and base libraries
-|-------------------------------------------------------------------------------
-*/
-import { createApp, DefineComponent, h } from "vue";
-import { createInertiaApp, Link, Head } from "@inertiajs/vue3";
-import { createPinia } from "pinia";
-import PrimeVue from "primevue/config";
-import Tooltip from "primevue/tooltip";
-import ConfirmationService from "primevue/confirmationservice";
-import FocusTrap from "primevue/focustrap";
-import Aura from "@primevue/themes/aura";
-import "./echo";
-
-/*
-|-------------------------------------------------------------------------------
 | Font Awesome
 |-------------------------------------------------------------------------------
 */
-import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { library } from "@fortawesome/fontawesome-svg-core";
 import { fas } from "@fortawesome/free-solid-svg-icons";
 import { far } from "@fortawesome/free-regular-svg-icons";
 
-library.add(fas);
+configureEcho({
+    broadcaster: "reverb",
+    key: import.meta.env.VITE_REVERB_APP_KEY,
+    wsHost: import.meta.env.VITE_REVERB_HOST,
+    wsPort: 80,
+    wssPort: 443,
+    forceTLS: true,
+    enabledTransports: ["ws", "wss"],
+});
+
 library.add(far);
+library.add(fas);
 
-/*
-|-------------------------------------------------------------------------------
-| App Constants
-|-------------------------------------------------------------------------------
-*/
-const appName = "Tech Bench";
-const pinia = createPinia();
-
-/*
-|-------------------------------------------------------------------------------
-| PrimeVue Configuration
-|-------------------------------------------------------------------------------
-*/
-const primeVueConfig = {
-    theme: {
-        preset: Aura,
-        options: {
-            darkModeSelector: ".dark-mode-not-support-at-this-time",
-        },
-    },
-};
-
-/*
-|-------------------------------------------------------------------------------
-| Initialize App
-|-------------------------------------------------------------------------------
-*/
 createInertiaApp({
-    resolve: (name: string): Promise<DefineComponent> => {
-        const pages = import.meta.glob("./Pages/**/*.vue");
-        return pages[`./Pages/${name}.vue`]() as Promise<DefineComponent>;
-    },
-    setup({ el, App, props, plugin }) {
-        const inertiaApp = createApp({ render: () => h(App, props) })
-            .use(plugin)
-            .use(pinia)
-            .use(PrimeVue, primeVueConfig)
-            .use(ConfirmationService)
-            .component("fa-icon", FontAwesomeIcon)
+    withApp(app) {
+        app.component("fa-icon", FontAwesomeIcon)
             .component("Link", Link)
-            .component("Head", Head)
-            .directive("tooltip", Tooltip)
-            .directive("focustrap", FocusTrap);
-
-        inertiaApp.config.globalProperties.$route = route;
-
-        inertiaApp.mount(el);
+            .directive("on-click-outside", vOnClickOutside)
+            .directive("tooltip", tooltip)
+            // .directive("copy", copy)
+            .directive("focus", focus)
+            .directive("tab-trap", tabTrap);
     },
-    title: (title: string) => (title ? `${title} - ${appName}` : `${appName}`),
 });
