@@ -8,21 +8,38 @@ export const useVariantHelper = () => {
     /**
      * Get the base color of the variant
      */
-    const getVariantBase = (variant: VariantType): string => {
-        return {
-            danger: "rose-600",
-            dark: "gray-900",
-            error: "red-500",
-            help: "violet-600",
-            info: "blue-400",
-            light: "neutral-300",
-            primary: "blue-600",
-            secondary: "blue-300",
-            success: "green-500",
-            warning: "yellow-400",
-            none: "",
-        }[variant];
-    };
+    // const getVariantBase = (variant: VariantType): string => {
+    //     return {
+    //         danger: "rose-600",
+    //         dark: "gray-800",
+    //         error: "rose-500",
+    //         help: "violet-600",
+    //         info: "blue-400",
+    //         light: "neutral-300",
+    //         primary: "blue-600",
+    //         secondary: "blue-300",
+    //         success: "emerald-500",
+    //         warning: "amber-500",
+    //     }[variant];
+    // };
+
+    /**
+     * Get the active color of the variant
+     */
+    // const getActiveVariant = (variant: VariantType): string => {
+    //     return {
+    //         danger: "rose-700",
+    //         dark: "gray-900",
+    //         error: "rose-600",
+    //         help: "violet-700",
+    //         info: "blue-400",
+    //         light: "neutral-400",
+    //         primary: "blue-700",
+    //         secondary: "blue-400",
+    //         success: "emerald-600",
+    //         warning: "amber-600",
+    //     }[variant];
+    // };
 
     /**
      * Basic background color per variant
@@ -48,16 +65,16 @@ export const useVariantHelper = () => {
      */
     const getVariantClass = (variant: VariantType): string => {
         return {
-            danger: "bg-rose-600 text-white focus:outline-rose-700",
-            dark: "bg-gray-900 text-white focus:outline-gray-900",
-            error: "bg-red-500 text-white focus:outline-red-800",
-            help: "bg-violet-600 text-white focus:outline-violet-700",
-            info: "bg-blue-400 text-white focus:outline-blue-500",
-            light: "bg-neutral-300 focus:outline-neutral-400",
-            primary: "bg-blue-500 text-white focus:outline-blue-600",
-            secondary: "bg-blue-300 focus:outline-blue-400",
-            success: "bg-green-500 text-white focus:outline-green-600",
-            warning: "bg-yellow-400 focus:outline-yellow-500",
+            danger: `bg-rose-600 hover:bg-rose-700 text-white focus:outline-rose-700`,
+            dark: `bg-slate-800 hover:bg-slate-900 text-white focus:outline-slate-900`,
+            error: `bg-rose-500 hover:bg-rose-600 text-white focus:outline-rose-600`,
+            help: `bg-violet-600 hover:bg-violet-700 text-white focus:outline-violet-700`,
+            info: `bg-blue-400 hover:bg-blue-500 text-white focus:outline-blue-500`,
+            light: `bg-neutral-300 hover:bg-neutral-400 text-slate-800 focus:outline-neutral-400`,
+            primary: `bg-blue-600 hover:bg-blue-700 text-white focus:outline-blue-700`,
+            secondary: `bg-blue-300 hover:bg-blue-400 text-slate-800 focus:outline-blue-400`,
+            success: `bg-emerald-500 hover:bg-emerald-600 text-white focus:outline-emerald-600`,
+            warning: `bg-amber-500 hover:bg-amber-600 text-white focus:outline-amber-600`,
         }[variant];
     };
 
@@ -66,17 +83,16 @@ export const useVariantHelper = () => {
      */
     const getActiveVariantClass = (variant: VariantType): string => {
         return {
-            danger: "bg-rose-800",
-            dark: "bg-gray-900",
-            error: "bg-red-700",
-            help: "bg-violet-800",
-            info: "bg-blue-600",
-            light: "bg-neutral-500",
-            primary: "bg-blue-700",
-            secondary: "bg-blue-500",
-            success: "bg-green-700",
-            warning: "bg-yellow-600",
-            none: "bg-blue-100",
+            danger: "rose-700",
+            dark: "gray-900",
+            error: "rose-600",
+            help: "violet-700",
+            info: "blue-500",
+            light: "neutral-400",
+            primary: "blue-700",
+            secondary: "blue-400",
+            success: "emerald-600",
+            warning: "amber-600",
         }[variant];
     };
 

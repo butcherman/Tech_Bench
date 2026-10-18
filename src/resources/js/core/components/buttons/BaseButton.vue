@@ -30,9 +30,13 @@ const buttonType = computed<typeof Link | "button">(() =>
 /**
  * Class and font color for the button
  */
-const variantClass = computed(() =>
-    getVariantClass(props.variant ?? "primary"),
-);
+const variantClass = computed(() => {
+    if (props.variant) {
+        return getVariantClass(props.variant ?? "primary");
+    }
+
+    return;
+});
 
 /**
  * Class and color when the button is active
@@ -47,8 +51,8 @@ const activeClass = computed(() =>
 const sizeClass = computed<string>(() => {
     return {
         sm: "px-2 py-1",
-        md: "px-3 py-4",
-        lg: "px-3 py-6",
+        md: "px-3 py-3",
+        lg: "px-3 py-5",
     }[props.size ?? "md"];
 });
 </script>

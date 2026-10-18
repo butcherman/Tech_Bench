@@ -15,14 +15,5 @@ declare module "@inertiajs/core" {
         flashDataType: {
             banner?: FlashAlert;
         };
-        // errorValueType: string[];
-        // layoutProps: {
-        //     title: string;
-        //     showSidebar: boolean;
-        // };
-        // namedLayoutProps: {
-        //     app: { title: string; theme: "light" | "dark" };
-        //     content: { padding: string; maxWidth: string };
-        // };
     }
 }
