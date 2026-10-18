@@ -67,7 +67,7 @@ class BuildUserNavbar
         return collect([])->when($this->seeAdminLink($this->user), function ($collection) {
             $collection->add([
                 'label' => 'Administration',
-                'route' => '#', // route('admin.index'),
+                'route' => route('admin.index'),
                 'icon' => 'cog',
             ]);
         })->when($this->seeReportLink($this->user), function ($collection) {

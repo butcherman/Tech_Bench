@@ -14,7 +14,7 @@ const nonBaggedList = computed<string[]>(
 </script>
 
 <template>
-    <div>
+    <div v-if="nonBaggedList.length">
         <BannerAlert
             v-for="err in nonBaggedList"
             variant="danger"
