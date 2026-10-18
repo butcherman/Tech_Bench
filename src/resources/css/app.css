@@ -55,6 +55,7 @@
     --color-highlight-nav: var(--color-highlight-nav);
     --color-sidebar: var(--color-sidebar);
     --color-sidebar-header: var(--color-sidebar-header);
+    --color-content: var(--color-content);
 }
 
 :root {
@@ -62,6 +63,7 @@
     --color-highlight-nav: #2563eb;
     --color-sidebar: #102037;
     --color-sidebar-header: #152845;
+    --color-content: #f1f5f9;
 }
 
 .dark {
@@ -69,6 +71,7 @@
     --color-highlight-nav: #2563eb;
     --color-sidebar: #0b1120;
     --color-sidebar-header: #102037;
+    --color-content: #0f172a;
 }
 
 /**
