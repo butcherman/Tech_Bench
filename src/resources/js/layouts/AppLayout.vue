@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import AppHeader from "./components/AppHeader.vue";
 import AppSideNav from "./components/AppSideNav.vue";
-import { Head, router, usePage } from "@inertiajs/vue3";
-import { computed, ref } from "vue";
 import Breadcrumbs from "./components/Breadcrumbs.vue";
 import FlashAlert from "./components/FlashAlert.vue";
 import ToastAlert from "./components/ToastAlert.vue";
 import UnbaggedErrors from "./components/UnbaggedErrors.vue";
+import { Head, router, usePage } from "@inertiajs/vue3";
+import { computed, ref } from "vue";
 
 const pageTitle = computed<string | undefined>(
     () =>
@@ -34,7 +34,7 @@ router.on("before", () => {
         <AppHeader @toggle-navbar="toggleNav" />
         <AppSideNav v-model="sideNavHidden" v-on-click-outside="closeNav" />
         <section
-            class="mt-14 lg:ms-64 flex flex-col gap-5 p-5 bg-content h-full"
+            class="mt-14 lg:ms-64 flex flex-col gap-2 p-5 bg-content h-full"
         >
             <Breadcrumbs />
             <UnbaggedErrors />

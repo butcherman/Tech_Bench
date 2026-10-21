@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AdminIndexController;
 use App\Http\Controllers\Admin\ApplicationConfigurationController;
 use App\Http\Controllers\Admin\EmailSettingsController;
 use App\Http\Controllers\Admin\LogoController;
+use App\Http\Controllers\Admin\SendTestEmailController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -58,10 +59,10 @@ Route::middleware('auth.secure')->prefix('administration')->name('admin.')->grou
         Route::get('email-settings', 'edit')
             ->name('email-settings.edit')
             ->breadcrumb('Email Settings', 'admin.index');
-        // Route::put('email-settings', 'update')
-        //     ->name('email-settings.update');
+        Route::put('email-settings', 'update')
+            ->name('email-settings.update');
     });
 
-    // Route::get('test-email', SendTestEmailController::class)
-    //     ->name('test-email');
+    Route::put('test-email', SendTestEmailController::class)
+        ->name('test-email');
 });

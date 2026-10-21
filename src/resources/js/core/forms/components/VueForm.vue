@@ -1,5 +1,4 @@
 <script setup lang="ts" generic="TFormData extends FormDataType<TFormData>">
-import SubmitButton from "@/core/components/buttons/SubmitButton.vue";
 import ValidatedVueForm from "./ValidatedVueForm.vue";
 import { router } from "@inertiajs/vue3";
 import { ref, useTemplateRef } from "vue";

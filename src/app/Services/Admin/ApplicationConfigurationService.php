@@ -143,4 +143,40 @@ class ApplicationConfigurationService
 
         CacheData::clearCache('appData');
     }
+
+    /*
+    |---------------------------------------------------------------------------
+    | Email Settings
+    |---------------------------------------------------------------------------
+    */
+    /**
+     * Get an array of the Email Settings
+     */
+    public function getEmailSettings(): array
+    {
+        return [
+            'from_address' => config('mail.from.address'),
+            'host' => config('mail.mailers.smtp.host'),
+            'port' => config('mail.mailers.smtp.port'),
+            'encryption' => strtoupper(config('mail.mailers.smtp.encryption')),
+            'username' => config('mail.mailers.smtp.username'),
+            'password' => config('mail.mailers.smtp.password')
+                ? __('admin.fake_password')
+                : '',
+            'require_auth' => (bool) config('mail.mailers.smtp.require_auth'),
+        ];
+    }
+
+    /**
+     * Save the new email settings
+     */
+    public function updateEmailSettings(Collection $requestData): void
+    {
+        $this->saveSettings('mail.from.address', $requestData->get('from_address'));
+
+        $this->saveSettingsArray(
+            $requestData->except('from_address')->toArray(),
+            'mail.mailers.smtp'
+        );
+    }
 }

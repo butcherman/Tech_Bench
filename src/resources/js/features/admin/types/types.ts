@@ -26,3 +26,13 @@ interface AppFeatureList {
 interface AdministrativeMessage {
     msg: string;
 }
+
+interface EmailSettings {
+    from_address: string;
+    host: string;
+    port: number;
+    encryption: string;
+    require_auth: boolean;
+    username: string;
+    password: string;
+}
