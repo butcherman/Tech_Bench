@@ -27,7 +27,7 @@ Route::middleware('auth.secure')->prefix('administration')->name('admin.')->grou
     Route::controller(LogoController::class)->group(function () {
         Route::get('logo', 'edit')
             ->name('logo.edit')
-            ->breadcrumb('Tech Bench Logo', 'admin.index');
+            ->breadcrumb('Logo', 'admin.index');
         Route::post('logo', 'update')
             ->name('logo.update');
         Route::delete('logo', 'destroy')
@@ -37,7 +37,7 @@ Route::middleware('auth.secure')->prefix('administration')->name('admin.')->grou
     /*
     |---------------------------------------------------------------------------
     | Basic App Settings
-    | /administration/basic-settings
+    | /administration/configuration
     |---------------------------------------------------------------------------
     */
     Route::controller(ApplicationConfigurationController::class)->group(function () {
@@ -58,8 +58,8 @@ Route::middleware('auth.secure')->prefix('administration')->name('admin.')->grou
         Route::get('email-settings', 'edit')
             ->name('email-settings.edit')
             ->breadcrumb('Email Settings', 'admin.index');
-        Route::put('email-settings', 'update')
-            ->name('email-settings.update');
+        // Route::put('email-settings', 'update')
+        //     ->name('email-settings.update');
     });
 
     // Route::get('test-email', SendTestEmailController::class)

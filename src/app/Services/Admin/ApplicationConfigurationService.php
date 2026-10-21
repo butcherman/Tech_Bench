@@ -2,9 +2,12 @@
 
 namespace App\Services\Admin;
 
+use App\Facades\CacheData;
 use App\Traits\AppSettingsTrait;
+use ArthurPatriot\Tus\Helpers\TusFile;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 class ApplicationConfigurationService
 {
@@ -104,5 +107,40 @@ class ApplicationConfigurationService
         }
 
         $this->saveSettings('app.home_links', $newLinks);
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | Application Logo
+    |---------------------------------------------------------------------------
+    */
+    /**
+     * Save the Logo File
+     */
+    public function updateLogo(TusFile $logoFile): string
+    {
+        // Set the new filename
+        $fileParts = pathinfo($logoFile->path);
+        $extension = $fileParts['extension'];
+
+        $logoName = 'logo-'.Str::random(10).'.'.$extension;
+        $destination = 'images/logo/'.$logoName;
+
+        $this->saveSettings(
+            'app.logo',
+            '/storage/'.$destination
+        );
+
+        return $destination;
+    }
+
+    /**
+     * Delete the Logo File
+     */
+    public function destroyLogo(): void
+    {
+        $this->clearSetting('app.logo');
+
+        CacheData::clearCache('appData');
     }
 }

@@ -37,7 +37,7 @@ const breadcrumbs = computed(() => page.props.breadcrumbs);
                         <Link :href="link.url"> {{ link.title }}</Link>
                     </li>
                     <li>
-                        <fa-icon icon="chevron-right" class="text-muted" />
+                        <fa-icon icon="chevron-right" />
                     </li>
                 </template>
             </template>

@@ -15,6 +15,8 @@ class AdminIndexController extends Controller
      */
     public function __invoke(Request $request, BuildAdminMenu $svc): Response
     {
+        $this->authorize('admin-link');
+
         return Inertia::render('Admin/Index', [
             'menu' => fn () => $svc($request->user()),
         ]);

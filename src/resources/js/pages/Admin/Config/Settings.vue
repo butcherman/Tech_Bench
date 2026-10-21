@@ -20,7 +20,7 @@ defineProps<{
 
 <template>
     <div class="flex flex-col gap-4">
-        <div>
+        <div class="border-b border-slate-300">
             <h1>Application Configuration</h1>
             <p>Application Global Settings</p>
         </div>

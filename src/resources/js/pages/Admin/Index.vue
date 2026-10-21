@@ -14,7 +14,7 @@ const props = defineProps<{
 
 <template>
     <div class="flex flex-col gap-4">
-        <div>
+        <div class="border-b border-slate-300">
             <h1>System Administration</h1>
             <p>Manage Users and Application Features</p>
         </div>
