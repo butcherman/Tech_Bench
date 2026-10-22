@@ -7,65 +7,68 @@
 #                                                                              #
 ################################################################################
 
-FROM butcherman/tech_bench_baseline:1.0
+FROM mysql:9.4 AS mysql
+FROM php:8.5-fpm
 
-ENV TB_URL=localhost
-ENV ENABLE_HTTPS=true
-ENV SERVICE=master
+# Create the tbuser and tbgroup
+RUN addgroup --gid 1024 tbgroup
+RUN adduser --disabled-password --gecos "" --force-badname --ingroup tbgroup tbuser
+RUN usermod -a -G www-data tbuser
 
-# Make sure image is up to date
-RUN apt update && apt upgrade -y --no-install-recommends
+# Add the docker-php-extension-installer script
+ADD --chmod=0755 \
+    https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions \
+    /usr/local/bin/
 
-#  Install php modules
-RUN apt install -yq php-common \
-    php-curl \
-    php-dom \
-    php-gd \
-    php-json \
-    php-mbstring \
-    php-mysql \
-    php-pdo \
-    php-redis \
-    php-xml \
-    php-zip \
+# Install dependency packages
+RUN apt update && apt install -yq \
     curl \
+    libncurses6 \
+    libtinfo6 \
     nano \
+    nodejs \
+    npm \
     openssl \
     unzip \
     yq \
-    zip \
-    mariadb-client
+    zip
 
-#  Entrypoint and update scripts along with any other necessary shell scripts will be copied here
-RUN mkdir -p /scripts
+# Install PHP Extensions
+RUN install-php-extensions \
+    bcmath \
+    exif \
+    fileinfo \
+    gd \
+    gmp \
+    intl \
+    pcntl \
+    pdo_mysql \
+    zip
 
-#  Update npm and composer
-RUN apt install -y nodejs npm
+# Bring NodeJS and NPM up to the latest version
 RUN npm install -g n
-RUN n stable
-RUN npm install -g npm@latest
+RUN n lts
+RUN npm install -g npm@12.0.1
 
-#  Update Composer
-RUN composer self-update --2
 
-#  Basic scripts for Starting, Initializing and Updating Tech Bench App
-COPY ./download_tb.sh /scripts/
-COPY ./startup.sh /scripts/
-COPY ./update.sh /scripts/
-COPY ./setup.sh /scripts/
-COPY ./scheduler.sh /scripts/
-COPY ./_functions.sh /scripts/
-COPY ./install.sh /scripts/
+# Install Composer
+COPY --from=composer:2 /usr/bin/composer /usr/local/bin/composer
 
-#  Set permissions for the scripts to allow them to run
-RUN chmod 775 /scripts/*
-RUN chmod 775 /app
-RUN chmod 775 /opt/bitnami/php -R
+# Use the default production configuration
+RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
-# Create the staging directory
-RUN mkdir -p /staging
-RUN chmod 777 /staging
+# Build Healthcheck
+HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
+    CMD php artisan health:check
 
-WORKDIR /app
+# Copy the official MySQL client binaries
+COPY --from=mysql /usr/bin/mysql /usr/bin/mysql
+COPY --from=mysql /usr/bin/mysqldump /usr/bin/mysqldump
+COPY --from=mysql /usr/bin/mysqladmin /usr/bin/mysqladmin
 
-ENTRYPOINT [ "/scripts/startup.sh" ]
+# Change the owner of the /var/html folder to allow tbuser to write to it
+RUN chown tbuser:www-data -R /var/www
+
+# Finalize Image
+USER tbuser
+WORKDIR /var/www/html
