@@ -1,4 +1,3 @@
-
 #!/bin/bash
 
 ################################################################################
@@ -38,7 +37,7 @@ main()
         php artisan scout:import "App\Models\TechTip"
         php artisan scout:import "App\Models\Customer"
 
-        exec php-fpm -F
+        exec php-fpm -F --pid /tmp/php-fpm.pid
 
     elif [ "$SERVICE" = "horizon" ]
     then
