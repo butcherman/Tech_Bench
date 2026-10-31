@@ -20,8 +20,9 @@ RUN chmod 775 /scripts/setup.dev.sh
 RUN apt update && apt upgrade -y --no-install-recommends
 
 #  Install xDebug to allow PHPUnit Testing
-RUN apt install php-xdebug -y
-RUN apt install php-mysql -y
+# RUN apt install php-xdebug -y
+# RUN apt install php-mysql -y
+# RUN docker-php-ext-install -j"$(nproc)" xdebug
 
 #  Create a group and user to run the file permissions
 RUN addgroup --gid 1024 tbgroup
