@@ -67,6 +67,7 @@ RUN docker-php-ext-install -j"$(nproc)" \
     mysqli \
     pdo_mysql \
     pcntl \
+    intl \
     zip
 
 # Install Redis PHP extension
