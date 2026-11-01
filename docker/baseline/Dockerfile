@@ -1,92 +1,51 @@
-
 ################################################################################
 #                                                                              #
-#                   Tech Bench PHP 8.2 Baseline Image                         #
-#                                                                              #
-#    Baseline Tech Bench build does not contain the Tech Bench App             #
-#    All versions of Tech Bench start with this OS/runtime build               #
-#    Application files and scripts are added in subsequent builds              #
+#    Baseline Tech Bench build does not have Tech Bench App, only              #
+#          basic install point in which to build app off of                    #
+#        all versions of Tech Bench start with this OS build                   #
+#                 scripts and app copied later                                 #
 #                                                                              #
 ################################################################################
 
-FROM php:8.2.35-fpm-bookworm
+FROM mysql:9.4 AS mysql
+FROM php:8.5.12-fpm
 
-# Application environment
-ENV TB_URL=localhost
-ENV ENABLE_HTTPS=true
-ENV SERVICE=master
-
-# Version of Mike Farah yq
-ARG YQ_VERSION=v4.45.4
+# Add the docker-php-extension-installer script
+ADD --chmod=0755 \
+    https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions \
+    /usr/local/bin/
 
 ################################################################################
 # System Dependencies
 ################################################################################
 
-RUN apt-get update && apt-get upgrade -y --no-install-recommends && \
-    apt-get install -y --no-install-recommends \
+RUN apt update && apt install -yq \
     curl \
+    libncurses6 \
+    libtinfo6 \
     nano \
     openssl \
     unzip \
-    zip \
-    mariadb-client \
-    libcurl4-openssl-dev \
-    libfreetype6-dev \
-    libjpeg62-turbo-dev \
-    libpng-dev \
-    libwebp-dev \
-    libonig-dev \
-    libxml2-dev \
-    libzip-dev \
-    zlib1g-dev \
-    && rm -rf /var/lib/apt/lists/*
+    yq \
+    zip
 
 ################################################################################
 # PHP Extensions
 ################################################################################
 
-# Configure GD
-RUN docker-php-ext-configure gd \
-    --with-freetype \
-    --with-jpeg \
-    --with-webp
-
-# Install XML extensions
-RUN CFLAGS="-I/usr/src/php" docker-php-ext-install -j"$(nproc)" \
-    dom \
-    xml \
-    xmlreader \
-    xmlwriter
-
-# Install remaining PHP extensions
-RUN docker-php-ext-install -j"$(nproc)" \
-    curl \
+RUN install-php-extensions \
+    bcmath \
+    exif \
+    fileinfo \
     gd \
-    mbstring \
-    mysqli \
-    pdo_mysql \
-    pcntl \
+    gmp \
     intl \
+    pcntl \
+    pdo_mysql \
     zip
 
-# Install Redis PHP extension
-RUN pecl install redis \
-    && docker-php-ext-enable redis
-
-################################################################################
-# Install yq
-################################################################################
-
-RUN case "$(dpkg --print-architecture)" in \
-    amd64) YQ_ARCH=amd64 ;; \
-    arm64) YQ_ARCH=arm64 ;; \
-    *) echo "Unsupported architecture for yq"; exit 1 ;; \
-    esac \
-    && curl -fsSL \
-    "https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/yq_linux_${YQ_ARCH}" \
-    -o /usr/local/bin/yq \
-    && chmod +x /usr/local/bin/yq
+# Use the default production configuration
+RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
 ################################################################################
 # Node.js and npm
@@ -112,32 +71,20 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 RUN composer self-update --2
 
 ################################################################################
-# Tech Bench Directories
+# Healthcheck
 ################################################################################
 
-RUN mkdir -p /scripts /staging /app \
-    && chmod 775 /app \
-    && chmod 777 /staging
+HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
+    CMD php artisan health:check
 
 ################################################################################
-# Tech Bench Scripts
+# MySQL Binaries
 ################################################################################
-
-COPY ./download_tb.sh /scripts/
-COPY ./startup.sh /scripts/
-COPY ./update.sh /scripts/
-COPY ./setup.sh /scripts/
-COPY ./scheduler.sh /scripts/
-COPY ./_functions.sh /scripts/
-COPY ./install.sh /scripts/
-
-# Set permissions for scripts
-RUN chmod 775 /scripts/*
+COPY --from=mysql /usr/bin/mysql /usr/bin/mysql
+COPY --from=mysql /usr/bin/mysqldump /usr/bin/mysqldump
+COPY --from=mysql /usr/bin/mysqladmin /usr/bin/mysqladmin
 
 ################################################################################
 # Finalize Image
 ################################################################################
-
-WORKDIR /app
-
-ENTRYPOINT ["/scripts/startup.sh"]
+WORKDIR /var/www/html
