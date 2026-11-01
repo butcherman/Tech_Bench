@@ -1,39 +1,49 @@
 #!/bin/bash
 
+set -e
+
 #################################################################################################
 #                                                                                               #
 #                                      Entrypoint Script                                        #
-#              If there is no SSL Cert, create one before running Bitnami entrypoint            #
+#                         Tech Bench NGINX Initialization                                      #
 #                                                                                               #
 #################################################################################################
 
-echo "Starting NGINX Setup Script"
+echo "Starting Tech Bench NGINX Setup"
 
-# Verify that the Logs Folder exists and is writable
-# if [ ! -d "/app/storage/logs/NGINX" ]
-# then
-#     mkdir /app/storage/logs/NGINX
-#     chmod 777 /app/storage/logs/NGINX
-# fi
+# Determine application URL
+APP_URL="${APP_URL:-${TB_URL:-localhost}}"
 
-# If the SSL file does not exist, create a self signed SSL cert
-if [ ! -f "/app/keystore/server.crt" ]
+# Create required directories
+mkdir -p /app/keystore/private
+mkdir -p /app/storage/logs/nginx
+
+# Generate a self-signed SSL certificate if one does not exist
+if [ ! -f "/app/keystore/server.crt" ] || [ ! -f "/app/keystore/private/server.key" ]
 then
-    #  Generate self signed SSL Certificate
-    echo "Creating Self Signed SSL Certificate"
-    openssl rand -base64 48 > /tmp/passphrase.txt
-    openssl genrsa -aes128 -passout file:/tmp/passphrase.txt -out /tmp/server.key 2048
-    openssl req -new -passin file:/tmp/passphrase.txt -key /tmp/server.key -out /tmp/server.csr -subj "/C=FR/O=tb/OU=Domain Control Validated/CN=$APP_URL"
-    cp /tmp/server.key /tmp/server.key.org
-    openssl rsa -in /tmp/server.key.org -passin file:/tmp/passphrase.txt -out /tmp/server.key
-    openssl x509 -req -days 36500 -in /tmp/server.csr -signkey /tmp/server.key -out /tmp/server.crt
+    echo "Generating self-signed SSL certificate for ${APP_URL}"
 
-    #  Move the new certificate and key to the Tech Bench directory
-    mkdir -p /app/keystore/private
-    mv /tmp/server.crt /app/keystore/server.crt
-    mv /tmp/server.key /app/keystore/private/server.key
+    openssl req -x509 \
+        -nodes \
+        -days 36500 \
+        -newkey rsa:2048 \
+        -keyout /app/keystore/private/server.key \
+        -out /app/keystore/server.crt \
+        -subj "/C=US/O=Tech Bench/CN=${APP_URL}"
 
-    #  Cleanup unneeded files
-    rm -rf /tmp/server.csr /tmp/server.key.org /tmp/passphrase.txt
+    chmod 600 /app/keystore/private/server.key
+    chmod 644 /app/keystore/server.crt
+
+    echo "SSL certificate generated successfully"
+else
+    echo "Existing SSL certificate found"
 fi
 
+# Verify NGINX configuration
+echo "Testing NGINX configuration"
+
+nginx -t
+
+echo "Starting NGINX"
+
+exec "$@"
