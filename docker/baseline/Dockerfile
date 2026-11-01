@@ -80,6 +80,7 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
 ################################################################################
 # MySQL Binaries
 ################################################################################
+
 COPY --from=mysql /usr/bin/mysql /usr/bin/mysql
 COPY --from=mysql /usr/bin/mysqldump /usr/bin/mysqldump
 COPY --from=mysql /usr/bin/mysqladmin /usr/bin/mysqladmin
@@ -87,4 +88,5 @@ COPY --from=mysql /usr/bin/mysqladmin /usr/bin/mysqladmin
 ################################################################################
 # Finalize Image
 ################################################################################
+
 WORKDIR /var/www/html
