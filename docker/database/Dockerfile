@@ -16,4 +16,5 @@ HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=6 \
 ################################################################################
 # Finalize Image/Create Entrypoint
 ################################################################################
+
 COPY ./databaseInit.sql /docker-entrypoint-initdb.d/databaseInit.sql
