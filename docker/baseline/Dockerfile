@@ -46,6 +46,7 @@ RUN install-php-extensions \
 
 # Use the default production configuration
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
+COPY ./php-extended.ini $PHP_INI_DIR/conf.d/php-extended.ini
 
 ################################################################################
 # Node.js and npm
