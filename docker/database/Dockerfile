@@ -1,20 +1,19 @@
-#################################################################################################
-#                                                                                               #
-#            Database Container holds the MySQL Database for Tech Bench                         #
-#                                                                                               #
-#################################################################################################
+################################################################################
+#                                                                              #
+#        Database Container holds the MySQL Database for Tech Bench            #
+#                                                                              #
+################################################################################
 
-FROM butcherman/tech_bench_database:1.0
+FROM mysql:9.4
 
-USER root
+################################################################################
+# Healthcheck
+################################################################################
 
-RUN apt install && apt upgrade -y --no-install-recommends
+HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=6 \
+    CMD mysqladmin ping -h localhost
 
-ENV MYSQL_ROOT_PASSWORD=tbRootPasswd
-ENV MYSQL_USER=tbUser
-ENV MYSQL_PASSWORD=techBenchDatabase
-ENV MYSQL_DATABASE=tech-bench
-
-COPY ./defaultDatabase.sql /docker-entrypoint-initdb.d/
-
-USER tbUser
+################################################################################
+# Finalize Image/Create Entrypoint
+################################################################################
+COPY ./databaseInit.sql /docker-entrypoint-initdb.d/databaseInit.sql
