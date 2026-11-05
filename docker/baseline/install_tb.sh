@@ -8,12 +8,13 @@
 #                                                                              #
 ################################################################################
 
-source /scripts/_functions.sh
-
-APP_ROOT=/app
-STAGE_ROOT=/staging
+source /tb_data/scripts/_functions.sh
 
 echo "Installing Tech Bench Files"
+
+# Directory Variables
+STAGE_ROOT=/tb_data/staging
+APP_ROOT=/app
 
 # Check to make sure that the staging directory exists and is populated
 if [ ! -f "$STAGE_ROOT/version" ]
@@ -43,7 +44,6 @@ fi
 
 # Create the Keystore directory for Certificates
 run mkdir keystore
-run chown tbuser:www-data keystore
 run chmod 775 keystore
 
 echo -e "${GREEN}Tech Bench Installation Complete${NC}"

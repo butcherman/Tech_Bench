@@ -7,9 +7,10 @@
 #                                                                              #
 ################################################################################
 
-APP_ROOT=/app
+source /tb_data/scripts/_functions.sh
 
-source /scripts/_functions.sh
+# Directory Variables
+APP_ROOT=/app
 
 echo "New installation of Tech Bench detected"
 echo "Setting up the application for the first time"
