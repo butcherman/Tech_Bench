@@ -1,54 +1,133 @@
+
 ################################################################################
-#                                                                              #
-#              Tech Bench build for main Tech Bench Application                #
-#                                                                              #
+# Tech Bench - Production PHP-FPM Image
 ################################################################################
 
-FROM butcherman/tech_bench_baseline:1.0
+# ------------------------------------------------------------------------------
+# PHP base image
+# ------------------------------------------------------------------------------
 
-ARG BRANCH=false
-ARG VERSION=latest
+FROM php:8.5-fpm-bookworm AS php-base
 
-# Make sure image is up to date
-RUN apt update && apt upgrade -y --no-install-recommends
+# Install PHP extension installer
+ADD --chmod=0755 \
+    https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions \
+    /usr/local/bin/install-php-extensions
 
-# Update npm and composer
-RUN npm install -g npm@latest
-RUN composer self-update
+# Install required PHP extensions
+RUN install-php-extensions \
+    bcmath \
+    exif \
+    gd \
+    gmp \
+    intl \
+    pcntl \
+    pdo_mysql \
+    sockets \
+    zip
 
-# Download application files
-RUN /scripts/download_tb.sh ${BRANCH} ${VERSION}
+# Production PHP configuration
+RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
-# Create a group and user to run the file permissions
-RUN addgroup --gid 1024 tbgroup
-RUN adduser --disabled-password --gecos "" --force-badname --ingroup tbgroup tbuser
-RUN usermod -a -G root tbuser
-RUN chmod 775 /var/log
+# Create Tech Bench user and group
+RUN groupadd --gid 1024 tbgroup \
+    && useradd --uid 1024 --gid tbgroup --create-home --shell /usr/sbin/nologin tbuser
 
-# Set directory permissions
-RUN chown -R tbuser:tbgroup /app
-RUN find /app/ -type f -exec chmod 644 {} \;
-RUN find /app/ -type d -exec chmod 755 {} \;
-RUN chmod -R 775 /app/storage
-RUN chmod -R 775 /app/keystore
+# PHP-FPM configuration
+COPY docker/tech_bench/www.conf /usr/local/etc/php-fpm.d/zz-tech-bench.conf
 
-RUN chown tbuser:tbgroup -R /app/keystore
-RUN chown tbuser:tbgroup -R /app/storage
+# ------------------------------------------------------------------------------
+# Composer dependencies
+# ------------------------------------------------------------------------------
 
-# Set same directory permissions for staging directory
-RUN chown -R tbuser:tbgroup /staging
-RUN find /staging/ -type f -exec chmod 644 {} \;
-RUN find /staging/ -type d -exec chmod 755 {} \;
-RUN chmod -R 777 /staging/storage
+FROM php-base AS composer-build
 
-USER tbuser
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Install dependencies
-# RUN composer install --no-dev --no-interaction --optimize-autoloader
-# RUN npm install --omit=dev
-
-#  Place a version file in the staging directory to note what version this image is
-RUN echo $(php /app/artisan version --format=compact | sed -e 's/Tech Bench //g') > /staging/version
-
-# Finalize image
 WORKDIR /app
+
+# Copy Composer files first for better layer caching
+COPY src/composer.json src/composer.lock ./
+
+# Install production dependencies
+RUN composer install \
+    --no-dev \
+    --no-interaction \
+    --prefer-dist \
+    --optimize-autoloader \
+    --no-scripts
+
+# Copy application source
+COPY src/ ./
+
+# Remove locally generated Laravel cache files
+RUN rm -f bootstrap/cache/*.php
+
+# Run only the safe Composer autoload discovery step
+RUN composer dump-autoload \
+    # --no-dev \
+    --optimize \
+    --no-scripts \
+    && php artisan package:discover --ansi
+
+# ------------------------------------------------------------------------------
+# Frontend build
+# ------------------------------------------------------------------------------
+
+FROM node:22-bookworm-slim AS frontend-build
+
+WORKDIR /app
+
+COPY src/package.json src/package-lock.json ./
+
+RUN npm ci
+
+COPY src/ ./
+
+RUN npm run build
+
+# ------------------------------------------------------------------------------
+# Production image
+# ------------------------------------------------------------------------------
+
+FROM php-base AS production
+
+WORKDIR /app
+
+# Copy application source and Composer dependencies
+COPY --from=composer-build --chown=tbuser:tbgroup /app/ /app/
+
+# Copy compiled frontend assets
+COPY --from=frontend-build --chown=tbuser:tbgroup /app/public/build/ /app/public/build/
+
+# Create writable Laravel directories
+RUN mkdir -p \
+    /app/storage/app \
+    /app/storage/framework/cache \
+    /app/storage/framework/sessions \
+    /app/storage/framework/views \
+    /app/storage/logs \
+    /app/bootstrap/cache \
+    /app/keystore \
+    && chown -R tbuser:tbgroup \
+    /app/storage \
+    /app/bootstrap/cache \
+    /app/keystore \
+    && chmod -R 775 \
+    /app/storage \
+    /app/bootstrap/cache \
+    /app/keystore
+
+# Application files are readable by NGINX and PHP-FPM
+RUN find /app -type d -exec chmod 755 {} \; \
+    && find /app -type f -exec chmod 644 {} \; \
+    && chmod -R 775 /app/storage /app/bootstrap/cache /app/keystore
+
+# Store the image version
+RUN php artisan version --format=compact \
+    | sed -e 's/Tech Bench //' > /app/version
+
+# PHP-FPM runs as the configured service
+EXPOSE 9000
+
+CMD ["php-fpm"]
