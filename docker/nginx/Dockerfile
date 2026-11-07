@@ -13,7 +13,9 @@ ENV TB_URL=localhost
 
 # Install OpenSSL for initial self-signed certificate generation.
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends openssl \
+    && apt-get install -y --no-install-recommends \
+    openssl \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy the public application files, including Vite assets.

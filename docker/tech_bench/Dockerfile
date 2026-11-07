@@ -92,7 +92,7 @@ RUN rm -f bootstrap/cache/*.php
 
 # Run only the safe Composer autoload discovery step
 RUN composer dump-autoload \
-    # --no-dev \
+    --no-dev \
     --optimize \
     --no-scripts \
     && php artisan package:discover --ansi
