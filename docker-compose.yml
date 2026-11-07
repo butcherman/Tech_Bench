@@ -13,8 +13,10 @@ networks:
 volumes:
     appData:
     dbData:
-    redisData:
+    keystoreData:
     meilisearchData:
+    redisData:
+    storageData:
 
 services:
     # Application Container
@@ -23,10 +25,9 @@ services:
         restart: unless-stopped
         image: butcherman/tech_bench_app:${APP_VERSION:-latest}
         volumes:
-            - appData:/app
+            - storageData:/app/storage
+            - keystoreData:/app/keystore
             - ./.env:/app/.env
-            # - ./backupData:/app/storage/backups/tech-bench
-            # - ./logData:/app/storage/logs
         environment:
             - SERVICE=app
             - TB_URL=${BASE_URL}
@@ -38,11 +39,12 @@ services:
 
     # NGINX Web Server
     nginx:
-        image: butcherman/tech_bench_nginx:1.1
+        image: butcherman/tech_bench_nginx:${APP_VERSION:-latest}
         container_name: nginx
         restart: unless-stopped
         volumes:
-            - appData:/app
+            - storageData:/app/storage:ro
+            - keystoreData:/app/keystore:ro
             - ./.env:/app/.env
         environment:
             - TB_URL=${BASE_URL}
@@ -52,8 +54,10 @@ services:
         networks:
             - app-tier
         depends_on:
-            - tech_bench
-            - reverb
+            database:
+                condition: service_started
+            reverb:
+                condition: service_started
 
     #  Reverb Container for Websockets
     reverb:
@@ -61,14 +65,17 @@ services:
         restart: unless-stopped
         image: butcherman/tech_bench_app:${APP_VERSION:-latest}
         volumes:
-            - appData:/app
+            - storageData:/app/storage
+            - keystoreData:/app/keystore
             - ./.env:/app/.env
         environment:
             - SERVICE=reverb
+            - TB_URL=${BASE_URL}
         networks:
             - app-tier
         depends_on:
-            - tech_bench
+            tech_bench:
+                condition: healthy
 
     #  Horizon Container to run background jobs
     horizon:
@@ -76,15 +83,19 @@ services:
         restart: unless-stopped
         image: butcherman/tech_bench_app:${APP_VERSION:-latest}
         volumes:
-            - appData:/app
+            - storageData:/app/storage
+            - keystoreData:/app/keystore
             - ./.env:/app/.env
         environment:
             - SERVICE=horizon
+            - TB_URL=${BASE_URL}
         networks:
             - app-tier
         depends_on:
-            - tech_bench
-            - nginx
+            tech_bench:
+                condition: service_healthy
+            nginx:
+                condition: service_healthy
 
     #  Scheduler Container
     scheduler:
@@ -92,15 +103,19 @@ services:
         restart: unless-stopped
         image: butcherman/tech_bench_app:${APP_VERSION:-latest}
         volumes:
-            - appData:/app
+            - storageData:/app/storage
+            - keystoreData:/app/keystore
             - ./.env:/app/.env
         environment:
             - SERVICE=scheduler
+            - TB_URL=${BASE_URL}
         networks:
             - app-tier
         depends_on:
-            - tech_bench
-            - nginx
+            tech_bench:
+                condition: service_healthy
+            nginx:
+                condition: service_healthy
 
     # MySQL Database Container
     database:
