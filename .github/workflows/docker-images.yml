@@ -1,0 +1,69 @@
+name: Build and Publish Tech Bench Docker Images
+
+on:
+  push:
+    branches:
+      - dev9-docker_update
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build and publish Docker images
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Determine image tags
+        id: vars
+        shell: bash
+        run: |
+          if [[ "${GITHUB_REF}" == refs/tags/v* ]]; then
+            IMAGE_TAG="${GITHUB_REF_NAME#v}"
+          else
+            IMAGE_TAG="dev"
+          fi
+
+          echo "image_tag=${IMAGE_TAG}" >> "${GITHUB_OUTPUT}"
+          echo "sha_tag=sha-${GITHUB_SHA::7}" >> "${GITHUB_OUTPUT}"
+
+      - name: Build and publish PHP application image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: docker/tech_bench/Dockerfile
+          push: true
+          tags: |
+            butcherman/tech_bench_app:${{ steps.vars.outputs.image_tag }}
+            butcherman/tech_bench_app:${{ steps.vars.outputs.sha_tag }}
+          cache-from: type=gha,scope=tech-bench-app
+          cache-to: type=gha,mode=max,scope=tech-bench-app
+
+      - name: Build and publish NGINX image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: docker/nginx/Dockerfile
+          push: true
+          build-args: |
+            APP_IMAGE=butcherman/tech_bench_app
+            APP_VERSION=${{ steps.vars.outputs.image_tag }}
+          tags: |
+            butcherman/tech_bench_nginx:${{ steps.vars.outputs.image_tag }}
+            butcherman/tech_bench_nginx:${{ steps.vars.outputs.sha_tag }}
+          cache-from: type=gha,scope=tech-bench-nginx
+          cache-to: type=gha,mode=max,scope=tech-bench-nginx
