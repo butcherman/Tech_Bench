@@ -77,7 +77,7 @@ services:
             reverb:
                 condition: service_healthy
         healthcheck:
-            test: ["CMD", "curl", "-kfsS", "-o", "/dev/null", "https://127.0.0.1/"]
+            test: ["CMD", "curl", "-kfsS", "-o", "/dev/null", "https://127.0.0.1/health"]
             interval: 30s
             timeout: 10s
             retries: 3
@@ -214,9 +214,28 @@ services:
         networks:
             - app-tier
 
-###########################################################################################
-    #                               Dev Specific Containers                                   #
-    ###########################################################################################
+    # --------------------------------------------------------------------------
+    # Docker Management Container
+    # --------------------------------------------------------------------------
+    dockerManager:
+        image: docker-sidecar:test
+        container_name: dockerManager
+        restart: unless-stopped
+        stop_signal: SIGTERM
+        volumes:
+            - /home/cerberus/dev/Docker-Sidecar/src:/var/www/html
+            - /home/cerberus/dev/Tech_Bench/docker-dev:/home/cerberus/dev/Tech_Bench/docker-dev
+            - /var/run/docker.sock:/var/run/docker.sock
+        environment:
+            - TECH_BENCH_INSTALL_DIR=/opt/tech-bench
+        networks:
+            - app-tier
+        ports:
+            - 8080:8080
+
+################################################################################
+#                        Dev Specific Containers                               #
+################################################################################
 
     #  Mailpit for Email Traps
     mailpit:
