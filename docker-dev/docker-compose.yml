@@ -226,12 +226,45 @@ services:
             - /home/cerberus/dev/Docker-Sidecar/src:/var/www/html
             - /home/cerberus/dev/Tech_Bench/docker-dev:/home/cerberus/dev/Tech_Bench/docker-dev
             - /var/run/docker.sock:/var/run/docker.sock
+            - /home/cerberus/dev/Tech_Bench/docker-dev:/opt/tech-bench
         environment:
             - TECH_BENCH_INSTALL_DIR=/opt/tech-bench
+            - TECH_BENCH_COMPOSE_PROJECT_NAME=docker-dev
+            - TECH_BENCH_COMPOSE_DIRECTORY=/home/cerberus/dev/Tech_Bench/docker-dev
         networks:
             - app-tier
         ports:
-            - 8080:8080
+            - 8080:8080 # For testing only
+
+    # --------------------------------------------------------------------------
+    # Docker Worker Container
+    # --------------------------------------------------------------------------
+    dockerManagerWorker:
+        image: docker-sidecar:test
+        container_name: dockerManagerWorker
+        restart: unless-stopped
+        stop_signal: SIGTERM
+        stop_grace_period: 3700s
+        command:
+            - php
+            - artisan
+            - queue:work
+            - redis
+            - --queue=docker-updates
+            - --sleep=3
+            - --tries=1
+            - --timeout=3600
+        volumes:
+            - /home/cerberus/dev/Docker-Sidecar/src:/var/www/html
+            - /home/cerberus/dev/Tech_Bench/docker-dev:/home/cerberus/dev/Tech_Bench/docker-dev
+            - /var/run/docker.sock:/var/run/docker.sock
+            - /home/cerberus/dev/Tech_Bench/docker-dev:/opt/tech-bench
+        environment:
+            - TECH_BENCH_INSTALL_DIR=/opt/tech-bench
+            - TECH_BENCH_COMPOSE_PROJECT_NAME=docker-dev
+            - TECH_BENCH_COMPOSE_DIRECTORY=/home/cerberus/dev/Tech_Bench/docker-dev
+        networks:
+            - app-tier
 
 ################################################################################
 #                        Dev Specific Containers                               #
