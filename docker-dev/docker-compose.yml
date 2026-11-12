@@ -212,11 +212,19 @@ services:
     meilisearch:
         container_name: meilisearch
         restart: unless-stopped
-        image: butcherman/tech_bench_meilisearch:1.0
+        image: getmeili/meilisearch:v1.49.0
+        environment:
+            - MEILI_MASTER_KEY=${MEILI_MASTER_KEY}
         volumes:
             - meilisearchData:/meili_data
         networks:
             - app-tier
+        healthcheck:
+            test: ["CMD", "curl", "-f", "http://localhost:7700/health"]
+            interval: 30s
+            timeout: 30s
+            retries: 6
+            start_period: 5s
 
     # --------------------------------------------------------------------------
     # Docker Management Container
