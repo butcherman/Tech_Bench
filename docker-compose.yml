@@ -1,6 +1,11 @@
-
 ################################################################################
-# Tech Bench Docker Installation
+#                                                                              #
+#                                                                              #
+#                          Tech Bench Docker Installation                      #
+#           NOTE:  Check .env file for necessary fields to modify to           #
+#                        secure this Tech Bench installation                   #
+#                                                                              #
+#                                                                              #
 ################################################################################
 
 networks:
@@ -14,6 +19,7 @@ volumes:
     meilisearchData:
     redisData:
     storageData:
+    sidecarData:
 
 services:
 
@@ -70,7 +76,7 @@ services:
             reverb:
                 condition: service_healthy
         healthcheck:
-            test: ["CMD", "curl", "-kfsS", "-o", "/dev/null", "https://127.0.0.1/"]
+            test: ["CMD", "curl", "-kfsS", "-o", "/dev/null", "https://127.0.0.1/health"]
             interval: 30s
             timeout: 10s
             retries: 3
@@ -160,16 +166,15 @@ services:
     database:
         container_name: database
         restart: unless-stopped
-        image: butcherman/tech_bench_database:1.0
+        image: butcherman/tech_bench_database:2.0
+        environment:
+            - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
         volumes:
             - dbData:/var/lib/mysql
         networks:
             - app-tier
-        # healthcheck:
-        #     test: ['CMD', '/opt/bitnami/scripts/mysql/healthcheck.sh']
-        #     interval: 15s
-        #     timeout: 5s
-        #     retries: 6
+        ports:
+            - "3306:3306"
 
     # --------------------------------------------------------------------------
     # Redis
@@ -178,13 +183,21 @@ services:
     redis:
         container_name: redis
         restart: unless-stopped
-        image: butcherman/tech_bench_redis:1.0
+        image: redis:8.10.2
+        command:
+            - sh
+            - -c
+            - 'exec redis-server --appendonly yes --requirepass "$$REDIS_PASSWORD"'
+        environment:
+            REDIS_PASSWORD: ${REDIS_PASSWORD}
         volumes:
-            - redisData:/bitnami/redis/data
+            - redisData:/data
         networks:
             - app-tier
+        ports:
+            - "6379:6379"
         healthcheck:
-            test: ["CMD", "redis-cli", "ping"]
+            test: ["CMD-SHELL", 'redis-cli -a "$${REDIS_PASSWORD}" ping 2>/dev/null | grep -q PONG']
             interval: 15s
             timeout: 5s
             retries: 6
@@ -196,8 +209,52 @@ services:
     meilisearch:
         container_name: meilisearch
         restart: unless-stopped
-        image: butcherman/tech_bench_meilisearch:1.0
+        image: getmeili/meilisearch:v1.49.0
+        environment:
+            - MEILI_MASTER_KEY=${MEILI_MASTER_KEY}
         volumes:
             - meilisearchData:/meili_data
         networks:
             - app-tier
+        healthcheck:
+            test: ["CMD", "curl", "-f", "http://localhost:7700/health"]
+            interval: 30s
+            timeout: 30s
+            retries: 6
+            start_period: 5s
+
+    # --------------------------------------------------------------------------
+    # Docker Management Container
+    # --------------------------------------------------------------------------
+    dockerManager:
+        image: butcherman/docker-sidecar:test
+        container_name: dockerManager
+        restart: unless-stopped
+        stop_signal: SIGTERM
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+            - sidecarData:/var/lib/docker-sidecar
+        networks:
+            - app-tier
+
+    # --------------------------------------------------------------------------
+    # Docker Worker Container
+    # --------------------------------------------------------------------------
+    dockerManagerWorker:
+        image: butcherman/docker-sidecar:test
+        container_name: dockerManagerWorker
+        restart: unless-stopped
+        stop_signal: SIGTERM
+        stop_grace_period: 3700s
+        command:
+            - sh
+            - -c
+            - php artisan docker-manager:recover && exec php artisan queue:work redis --queue=docker-updates --sleep=3 --tries=1 --timeout=3600
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+            - sidecarData:/var/lib/docker-sidecar
+        networks:
+            - app-tier
+        depends_on:
+            redis:
+                condition: service_healthy
