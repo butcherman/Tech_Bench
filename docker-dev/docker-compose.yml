@@ -19,6 +19,7 @@ volumes:
     meilisearchData:
     redisData:
     storageData:
+    sidecarData:
 
 services:
 
@@ -177,11 +178,6 @@ services:
             - app-tier
         ports:
             - "3306:3306"
-        # healthcheck:
-        #     test: ['CMD', '/opt/bitnami/scripts/mysql/healthcheck.sh']
-        #     interval: 15s
-        #     timeout: 5s
-        #     retries: 6
 
     # --------------------------------------------------------------------------
     # Redis
@@ -190,13 +186,21 @@ services:
     redis:
         container_name: redis
         restart: unless-stopped
-        image: butcherman/tech_bench_redis:1.0
+        image: redis:8.10.2
+        command:
+            - sh
+            - -c
+            - 'exec redis-server --appendonly yes --requirepass "$$REDIS_PASSWORD"'
+        environment:
+            REDIS_PASSWORD: ${REDIS_PASSWORD}
         volumes:
-            - redisData:/bitnami/redis/data
+            - redisData:/data
         networks:
             - app-tier
+        ports:
+            - "6379:6379"
         healthcheck:
-            test: ["CMD", "redis-cli", "ping"]
+            test: ["CMD-SHELL", 'redis-cli -a "$${REDIS_PASSWORD}" ping 2>/dev/null | grep -q PONG']
             interval: 15s
             timeout: 5s
             retries: 6
@@ -218,7 +222,7 @@ services:
     # Docker Management Container
     # --------------------------------------------------------------------------
     dockerManager:
-        image: docker-sidecar:test
+        image: butcherman/docker-sidecar:test
         container_name: dockerManager
         restart: unless-stopped
         stop_signal: SIGTERM
@@ -227,6 +231,7 @@ services:
             - /home/cerberus/dev/Tech_Bench/docker-dev:/home/cerberus/dev/Tech_Bench/docker-dev
             - /var/run/docker.sock:/var/run/docker.sock
             - /home/cerberus/dev/Tech_Bench/docker-dev:/opt/tech-bench
+            - sidecarData:/var/lib/docker-sidecar
         environment:
             - TECH_BENCH_INSTALL_DIR=/opt/tech-bench
             - TECH_BENCH_COMPOSE_PROJECT_NAME=docker-dev
@@ -240,31 +245,30 @@ services:
     # Docker Worker Container
     # --------------------------------------------------------------------------
     dockerManagerWorker:
-        image: docker-sidecar:test
+        image: butcherman/docker-sidecar:test
         container_name: dockerManagerWorker
         restart: unless-stopped
         stop_signal: SIGTERM
         stop_grace_period: 3700s
         command:
-            - php
-            - artisan
-            - queue:work
-            - redis
-            - --queue=docker-updates
-            - --sleep=3
-            - --tries=1
-            - --timeout=3600
+            - sh
+            - -c
+            - php artisan docker-manager:recover && exec php artisan queue:work redis --queue=docker-updates --sleep=3 --tries=1 --timeout=3600
         volumes:
             - /home/cerberus/dev/Docker-Sidecar/src:/var/www/html
             - /home/cerberus/dev/Tech_Bench/docker-dev:/home/cerberus/dev/Tech_Bench/docker-dev
             - /var/run/docker.sock:/var/run/docker.sock
             - /home/cerberus/dev/Tech_Bench/docker-dev:/opt/tech-bench
+            - sidecarData:/var/lib/docker-sidecar
         environment:
             - TECH_BENCH_INSTALL_DIR=/opt/tech-bench
             - TECH_BENCH_COMPOSE_PROJECT_NAME=docker-dev
             - TECH_BENCH_COMPOSE_DIRECTORY=/home/cerberus/dev/Tech_Bench/docker-dev
         networks:
             - app-tier
+        depends_on:
+            redis:
+                condition: service_healthy
 
 ################################################################################
 #                        Dev Specific Containers                               #

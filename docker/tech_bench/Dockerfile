@@ -78,7 +78,7 @@ COPY src/composer.json src/composer.lock ./
 
 # Install production dependencies
 RUN composer install \
-    --no-dev \
+    # --no-dev \
     --no-interaction \
     --prefer-dist \
     --optimize-autoloader \
@@ -92,7 +92,7 @@ RUN rm -f bootstrap/cache/*.php
 
 # Run only the safe Composer autoload discovery step
 RUN composer dump-autoload \
-    --no-dev \
+    # --no-dev \
     --optimize \
     --no-scripts \
     && php artisan package:discover --ansi
