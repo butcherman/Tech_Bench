@@ -30,7 +30,7 @@ services:
     tech_bench:
         container_name: tech_bench
         restart: unless-stopped
-        image: butcherman/tech_bench_app:${APP_VERSION:-latest}
+        image: butcherman/tech_bench_app:${APP_VERSION}
         volumes:
             - ../src:/app
             # - storageData:/app/storage
@@ -60,7 +60,7 @@ services:
     nginx:
         container_name: nginx
         restart: unless-stopped
-        image: butcherman/tech_bench_nginx:${APP_VERSION:-latest}
+        image: butcherman/tech_bench_nginx:${APP_VERSION}
         volumes:
             - ../src:/app
             # - storageData:/app/storage:ro
@@ -91,7 +91,7 @@ services:
     reverb:
         container_name: reverb
         restart: unless-stopped
-        image: butcherman/tech_bench_app:${APP_VERSION:-latest}
+        image: butcherman/tech_bench_app:${APP_VERSION}
         volumes:
             - ../src:/app
             # - storageData:/app/storage
@@ -123,7 +123,7 @@ services:
     horizon:
         container_name: horizon
         restart: unless-stopped
-        image: butcherman/tech_bench_app:${APP_VERSION:-latest}
+        image: butcherman/tech_bench_app:${APP_VERSION}
         volumes:
             - ../src:/app
             # - storageData:/app/storage
@@ -147,7 +147,7 @@ services:
     scheduler:
         container_name: scheduler
         restart: unless-stopped
-        image: butcherman/tech_bench_app:${APP_VERSION:-latest}
+        image: butcherman/tech_bench_app:${APP_VERSION}
         volumes:
             - ../src:/app
             # - storageData:/app/storage
@@ -171,7 +171,9 @@ services:
     database:
         container_name: database
         restart: unless-stopped
-        image: butcherman/tech_bench_database:1.0
+        image: butcherman/tech_bench_database:${DB_VERSION}
+        environment:
+            - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
         volumes:
             - dbData:/var/lib/mysql
         networks:
@@ -230,7 +232,7 @@ services:
     # Docker Management Container
     # --------------------------------------------------------------------------
     dockerManager:
-        image: butcherman/docker-sidecar:test
+        image: butcherman/docker-sidecar:${SIDECAR_VERSION}
         container_name: dockerManager
         restart: unless-stopped
         stop_signal: SIGTERM
@@ -253,7 +255,7 @@ services:
     # Docker Worker Container
     # --------------------------------------------------------------------------
     dockerManagerWorker:
-        image: butcherman/docker-sidecar:test
+        image: butcherman/docker-sidecar:${SIDECAR_VERSION}
         container_name: dockerManagerWorker
         restart: unless-stopped
         stop_signal: SIGTERM

@@ -1,35 +1,58 @@
 #!/bin/bash
 
-#################################################################################################
-#                                                                                               #
-#                                      Setup Script                                             #
-#                  If Tech Bench is not initialized, first time setup will occur                #
-#                                                                                               #
-#################################################################################################
+################################################################################
+#                                                                              #
+#                            Tech Bench Setup Script                           #
+#                                                                              #
+#               Performs first-run application initialization.                 #
+#   Application code, Composer dependencies, and frontend assets are already   #
+#                        included in the Docker image.                         #
+#                                                                              #
+################################################################################
 
-echo "New installation of Tech Bench detected"
-echo "Setting up the application for the first time"
-echo "Please wait...."
+set -Eeuo pipefail
 
-# Install Dependencies
-composer install
-npm install
+APP_ROOT="/app"
 
-#  Create Encryption Key
-echo "Creating Encryption Key"
-php /app/artisan key:generate --force
+echo "Checking Tech Bench application configuration..."
 
-# Generate new Reverb Credentials
-echo "Generating Broadcasting Credentials"
-php /app/artisan reverb:generate --force
+cd "$APP_ROOT"
 
-#  Create symbolic link for public directory
-php /app/artisan storage:link -q
+# ------------------------------------------------------------------------------
+# Validate environment
+# ------------------------------------------------------------------------------
 
-# #  Create the database
-php /app/artisan migrate --force
+if [ ! -f "$APP_ROOT/.env" ]; then
+    echo "ERROR: Application environment file not found: $APP_ROOT/.env" >&2
+    exit 1
+fi
 
-# # Store the version information in the keystore volume
-echo $(php /app/artisan version --format=compact | sed -e 's/Tech Bench //g') > /app/keystore/version
+mkdir -p "$APP_ROOT/keystore"
 
-echo "Tech Bench Setup Complete"
+# ------------------------------------------------------------------------------
+# Laravel application key
+# ------------------------------------------------------------------------------
+
+if ! grep -Eq '^APP_KEY=.+$' "$APP_ROOT/.env"; then
+    echo "Generating Laravel application key..."
+    php artisan key:generate --force
+else
+    echo "Laravel application key already exists."
+fi
+
+# ------------------------------------------------------------------------------
+# Laravel Reverb credentials
+# ------------------------------------------------------------------------------
+
+if ! grep -Eq '^REVERB_APP_ID=.+$' "$APP_ROOT/.env" \
+    || ! grep -Eq '^REVERB_APP_KEY=.+$' "$APP_ROOT/.env" \
+    || ! grep -Eq '^REVERB_APP_SECRET=.+$' "$APP_ROOT/.env"; then
+
+    echo "Generating Laravel Reverb credentials..."
+    php artisan reverb:generate --force
+
+else
+    echo "Laravel Reverb credentials already exist."
+fi
+
+echo "Tech Bench setup checks completed."
