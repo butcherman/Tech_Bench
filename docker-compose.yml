@@ -30,7 +30,7 @@ services:
     tech_bench:
         container_name: tech_bench
         restart: unless-stopped
-        image: butcherman/tech_bench_app:${APP_VERSION:-latest}
+        image: butcherman/tech_bench_app:${APP_VERSION}
         volumes:
             - storageData:/app/storage
             - keystoreData:/app/keystore
@@ -44,6 +44,8 @@ services:
             database:
                 condition: service_healthy
             redis:
+                condition: service_healthy
+            meilisearch:
                 condition: service_healthy
         healthcheck:
             test: ["CMD", "php", "artisan", "health:check"]
@@ -59,7 +61,7 @@ services:
     nginx:
         container_name: nginx
         restart: unless-stopped
-        image: butcherman/tech_bench_nginx:${APP_VERSION:-latest}
+        image: butcherman/tech_bench_nginx:${APP_VERSION}
         volumes:
             - storageData:/app/storage:ro
             - keystoreData:/app/keystore
@@ -89,7 +91,7 @@ services:
     reverb:
         container_name: reverb
         restart: unless-stopped
-        image: butcherman/tech_bench_app:${APP_VERSION:-latest}
+        image: butcherman/tech_bench_app:${APP_VERSION}
         volumes:
             - storageData:/app/storage
             - keystoreData:/app/keystore
@@ -120,7 +122,7 @@ services:
     horizon:
         container_name: horizon
         restart: unless-stopped
-        image: butcherman/tech_bench_app:${APP_VERSION:-latest}
+        image: butcherman/tech_bench_app:${APP_VERSION}
         volumes:
             - storageData:/app/storage
             - keystoreData:/app/keystore
@@ -133,8 +135,14 @@ services:
         depends_on:
             tech_bench:
                 condition: service_healthy
+            redis:
+                condition: service_healthy
         healthcheck:
-            disable: true
+            test: ["CMD", "php", "artisan", "horizon:status"]
+            interval: 30s
+            timeout: 10s
+            retries: 3
+            start_period: 30s
 
     # --------------------------------------------------------------------------
     # Laravel Scheduler
@@ -143,7 +151,7 @@ services:
     scheduler:
         container_name: scheduler
         restart: unless-stopped
-        image: butcherman/tech_bench_app:${APP_VERSION:-latest}
+        image: butcherman/tech_bench_app:${APP_VERSION}
         volumes:
             - storageData:/app/storage
             - keystoreData:/app/keystore
@@ -156,8 +164,18 @@ services:
         depends_on:
             tech_bench:
                 condition: service_healthy
+            redis:
+                condition: service_healthy
         healthcheck:
-            disable: true
+            test:
+                - CMD
+                - php
+                - -r
+                - 'foreach (glob("/proc/[0-9]*/cmdline") as $$f) { $$c = str_replace("\0", " ", @file_get_contents($$f) ?: ""); if (str_contains($$c, "artisan schedule:work")) exit(0); } exit(1);'
+            interval: 30s
+            timeout: 10s
+            retries: 3
+            start_period: 30s
 
     # --------------------------------------------------------------------------
     # MySQL Database
@@ -166,15 +184,13 @@ services:
     database:
         container_name: database
         restart: unless-stopped
-        image: butcherman/tech_bench_database:2.0
+        image: butcherman/tech_bench_database:${DB_VERSION}
         environment:
-            - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+            - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
         volumes:
             - dbData:/var/lib/mysql
         networks:
             - app-tier
-        ports:
-            - "3306:3306"
 
     # --------------------------------------------------------------------------
     # Redis
@@ -194,8 +210,6 @@ services:
             - redisData:/data
         networks:
             - app-tier
-        ports:
-            - "6379:6379"
         healthcheck:
             test: ["CMD-SHELL", 'redis-cli -a "$${REDIS_PASSWORD}" ping 2>/dev/null | grep -q PONG']
             interval: 15s
@@ -227,7 +241,7 @@ services:
     # Docker Management Container
     # --------------------------------------------------------------------------
     dockerManager:
-        image: butcherman/docker-sidecar:test
+        image: butcherman/docker-sidecar:${SIDECAR_VERSION}
         container_name: dockerManager
         restart: unless-stopped
         stop_signal: SIGTERM
@@ -241,7 +255,7 @@ services:
     # Docker Worker Container
     # --------------------------------------------------------------------------
     dockerManagerWorker:
-        image: butcherman/docker-sidecar:test
+        image: butcherman/docker-sidecar:${SIDECAR_VERSION}
         container_name: dockerManagerWorker
         restart: unless-stopped
         stop_signal: SIGTERM
