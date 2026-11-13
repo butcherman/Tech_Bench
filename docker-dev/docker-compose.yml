@@ -46,6 +46,8 @@ services:
                 condition: service_healthy
             redis:
                 condition: service_healthy
+            meilisearch:
+                condition: service_healthy
         healthcheck:
             test: ["CMD", "php", "artisan", "health:check"]
             interval: 30s
@@ -137,8 +139,14 @@ services:
         depends_on:
             tech_bench:
                 condition: service_healthy
+            redis:
+                condition: service_healthy
         healthcheck:
-            disable: true
+            test: ["CMD", "php", "artisan", "horizon:status"]
+            interval: 30s
+            timeout: 10s
+            retries: 3
+            start_period: 30s
 
     # --------------------------------------------------------------------------
     # Laravel Scheduler
@@ -161,8 +169,18 @@ services:
         depends_on:
             tech_bench:
                 condition: service_healthy
+            redis:
+                condition: service_healthy
         healthcheck:
-            disable: true
+            test:
+                - CMD
+                - php
+                - -r
+                - 'foreach (glob("/proc/[0-9]*/cmdline") as $$f) { $$c = str_replace("\0", " ", @file_get_contents($$f) ?: ""); if (str_contains($$c, "artisan schedule:work")) exit(0); } exit(1);'
+            interval: 30s
+            timeout: 10s
+            retries: 3
+            start_period: 30s
 
     # --------------------------------------------------------------------------
     # MySQL Database
