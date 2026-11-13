@@ -1,5 +1,7 @@
 <?php
 
+use PDO\Mysql;
+
 return [
 
     /*
@@ -56,7 +58,7 @@ return [
             'strict' => true,
             'engine' => null,
             'options' => extension_loaded('pdo_mysql') ? array_filter([
-                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+                Mysql::ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
         ],
 
@@ -76,7 +78,7 @@ return [
             'strict' => true,
             'engine' => null,
             'options' => extension_loaded('pdo_mysql') ? array_filter([
-                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+                Mysql::ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
         ],
 
@@ -112,6 +114,7 @@ return [
     |   DB 1 - All Cached Data
     |   DB 2 - All Session Data
     |   DB 3 - Horizon Queue Jobs
+    |   DB 4 - Docker Manager Worker - Used only by the Docker Manager Worker container
     |
     */
 
