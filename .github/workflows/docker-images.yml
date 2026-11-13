@@ -2,8 +2,6 @@ name: Build and Publish Tech Bench Docker Images
 
 on:
   push:
-    branches:
-      - dev9-docker_update
     tags:
       - "v*"
 
