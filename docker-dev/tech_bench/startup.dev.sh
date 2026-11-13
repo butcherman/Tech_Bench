@@ -1,51 +1,73 @@
 #!/bin/bash
 
-#################################################################################################
-#                                                                                               #
-#                              Entrypoint Script for Dev Environment                            #
-#                  If Tech Bench is not initialized, first time setup will occur                #
-#                           After initialization, services will start                           #
-#                                                                                               #
-#################################################################################################
+################################################################################
+#                                                                              #
+#                          Tech Bench Startup Script                           #
+#                                                                              #
+#   This script initializes the application when necessary and starts the      #
+#                    requested Tech Bench service.                             #
+#                                                                              #
+################################################################################
 
-set -m
+set -Eeuo pipefail
 
-echo "Starting Tech Bench Development Container"
+APP_ROOT="/app"
+SCRIPT_ROOT="/scripts"
 
-if [ $SERVICE = "master" ] || [ $SERVICE = "app" ]
-then
-    # Do we need to run the first time setup script?
-    if [ ! -f /app/keystore/version ]
-    then
-        /scripts/setup.dev.sh
-    fi
-fi
+SERVICE="${SERVICE:-app}"
 
-# Since the Reverb container has to start at the same time as Tech Bench, pause it
-if [ $SERVICE = "reverb" ]
-then
-    sleep 30
-fi
+echo "============================================================"
+echo " Starting Tech Bench"
+echo " Service: ${SERVICE}"
+echo "============================================================"
 
-#  Start the Horizon and PHP-FPM Services and run the Scheduler script based on server purppose
-echo "Tech Bench $SERVICE is now running"
-if [ $SERVICE = "app" ]
-then
-    # Import all Scout data
-    echo "Importing Meilisearch Data"
-    # php artisan scout:sync-index-settings
-    # php artisan scout:import "App\Models\TechTip"
-    # php artisan scout:import "App\Models\Customer"
-    php-fpm -F --pid /opt/bitnami/php/tmp/php-fpm.pid -y /opt/bitnami/php/etc/php-fpm.conf
-elif [ $SERVICE = "horizon" ]
-then
-    php /app/artisan horizon:watch --without-tty
-elif [ $SERVICE = "scheduler" ]
-then
-    /scripts/scheduler.sh
-elif [ $SERVICE = "reverb" ]
-then
-    php /app/artisan reverb:start --debug
-else
-    php-fpm -F --pid /opt/bitnami/php/tmp/php-fpm.pid -y /opt/bitnami/php/etc/php-fpm.conf
-fi
+cd "$APP_ROOT"
+
+# ------------------------------------------------------------------------------
+# Application initialization and deployment tasks
+# ------------------------------------------------------------------------------
+
+start_app() {
+    echo "Preparing Tech Bench application..."
+
+    # Perform first-run credential initialization when required.
+    "$SCRIPT_ROOT/setup.sh"
+
+    echo "Application initialization completed."
+}
+
+# ------------------------------------------------------------------------------
+# Service dispatch
+# ------------------------------------------------------------------------------
+
+case "$SERVICE" in
+
+    app)
+        start_app
+
+        echo "Starting PHP-FPM..."
+        exec php-fpm -F --pid /tmp/php-fpm.pid
+        ;;
+
+    horizon)
+        echo "Starting Laravel Horizon..."
+        exec php artisan horizon
+        ;;
+
+    reverb)
+        echo "Starting Laravel Reverb..."
+        exec php artisan reverb:start
+        ;;
+
+    scheduler)
+        echo "Starting Laravel Scheduler..."
+        exec php artisan schedule:work
+        ;;
+
+    *)
+        echo "ERROR: Unknown SERVICE value: ${SERVICE}" >&2
+        echo "Valid values: app, horizon, reverb, scheduler" >&2
+        exit 1
+        ;;
+
+esac

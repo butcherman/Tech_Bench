@@ -17,10 +17,10 @@
     ],
     "license": "LGPL-2.0-or-later",
     "require": {
-        "php": "^8.2",
+        "php": "^8.5",
         "barryvdh/laravel-dompdf": "^3.1",
         "butcherman/version": "^1.4",
-        "glhd/gretel": "^1.9",
+        "glhd/gretel": "^1.10",
         "inertiajs/inertia-laravel": "^2.0",
         "jackiedo/timezonelist": "^5.1",
         "karmendra/laravel-agent-detector": "^1.1",

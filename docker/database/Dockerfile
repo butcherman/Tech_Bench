@@ -1,20 +1,14 @@
-#################################################################################################
-#                                                                                               #
-#            Database Container holds the MySQL Database for Tech Bench                         #
-#                                                                                               #
-#################################################################################################
+################################################################################
+#                                                                              #
+#        Database Container holds the MySQL Database for Tech Bench            #
+#                                                                              #
+################################################################################
 
-FROM butcherman/tech_bench_database:1.0
+FROM mysql:9.4
 
-USER root
+# Build Healthcheck
+HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=6 \
+    CMD mysqladmin ping -h localhost
 
-RUN apt install && apt upgrade -y --no-install-recommends
-
-ENV MYSQL_ROOT_PASSWORD=tbRootPasswd
-ENV MYSQL_USER=tbUser
-ENV MYSQL_PASSWORD=techBenchDatabase
-ENV MYSQL_DATABASE=tech-bench
-
-COPY ./defaultDatabase.sql /docker-entrypoint-initdb.d/
-
-USER tbUser
+# Entrypoint script creates TB Database and User
+COPY docker/database/databaseInit.sql /docker-entrypoint-initdb.d/databaseInit.sql

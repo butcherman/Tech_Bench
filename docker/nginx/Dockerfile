@@ -1,42 +1,35 @@
-#################################################################################################
-#                                                                                               #
-#            NGINX Container is the main web service for Tech Bench                             #
-#                                                                                               #
-#################################################################################################
 
-FROM butcherman/tech_bench_nginx:1.1
+# The NGINX image must use the same APP_VERSION as the PHP image.
+ARG APP_IMAGE=butcherman/tech_bench_app
+ARG APP_VERSION=latest
+
+# Get the public files from the matching Tech Bench application image.
+FROM ${APP_IMAGE}:${APP_VERSION} AS tech_bench_app
+
+# Official NGINX image based on Debian Bookworm.
+FROM nginx:stable-bookworm
 
 ENV TB_URL=localhost
-ENV ENABLE_HTTPS=true
 
-USER root
+# Install OpenSSL for initial self-signed certificate generation.
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+    openssl \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
 
-# Make sure image is up to date
-RUN apt update && apt upgrade -y --no-install-recommends
+# Copy the public application files, including Vite assets.
+COPY --from=tech_bench_app /app/public/ /app/public/
 
-# Copy configuration files
-COPY ./http.conf /opt/bitnami/nginx/conf/server_blocks/tech_bench_http.conf
-COPY ./https.conf /opt/bitnami/nginx/conf/server_blocks/tech_bench_https.conf
+# Install Tech Bench NGINX configurations.
+COPY docker/nginx/http.conf /etc/nginx/conf.d/http.conf
+COPY docker/nginx/https.conf /etc/nginx/conf.d/https.conf
 
-# Copy scripts
-COPY ./entrypoint.sh /docker-entrypoint-startdb.d/
-COPY ./entrypoint.sh /docker-entrypoint-initdb.d/
+# Generate a certificate before NGINX starts, if one does not exist.
+COPY docker/nginx/entrypoint.sh /docker-entrypoint.d/10-tech-bench-certificate.sh
 
-# Create a group and user to run the file permissions
-# RUN addgroup --gid 1024 tbgroup
-# RUN adduser --disabled-password --gecos "" --force-badname --ingroup tbgroup tbuser
-# RUN usermod -a -G root tbuser
+RUN chmod 755 /docker-entrypoint.d/10-tech-bench-certificate.sh \
+    && mkdir -p /app/keystore/private \
+    && chown -R nginx:nginx /app/public
 
-# Make directories for storage logs and SSL Cert
-RUN mkdir -p /app/storage/logs/nginx -m 775
-RUN mkdir -p /app/keystore/private -m 775
-RUN mkdir -p /app/public/build/assets -m 775
-
-RUN chown tbuser:tbgroup -R /app
-
-# Remove default files
-# RUN rm /app/50x.html
-# RUN rm /app/index.html
-
-USER tbuser
-WORKDIR /app
+EXPOSE 80 443

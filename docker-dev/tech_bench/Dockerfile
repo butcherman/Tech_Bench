@@ -1,43 +1,101 @@
-#################################################################################################
-#                                                                                               #
-#                      Tech Bench build for main Tech Bench Application                         #
-#                                                                                               #
-#################################################################################################
 
-FROM butcherman/tech_bench_baseline:1.1
+################################################################################
+# Tech Bench - Production PHP-FPM Image
+################################################################################
 
-COPY ./php.ini /opt/bitnami/php/lib/
-COPY ./startup.dev.sh /scripts/
-COPY ./setup.dev.sh /scripts/
+# ------------------------------------------------------------------------------
+# PHP base image
+# ------------------------------------------------------------------------------
 
-COPY ./docker /usr/local/bin/docker
-RUN chmod 775 /usr/local/bin/docker
+# MySQL client binaries
+FROM mysql:9.4 AS mysql-client
 
-RUN chmod 775 /scripts/startup.dev.sh
-RUN chmod 775 /scripts/setup.dev.sh
+# PHP base
+FROM php:8.5-fpm-bookworm AS php-base
 
-#  Make sure image is up to date
-RUN apt update && apt upgrade -y --no-install-recommends
+# Install OS Dependencies
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+    libncurses6 \
+    libtinfo6 \
+    && rm -rf /var/lib/apt/lists/*
 
-#  Install xDebug to allow PHPUnit Testing
-# RUN apt install php-xdebug -y
-# RUN apt install php-mysql -y
-# RUN docker-php-ext-install -j"$(nproc)" xdebug
+# Install PHP extension installer
+ADD --chmod=0755 \
+    https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions \
+    /usr/local/bin/install-php-extensions
 
-#  Create a group and user to run the file permissions
-RUN addgroup --gid 1024 tbgroup
-RUN addgroup --gid 999 docker
-RUN adduser --disabled-password --gecos "" --force-badname --ingroup tbgroup tbuser
-RUN usermod -a -G root tbuser
-RUN usermod -a -G docker tbuser
-RUN chmod 775 /var/log
+# Install required PHP extensions
+RUN install-php-extensions \
+    bcmath \
+    exif \
+    gd \
+    gmp \
+    intl \
+    pcntl \
+    pdo_mysql \
+    sockets \
+    xdebug \
+    zip
 
-#  Set directory permissions
-RUN chown -R tbuser:tbgroup /app
-RUN find /app/ -type f -exec chmod 777 {} \;
-RUN find /app/ -type d -exec chmod 777 {} \;
+# Production PHP configuration
+RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
-USER tbuser
+# Copy the .ini file for additional debug configuration
+COPY docker-dev/tech_bench/php-dev.ini $PHP_INI_DIR/conf.d/php-dev.ini
+
+# Create Tech Bench user and group
+RUN groupadd --gid 1024 tbgroup \
+    && useradd --uid 1024 --gid tbgroup --create-home --shell /usr/sbin/nologin tbuser
+
+# PHP-FPM configuration
+COPY docker/tech_bench/www.conf /usr/local/etc/php-fpm.d/zz-tech-bench.conf
+
+# Copy official MySQL 9.4 client binaries
+COPY --from=mysql-client /usr/bin/mysql /usr/bin/mysql
+COPY --from=mysql-client /usr/bin/mysqldump /usr/bin/mysqldump
+COPY --from=mysql-client /usr/bin/mysqladmin /usr/bin/mysqladmin
+
+# Validate the client binaries exist
+RUN set -eux; \
+    for binary in mysql mysqldump mysqladmin; do \
+    missing="$(ldd "/usr/bin/${binary}" | grep 'not found' || true)"; \
+    if [ -n "$missing" ]; then \
+    echo "Missing libraries for ${binary}:"; \
+    echo "$missing"; \
+    exit 1; \
+    fi; \
+    done
+
+# ------------------------------------------------------------------------------
+# Composer dependencies
+# ------------------------------------------------------------------------------
+
+FROM php-base AS composer-build
+
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
 WORKDIR /app
 
-ENTRYPOINT [ "/scripts/startup.dev.sh" ]
+
+
+# ------------------------------------------------------------------------------
+# Production image
+# ------------------------------------------------------------------------------
+
+FROM php-base AS production
+
+WORKDIR /app
+
+# PHP-FPM runs as the configured service
+EXPOSE 9000
+
+# Runtime scripts
+COPY docker-dev/tech_bench/startup.dev.sh /scripts/startup.sh
+COPY docker-dev/tech_bench/setup.dev.sh /scripts/setup.sh
+
+RUN chmod 755 \
+    /scripts/startup.sh \
+    /scripts/setup.sh
+
+ENTRYPOINT ["/scripts/startup.sh"]

@@ -1,11 +1,35 @@
-import { defineConfig, loadEnv } from "vite";
+
+import fs from 'node:fs'
 import laravel from "laravel-vite-plugin";
+import path from 'node:path'
 import tailwindcss from '@tailwindcss/vite';
 import vue from "@vitejs/plugin-vue";
-import fs from "fs";
+import { fileURLToPath } from 'node:url'
+import { defineConfig, loadEnv } from "vite";
 
-export default defineConfig(({ mode }) => {
+const appRoot = path.dirname(fileURLToPath(import.meta.url))
+
+export default defineConfig(({ command, mode }) => {
+    const certPath = path.resolve(appRoot, 'keystore/server.crt')
+    const keyPath = path.resolve(appRoot, 'keystore/private/server.key')
+
+    // Only configure HTTPS when running the development server
+    // and both certificate files are available.
+    const useHttps =
+        command === 'serve' &&
+        fs.existsSync(certPath) &&
+        fs.existsSync(keyPath)
+
+    const https = useHttps
+        ? {
+            cert: fs.readFileSync(certPath),
+            key: fs.readFileSync(keyPath),
+        }
+        : undefined
+
+    // Load variables from the .env file
     process.env = { ...process.env, ...loadEnv(mode, process.cwd()) };
+
     const wsHost =
         process.env.VITE_WS_HOST !== undefined
             ? process.env.VITE_WS_HOST
@@ -27,25 +51,25 @@ export default defineConfig(({ mode }) => {
             }),
             tailwindcss(),
         ],
+
         server: {
-            https: {
-                key: fs.readFileSync("/app/keystore/private/server.key"),
-                cert: fs.readFileSync("/app/keystore/server.crt"),
-            },
+            ...(https ? { https } : {}),
             host: "0.0.0.0",
             hmr: {
-                protocol: "wss",
+                protocol: useHttps ? "wss" : "ws",
                 host: wsHost,
-                https: {
-                    key: fs.readFileSync("/app/keystore/private/server.key"),
-                    cert: fs.readFileSync("/app/keystore/server.crt"),
-                },
+                ...(useHttps ? {
+                    https: {
+                        key: https.key,
+                        cert: https.cert,
+                    },
+                } : {}),
             },
             cors: {
                 origin: [
-                    `https://${wsHost}`,
+                    `${useHttps ? "https" : "http"}://${wsHost}`,
                 ],
             }
         },
-    };
-});
+    }
+})

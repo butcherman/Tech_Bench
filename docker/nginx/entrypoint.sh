@@ -1,39 +1,51 @@
-#!/bin/bash
 
-#################################################################################################
-#                                                                                               #
-#                                      Entrypoint Script                                        #
-#              If there is no SSL Cert, create one before running Bitnami entrypoint            #
-#                                                                                               #
-#################################################################################################
+#!/bin/sh
 
-echo "Starting NGINX Setup Script"
+set -eu
 
-# Verify that the Logs Folder exists and is writable
-# if [ ! -d "/app/storage/logs/NGINX" ]
-# then
-#     mkdir /app/storage/logs/NGINX
-#     chmod 777 /app/storage/logs/NGINX
-# fi
+echo "Starting Tech Bench NGINX setup"
 
-# If the SSL file does not exist, create a self signed SSL cert
-if [ ! -f "/app/keystore/server.crt" ]
-then
-    #  Generate self signed SSL Certificate
-    echo "Creating Self Signed SSL Certificate"
-    openssl rand -base64 48 > /tmp/passphrase.txt
-    openssl genrsa -aes128 -passout file:/tmp/passphrase.txt -out /tmp/server.key 2048
-    openssl req -new -passin file:/tmp/passphrase.txt -key /tmp/server.key -out /tmp/server.csr -subj "/C=FR/O=tb/OU=Domain Control Validated/CN=$APP_URL"
-    cp /tmp/server.key /tmp/server.key.org
-    openssl rsa -in /tmp/server.key.org -passin file:/tmp/passphrase.txt -out /tmp/server.key
-    openssl x509 -req -days 36500 -in /tmp/server.csr -signkey /tmp/server.key -out /tmp/server.crt
+CERT_FILE="/app/keystore/server.crt"
+KEY_FILE="/app/keystore/private/server.key"
 
-    #  Move the new certificate and key to the Tech Bench directory
+# Generate a self-signed certificate if either file is missing.
+if [ ! -f "$CERT_FILE" ] || [ ! -f "$KEY_FILE" ]; then
+
+    echo "Creating self-signed SSL certificate"
+
     mkdir -p /app/keystore/private
-    mv /tmp/server.crt /app/keystore/server.crt
-    mv /tmp/server.key /app/keystore/private/server.key
 
-    #  Cleanup unneeded files
-    rm -rf /tmp/server.csr /tmp/server.key.org /tmp/passphrase.txt
+    # Extract the hostname from TB_URL.
+    CERT_HOST="${TB_URL:-localhost}"
+    CERT_HOST="${CERT_HOST#*://}"
+    CERT_HOST="${CERT_HOST%%/*}"
+    CERT_HOST="${CERT_HOST%%:*}"
+
+    # Use an IP or DNS subjectAltName as appropriate.
+    case "$CERT_HOST" in
+        *[!0-9.]*)
+            SAN="DNS:${CERT_HOST}"
+            ;;
+        *)
+            SAN="IP:${CERT_HOST}"
+            ;;
+    esac
+
+    openssl req -x509 \
+        -nodes \
+        -newkey rsa:2048 \
+        -sha256 \
+        -days 3650 \
+        -keyout "$KEY_FILE" \
+        -out "$CERT_FILE" \
+        -subj "/CN=${CERT_HOST}" \
+        -addext "subjectAltName=${SAN}"
+
+    chmod 644 "$CERT_FILE"
+    chmod 640 "$KEY_FILE"
+    chown root:nginx "$KEY_FILE"
+
+    echo "Self-signed SSL certificate created"
+else
+    echo "Existing SSL certificate found; skipping generation"
 fi
-

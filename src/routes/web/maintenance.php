@@ -10,6 +10,7 @@ use App\Http\Controllers\Maintenance\Logs\DownloadLogController;
 use App\Http\Controllers\Maintenance\Logs\LogSettingsController;
 use App\Http\Controllers\Maintenance\Logs\LogsIndexController;
 use App\Http\Controllers\Maintenance\Logs\ViewLogController;
+use App\Http\Controllers\Maintenance\Update\UpdateIndexController;
 use Illuminate\Support\Facades\Route;
 
 /**
@@ -68,5 +69,17 @@ Route::middleware('auth.secure')->prefix('maintenance')->name('maint.')->group(f
         Route::get('/', BackupIndexController::class)
             ->name('index')
             ->breadcrumb('Backups', 'admin.index');
+    });
+
+    /*
+     |---------------------------------------------------------------------------
+     | Application Updates
+     | /maintenance/updates
+     |---------------------------------------------------------------------------
+     */
+    Route::prefix('updates')->name('updates.')->group(function () {
+        Route::get('/', UpdateIndexController::class)
+            ->name('index')
+            ->breadcrumb('Application Updates', 'admin.index');
     });
 });
