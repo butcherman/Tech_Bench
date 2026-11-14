@@ -36,6 +36,7 @@ return new class extends Migration
             $table->dropForeign(['cust_site_id']);
             $table->dropForeign(['cont_id']);
         });
+
         Schema::dropIfExists('customer_site_contacts');
     }
 };

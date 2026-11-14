@@ -27,17 +27,4 @@ class CreateTechTipFilesTable extends Migration
                 ->onUpdate('cascade');
         });
     }
-
-    /**
-     * Reverse the migrations
-     */
-    public function down(): void
-    {
-        Schema::table('tech_tip_files', function (Blueprint $table) {
-            $table->dropForeign(['tip_id']);
-            $table->dropForeign(['file_id']);
-        });
-
-        Schema::dropIfExists('tech_tip_files');
-    }
 }

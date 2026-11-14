@@ -43,6 +43,7 @@ return new class extends Migration
             $table->dropForeign(['cust_equip_id']);
             $table->dropForeign(['cust_id']);
         });
+
         Schema::dropIfExists('customer_equipment_workbooks');
     }
 };

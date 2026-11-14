@@ -30,7 +30,6 @@ return new class extends Migration
 
             $fileData->file_size = $size;
             $fileData->save();
-
         }
     }
 

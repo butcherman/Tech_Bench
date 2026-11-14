@@ -28,16 +28,4 @@ class CreateCustomerContactsTable extends Migration
                 ->onDelete('cascade');
         });
     }
-
-    /**
-     * Reverse the migrations
-     */
-    public function down(): void
-    {
-        Schema::table('customer_contacts', function (Blueprint $table) {
-            $table->dropForeign(['cust_id']);
-        });
-
-        Schema::dropIfExists('customer_contacts');
-    }
 }

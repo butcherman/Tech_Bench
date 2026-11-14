@@ -29,16 +29,4 @@ class CreateCustomersTable extends Migration
                 ->onUpdate('cascade');
         });
     }
-
-    /**
-     * Reverse the migrations
-     */
-    public function down(): void
-    {
-        Schema::table('customers', function (Blueprint $table) {
-            $table->dropForeign(['parent_id']);
-        });
-
-        Schema::dropIfExists('customers');
-    }
 }

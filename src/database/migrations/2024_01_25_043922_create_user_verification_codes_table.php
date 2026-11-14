@@ -32,6 +32,7 @@ return new class extends Migration
         Schema::table('user_verification_codes', function (Blueprint $table) {
             $table->dropForeign(['user_id']);
         });
+
         Schema::dropIfExists('user_verification_codes');
     }
 };

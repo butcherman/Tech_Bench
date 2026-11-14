@@ -29,17 +29,4 @@ class CreateCustomerEquipmentDataTable extends Migration
                 ->onDelete('cascade');
         });
     }
-
-    /**
-     * Reverse the migrations
-     */
-    public function down(): void
-    {
-        Schema::table('customer_equipment_data', function (Blueprint $table) {
-            $table->dropForeign(['cust_equip_id']);
-            $table->dropForeign(['field_id']);
-        });
-
-        Schema::dropIfExists('customer_equipment_data');
-    }
 }

@@ -37,17 +37,4 @@ class CreateTechTipsTable extends Migration
                 ->onUpdate('cascade');
         });
     }
-
-    /**
-     * Reverse the migrations
-     */
-    public function down(): void
-    {
-        Schema::table('tech_tips', function (Blueprint $table) {
-            $table->dropForeign(['user_id']);
-            $table->dropForeign(['updated_id']);
-            $table->dropForeign(['tip_type_id']);
-        });
-        Schema::dropIfExists('tech_tips');
-    }
 }

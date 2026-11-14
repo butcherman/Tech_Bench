@@ -39,6 +39,7 @@ return new class extends Migration
         Schema::table('file_links', function (Blueprint $table) {
             $table->dropForeign(['user_id']);
         });
+
         Schema::dropIfExists('file_link');
     }
 };
