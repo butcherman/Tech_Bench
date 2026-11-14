@@ -7,13 +7,15 @@ use App\Models\FileLink;
 use App\Models\FileLinkFile;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Database\Seeder;
 use Illuminate\Foundation\Testing\WithFaker;
 
-class FileLinkSeeder extends Seeder
+class DevFileLinkSeeder extends Seeder
 {
     use WithFaker;
+    use WithoutModelEvents;
 
     /**
      * Run the database seeds.
