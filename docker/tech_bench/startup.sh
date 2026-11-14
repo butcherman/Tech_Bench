@@ -36,7 +36,7 @@ start_app() {
     # Run outstanding database migrations.
     # Laravel safely skips migrations that have already been applied.
     echo "Running database migrations..."
-    php artisan migrate --force
+    php artisan migrate --force --seed
 
     # Generate Laravel and application caches using the runtime environment.
     echo "Generating application caches..."
