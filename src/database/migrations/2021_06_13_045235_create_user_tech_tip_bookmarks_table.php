@@ -29,17 +29,4 @@ class CreateUserTechTipBookmarksTable extends Migration
                 ->onDelete('cascade');
         });
     }
-
-    /**
-     * Reverse the migrations
-     */
-    public function down(): void
-    {
-        Schema::table('user_tech_tip_bookmarks', function (Blueprint $table) {
-            $table->dropForeign(['tip_id']);
-            $table->dropForeign(['user_id']);
-        });
-
-        Schema::dropIfExists('user_tech_tip_bookmarks');
-    }
 }

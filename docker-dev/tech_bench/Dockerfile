@@ -18,6 +18,9 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends \
     libncurses6 \
     libtinfo6 \
+    nodejs \
+    npm \
+    unzip \
     && rm -rf /var/lib/apt/lists/*
 
 # Install PHP extension installer
@@ -67,17 +70,15 @@ RUN set -eux; \
     fi; \
     done
 
-# ------------------------------------------------------------------------------
-# Composer dependencies
-# ------------------------------------------------------------------------------
-
-FROM php-base AS composer-build
-
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-WORKDIR /app
+RUN mkdir /.composer && chown 1000:0 /.composer
+RUN mkdir /.npm && chown 1000:0 /.npm
 
-
+# Bring NodeJS and NPM up to the latest version
+RUN npm install -g n
+RUN n lts
+RUN npm install -g npm@latest
 
 # ------------------------------------------------------------------------------
 # Production image

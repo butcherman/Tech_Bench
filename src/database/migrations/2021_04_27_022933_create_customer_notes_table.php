@@ -37,18 +37,4 @@ class CreateCustomerNotesTable extends Migration
                 ->onUpdate('cascade');
         });
     }
-
-    /**
-     * Reverse the migrations
-     */
-    public function down(): void
-    {
-        Schema::table('customer_notes', function (Blueprint $table) {
-            $table->dropForeign(['cust_id']);
-            $table->dropForeign(['created_by']);
-            $table->dropForeign(['updated_by']);
-        });
-
-        Schema::dropIfExists('customer_notes');
-    }
 }

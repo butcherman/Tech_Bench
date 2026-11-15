@@ -27,17 +27,4 @@ class CreateTechTipEquipmentTable extends Migration
                 ->onUpdate('cascade');
         });
     }
-
-    /**
-     * Reverse the migrations
-     */
-    public function down(): void
-    {
-        Schema::table('tech_tip_equipment', function (Blueprint $table) {
-            $table->dropForeign(['tip_id']);
-            $table->dropForeign(['equip_id']);
-        });
-
-        Schema::dropIfExists('tech_tip_equipment');
-    }
 }

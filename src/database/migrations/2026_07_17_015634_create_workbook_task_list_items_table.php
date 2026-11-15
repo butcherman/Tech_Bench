@@ -42,6 +42,7 @@ return new class extends Migration
             $table->dropForeign(['list_id']);
             $table->dropForeign(['file_id']);
         });
+
         Schema::dropIfExists('workbook_task_list_items');
     }
 };
