@@ -38,6 +38,7 @@ class CreateUserCustomerRecentsTable extends Migration
             $table->dropForeign(['user_id']);
             $table->dropForeign(['cust_id']);
         });
+
         Schema::dropIfExists('user_customer_recents');
     }
 }

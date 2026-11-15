@@ -37,6 +37,7 @@ return new class extends Migration
         Schema::table('device_tokens', function (Blueprint $table) {
             $table->dropForeign(['user_id']);
         });
+
         Schema::dropIfExists('device_tokens');
     }
 };

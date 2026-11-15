@@ -27,6 +27,7 @@ return new class extends Migration
 
                 $setting->value = json_encode($setting->value);
             }
+
             $setting->save();
         }
 
