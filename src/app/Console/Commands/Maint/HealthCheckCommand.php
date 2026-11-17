@@ -4,28 +4,30 @@ namespace App\Console\Commands\Maint;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Redis;
-use Throwable;
 
 class HealthCheckCommand extends Command
 {
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
     protected $signature = 'health:check';
 
-    protected $description = 'Determines if the application is healthy';
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Determines if the application is running';
 
-    public function handle(): int
+    /**
+     * Execute the console command.
+     */
+    public function handle()
     {
-        try {
-            DB::select('SELECT 1');
+        DB::select('SELECT 1');
 
-            Redis::connection()->ping();
-
-            return self::SUCCESS;
-        } catch (Throwable $exception) {
-            $this->error('Application healthcheck failed.');
-            report($exception);
-
-            return self::FAILURE;
-        }
+        return self::SUCCESS;
     }
 }

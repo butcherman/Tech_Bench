@@ -1,0 +1,19 @@
+import "@inertiajs/core";
+
+declare module "@inertiajs/core" {
+    export interface InertiaConfig {
+        sharedPageProps: {
+            current_user: User | null;
+            csrf_token: string;
+            navbar: SideNav;
+            breadcrumbs: {
+                title: string;
+                url: string;
+                is_current_page: boolean;
+            }[];
+        };
+        flashDataType: {
+            banner?: FlashAlert;
+        };
+    }
+}

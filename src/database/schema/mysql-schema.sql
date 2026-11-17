@@ -860,6 +860,7 @@ DROP TABLE IF EXISTS `user_setting_types`;
 CREATE TABLE `user_setting_types` (
   `setting_type_id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `name` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `perm_type_id` bigint unsigned DEFAULT NULL,
   `feature_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `config_key` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -941,7 +942,7 @@ CREATE TABLE `users` (
   `first_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `last_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '$2y$12$.G2qFqu9a7RuYdBg6cD1..ZkPKeGJxfkqCrL6vZqqURWspf2WGWtm',
+  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '$2y$12$EHc8yGysgz8YXxEL0Kbro.kGsJ88ztfKu9GcseMEELi3Psr5u0Q3C',
   `two_factor_secret` text COLLATE utf8mb4_unicode_ci,
   `two_factor_recovery_codes` text COLLATE utf8mb4_unicode_ci,
   `two_factor_confirmed_at` timestamp NULL DEFAULT NULL,
@@ -1112,3 +1113,4 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (74,'2026_06_05_164
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (75,'2026_06_05_164328_create_workbook_table_values_table',1);
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (76,'2026_07_17_012046_create_workbook_task_lists_table',1);
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (77,'2026_07_17_015634_create_workbook_task_list_items_table',1);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (78,'2026_08_16_205502_add_description_column_to_user_setting_types_table',1);
