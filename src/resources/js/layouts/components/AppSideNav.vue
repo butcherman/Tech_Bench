@@ -29,37 +29,43 @@ const hiddenClass = computed<string>(() => (isOpen.value ? "w-0" : "w-64"));
                 {{ appName }}
             </h2>
         </div>
-        <div class="my-2">
-            <ul>
-                <li
-                    v-for="nav in navBar.base"
-                    :key="nav.label"
-                    class="text-slate-200"
-                >
-                    <Link :href="nav.route">
-                        <h4 class="ps-4 py-4 hover:bg-highlight-nav rounded-lg">
-                            <fa-icon :icon="nav.icon" />
-                            {{ nav.label }}
-                        </h4>
-                    </Link>
-                </li>
-            </ul>
-        </div>
-        <div v-if="navBar.admin.length" class="grow border-t border-slate-300">
-            <ul class="my-2">
-                <li
-                    v-for="nav in navBar.admin"
-                    :key="nav.label"
-                    class="text-slate-200"
-                >
-                    <Link :href="nav.route">
-                        <h4 class="ps-4 py-4 hover:bg-highlight-nav rounded-lg">
-                            <fa-icon :icon="nav.icon" />
-                            {{ nav.label }}
-                        </h4>
-                    </Link>
-                </li>
-            </ul>
+        <div class="grow">
+            <div class="my-2">
+                <ul>
+                    <li
+                        v-for="nav in navBar.base"
+                        :key="nav.label"
+                        class="text-slate-200"
+                    >
+                        <Link :href="nav.route">
+                            <h4
+                                class="ps-4 py-4 hover:bg-highlight-nav rounded-lg"
+                            >
+                                <fa-icon :icon="nav.icon" />
+                                {{ nav.label }}
+                            </h4>
+                        </Link>
+                    </li>
+                </ul>
+            </div>
+            <div v-if="navBar.admin.length" class="border-t border-slate-300">
+                <ul class="my-2">
+                    <li
+                        v-for="nav in navBar.admin"
+                        :key="nav.label"
+                        class="text-slate-200"
+                    >
+                        <Link :href="nav.route">
+                            <h4
+                                class="ps-4 py-4 hover:bg-highlight-nav rounded-lg"
+                            >
+                                <fa-icon :icon="nav.icon" />
+                                {{ nav.label }}
+                            </h4>
+                        </Link>
+                    </li>
+                </ul>
+            </div>
         </div>
         <footer class="text-slate-500 p-2 border-t border-slate-300">
             <div class="text-center">Copyright &copy; {{ copyright }}</div>
