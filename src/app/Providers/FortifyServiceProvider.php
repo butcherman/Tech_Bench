@@ -62,7 +62,15 @@ class FortifyServiceProvider extends ServiceProvider
         */
         Fortify::loginView(fn () => app(LoginController::class)->__invoke());
         Fortify::requestPasswordResetLinkView(
-            fn () => Inertia::render('Auth/ForgotPassword')
+            fn () => Inertia::render('Auth/ForgotPassword', [
+                'welcome-message' => fn () => config('app.welcome_message'),
+                'home-links' => fn () => config('app.home_links'),
+                'public-link' => fn () => config('tech-tips.allow_public')
+                    ? [
+                        'url' => route('publicTips.index'),
+                        'text' => config('tech-tips.public_link_text'),
+                    ] : false,
+            ])
         );
         Fortify::resetPasswordView(
             fn (Request $request) => app(ResetPasswordController::class)
