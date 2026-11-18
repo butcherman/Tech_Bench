@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import PasswordInput from "@/core/forms/components/validatedInputs/PasswordInput.vue";
-import SubmitButton from "@/core/components/buttons/SubmitButton.vue";
 import SwitchInput from "@/core/forms/components/validatedInputs/SwitchInput.vue";
 import TextInput from "@/core/forms/components/validatedInputs/TextInput.vue";
 import VueForm from "@/core/forms/components/VueForm.vue";
@@ -34,7 +33,7 @@ const validationSchema = object({
     <VueForm
         name="login-form"
         submit-method="post"
-        submit-text="Login"
+        submit-text="Sign In"
         submit-icon="user-check"
         :submit-route="login.url()"
         :validation-schema="validationSchema"
@@ -75,16 +74,5 @@ const validationSchema = object({
                 <SwitchInput name="remember" label="Remember Me" />
             </div>
         </div>
-        <template #submit-button="{ isSubmitting }">
-            <div class="flex justify-center">
-                <SubmitButton class="w-1/2" size="sm" pill>
-                    <fa-icon
-                        :class="{ 'fa-spin': isSubmitting }"
-                        :icon="isSubmitting ? 'spinner' : 'user-check'"
-                    />
-                    <span v-if="!isSubmitting"> Login </span>
-                </SubmitButton>
-            </div>
-        </template>
     </VueForm>
 </template>
