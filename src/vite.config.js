@@ -34,19 +34,29 @@ export default defineConfig(({ mode }) => {
                 skipDatabase: true,
             })] : [])
         ],
-        server: {
-            https: {
-                key: fs.readFileSync("/app/keystore/private/server.key"),
-                cert: fs.readFileSync("/app/keystore/server.crt"),
-            },
+                server: {
+            ...(fs.existsSync("/app/keystore/private/server.key") &&
+                fs.existsSync("/app/keystore/server.crt")
+                ? {
+                    https: {
+                        key: fs.readFileSync("/app/keystore/private/server.key"),
+                        cert: fs.readFileSync("/app/keystore/server.crt"),
+                    },
+                }
+                : {}),
             host: "0.0.0.0",
             hmr: {
                 protocol: "wss",
                 host: wsHost,
-                https: {
-                    key: fs.readFileSync("/app/keystore/private/server.key"),
-                    cert: fs.readFileSync("/app/keystore/server.crt"),
-                },
+                ...(fs.existsSync("/app/keystore/private/server.key") &&
+                    fs.existsSync("/app/keystore/server.crt")
+                    ? {
+                        https: {
+                            key: fs.readFileSync("/app/keystore/private/server.key"),
+                            cert: fs.readFileSync("/app/keystore/server.crt"),
+                        },
+                    }
+                    : {}),
             },
             cors: {
                 origin: [
