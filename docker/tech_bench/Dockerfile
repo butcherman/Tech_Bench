@@ -97,21 +97,33 @@ RUN composer dump-autoload \
     --no-scripts \
     && php artisan package:discover --ansi
 
+
 # ------------------------------------------------------------------------------
 # Frontend build
 # ------------------------------------------------------------------------------
 
-FROM node:22-bookworm-slim AS frontend-build
+FROM composer-build AS frontend-build
+
+# Install Node.js 22
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+    ca-certificates \
+    curl \
+    && curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
+    && apt-get install -y --no-install-recommends nodejs \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
-COPY src/package.json src/package-lock.json ./
+# Temporary build-only Laravel configuration
+ENV APP_KEY=base64:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
 
+# Install frontend dependencies
 RUN npm ci
 
-COPY src/ ./
-
+# Build frontend assets (Wayfinder runs automatically through Vite)
 RUN npm run build
+
 
 # ------------------------------------------------------------------------------
 # Production image

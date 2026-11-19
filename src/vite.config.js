@@ -30,7 +30,8 @@ export default defineConfig(({ mode }) => {
             tailwindcss(),
             inertia(),
             ...(mode !== "test" ? [wayfinder({
-                path: 'resources/js/wayfinder'
+                path: 'resources/js/wayfinder',
+                skipDatabase: true,
             })] : [])
         ],
         server: {
