@@ -115,14 +115,11 @@ RUN apt-get update \
 
 WORKDIR /app
 
-# Temporary build-only Laravel configuration
-ENV APP_KEY=base64:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
-
 # Install frontend dependencies
 RUN npm ci
 
 # Build frontend assets (Wayfinder runs automatically through Vite)
-RUN npm run build
+RUN APP_KEY=base64:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA= npm run build
 
 
 # ------------------------------------------------------------------------------
