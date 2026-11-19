@@ -2,15 +2,12 @@
 
 namespace Database\Seeders;
 
-use App\Features\FileLinkFeature;
-use App\Features\PublicTechTipFeature;
-use App\Features\TechTipCommentFeature;
 use App\Models\UserRole;
 use App\Models\UserRolePermission;
+use App\Models\UserRolePermissionCategory;
 use App\Models\UserRolePermissionType;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class UserRoleSeeder extends Seeder
 {
@@ -37,34 +34,34 @@ class UserRoleSeeder extends Seeder
                 'role_cat_id' => 1,
                 'category' => 'Administration',
                 'feature_name' => null,
-                'created_at' => NOW(),
-                'updated_at' => NOW(),
             ],
             [
                 'role_cat_id' => 2,
                 'category' => 'Customers',
                 'feature_name' => null,
-                'created_at' => NOW(),
-                'updated_at' => NOW(),
             ],
             [
                 'role_cat_id' => 3,
                 'category' => 'Tech Tips',
                 'feature_name' => null,
-                'created_at' => NOW(),
-                'updated_at' => NOW(),
             ],
             [
                 'role_cat_id' => 4,
                 'category' => 'File Links',
-                'feature_name' => FileLinkFeature::class,
-                'created_at' => NOW(),
-                'updated_at' => NOW(),
+                'feature_name' => 'file-link.feature_enabled',
+            ],
+            [
+                'role_cat_id' => 5,
+                'category' => 'Maintenance',
+                'feature_name' => null,
             ],
         ];
 
-        DB::table('user_role_permission_categories')
-            ->insertOrIgnore($defaultCategories);
+        UserRolePermissionCategory::upsert(
+            $defaultCategories,
+            ['role_cat_id'],
+            ['category', 'feature_name']
+        );
     }
 
     /**
@@ -80,8 +77,6 @@ class UserRoleSeeder extends Seeder
                 'description' => 'App Settings',
                 'is_admin_link' => 1,
                 'feature_name' => null,
-                'created_at' => NOW(),
-                'updated_at' => NOW(),
             ],
             [
                 'perm_type_id' => 2,
@@ -89,8 +84,6 @@ class UserRoleSeeder extends Seeder
                 'description' => 'Manage Users',
                 'is_admin_link' => 1,
                 'feature_name' => null,
-                'created_at' => NOW(),
-                'updated_at' => NOW(),
             ],
             [
                 'perm_type_id' => 3,
@@ -98,8 +91,6 @@ class UserRoleSeeder extends Seeder
                 'description' => 'Manage Permissions',
                 'is_admin_link' => 1,
                 'feature_name' => null,
-                'created_at' => NOW(),
-                'updated_at' => NOW(),
             ],
             [
                 'perm_type_id' => 4,
@@ -107,8 +98,6 @@ class UserRoleSeeder extends Seeder
                 'description' => 'Run Reports',
                 'is_admin_link' => 0,
                 'feature_name' => null,
-                'created_at' => NOW(),
-                'updated_at' => NOW(),
             ],
             [
                 'perm_type_id' => 5,
@@ -116,8 +105,6 @@ class UserRoleSeeder extends Seeder
                 'description' => 'Manage Equipment',
                 'is_admin_link' => 1,
                 'feature_name' => null,
-                'created_at' => NOW(),
-                'updated_at' => NOW(),
             ],
             //  Customer Permissions
             [
@@ -126,8 +113,6 @@ class UserRoleSeeder extends Seeder
                 'description' => 'Manage Customers',
                 'is_admin_link' => 1,
                 'feature_name' => null,
-                'created_at' => NOW(),
-                'updated_at' => NOW(),
             ],
             [
                 'perm_type_id' => 7,
@@ -135,8 +120,6 @@ class UserRoleSeeder extends Seeder
                 'description' => 'Add Customer',
                 'is_admin_link' => 0,
                 'feature_name' => null,
-                'created_at' => NOW(),
-                'updated_at' => NOW(),
             ],
             [
                 'perm_type_id' => 8,
@@ -144,8 +127,6 @@ class UserRoleSeeder extends Seeder
                 'description' => 'Update Customer',
                 'is_admin_link' => 0,
                 'feature_name' => null,
-                'created_at' => NOW(),
-                'updated_at' => NOW(),
             ],
             [
                 'perm_type_id' => 9,
@@ -153,8 +134,6 @@ class UserRoleSeeder extends Seeder
                 'description' => 'Deactivate Customer',
                 'is_admin_link' => 0,
                 'feature_name' => null,
-                'created_at' => NOW(),
-                'updated_at' => NOW(),
             ],
             [
                 'perm_type_id' => 10,
@@ -162,8 +141,6 @@ class UserRoleSeeder extends Seeder
                 'description' => 'Delete Customer',
                 'is_admin_link' => 0,
                 'feature_name' => null,
-                'created_at' => NOW(),
-                'updated_at' => NOW(),
             ],
             //  Customer Equipment Permissions
             [
@@ -172,8 +149,6 @@ class UserRoleSeeder extends Seeder
                 'description' => 'Add Customer Equipment',
                 'is_admin_link' => 0,
                 'feature_name' => null,
-                'created_at' => NOW(),
-                'updated_at' => NOW(),
             ],
             [
                 'perm_type_id' => 12,
@@ -181,8 +156,6 @@ class UserRoleSeeder extends Seeder
                 'description' => 'Edit Customer Equipment',
                 'is_admin_link' => 0,
                 'feature_name' => null,
-                'created_at' => NOW(),
-                'updated_at' => NOW(),
             ],
             [
                 'perm_type_id' => 13,
@@ -190,8 +163,6 @@ class UserRoleSeeder extends Seeder
                 'description' => 'Delete Customer Equipment',
                 'is_admin_link' => 0,
                 'feature_name' => null,
-                'created_at' => NOW(),
-                'updated_at' => NOW(),
             ],
             //  Customer Contact Permissions
             [
@@ -200,8 +171,6 @@ class UserRoleSeeder extends Seeder
                 'description' => 'Add Customer Contact',
                 'is_admin_link' => 0,
                 'feature_name' => null,
-                'created_at' => NOW(),
-                'updated_at' => NOW(),
             ],
             [
                 'perm_type_id' => 15,
@@ -209,8 +178,6 @@ class UserRoleSeeder extends Seeder
                 'description' => 'Edit Customer Contact',
                 'is_admin_link' => 0,
                 'feature_name' => null,
-                'created_at' => NOW(),
-                'updated_at' => NOW(),
             ],
             [
                 'perm_type_id' => 16,
@@ -218,8 +185,6 @@ class UserRoleSeeder extends Seeder
                 'description' => 'Delete Customer Contact',
                 'is_admin_link' => 0,
                 'feature_name' => null,
-                'created_at' => NOW(),
-                'updated_at' => NOW(),
             ],
             //  Customer Notes Permissions
             [
@@ -228,8 +193,6 @@ class UserRoleSeeder extends Seeder
                 'description' => 'Add Customer Note',
                 'is_admin_link' => 0,
                 'feature_name' => null,
-                'created_at' => NOW(),
-                'updated_at' => NOW(),
             ],
             [
                 'perm_type_id' => 18,
@@ -237,8 +200,6 @@ class UserRoleSeeder extends Seeder
                 'description' => 'Edit Customer Note',
                 'is_admin_link' => 0,
                 'feature_name' => null,
-                'created_at' => NOW(),
-                'updated_at' => NOW(),
             ],
             [
                 'perm_type_id' => 19,
@@ -246,8 +207,6 @@ class UserRoleSeeder extends Seeder
                 'description' => 'Delete Customer Note',
                 'is_admin_link' => 0,
                 'feature_name' => null,
-                'created_at' => NOW(),
-                'updated_at' => NOW(),
             ],
             //  Customer Notes Permissions
             [
@@ -256,8 +215,6 @@ class UserRoleSeeder extends Seeder
                 'description' => 'Add Customer File',
                 'is_admin_link' => 0,
                 'feature_name' => null,
-                'created_at' => NOW(),
-                'updated_at' => NOW(),
             ],
             [
                 'perm_type_id' => 21,
@@ -265,8 +222,6 @@ class UserRoleSeeder extends Seeder
                 'description' => 'Edit Customer File',
                 'is_admin_link' => 0,
                 'feature_name' => null,
-                'created_at' => NOW(),
-                'updated_at' => NOW(),
             ],
             [
                 'perm_type_id' => 22,
@@ -274,8 +229,6 @@ class UserRoleSeeder extends Seeder
                 'description' => 'Delete Customer File',
                 'is_admin_link' => 0,
                 'feature_name' => null,
-                'created_at' => NOW(),
-                'updated_at' => NOW(),
             ],
             //  Tech Tips Permissions
             [
@@ -284,8 +237,6 @@ class UserRoleSeeder extends Seeder
                 'description' => 'Add Tech Tip',
                 'is_admin_link' => 0,
                 'feature_name' => null,
-                'created_at' => NOW(),
-                'updated_at' => NOW(),
             ],
             [
                 'perm_type_id' => 24,
@@ -293,8 +244,6 @@ class UserRoleSeeder extends Seeder
                 'description' => 'Edit Tech Tip',
                 'is_admin_link' => 0,
                 'feature_name' => null,
-                'created_at' => NOW(),
-                'updated_at' => NOW(),
             ],
             [
                 'perm_type_id' => 25,
@@ -302,8 +251,6 @@ class UserRoleSeeder extends Seeder
                 'description' => 'Delete Tech Tip',
                 'is_admin_link' => 0,
                 'feature_name' => null,
-                'created_at' => NOW(),
-                'updated_at' => NOW(),
             ],
             [
                 'perm_type_id' => 26,
@@ -311,26 +258,20 @@ class UserRoleSeeder extends Seeder
                 'description' => 'Manage Tech Tips',
                 'is_admin_link' => 1,
                 'feature_name' => null,
-                'created_at' => NOW(),
-                'updated_at' => NOW(),
             ],
             [
                 'perm_type_id' => 27,
                 'role_cat_id' => 3,
                 'description' => 'Comment on Tech Tip',
                 'is_admin_link' => 0,
-                'feature_name' => TechTipCommentFeature::class,
-                'created_at' => NOW(),
-                'updated_at' => NOW(),
+                'feature_name' => 'tech-tips.allow_comments',
             ],
             [
                 'perm_type_id' => 28,
                 'role_cat_id' => 3,
                 'description' => 'Add Public Tech Tip',
-                'feature_name' => PublicTechTipFeature::class,
+                'feature_name' => 'tech-tips.allow_public',
                 'is_admin_link' => 0,
-                'created_at' => NOW(),
-                'updated_at' => NOW(),
             ],
             // File Links
             [
@@ -338,18 +279,14 @@ class UserRoleSeeder extends Seeder
                 'role_cat_id' => 4,
                 'description' => 'Use File Links',
                 'is_admin_link' => 0,
-                'feature_name' => FileLinkFeature::class,
-                'created_at' => NOW(),
-                'updated_at' => NOW(),
+                'feature_name' => 'file-link.feature_enabled',
             ],
             [
                 'perm_type_id' => 30,
                 'role_cat_id' => 4,
                 'description' => 'Manage File Links',
                 'is_admin_link' => 1,
-                'feature_name' => FileLinkFeature::class,
-                'created_at' => NOW(),
-                'updated_at' => NOW(),
+                'feature_name' => 'file-link.feature_enabled',
             ],
             // Customer Equipment Workbooks
             [
@@ -358,13 +295,37 @@ class UserRoleSeeder extends Seeder
                 'description' => 'Manage Equipment Workbooks',
                 'is_admin_link' => 1,
                 'feature_name' => null,
-                'created_at' => NOW(),
-                'updated_at' => NOW(),
+            ],
+            // Maintenance
+            [
+                'perm_type_id' => 32,
+                'role_cat_id' => 5,
+                'description' => 'View Logs',
+                'is_admin_link' => 0,
+                'feature_name' => null,
+            ],
+            [
+                'perm_type_id' => 33,
+                'role_cat_id' => 5,
+                'desctiption' => 'Manage Log Settings',
+                'is_admin_link' => 0,
+                'feature_name' => null,
+            ],
+            [
+                'perm_type_id' => 34,
+                'role_cat_id' => 5,
+                'description' => 'Run Backups',
+                'is_admin_link' => 0,
+                'feature_name' => null,
             ],
         ];
 
         // Insert the data if it does not already exist
-        DB::table('user_role_permission_types')->insertOrIgnore($defaultData);
+        UserRolePermissionType::upsert(
+            $defaultData,
+            ['perm_type_id'],
+            ['description', 'is_admin_link', 'feature_name']
+        );
     }
 
     /**
@@ -378,36 +339,28 @@ class UserRoleSeeder extends Seeder
                 'name' => 'Installer',
                 'description' => 'All Access Administrator',
                 'allow_edit' => 0,
-                'created_at' => NOW(),
-                'updated_at' => NOW(),
             ],
             [
                 'role_id' => 2,
                 'name' => 'Administrator',
                 'description' => 'System Administrator',
                 'allow_edit' => 0,
-                'created_at' => NOW(),
-                'updated_at' => NOW(),
             ],
             [
                 'role_id' => 3,
                 'name' => 'Reports',
                 'description' => 'User who can run reports',
                 'allow_edit' => 0,
-                'created_at' => NOW(),
-                'updated_at' => NOW(),
             ],
             [
                 'role_id' => 4,
                 'name' => 'Tech',
                 'description' => 'Standard User',
                 'allow_edit' => 0,
-                'created_at' => NOW(),
-                'updated_at' => NOW(),
             ],
         ];
 
-        DB::table('user_roles')->insertOrIgnore($defaultData);
+        UserRole::insertOrIgnore($defaultData);
     }
 
     /**
@@ -640,6 +593,24 @@ class UserRoleSeeder extends Seeder
                 'other' => false,
             ],
             31 => [
+                'installer' => true,
+                'administrator' => true,
+                'reports' => false,
+                'other' => false,
+            ],
+            32 => [
+                'installer' => true,
+                'administrator' => true,
+                'reports' => false,
+                'other' => false,
+            ],
+            33 => [
+                'installer' => true,
+                'administrator' => true,
+                'reports' => false,
+                'other' => false,
+            ],
+            34 => [
                 'installer' => true,
                 'administrator' => true,
                 'reports' => false,

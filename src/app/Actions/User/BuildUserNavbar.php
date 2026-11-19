@@ -53,8 +53,8 @@ class BuildUserNavbar
         ])->when(config('file-link.feature_enabled'), function ($collection) {
             return $collection->add([
                 'label' => 'File Links',
-                'icon' => 'link',
                 'route' => '#', // route('links.index'),
+                'icon' => 'link',
             ]);
         });
     }
@@ -69,6 +69,12 @@ class BuildUserNavbar
                 'label' => 'Administration',
                 'route' => route('admin.index'),
                 'icon' => 'cog',
+            ]);
+        })->when($this->seeMaintenanceLink($this->user), function ($collection) {
+            $collection->add([
+                'label' => 'Maintenance',
+                'route' => '#',
+                'icon' => 'wrench',
             ]);
         })->when($this->seeReportLink($this->user), function ($collection) {
             $collection->add([

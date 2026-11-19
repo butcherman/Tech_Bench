@@ -73,4 +73,24 @@ trait AllowTrait
     {
         return $this->checkPermission($user, 'Run Reports');
     }
+
+    /**
+     * Determine if the user has access the Maintenance link
+     */
+    public function seeMaintenanceLink(User $user): bool
+    {
+        $permList = [
+            'View Logs',
+            'Manage Log Settings',
+            'Run Backups',
+        ];
+
+        foreach ($permList as $perm) {
+            if ($this->checkPermission($user, $perm)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

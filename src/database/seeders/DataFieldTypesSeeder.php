@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\DataFieldType;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class DataFieldTypesSeeder extends Seeder
 {
@@ -25,8 +25,6 @@ class DataFieldTypesSeeder extends Seeder
                 'allow_copy' => false,
                 'do_not_log_value' => false,
                 'masked' => false,
-                'created_at' => NOW(),
-                'updated_at' => NOW(),
             ],
             [
                 'type_id' => 2,
@@ -37,8 +35,6 @@ class DataFieldTypesSeeder extends Seeder
                 'allow_copy' => false,
                 'do_not_log_value' => false,
                 'masked' => false,
-                'created_at' => NOW(),
-                'updated_at' => NOW(),
             ],
             [
                 'type_id' => 3,
@@ -49,8 +45,6 @@ class DataFieldTypesSeeder extends Seeder
                 'allow_copy' => false,
                 'do_not_log_value' => false,
                 'masked' => false,
-                'created_at' => NOW(),
-                'updated_at' => NOW(),
             ],
             [
                 'type_id' => 4,
@@ -61,8 +55,6 @@ class DataFieldTypesSeeder extends Seeder
                 'allow_copy' => false,
                 'do_not_log_value' => false,
                 'masked' => true,
-                'created_at' => NOW(),
-                'updated_at' => NOW(),
             ],
             [
                 'type_id' => 5,
@@ -73,8 +65,6 @@ class DataFieldTypesSeeder extends Seeder
                 'allow_copy' => false,
                 'do_not_log_value' => false,
                 'masked' => false,
-                'created_at' => NOW(),
-                'updated_at' => NOW(),
             ],
             [
                 'type_id' => 6,
@@ -85,8 +75,6 @@ class DataFieldTypesSeeder extends Seeder
                 'allow_copy' => false,
                 'do_not_log_value' => false,
                 'masked' => false,
-                'created_at' => NOW(),
-                'updated_at' => NOW(),
             ],
             [
                 'type_id' => 7,
@@ -97,8 +85,6 @@ class DataFieldTypesSeeder extends Seeder
                 'allow_copy' => false,
                 'do_not_log_value' => false,
                 'masked' => false,
-                'created_at' => NOW(),
-                'updated_at' => NOW(),
             ],
             [
                 'type_id' => 8,
@@ -109,8 +95,6 @@ class DataFieldTypesSeeder extends Seeder
                 'allow_copy' => false,
                 'do_not_log_value' => false,
                 'masked' => false,
-                'created_at' => NOW(),
-                'updated_at' => NOW(),
             ],
             [
                 'type_id' => 9,
@@ -121,11 +105,13 @@ class DataFieldTypesSeeder extends Seeder
                 'allow_copy' => false,
                 'do_not_log_value' => false,
                 'masked' => false,
-                'created_at' => NOW(),
-                'updated_at' => NOW(),
             ],
         ];
 
-        DB::table('data_field_types')->insertOrIgnore($defaultData);
+        // Only input the default data if the table is empty so we don't re-add
+        // any data that was intentionally removed.
+        if (DataFieldType::doesntExist()) {
+            DataFieldType::insertOrIgnore($defaultData);
+        }
     }
 }

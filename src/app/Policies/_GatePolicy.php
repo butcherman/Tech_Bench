@@ -22,11 +22,15 @@ class _GatePolicy
      */
     public function reportsLink(User $user): bool
     {
-        if ($this->checkPermission($user, 'Run Reports')) {
-            return true;
-        }
+        return $this->seeReportLink($user);
+    }
 
-        return false;
+    /**
+     * Determine if the user is allowed to see the Maintenance link
+     */
+    public function maintenanceLink(User $user): bool
+    {
+        return $this->maintenanceLink($user);
     }
 
     /**

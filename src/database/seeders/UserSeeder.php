@@ -2,9 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\User;
+use App\Models\UserSetting;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class UserSeeder extends Seeder
 {
@@ -24,11 +25,9 @@ class UserSeeder extends Seeder
             'email' => 'admin@em.com',
             'password' => bcrypt('password'),
             'password_expires' => '2000-01-01 00:00:00',
-            'created_at' => now(),
-            'updated_at' => now(),
         ];
 
-        DB::table('users')->insertOrIgnore($defaultUser);
+        User::insertOrIgnore($defaultUser);
 
         $settings = [
             [
@@ -36,27 +35,21 @@ class UserSeeder extends Seeder
                 'user_id' => 1,
                 'setting_type_id' => 1,
                 'value' => 1,
-                'created_at' => NOW(),
-                'updated_at' => NOW(),
             ],
             [
                 'setting_id' => 2,
                 'user_id' => 1,
                 'setting_type_id' => 2,
                 'value' => 1,
-                'created_at' => NOW(),
-                'updated_at' => NOW(),
             ],
             [
                 'setting_id' => 3,
                 'user_id' => 1,
                 'setting_type_id' => 3,
                 'value' => 1,
-                'created_at' => NOW(),
-                'updated_at' => NOW(),
             ],
         ];
 
-        DB::table('user_settings')->insertOrIgnore($settings);
+        UserSetting::insertOrIgnore($settings);
     }
 }
