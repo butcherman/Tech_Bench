@@ -117,6 +117,8 @@ class _ForgotPasswordTest extends TestCase
      */
     public function test_view_password_reset_form(): void
     {
+        config(['tech-tips.allow_public' => true]);
+
         /** @var User $user */
         $user = User::factory()->createQuietly();
         $token = Password::broker()->createToken($user);
@@ -126,7 +128,18 @@ class _ForgotPasswordTest extends TestCase
             'email' => $user->email,
         ]));
 
-        $response->assertSuccessful();
+        $response->assertSuccessful()
+            ->assertInertia(
+                fn (Assert $page) => $page
+                    ->component('Auth/ResetPassword')
+                    ->has('email')
+                    ->has('token')
+                    ->has('rules')
+                    ->has('welcome-message')
+                    ->has('home-links')
+                    ->has('public-link')
+            );
+        $this->assertGuest();
     }
 
     /**
