@@ -30,13 +30,11 @@ class CustomerFileTypeSeeder extends Seeder
             ],
             [
                 'file_type_id' => 4,
-                'description' => 'Other',
-            ],
+                'description' => 'Other',            ],
         ];
 
-        // Only insert the data if the table is empty
         if (CustomerFileType::doesntExist()) {
-            CustomerFileType::insertOrIgnore($defaultData);
+            CustomerFileType::insert($defaultData);
         }
     }
 }

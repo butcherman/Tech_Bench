@@ -65,12 +65,14 @@ class PasswordValidationRulesUnitTest extends TestCase
     public function test_tmp_password_rules_default(): void
     {
         $passRules = [
-            'disable_compromised' => false,
-            'min_length' => 6,
-            'contains_uppercase' => true,
-            'contains_lowercase' => true,
-            'contains_number' => true,
-            'contains_special' => true,
+            'password' => [
+                'disable_compromised' => false,
+                'min_length' => 6,
+                'contains_uppercase' => true,
+                'contains_lowercase' => true,
+                'contains_number' => true,
+                'contains_special' => true,
+            ],
         ];
 
         $rules = $this->tmpPasswordRules($passRules);

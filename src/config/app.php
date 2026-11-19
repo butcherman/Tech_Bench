@@ -47,7 +47,7 @@ return [
     |
     */
 
-    'welcome_message' => '',
+    'welcome_message' => 'Welcome to the Tech Bench',
 
     'home_links' => [],
 

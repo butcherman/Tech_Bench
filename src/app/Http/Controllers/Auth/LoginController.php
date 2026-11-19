@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
-use Inertia\Response;
 
-class LoginController
+class LoginController extends Controller
 {
     /**
-     * Show Login Screen
+     * Handle the incoming request.
      */
-    public function __invoke(): Response
+    public function __invoke()
     {
-        return Inertia::render('Auth/TechLogin', [
+        return Inertia::render('Auth/Login', [
             'welcome-message' => fn () => config('app.welcome_message'),
             'home-links' => fn () => config('app.home_links'),
             'allow-oath' => fn () => config('services.azure.allow_login'),

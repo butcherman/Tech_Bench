@@ -2,9 +2,8 @@
 
 use App\Http\Controllers\Home\AboutController;
 use App\Http\Controllers\Home\DashboardController;
-use App\Http\Controllers\Home\DownloadFileController;
-use App\Http\Controllers\Home\UploadImageController;
-use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
+// use App\Http\Controllers\Home\DownloadFileController;
+// use App\Http\Controllers\Home\UploadImageController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,9 +21,9 @@ Route::middleware('auth.secure')->group(function () {
         ->name('about')
         ->breadcrumb('About', 'dashboard');
 
-    Route::post('upload-image/{folder?}', UploadImageController::class)
-        ->name('upload-image')
-        ->withoutMiddleware(ValidateCsrfToken::class);
+    // Route::post('upload-image/{folder?}', UploadImageController::class)
+    //     ->name('upload-image')
+    //     ->withoutMiddleware(ValidateCsrfToken::class);
 });
 
 /*
@@ -32,4 +31,4 @@ Route::middleware('auth.secure')->group(function () {
 | Download a File
 |-------------------------------------------------------------------------------
 */
-Route::get('download/{file}/{fileName}', DownloadFileController::class)->name('download');
+// Route::get('download/{file}/{fileName}', DownloadFileController::class)->name('download');

@@ -315,7 +315,7 @@ services:
 
     #  NPM Container to run npm run dev
     npm:
-        image: node:22-bookworm-slim
+        image: butcherman/tech_bench_app:${APP_VERSION}
         container_name: npm
         user: root
         volumes:

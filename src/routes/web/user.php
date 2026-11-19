@@ -13,6 +13,8 @@ use App\Http\Controllers\User\UpdateUserSettingsController;
 use App\Http\Controllers\User\UserPasswordController;
 use App\Http\Controllers\User\UserSettingsController;
 use App\Http\Middleware\CheckPasswordExpiration;
+use App\Models\User;
+use App\Models\UserRole;
 use Glhd\Gretel\Routing\ResourceBreadcrumbs;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Http\Controllers\PasswordResetLinkController;
@@ -41,16 +43,16 @@ Route::middleware('auth.secure')->group(function () {
             ->name('user-settings.show')
             ->breadcrumb('User Settings', 'dashboard');
 
-        Route::put('user-account/{user}', UpdateUserAccountController::class)
-            ->name('user-account.update');
+        // Route::put('user-account/{user}', UpdateUserAccountController::class)
+        //     ->name('user-account.update');
 
-        Route::put('user-settings/{user}', UpdateUserSettingsController::class)
-            ->name('user-settings.update');
+        // Route::put('user-settings/{user}', UpdateUserSettingsController::class)
+        //     ->name('user-settings.update');
 
-        Route::delete(
-            'remove-device/{user}/{token}',
-            RemoveDeviceTokenController::class
-        )->name('remove-device');
+        // Route::delete(
+        //     'remove-device/{user}/{token}',
+        //     RemoveDeviceTokenController::class
+        // )->name('remove-device');
     });
 
     /*
@@ -67,32 +69,32 @@ Route::middleware('auth.secure')->group(function () {
         | /administration/users
         |-----------------------------------------------------------------------
         */
-        Route::prefix('users')->name('user.')->group(function () {
-            Route::get('{user}/restore', [UserAdministrationController::class, 'restore'])
-                ->name('restore')
-                ->withTrashed();
+        // Route::prefix('users')->name('user.')->group(function () {
+        //     Route::get('{user}/restore', [UserAdministrationController::class, 'restore'])
+        //         ->name('restore')
+        //         ->withTrashed();
 
-            Route::post('send-reset-password-link', [PasswordResetLinkController::class, 'store'])
-                ->name('password-link');
+        //     Route::post('send-reset-password-link', [PasswordResetLinkController::class, 'store'])
+        //         ->name('password-link');
 
-            Route::put('{user}/reset-user-password', ResetUserPasswordController::class)
-                ->name('reset-password');
+        //     Route::put('{user}/reset-user-password', ResetUserPasswordController::class)
+        //         ->name('reset-password');
 
-            Route::get('deactivated-users', DisabledUserController::class)
-                ->name('deactivated')
-                ->breadcrumb('Disabled Users', 'admin.user.index');
+        //     Route::get('deactivated-users', DisabledUserController::class)
+        //         ->name('deactivated')
+        //         ->breadcrumb('Disabled Users', 'admin.user.index');
 
-            Route::put('{user}/reset-2fa', ResetTwoFaController::class)
-                ->name('two-factor.reset');
-        });
+        //     Route::put('{user}/reset-2fa', ResetTwoFaController::class)
+        //         ->name('two-factor.reset');
+        // });
 
-        Route::resource('user', UserAdministrationController::class)
-            ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
-                $breadcrumbs->index('User Administration', 'admin.index')
-                    ->create('New User')
-                    ->show('User Details')
-                    ->edit('Edit User Details');
-            })->withTrashed();
+        // Route::resource('user', UserAdministrationController::class)
+        //     ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
+        //         $breadcrumbs->index('Users', 'admin.index')
+        //             ->create('New User')
+        //             ->show(fn (User $user) => $user->fullName)
+        //             ->edit('Edit Profile');
+        //     })->withTrashed();
 
         /*
         |-----------------------------------------------------------------------
@@ -100,17 +102,17 @@ Route::middleware('auth.secure')->group(function () {
         | /administration/user-roles
         |-----------------------------------------------------------------------
         */
-        Route::post('user-roles/create', [UserRolesController::class, 'create'])
-            ->name('user-roles.copy')
-            ->breadcrumb('Build New Role', 'admin.user-roles.index');
+        // Route::post('user-roles/create', [UserRolesController::class, 'create'])
+        //     ->name('user-roles.copy')
+        //     ->breadcrumb('Build New Role', 'admin.user-roles.index');
 
-        Route::resource('user-roles', UserRolesController::class)
-            ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
-                $breadcrumbs->index('Roles and Permissions', 'admin.index')
-                    ->create('Build New Role')
-                    ->show('View Role')
-                    ->edit('Modify Role');
-            });
+        // Route::resource('user-roles', UserRolesController::class)
+        //     ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
+        //         $breadcrumbs->index('Roles and Permissions', 'admin.index')
+        //             ->create('Build New Role')
+        //             ->show(fn(UserRole $role) => $role->name)
+        //             ->edit('Modify Role');
+        //     });
     });
 });
 
@@ -119,15 +121,15 @@ Route::middleware('auth.secure')->group(function () {
 | Finish Setting Up User Account Routes
 |-------------------------------------------------------------------------------
 */
-Route::middleware('guest')->controller(InitializeUserController::class)->group(function () {
-    Route::get('initialize-account/{token}', 'show')
-        ->name('initialize')
-        ->missing(function () {
-            throw new InitializeUserLinkMissingException;
-        });
-    Route::put('initialize-account/{token}', 'update')
-        ->name('initialize.update')
-        ->missing(function () {
-            throw new InitializeUserLinkMissingException;
-        });
-});
+// Route::middleware('guest')->controller(InitializeUserController::class)->group(function () {
+//     Route::get('initialize-account/{token}', 'show')
+//         ->name('initialize')
+//         ->missing(function () {
+//             throw new InitializeUserLinkMissingException;
+//         });
+//     Route::post('initialize-account/{token}', 'update')
+//         ->name('initialize.update')
+//         ->missing(function () {
+//             throw new InitializeUserLinkMissingException;
+//         });
+// });

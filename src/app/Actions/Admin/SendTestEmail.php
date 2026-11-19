@@ -2,33 +2,38 @@
 
 namespace App\Actions\Admin;
 
-use App\Mail\Admin\TestEmail;
-use App\Models\User;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-use Symfony\Component\Mailer\Exception\TransportException;
 
 class SendTestEmail
 {
-    /*
-    |---------------------------------------------------------------------------
-    | Send a test email to the currently authenticated user.  Message is not
-    | queued so that a live result can be sent in response with any possible
-    | errors that may have occurred.
-    |---------------------------------------------------------------------------
-    */
-    public function __invoke(User $user)
+    public function send(array $settings, string $recipient)
     {
-        try {
-            Log::debug('Attempting to send test email to '.$user->email);
+        $mailer = Mail::build([
+            'transport' => 'smtp',
+            'host' => $settings['host'],
+            'port' => (int) $settings['port'],
+            'encryption' => $settings['encryption'] ?: null,
+            'username' => $settings['username'] ?: null,
+            'password' => $settings['password'] ?: null,
+            'timeout' => 10,
+            'local_domain' => parse_url(
+                config('app.url'),
+                PHP_URL_HOST
+            ),
+        ]);
 
-            Mail::to($user)->send(new TestEmail($user));
-
-            return [true, __('admin.email.test')];
-        } catch (TransportException $e) {
-            Log::error('Test email failed - '.$e->getMessage());
-
-            return [false, $e->getMessage()];
-        }
+        $mailer->raw(
+            'This is a test email from Tech Bench. '
+            .'Your email settings are working.',
+            function ($message) use ($recipient, $settings) {
+                $message
+                    ->to($recipient)
+                    ->from(
+                        $settings['from_address'],
+                        $settings['from_address'],
+                    )
+                    ->subject('Tech Bench - Test Email');
+            }
+        );
     }
 }

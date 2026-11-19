@@ -4,17 +4,8 @@ namespace App\Actions\Misc;
 
 use Jackiedo\Timezonelist\Facades\Timezonelist;
 
-/*
-|-------------------------------------------------------------------------------
-| Create a list of available Time Zones for the application
-|-------------------------------------------------------------------------------
-*/
-
 class BuildTimezoneList
 {
-    /**
-     * @codeCoverageIgnore
-     */
     public static function build(): array
     {
         $tzList = [];

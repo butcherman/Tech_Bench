@@ -23,14 +23,14 @@ Schedule::command('auth:clear-validation-codes')->everyFifteenMinutes();
 | Daily Maintenance Jobs
 |-------------------------------------------------------------------------------
 */
-Schedule::job(new CheckSslCertificateJob)->daily();
-Schedule::job(new CheckAzureCertificateJob)->daily();
-Schedule::job(new NightlyBackupJob)->dailyAt('03:00');
-Schedule::job(new GarbageCollectionJob)->daily();
+// Schedule::job(new CheckSslCertificateJob)->daily();
+// Schedule::job(new CheckAzureCertificateJob)->daily();
+// Schedule::job(new NightlyBackupJob)->dailyAt('03:00');
+// Schedule::job(new GarbageCollectionJob)->daily();
 
 /*
 |-------------------------------------------------------------------------------
 | Weekly or Monthly Maintenance Jobs
 |-------------------------------------------------------------------------------
 */
-Schedule::job(new CleanImageFoldersJob)->monthly();
+// Schedule::job(new CleanImageFoldersJob)->monthly();

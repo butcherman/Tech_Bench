@@ -2,14 +2,12 @@
 
 namespace Database\Seeders;
 
-use App\Features\FileLinkFeature;
 use App\Models\UserRole;
 use App\Models\UserRolePermission;
 use App\Models\UserRolePermissionCategory;
 use App\Models\UserRolePermissionType;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class UserRoleSeeder extends Seeder
 {
@@ -50,11 +48,20 @@ class UserRoleSeeder extends Seeder
             [
                 'role_cat_id' => 4,
                 'category' => 'File Links',
-                'feature_name' => FileLinkFeature::class,
+                'feature_name' => 'file-link.feature_enabled',
+            ],
+            [
+                'role_cat_id' => 5,
+                'category' => 'Maintenance',
+                'feature_name' => null,
             ],
         ];
 
-        UserRolePermissionCategory::insertOrIgnore($defaultCategories);
+        UserRolePermissionCategory::upsert(
+            $defaultCategories,
+            ['role_cat_id'],
+            ['category', 'feature_name']
+        );
     }
 
     /**
@@ -285,21 +292,40 @@ class UserRoleSeeder extends Seeder
             [
                 'perm_type_id' => 31,
                 'role_cat_id' => 1,
-                'description' => 'customer.enable_workbooks',
+                'description' => 'Manage Equipment Workbooks',
                 'is_admin_link' => 1,
+                'feature_name' => null,
+            ],
+            // Maintenance
+            [
+                'perm_type_id' => 32,
+                'role_cat_id' => 5,
+                'description' => 'View Logs',
+                'is_admin_link' => 0,
+                'feature_name' => null,
+            ],
+            [
+                'perm_type_id' => 33,
+                'role_cat_id' => 5,
+                'desctiption' => 'Manage Log Settings',
+                'is_admin_link' => 0,
+                'feature_name' => null,
+            ],
+            [
+                'perm_type_id' => 34,
+                'role_cat_id' => 5,
+                'description' => 'Run Backups',
+                'is_admin_link' => 0,
                 'feature_name' => null,
             ],
         ];
 
         // Insert the data if it does not already exist
-        // DB::table('user_role_permission_types')->insertOrIgnore($defaultData);
-
-        foreach ($defaultData as $data) {
-            UserRolePermissionType::updateOrCreate(
-                ['perm_type_id' => $data['perm_type_id']],
-                $data
-            );
-        }
+        UserRolePermissionType::upsert(
+            $defaultData,
+            ['perm_type_id'],
+            ['description', 'is_admin_link', 'feature_name']
+        );
     }
 
     /**
@@ -334,7 +360,6 @@ class UserRoleSeeder extends Seeder
             ],
         ];
 
-        // DB::table('user_roles')->insertOrIgnore($defaultData);
         UserRole::insertOrIgnore($defaultData);
     }
 
@@ -568,6 +593,24 @@ class UserRoleSeeder extends Seeder
                 'other' => false,
             ],
             31 => [
+                'installer' => true,
+                'administrator' => true,
+                'reports' => false,
+                'other' => false,
+            ],
+            32 => [
+                'installer' => true,
+                'administrator' => true,
+                'reports' => false,
+                'other' => false,
+            ],
+            33 => [
+                'installer' => true,
+                'administrator' => true,
+                'reports' => false,
+                'other' => false,
+            ],
+            34 => [
                 'installer' => true,
                 'administrator' => true,
                 'reports' => false,

@@ -1,35 +1,13 @@
-
-import fs from 'node:fs'
+import fs from "fs";
+import inertia from '@inertiajs/vite';
 import laravel from "laravel-vite-plugin";
-import path from 'node:path'
 import tailwindcss from '@tailwindcss/vite';
 import vue from "@vitejs/plugin-vue";
-import { fileURLToPath } from 'node:url'
 import { defineConfig, loadEnv } from "vite";
+import { wayfinder } from '@laravel/vite-plugin-wayfinder';
 
-const appRoot = path.dirname(fileURLToPath(import.meta.url))
-
-export default defineConfig(({ command, mode }) => {
-    const certPath = path.resolve(appRoot, 'keystore/server.crt')
-    const keyPath = path.resolve(appRoot, 'keystore/private/server.key')
-
-    // Only configure HTTPS when running the development server
-    // and both certificate files are available.
-    const useHttps =
-        command === 'serve' &&
-        fs.existsSync(certPath) &&
-        fs.existsSync(keyPath)
-
-    const https = useHttps
-        ? {
-            cert: fs.readFileSync(certPath),
-            key: fs.readFileSync(keyPath),
-        }
-        : undefined
-
-    // Load variables from the .env file
+export default defineConfig(({ mode }) => {
     process.env = { ...process.env, ...loadEnv(mode, process.cwd()) };
-
     const wsHost =
         process.env.VITE_WS_HOST !== undefined
             ? process.env.VITE_WS_HOST
@@ -50,26 +28,39 @@ export default defineConfig(({ command, mode }) => {
                 },
             }),
             tailwindcss(),
+            inertia(),
+            ...(mode !== "test" ? [wayfinder({
+                path: 'resources/js/wayfinder'
+            })] : [])
         ],
-
         server: {
-            ...(https ? { https } : {}),
+            https: {
+                key: fs.readFileSync("/app/keystore/private/server.key"),
+                cert: fs.readFileSync("/app/keystore/server.crt"),
+            },
             host: "0.0.0.0",
             hmr: {
-                protocol: useHttps ? "wss" : "ws",
+                protocol: "wss",
                 host: wsHost,
-                ...(useHttps ? {
-                    https: {
-                        key: https.key,
-                        cert: https.cert,
-                    },
-                } : {}),
+                https: {
+                    key: fs.readFileSync("/app/keystore/private/server.key"),
+                    cert: fs.readFileSync("/app/keystore/server.crt"),
+                },
             },
             cors: {
                 origin: [
-                    `${useHttps ? "https" : "http"}://${wsHost}`,
+                    `https://${wsHost}`,
                 ],
             }
         },
-    }
-})
+        test: {
+            globals: true,
+            environment: 'happy-dom',
+            coverage: {
+                enabled: true,
+                provider: 'v8',
+                reportsDirectory: './tests/Vitest/_Report'
+            }
+        }
+    };
+});

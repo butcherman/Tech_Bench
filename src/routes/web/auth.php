@@ -16,8 +16,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['guest', 'throttle:50,120'])->group(function () {
     Route::get('/', LoginController::class)->name('home');
-    Route::post('two-factor-submit', TwoFactorController::class)
-        ->name('two-factor.login.email');
+    // Route::post('two-factor-submit', TwoFactorController::class)
+    //     ->name('two-factor.login.email');
     /*
     |---------------------------------------------------------------------------
     | Socialite Routes (Azure Login)
@@ -29,13 +29,13 @@ Route::middleware(['guest', 'throttle:50,120'])->group(function () {
     });
 });
 
-Route::middleware('auth')
-    ->prefix('two-factor-authentication/setup')
-    ->name('two-factor.setup.')
-    ->group(function () {
-        Route::get('/', TwoFactorSetupController::class)->name('index');
-        Route::get('email-verification', TwoFactorSetupEmailController::class)
-            ->name('email');
-        Route::get('authenticator-app-verification', TwoFactorSetupAuthenticatorController::class)
-            ->name('authenticator');
-    });
+// Route::middleware('auth')
+//     ->prefix('two-factor-authentication/setup')
+//     ->name('two-factor.setup.')
+//     ->group(function () {
+//         Route::get('/', TwoFactorSetupController::class)->name('index');
+//         Route::get('email-verification', TwoFactorSetupEmailController::class)
+//             ->name('email');
+//         Route::get('authenticator-app-verification', TwoFactorSetupAuthenticatorController::class)
+//             ->name('authenticator');
+//     });

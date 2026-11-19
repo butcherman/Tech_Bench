@@ -1,17 +1,10 @@
 <?php
 
-use App\Http\Controllers\Admin\AdminController;
-use App\Http\Controllers\Admin\Config\BasicSettingsController;
-use App\Http\Controllers\Admin\Config\EmailSettingsController;
-use App\Http\Controllers\Admin\Config\FeatureController;
-use App\Http\Controllers\Admin\Config\LogoController;
-use App\Http\Controllers\Admin\Config\SecurityController;
-use App\Http\Controllers\Admin\Config\SendTestEmailController;
-use App\Http\Controllers\Admin\Misc\ContactPhoneTypesController;
-use App\Http\Controllers\Admin\User\PasswordPolicyController;
-use App\Http\Controllers\Admin\User\UserSettingsController;
-use App\Http\Controllers\Customer\CustomerFileTypesController;
-use Glhd\Gretel\Routing\ResourceBreadcrumbs;
+use App\Http\Controllers\Admin\AdminIndexController;
+use App\Http\Controllers\Admin\ApplicationConfigurationController;
+use App\Http\Controllers\Admin\EmailSettingsController;
+use App\Http\Controllers\Admin\LogoController;
+use App\Http\Controllers\Admin\SendTestEmailController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,45 +15,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('auth.secure')->prefix('administration')->name('admin.')->group(function () {
-    Route::get('/', AdminController::class)
+    Route::get('/', AdminIndexController::class)
         ->name('index')
         ->breadcrumb('Administration');
-
-    /*
-    |---------------------------------------------------------------------------
-    | User Settings Administration
-    | /administration/users
-    |---------------------------------------------------------------------------
-    */
-    Route::prefix('users')->name('user.')->group(function () {
-        /*
-        |-----------------------------------------------------------------------
-        | Password Policy
-        | /administration/password-policy
-        |-----------------------------------------------------------------------
-        */
-        Route::controller(PasswordPolicyController::class)->group(function () {
-            Route::get('password-policy', 'edit')
-                ->name('password-policy.edit')
-                ->breadcrumb('Password Policy', 'admin.index');
-            Route::put('password-policy', 'update')
-                ->name('password-policy.update');
-        });
-
-        /*
-        |-----------------------------------------------------------------------
-        | User Settings
-        | /administration/user-settings
-        |-----------------------------------------------------------------------
-        */
-        Route::controller(UserSettingsController::class)->group(function () {
-            Route::get('user-settings', 'edit')
-                ->name('user-settings.edit')
-                ->breadcrumb('User Settings', 'admin.index');
-            Route::put('user-settings', 'update')
-                ->name('user-settings.update');
-        });
-    });
 
     /*
     |---------------------------------------------------------------------------
@@ -71,7 +28,7 @@ Route::middleware('auth.secure')->prefix('administration')->name('admin.')->grou
     Route::controller(LogoController::class)->group(function () {
         Route::get('logo', 'edit')
             ->name('logo.edit')
-            ->breadcrumb('Tech Bench Logo', 'admin.index');
+            ->breadcrumb('Logo', 'admin.index');
         Route::post('logo', 'update')
             ->name('logo.update');
         Route::delete('logo', 'destroy')
@@ -81,14 +38,14 @@ Route::middleware('auth.secure')->prefix('administration')->name('admin.')->grou
     /*
     |---------------------------------------------------------------------------
     | Basic App Settings
-    | /administration/basic-settings
+    | /administration/configuration
     |---------------------------------------------------------------------------
     */
-    Route::controller(BasicSettingsController::class)->group(function () {
-        Route::get('basic-settings', 'edit')
+    Route::controller(ApplicationConfigurationController::class)->group(function () {
+        Route::get('configuration', 'edit')
             ->name('basic-settings.edit')
-            ->breadcrumb('Tech Bench Settings', 'admin.index');
-        Route::put('basic-settings', 'update')
+            ->breadcrumb('Application Configuration', 'admin.index');
+        Route::put('configuration', 'update')
             ->name('basic-settings.update');
     });
 
@@ -106,55 +63,6 @@ Route::middleware('auth.secure')->prefix('administration')->name('admin.')->grou
             ->name('email-settings.update');
     });
 
-    Route::get('test-email', SendTestEmailController::class)
+    Route::put('test-email', SendTestEmailController::class)
         ->name('test-email');
-
-    /*
-    |---------------------------------------------------------------------------
-    | Feature Configuration
-    | /administration/features
-    |---------------------------------------------------------------------------
-    */
-    Route::controller(FeatureController::class)->group(function () {
-        Route::get('features', 'edit')
-            ->name('features.edit')
-            ->breadcrumb('App Features', 'admin.index');
-        Route::put('features', 'update')
-            ->name('features.update');
-    });
-
-    /*
-    |---------------------------------------------------------------------------
-    | SSL Certificate Administration
-    | /administration/security
-    |---------------------------------------------------------------------------
-    */
-    Route::resource('security', SecurityController::class)
-        ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
-            $breadcrumbs->index('SSL Certificate', 'admin.index')
-                ->create('Upload New Certificate')
-                ->edit('Generate CSR', 'admin.security.index');
-        })->except(['show']);
-
-    /*
-    |---------------------------------------------------------------------------
-    | File Types for Uploaded Files
-    | /administration/file-types
-    |---------------------------------------------------------------------------
-    */
-    Route::apiResource('file-types', CustomerFileTypesController::class)
-        ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
-            $breadcrumbs->index('Uploaded File Types', 'admin.index');
-        })->except(['show']);
-
-    /*
-    |---------------------------------------------------------------------------
-    | Phone Number Types for Contacts
-    | /administration/phone-types
-    |---------------------------------------------------------------------------
-    */
-    Route::apiResource('phone-types', ContactPhoneTypesController::class)
-        ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
-            $breadcrumbs->index('Contact Phone Types', 'admin.index');
-        })->except(['show']);
 });

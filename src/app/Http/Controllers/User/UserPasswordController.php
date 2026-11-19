@@ -2,20 +2,16 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Facades\CacheData;
 use App\Http\Controllers\Controller;
-use Inertia\Inertia;
-use Inertia\Response;
+use Illuminate\Http\Request;
 
 class UserPasswordController extends Controller
 {
     /**
-     * Show the Password Change Page.
+     * Handle the incoming request.
      */
-    public function __invoke(): Response
+    public function __invoke(Request $request)
     {
-        return Inertia::render('User/Password', [
-            'rules' => fn () => CacheData::passwordRules(),
-        ]);
+        //
     }
 }
