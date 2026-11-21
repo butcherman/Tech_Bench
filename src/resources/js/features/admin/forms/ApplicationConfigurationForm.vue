@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import Card from "@/core/components/Card.vue";
 import prettyBytes from "pretty-bytes";
 import RangeSliderInput from "@/core/forms/components/validatedInputs/RangeSliderInput.vue";
 import SelectGroupedInput from "@/core/forms/components/validatedInputs/SelectGroupedInput.vue";
@@ -48,78 +49,54 @@ const schema = object({
     <VueForm
         name="application-settings-form"
         submit-method="put"
+        submit-text="Update Application Configuration"
         :initial-values="initValues"
         :submit-route="update.url()"
-        submit-text="Update Application Configuration"
         :validation-schema="schema"
         do-not-reset
         @success="$emit('success')"
     >
-        <fieldset
-            class="border border-slate-300 rounded-xl p-2 flex flex-col gap-3"
-        >
-            <legend class="text-muted">Basic Settings</legend>
-            <TextInput label="Site URL" name="url" prepend="https://" focus>
-                <template #prepend-input>
-                    <span>https://</span>
-                </template>
-            </TextInput>
-            <SelectGroupedInput
-                group-text-field="label"
-                group-list-field="items"
-                label="Timezone"
-                name="timezone"
-                text-field="label"
-                value-field="value"
-                :list="timezoneList"
-            />
-            <RangeSliderInput
-                label="Maximum Uploaded File Size"
-                format="prettybytes"
-                name="max_filesize"
-                :min="99967437"
-                :max="5001634329"
-                :value-formatter="prettyBytes"
-            >
-                <template #value-slot="{ value }">
-                    {{ prettyBytes(value) }}
-                </template>
-            </RangeSliderInput>
-        </fieldset>
-        <fieldset
-            class="border border-slate-300 rounded-xl p-2 mt-4 flex flex-col gap-3"
-        >
-            <legend class="text-muted">Home Page</legend>
-            <TextInput name="company_name" label="Company Name" />
-            <TextInput
-                name="welcome_message"
-                label="Welcome Message"
-                help-message="This message will show on the home page under the Company Logo"
-            />
-            <fieldset
-                class="border border-slate-300 rounded-xl p-2 mt-4 flex flex-col gap-3"
-            >
-                <legend class="text-muted">
-                    Additional Links for Home Page
-                </legend>
-                <div class="grid grid-cols-2 gap-1">
-                    <TextInput :name="`home_links[0].url`" label="URL" />
-                    <TextInput
-                        name="home_links[0].text"
-                        label="Text to Display"
-                    />
-                    <TextInput name="home_links[1].url" label="URL" />
-                    <TextInput
-                        name="home_links[1].text"
-                        label="Text to Display"
-                    />
-                    <TextInput name="home_links[2].url" label="URL" />
-                    <TextInput
-                        name="home_links[2].text"
-                        label="Text to Display"
-                    />
-                </div>
-            </fieldset>
-        </fieldset>
+        <Card title="Basic Settings">
+            <div class="flex flex-col gap-4">
+                <TextInput
+                    label="Site URL"
+                    name="url"
+                    prepend-text="https://"
+                    help-message="The address used to access this application"
+                    focus
+                />
+                <SelectGroupedInput
+                    group-text-field="label"
+                    group-list-field="items"
+                    label="Timezone"
+                    name="timezone"
+                    text-field="label"
+                    value-field="value"
+                    :list="timezoneList"
+                />
+                <RangeSliderInput
+                    label="Maximum Uploaded File Size"
+                    format="prettybytes"
+                    name="max_filesize"
+                    :min="99967437"
+                    :max="5001634329"
+                    :value-formatter="prettyBytes"
+                >
+                    <template #value-slot="{ value }">
+                        {{ prettyBytes(value) }}
+                    </template>
+                </RangeSliderInput>
+            </div>
+        </Card>
+        <Card title="Home Page">
+            <div class="flex flex-col gap-4">
+                <TextInput name="company_name" label="Company Name" />
+                <TextInput
+                    name="welcome_message"
+                    label="Welcome Message"
+                    help-message="This message will show on the home page under the Company Logo"
+                />
+            </div>
+        </Card>
     </VueForm>
 </template>

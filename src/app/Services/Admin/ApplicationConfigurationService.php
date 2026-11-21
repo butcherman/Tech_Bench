@@ -24,7 +24,7 @@ class ApplicationConfigurationService
             'timezone' => config('app.timezone'),
             'max_filesize' => config('filesystems.max_filesize'),
             'welcome_message' => config('app.welcome_message'),
-            'home_links' => $this->formatHomeLinks(),
+            'home_links' => config('app.home_links'),
         ];
     }
 

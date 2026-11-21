@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import TextInputWrapper from "../wrappers/TextInputWrapper.vue";
+import InputWrapper from "../wrappers/InputWrapper.vue";
 import { useId } from "vue";
 import { useInputHelper } from "../../composables/inputHelper.js";
 
@@ -15,6 +15,7 @@ const emit = defineEmits<{
 const props = defineProps<{
     name: string;
 
+    appendText?: string;
     autocomplete?: string;
     disabled?: boolean;
     errorMessage?: string;
@@ -22,49 +23,52 @@ const props = defineProps<{
     helpVisible?: boolean;
     label?: string;
     placeholder?: string;
-    variant?: InputVariant;
+    prependText?: string;
 }>();
 
 const inputValue = defineModel<string | null | undefined>({
     required: true,
 });
 
-const { hasFocus, onFocus, onBlur, inputVariantStyle } = useInputHelper(
-    props,
-    emit,
-);
+const { hasFocus, onFocus, onBlur } = useInputHelper(props, emit);
 
 const inputId = useId();
 </script>
 
 <template>
-    <TextInputWrapper v-bind="props" :has-focus="hasFocus">
-        <template v-for="(_, slot) of $slots" #[slot]="scope">
-            <slot :name="slot" v-bind="scope" />
-        </template>
-        <input
-            v-model="inputValue"
-            class="block peer form-input-base"
-            type="text"
-            :autocomplete="name"
-            :class="[
-                inputVariantStyle,
-                { invalid: errorMessage?.length, 'has-focus': hasFocus },
-            ]"
-            :disabled="disabled"
-            :id="inputId"
-            :placeholder="placeholder ?? ''"
-            :name="name"
-            @focus="onFocus"
-            @blur="onBlur"
-        />
-        <label
-            v-if="label"
-            :for="inputId"
-            class="form-label-base"
-            :class="{ 'bg-white!': variant === 'outlined' }"
-        >
+    <InputWrapper :error-message :help-message :has-focus :help-visible>
+        <label v-if="label" :for="inputId" class="form-label-base">
             {{ label }}
         </label>
-    </TextInputWrapper>
+        <div class="flex form-input-wrapper" :class="{ 'has-focus': hasFocus }">
+            <div
+                v-if="$slots['prepend-input'] || prependText"
+                class="border-e border-slate-300 p-2"
+                :class="{ 'has-focus': hasFocus }"
+            >
+                <slot name="prepend-input">{{ prependText }}</slot>
+            </div>
+            <div class="grow">
+                <input
+                    v-model="inputValue"
+                    type="text"
+                    class="w-full p-2 form-input"
+                    :autocomplete="name"
+                    :disabled="disabled"
+                    :id="inputId"
+                    :placeholder="placeholder ?? ''"
+                    :name="name"
+                    @focus="onFocus"
+                    @blur="onBlur"
+                />
+            </div>
+            <div
+                v-if="$slots['append-input'] || appendText"
+                class="border-s border-slate-300 p-2"
+                :class="{ 'has-focus': hasFocus }"
+            >
+                <slot name="append-input">{{ appendText }}</slot>
+            </div>
+        </div>
+    </InputWrapper>
 </template>
