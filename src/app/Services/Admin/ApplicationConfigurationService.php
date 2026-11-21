@@ -7,6 +7,8 @@ use App\Traits\AppSettingsTrait;
 use ArthurPatriot\Tus\Helpers\TusFile;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class ApplicationConfigurationService
@@ -77,20 +79,6 @@ class ApplicationConfigurationService
     }
 
     /**
-     * Format the home links for the settings form.
-     */
-    private function formatHomeLinks(): array
-    {
-        return array_replace_recursive(
-            array_fill(0, 3, [
-                'url' => null,
-                'text' => null,
-            ]),
-            config('app.home_links'),
-        );
-    }
-
-    /**
      * Update the Home Links
      */
     private function updateHomeLinks(array $homeLinks): void
@@ -125,6 +113,9 @@ class ApplicationConfigurationService
 
         $logoName = 'logo-'.Str::random(10).'.'.$extension;
         $destination = 'images/logo/'.$logoName;
+
+        $path = Storage::disk('public')->path('/');
+        File::ensureDirectoryExists($path.'images/logo');
 
         $this->saveSettings(
             'app.logo',
