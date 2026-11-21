@@ -31,13 +31,9 @@ const inputValue = defineModel<string | null>({
     required: true,
 });
 
-const { hasFocus, onFocus, onBlur, inputVariantStyle } = useInputHelper(
-    props,
-    emit,
-);
+const { hasFocus, onFocus, onBlur } = useInputHelper(props, emit);
 
 const inputId = useId();
-
 
 /*
 |-------------------------------------------------------------------------------
@@ -54,37 +50,39 @@ const maskIcon = computed<"eye-slash" | "eye">(() =>
 </script>
 
 <template>
-    <InputWrapper v-bind="props" :has-focus="hasFocus" class="relative">
-        <input
-            v-model="inputValue"
-            class="block peer form-input-base"
-            :type="maskType"
-            :autocomplete="name"
-            :class="[
-                inputVariantStyle,
-                { invalid: errorMessage?.length, 'has-focus': hasFocus },
-            ]"
-            :disabled="disabled"
-            :id="inputId"
-            :placeholder="placeholder ?? ''"
-            :name="name"
-            @focus="onFocus"
-            @blur="onBlur"
-            @change="$emit('change', inputValue)"
-        />
-        <div
-            v-if="!hideUnmask"
-            class="absolute inset-e-1.5 bottom-1.5 text-muted pointer"
-            @click="showPass = !showPass"
-        >
-            <fa-icon :icon="maskIcon" />
-        </div>
+    <InputWrapper :error-message :help-message :has-focus :help-visible>
         <label
+            v-if="label"
             :for="inputId"
             class="form-label-base"
-            :class="{ 'bg-white!': variant === 'outlined' }"
+            :class="{ 'has-focus': hasFocus }"
         >
             {{ label }}
         </label>
+        <div
+            class="flex form-input-wrapper relative"
+            :class="{ 'has-focus': hasFocus }"
+        >
+            <input
+                v-model="inputValue"
+                :type="maskType"
+                class="w-full p-2 form-input"
+                :autocomplete="name"
+                :disabled="disabled"
+                :id="inputId"
+                :placeholder="placeholder ?? ''"
+                :name="name"
+                @focus="onFocus"
+                @blur="onBlur"
+                @change="$emit('change', inputValue)"
+            />
+            <div
+                v-if="!hideUnmask"
+                class="absolute inset-e-1.5 bottom-1.5 text-muted pointer"
+                @click="showPass = !showPass"
+            >
+                <fa-icon :icon="maskIcon" />
+            </div>
+        </div>
     </InputWrapper>
 </template>

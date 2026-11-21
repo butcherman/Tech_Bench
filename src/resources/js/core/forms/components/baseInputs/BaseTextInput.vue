@@ -10,6 +10,7 @@ defineSlots<{
 const emit = defineEmits<{
     focus: [];
     blur: [];
+    change: [modelValue: string | null | undefined];
 }>();
 
 const props = defineProps<{
@@ -37,7 +38,12 @@ const inputId = useId();
 
 <template>
     <InputWrapper :error-message :help-message :has-focus :help-visible>
-        <label v-if="label" :for="inputId" class="form-label-base">
+        <label
+            v-if="label"
+            :for="inputId"
+            class="form-label-base"
+            :class="{ 'has-focus': hasFocus }"
+        >
             {{ label }}
         </label>
         <div class="flex form-input-wrapper" :class="{ 'has-focus': hasFocus }">
@@ -60,6 +66,7 @@ const inputId = useId();
                     :name="name"
                     @focus="onFocus"
                     @blur="onBlur"
+                    @change="$emit('change', inputValue)"
                 />
             </div>
             <div

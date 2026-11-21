@@ -34,7 +34,6 @@ const schema = object({});
             <TextInput
                 name="search"
                 placeholder="Search Equipment, Customers, or Tech Tips"
-                label="Search Equipment, Customers, or Tech Tips"
                 class="bg-gray-50 rounded-lg"
             >
                 <template #prepend-input>

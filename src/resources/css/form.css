@@ -52,6 +52,9 @@
 
 .form-label-base {
     @apply font-semibold;
+    &.has-focus {
+        @apply font-bold;
+    }
 }
 
 /* .form-label-base {

@@ -43,7 +43,6 @@ const validationSchema = object({
     >
         <TextInput
             name="username"
-            label="Username"
             placeholder="Username"
             input-style="standard"
             help="Enter your username or email address"
@@ -53,7 +52,6 @@ const validationSchema = object({
         />
         <PasswordInput
             name="password"
-            label="Password"
             placeholder="Password"
             input-style="standard"
             help="Enter your password"

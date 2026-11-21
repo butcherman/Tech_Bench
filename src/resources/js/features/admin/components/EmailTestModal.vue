@@ -18,7 +18,7 @@ const showTestModal = defineModel();
                 <h5>SMTP Host</h5>
                 <p class="px-5">{{ testValues.host }}</p>
             </div>
-            <div class="flex gap-5">
+            <div class="flex justify-between gap-5">
                 <div>
                     <h5>Port</h5>
                     <p class="px-5">{{ testValues.port }}</p>
