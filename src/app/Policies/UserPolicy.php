@@ -30,7 +30,7 @@ class UserPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return $this->checkPermission($user, 'Manage Users');
     }
 
     /**
@@ -38,7 +38,12 @@ class UserPolicy
      */
     public function update(User $user, User $model): bool
     {
-        return false;
+        if ($user->user_id !== $model->user_id) {
+            return $this->checkPermission($user, 'Manage Users')
+                && $user->role_id <= $model->role_id;
+        }
+
+        return $user->user_id === $model->user_id;
     }
 
     /**

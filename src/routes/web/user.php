@@ -135,3 +135,7 @@ Route::middleware('auth.secure')->group(function () {
 //             throw new InitializeUserLinkMissingException;
 //         });
 // });
+
+Route::get('initialize', function () {
+    return 'initialize user';
+})->name('initialize');

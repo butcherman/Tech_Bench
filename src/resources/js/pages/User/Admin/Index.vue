@@ -1,7 +1,7 @@
 <script setup lang="ts">
+import AddBadge from "@/core/components/badges/AddBadge.vue";
 import AppLayout from "@/layouts/AppLayout.vue";
 import Card from "@/core/components/Card.vue";
-import AddBadge from "@/core/components/badges/AddBadge.vue";
 import DeferredLoader from "@/core/components/loaders/DeferredLoader.vue";
 import UserAdministrationList from "@/features/user/components/UserAdministrationList.vue";
 import { create } from "@/wayfinder/routes/admin/user";

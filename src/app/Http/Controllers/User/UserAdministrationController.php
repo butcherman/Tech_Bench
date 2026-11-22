@@ -3,19 +3,24 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\User\Admin\UserAdministrationRequest;
 use App\Models\User;
 use App\Services\User\UserAdministrationService;
+use App\Traits\UserRoleTrait;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class UserAdministrationController extends Controller
 {
+    use UserRoleTrait;
+
     public function __construct(protected UserAdministrationService $svc) {}
 
     /**
-     * Display a listing of the resource.
+     * Display a listing of all active users.
      */
-    public function index()
+    public function index(): Response
     {
         $this->authorize('viewAny', User::class);
 
@@ -28,25 +33,31 @@ class UserAdministrationController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new user.
      */
-    public function create()
+    public function create(Request $request): Response
     {
-        //
-        return 'create';
+        return Inertia::render('User/Admin/Create', [
+            'roles' => fn () => $this->getAvailableRoles($request->user()),
+        ]);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created user in storage.
      */
-    public function store(Request $request)
+    public function store(UserAdministrationRequest $request)
     {
-        //
-        return 'store';
+        $user = $this->svc->createUser($request->safe()->collect());
+
+        return redirect(route('admin.user.show', $user))
+            ->with(
+                'success',
+                __('admin.user.created', ['user' => $user->full_name])
+            );
     }
 
     /**
-     * Display the specified resource.
+     * Display the users profile.
      */
     public function show(string $id)
     {
@@ -55,7 +66,7 @@ class UserAdministrationController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing the specified user.
      */
     public function edit(string $id)
     {
@@ -64,7 +75,7 @@ class UserAdministrationController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified user in storage.
      */
     public function update(Request $request, string $id)
     {
@@ -73,7 +84,7 @@ class UserAdministrationController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified user from storage.
      */
     public function destroy(string $id)
     {

@@ -14,12 +14,12 @@ interface User {
     updated_at?: string;
 }
 
-// interface UserRole {
-//     allow_edit: boolean;
-//     description: string;
-//     name: string;
-//     role_id: number;
-// }
+interface UserRole {
+    allow_edit: boolean;
+    description: string;
+    name: string;
+    role_id: number;
+}
 
 // interface UserSettings {
 //     setting_type_id: number;
