@@ -11,6 +11,8 @@
 // use App\Http\Controllers\User\UpdateUserAccountController;
 // use App\Http\Controllers\User\UpdateUserSettingsController;
 
+use App\Http\Controllers\User\ResetTwoFaController;
+use App\Http\Controllers\User\ResetUserPasswordController;
 use App\Http\Controllers\User\UserAdministrationController;
 use App\Http\Controllers\User\UserPasswordController;
 use App\Http\Controllers\User\UserSettingsController;
@@ -71,24 +73,24 @@ Route::middleware('auth.secure')->group(function () {
         | /administration/users
         |-----------------------------------------------------------------------
         */
-        // Route::prefix('users')->name('user.')->group(function () {
-        //     Route::get('{user}/restore', [UserAdministrationController::class, 'restore'])
-        //         ->name('restore')
-        //         ->withTrashed();
+        Route::prefix('users')->name('user.')->group(function () {
+            //     Route::get('{user}/restore', [UserAdministrationController::class, 'restore'])
+            //         ->name('restore')
+            //         ->withTrashed();
 
-        //     Route::post('send-reset-password-link', [PasswordResetLinkController::class, 'store'])
-        //         ->name('password-link');
+            Route::post('send-reset-password-link', [PasswordResetLinkController::class, 'store'])
+                ->name('password-link');
 
-        //     Route::put('{user}/reset-user-password', ResetUserPasswordController::class)
-        //         ->name('reset-password');
+            Route::put('{user}/reset-user-password', ResetUserPasswordController::class)
+                ->name('reset-password');
 
-        //     Route::get('deactivated-users', DisabledUserController::class)
-        //         ->name('deactivated')
-        //         ->breadcrumb('Disabled Users', 'admin.user.index');
+            //     Route::get('deactivated-users', DisabledUserController::class)
+            //         ->name('deactivated')
+            //         ->breadcrumb('Disabled Users', 'admin.user.index');
 
-        //     Route::put('{user}/reset-2fa', ResetTwoFaController::class)
-        //         ->name('two-factor.reset');
-        // });
+            Route::put('{user}/reset-2fa', ResetTwoFaController::class)
+                ->name('two-factor.reset');
+        });
 
         Route::resource('user', UserAdministrationController::class)
             ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {

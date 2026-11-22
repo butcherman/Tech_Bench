@@ -36,12 +36,12 @@ const showHeader = computed(() => {
     >
         <div
             v-if="showHeader || $slots.title || $slots['append-title']"
-            class="card-title border-b border-slate-300 mb-5 pb-1 flex"
+            class="border-b border-slate-300 mb-5 pb-1 flex"
         >
             <div class="grow">
                 <slot name="title">
-                    <div class="flex gap-2">
-                        <div v-if="titleIcon" class="flex items-center">
+                    <div class="flex gap-2 items-center">
+                        <div v-if="titleIcon">
                             <h1 class="text-slate-600">
                                 <fa-icon :icon="titleIcon" />
                             </h1>
@@ -55,10 +55,8 @@ const showHeader = computed(() => {
                     </div>
                 </slot>
             </div>
-            <div class="flex items-center">
-                <span class="mb-1">
-                    <slot name="append-title" />
-                </span>
+            <div>
+                <slot name="append-title" />
             </div>
         </div>
         <div class="grow min-w-0 w-full">

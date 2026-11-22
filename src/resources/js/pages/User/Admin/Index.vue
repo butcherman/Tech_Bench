@@ -15,18 +15,12 @@ defineProps<{
 
 <template>
     <div class="w-full min-w-0">
-        <Card class="w-full min-w-0">
-            <template #title>
-                <div class="flex gap-2 items-center">
-                    <h1><fa-icon icon="fa-user" /></h1>
-                    <div>
-                        <h3 class="text-black">User Administration</h3>
-                        <p class="text-muted">
-                            Select a User to edit, or create a new user.
-                        </p>
-                    </div>
-                </div>
-            </template>
+        <Card
+            class="w-full min-w-0"
+            title="User Administration"
+            sub-title="Select a User to edit, or create a new user."
+            title-icon="user"
+        >
             <template #append-title>
                 <div class="flex items-center h-full">
                     <AddBadge

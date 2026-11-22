@@ -7,6 +7,7 @@ use App\Http\Requests\User\Admin\UserAdministrationRequest;
 use App\Models\User;
 use App\Services\User\UserAdministrationService;
 use App\Traits\UserRoleTrait;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -45,7 +46,7 @@ class UserAdministrationController extends Controller
     /**
      * Store a newly created user in storage.
      */
-    public function store(UserAdministrationRequest $request)
+    public function store(UserAdministrationRequest $request): RedirectResponse
     {
         $user = $this->svc->createUser($request->safe()->collect());
 
@@ -59,10 +60,18 @@ class UserAdministrationController extends Controller
     /**
      * Display the users profile.
      */
-    public function show(string $id)
+    public function show(User $user): Response
     {
-        //
-        return 'show';
+        $this->authorize('view', $user);
+
+        return Inertia::render('User/Admin/Show', [
+            'user' => fn () => $user->getAdminLoad(),
+            'last-login' => fn () => $user->getLastLogin(),
+            'thirty-day-count' => fn () => $user->getLoginHistory(30)->count(),
+            'allow-two-fa' => fn () => config('auth.twoFa.enabled'),
+            'allow-save-device' => fn () => config('auth.twoFa.allow_save_device'),
+            'saved-devices-count' => fn () => $user->DeviceTokens->count(),
+        ]);
     }
 
     /**
@@ -84,11 +93,18 @@ class UserAdministrationController extends Controller
     }
 
     /**
-     * Remove the specified user from storage.
+     * Soft Delete/Disable a user.
      */
-    public function destroy(string $id)
+    public function destroy(User $user): RedirectResponse
     {
-        //
-        return 'destroy';
+        $this->authorize('delete', $user);
+
+        $this->svc->disableUser($user);
+
+        return redirect(route('admin.user.index'))
+            ->with(
+                'warning',
+                __('admin.user.disabled', ['user' => $user->full_name])
+            );
     }
 }

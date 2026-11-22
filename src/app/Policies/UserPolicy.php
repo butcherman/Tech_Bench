@@ -22,7 +22,12 @@ class UserPolicy
      */
     public function view(User $user, User $model): bool
     {
-        return false;
+        if ($user->user_id === $model->user_id) {
+            return true;
+        }
+
+        return $this->checkPermission($user, 'Manage Users')
+            && $user->role_id <= $model->role_id;
     }
 
     /**
@@ -38,12 +43,12 @@ class UserPolicy
      */
     public function update(User $user, User $model): bool
     {
-        if ($user->user_id !== $model->user_id) {
-            return $this->checkPermission($user, 'Manage Users')
-                && $user->role_id <= $model->role_id;
+        if ($user->user_id === $model->user_id) {
+            return true;
         }
 
-        return $user->user_id === $model->user_id;
+        return $this->checkPermission($user, 'Manage Users')
+            && $user->role_id <= $model->role_id;
     }
 
     /**
@@ -51,7 +56,7 @@ class UserPolicy
      */
     public function delete(User $user, User $model): bool
     {
-        return false;
+        return $this->checkPermission($user, 'Manage Users');
     }
 
     /**

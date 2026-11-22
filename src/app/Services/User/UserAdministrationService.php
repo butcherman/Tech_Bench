@@ -10,6 +10,12 @@ use Illuminate\Support\Collection;
 
 class UserAdministrationService
 {
+    /*
+    |---------------------------------------------------------------------------
+    | Users
+    |---------------------------------------------------------------------------
+    */
+
     /**
      * Return a list of active, or deactivated users
      */
@@ -38,5 +44,36 @@ class UserAdministrationService
         dispatch(new CreateUserSettingsJob($newUser));
 
         return $newUser;
+    }
+
+    /**
+     * Disable a user
+     */
+    public function disableUser(User $user): void
+    {
+        $user->delete();
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | User Security - Multi-Factor Auth & Passwords
+    |---------------------------------------------------------------------------
+    */
+
+    /**
+     * Clear the Two Factor settings for a single user
+     */
+    public function clearTwoFaSettings(User $user): void
+    {
+        // Delete 2FA Settings
+        $user->two_factor_secret = null;
+        $user->two_factor_recovery_codes = null;
+        $user->two_factor_confirmed_at = null;
+        $user->two_factor_via = null;
+
+        $user->save();
+
+        // Delete saved devices
+        $user->DeviceTokens()->delete();
     }
 }
