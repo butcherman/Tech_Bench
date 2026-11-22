@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Actions\Fortify;
 
+use App\Actions\Fortify\ResetUserPassword;
 use App\Events\User\UserPasswordChangedEvent;
 use App\Models\User;
 use Illuminate\Support\Facades\Event;
@@ -10,23 +11,18 @@ use Tests\TestCase;
 
 class UpdateUserPasswordUnitTest extends TestCase
 {
-    public function test_update(): void
+    public function test_reset(): void
     {
         Event::fake();
 
-        /** @var User $user */
-        $user = User::factory()->createQuietly();
         $pass = 'S3curePassw0rd!';
+        $user = User::factory()->create();
         $data = [
-            'current_password' => 'password',
             'password' => $pass,
             'password_confirmation' => $pass,
         ];
 
-        // Because of the web guard, we must call this as an http request
-        //  TODO - This should not have to call $request since it is a unit test
-        $this->actingAs($user)
-            ->put(route('user-password.update'), $data);
+        (new ResetUserPassword)->reset($user, $data);
 
         $this->assertTrue(Hash::check($pass, $user->fresh()->password));
 

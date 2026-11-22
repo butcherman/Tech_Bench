@@ -32,3 +32,28 @@ Route::middleware('auth.secure')->group(function () {
 |-------------------------------------------------------------------------------
 */
 // Route::get('download/{file}/{fileName}', DownloadFileController::class)->name('download');
+
+/*
+|---------------------------------------------------------------------------
+| TMP for testing
+|---------------------------------------------------------------------------
+*/
+// TODO - REMOVE ME
+Route::get('download', function () {
+    return 'download';
+})->name('download');
+Route::get('invalid-1', function () {
+    return 'customer-sites';
+})->name('customers.sites.show');
+Route::get('invalid-2', function () {
+    return 'tech tips';
+})->name('tech-tips.show');
+Route::get('invalid-3', function () {
+    return 'links';
+})->name('links.show');
+Route::get('invalid-4', function () {
+    return 'guest links';
+})->name('guest-link.show');
+Route::get('invlid-5', function () {
+    return 'public tips';
+})->name('publicTips.show');

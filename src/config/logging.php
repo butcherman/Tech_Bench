@@ -70,13 +70,6 @@ return [
             'level' => env('LOG_LEVEL', 'info'),
             'days' => 14,
             'replace_placeholders' => true,
-        ],
-
-        'auth' => [
-            'driver' => 'daily',
-            'path' => storage_path('logs/Auth/Auth.log'),
-            'level' => env('LOG_LEVEL', 'info'),
-            'days' => 14,
             'permission' => 0777,
         ],
 
