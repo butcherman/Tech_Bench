@@ -54,6 +54,14 @@ class UserAdministrationService
         $user->delete();
     }
 
+    /**
+     * Restore a soft deleted/disabled user
+     */
+    public function restoreUser(User $user): void
+    {
+        $user->restore();
+    }
+
     /*
     |---------------------------------------------------------------------------
     | User Security - Multi-Factor Auth & Passwords

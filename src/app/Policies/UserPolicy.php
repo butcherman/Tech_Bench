@@ -64,7 +64,7 @@ class UserPolicy
      */
     public function restore(User $user, User $model): bool
     {
-        return false;
+        return $this->checkPermission($user, 'Manage Users');
     }
 
     /**

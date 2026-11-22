@@ -40,11 +40,11 @@ const props = defineProps<{
                 :user="user"
                 class="basis-1/3"
             />
-            <!-- <UserAdministrationDisabledActions
+            <UserAdministrationDisabledActions
                 v-else
                 :user="user"
                 class="basis-1/3"
-            /> -->
+            />
         </div>
         <div class="w-full xl:w-3/4">
             <UserAdministrationAccountActivity

@@ -50,11 +50,11 @@ class BuildAdminMenu
                 'admin.user.create'
             );
 
-            // $menu[] = $this->item(
-            //     'Disabled Users',
-            //     'fas fa-store-alt-slash',
-            //     'admin.user.deactivated'
-            // );
+            $menu[] = $this->item(
+                'Disabled Users',
+                'fas fa-store-alt-slash',
+                'admin.user.deactivated'
+            );
 
             // $menu[] = $this->item(
             //     'Password Policy',

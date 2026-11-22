@@ -107,4 +107,19 @@ class UserAdministrationController extends Controller
                 __('admin.user.disabled', ['user' => $user->full_name])
             );
     }
+
+    /**
+     * Restore a disabled user
+     */
+    public function restore(User $user): RedirectResponse
+    {
+        $this->authorize('restore', $user);
+
+        $this->svc->restoreUser($user);
+
+        return back()->with(
+            'success',
+            __('admin.user.restored', ['user' => $user->full_name])
+        );
+    }
 }
