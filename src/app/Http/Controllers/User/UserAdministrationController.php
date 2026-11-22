@@ -75,21 +75,27 @@ class UserAdministrationController extends Controller
     }
 
     /**
-     * Show the form for editing the specified user.
+     * Show the form for editing a user.
      */
-    public function edit(string $id)
+    public function edit(Request $request, User $user): Response
     {
-        //
-        return 'edit';
+        $this->authorize('update', $user);
+
+        return Inertia::render('User/Admin/Edit', [
+            'roles' => fn () => $this->getAvailableRoles($request->user()),
+            'user' => fn () => $user->getAdminLoad(),
+        ]);
     }
 
     /**
-     * Update the specified user in storage.
+     * Update a users information.
      */
-    public function update(Request $request, string $id)
+    public function update(UserAdministrationRequest $request, User $user): RedirectResponse
     {
-        //
-        return 'update';
+        $this->svc->updateUser($request->safe()->collect(), $user);
+
+        return redirect(route('admin.user.show', $user->username))
+            ->with('success', __('admin.user.updated', ['user' => $user->full_name]));
     }
 
     /**

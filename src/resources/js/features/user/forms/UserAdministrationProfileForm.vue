@@ -17,9 +17,7 @@ const props = defineProps<{
     init?: boolean;
 }>();
 
-const submitText = computed(() =>
-    props.user ? "Update User Profile" : "Create User",
-);
+const submitText = computed(() => (props.user ? "Update User" : "Create User"));
 
 const submitRoute = computed(() => {
     // if (props.init && props.user) {

@@ -47,6 +47,16 @@ class UserAdministrationService
     }
 
     /**
+     * Update an existing user
+     */
+    public function updateUser(Collection $requestData, User $user): User
+    {
+        $user->update($requestData->all());
+
+        return $user->fresh();
+    }
+
+    /**
      * Disable a user
      */
     public function disableUser(User $user): void
