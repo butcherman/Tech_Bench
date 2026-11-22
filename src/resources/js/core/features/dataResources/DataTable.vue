@@ -36,31 +36,30 @@ const table = useDataTable(props);
 </script>
 
 <template>
-    <div class="w-full min-w-0 max-w-full overflow-x-auto">
-        <table class="table-auto w-full">
-            <DataTableHeader :table="table">
-                <template v-for="(_, slot) of $slots" #[slot]="scope">
-                    <slot :name="slot" v-bind="scope" />
-                </template>
-            </DataTableHeader>
-            <DataTableBody
-                :table="table"
-                :no-results-text="noResultsText"
-                :is-loading="loading"
-                @row-click="$emit('row-click', $event)"
-            >
-                <template v-for="(_, slot) of $slots" #[slot]="scope">
-                    <slot :name="slot" v-bind="scope" />
-                </template>
-            </DataTableBody>
-            <DataTableFooter
-                :table="table"
-                :has-action-slot="props.actionsSlot"
-            >
-                <template v-for="(_, slot) of $slots" #[slot]="scope">
-                    <slot :name="slot" v-bind="scope" />
-                </template>
-            </DataTableFooter>
-        </table>
+    <div class="w-full min-w-0">
+        <div class="w-full min-w-0 max-w-full overflow-x-auto">
+            <table class="table-auto w-full">
+                <DataTableHeader :table="table">
+                    <template v-for="(_, slot) of $slots" #[slot]="scope">
+                        <slot :name="slot" v-bind="scope" />
+                    </template>
+                </DataTableHeader>
+                <DataTableBody
+                    :table="table"
+                    :no-results-text="noResultsText"
+                    :is-loading="loading"
+                    @row-click="$emit('row-click', $event)"
+                >
+                    <template v-for="(_, slot) of $slots" #[slot]="scope">
+                        <slot :name="slot" v-bind="scope" />
+                    </template>
+                </DataTableBody>
+            </table>
+        </div>
+        <DataTableFooter :table="table" :has-action-slot="props.actionsSlot">
+            <template v-for="(_, slot) of $slots" #[slot]="scope">
+                <slot :name="slot" v-bind="scope" />
+            </template>
+        </DataTableFooter>
     </div>
 </template>

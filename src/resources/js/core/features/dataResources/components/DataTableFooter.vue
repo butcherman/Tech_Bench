@@ -27,12 +27,6 @@ const currentPage = computed<number>(
 
 const totalRecords = computed<number>(() => props.table.getRowCount());
 
-const totalColumns = computed<number>(() => {
-    let baseCols = props.table.getAllColumns().length;
-
-    return props.hasActionSlot ? baseCols + 1 : baseCols;
-});
-
 /*
 |-------------------------------------------------------------------------------
 | Pagination Events
@@ -44,23 +38,19 @@ const onGoToPage = (page: number): void => {
 </script>
 
 <template>
-    <tfoot>
-        <tr class="border-t border-slate-300 border-collapse">
-            <td
-                :colspan="totalColumns"
-                :class="table.options.meta?.paddingClass"
-            >
-                <slot name="footer">
-                    <Paginate
-                        v-if="table.options.meta?.paginate"
-                        v-model:per-page="perPage"
-                        :per-page-array="table.options.meta?.paginationArray"
-                        :current-page="currentPage"
-                        :total-records="totalRecords"
-                        @go-to-page="onGoToPage"
-                    />
-                </slot>
-            </td>
-        </tr>
-    </tfoot>
+    <div
+        class="w-full min-w-0 border-t border-slate-300"
+        :class="table.options.meta?.paddingClass"
+    >
+        <slot name="footer">
+            <Paginate
+                v-if="table.options.meta?.paginate"
+                v-model:per-page="perPage"
+                :per-page-array="table.options.meta?.paginationArray"
+                :current-page="currentPage"
+                :total-records="totalRecords"
+                @go-to-page="onGoToPage"
+            />
+        </slot>
+    </div>
 </template>
