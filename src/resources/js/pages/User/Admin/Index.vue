@@ -14,8 +14,8 @@ defineProps<{
 </script>
 
 <template>
-    <div class="flex justify-center">
-        <Card title="User Administration">
+    <div class="w-full min-w-0">
+        <Card class="w-full min-w-0">
             <template #title>
                 <div class="flex gap-2 items-center">
                     <h1><fa-icon icon="fa-user" /></h1>

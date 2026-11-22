@@ -29,13 +29,13 @@ const { recordStart, recordEnd, totalPages, paginationArray } =
 </script>
 
 <template>
-    <div class="flex flex-row w-full">
+    <div class="grid grid-cols-2 items-center gap-y-2 w-full sm:flex sm:gap-0">
         <PaginatePerPageSelector
             v-model:per-page="perPageInternal"
             :per-page-array="perPageArray"
         />
         <PaginationNavigation
-            class="grow"
+            class="col-span-2 row-start-2 sm:grow sm:order-0"
             :current-page="currentPage"
             :total-pages="totalPages"
             :pagination-array="paginationArray"
@@ -44,6 +44,7 @@ const { recordStart, recordEnd, totalPages, paginationArray } =
             @prev-page="$emit('prevPage', $event)"
         />
         <PaginateNumberResults
+            class="col-start-2 row-start-1 sm:order-0"
             :record-start="recordStart"
             :record-end="recordEnd"
             :total-records="totalRecords"

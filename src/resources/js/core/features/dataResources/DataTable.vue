@@ -36,7 +36,7 @@ const table = useDataTable(props);
 </script>
 
 <template>
-    <div class="overflow-x-auto w-full">
+    <div class="w-full min-w-0 max-w-full overflow-x-auto">
         <table class="table-auto w-full">
             <DataTableHeader :table="table">
                 <template v-for="(_, slot) of $slots" #[slot]="scope">

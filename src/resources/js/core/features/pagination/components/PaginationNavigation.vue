@@ -43,7 +43,7 @@ const onPrevPage = (): void => {
     <div class="flex justify-center">
         <ul class="flex flex-row">
             <li
-                class="border rounded-s-lg p-1"
+                class="border border-slate-300 rounded-s-lg p-1"
                 :class="{
                     pointer: currentPage !== 1,
                     'text-muted': currentPage === 1,
@@ -53,7 +53,7 @@ const onPrevPage = (): void => {
                 <fa-icon icon="angles-left" />
             </li>
             <li
-                class="border p-1"
+                class="border border-slate-300 p-1"
                 :class="{
                     pointer: currentPage !== 1,
                     'text-muted': currentPage === 1,
@@ -65,14 +65,14 @@ const onPrevPage = (): void => {
             <li
                 v-for="page in paginationArray"
                 :key="page"
-                class="border p-1 pointer"
+                class="border border-slate-300 p-1 pointer"
                 :class="{ 'bg-slate-300 font-bold': page === currentPage }"
                 @click="$emit('goToPage', page)"
             >
                 {{ page }}
             </li>
             <li
-                class="border p-1"
+                class="border border-slate-300 p-1"
                 :class="{
                     pointer: currentPage !== totalPages,
                     'text-muted': currentPage === totalPages,
@@ -82,7 +82,7 @@ const onPrevPage = (): void => {
                 <fa-icon icon="angle-right" />
             </li>
             <li
-                class="border rounded-e-lg p-1"
+                class="border border-slate-300 rounded-e-lg p-1"
                 :class="{
                     pointer: currentPage !== totalPages,
                     'text-muted': currentPage === totalPages,

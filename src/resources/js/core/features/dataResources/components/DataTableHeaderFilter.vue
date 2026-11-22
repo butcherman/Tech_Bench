@@ -38,13 +38,13 @@ const updateFilter = (): void => {
             <input
                 v-model="localValue"
                 type="text"
-                class="border border-slate-300 p-1 ps-2 rounded-md w-full"
+                class="border border-slate-300 p-1 ps-2 pe-8 rounded-md w-full"
                 :placeholder="placeholder"
                 @keyup="updateFilter"
             />
             <fa-icon
                 icon="filter"
-                class="absolute top-1/2 transform -translate-y-1/2 right-3 text-muted"
+                class="absolute top-1/2 -translate-y-1/2 right-3 text-muted pointer-events-none"
             />
         </template>
     </div>
