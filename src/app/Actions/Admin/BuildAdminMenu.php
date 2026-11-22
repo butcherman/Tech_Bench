@@ -21,7 +21,7 @@ class BuildAdminMenu
         $this->user = $user;
 
         return array_filter([
-            // 'Users & Access' => $this->usersAndAccess(),
+            'Users & Access' => $this->usersAndAccess(),
             // 'Customers' => $this->customers(),
             // 'Content & Features' => $this->contentAndFeatures(),
             // 'Files & Equipment' => $this->filesAndEquipment(),
@@ -33,52 +33,52 @@ class BuildAdminMenu
     /**
      * Users, authentication, authorization and security.
      */
-    // protected function usersAndAccess(): array
-    // {
-    //     $menu = [];
+    protected function usersAndAccess(): array
+    {
+        $menu = [];
 
-    //     if ($this->can('Manage Users')) {
-    //         $menu[] = $this->item(
-    //             'Users',
-    //             'fas fa-user-edit',
-    //             'admin.user.index'
-    //         );
+        if ($this->can('Manage Users')) {
+            $menu[] = $this->item(
+                'Users',
+                'fas fa-user-edit',
+                'admin.user.index'
+            );
 
-    //         $menu[] = $this->item(
-    //             'Create User',
-    //             'fas fa-user-plus',
-    //             'admin.user.create'
-    //         );
+            $menu[] = $this->item(
+                'Create User',
+                'fas fa-user-plus',
+                'admin.user.create'
+            );
 
-    //         $menu[] = $this->item(
-    //             'Disabled Users',
-    //             'fas fa-store-alt-slash',
-    //             'admin.user.deactivated'
-    //         );
+            // $menu[] = $this->item(
+            //     'Disabled Users',
+            //     'fas fa-store-alt-slash',
+            //     'admin.user.deactivated'
+            // );
 
-    //         $menu[] = $this->item(
-    //             'Password Policy',
-    //             'fas fa-user-lock',
-    //             'admin.user.password-policy.edit'
-    //         );
+            // $menu[] = $this->item(
+            //     'Password Policy',
+            //     'fas fa-user-lock',
+            //     'admin.user.password-policy.edit'
+            // );
 
-    //         $menu[] = $this->item(
-    //             'User Security Settings',
-    //             'cog',
-    //             'admin.user.user-settings.edit'
-    //         );
-    //     }
+            // $menu[] = $this->item(
+            //     'User Security Settings',
+            //     'cog',
+            //     'admin.user.user-settings.edit'
+            // );
+        }
 
-    //     if ($this->can('Manage Permissions')) {
-    //         $menu[] = $this->item(
-    //             'Roles & Permissions',
-    //             'fas fa-users-cog',
-    //             'admin.user-roles.index'
-    //         );
-    //     }
+        // if ($this->can('Manage Permissions')) {
+        //     $menu[] = $this->item(
+        //         'Roles & Permissions',
+        //         'fas fa-users-cog',
+        //         'admin.user-roles.index'
+        //     );
+        // }
 
-    //     return $menu;
-    // }
+        return $menu;
+    }
 
     /**
      * Customer-specific configuration and data.

@@ -1,15 +1,17 @@
 <?php
 
-use App\Exceptions\Auth\InitializeUserLinkMissingException;
-use App\Http\Controllers\Admin\User\DisabledUserController;
-use App\Http\Controllers\Admin\User\ResetTwoFaController;
-use App\Http\Controllers\Admin\User\ResetUserPasswordController;
-use App\Http\Controllers\Admin\User\UserAdministrationController;
-use App\Http\Controllers\Admin\User\UserRolesController;
-use App\Http\Controllers\User\InitializeUserController;
-use App\Http\Controllers\User\RemoveDeviceTokenController;
-use App\Http\Controllers\User\UpdateUserAccountController;
-use App\Http\Controllers\User\UpdateUserSettingsController;
+// use App\Exceptions\Auth\InitializeUserLinkMissingException;
+// use App\Http\Controllers\Admin\User\DisabledUserController;
+// use App\Http\Controllers\Admin\User\ResetTwoFaController;
+// use App\Http\Controllers\Admin\User\ResetUserPasswordController;
+// use App\Http\Controllers\Admin\User\UserAdministrationController;
+// use App\Http\Controllers\Admin\User\UserRolesController;
+// use App\Http\Controllers\User\InitializeUserController;
+// use App\Http\Controllers\User\RemoveDeviceTokenController;
+// use App\Http\Controllers\User\UpdateUserAccountController;
+// use App\Http\Controllers\User\UpdateUserSettingsController;
+
+use App\Http\Controllers\User\UserAdministrationController;
 use App\Http\Controllers\User\UserPasswordController;
 use App\Http\Controllers\User\UserSettingsController;
 use App\Http\Middleware\CheckPasswordExpiration;
@@ -88,13 +90,13 @@ Route::middleware('auth.secure')->group(function () {
         //         ->name('two-factor.reset');
         // });
 
-        // Route::resource('user', UserAdministrationController::class)
-        //     ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
-        //         $breadcrumbs->index('Users', 'admin.index')
-        //             ->create('New User')
-        //             ->show(fn (User $user) => $user->fullName)
-        //             ->edit('Edit Profile');
-        //     })->withTrashed();
+        Route::resource('user', UserAdministrationController::class)
+            ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
+                $breadcrumbs->index('Users', 'admin.index')
+                    ->create('New User')
+                    ->show(fn (User $user) => $user->fullName)
+                    ->edit('Edit Profile');
+            })->withTrashed();
 
         /*
         |-----------------------------------------------------------------------
