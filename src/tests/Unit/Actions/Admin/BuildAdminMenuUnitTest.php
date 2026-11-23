@@ -57,6 +57,23 @@ class BuildAdminMenuUnitTest extends TestCase
     private function getBaseMenu(): array
     {
         return [
+            'Users & Access' => [
+                [
+                    'label' => 'Users',
+                    'icon' => 'fas fa-user-edit',
+                    'route' => route('admin.user.index'),
+                ],
+                [
+                    'label' => 'Create User',
+                    'icon' => 'fas fa-user-plus',
+                    'route' => route('admin.user.create'),
+                ],
+                [
+                    'label' => 'Disabled Users',
+                    'icon' => 'fas fa-store-alt-slash',
+                    'route' => route('admin.user.deactivated'),
+                ],
+            ],
             'Application' => [
                 [
                     'label' => 'Application Configuration',

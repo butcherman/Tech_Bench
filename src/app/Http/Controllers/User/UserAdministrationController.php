@@ -38,6 +38,8 @@ class UserAdministrationController extends Controller
      */
     public function create(Request $request): Response
     {
+        $this->authorize('create', User::class);
+
         return Inertia::render('User/Admin/Create', [
             'roles' => fn () => $this->getAvailableRoles($request->user()),
         ]);
