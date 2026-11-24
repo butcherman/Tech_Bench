@@ -3,6 +3,7 @@ import InputWrapper from "../wrappers/InputWrapper.vue";
 import { computed, useId } from "vue";
 import { useInputHelper } from "../../composables/inputHelper.js";
 import { useVariantHelper } from "@/core/composables/variantHelper.js";
+import BaseBadge from "@/core/components/badges/BaseBadge.vue";
 
 defineSlots<{
     [key: string]: any;
@@ -51,12 +52,22 @@ const inputId = useId();
 
 <template>
     <InputWrapper v-bind="props" :has-focus="hasFocus">
-        <label :for="inputId" class="block mb-2 text-sm font-medium text-muted">
-            {{ label }}
-        </label>
+        <div class="flex">
+            <label :for="inputId" class="form-label-base grow">
+                {{ label }}
+            </label>
+            <div>
+                <span v-if="valueText">{{ valueText }}</span>
+                <BaseBadge
+                    v-if="displayValue"
+                    :text="displayValue"
+                    variant="primary"
+                    light
+                />
+            </div>
+        </div>
         <input
             v-model="inputValue"
-            v-tooltip.bottom="inputValue"
             class="w-full"
             type="range"
             :autocomplete="name"
@@ -74,9 +85,5 @@ const inputId = useId();
             @blur="onBlur"
             @change="$emit('change', inputValue)"
         />
-        <div v-if="!hideValue" class="text-muted">
-            <span v-if="valueText">{{ valueText }}</span>
-            {{ displayValue }}
-        </div>
     </InputWrapper>
 </template>

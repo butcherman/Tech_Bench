@@ -69,51 +69,56 @@ const attentionRequired = ref<boolean>(false);
 </script>
 
 <template>
-    <Teleport to="body">
-        <Transition
-            name="modal"
-            @after-enter="$emit('shown')"
-            @after-leave="$emit('hidden')"
-        >
-            <div
-                v-if="show"
-                class="tb-modal fixed inset-0 z-50 w-screen overflow-y-auto flex justify-center"
-                :class="[modalPosition, { 'bg-gray-500/75': !hideBackdrop }]"
+    <div>
+        <Teleport to="body">
+            <Transition
+                name="modal"
+                @after-enter="$emit('shown')"
+                @after-leave="$emit('hidden')"
             >
                 <div
-                    class="tb-modal-body bg-white min-w-96 m-4 min-h-32 rounded-lg p-5 flex flex-col relative border border-slate-300"
-                    :class="[modalSize, { attention: attentionRequired }]"
-                    v-on-click-outside="onBackgroundClicked"
+                    v-if="show"
+                    class="tb-modal fixed inset-0 z-50 w-screen overflow-y-auto flex justify-center"
+                    :class="[
+                        modalPosition,
+                        { 'bg-gray-500/75': !hideBackdrop },
+                    ]"
                 >
                     <div
-                        v-if="!hideClose"
-                        class="absolute top-2 right-4 text-muted pointer"
+                        class="tb-modal-body bg-white min-w-96 m-4 min-h-32 rounded-lg p-5 flex flex-col relative border border-slate-300"
+                        :class="[modalSize, { attention: attentionRequired }]"
+                        v-on-click-outside="onBackgroundClicked"
                     >
-                        <button
-                            class="pointer hide-button"
-                            @click="show = false"
+                        <div
+                            v-if="!hideClose"
+                            class="absolute top-2 right-4 text-muted pointer"
                         >
-                            <fa-icon icon="close" />
-                        </button>
-                    </div>
-                    <div
-                        class="mb-3 border-slate-300"
-                        :class="{ 'border-b': $slots.header || title }"
-                    >
-                        <slot name="header">
-                            <h5 class="text-muted">{{ title }}</h5>
-                        </slot>
-                    </div>
-                    <div class="grow overflow-auto">
-                        <slot />
-                    </div>
-                    <div v-if="$slots.footer" class="border-t pt-2 mt-3">
-                        <slot name="footer" />
+                            <button
+                                class="pointer hide-button"
+                                @click="show = false"
+                            >
+                                <fa-icon icon="close" />
+                            </button>
+                        </div>
+                        <div
+                            class="mb-3 border-slate-300"
+                            :class="{ 'border-b': $slots.header || title }"
+                        >
+                            <slot name="header">
+                                <h5 class="text-muted">{{ title }}</h5>
+                            </slot>
+                        </div>
+                        <div class="grow overflow-auto">
+                            <slot />
+                        </div>
+                        <div v-if="$slots.footer" class="border-t pt-2 mt-3">
+                            <slot name="footer" />
+                        </div>
                     </div>
                 </div>
-            </div>
-        </Transition>
-    </Teleport>
+            </Transition>
+        </Teleport>
+    </div>
 </template>
 
 <style scoped>

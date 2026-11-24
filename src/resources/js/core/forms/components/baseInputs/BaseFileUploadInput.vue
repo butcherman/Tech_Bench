@@ -115,7 +115,6 @@ defineExpose({
 
 <template>
     <InputWrapper :has-focus="false">
-        <slot :totalProgress />
         <div
             class="h-full border-2 border-blue-300 border-dashed rounded-lg py-8 text-center cursor-pointer bg-blue-400/30"
             :class="{

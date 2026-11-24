@@ -12,11 +12,10 @@ class HandleFailedLoginListener
      */
     public function handle(Failed $event): void
     {
-        Log::stack(['app', 'auth'])
-            ->warning('User tried to login with invalid credentials', [
-                'Username' => $event->credentials['username'],
-                'IP Address' => request()->ip(),
-                'Attempt Number' => session('failed_login') + 1,
-            ]);
+        Log::warning('User tried to login with invalid credentials', [
+            'Username' => $event->credentials['username'],
+            'IP Address' => request()->ip(),
+            'Attempt Number' => session('failed_login') + 1,
+        ]);
     }
 }

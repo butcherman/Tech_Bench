@@ -13,7 +13,7 @@ class HandleUserInitializeCompleteListener implements ShouldQueue
      */
     public function handle(UserInitializeComplete $event): void
     {
-        Log::stack(['app', 'auth'])->notice(
+        Log::notice(
             'User '.$event->token->User->full_name.
                 ' has finished setting up their account'
         );

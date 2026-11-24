@@ -27,15 +27,13 @@ router.on("before", () => {
 </script>
 
 <template>
-    <div class="h-screen flex flex-col">
+    <div class="min-h-screen flex flex-col bg-content">
         <Head :title="pageTitle" />
         <FlashAlert />
         <ToastAlert />
         <AppHeader @toggle-navbar="toggleNav" />
         <AppSideNav v-model="sideNavHidden" v-on-click-outside="closeNav" />
-        <section
-            class="mt-14 lg:ms-64 flex flex-col gap-2 p-5 bg-content h-full"
-        >
+        <section class="mt-14 lg:ms-64 flex flex-col gap-2 p-5 h-full">
             <Breadcrumbs />
             <UnbaggedErrors />
             <div>

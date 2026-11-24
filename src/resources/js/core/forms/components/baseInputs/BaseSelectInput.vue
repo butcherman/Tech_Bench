@@ -1,6 +1,6 @@
 <script setup lang="ts" generic="TOption extends string | object">
 import InputWrapper from "../wrappers/InputWrapper.vue";
-import {  useId } from "vue";
+import { useId } from "vue";
 import { useInputHelper } from "../../composables/inputHelper.js";
 import { useSelectHelper } from "../../composables/selectHelper.js";
 
@@ -34,10 +34,7 @@ const inputValue = defineModel<string | null>({
     required: true,
 });
 
-const { hasFocus, onFocus, onBlur, inputVariantStyle } = useInputHelper(
-    props,
-    emit,
-);
+const { hasFocus, onFocus, onBlur } = useInputHelper(props, emit);
 const { getValue, getOptionText } = useSelectHelper(props);
 
 const inputId = useId();
@@ -50,45 +47,33 @@ const inputId = useId();
         :has-focus="hasFocus"
         :help-visible="helpVisible"
     >
-        <div>
-            <div class="relative">
-                <select
-                    v-model="inputValue"
-                    class="block peer form-input-base"
-                    :class="[
-                        inputVariantStyle,
-                        {
-                            invalid: errorMessage?.length,
-                            'has-focus': hasFocus,
-                        },
-                    ]"
-                    :disabled="disabled"
-                    :id="inputId"
-                    :name="name"
-                    :placeholder="placeholder ?? ''"
-                    @focus="onFocus"
-                    @blur="onBlur"
-                    @change="$emit('change', inputValue)"
-                >
-                    <option
-                        v-for="opt in list"
-                        :key="getOptionText(opt)"
-                        :value="getValue(opt)"
-                    >
-                        {{ getOptionText(opt) }}
-                    </option>
-                </select>
-                <div class="absolute inset-e-1.5 bottom-1.5 text-muted pointer">
-                    <fa-icon icon="caret-down" />
-                </div>
-                <label
-                    :for="inputId"
-                    class="form-label-base"
-                    :class="{ 'bg-white!': variant === 'outlined' }"
-                >
-                    {{ label }}
-                </label>
-            </div>
-        </div>
+        <label v-if="label" :for="inputId" class="form-label-base">
+            {{ label }}
+        </label>
+        <select
+            v-model="inputValue"
+            class="block peer form-input-wrapper form-input p-2"
+            :class="[
+                {
+                    invalid: errorMessage?.length,
+                    'has-focus': hasFocus,
+                },
+            ]"
+            :disabled="disabled"
+            :id="inputId"
+            :name="name"
+            :placeholder="placeholder ?? ''"
+            @focus="onFocus"
+            @blur="onBlur"
+            @change="$emit('change', inputValue)"
+        >
+            <option
+                v-for="opt in list"
+                :key="getOptionText(opt)"
+                :value="getValue(opt)"
+            >
+                {{ getOptionText(opt) }}
+            </option>
+        </select>
     </InputWrapper>
 </template>

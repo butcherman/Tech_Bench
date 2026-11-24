@@ -4,6 +4,7 @@
 * Additional CSS Style Sheets
 */
 @import "./form.css";
+@import "./tooltip.css";
 
 /**
 * Base styles applied to all pages

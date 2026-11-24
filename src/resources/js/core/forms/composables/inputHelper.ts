@@ -19,34 +19,6 @@ export const useInputHelper = (props: InputBaseProps, emit: any) => {
         emit("blur");
     };
 
-    /*
-    |-------------------------------------------------------------------------------
-    | Input Styling
-    |-------------------------------------------------------------------------------
-    */
-    const defaultVariant = "outlined";
-
-    /**
-     * Variant styling for standard inputs
-     */
-    const inputVariantStyle = {
-        filled: "form-input-filled",
-        standard: "form-input-standard",
-        outlined: "form-input-outlined",
-    }[props.variant ?? defaultVariant];
-
-    const prependVariantStyle = {
-        filled: "form-prepend-filled",
-        standard: "form-prepend-standard",
-        outlined: "form-prepend-outlined",
-    }[props.variant ?? defaultVariant];
-
-    const appendVariantStyle = {
-        filled: "form-append-filled",
-        standard: "form-append-standard",
-        outlined: "form-append-outlined",
-    }[props.variant ?? defaultVariant];
-
     /**
      * Variant styling for switch inputs
      */
@@ -66,9 +38,6 @@ export const useInputHelper = (props: InputBaseProps, emit: any) => {
         hasFocus: readonly(hasFocus),
         onFocus,
         onBlur,
-        inputVariantStyle,
-        prependVariantStyle,
-        appendVariantStyle,
         switchInputSize,
         switchSize,
     };

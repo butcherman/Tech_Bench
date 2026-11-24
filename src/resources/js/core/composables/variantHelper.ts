@@ -74,7 +74,7 @@ export const useVariantHelper = () => {
             primary: `bg-blue-600 hover:bg-blue-700 text-white focus:outline-blue-700`,
             secondary: `bg-blue-300 hover:bg-blue-400 text-slate-800 focus:outline-blue-400`,
             success: `bg-emerald-500 hover:bg-emerald-600 text-white focus:outline-emerald-600`,
-            warning: `bg-amber-500 hover:bg-amber-600 text-white focus:outline-amber-600`,
+            warning: `bg-amber-400 hover:bg-amber-600 text-white focus:outline-amber-600`,
         }[variant];
     };
 

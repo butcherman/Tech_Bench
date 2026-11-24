@@ -64,6 +64,7 @@ const sizeClass = computed(() => {
         :href="href"
         :class="[variantColor, sizeClass, borderClass, { pointer: pointer }]"
         class="inline-flex items-center justify-center text-xs font-bold"
+        type="button"
     >
         <slot>
             <fa-icon v-if="icon" :icon="icon" />

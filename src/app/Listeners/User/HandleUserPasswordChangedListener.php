@@ -17,11 +17,10 @@ class HandleUserPasswordChangedListener implements ShouldQueue
     {
         Mail::to($event->user)->send(new PasswordChangedMail($event->user));
 
-        Log::stack(['daily', 'auth'])
-            ->info('User '.$event->user->full_name.' has updated their password', [
-                'User ID' => $event->user->user_id,
-                'Username' => $event->user->username,
-                'IP Address' => request()->ip(),
-            ]);
+        Log::info('User '.$event->user->full_name.' has updated their password', [
+            'User ID' => $event->user->user_id,
+            'Username' => $event->user->username,
+            'IP Address' => request()->ip(),
+        ]);
     }
 }

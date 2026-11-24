@@ -12,14 +12,13 @@ class HandleLockoutListener
      */
     public function handle(Lockout $event): void
     {
-        Log::stack(['app', 'auth'])
-            ->notice(
-                'Username '.$event->request->username.
-                    ' has been locked out due to too many failed login attempts',
-                [
-                    'Username' => $event->request->username,
-                    'IP Address' => $event->request->ip(),
-                ]
-            );
+        Log::notice(
+            'Username '.$event->request->username.
+                ' has been locked out due to too many failed login attempts',
+            [
+                'Username' => $event->request->username,
+                'IP Address' => $event->request->ip(),
+            ]
+        );
     }
 }

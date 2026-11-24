@@ -13,5 +13,6 @@ class UserPasswordController extends Controller
     public function __invoke(Request $request)
     {
         //
+        return 'user password controller';
     }
 }
