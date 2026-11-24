@@ -8,7 +8,7 @@ import TextInput from "@/core/forms/components/validatedInputs/TextInput.vue";
 import VueForm from "@/core/forms/components/VueForm.vue";
 import { object, string, number, boolean } from "yup";
 import { computed } from "vue";
-// import { submit } from "@/wayfinder/routes/init/step-2";
+import { submit } from "@/wayfinder/routes/init/step-2";
 import { update } from "@/wayfinder/routes/admin/email-settings";
 
 defineEmits<{
@@ -24,8 +24,7 @@ const props = defineProps<{
 const encryptionTypes = ["NONE", "TLS", "SSL"];
 
 const submitRoute = computed<string>(() =>
-    // props.init ? submit.url() : update.url(),
-    update.url(),
+    props.init ? submit.url() : update.url(),
 );
 
 const submitText = computed<string>(() =>

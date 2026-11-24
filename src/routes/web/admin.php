@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\ApplicationConfigurationController;
 use App\Http\Controllers\Admin\EmailSettingsController;
 use App\Http\Controllers\Admin\LogoController;
 use App\Http\Controllers\Admin\SendTestEmailController;
+use Illuminate\Auth\Middleware\Authenticate;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -63,6 +64,8 @@ Route::middleware('auth.secure')->prefix('administration')->name('admin.')->grou
             ->name('email-settings.update');
     });
 
-    Route::put('test-email', SendTestEmailController::class)
-        ->name('test-email');
 });
+
+Route::put('test-email', SendTestEmailController::class)
+    ->name('admin.test-email')
+    ->middleware(Authenticate::class);
