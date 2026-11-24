@@ -4,14 +4,13 @@ import Card from "@/core/components/Card.vue";
 import DeferredLoader from "@/core/components/loaders/DeferredLoader.vue";
 import UserAdministrationList from "@/features/user/components/UserAdministrationList.vue";
 
+defineOptions({ layout: AppLayout });
+
 defineProps<{
     userList?: User[];
 }>();
 </script>
 
-<script lang="ts">
-export default { layout: AppLayout };
-</script>
 <template>
     <div class="w-full min-w-0">
         <Card

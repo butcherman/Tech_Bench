@@ -12,6 +12,7 @@
 // use App\Http\Controllers\User\UpdateUserSettingsController;
 
 use App\Http\Controllers\User\DisabledUserListController;
+use App\Http\Controllers\User\PasswordPolicyController;
 use App\Http\Controllers\User\ResetTwoFaController;
 use App\Http\Controllers\User\ResetUserPasswordController;
 use App\Http\Controllers\User\UserAdministrationController;
@@ -75,6 +76,20 @@ Route::middleware('auth.secure')->group(function () {
         |-----------------------------------------------------------------------
         */
         Route::prefix('users')->name('user.')->group(function () {
+            /*
+            |-----------------------------------------------------------------------
+            | Password Policy
+            | /administration/password-policy
+            |-----------------------------------------------------------------------
+            */
+            Route::controller(PasswordPolicyController::class)->group(function () {
+                Route::get('password-policy', 'edit')
+                    ->name('password-policy.edit')
+                    ->breadcrumb('Password Policy', 'admin.index');
+                Route::put('password-policy', 'update')
+                    ->name('password-policy.update');
+            });
+
             Route::get('{user}/restore', [UserAdministrationController::class, 'restore'])
                 ->name('restore')
                 ->withTrashed();

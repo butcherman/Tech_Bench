@@ -56,11 +56,11 @@ class BuildAdminMenu
                 'admin.user.deactivated'
             );
 
-            // $menu[] = $this->item(
-            //     'Password Policy',
-            //     'fas fa-user-lock',
-            //     'admin.user.password-policy.edit'
-            // );
+            $menu[] = $this->item(
+                'Password Policy',
+                'fas fa-user-lock',
+                'admin.user.password-policy.edit'
+            );
 
             // $menu[] = $this->item(
             //     'User Security Settings',

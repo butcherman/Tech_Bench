@@ -3,15 +3,14 @@ import AppLayout from "@/layouts/AppLayout.vue";
 import Card from "@/core/components/Card.vue";
 import UserAdministrationProfileForm from "@/features/user/forms/UserAdministrationProfileForm.vue";
 
+defineOptions({ layout: AppLayout });
+
 defineProps<{
     roles: UserRole[];
     user: User;
 }>();
 </script>
 
-<script lang="ts">
-export default { layout: AppLayout };
-</script>
 <template>
     <div class="flex justify-center">
         <Card
