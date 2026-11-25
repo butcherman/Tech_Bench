@@ -14,26 +14,32 @@ defineProps<{
 </script>
 
 <template>
-    <div class="w-full min-w-0">
-        <Card
-            class="w-full min-w-0"
-            title="User Administration"
-            sub-title="Select a User to edit, or create a new user."
-            title-icon="user"
-        >
-            <template #append-title>
-                <div class="flex items-center h-full">
-                    <AddBadge
-                        :href="create.url()"
-                        text="New User"
-                        size="sm"
-                        pill
+    <div>
+        <div class="border-b border-slate-300 pb-2 mb-2">
+            <h1 class="text-black">User Administration</h1>
+            <p class="text-muted">
+                Select a User to edit, or create a new user.
+            </p>
+        </div>
+        <div class="w-full min-w-0">
+            <Card class="w-full min-w-0">
+                <template #append-title>
+                    <div class="flex items-center h-full">
+                        <AddBadge
+                            :href="create.url()"
+                            text="New User"
+                            size="sm"
+                            pill
+                        />
+                    </div>
+                </template>
+                <DeferredLoader data="user-list">
+                    <UserAdministrationList
+                        v-if="userList"
+                        :user-list="userList"
                     />
-                </div>
-            </template>
-            <DeferredLoader data="user-list">
-                <UserAdministrationList v-if="userList" :user-list="userList" />
-            </DeferredLoader>
-        </Card>
+                </DeferredLoader>
+            </Card>
+        </div>
     </div>
 </template>
