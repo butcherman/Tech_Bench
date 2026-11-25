@@ -73,6 +73,16 @@ class BuildAdminMenuUnitTest extends TestCase
                     'icon' => 'fas fa-store-alt-slash',
                     'route' => route('admin.user.deactivated'),
                 ],
+                [
+                    'label' => 'Password Policy',
+                    'icon' => 'fas fa-user-lock',
+                    'route' => route('admin.user.password-policy.edit'),
+                ],
+                [
+                    'label' => 'User Security Settings',
+                    'icon' => 'cog',
+                    'route' => route('admin.user.user-settings.edit'),
+                ],
             ],
             'Application' => [
                 [

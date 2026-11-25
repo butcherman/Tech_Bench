@@ -9,7 +9,6 @@ use App\Services\User\UserGlobalSettingsService;
 use App\Traits\UserRoleTrait;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -40,11 +39,6 @@ class UserSecuritySettingsController extends Controller
     public function update(UserSecurityRequest $request): RedirectResponse
     {
         $this->svc->updateUserSettingsConfig($request->safe()->collect());
-
-        // Log::notice(
-        //     'User Administration Settings updated by '.request()->user()->username,
-        //     $request->except(['client_secret'])
-        // );
 
         return back()->with('success', __('admin.user.settings_updated'));
     }
