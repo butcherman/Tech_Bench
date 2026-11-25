@@ -62,11 +62,11 @@ class BuildAdminMenu
                 'admin.user.password-policy.edit'
             );
 
-            // $menu[] = $this->item(
-            //     'User Security Settings',
-            //     'cog',
-            //     'admin.user.user-settings.edit'
-            // );
+            $menu[] = $this->item(
+                'User Security Settings',
+                'cog',
+                'admin.user.user-settings.edit'
+            );
         }
 
         // if ($this->can('Manage Permissions')) {

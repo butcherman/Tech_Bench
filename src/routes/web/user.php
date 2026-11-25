@@ -1,22 +1,12 @@
 <?php
 
-// use App\Exceptions\Auth\InitializeUserLinkMissingException;
-// use App\Http\Controllers\Admin\User\DisabledUserController;
-// use App\Http\Controllers\Admin\User\ResetTwoFaController;
-// use App\Http\Controllers\Admin\User\ResetUserPasswordController;
-// use App\Http\Controllers\Admin\User\UserAdministrationController;
-// use App\Http\Controllers\Admin\User\UserRolesController;
-// use App\Http\Controllers\User\InitializeUserController;
-// use App\Http\Controllers\User\RemoveDeviceTokenController;
-// use App\Http\Controllers\User\UpdateUserAccountController;
-// use App\Http\Controllers\User\UpdateUserSettingsController;
-
 use App\Http\Controllers\User\DisabledUserListController;
 use App\Http\Controllers\User\PasswordPolicyController;
 use App\Http\Controllers\User\ResetTwoFaController;
 use App\Http\Controllers\User\ResetUserPasswordController;
 use App\Http\Controllers\User\UserAdministrationController;
 use App\Http\Controllers\User\UserPasswordController;
+use App\Http\Controllers\User\UserSecuritySettingsController;
 use App\Http\Controllers\User\UserSettingsController;
 use App\Http\Middleware\CheckPasswordExpiration;
 use App\Models\User;
@@ -79,17 +69,37 @@ Route::middleware('auth.secure')->group(function () {
             /*
             |-----------------------------------------------------------------------
             | Password Policy
-            | /administration/password-policy
+            | /administration/users/password-policy
             |-----------------------------------------------------------------------
             */
             Route::controller(PasswordPolicyController::class)->group(function () {
                 Route::get('password-policy', 'edit')
                     ->name('password-policy.edit')
-                    ->breadcrumb('Password Policy', 'admin.index');
+                    ->breadcrumb('Password Policy', 'admin.user.index');
                 Route::put('password-policy', 'update')
                     ->name('password-policy.update');
             });
 
+            /*
+            |---------------------------------------------------------------------------
+            | User Administrative Settings
+            | /administration/users/user-security-settings
+            |---------------------------------------------------------------------------
+            */
+            Route::controller(UserSecuritySettingsController::class)->group(function () {
+                Route::get('user-security-settings', 'edit')
+                    ->name('user-settings.edit')
+                    ->breadcrumb('User Security Settings', 'admin.user.index');
+                Route::put('user-security-settings', 'update')
+                    ->name('user-settings.update');
+            });
+
+            /*
+            |---------------------------------------------------------------------------
+            | User Administration
+            | /administration/users/{user}/{action}
+            |---------------------------------------------------------------------------
+            */
             Route::get('{user}/restore', [UserAdministrationController::class, 'restore'])
                 ->name('restore')
                 ->withTrashed();

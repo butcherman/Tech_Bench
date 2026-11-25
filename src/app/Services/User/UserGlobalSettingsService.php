@@ -4,11 +4,18 @@ namespace App\Services\User;
 
 use App\Jobs\User\UpdatePasswordExpireJob;
 use App\Traits\AppSettingsTrait;
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
 class UserGlobalSettingsService
 {
     use AppSettingsTrait;
+
+    /*
+    |---------------------------------------------------------------------------
+    | Password Config
+    |---------------------------------------------------------------------------
+    */
 
     /**
      * Get the password Policy settings
@@ -40,5 +47,90 @@ class UserGlobalSettingsService
             $requestData->toArray(),
             'auth.passwords.settings'
         );
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | MFA Config
+    |---------------------------------------------------------------------------
+    */
+    /**
+     * Return the current 2FA Configuration
+     */
+    public function getTwoFaConfig(): array
+    {
+        return [
+            'enabled' => (bool) config('auth.twoFa.enabled'),
+            'required' => (bool) config('auth.twoFa.required'),
+            'allow_save_device' => (bool) config('auth.twoFa.allow_save_device'),
+            'methods' => config('auth.twoFa.methods'),
+        ];
+    }
+
+    /**
+     * Save the MFA Config
+     */
+    public function saveTwoFaSettings(Collection $requestData): void
+    {
+        $mfaConfig = $requestData->get('twoFa');
+        $this->saveSettingsArray($mfaConfig['methods'], 'auth.twoFa.methods');
+        unset($mfaConfig['methods']);
+        $this->saveSettingsArray($mfaConfig, 'auth.twoFa');
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | OATH Config
+    |---------------------------------------------------------------------------
+    */
+
+    /**
+     * Return the current OATH Configuration
+     */
+    public function getOathConfig(): array
+    {
+        return [
+            'allow_login' => (bool) config('services.azure.allow_login'),
+            'allow_register' => (bool) config('services.azure.allow_register'),
+            'default_role_id' => (string) config('services.azure.default_role_id'),
+            'tenant' => config('services.azure.tenant'),
+            'client_id' => config('services.azure.client_id'),
+            'client_secret' => config('services.azure.client_secret')
+                ? __('admin.fake-password') : '',
+            'secret_expires' => config('services.azure.secret_expires')
+                ? Carbon::parse(config('services.azure.secret_expires'))->format('m-d-Y') : '',
+            'redirect' => config('services.azure.redirect') ?? config('app.url').'/auth/callback',
+        ];
+    }
+
+    /**
+     * Return the number of days until the Oath Certificate expires
+     */
+    public function getOathCertExpiresDays(): int
+    {
+        $certExpires = Carbon::parse(config('services.azure.secret_expires'));
+
+        return floor(Carbon::now()->diffInDays($certExpires));
+    }
+
+    /*
+    |---------------------------------------------------------------------------
+    | User Admin Settings
+    |---------------------------------------------------------------------------
+    */
+
+    /**
+     * Update all of the User Administration Settings
+     */
+    public function updateUserSettingsConfig(Collection $requestData): void
+    {
+        $this->saveSettings(
+            'auth.auto_logout_timer',
+            intval($requestData->get('auto_logout_timer'))
+        );
+
+        $this->saveTwoFaSettings($requestData);
+
+        $this->saveSettingsArray($requestData->get('oath'), 'services.azure');
     }
 }
