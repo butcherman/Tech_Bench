@@ -32,28 +32,28 @@ class UserRoleAdministrationService
     /**
      * Return all Role Permissions Grouped by Category.
      */
-    // public function getRolePermissionTypes(): Collection
-    // {
-    //     return UserRolePermissionType::all()
-    //         ->filter(function ($perm) {
-    //             return $perm->feature_enabled;
-    //         })->groupBy('group');
-    // }
+    public function getRolePermissionTypes(): Collection
+    {
+        return UserRolePermissionType::all()
+            ->filter(function ($perm) {
+                return $perm->feature_enabled;
+            })->groupBy('group');
+    }
 
     /**
      * Build a new Role and assign permissions
      */
-    // public function createNewRole(SupportCollection $requestData): UserRole
-    // {
-    //     $newRole = UserRole::create(
-    //         $requestData->only(['name', 'description'])->toArray()
-    //     );
+    public function createNewRole(SupportCollection $requestData): UserRole
+    {
+        $newRole = UserRole::create(
+            $requestData->only(['name', 'description'])->toArray()
+        );
 
-    //     $this->processPermissions($requestData->get('permissions'), $newRole);
-    //     $this->flushRoleCache();
+        $this->processPermissions($requestData->get('permissions'), $newRole);
+        $this->flushRoleCache();
 
-    //     return $newRole;
-    // }
+        return $newRole;
+    }
 
     /**
      * Update an existing Role
@@ -89,29 +89,29 @@ class UserRoleAdministrationService
     /**
      * Go through all Role Permissions and build/update in Database
      */
-    // protected function processPermissions(array $permissions, UserRole $role): void
-    // {
-    //     Log::debug('Updating User Role Permissions', [
-    //         'role_id' => $role->role_id,
-    //         'role_name' => $role->name,
-    //         'permissions' => $permissions,
-    //     ]);
+    protected function processPermissions(array $permissions, UserRole $role): void
+    {
+        Log::debug('Updating User Role Permissions', [
+            'role_id' => $role->role_id,
+            'role_name' => $role->name,
+            'permissions' => $permissions,
+        ]);
 
-    //     foreach ($permissions as $key => $value) {
-    //         if (! is_null($value)) {
-    //             UserRolePermission::firstOrCreate([
-    //                 'role_id' => $role->role_id,
-    //                 'perm_type_id' => $key,
-    //             ])->update(['allow' => $value]);
-    //         }
-    //     }
-    // }
+        foreach ($permissions as $key => $value) {
+            if (! is_null($value)) {
+                UserRolePermission::firstOrCreate([
+                    'role_id' => $role->role_id,
+                    'perm_type_id' => $key,
+                ])->update(['allow' => $value]);
+            }
+        }
+    }
 
     /**
      * Flush the Roles Cache so it can be rebuilt
      */
-    // protected function flushRoleCache(): void
-    // {
-    //     CacheData::clearCache('userRoles');
-    // }
+    protected function flushRoleCache(): void
+    {
+        CacheData::clearCache('userRoles');
+    }
 }

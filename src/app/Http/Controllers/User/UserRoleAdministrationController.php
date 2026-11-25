@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\User\UserRoleAdministrationRequest;
 use App\Models\UserRole;
 use App\Services\User\UserRoleAdministrationService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -28,19 +30,30 @@ class UserRoleAdministrationController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request): Response
     {
-        //
-        return 'create';
+        $this->authorize('create', UserRole::class);
+
+        return Inertia::render('User/Role/Create', [
+            'permission-list' => $this->svc->getRolePermissionTypes(),
+            'base-role' => fn () => $request->role_id
+                ? $this->svc->getRole($request->role_id)
+                : null,
+            'permission-values' => fn () => $request->role_id
+                ? $this->svc->getRole($request->role_id)->UserRolePermission
+                : [],
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(UserRoleAdministrationRequest $request): RedirectResponse
     {
-        //
-        return 'store';
+        $newRole = $this->svc->createNewRole($request->safe()->collect());
+
+        return redirect(route('admin.user-roles.show', $newRole->role_id))
+            ->with('success', __('admin.user-role.created'));
     }
 
     /**
