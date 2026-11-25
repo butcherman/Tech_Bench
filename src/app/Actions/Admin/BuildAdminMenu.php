@@ -69,13 +69,13 @@ class BuildAdminMenu
             );
         }
 
-        // if ($this->can('Manage Permissions')) {
-        //     $menu[] = $this->item(
-        //         'Roles & Permissions',
-        //         'fas fa-users-cog',
-        //         'admin.user-roles.index'
-        //     );
-        // }
+        if ($this->can('Manage Permissions')) {
+            $menu[] = $this->item(
+                'Roles & Permissions',
+                'fas fa-users-cog',
+                'admin.user-roles.index'
+            );
+        }
 
         return $menu;
     }

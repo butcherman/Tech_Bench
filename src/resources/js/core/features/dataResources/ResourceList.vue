@@ -100,7 +100,7 @@ const onRowClick = (event: MouseEvent, row: IndexedData<TRow>) => {
                     {
                         'border-b': gridLines && !data.isLast,
                         'text-center': center,
-                        'hover:bg-slate-200/50': hoverRow,
+                        'hover:bg-slate-400/50': hoverRow,
                     },
                     paddingClass,
                     pointerClass,

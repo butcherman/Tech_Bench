@@ -6,6 +6,7 @@ use App\Http\Controllers\User\ResetTwoFaController;
 use App\Http\Controllers\User\ResetUserPasswordController;
 use App\Http\Controllers\User\UserAdministrationController;
 use App\Http\Controllers\User\UserPasswordController;
+use App\Http\Controllers\User\UserRoleAdministrationController;
 use App\Http\Controllers\User\UserSecuritySettingsController;
 use App\Http\Controllers\User\UserSettingsController;
 use App\Http\Middleware\CheckPasswordExpiration;
@@ -136,13 +137,13 @@ Route::middleware('auth.secure')->group(function () {
         //     ->name('user-roles.copy')
         //     ->breadcrumb('Build New Role', 'admin.user-roles.index');
 
-        // Route::resource('user-roles', UserRolesController::class)
-        //     ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
-        //         $breadcrumbs->index('Roles and Permissions', 'admin.index')
-        //             ->create('Build New Role')
-        //             ->show(fn(UserRole $role) => $role->name)
-        //             ->edit('Modify Role');
-        //     });
+        Route::resource('user-roles', UserRoleAdministrationController::class)
+            ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {
+                $breadcrumbs->index('Roles and Permissions', 'admin.index')
+                    ->create('Build New Role')
+                    ->show(fn (UserRole $role) => $role->name)
+                    ->edit('Modify Role');
+            });
     });
 });
 
