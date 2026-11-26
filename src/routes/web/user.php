@@ -133,9 +133,9 @@ Route::middleware('auth.secure')->group(function () {
         | /administration/user-roles
         |-----------------------------------------------------------------------
         */
-        // Route::post('user-roles/create', [UserRolesController::class, 'create'])
-        //     ->name('user-roles.copy')
-        //     ->breadcrumb('Build New Role', 'admin.user-roles.index');
+        Route::post('user-roles/create', [UserRoleAdministrationController::class, 'create'])
+            ->name('user-roles.copy')
+            ->breadcrumb('Build New Role', 'admin.user-roles.index');
 
         Route::resource('user-roles', UserRoleAdministrationController::class)
             ->breadcrumbs(function (ResourceBreadcrumbs $breadcrumbs) {

@@ -59,36 +59,52 @@ class UserRoleAdministrationController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(UserRole $user_role): Response
     {
-        //
-        return 'show';
+        $this->authorize('view', $user_role);
+
+        return Inertia::render('User/Role/Show', [
+            'role' => fn () => $user_role->makeVisible(['allow_edit']),
+            'permission-list' => fn () => $this->svc->getRolePermissionTypes(),
+            'permission-values' => fn () => $user_role->UserRolePermission,
+        ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(UserRole $user_role): Response
     {
-        //
-        return 'edit';
+        $this->authorize('update', $user_role);
+
+        return Inertia::render('User/Role/Edit', [
+            'base-role' => fn () => $user_role,
+            'permission-list' => fn () => $this->svc->getRolePermissionTypes(),
+            'permission-values' => fn () => $user_role->UserRolePermission,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UserRoleAdministrationRequest $request, UserRole $user_role): RedirectResponse
     {
-        //
-        return 'update';
+        $this->svc->updateExistingRole($request->safe()->collect(), $user_role);
+
+        return redirect(route('admin.user-roles.show', $user_role->role_id))
+            ->with('success', __('admin.user-role.updated'));
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(UserRole $user_role): RedirectResponse
     {
-        //
-        return 'destroy';
+        $this->authorize('delete', $user_role);
+
+        $this->svc->destroyRole($user_role);
+
+        return redirect(route('admin.user-roles.index'))
+            ->with('warning', __('admin.user-role.destroyed'));
     }
 }

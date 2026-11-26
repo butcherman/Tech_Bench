@@ -58,33 +58,34 @@ class UserRoleAdministrationService
     /**
      * Update an existing Role
      */
-    // public function updateExistingRole(
-    //     SupportCollection $requestData,
-    //     UserRole $role
-    // ): UserRole {
-    //     $role->update($requestData->only(['name', 'description'])->toArray());
+    public function updateExistingRole(
+        SupportCollection $requestData,
+        UserRole $role
+    ): UserRole {
+        $role->update($requestData->only(['name', 'description'])->toArray());
 
-    //     $this->processPermissions($requestData->get('permissions'), $role);
-    //     $this->flushRoleCache();
+        $this->processPermissions($requestData->get('permissions'), $role);
+        $this->flushRoleCache();
 
-    //     return $role->fresh();
-    // }
+        return $role->fresh();
+    }
 
     /**
      * Delete an existing Role
      *
      * Note: A role can only be deleted if it is not currently in use
      */
-    // public function destroyRole(UserRole $role): void
-    // {
-    //     try {
-    //         $role->delete();
-    //         $this->flushRoleCache();
-    //     } catch (QueryException $e) {
-    //         // If the Role is in use, throw in use exception
-    //         DbException::check($e, __('admin.user-role.in-use'));
-    //     }
-    // }
+    public function destroyRole(UserRole $role): void
+    {
+        try {
+            $role->delete();
+            $this->flushRoleCache();
+        } catch (QueryException $e) {
+            // If the Role is in use, throw in use exception
+            DbException::check($e, __('admin.user-role.in-use'));
+            dd('in use');
+        }
+    }
 
     /**
      * Go through all Role Permissions and build/update in Database
