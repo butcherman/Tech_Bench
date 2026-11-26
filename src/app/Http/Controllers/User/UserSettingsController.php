@@ -2,17 +2,36 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Actions\User\BuildUserSettings;
+use App\Facades\CacheData;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class UserSettingsController extends Controller
 {
     /**
-     * Handle the incoming request.
+     * Show the Users Account and Application Settings
      */
-    public function __invoke(Request $request)
+    public function __invoke(Request $request, BuildUserSettings $svc): Response
     {
-        //
-        return 'user settings controller';
+        $this->authorize('view', $request->user());
+
+        return Inertia::render('User/Settings', [
+            'settings' => fn () => $svc($request->user()),
+            'password-rules' => fn () => CacheData::passwordRules(),
+            'two-fa' => [
+                'allowSaveDevice' => fn () => config('auth.twoFa.allow_save_device')
+                    && config('auth.twoFa.enabled'),
+                'allowAuthenticator' => fn () => config('auth.twoFa.allow_via_authenticator')
+                    && config('auth.twoFa.enabled'),
+                'allowEmail' => fn () => config('auth.twoFa.allow_via_email')
+                    && config('auth.twoFa.enabled'),
+                'currentVia' => fn () => $request->user()->two_factor_via,
+                'devices' => fn () => $request->user()->DeviceTokens,
+                'enabled' => fn () => config('auth.twoFa.enabled'),
+            ],
+        ]);
     }
 }

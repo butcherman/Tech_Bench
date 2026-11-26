@@ -21,12 +21,12 @@ interface UserRole {
     role_id: number;
 }
 
-// interface UserSettings {
-//     setting_type_id: number;
-//     value: boolean;
-//     name: string;
-//     description: string;
-// }
+interface UserSettings {
+    setting_type_id: number;
+    value: boolean;
+    name: string;
+    description: string;
+}
 
 interface UserRolePermission {
     perm_type_id: number;
@@ -38,13 +38,13 @@ interface UserRolePermission {
 
 type UserRolePermissionCategory = { [key: string]: UserRolePermission[] };
 
-// interface UserDevice {
-//     device_id: number;
-//     type: string;
-//     os: string;
-//     browser: string;
-//     registered_ip_address: string;
-//     updated_ip_address: string;
-//     created_at: string;
-//     updated_at: string;
-// }
+interface UserDevice {
+    device_id: number;
+    type: string;
+    os: string;
+    browser: string;
+    registered_ip_address: string;
+    updated_ip_address: string;
+    created_at: string;
+    updated_at: string;
+}

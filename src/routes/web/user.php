@@ -6,6 +6,8 @@ use App\Http\Controllers\User\InitializeUserController;
 use App\Http\Controllers\User\PasswordPolicyController;
 use App\Http\Controllers\User\ResetTwoFaController;
 use App\Http\Controllers\User\ResetUserPasswordController;
+use App\Http\Controllers\User\UpdateUserAccountController;
+use App\Http\Controllers\User\UpdateUserSettingsController;
 use App\Http\Controllers\User\UserAdministrationController;
 use App\Http\Controllers\User\UserPasswordController;
 use App\Http\Controllers\User\UserRoleAdministrationController;
@@ -42,11 +44,11 @@ Route::middleware('auth.secure')->group(function () {
             ->name('user-settings.show')
             ->breadcrumb('User Settings', 'dashboard');
 
-        // Route::put('user-account/{user}', UpdateUserAccountController::class)
-        //     ->name('user-account.update');
+        Route::put('user-account/{user}', UpdateUserAccountController::class)
+            ->name('user-account.update');
 
-        // Route::put('user-settings/{user}', UpdateUserSettingsController::class)
-        //     ->name('user-settings.update');
+        Route::put('user-settings/{user}', UpdateUserSettingsController::class)
+            ->name('user-settings.update');
 
         // Route::delete(
         //     'remove-device/{user}/{token}',
