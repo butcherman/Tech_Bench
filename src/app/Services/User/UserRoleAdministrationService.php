@@ -3,6 +3,7 @@
 namespace App\Services\User;
 
 use App\Facades\CacheData;
+use App\Facades\DbException;
 use App\Models\UserRole;
 use App\Models\UserRolePermission;
 use App\Models\UserRolePermissionType;
@@ -83,7 +84,6 @@ class UserRoleAdministrationService
         } catch (QueryException $e) {
             // If the Role is in use, throw in use exception
             DbException::check($e, __('admin.user-role.in-use'));
-            dd('in use');
         }
     }
 

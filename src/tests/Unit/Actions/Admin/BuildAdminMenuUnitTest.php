@@ -83,6 +83,11 @@ class BuildAdminMenuUnitTest extends TestCase
                     'icon' => 'cog',
                     'route' => route('admin.user.user-settings.edit'),
                 ],
+                [
+                    'label' => 'Roles & Permissions',
+                    'icon' => 'fas fa-users-cog',
+                    'route' => route('admin.user-roles.index'),
+                ],
             ],
             'Application' => [
                 [
