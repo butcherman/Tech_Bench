@@ -1,6 +1,8 @@
 <?php
 
+use App\Exceptions\Auth\InitializeUserLinkMissingException;
 use App\Http\Controllers\User\DisabledUserListController;
+use App\Http\Controllers\User\InitializeUserController;
 use App\Http\Controllers\User\PasswordPolicyController;
 use App\Http\Controllers\User\ResetTwoFaController;
 use App\Http\Controllers\User\ResetUserPasswordController;
@@ -152,19 +154,15 @@ Route::middleware('auth.secure')->group(function () {
 | Finish Setting Up User Account Routes
 |-------------------------------------------------------------------------------
 */
-// Route::middleware('guest')->controller(InitializeUserController::class)->group(function () {
-//     Route::get('initialize-account/{token}', 'show')
-//         ->name('initialize')
-//         ->missing(function () {
-//             throw new InitializeUserLinkMissingException;
-//         });
-//     Route::post('initialize-account/{token}', 'update')
-//         ->name('initialize.update')
-//         ->missing(function () {
-//             throw new InitializeUserLinkMissingException;
-//         });
-// });
-
-Route::get('initialize', function () {
-    return 'initialize user';
-})->name('initialize');
+Route::middleware('guest')->controller(InitializeUserController::class)->group(function () {
+    Route::get('initialize-account/{token}', 'show')
+        ->name('initialize')
+        ->missing(function () {
+            throw new InitializeUserLinkMissingException;
+        });
+    Route::post('initialize-account/{token}', 'update')
+        ->name('initialize.update')
+        ->missing(function () {
+            throw new InitializeUserLinkMissingException;
+        });
+});
