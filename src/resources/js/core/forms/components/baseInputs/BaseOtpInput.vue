@@ -105,7 +105,7 @@ const onKeyDown = (event: KeyboardEvent, index: number) => {
                 v-for="(n, index) in otpLength"
                 v-model="otpDigits[index]"
                 autocomplete="off"
-                class="text-center w-10! border border-slate-400 focus:outline-blue-400 rounded-lg"
+                class="text-center w-10! border border-slate-400 focus:outline-blue-400 rounded-lg p-2"
                 inputmode="numeric"
                 maxlength="1"
                 pattern="[0-9]*"
