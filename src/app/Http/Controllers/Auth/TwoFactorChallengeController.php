@@ -12,22 +12,29 @@ use Laravel\Fortify\Http\Requests\TwoFactorLoginRequest;
 
 class TwoFactorChallengeController extends Controller
 {
-    // public function __construct(protected TwoFactorService $svc) {}
+    public function __construct(protected TwoFactorService $svc) {}
 
     /**
      * Provide the 2FA Challenge
      */
     public function challenge(Request $request)
     {
-        return 'two-factor challenge';
-        // $user = $this->svc->getChallengedUser($request);
-        // $via = $this->svc->getMfaMethod($user);
-        // $this->svc->provideChallenge($user);
+        $user = $this->svc->getChallengedUser($request);
+        $via = $this->svc->getMfaMethod($user);
+        $this->svc->provideChallenge($user);
 
-        // return Inertia::render('Auth/TwoFactorChallenge', [
-        //     'via' => $via,
-        //     'allow-remember' => config('auth.twoFa.allow_save_device'),
-        // ]);
+        return Inertia::render('Auth/TwoFactorChallenge', [
+            'via' => $via,
+            'allow-remember' => config('auth.twoFa.allow_save_device'),
+            'welcome-message' => fn () => config('app.welcome_message'),
+            'home-links' => fn () => config('app.home_links'),
+            'allow-oath' => fn () => config('services.azure.allow_login'),
+            'public-link' => fn () => config('tech-tips.allow_public')
+                ? [
+                    'url' => route('publicTips.index'),
+                    'text' => config('tech-tips.public_link_text'),
+                ] : false,
+        ]);
 
     }
 

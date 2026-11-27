@@ -2,8 +2,6 @@
 
 namespace App\Enums;
 
-use Illuminate\Support\Str;
-
 enum TwoFactorMethod: string
 {
     case Email = 'email';
@@ -26,8 +24,13 @@ enum TwoFactorMethod: string
     public static function getMethods(): array
     {
         return array_map(fn (self $method) => [
-            'name' => Str::ucfirst($method->value),
-            'setupRoute' => $method->getSetupRoute(),
-        ], self::cases());
+            'name' => $method->value,
+            'setup-route' => $method->getSetupRoute(),
+        ], array_values(
+            array_filter(self::cases(),
+                fn (self $method) => config("auth.twoFa.methods.{$method->value}",
+                    false
+                )
+            )));
     }
 }
