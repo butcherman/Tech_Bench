@@ -1,4 +1,4 @@
-// type MultiFactorMethod = "email" | "authenticator";
+type MultiFactorMethod = "email" | "authenticator";
 
 interface PasswordPolicy {
     expire: number;

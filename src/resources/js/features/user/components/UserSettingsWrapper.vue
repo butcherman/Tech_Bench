@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Card from "@/core/components/Card.vue";
 // import TwoFactorDevices from "@/features/user/components/TwoFactorDevices.vue";
-// import TwoFactorSettings from "@/features/user/components/TwoFactorSettings.vue";
+import TwoFactorSettings from "@/features/user/components/TwoFactorSettings.vue";
 import UserSecurity from "@/features/user/components/UserSecurity.vue";
 import UserSettingsPreferences from "@/features/user/components/UserSettingsPreferences.vue";
 import UserSettingsProfile from "@/features/user/components/UserSettingsProfile.vue";
@@ -22,7 +22,7 @@ const props = defineProps<{
         allowSaveDevice: boolean;
         allowAuthenticator: boolean;
         allowEmail: boolean;
-        currentVia: "email" | "authenticator" | null;
+        currentVia: MultiFactorMethod | null;
         devices: UserDevice[];
         enabled: boolean;
     };
@@ -37,7 +37,7 @@ const activeComponent = computed(() => {
         profile: UserSettingsProfile,
         preferences: UserSettingsPreferences,
         security: UserSecurity,
-        // TwoFaSettings: TwoFactorSettings,
+        TwoFaSettings: TwoFactorSettings,
         // TwoFaDevices: TwoFactorDevices,
     }[activeComponentName.value];
 });
