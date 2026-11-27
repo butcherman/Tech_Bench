@@ -2,7 +2,7 @@
 import Card from "@/core/components/Card.vue";
 // import TwoFactorDevices from "@/features/user/components/TwoFactorDevices.vue";
 // import TwoFactorSettings from "@/features/user/components/TwoFactorSettings.vue";
-// import UserSecurity from "@/features/user/components/UserSecurity.vue";
+import UserSecurity from "@/features/user/components/UserSecurity.vue";
 import UserSettingsPreferences from "@/features/user/components/UserSettingsPreferences.vue";
 import UserSettingsProfile from "@/features/user/components/UserSettingsProfile.vue";
 import { computed, ref } from "vue";
@@ -36,7 +36,7 @@ const activeComponent = computed(() => {
     return {
         profile: UserSettingsProfile,
         preferences: UserSettingsPreferences,
-        // security: UserSecurity,
+        security: UserSecurity,
         // TwoFaSettings: TwoFactorSettings,
         // TwoFaDevices: TwoFactorDevices,
     }[activeComponentName.value];
