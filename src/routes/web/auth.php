@@ -36,6 +36,6 @@ Route::middleware('auth')
         Route::get('/', TwoFactorSetupController::class)->name('index');
         // Route::get('email-verification', TwoFactorSetupEmailController::class)
         //     ->name('email');
-        // Route::get('authenticator-app-verification', TwoFactorSetupAuthenticatorController::class)
-        //     ->name('authenticator');
+        Route::get('authenticator-app-verification', TwoFactorSetupAuthenticatorController::class)
+            ->name('authenticator');
     });

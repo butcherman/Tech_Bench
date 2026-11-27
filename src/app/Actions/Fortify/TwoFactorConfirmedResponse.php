@@ -14,6 +14,12 @@ class TwoFactorConfirmedResponse implements TwoFactorConfirmedResponseContract
      */
     public function toResponse($request)
     {
+        $request->session()->forget('two_factor.setup');
+        $via = $request->session()->pull('two_factor.via');
+
+        $request->user()->two_factor_via = $via;
+        $request->user()->save();
+
         $request->session()->flash('success', 'MFA Setup Complete');
 
         return redirect()->route('dashboard');

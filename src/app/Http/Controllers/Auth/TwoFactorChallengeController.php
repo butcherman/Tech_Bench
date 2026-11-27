@@ -12,21 +12,22 @@ use Laravel\Fortify\Http\Requests\TwoFactorLoginRequest;
 
 class TwoFactorChallengeController extends Controller
 {
-    public function __construct(protected TwoFactorService $svc) {}
+    // public function __construct(protected TwoFactorService $svc) {}
 
     /**
      * Provide the 2FA Challenge
      */
     public function challenge(Request $request)
     {
-        $user = $this->svc->getChallengedUser($request);
-        $via = $this->svc->getMfaMethod($user);
-        $this->svc->provideChallenge($user);
+        return 'two-factor challenge';
+        // $user = $this->svc->getChallengedUser($request);
+        // $via = $this->svc->getMfaMethod($user);
+        // $this->svc->provideChallenge($user);
 
-        return Inertia::render('Auth/TwoFactorChallenge', [
-            'via' => $via,
-            'allow-remember' => config('auth.twoFa.allow_save_device'),
-        ]);
+        // return Inertia::render('Auth/TwoFactorChallenge', [
+        //     'via' => $via,
+        //     'allow-remember' => config('auth.twoFa.allow_save_device'),
+        // ]);
 
     }
 
@@ -35,17 +36,17 @@ class TwoFactorChallengeController extends Controller
      */
     public function verify(TwoFactorLoginRequest $request)
     {
-        $user = $request->challengedUser();
-        $valid = $user->validateVerificationCode($request->input('code'));
+        // $user = $request->challengedUser();
+        // $valid = $user->validateVerificationCode($request->input('code'));
 
-        if (! $valid) {
-            return back()->withErrors([
-                'code' => 'The provided code is invalid or has expired',
-            ], 'mfa');
-        }
+        // if (! $valid) {
+        //     return back()->withErrors([
+        //         'code' => 'The provided code is invalid or has expired',
+        //     ], 'mfa');
+        // }
 
-        Auth::login($user, $request->remember());
+        // Auth::login($user, $request->remember());
 
-        return app(TwoFactorLoginResponse::class);
+        // return app(TwoFactorLoginResponse::class);
     }
 }

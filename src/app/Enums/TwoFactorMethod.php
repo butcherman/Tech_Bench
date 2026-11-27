@@ -16,7 +16,7 @@ enum TwoFactorMethod: string
     {
         return match ($this) {
             self::Email => '#',
-            self::Authenticator => '#',
+            self::Authenticator => route('two-factor.setup.authenticator'),
         };
     }
 
